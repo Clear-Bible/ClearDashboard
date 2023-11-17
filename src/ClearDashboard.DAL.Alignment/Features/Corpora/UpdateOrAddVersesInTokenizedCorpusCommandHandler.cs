@@ -209,11 +209,19 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 var parallelCorpusId = parallelCorpusIds.ToList().FirstOrDefault();//do loop here for each parallel corpus
 
                 var parallelCorpus = await ParallelCorpus.Get(_mediator, parallelCorpusId, cancellationToken);
+
+                var oldParallelTextRows = parallelCorpus.Select(v => (EngineParallelTextRow)v).ToList();//what if we just just the new text for the alignment managers? SLOW
+
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+                //Get Alignments/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //do loop here for each alignmentSet
+                var alignmentSetIds = await AlignmentSet.GetAllAlignmentSetIds(_mediator, parallelCorpusId);
+                var alignmentSet = await AlignmentSet.Get(alignmentSetIds.FirstOrDefault(), _mediator);
+                var oldAlignments = await alignmentSet.GetAlignments(oldParallelTextRows);
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
                 //Train//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                //do loop here for each alignment
-                
                 var isTrainedSymmetrizedModel = false;
 
                 var symmetrizationHeuristic = isTrainedSymmetrizedModel
@@ -292,7 +300,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                 cancellationToken.ThrowIfCancellationRequested();
                 var displayName = "Temp Alignment";
-                AlignmentSet alignmentSet = await trainSmtModelSet.AlignedTokenPairs.Create(displayName,
+                AlignmentSet newAlignmentSet = await trainSmtModelSet.AlignedTokenPairs.Create(displayName,
                     smtModel: smtModelType.ToString(),
                     isSyntaxTreeAlignerRefined: false,
                     isSymmetrized: isTrainedSymmetrizedModel,
@@ -305,22 +313,22 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 var verificationTypes = new Dictionary<string, Models.AlignmentVerification>();
                 var originatedTypes = new Dictionary<string, Models.AlignmentOriginatedFrom>();
 
-                var alignments = trainSmtModelSet.AlignedTokenPairs.Select(a =>
+                var redoneAlignments = trainSmtModelSet.AlignedTokenPairs.Select(a =>
                     new Alignment.Translation.Alignment(a, "Unverified", "FromAlignmentModel"));
 
                 var alignmentSetId = Guid.NewGuid();
                 var alignmentSetModel = new Models.AlignmentSet
                 {
                     Id = alignmentSetId,
-                    ParallelCorpusId = alignmentSet.AlignmentSetId.ParallelCorpusId.Id,
+                    ParallelCorpusId = newAlignmentSet.AlignmentSetId.ParallelCorpusId.Id,
                     DisplayName = displayName,
-                    SmtModel = alignmentSet.AlignmentSetId.SmtModel,
-                    IsSyntaxTreeAlignerRefined = alignmentSet.AlignmentSetId.IsSyntaxTreeAlignerRefined,
-                    IsSymmetrized = alignmentSet.AlignmentSetId.IsSymmetrized,
-                    Metadata = alignmentSet.AlignmentSetId.Metadata,
+                    SmtModel = newAlignmentSet.AlignmentSetId.SmtModel,
+                    IsSyntaxTreeAlignerRefined = newAlignmentSet.AlignmentSetId.IsSyntaxTreeAlignerRefined,
+                    IsSymmetrized = newAlignmentSet.AlignmentSetId.IsSymmetrized,
+                    Metadata = newAlignmentSet.AlignmentSetId.Metadata,
                     //DerivedFrom = ,
                     //EngineWordAlignment = ,
-                    Alignments = alignments
+                    Alignments = redoneAlignments
                         .Select(al => new Models.Alignment
                         {
                             SourceTokenComponentId = al.AlignedTokenPair.SourceToken.TokenId.Id,
@@ -341,14 +349,21 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     ProjectDbContext.UserProvider!.CurrentUser!.Id,
                     cancellationToken);
 
+                
+
                 //Get alignments to be replaced
+                var alignmentsToReplace = oldAlignments.Where(x => x.OriginatedFrom == "FromAlignmentModel");
                 //Delete alignments to be replaced (we could do this before making the alignment)
                     //Make Delete Utils
-                
+
                 //Get Replacement alignments
+                var tokenIdsToReplace = alignmentsToReplace.Select(oa => oa.AlignedTokenPair.SourceToken.TokenId).ToList();
+                var replacementAlignments = redoneAlignments.Where(na => tokenIdsToReplace.Contains(na.AlignedTokenPair.SourceToken.TokenId));
                 //Insert Replacement Alignments
-                
+
                 //Get New Alignments
+                var oldTokenIds = oldAlignments.Select(oa => oa.AlignedTokenPair.SourceToken.TokenId).ToList();
+                var newAlignments = redoneAlignments.Where(ra => !oldTokenIds.Contains(ra.AlignedTokenPair.SourceToken.TokenId));
                 //Insert New Alignments
 
                 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
