@@ -27,7 +27,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             return command;
         }
 
-        public static async Task<Guid> CreateAlignmentAsync(Models.AlignmentSet alignmentSet, DbCommand alignmentSetCommand, Guid currentUserId, CancellationToken cancellationToken)
+        public static async Task<Guid> PrepareInsertAlignmentSetAsync(Models.AlignmentSet alignmentSet, DbCommand alignmentSetCommand, Guid currentUserId, CancellationToken cancellationToken)
         {
             var converter = new DateTimeOffsetToBinaryConverter();
 

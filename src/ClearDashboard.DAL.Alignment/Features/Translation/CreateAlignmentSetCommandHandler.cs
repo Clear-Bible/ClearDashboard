@@ -173,12 +173,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 using var connection = ProjectDbContext.Database.GetDbConnection();
                 using var transaction = await ProjectDbContext.Database.GetDbConnection().BeginTransactionAsync(cancellationToken);
 
-
-                //CREATE ALIGNMENT SET//
                 using var alignmentSetInsertCommand = AlignmentUtil.CreateAlignmentSetInsertCommand(connection);
                 using var alignmentInsertCommand = AlignmentUtil.CreateAlignmentInsertCommand(connection);
 
-                await AlignmentUtil.CreateAlignmentAsync(
+                await AlignmentUtil.PrepareInsertAlignmentSetAsync(
                     alignmentSet,
                     alignmentSetInsertCommand,
                     ProjectDbContext.UserProvider!.CurrentUser!.Id,
@@ -190,9 +188,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     alignmentInsertCommand, 
                     ProjectDbContext.UserProvider!.CurrentUser!.Id, 
                     cancellationToken);
-
-                //add in for loop here
-                //CREATE ALIGNMENT SET//
 
                 // Explicitly setting the DatabaseFacade transaction to match
                 // the underlying DbConnection transaction in case any event handlers

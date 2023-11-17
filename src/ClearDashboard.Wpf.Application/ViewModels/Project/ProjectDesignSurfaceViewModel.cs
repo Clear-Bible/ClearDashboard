@@ -1432,7 +1432,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                     null, true);
 
                                 //Should we make one new alignment or as many new alignments as old alignments?
-                                _ = _projectTemplateProcessRunner.RegisterAlignmentTasks(
+                                _ = _projectTemplateProcessRunner.RegisterParallelizationTasks(
                                     sourceTaskName,
                                     targetTaskName,
                                     false,//remember this from the old alignment
