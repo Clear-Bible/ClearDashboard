@@ -1398,7 +1398,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                                 //Get Old Alignments
                                 var oldParallelCorpus = await ParallelCorpus.Get(Mediator!, connection.ParallelCorpusId);
-                                var oldParallelTextRows = oldParallelCorpus.Select(v => (EngineParallelTextRow)v).ToList();
+                                var oldParallelTextRows = oldParallelCorpus.Select(v => (EngineParallelTextRow)v).ToList();//what if we just just the new text for the alignment managers? SLOW
                                 var oldAlignmentIds = topLevelProjectIds2.AlignmentSetIds.Where(x => x.ParallelCorpusId == oldParallelCorpus.ParallelCorpusId);
                                 if (oldAlignmentIds == null)
                                 {
@@ -1408,6 +1408,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 //Create New Alignments
                                 var allBookIds = BookChapterVerseViewModel.GetBookIdDictionary().Keys.ToList();
 
+                                _projectTemplateProcessRunner.StartRegistration();
                                 var targetProjectMetadata = new ParatextProjectMetadata()
                                 {
                                     Name = connection.SourceConnector.ParentNode.Name,
@@ -1438,45 +1439,81 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                     SmtModelType.FastAlign.ToString());//
 
                                 var runningTask = _projectTemplateProcessRunner.RunRegisteredTasks(new Stopwatch());
-                                await runningTask;
+                                await runningTask;//SLOW
 
                                 // get all the existing alignment sets for this parallelCorpusId
                                 var alignmentSets = (await AlignmentSet.GetAllAlignmentSetIds(
                                         Mediator!,
                                         null,
                                         //connection.ParallelCorpusId,
-                                new UserId(ProjectManager!.CurrentUser.Id, ProjectManager.CurrentUser.FullName!)))
-                                    .ToList();
+                                        new UserId(ProjectManager!.CurrentUser.Id, ProjectManager.CurrentUser.FullName!))
+                                    ).ToList();
 
                                 var newestAlignmentSet = alignmentSets.OrderBy(x => x.Created).LastOrDefault();
 
                                 var newParallelCorpus = await ParallelCorpus.Get(Mediator, newestAlignmentSet.ParallelCorpusId);
 
                                 var alignmentId = newestAlignmentSet;
-                                var parallelTextRows = newParallelCorpus.Select(v => (EngineParallelTextRow)v).ToList();
+                                var parallelTextRows = newParallelCorpus.Select(v => (EngineParallelTextRow)v).ToList();//SLOW
                                 NewAlignmentManager = await AlignmentManager.CreateAsync(LifetimeScope, parallelTextRows, alignmentId);
 
                                 //foreach old alignment, if Auto aligned, then replace with new alignment
                                 foreach (var oldAlignmentId in oldAlignmentIds)
                                 {
-                                    OldAlignmentManager = await AlignmentManager.CreateAsync(LifetimeScope, oldParallelTextRows, oldAlignmentId);
-
-                                    var cloneForLoop = CloneAlignmentCollection(OldAlignmentManager.Alignments);
+                                    OldAlignmentManager = await AlignmentManager.CreateAsync(LifetimeScope, oldParallelTextRows, oldAlignmentId);//Why are oldParallelTextRows and newParallelTextRows the same?
 
                                     if (OldAlignmentManager.Alignments != null)
-                                        foreach (var oldAlignment in cloneForLoop)
-                                        {
-                                            if (oldAlignment.OriginatedFrom == "FromAlignmentModel")
-                                            {
-                                                var newAlignment = NewAlignmentManager.Alignments?.FindAlignmentByTokenId(oldAlignment.AlignedTokenPair.SourceToken.TokenId.Id);
-                                                    
-                                                await OldAlignmentManager.DeleteAlignment(new TokenDisplayViewModel(oldAlignment.AlignedTokenPair.SourceToken), true);
-                                                //await OldAlignmentManager.AlignmentSet.DeleteAlignment(oldAlignment.AlignmentId);
+                                    {
+                                        var oldAlignmentsClone = CloneAlignmentCollection(OldAlignmentManager.Alignments);
 
-                                                if (newAlignment != null)
-                                                    await OldAlignmentManager.AlignmentSet?.PutAlignment(newAlignment)!;
-                                            }
+                                        var oldTokenIds = oldAlignmentsClone.Select(oa => oa.AlignedTokenPair.SourceToken.TokenId).ToList();
+
+                                        var newAlignments = NewAlignmentManager.Alignments
+                                            .Where(na => !oldTokenIds.Contains(na.AlignedTokenPair.SourceToken.TokenId));
+
+                                        var alignmentsToReplace = oldAlignmentsClone.Where(x => x.OriginatedFrom == "FromAlignmentModel");
+
+                                        var tokenIdsToReplace = alignmentsToReplace.Select(oa => oa.AlignedTokenPair.SourceToken.TokenId).ToList();
+
+                                        var replacementAlignments = NewAlignmentManager.Alignments
+                                            .Where(na => tokenIdsToReplace.Contains(na.AlignedTokenPair.SourceToken.TokenId));
+
+                                        try
+                                        {
+                                            //await OldAlignmentManager.AddAlignment(
+                                            //    new TokenDisplayViewModel(alignmentsToReplace.FirstOrDefault().AlignedTokenPair.SourceToken), 
+                                            //    new TokenDisplayViewModel(replacementAlignments.Where(na=> na.AlignedTokenPair.SourceToken.TokenId == 
+                                            //        alignmentsToReplace.FirstOrDefault().AlignedTokenPair.SourceToken.TokenId).FirstOrDefault().AlignedTokenPair.TargetToken));
+
+                                            //TODO await OldAlignmentManager.DeleteAlignments(alignmentsToReplace);
+                                            await OldAlignmentManager.AddAlignments(newAlignments);
+                                            await OldAlignmentManager.AddAlignments(replacementAlignments);
+                                            
                                         }
+                                        catch (Exception ex)
+                                        {
+                                            var someException = ex;
+                                        }
+                                        //foreach (var oldAlignment in oldAlignmentsClone)
+                                        //{
+                                        //    if (oldAlignment.OriginatedFrom == "FromAlignmentModel")
+                                        //    {
+                                        //        var newAlignment = NewAlignmentManager.Alignments?.FindAlignmentByTokenId(oldAlignment.AlignedTokenPair.SourceToken.TokenId.Id);
+
+                                        //        try//work on doing batch delete
+                                        //        {
+                                        //            await OldAlignmentManager.DeleteAlignment(new TokenDisplayViewModel(oldAlignment.AlignedTokenPair.SourceToken), true);
+                                        //            //await OldAlignmentManager.AlignmentSet.DeleteAlignment(oldAlignment.AlignmentId);
+
+                                        //            await OldAlignmentManager.AddAlignments(replacementAlignments);
+                                        //        }
+                                        //        catch (Exception ex)
+                                        //        {
+                                        //            var someexception = ex;//figure out bulk delete
+                                        //        }
+                                        //    }
+                                        //}
+                                    }
                                 }
                             }
                             //NewAlignmentManager.Alignments;
