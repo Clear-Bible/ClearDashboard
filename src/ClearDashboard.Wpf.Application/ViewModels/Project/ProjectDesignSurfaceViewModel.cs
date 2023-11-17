@@ -1344,7 +1344,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 description: $"Updating verses in tokenized text corpus for '{selectedProject.Name}' corpus...Completed", cancellationToken: cancellationToken);
 
                             /////////////////////////////////////////////////
-
+                            ProjectManager!.PauseDenormalization = true;
                             if (bookIds.Count == 0)
                             {
                                 return;
@@ -1399,8 +1399,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 //Get Old Alignments
                                 var oldParallelCorpus = await ParallelCorpus.Get(Mediator!, connection.ParallelCorpusId);
                                 var oldParallelTextRows = oldParallelCorpus.Select(v => (EngineParallelTextRow)v).ToList();//what if we just just the new text for the alignment managers? SLOW
-                                var oldAlignmentIds = topLevelProjectIds2.AlignmentSetIds.Where(x => x.ParallelCorpusId == oldParallelCorpus.ParallelCorpusId);
-                                if (oldAlignmentIds == null)
+                                var oldAlignmentSetIds = topLevelProjectIds2.AlignmentSetIds.Where(x => x.ParallelCorpusId == oldParallelCorpus.ParallelCorpusId);
+                                if (oldAlignmentSetIds == null)
                                 {
                                     break;
                                 }
@@ -1432,7 +1432,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                     null, true);
 
                                 //Should we make one new alignment or as many new alignments as old alignments?
-                                _ = _projectTemplateProcessRunner.RegisterParallelizationTasks(
+                                _ = _projectTemplateProcessRunner.RegisterAlignmentTasks(
                                     sourceTaskName,
                                     targetTaskName,
                                     false,//remember this from the old alignment
@@ -1458,7 +1458,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 NewAlignmentManager = await AlignmentManager.CreateAsync(LifetimeScope, parallelTextRows, alignmentId);
 
                                 //foreach old alignment, if Auto aligned, then replace with new alignment
-                                foreach (var oldAlignmentId in oldAlignmentIds)
+                                foreach (var oldAlignmentId in oldAlignmentSetIds)//Parallelize
                                 {
                                     OldAlignmentManager = await AlignmentManager.CreateAsync(LifetimeScope, oldParallelTextRows, oldAlignmentId);//Why are oldParallelTextRows and newParallelTextRows the same?
 
@@ -1533,7 +1533,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             //topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
                             //DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(newParallelCorpusConnection,
                             //    topLevelProjectIds);
-
+                            ProjectManager!.PauseDenormalization = false;
                             await SaveDesignSurfaceData();
 
                             //foreach connection (based on source token)

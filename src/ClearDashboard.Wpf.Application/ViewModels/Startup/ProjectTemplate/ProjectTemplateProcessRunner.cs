@@ -313,6 +313,41 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             return parallelizationTaskNameSet;
         }
 
+        public IDictionary<Type, string> RegisterAlignmentTasks(
+            string sourceCorpusTaskName,
+            string targetCorpusTaskName,
+            bool isTrainedSymmetrizedModel,
+            string? smtModelName)
+        {
+            var sourceTask = backgroundTasksToRun.FirstOrDefault(e => e.TaskName == sourceCorpusTaskName);
+
+            if (sourceTask is null || sourceTask is not CorpusBackgroundTask)
+                throw new ArgumentException($"Source corpus background task name '{sourceCorpusTaskName}' not found: ", nameof(sourceCorpusTaskName));
+
+            var targetTask = backgroundTasksToRun.FirstOrDefault(e => e.TaskName == targetCorpusTaskName);
+
+            if (targetTask is null || targetTask is not CorpusBackgroundTask)
+                throw new ArgumentException($"Target corpus background task name '{targetCorpusTaskName}' not found: ", nameof(targetCorpusTaskName));
+
+            var parallelizationTaskNameSet = DefaultParallizationTaskNameSet(
+                (sourceTask as CorpusBackgroundTask)!.CorpusName,
+                (targetTask as CorpusBackgroundTask)!.CorpusName);
+
+            RegisterTrainSmtModelTask(
+                parallelizationTaskNameSet[typeof(TrainSmtModelSet)],
+                parallelizationTaskNameSet[typeof(ParallelCorpus)],
+                isTrainedSymmetrizedModel,
+                smtModelName,
+                false);
+            RegisterAlignmentSetTask(
+                parallelizationTaskNameSet[typeof(AlignmentSet)],
+                parallelizationTaskNameSet[typeof(TrainSmtModelSet)],
+                parallelizationTaskNameSet[typeof(ParallelCorpus)]
+            );
+
+            return parallelizationTaskNameSet;
+        }
+
         public void RegisterParallelCorpusTask(string taskName, string sourceBackgroundTaskName, string targetBackgroundTaskName)
         {
             if (backgroundTasksToRun.Any(e => e.TaskName == taskName))

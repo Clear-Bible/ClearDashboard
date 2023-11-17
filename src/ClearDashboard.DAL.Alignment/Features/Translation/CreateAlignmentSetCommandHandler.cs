@@ -17,6 +17,7 @@ using System.Text.Json;
 using System.Diagnostics;
 using ClearDashboard.DAL.Alignment.Features.Events;
 using System;
+using ClearDashboard.DAL.Alignment.Features.Common;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
@@ -172,14 +173,26 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 using var connection = ProjectDbContext.Database.GetDbConnection();
                 using var transaction = await ProjectDbContext.Database.GetDbConnection().BeginTransactionAsync(cancellationToken);
 
-                using var alignmentSetInsertCommand = CreateAlignmentSetInsertCommand(connection);
-                using var alignmentInsertCommand = CreateAlignmentInsertCommand(connection);
 
-                await InsertAlignmentSetAsync(
+                //CREATE ALIGNMENT SET//
+                using var alignmentSetInsertCommand = AlignmentUtil.CreateAlignmentSetInsertCommand(connection);
+                using var alignmentInsertCommand = AlignmentUtil.CreateAlignmentInsertCommand(connection);
+
+                await AlignmentUtil.CreateAlignmentAsync(
                     alignmentSet,
                     alignmentSetInsertCommand,
-                    alignmentInsertCommand,
+                    ProjectDbContext.UserProvider!.CurrentUser!.Id,
                     cancellationToken);
+
+                await AlignmentUtil.InsertAlignmentSetAsync(
+                    alignmentSet, 
+                    alignmentSetId,
+                    alignmentInsertCommand, 
+                    ProjectDbContext.UserProvider!.CurrentUser!.Id, 
+                    cancellationToken);
+
+                //add in for loop here
+                //CREATE ALIGNMENT SET//
 
                 // Explicitly setting the DatabaseFacade transaction to match
                 // the underlying DbConnection transaction in case any event handlers
@@ -214,89 +227,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 ModelHelper.BuildAlignmentSetId(alignmentSetFromDb, parallelCorpusId, alignmentSetFromDb.User!),
                 parallelCorpusId,
                 _mediator));
-        }
-
-        private DbCommand CreateAlignmentSetInsertCommand(DbConnection connection)
-        {
-            var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "ParallelCorpusId", "DisplayName", "SmtModel", "IsSyntaxTreeAlignerRefined", "IsSymmetrized", "Metadata", "UserId", "Created" };
-
-            ApplyColumnsToCommand(command, typeof(Models.AlignmentSet), columns);
-
-            command.Prepare();
-
-            return command;
-        }
-
-        private async Task<Guid> InsertAlignmentSetAsync(Models.AlignmentSet alignmentSet, DbCommand alignmentSetCommand, DbCommand alignmentCommand, CancellationToken cancellationToken)
-        {
-            var converter = new DateTimeOffsetToBinaryConverter();
-
-            var alignmentSetId = (Guid.Empty != alignmentSet.Id) ? alignmentSet.Id : Guid.NewGuid();
-
-            alignmentSetCommand.Parameters["@Id"].Value = alignmentSetId;
-            alignmentSetCommand.Parameters["@ParallelCorpusId"].Value = alignmentSet.ParallelCorpusId;
-            alignmentSetCommand.Parameters["@DisplayName"].Value = alignmentSet.DisplayName;
-            alignmentSetCommand.Parameters["@SmtModel"].Value = alignmentSet.SmtModel;
-            alignmentSetCommand.Parameters["@IsSyntaxTreeAlignerRefined"].Value = alignmentSet.IsSyntaxTreeAlignerRefined;
-            alignmentSetCommand.Parameters["@IsSymmetrized"].Value = alignmentSet.IsSymmetrized;
-            alignmentSetCommand.Parameters["@Metadata"].Value = JsonSerializer.Serialize(alignmentSet.Metadata);
-            alignmentSetCommand.Parameters["@UserId"].Value = Guid.Empty != alignmentSet.UserId ? alignmentSet.UserId : ProjectDbContext.UserProvider!.CurrentUser!.Id;
-            alignmentSetCommand.Parameters["@Created"].Value = converter.ConvertToProvider(alignmentSet.Created);
-
-            _ = await alignmentSetCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
-
-            foreach (var alignment in alignmentSet.Alignments)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await InsertAlignmentAsync(alignment, alignmentSetId, alignmentCommand, cancellationToken);
-            }
-
-            return alignmentSetId;
-        }
-
-        private DbCommand CreateAlignmentInsertCommand(DbConnection connection)
-        {
-            var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "SourceTokenComponentId", "TargetTokenComponentId", "AlignmentVerification", "AlignmentOriginatedFrom", "Score", "AlignmentSetId", "UserId", "Created" };
-
-            ApplyColumnsToCommand(command, typeof(Models.Alignment), columns);
-
-            command.Prepare();
-
-            return command;
-        }
-
-        private async Task InsertAlignmentAsync(Models.Alignment alignment, Guid alignmentSetId, DbCommand alignmentCommand, CancellationToken cancellationToken)
-        {
-            var converter = new DateTimeOffsetToBinaryConverter();
-
-            alignmentCommand.Parameters["@Id"].Value = (Guid.Empty != alignment.Id) ? alignment.Id : Guid.NewGuid();
-            alignmentCommand.Parameters["@SourceTokenComponentId"].Value = alignment.SourceTokenComponentId;
-            alignmentCommand.Parameters["@TargetTokenComponentId"].Value = alignment.TargetTokenComponentId;
-            alignmentCommand.Parameters["@AlignmentVerification"].Value = alignment.AlignmentVerification;
-            alignmentCommand.Parameters["@AlignmentOriginatedFrom"].Value = alignment.AlignmentOriginatedFrom;
-            alignmentCommand.Parameters["@Score"].Value = alignment.Score;
-            alignmentCommand.Parameters["@AlignmentSetId"].Value = alignmentSetId;
-            alignmentCommand.Parameters["@UserId"].Value = Guid.Empty != alignment.UserId ? alignment.UserId : ProjectDbContext.UserProvider!.CurrentUser!.Id;
-            alignmentCommand.Parameters["@Created"].Value = converter.ConvertToProvider(alignment.Created);
-            _ = await alignmentCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
-        }
-
-        private static void ApplyColumnsToCommand(DbCommand command, Type type, string[] columns)
-        {
-            command.CommandText =
-            $@"
-                INSERT INTO {type.Name} ({string.Join(", ", columns)})
-                VALUES ({string.Join(", ", columns.Select(c => "@" + c))})
-            ";
-
-            foreach (var column in columns)
-            {
-                var parameter = command.CreateParameter();
-                parameter.ParameterName = $"@{column}";
-                command.Parameters.Add(parameter);
-            }
         }
     }
 }

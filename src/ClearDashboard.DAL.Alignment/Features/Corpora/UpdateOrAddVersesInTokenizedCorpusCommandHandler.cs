@@ -184,7 +184,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         }
                     }
                 }
-
+                //MAKE CALL HERE FOR ALIGNMENT CREATION AND UPDATING
                 if (alignmentsRemoving.Any())
                 {
                     // Explicitly setting the DatabaseFacade transaction to match
