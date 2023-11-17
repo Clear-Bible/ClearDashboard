@@ -49,6 +49,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.DAL.Alignment.Translation;
 using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
@@ -1283,7 +1284,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             }
 
                             var tokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, tokenizedTextCorpusId);
-                            await tokenizedTextCorpus.UpdateOrAddVerses(Mediator!, textCorpus, cancellationToken);
+                            await tokenizedTextCorpus.UpdateOrAddVerses(Mediator!, textCorpus, new List<AlignmentSetId>(), cancellationToken);
 
                             //await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage(ReloadType.Force), cancellationToken);
 
