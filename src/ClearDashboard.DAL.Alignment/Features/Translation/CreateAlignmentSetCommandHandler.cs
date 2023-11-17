@@ -182,8 +182,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     ProjectDbContext.UserProvider!.CurrentUser!.Id,
                     cancellationToken);
 
-                await AlignmentUtil.InsertAlignmentSetAsync(
-                    alignmentSet, 
+                await AlignmentUtil.InsertAlignmentsAsync(
+                    alignmentSet.Alignments, 
                     alignmentSetId,
                     alignmentInsertCommand, 
                     ProjectDbContext.UserProvider!.CurrentUser!.Id, 

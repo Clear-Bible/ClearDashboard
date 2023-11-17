@@ -48,16 +48,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             return alignmentSetId;
         }
 
-        public static async Task<Models.AlignmentSet> InsertAlignmentSetAsync(Models.AlignmentSet alignmentSet, Guid alignmentSetId, DbCommand alignmentCommand, Guid currentUserId, CancellationToken cancellationToken)
+        public static async Task InsertAlignmentsAsync(IEnumerable<Models.Alignment> alignments, Guid alignmentSetId, DbCommand alignmentCommand, Guid currentUserId, CancellationToken cancellationToken)
         {
             //disconnect since I am not looking to insert a new alignment set
-            foreach (var alignment in alignmentSet.Alignments)
+            foreach (var alignment in alignments)
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 await InsertAlignmentAsync(alignment, alignmentSetId, alignmentCommand, currentUserId, cancellationToken);
             }
-
-            return alignmentSet;
         }
 
         public static DbCommand CreateAlignmentInsertCommand(DbConnection connection)
@@ -88,7 +86,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             _ = await alignmentCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public static void ApplyColumnsToCommand(DbCommand command, Type type, string[] columns)
+        private static void ApplyColumnsToCommand(DbCommand command, Type type, string[] columns)
         {
             command.CommandText =
             $@"
