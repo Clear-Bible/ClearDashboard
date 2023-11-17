@@ -404,7 +404,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
                 ProjectDbContext.RemoveRange(tasks);
 
                 ProjectDbContext.Database.UseTransaction(transaction);
-                await ProjectDbContext.SaveChangesAsync(cancellationToken);
+                await ProjectDbContext.SaveChangesAsync(cancellationToken);//causes denormalization error
                 await transaction.CommitAsync(cancellationToken);
                 ProjectDbContext.Database.UseTransaction(null);
             }

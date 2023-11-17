@@ -168,6 +168,21 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
+        public async Task AddAlignments(IEnumerable<Alignment> alignments)
+        {
+            try
+            {
+                await AlignmentSet!.PutAlignments(alignments);
+
+                Alignments!.AddRange(alignments.Where(x => x.AlignmentId!=null));
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"An unexpected error occurred while placing multiple alignments at once.");
+            }
+
+        }
+
         private AlignmentPopupViewModel GetAlignmentPopupViewModel(SimpleMessagePopupMode mode, TokenDisplayViewModel? targetTokenDisplay = null,
             TokenDisplayViewModel? sourceTokenDisplay = null)
         {
@@ -226,9 +241,12 @@ namespace ClearDashboard.Wpf.Application.Services
                 {
                     Alignments!.RemoveRange(alignmentsToRemove);
                     // Message the rest of the app that the alignments have been removed.
-                    foreach (var alignment in alignmentsToRemove)
+                    if (!autoConfirm)
                     {
-                        await EventAggregator.PublishOnUIThreadAsync(new AlignmentDeletedMessage(alignment));
+                        foreach (var alignment in alignmentsToRemove)
+                        {
+                            await EventAggregator.PublishOnUIThreadAsync(new AlignmentDeletedMessage(alignment));
+                        }
                     }
                 }
             }
