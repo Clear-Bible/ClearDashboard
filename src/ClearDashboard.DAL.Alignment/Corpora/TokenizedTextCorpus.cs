@@ -7,6 +7,7 @@ using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Scripture;
 using ClearDashboard.DAL.Alignment.Features.Translation;
+using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
@@ -85,7 +86,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             }
         }
 
-        public async Task UpdateOrAddVerses(IMediator mediator, ITextCorpus textCorpus, CancellationToken token = default)
+        public async Task UpdateOrAddVerses(IMediator mediator, ITextCorpus textCorpus, List<AlignmentSetId> alignmentSetsToRedo, CancellationToken token = default)
         {
             try
             {
@@ -102,7 +103,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             result.ThrowIfCanceledOrFailed();
 
             var updateOrAddResult = await mediator.Send(
-                new UpdateOrAddVersesInTokenizedCorpusCommand(TokenizedTextCorpusId, textCorpus, result.Data.bookIds), 
+                new UpdateOrAddVersesInTokenizedCorpusCommand(TokenizedTextCorpusId, textCorpus, result.Data.bookIds, alignmentSetsToRedo), 
                 token);
             updateOrAddResult.ThrowIfCanceledOrFailed();
 
