@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,6 +25,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
     /// </summary>
     public class TokenDisplayViewModel : PropertyChangedBase
     {
+        private Guid Id { get; } = Guid.NewGuid();
+
         /// <summary>
         /// The token itself.
         /// </summary>
@@ -190,10 +193,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+
         private BindableCollection<ExternalNote> _externalNotes = new();
         public BindableCollection<ExternalNote> ExternalNotes
         {
-            get => _externalNotes;
+            get 
+            {
+                //Debug.WriteLine($"TokenGuid: {Id} {ExternalNotes.Count()}");
+                return _externalNotes;
+            }
             set
             {
                 if (Set(ref _externalNotes, value))
@@ -357,7 +365,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public bool HasExternalNotes => ExternalNotes.Count() > 0;
 
 
-        private bool _isFirstExternalNoteToken;
+        private bool _isFirstExternalNoteToken = false;
         public bool IsFirstExternalNoteToken
         {
             get => _isFirstExternalNoteToken;
@@ -368,6 +376,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        private bool _multipleExternalNotes;
+        public bool MultipleExternalNotes
+        {
+            get => _multipleExternalNotes;
+            set 
+            { 
+                _multipleExternalNotes = value;
+                NotifyOfPropertyChange(nameof(MultipleExternalNotes));
+            }
+        }
 
 
 
