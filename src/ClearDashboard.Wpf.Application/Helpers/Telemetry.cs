@@ -126,7 +126,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
             }
         }
 
-        public static void IncrementMetric(TelemetryDictionaryKeys key, int increment)
+        public static void IncrementMetric(TelemetryDictionaryKeys key, double increment)
         {
             var keyString = key.ToString();
 
@@ -152,7 +152,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
             VerseViewAddedCount,
             TimerStartCount, 
             GlossesConfirmed,
-            ActiveAppTime
+            ActiveAppMinutes
         }
     }
 }

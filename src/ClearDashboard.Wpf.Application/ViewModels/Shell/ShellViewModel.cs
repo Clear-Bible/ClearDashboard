@@ -59,6 +59,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         private System.Timers.Timer _timer;
         private long _elapsedSeconds;
         nint _backgroundIndicatorValue = 0;
+        private double _timerInterval = 15000;
 
         public BackgroundTasksViewModel BackgroundTasksViewModel { get; }
 
@@ -377,7 +378,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         private void StartTimer()
         {
-            _timer = new System.Timers.Timer(5000);
+            _timer = new System.Timers.Timer(15000);
             _timer.Elapsed += OnTimedEvent;
             _timer.Enabled = true;
             _timer.AutoReset = true;
@@ -401,7 +402,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             
             if (ApplicationIsActivated())
             {
-                Telemetry.IncrementMetric(TelemetryDictionaryKeys.ActiveAppTime, 1);
+                Telemetry.IncrementMetric(TelemetryDictionaryKeys.ActiveAppMinutes, _timerInterval/60000);
             }
         }
 
