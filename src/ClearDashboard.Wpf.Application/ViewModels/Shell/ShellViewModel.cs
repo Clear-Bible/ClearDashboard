@@ -58,7 +58,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         private System.Timers.Timer _timer;
         private long _elapsedSeconds;
-        nint _backgroundIndicatorValue = 0;
         private double _timerInterval = 15000;
 
         public BackgroundTasksViewModel BackgroundTasksViewModel { get; }
