@@ -21,6 +21,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using ClearDashboard.Wpf.Application.Helpers;
+using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
+
 // ReSharper disable UnusedMember.Global
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
@@ -167,6 +170,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             }
             finally
             {
+                Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.GlossesConfirmed, 1);
                 OnUIThread(() => ProgressBarVisibility = Visibility.Collapsed);
                 await TryCloseAsync(true);
             }
