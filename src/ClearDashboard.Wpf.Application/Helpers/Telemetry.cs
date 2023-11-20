@@ -60,7 +60,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
             TelemetryClient client = new TelemetryClient(config);
             client.Context.Component.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
             client.Context.Session.Id = Guid.NewGuid().ToString();
-            client.Context.User.Id = (Environment.UserName + Environment.MachineName).GetHashCode().ToString();
+            client.Context.User.Id = user.Id.ToString();//(Environment.UserName + Environment.MachineName).GetHashCode().ToString();
             client.Context.Device.OperatingSystem = Environment.OSVersion.ToString();
             client.Context.User.AccountId = user.Id.ToString();
             AppRunTelemetry = client.StartOperation<RequestTelemetry>($"{client.Context.Component.Version} - {"InternalUseCount"} - {"UnlockKey.LicenseKey"}");
@@ -126,7 +126,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
             }
         }
 
-        public static void IncrementMetric(TelemetryDictionaryKeys key, int increment)
+        public static void IncrementMetric(TelemetryDictionaryKeys key, double increment)
         {
             var keyString = key.ToString();
 
@@ -150,7 +150,9 @@ namespace ClearDashboard.Wpf.Application.Helpers
             AlignmentViewAddedCount,
             AlignmentBatchReviewCount,
             VerseViewAddedCount,
-            TimerStartCount
+            TimerStartCount, 
+            GlossesConfirmed,
+            ActiveAppMinutes
         }
     }
 }
