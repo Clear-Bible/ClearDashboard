@@ -150,7 +150,9 @@ namespace ClearDashboard.Wpf.Application.Helpers
             AlignmentViewAddedCount,
             AlignmentBatchReviewCount,
             VerseViewAddedCount,
-            TimerStartCount
+            TimerStartCount, 
+            GlossesConfirmed,
+            ActiveAppTime
         }
     }
 }
