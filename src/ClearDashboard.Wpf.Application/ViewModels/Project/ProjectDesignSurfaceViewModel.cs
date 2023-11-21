@@ -54,14 +54,10 @@ using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
-using CefSharp.DevTools.DOM;
 using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using ClearDashboard.DataAccessLayer.Features.Corpa;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
-using SIL.Extensions;
-using ClearDashboard.DAL.Interfaces;
+
 using ClearDashboard.Wpf.Application.Collections;
 
 
@@ -83,7 +79,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private readonly LongRunningTaskManager? _longRunningTaskManager;
         private readonly ILocalizationService _localizationService;
         private readonly NoteManager _noteManager;
-        private readonly ProjectTemplateProcessRunner _projectTemplateProcessRunner;
         private readonly SystemPowerModes _systemPowerModes;
         private readonly ObservableDictionary<string, bool> _busyState = new();
 
@@ -92,9 +87,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #endregion //Member Variables
 
         #region Observable Properties
-        public AlignmentManager? OldAlignmentManager { get; set; } = null;
-
-        public AlignmentManager? NewAlignmentManager { get; set; } = null;
 
         public new bool IsBusy => _busyState.Count > 0;
 
@@ -192,13 +184,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             LongRunningTaskManager longRunningTaskManager,
             ILocalizationService localizationService,
             IEnhancedViewManager enhancedViewManager,
-            NoteManager noteManager,
-            ProjectTemplateProcessRunner projectTemplateProcessRunner)
+            NoteManager noteManager)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             EnhancedViewManager = enhancedViewManager;
             _noteManager = noteManager;
-            _projectTemplateProcessRunner = projectTemplateProcessRunner;
             _systemPowerModes = systemPowerModes;
             _windowManager = windowManager;
             BackgroundTasksViewModel = backgroundTasksViewModel;
@@ -1268,7 +1258,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        public async Task UpdateParatextCorpus(string selectedParatextProjectId, string? selectedTokenizer, CorpusNodeViewModel corpusNodeViewModel, CorpusNodeMenuItemViewModel connectionMenuItem)
+        public async Task UpdateParatextCorpus(string selectedParatextProjectId, string? selectedTokenizer, CorpusNodeViewModel corpusNodeViewModel)//, CorpusNodeMenuItemViewModel connectionMenuItem
         {
             Logger!.LogInformation("UpdateParatextCorpus called.");
 
@@ -1544,7 +1534,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
                                 description: $"Updating verses in tokenized text corpus for '{selectedProject.Name}' corpus...Completed", cancellationToken: cancellationToken);
-                            ProjectManager!.PauseDenormalization = false;
                         }
                         catch (OperationCanceledException)
                         {
@@ -1576,6 +1565,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         {
                             _longRunningTaskManager.TaskComplete(taskName);
                             _busyState.Remove(taskName);
+                            ProjectManager!.PauseDenormalization = false;
 
                             PlaySound.PlaySoundFromResource(soundType);
                         }
@@ -1592,17 +1582,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        public AlignmentCollection CloneAlignmentCollection(AlignmentCollection original)
-        {
-            AlignmentCollection copy = new();
+        //public AlignmentCollection CloneAlignmentCollection(AlignmentCollection original)
+        //{
+        //    AlignmentCollection copy = new();
 
-            foreach (var item in original)
-            {
-                copy.Add(item);
-            }
+        //    foreach (var item in original)
+        //    {
+        //        copy.Add(item);
+        //    }
 
-            return copy;
-        }
+        //    return copy;
+        //}
 
         private static ITokenizer<string, int, string> InstantiateTokenizer(Tokenizers tokenizerEnum)
         {
@@ -1936,8 +1926,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     //#pragma warning restore CS8601
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.UpdateParatextCorpus:
-                    await UpdateParatextCorpus(corpusNodeViewModel.ParatextProjectId, corpusNodeMenuItem.Tokenizer, corpusNodeViewModel, corpusNodeMenuItem);
-                    
+                    await UpdateParatextCorpus(corpusNodeViewModel.ParatextProjectId, corpusNodeMenuItem.Tokenizer, corpusNodeViewModel);//corpusNodeMenuItem
+
+
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.GetLatestExternalNotes:
                     GetLatestExternalNotes(corpusNodeViewModel.ParatextProjectId);

@@ -6,23 +6,17 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Threading;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Translation;
 using System.Data.Common;
-using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.DAL.Alignment.Corpora;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
-using SIL.Machine.Corpora;
-using ClearDashboard.DataAccessLayer.Models;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
-using SIL.Machine.SequenceAlignment;
 
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
@@ -486,7 +480,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                 //Get Replacement alignments
                
-                var replacementAlignments = redoneAlignments.Where(na => tokenIdsToReplace.Contains(na.AlignedTokenPair.SourceToken.TokenId.Id));
+                //var replacementAlignments = redoneAlignments.Where(na => tokenIdsToReplace.Contains(na.AlignedTokenPair.SourceToken.TokenId.Id));
                 var replacementAlignmentsModel = redoneAlignmentsModel.Where(na => tokenIdsToReplace.Contains(na.SourceTokenComponentId));
 
 

@@ -171,7 +171,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 // Generally follows https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/bulk-insert
                 // mostly using database connection-level functions, commands, paramters etc.
                 using var connection = ProjectDbContext.Database.GetDbConnection();
-                using var transaction = await ProjectDbContext.Database.GetDbConnection().BeginTransactionAsync(cancellationToken);//GETS STUCK HERE
+                using var transaction = await ProjectDbContext.Database.GetDbConnection().BeginTransactionAsync(cancellationToken);
 
                 using var alignmentSetInsertCommand = AlignmentUtil.CreateAlignmentSetInsertCommand(connection);
                 using var alignmentInsertCommand = AlignmentUtil.CreateAlignmentInsertCommand(connection);

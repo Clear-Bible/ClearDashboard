@@ -23,7 +23,7 @@ namespace ClearDashboard.Wpf.Application.Services
     {
         private List<EngineParallelTextRow> ParallelTextRows { get; }
         private AlignmentSetId AlignmentSetId { get; }
-        public AlignmentSet? AlignmentSet { get; set; }
+        private AlignmentSet? AlignmentSet { get; set; }
 
         private IEventAggregator EventAggregator { get; }
         private ILogger<AlignmentManager> Logger { get; }
@@ -168,20 +168,20 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public async Task AddAlignments(IEnumerable<Alignment> alignments)
-        {
-            try
-            {
-                await AlignmentSet!.PutAlignments(alignments);
+        //public async Task AddAlignments(IEnumerable<Alignment> alignments)
+        //{
+        //    try
+        //    {
+        //        await AlignmentSet!.PutAlignments(alignments);
 
-                Alignments!.AddRange(alignments.Where(x => x.AlignmentId!=null));
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, $"An unexpected error occurred while placing multiple alignments at once.");
-            }
+        //        Alignments!.AddRange(alignments.Where(x => x.AlignmentId!=null));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.LogError(ex, $"An unexpected error occurred while placing multiple alignments at once.");
+        //    }
 
-        }
+        //}
 
         private AlignmentPopupViewModel GetAlignmentPopupViewModel(SimpleMessagePopupMode mode, TokenDisplayViewModel? targetTokenDisplay = null,
             TokenDisplayViewModel? sourceTokenDisplay = null)
@@ -198,58 +198,58 @@ namespace ClearDashboard.Wpf.Application.Services
             return alignmentPopupViewModel;
         }
 
-        public async Task DeleteAlignment(TokenDisplayViewModel tokenDisplay, bool autoConfirm = false)
+        public async Task DeleteAlignment(TokenDisplayViewModel tokenDisplay)//, bool autoConfirm = false
         {
             var alignmentPopupViewModel = GetAlignmentPopupViewModel(SimpleMessagePopupMode.Delete);
             alignmentPopupViewModel.TargetTokenDisplay = tokenDisplay;
 
             var result = false;
-            if (!autoConfirm)
-            {
-                result = await WindowManager.ShowDialogAsync(alignmentPopupViewModel, null, SimpleMessagePopupViewModel.CreateDialogSettings(alignmentPopupViewModel.Title));
-            }
+            //if (!autoConfirm)
+            //{
+            result = await WindowManager.ShowDialogAsync(alignmentPopupViewModel, null, SimpleMessagePopupViewModel.CreateDialogSettings(alignmentPopupViewModel.Title));
+            //}
             
-            if (result == true || autoConfirm)
+            //if (result == true || autoConfirm)
+            //{
+            var alignmentIds = FindAlignmentIds(tokenDisplay);
+     
+            // gather all of the alignments which can be removed and delete them form the database.
+            var alignmentsToRemove = new List<Alignment>();
+            foreach (var alignmentId in alignmentIds)
             {
-                var alignmentIds = FindAlignmentIds(tokenDisplay);
-         
-                // gather all of the alignments which can be removed and delete them form the database.
-                var alignmentsToRemove = new List<Alignment>();
-                foreach (var alignmentId in alignmentIds)
+                if (alignmentId != null)
                 {
-                    if (alignmentId != null)
+                    try
                     {
-                        try
+                        await AlignmentSet!.DeleteAlignment(alignmentId);
+                        var alignment = Alignments!.FirstOrDefault(a => a.AlignmentId == alignmentId);
+                        if (alignment != null)
                         {
-                            await AlignmentSet!.DeleteAlignment(alignmentId);
-                            var alignment = Alignments!.FirstOrDefault(a => a.AlignmentId == alignmentId);
-                            if (alignment != null)
-                            {
-                                alignmentsToRemove.Add(alignment);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.LogError(ex, "An unexpected error occurred while deleting an alignment.");
+                            alignmentsToRemove.Add(alignment);
                         }
                     }
-                }
-
-
-                // Now remove all of the alignments from the AlignmentCollection.
-                if (alignmentsToRemove.Count > 0)
-                {
-                    Alignments!.RemoveRange(alignmentsToRemove);
-                    // Message the rest of the app that the alignments have been removed.
-                    if (!autoConfirm)
+                    catch (Exception ex)
                     {
-                        foreach (var alignment in alignmentsToRemove)
-                        {
-                            await EventAggregator.PublishOnUIThreadAsync(new AlignmentDeletedMessage(alignment));
-                        }
+                        Logger.LogError(ex, "An unexpected error occurred while deleting an alignment.");
                     }
                 }
             }
+
+
+            // Now remove all of the alignments from the AlignmentCollection.
+            if (alignmentsToRemove.Count > 0)
+            {
+                Alignments!.RemoveRange(alignmentsToRemove);
+                // Message the rest of the app that the alignments have been removed.
+                //if (!autoConfirm)
+                //{
+                foreach (var alignment in alignmentsToRemove)
+                {
+                    await EventAggregator.PublishOnUIThreadAsync(new AlignmentDeletedMessage(alignment));
+                }
+                //}
+            }
+            //}
         }
 
         private AlignmentId? FindAlignmentId(TokenDisplayViewModel tokenDisplay)
