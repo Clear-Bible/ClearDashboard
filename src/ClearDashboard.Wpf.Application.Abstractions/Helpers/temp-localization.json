@@ -12,5 +12,8 @@
   "LexiconEdit_Partially": "Partially",
   "LexiconEdit_Translation": "Translation",
   "LexiconEdit_Translations": "Translations",
-  "LexiconEdit_Type": "Type"
+  "LexiconEdit_Type": "Type",
+  "LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate": "Edit - adding {0} as translation to first meaning",
+  "LexiconEdit_Edit_MatchOnTranslationTemplate": "Edit - adding {0} as form"
+
 }

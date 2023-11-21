@@ -1,187 +1,28 @@
-﻿using System;
+﻿using Autofac;
+using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Lexicon;
+using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.Threading;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Dynamic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Controls.Primitives;
 using System.Windows;
-using Autofac;
-using Caliburn.Micro;
-using ClearDashboard.Wpf.Application.Infrastructure;
-using ClearDashboard.Wpf.Application.Services;
-using MediatR;
-using Microsoft.Extensions.Logging;
 using System.Windows.Controls;
-using ClearDashboard.DAL.Alignment.Lexicon;
-using ClearDashboard.Wpf.Application.Threading;
+using System.Windows.Controls.Primitives;
+using ClearDashboard.Wpf.Application.Helpers;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 {
-
-    public enum LexiconEditMode
-    {
-        PartialMatchOnLexemeOrForm,
-        MatchOnTranslation,
-        Edit
-    }
-
-    public static class LexiconEditTags
-    {
-        public const string And = "And";
-        public const string Fully = "Fully";
-        public const string Or = "Or";
-        public const string Partially = "Partially";
-       
-    }
-
-    public enum PredicateOption
-    {
-        And,
-        Or
-    }
-
-    public enum MatchOption
-    {
-        Partially,
-        Fully,
-    }
-
-    public class LexiconEditDialogState : PropertyChangedBase
-    {
-        private bool _lexemeChecked;
-        private bool _formsChecked;
-        private bool _translationChecked;
-        private MatchOption _lexemeOption;
-        private MatchOption _formsOption;
-        private PredicateOption _predicateOption;
-        private string? _formsMatch;
-        private string? _translationMatch;
-
-        public bool LexemeChecked
-        {
-            get => _lexemeChecked;
-            set
-            {
-                Set(ref _lexemeChecked, value);
-                NotifyBooleansChanged();
-            }
-        }
-
-        public bool FormsChecked
-        {
-            get => _formsChecked;
-            set
-            {
-                Set(ref _formsChecked, value);
-                NotifyBooleansChanged();
-            }
-        }
-
-        public bool LexemeAndFormsChecked => LexemeChecked & FormsChecked;
-
-        public bool LexemeOrFormsChecked => LexemeChecked | FormsChecked;
-
-        public bool TransitionAndLexemeOrFormsChecked => TranslationChecked & LexemeAndFormsChecked;
-
-        private void NotifyBooleansChanged()
-        {
-            NotifyOfPropertyChange(()=> LexemeAndFormsChecked);
-            NotifyOfPropertyChange(() => LexemeOrFormsChecked);
-            NotifyOfPropertyChange(() => TransitionAndLexemeOrFormsChecked);
-        }
-
-        public bool TranslationChecked
-        {
-            get => _translationChecked;
-            set
-            {
-                Set(ref _translationChecked, value);
-                NotifyBooleansChanged();
-            }
-        }
-
-        public MatchOption LexemeOption
-        {
-            get => _lexemeOption;
-            set => Set(ref _lexemeOption, value);
-        }
-
-        public MatchOption FormsOption
-        {
-            get => _formsOption;
-            set => Set(ref _formsOption, value);
-        }
-
-        public PredicateOption PredicateOption
-        {
-            get => _predicateOption;
-            set => Set(ref _predicateOption, value);
-        }
-
-        public string? FormsMatch
-        {
-            get => _formsMatch;
-            set => Set(ref _formsMatch, value);
-        }
-
-        public string? TranslationMatch
-        {
-            get => _translationMatch;
-            set => Set(ref _translationMatch, value);
-        }
-
-        public void Configure(LexiconEditMode editMode, string? toMatch)
-        {
-            /*
-             
-              -when [PartialMatchOnLexemeOrForm] parameter: (C) checked, (D) set to
-              partially, (F) checked, (G) partial, (I) filled in with [toMatch] parameter,
-              (K) unchecked; (M) is "Edit adding [other] as translation to first meaning" and
-              when pressed (M) changes line into in-place editing, adds [] to first default meaning 
-              if no meaning, then adds [other] to first meaning's comma delimited [] list and selects 
-              other in this list so user can see what has been added.
-               
-            
-             -when [MatchOnTranslation] parameter: (C) and (F) unchecked, (K) checked; (L) set to 
-               [toMatch].; (M) is "Edit adding [other] as form" and when pressed (M) changes line 
-               into in-place editing, adds [other] to the comma delimited list of forms, and highlights 
-               added form so user can see what was added..
-
-            */
-
-            switch (editMode)
-            {
-                case LexiconEditMode.MatchOnTranslation:
-                    LexemeChecked = false;
-                    FormsChecked = false;
-                    TranslationChecked = true;
-                    LexemeOption = MatchOption.Partially;
-                    FormsOption = MatchOption.Partially;
-                    PredicateOption = PredicateOption.And;
-                    FormsMatch = string.Empty;
-                    TranslationMatch = toMatch;
-                    break;
-                case LexiconEditMode.PartialMatchOnLexemeOrForm:
-                    LexemeChecked = true;
-                    FormsChecked = true;
-                    TranslationChecked = false;
-                    LexemeOption = MatchOption.Partially;
-                    FormsOption = MatchOption.Partially;
-                    PredicateOption = PredicateOption.And;
-                    FormsMatch = toMatch;
-                    TranslationMatch = string.Empty;
-                    break;
-
-            }
-        }
-
-      
-    }
     public class LexiconEditDialogViewModel : DashboardApplicationScreen
     {
+        private readonly TranslationSource _translationSource;
         private readonly LexiconManager? _lexiconManager;
 
         private readonly DebounceDispatcher _debounceTimer = new();
@@ -337,66 +178,91 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             SourceLanguages = new BindableCollection<string>();
 
             State = new LexiconEditDialogState();
+
+           
+        }
+
+        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+        {
+            IsBusy = false;
+            return base.OnInitializeAsync(cancellationToken);
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            if (!string.IsNullOrEmpty(SourceLanguage))
+            IsBusy = true;
+            try
             {
-                SelectedSourceLanguage = SourceLanguage;
-                SourceLanguages.Add(SourceLanguage);
-            }
+                if (!string.IsNullOrEmpty(SourceLanguage))
+                {
+                    SelectedSourceLanguage = SourceLanguage;
+                    SourceLanguages.Add(SourceLanguage);
+                }
 
-            if (!string.IsNullOrEmpty(TargetLanguage))
+                if (!string.IsNullOrEmpty(TargetLanguage))
+                {
+                    SelectedTargetLanguage = TargetLanguage;
+                    TargetLanguages.Add(TargetLanguage);
+                }
+
+
+                State.Configure(EditMode, ToMatch);
+
+                EditableLexemes = GetFilteredLexemes();
+            }
+            finally
             {
-                SelectedTargetLanguage = TargetLanguage;
-                TargetLanguages.Add(TargetLanguage);
+                IsBusy = false;
             }
-
-           
-            State.Configure(EditMode, ToMatch);
-
-            FilteredLexemes = FilterLexemes();
             return base.OnActivateAsync(cancellationToken);
         }
 
-        private ObservableCollection<Lexeme>? _filteredLexemes;
-
-        public ObservableCollection<Lexeme>? FilteredLexemes
+        private ObservableCollection<EditableLexemeViewModel>? _editableLexemes;
+        public ObservableCollection<EditableLexemeViewModel>? EditableLexemes
         {
-            get => _filteredLexemes;
-            set => Set(ref _filteredLexemes, value);
+            get => _editableLexemes;
+            set => Set(ref _editableLexemes, value);
         }
 
-        private ObservableCollection<Lexeme>? FilterLexemes()
+        public string EditButtonLabel => GetEditButtonLabel();
+
+        private string GetEditButtonLabel()
+        {
+            switch (EditMode)
+            {
+                case LexiconEditMode.MatchOnTranslation:
+                    return string.Format(LocalizationService.Get("LexiconEdit_Edit_MatchOnTranslationTemplate"), Other);
+
+
+                case LexiconEditMode.PartialMatchOnLexemeOrForm:
+                    return string.Format(LocalizationService.Get("LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate"), Other);
+            }
+
+            return "[UNKNOWN DIALOG MODE!]";
+        }
+
+        private ObservableCollection<EditableLexemeViewModel>? GetFilteredLexemes()
         {
             var filteredLexemes = new List<Lexeme>();
+            var managedLexemes = LexiconManager.ManagedLexemes;
 
             switch (EditMode)
             {
                 case LexiconEditMode.MatchOnTranslation:
-                    filteredLexemes =  LexiconManager.ManagedLexemes
-                        .Where(lexeme => lexeme.Language == SelectedSourceLanguage && lexeme.Meanings
-                            .Any(meaning => meaning.Language == SelectedSourceLanguage && meaning.Translations
-                                .Any(trans => trans.Text == State.TranslationMatch)))
-                        .ToList();
+                   
 
-                    return new ObservableCollection<Lexeme>(filteredLexemes);
+                    filteredLexemes = managedLexemes.FilterByTranslationText(SelectedSourceLanguage,
+                        SelectedTargetLanguage, Other).ToList();
+
+                    return new ObservableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l=> new EditableLexemeViewModel(l)));
 
                 case LexiconEditMode.PartialMatchOnLexemeOrForm:
-                    //filteredLexemes = LexiconManager.ManagedLexemes
-                    //    .Where(lexeme => lexeme.Language == SelectedSourceLanguage && lexeme.Meanings
-                    //        .Any(meaning => meaning.Language == SelectedSourceLanguage && meaning.Text == State.FormsMatch) || 
-                    //            lexeme.Forms.Any(form=>form.Text == State.FormsMatch))
-                    //    .ToList();
 
-                    filteredLexemes = LexiconManager.ManagedLexemes
-                        .Where(lexeme => lexeme.Language == SelectedSourceLanguage && lexeme.Meanings
-                            .Any(meaning => meaning.Language == SelectedSourceLanguage && meaning.Translations
-                                .Any(trans => trans.Text == State.FormsMatch)))
-                        .ToList();
+                    //filteredLexemes = managedLexemes.FilterByLexemeText(ToMatch, State.FormsOption == MatchOption.Partially, SourceLanguage, null).ToList();
 
-                    return new ObservableCollection<Lexeme>(filteredLexemes);
+                    filteredLexemes = managedLexemes.FilterByLexemeText(Other, State.FormsOption == MatchOption.Partially, SourceLanguage, null).ToList();
+                    
+                    return new ObservableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l => new EditableLexemeViewModel(l)));
 
                 default:
                     return null;

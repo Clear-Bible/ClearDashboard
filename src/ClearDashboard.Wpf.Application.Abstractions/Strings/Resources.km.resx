@@ -773,7 +773,7 @@
     <value>លេខសម្ងាត់:</value>
   </data>
   <data name="JiraResultsView_URL" xml:space="preserve">
-    <value>url:</value>
+    <value>URL:</value>
   </data>
   <data name="JiraResultsView_Username" xml:space="preserve">
     <value>ឈ្មោះ​អ្នកប្រើប្រាស់:</value>
@@ -906,6 +906,12 @@
   </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>បិនិត្យ</value>
+  </data>
+  <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>បន្ថែម '{0}' ជាទម្រង់</value>
+  </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>បន្ថែម '{0}' ជាការបកប្រែទៅជាអត្ថន័យដំបូង</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>រកទាំងអស់</value>
@@ -1573,11 +1579,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>វចនានុរកម</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>កម្មវិធីនិពន្ធកំណត់ត្រាខាងក្រៅ</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>សមនឹងផ្ទៃមាតិកាទាំងមូលទៅអ្នកមើល</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>សមនឹងថ្នាំងទាំងអស់ទៅអ្នកមើល</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>ទទួលបានកំណត់ត្រាខាងក្រៅចុងក្រោយ</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>ទទួលបានចុងក្រោយពី Paratext</value>
