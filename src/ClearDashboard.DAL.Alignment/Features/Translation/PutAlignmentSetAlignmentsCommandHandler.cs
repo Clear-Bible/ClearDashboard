@@ -252,7 +252,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 transaction.Commit();
             }
 
-            //await _mediator.Publish(new AlignmentSetSourceTokenIdsUpdatedEvent(request.AlignmentSetId.Id, sourceTokenIdsForDenormalization), cancellationToken);
+            await _mediator.Publish(new AlignmentSetSourceTokenIdsUpdatedEvent(request.AlignmentSetId.Id, sourceTokenIdsForDenormalization), cancellationToken);
 
             return new RequestResult<Unit>(Unit.Value);
         }
