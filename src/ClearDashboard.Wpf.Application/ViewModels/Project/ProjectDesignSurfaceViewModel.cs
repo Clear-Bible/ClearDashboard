@@ -1272,7 +1272,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             if (!Enum.TryParse(selectedTokenizer, out Tokenizers tokenizer))
             {
-                Logger!.LogError($"UpdateParatextCorups received an invalid selectedTokenizer value '{selectedTokenizer}'");
+                Logger!.LogError($"UpdateParatextCorpus received an invalid selectedTokenizer value '{selectedTokenizer}'");
                 throw new ArgumentException($@"Unable to parse value as Enum '{selectedTokenizer}'", nameof(selectedTokenizer));
             }
 
@@ -1298,9 +1298,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         var soundType = SoundType.Success;
                         try
                         {
-                            /////////////////////////////////////////////////
                             ProjectManager!.PauseDenormalization = true;
-                            var alignmentSetsToRedo = new List<AlignmentSetId>();
+                            
                             if (bookIds.Count == 0)
                             {
                                 return;
@@ -1309,12 +1308,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             //Get all connections for a text
                             var connections = corpusNodeViewModel.AttachedConnections.ToList();
 
+                            var alignmentSetsToRedo = new List<AlignmentSetId>();
+
                             //foreach connection
                             foreach (var connection in connections)
                             {
                                 var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
 
-                                //Are common books present?
+                                //Checking if common books are present
                                 var commonBookPresent = false;
                                 var updatedNodeIsSource = connection.SourceConnector.ParentNode.Id == corpusNodeViewModel.Id;
                                 if (updatedNodeIsSource)
@@ -1327,7 +1328,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                         if (tokenizedBookRequest.Data.Contains(BookChapterVerseViewModel.GetBookNumFromBookName(bookId)))
                                         {
                                             commonBookPresent = true;
-                                            break;
+                                            continue;
                                         }
                                     }
 
@@ -1342,163 +1343,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                         if (tokenizedBookRequest.Data.Contains(BookChapterVerseViewModel.GetBookNumFromBookName(bookId)))
                                         {
                                             commonBookPresent = true;
-                                            break;
+                                            continue;
                                         }
                                     }
                                 }
 
                                 if (!commonBookPresent)
                                 {
-                                    break;
+                                    continue;
                                 }
 
-                                
                                 //Get Old Alignments
                                 var oldParallelCorpus = await ParallelCorpus.Get(Mediator!, connection.ParallelCorpusId);
-                                //var oldParallelTextRows = oldParallelCorpus.Select(v => (EngineParallelTextRow)v).ToList();//what if we just just the new text for the alignment managers? SLOW
                                 var oldAlignmentSetIds = topLevelProjectIds.AlignmentSetIds.Where(x => x.ParallelCorpusId == oldParallelCorpus.ParallelCorpusId);
                                 if (oldAlignmentSetIds == null)
                                 {
-                                    break;
+                                    continue;
                                 }
                                 alignmentSetsToRedo.AddRange(oldAlignmentSetIds);
-
-                                ////Create New Alignments
-                                //var allBookIds = BookChapterVerseViewModel.GetBookIdDictionary().Keys.ToList();
-
-                                //_projectTemplateProcessRunner.StartRegistration();
-                                //var targetProjectMetadata = new ParatextProjectMetadata()
-                                //{
-                                //    Name = connection.SourceConnector.ParentNode.Name,
-                                //    Id=connection.SourceConnector.ParatextId
-                                //};
-
-                                //var sourceTaskName = _projectTemplateProcessRunner.RegisterParatextProjectCorpusTask(
-                                //    targetProjectMetadata, Tokenizers.LatinWordTokenizer,
-                                //    allBookIds,
-                                //    null, true);
-
-                                //var sourceProjectMetadata = new ParatextProjectMetadata()
-                                //{
-                                //    Name = connection.DestinationConnector.ParentNode.Name,
-                                //    Id=connection.DestinationConnector.ParatextId
-                                //};
-
-                                //var targetTaskName = _projectTemplateProcessRunner.RegisterParatextProjectCorpusTask(
-                                //    sourceProjectMetadata, Tokenizers.LatinWordTokenizer,
-                                //    allBookIds,
-                                //    null, true);
-
-                                ////Should we make one new alignment or as many new alignments as old alignments?
-                                //_ = _projectTemplateProcessRunner.RegisterParallelizationTasks(
-                                //    sourceTaskName,
-                                //    targetTaskName,
-                                //    false,//remember this from the old alignment
-                                //    SmtModelType.FastAlign.ToString());//
-
-                                //var runningTask = _projectTemplateProcessRunner.RunRegisteredTasks(new Stopwatch());
-                                //await runningTask;//SLOW
-
-                                //// get all the existing alignment sets for this parallelCorpusId
-                                //var alignmentSets = (await AlignmentSet.GetAllAlignmentSetIds(
-                                //        Mediator!,
-                                //        null,
-                                //        //connection.ParallelCorpusId,
-                                //        new UserId(ProjectManager!.CurrentUser.Id, ProjectManager.CurrentUser.FullName!))
-                                //    ).ToList();
-
-                                //var newestAlignmentSet = alignmentSets.OrderBy(x => x.Created).LastOrDefault();
-
-                                //var newParallelCorpus = await ParallelCorpus.Get(Mediator, newestAlignmentSet.ParallelCorpusId);
-
-                                //var alignmentId = newestAlignmentSet;
-                                //var parallelTextRows = newParallelCorpus.Select(v => (EngineParallelTextRow)v).ToList();//SLOW
-                                //NewAlignmentManager = await AlignmentManager.CreateAsync(LifetimeScope, parallelTextRows, alignmentId);
-
-                                ////foreach old alignment, if Auto aligned, then replace with new alignment
-                                //foreach (var oldAlignmentId in oldAlignmentSetIds)//Parallelize
-                                //{
-                                //    OldAlignmentManager = await AlignmentManager.CreateAsync(LifetimeScope, oldParallelTextRows, oldAlignmentId);//Why are oldParallelTextRows and newParallelTextRows the same?
-
-                                //    if (OldAlignmentManager.Alignments != null)
-                                //    {
-                                //        var oldAlignmentsClone = CloneAlignmentCollection(OldAlignmentManager.Alignments);
-
-                                //        var oldTokenIds = oldAlignmentsClone.Select(oa => oa.AlignedTokenPair.SourceToken.TokenId).ToList();
-
-                                //        var newAlignments = NewAlignmentManager.Alignments
-                                //            .Where(na => !oldTokenIds.Contains(na.AlignedTokenPair.SourceToken.TokenId));
-
-                                //        var alignmentsToReplace = oldAlignmentsClone.Where(x => x.OriginatedFrom == "FromAlignmentModel");
-
-                                //        var tokenIdsToReplace = alignmentsToReplace.Select(oa => oa.AlignedTokenPair.SourceToken.TokenId).ToList();
-
-                                //        var replacementAlignments = NewAlignmentManager.Alignments
-                                //            .Where(na => tokenIdsToReplace.Contains(na.AlignedTokenPair.SourceToken.TokenId));
-
-                                //        try
-                                //        {
-                                //            //await OldAlignmentManager.AddAlignment(
-                                //            //    new TokenDisplayViewModel(alignmentsToReplace.FirstOrDefault().AlignedTokenPair.SourceToken), 
-                                //            //    new TokenDisplayViewModel(replacementAlignments.Where(na=> na.AlignedTokenPair.SourceToken.TokenId == 
-                                //            //        alignmentsToReplace.FirstOrDefault().AlignedTokenPair.SourceToken.TokenId).FirstOrDefault().AlignedTokenPair.TargetToken));
-
-                                //            //TODO await OldAlignmentManager.DeleteAlignments(alignmentsToReplace);
-                                //            await OldAlignmentManager.AddAlignments(newAlignments);
-                                //            await OldAlignmentManager.AddAlignments(replacementAlignments);
-
-                                //        }
-                                //        catch (Exception ex)
-                                //        {
-                                //            var someException = ex;
-                                //        }
-                                //        //foreach (var oldAlignment in oldAlignmentsClone)
-                                //        //{
-                                //        //    if (oldAlignment.OriginatedFrom == "FromAlignmentModel")
-                                //        //    {
-                                //        //        var newAlignment = NewAlignmentManager.Alignments?.FindAlignmentByTokenId(oldAlignment.AlignedTokenPair.SourceToken.TokenId.Id);
-
-                                //        //        try//work on doing batch delete
-                                //        //        {
-                                //        //            await OldAlignmentManager.DeleteAlignment(new TokenDisplayViewModel(oldAlignment.AlignedTokenPair.SourceToken), true);
-                                //        //            //await OldAlignmentManager.AlignmentSet.DeleteAlignment(oldAlignment.AlignmentId);
-
-                                //        //            await OldAlignmentManager.AddAlignments(replacementAlignments);
-                                //        //        }
-                                //        //        catch (Exception ex)
-                                //        //        {
-                                //        //            var someexception = ex;//figure out bulk delete
-                                //        //        }
-                                //        //    }
-                                //        //}
-                                //    }
-                                //}
                             }
-                            //NewAlignmentManager.Alignments;
-                            //topLevelProjectIds2.AlignmentSetIds.FirstOrDefault(x => x.ParallelCorpusId == connection.ParallelCorpusId);
-                            //dialogViewModel?.AlignmentSet?.AlignmentSetId;
-                            //parallelCorpus.AlignmentCorpus.AlignmentCollections.GetEnumerator().Current.Id;
-                            //var alignmentId = dialogViewModel.AlignmentSet.AlignmentSetId;
-
-                            //if (parallelProjectType == ParallelProjectType.WholeProcess)
-                            //{
-                            //    newParallelCorpusConnection.ParallelCorpusId =
-                            //        dialogViewModel!.ParallelTokenizedCorpus.ParallelCorpusId;
-                            //    newParallelCorpusConnection.ParallelCorpusDisplayName =
-                            //        dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId.DisplayName;
-                            //}
-
-                            //topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-                            //DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(newParallelCorpusConnection,
-                            //    topLevelProjectIds);
-
-                            //foreach connection (based on source token)
-                            //foreach token/alignment
-                            //if auto aligned
-                            //replace with new auto alignment
-
-                            //recalculate interlinear
-                            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                             var node = DesignSurfaceViewModel!.CorpusNodes
                                 .Single(cn => cn.ParatextProjectId == selectedProject.Id);
@@ -1581,18 +1444,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 await SaveDesignSurfaceData();
             }
         }
-
-        //public AlignmentCollection CloneAlignmentCollection(AlignmentCollection original)
-        //{
-        //    AlignmentCollection copy = new();
-
-        //    foreach (var item in original)
-        //    {
-        //        copy.Add(item);
-        //    }
-
-        //    return copy;
-        //}
 
         private static ITokenizer<string, int, string> InstantiateTokenizer(Tokenizers tokenizerEnum)
         {
