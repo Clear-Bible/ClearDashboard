@@ -17,6 +17,8 @@ using System.Threading.Tasks;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
+using SIL.Machine.SequenceAlignment;
+using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
@@ -212,9 +214,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     //{
                         await UpdateAlignments(request, connection, cancellationToken);//Make it it's own transaction
 
-                    //    await alignmentTransaction.CommitAsync(cancellationToken);
-                    //}
-                }
+                //    await alignmentTransaction.CommitAsync(cancellationToken);
+                //}
+            }
                 else
                 {
                     await transaction.CommitAsync(cancellationToken);
@@ -224,10 +226,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     //{
                         await UpdateAlignments(request, connection, cancellationToken);//Make it it's own transaction
 
-                    //    await alignmentTransaction.CommitAsync(cancellationToken);
-                    //}
-                    
-                }
+                //    await alignmentTransaction.CommitAsync(cancellationToken);
+                //}
+
+            }
             }
             finally
             {
@@ -482,7 +484,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                
                 //var replacementAlignments = redoneAlignments.Where(na => tokenIdsToReplace.Contains(na.AlignedTokenPair.SourceToken.TokenId.Id));
                 var replacementAlignmentsModel = redoneAlignmentsModel.Where(na => tokenIdsToReplace.Contains(na.SourceTokenComponentId));
-
+                
 
                 //Insert Replacement Alignments
                 using var replacementAlignmentsInsertCommand = AlignmentUtil.CreateAlignmentInsertCommand(connection);
@@ -506,10 +508,63 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     ProjectDbContext.UserProvider!.CurrentUser!.Id,
                     cancellationToken);
 
-                //Another Transaction?
-                //ReDo Translations/Interlinear
-                //Get translations to be replaced
-                //Replace Translations
+                ProjectDbContext.AlignmentSetDenormalizationTasks.Add(new Models.AlignmentSetDenormalizationTask()
+                {
+                    AlignmentSetId = alignmentSetIdToRedo.Id
+                });
+
+                await ProjectDbContext.SaveChangesAsync();
+
+                ////Another Transaction?
+                ////ReDo Translations/Interlinear
+                //Dictionary<string, Dictionary<string, double>> translationModel = null;
+                //var newTranslationSetModel = new Models.TranslationSet
+                //{
+                //    ParallelCorpusId = parallelCorpus.ParallelCorpusId.Id,
+                //    AlignmentSetId = oldAlignmentSet.AlignmentSetId.Id,
+                //    DisplayName = "Temp Translation Set",
+                //    //SmtModel = request.SmtModel,
+                //    Metadata = new Dictionary<string, object>(),
+                //    //DerivedFrom = ,
+                //    //EngineWordAlignment = ,
+                //    TranslationModel = translationModel?
+                //        .Select(tm => new Models.TranslationModelEntry
+                //        {
+                //            SourceText = tm.Key,
+                //            TargetTextScores = tm.Value
+                //                .Select(tts => new Models.TranslationModelTargetTextScore
+                //                {
+                //                    Text = tts.Key,
+                //                    Score = tts.Value
+                //                }).ToList()
+                //        }).ToList() ?? new()
+                //};
+
+                //var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(_mediator);
+                //var oldTranslationSetId = topLevelProjectIds.TranslationSetIds.Where(ts => ts.AlignmentSetGuid == oldAlignmentSet.AlignmentSetId.Id).FirstOrDefault();
+
+                //var newTranslationSetId = ModelHelper.BuildTranslationSetId(newTranslationSetModel, parallelCorpusId, newTranslationSetModel.User!);
+
+                //var oldTranslationSet = await DAL.Alignment.Translation.TranslationSet.Get(oldTranslationSetId, _mediator);
+
+                ////Get translations to be replaced (unconfirmed)
+                ////var Translations = new TranslationCollection(await TranslationSet.GetTranslations(SourceTokenIds));
+                //var newTranslationSet = await DAL.Alignment.Translation.TranslationSet.Get(newTranslationSetId, _mediator);
+
+                //var oldTokenIdList = oldAlignments.Select(oa => oa.AlignedTokenPair.SourceToken.TokenId).ToList();
+                //var oldTranslations = await oldTranslationSet.GetTranslations(oldTokenIdList);
+
+                //var newTokenIdList = replacementAlignments.Select(na => na.AlignedTokenPair.SourceToken.TokenId);
+                //var newTranslations = await newTranslationSet.GetTranslations(newTokenIdList);
+
+                ////Replace Translations
+                //foreach (var oldTranslation in oldTranslations)
+                //{
+                //    if (oldTranslation.OriginatedFrom != "Assigned")
+                //    {
+                //        //oldTranslation
+                //    }
+                //}
             }
 
             return new RequestResult<AlignmentSet>

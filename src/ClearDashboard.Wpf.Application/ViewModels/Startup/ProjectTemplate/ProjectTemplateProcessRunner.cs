@@ -1101,7 +1101,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             cancellationToken.ThrowIfCancellationRequested();
 
             // RUSSELL - code review
-            var translationSet = await TranslationSet.Create(null, alignmentSetId,
+            var translationSet = await TranslationSet.Create(null, alignmentSetId,//why put null rather than use the translationModel?
                 displayName, new Dictionary<string, object>(),
                 parallelCorpusId, Mediator, cancellationToken);
 
