@@ -9,9 +9,9 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Title="AboutView"
     Width="400"
-    FontFamily="{StaticResource ClearDashboardFont}"
     Height="300"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>

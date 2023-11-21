@@ -58,6 +58,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="&quot;LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>Editar - Adicionando '{0}' como forma</value>
+  </data>
   <data name="1CH" xml:space="preserve">
     <value>1CH</value>
   </data>
@@ -907,6 +910,9 @@
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Editar</value>
   </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>Editar - Adicionando '{0}' como tradução para o primeiro significado</value>
+  </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Encontrar tudo</value>
   </data>
@@ -1160,7 +1166,7 @@
     <value>Pesquisar por brilho inglês</value>
   </data>
   <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>Pesquisar por hebraico/grego</value>
+    <value>Pesquise por hebraico/grego</value>
   </data>
   <data name="Marble_Sense" xml:space="preserve">
     <value>Senso</value>
@@ -1181,7 +1187,7 @@
     <value>Versos</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Verso senso</value>
+    <value>Sentido do verso</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Verso total</value>
@@ -1226,7 +1232,7 @@
     <value>Token de acesso:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Verifique seu e -mail e insira o código de validação:</value>
+    <value>Verifique seu e -mail e digite o código de validação:</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Verifique a disponibilidade do usuário</value>
@@ -1340,7 +1346,7 @@
     <value>Adicione um rótulo</value>
   </data>
   <data name="Notes_LabelAddConfirm" xml:space="preserve">
-    <value>Você quer criar o rótulo:</value>
+    <value>Você quer criar rótulo:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>e associe -o ao grupo de etiquetas:</value>
@@ -1418,7 +1424,7 @@
     <value>Grupos de etiquetas</value>
   </data>
   <data name="Notes_NoteLabels" xml:space="preserve">
-    <value>Rótulos</value>
+    <value>Etiquetas</value>
   </data>
   <data name="Notes_NoteReplies" xml:space="preserve">
     <value>Respostas</value>
@@ -1573,11 +1579,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Dicionário</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>Editor de notas externas</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>Ajuste toda a área de conteúdo na visualização</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>Ajuste todos os nós na visualização</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>Obtenha as últimas notas externas</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Obtenha mais recente do Paratext</value>
@@ -1628,7 +1640,7 @@
     <value>Estudobible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
-    <value>Estudobibleadditions</value>
+    <value>Estudarbibleaddditions</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
     <value>Vá para projetos Paratext e troca. O projeto Paratext atualmente conectado ao plug -in ClearDashboard não é o mesmo que o corpus neste projeto ClearDashboard.</value>
@@ -1640,7 +1652,7 @@
     <value>Transliteração manual</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Transliteração comncoder</value>
+    <value>TransliteraçãoWithEncoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Desconhecido</value>
@@ -1682,7 +1694,7 @@
     <value>Lexeme</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
-    <value>Lexeme Type</value>
+    <value>Lexeme tipo</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
     <value>Referências de carga</value>
@@ -1778,7 +1790,7 @@
     <value>Verifique esta caixa para incluir os textos bíblicos gregos e hebraicos ao criar seu projeto.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Incluir textos bíblicos gregos no NT?</value>
+    <value>Incluir textos bíblicos gregos do NT?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>Incluir textos bíblicos hebraicos?</value>
@@ -1823,7 +1835,7 @@
     <value>Estamos quase lá!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>Clique aqui para visualizar vídeos 'Painel de início'</value>
+    <value>Clique aqui para ver os vídeos 'Painel de início'</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
     <value>Depois de clicar no botão 'Criar' abaixo, estaremos tokenizando, alinhando e preparando seu projeto. Todas as etapas aparecerão aqui à medida que são processadas. Enquanto você espera, fique à vontade para clicar no link abaixo e assistir a alguns vídeos úteis para começar a usar o ClearDashboard!</value>
@@ -2111,7 +2123,7 @@
     <value>Ativar plug -in experimental aqua</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Verifique seu e -mail e insira o código de validação:</value>
+    <value>Verifique seu e -mail e digite o código de validação:</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Configurações de colaboração</value>
@@ -2168,7 +2180,7 @@
     <value>Reservado para expansão futura</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaurar o usuário de colaboração</value>
+    <value>Restaure o usuário da colaboração</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Salvo para servidor remoto</value>

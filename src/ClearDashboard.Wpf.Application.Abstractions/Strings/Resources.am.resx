@@ -58,6 +58,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="&quot;LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>አርትዕ - '{0}' እንደ ቅጽ</value>
+  </data>
   <data name="1CH" xml:space="preserve">
     <value>1CH</value>
   </data>
@@ -907,6 +910,9 @@
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>አርትዕ</value>
   </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>አርትዕ - '{0}' ን ለመጀመሪያ ጊዜ ትርጉም ትርጉም</value>
+  </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>ሁሉንም ያግኙ</value>
   </data>
@@ -1573,11 +1579,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>መዝገበ ቃላት</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>ውጫዊ ማስታወሻዎች አርታኢ</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>ከጠቅላላው የይዘት ቦታ ጋር ወደ የእይታ እይታ ይጣጣሙ</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>ሁሉንም አንጓዎች ወደ የእይታ መረብ ይግባኝ</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>የቅርብ ጊዜ ውጫዊ ማስታወሻዎችን ያግኙ</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>ከስርታ ከተለቀቀ የቅርብ ጊዜ ያግኙ</value>

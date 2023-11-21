@@ -10,6 +10,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:popUps="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.PopUps"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     x:Name="UserControl"
     d:DataContext="{d:DesignInstance Type=popUps:ExternalNoteViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -22,6 +23,8 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
+    Title="{helpers:Localization Pds_ExternalNotesEditor}"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
 
     <Window.DataContext>
@@ -60,7 +63,6 @@
                             Margin="5,0,0,0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Foreground="Blue"
                             Text="{Binding TabHeader}" />
                     </StackPanel>
                 </DataTemplate>
@@ -93,7 +95,6 @@
                 VerticalAlignment="Center"
                 FontSize="18"
                 FontWeight="Bold"
-                Foreground="Blue"
                 Text="{Binding SelectedTab.TabHeader}" />
 
             <!--  ROW 0 FLAG/VERSE REF/ASSIGNED USER  -->

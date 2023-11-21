@@ -58,6 +58,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="&quot;LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>Edit - Menambahkan '{0}' sebagai formulir</value>
+  </data>
   <data name="1CH" xml:space="preserve">
     <value>1CH</value>
   </data>
@@ -251,7 +254,7 @@
     <value>buah</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>batu permata</value>
+    <value>Batu permata</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>rumput</value>
@@ -458,7 +461,7 @@
     <value>Sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Bagian sumber</value>
+    <value>Bagian Sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Sumber Ref</value>
@@ -494,7 +497,7 @@
     <value>Waktu lokal</value>
   </data>
   <data name="ClockUserControl_Name" xml:space="preserve">
-    <value>Beri nama item</value>
+    <value>Beri nama itemnya</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
     <value>grup baru</value>
@@ -515,7 +518,7 @@
     <value>Pengguna kolaborasi yang tersedia:</value>
   </data>
   <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
-    <value>Mengelola proyek kolaborasi</value>
+    <value>Kelola proyek kolaborasi</value>
   </data>
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Pengguna proyek saat ini:</value>
@@ -906,6 +909,9 @@
   </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Edit</value>
+  </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>Edit - Menambahkan '{0}' sebagai terjemahan ke makna pertama</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Temukan semua</value>
@@ -1343,7 +1349,7 @@
     <value>Apakah Anda ingin membuat label:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
-    <value>dan asosiasikan dengan grup label:</value>
+    <value>dan kaitkan dengan grup label:</value>
   </data>
   <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
     <value>Apakah Anda ingin menghapus label:</value>
@@ -1496,7 +1502,7 @@
     <value>Kereta</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Pelatihan mesin pelurus mesin</value>
+    <value>Pelatih mesin pelurus mesin</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Atur pemetaan ayat antara korpora yang disejajarkan</value>
@@ -1573,11 +1579,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Kamus</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>Editor Catatan Eksternal</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>Pasang seluruh area konten ke viewport</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>Pasang semua node ke viewport</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>Dapatkan catatan eksternal terbaru</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Dapatkan terbaru dari Paratext</value>
@@ -1625,7 +1637,7 @@
     <value>Standar</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Studibible</value>
+    <value>Studybible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBibleadditions</value>
@@ -1784,7 +1796,7 @@
     <value>Sertakan teks -teks Alkitab Ibrani?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
-    <value>Mengelola proyek kolaborasi</value>
+    <value>Kelola proyek kolaborasi</value>
   </data>
   <data name="ProjectPicker_NoMatches" xml:space="preserve">
     <value>Tidak ada yang cocok.</value>
@@ -2003,7 +2015,7 @@
     <value>Luke</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
-    <value>Maleakhi</value>
+    <value>Malachi</value>
   </data>
   <data name="ProperCase_Mark" xml:space="preserve">
     <value>Tanda</value>

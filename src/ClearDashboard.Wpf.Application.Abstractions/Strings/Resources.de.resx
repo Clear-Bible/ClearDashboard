@@ -58,6 +58,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="&quot;LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>Bearbeiten - addieren '{0}' als Formular</value>
+  </data>
   <data name="1CH" xml:space="preserve">
     <value>1CH</value>
   </data>
@@ -458,7 +461,7 @@
     <value>Quelle</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Quellenteil</value>
+    <value>Quellteil</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Quelle Ref</value>
@@ -906,6 +909,9 @@
   </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Bearbeiten</value>
+  </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>Bearbeiten - Hinzufügen von '{0}' als Übersetzung zur ersten Bedeutung</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Finde alle</value>
@@ -1573,11 +1579,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Wörterbuch</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>Externe Notes Editor</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>Passen Sie den gesamten Inhaltsbereich in das Ansichtsfenster ein</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>Passen Sie alle Knoten in das Ansichtsfenster ein</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>Holen Sie sich die neuesten externen Notizen</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Holen Sie sich das Neueste von Paratext</value>
@@ -1775,7 +1787,7 @@
     <value>Serverprojekt importieren</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Aktivieren Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
+    <value>Überprüfen Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>NT Griechische biblische Texte einschließen?</value>
@@ -1835,7 +1847,7 @@
     <value>Projektvorlage Assistent: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Aktualisierung der Kollaborationsprojekte Liste</value>
+    <value>Aktualisierungsprojekte Liste aktualisieren</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>Suchen Sie neu</value>
@@ -1970,7 +1982,7 @@
     <value>James</value>
   </data>
   <data name="ProperCase_Jeremiah" xml:space="preserve">
-    <value>Jeremia</value>
+    <value>Jeremiah</value>
   </data>
   <data name="ProperCase_Job" xml:space="preserve">
     <value>Arbeit</value>

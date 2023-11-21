@@ -58,6 +58,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="&quot;LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>Editare - adăugarea „{0}” ca formă</value>
+  </data>
   <data name="1CH" xml:space="preserve">
     <value>1CH</value>
   </data>
@@ -653,7 +656,7 @@
     <value>Note</value>
   </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
-    <value>Nu există date de versuri în acest game de versuri.</value>
+    <value>Nu există date de versuri în acest interval de versuri.</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
     <value>Îndepărtați corpusul</value>
@@ -869,7 +872,7 @@
     <value>Introduceți un nou luciu</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
-    <value>LEMMA</value>
+    <value>Lemma</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
     <value>Lemma/forme:</value>
@@ -906,6 +909,9 @@
   </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Editați | ×</value>
+  </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>EDIT - Adăugarea '{0}' ca traducere la primul sens</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Găsiți toate</value>
@@ -1046,7 +1052,7 @@
     <value>Ștergeți aspectul salvat</value>
   </data>
   <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
-    <value>Machete de proiect</value>
+    <value>Aspecte de proiect</value>
   </data>
   <data name="MainView_LayoutsSave" xml:space="preserve">
     <value>Salvați aspectul curent</value>
@@ -1490,7 +1496,7 @@
     <value>Algoritm de aliniere a cuvântului mașinii</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Modelul simetrizat de antrenament?</value>
+    <value>Antrenează modelul simetrizat?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>Tren</value>
@@ -1532,7 +1538,7 @@
     <value>Adăugați text la vizualizare</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați text la vizualizare nouă</value>
+    <value>Adăugați text la New View</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Adăugați la vizualizare</value>
@@ -1573,11 +1579,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Dicţionar</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>Editor de note externe</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>Montați întreaga zonă de conținut la Viewport</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>Montați toate nodurile la Viewport</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>Obțineți cele mai recente note externe</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Obțineți cele mai recente de la paratext</value>
@@ -1586,7 +1598,7 @@
     <value>Afișați informații despre acest proiect</value>
   </data>
   <data name="Pds_ManuscriptGreek" xml:space="preserve">
-    <value>Macula greacă (NT)</value>
+    <value>Greacă (NT) macula</value>
   </data>
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>Ebraică (OT) macula</value>
@@ -1781,7 +1793,7 @@
     <value>Includeți textele biblice grecești NT?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
-    <value>Includeți texte biblice ebraice?</value>
+    <value>Includeți textele biblice ebraice?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Gestionați proiectele de colaborare</value>
@@ -1811,7 +1823,7 @@
     <value>Biblia interlinear (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext rulează, dar nu este conectat.</value>
+    <value>Paratext funcționează, dar nu este conectat.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>Proiect paratext</value>
@@ -1829,7 +1841,7 @@
     <value>După ce faceți clic pe butonul „Creați” de mai jos, vom fi tokenizarea, alinierea și pregătirea proiectului dvs. Toți pașii vor apărea aici pe măsură ce sunt procesate. În timp ce așteptați, nu ezitați să faceți clic pe linkul de mai jos și să vizionați câteva videoclipuri utile pentru a începe utilizarea ClearDashboard!</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
-    <value>Vrăjitor de șablon de proiect</value>
+    <value>Expert de șablon de proiect</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizardTemplate" xml:space="preserve">
     <value>Proiect de șablon vrăjitor: {0}</value>
@@ -2138,7 +2150,7 @@
     <value>Activați importul de lexic</value>
   </data>
   <data name="Settings_EnableTokenSplitting" xml:space="preserve">
-    <value>Activați divizarea jetoanelor</value>
+    <value>Activați împărțirea jetoanelor</value>
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Experimental</value>
@@ -2267,7 +2279,7 @@
     <value>Editor</value>
   </data>
   <data name="SlackMessageView_SuggestionMarkdown" xml:space="preserve">
-    <value>Suportă formatul Markdown</value>
+    <value>Acceptă formatul de marcare</value>
   </data>
   <data name="SlackMessageView_SuggestionPreview" xml:space="preserve">
     <value>previzualizare</value>
