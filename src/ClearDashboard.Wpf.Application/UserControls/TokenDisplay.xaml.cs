@@ -18,6 +18,7 @@ using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using System.Linq;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+using Autofac.Core.Lifetime;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -2170,11 +2171,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
             settings.MinWidth = 500;
             settings.MinHeight = 500;
             settings.Height = 500;
-            settings.MaxWidth = 700;
+            settings.MaxWidth = 800;
             settings.MaxHeight = 700;
             settings.Top = Mouse.GetPosition(this).Y + screenPoint.Y;
             settings.Left = Mouse.GetPosition(this).X + screenPoint.X;
-
 
             var viewModel = IoC.Get<ExternalNoteViewModel>();
             await viewModel.Initialize(TokenDisplayViewModel.ExternalNotes);

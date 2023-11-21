@@ -29,7 +29,7 @@
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
             <converters1:ValuesAdditionConverter x:Key="ValuesAddition" />
             <converters1:MarginLeftConverter x:Key="MarginLeftConverter" />
-            <converters1:GetIndexMultiConverter x:Key="GetIndexMultiConverter" />
+            <converters1:GetIndexBindableCollectionMultiConverter x:Key="GetIndexMultiConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
 

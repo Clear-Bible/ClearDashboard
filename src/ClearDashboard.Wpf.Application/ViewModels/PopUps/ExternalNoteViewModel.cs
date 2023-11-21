@@ -11,12 +11,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Xml.Linq;
@@ -31,18 +31,42 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         #region Member Variables   
 
         private string _externalProjectId;
-        private string _externalNoteId;
-        private string _verseRef;
 
         #endregion //Member Variables
 
 
         #region Public Properties
 
+        public Guid Id { get; set; } = Guid.NewGuid();
+
         #endregion //Public Properties
 
 
         #region Observable Properties
+
+        private ObservableCollection<ExternalNoteExtended> _tabs = new();
+        public ObservableCollection<ExternalNoteExtended> Tabs
+        {
+            get => _tabs;
+            set 
+            { 
+                _tabs = value; 
+                NotifyOfPropertyChange(() => Tabs);
+            }
+        }
+
+
+        private ExternalNoteExtended _selectedTab;
+        public ExternalNoteExtended SelectedTab
+        {
+            get => _selectedTab;
+            set 
+            { 
+                _selectedTab = value;
+                NotifyOfPropertyChange(() => SelectedTab);
+            }
+        }
+
 
         private ObservableCollection<string> _assignableUsers = new();
         public ObservableCollection<string> AssignableUsers
@@ -67,13 +91,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
-
-        private BindableCollection<ExternalNoteExtended> _externalNotes = new();
-        public BindableCollection<ExternalNoteExtended> ExternalNotes
-        {
-            get => _externalNotes;
-            set => Set(ref _externalNotes, value);
-        }
 
         // ReSharper disable once MemberCanBePrivate.Global
         public string ReplyText { get; set; } = string.Empty;
@@ -107,17 +124,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public async Task Initialize(BindableCollection<ExternalNote> externalNotes)
         {
+            Tabs.Clear();
+
+            int index = 1;
             foreach (var externalNote in externalNotes)
             {
                 var items = ExtractBody(externalNote.Body);
 
                 var inlines = GenerateVerseInlines(externalNote);
 
-                _externalNoteId = externalNote.ExternalNoteId;
                 _externalProjectId = externalNote.ExternalProjectId;
-                _verseRef = externalNote.VerseRefString;
-
-                ExternalNotes.Add(new ExternalNoteExtended
+                var item = new ExternalNoteExtended
                 {
                     ExternalNoteId = externalNote.ExternalNoteId,
                     ExternalProjectId = externalNote.ExternalProjectId,
@@ -130,11 +147,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     AssignedUser = items.Item1,
                     BodyComments = items.Item2,
                     IsResolved = items.Item3,
-                    Inlines = inlines
-                });
+                    Inlines = inlines,
+                    TabHeader = $"Note: {index}",
+                    Id = Id
+                };
+
+                Tabs.Add(item);
+
+                index++;
             }
 
-            NotifyOfPropertyChange(nameof(ExternalNotes));
+            NotifyOfPropertyChange(nameof(Tabs));
 
             var result = await ExecuteRequest(new GetAllEditableProjectUsersQuery(_externalProjectId), CancellationToken.None);
             if (result.Success && result.HasData)
@@ -145,12 +168,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             NotifyOfPropertyChange(nameof(AssignableUsers));
             SelectedAssignableUser = null;
+
+            SelectedTab= Tabs[0];
+            NotifyOfPropertyChange(nameof(SelectedTab));
         }
 
         #endregion //Constructor
 
 
         #region Methods
+
+        // write a function that takes the external note and returns a list of inlines
+
+
+
 
         /// <summary>
         /// do the verse context highlighting
@@ -216,8 +247,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         /// <summary>
         /// Saves the external note and or selected assigned user
         /// </summary>
-        public async void Ok()
+        public async void Ok(object e)
         {
+            var button = (FrameworkElement)e;
+            var externalNote = (ExternalNoteExtended)button.DataContext;
+
             if (string.IsNullOrEmpty(ReplyText) == false || SelectedAssignableUser != "")
             {
                 var comment = string.Empty;
@@ -230,8 +264,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     comment = ReplyText;
                 }
 
-                var result = await ExternalNoteManager.AddNewCommentToExternalNote(_mediator, _externalProjectId,
-                    _externalNoteId, _verseRef, comment, SelectedAssignableUser, _logger);
+                var result = await ExternalNoteManager.AddNewCommentToExternalNote(_mediator, externalNote.ExternalProjectId,
+                    externalNote.ExternalNoteId, externalNote.VerseRefString, comment, SelectedAssignableUser, _logger);
 
                 if (result)
                 {
@@ -255,9 +289,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         /// <summary>
         /// Resolves the external note
         /// </summary>
-        public async void Resolve()
+        public async void Resolve(object e)
         {
-            var result = await ExternalNoteManager.ResolveExternalNote(_mediator, _externalProjectId, _externalNoteId, _verseRef, _logger);
+            var button = (FrameworkElement)e;
+            var externalNote = (ExternalNoteExtended)button.DataContext;
+
+
+            var result = await ExternalNoteManager.ResolveExternalNote(_mediator, externalNote.ExternalProjectId, externalNote.ExternalNoteId, externalNote.VerseRefString, _logger);
 
             if (result)
             {
@@ -267,12 +305,33 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
+        public void SwitchTab(object e)
+        {
+            try
+            {
+                var tab = (TabControl)e;
+
+                if (tab.SelectedIndex == -1)
+                    return;
+
+                _selectedAssignableUser = "";
+                SelectedTab = Tabs[tab.SelectedIndex];
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+            }
+        }
+
         #endregion // Methods
     }
 
 
     public class ExternalNoteExtended : ExternalNote, INotifyPropertyChanged
     {
+        public Guid Id { get; set; } = Guid.Empty;
+
+
         private ObservableCollection<Inline> _inlines = new();
         public ObservableCollection<Inline> Inlines
         {
@@ -284,10 +343,53 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
-        public string AssignedUser { get; set; } = string.Empty;
-        public List<BodyComment> BodyComments { get; set; } = new();
-        public bool IsResolved { get; set; }
+        private string _assignedUser = "Empty User";
+        public string AssignedUser
+        {
+            get => _assignedUser;
+            set 
+            { 
+                _assignedUser = value;
+                OnPropertyChanged();
+            }
+        }
 
+
+        private List<BodyComment> _bodyComments = new();
+        public List<BodyComment> BodyComments
+        {
+            get => _bodyComments;
+            set 
+            { 
+                _bodyComments = value; 
+                OnPropertyChanged();
+            }
+        }
+
+
+        private bool _isResolved;
+        public bool IsResolved
+        {
+            get => _isResolved;
+            set 
+            { 
+                _isResolved = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        private string _tabHeader = "HEADER";
+
+        public string TabHeader
+        {
+            get => _tabHeader;
+            set 
+            { 
+                _tabHeader = value; 
+                OnPropertyChanged();
+            }
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)

@@ -11,5 +11,7 @@ namespace ClearDashboard.Wpf.Application.Views.PopUps
         {
             InitializeComponent();
         }
+
+
     }
 }
