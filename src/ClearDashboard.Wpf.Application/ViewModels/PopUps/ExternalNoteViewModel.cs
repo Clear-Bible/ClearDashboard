@@ -106,8 +106,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             //no-op
         }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
 
         public ExternalNoteViewModel(INavigationService navigationService,
             ILogger<AboutViewModel> logger,
@@ -121,6 +119,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _logger = logger;
             _mediator = mediator;
         }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
 
         public async Task Initialize(BindableCollection<ExternalNote> externalNotes)
         {
@@ -249,12 +249,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         /// </summary>
         public async void Ok(object e)
         {
-            var button = (FrameworkElement)e;
-            var externalNote = (ExternalNoteExtended)button.DataContext;
-
             if (string.IsNullOrEmpty(ReplyText) == false || SelectedAssignableUser != "")
             {
-                var comment = string.Empty;
+                string comment;
                 if (string.IsNullOrEmpty(ReplyText))
                 {
                     comment = $"- Assigned to user {SelectedAssignableUser} -";
@@ -264,8 +261,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     comment = ReplyText;
                 }
 
-                var result = await ExternalNoteManager.AddNewCommentToExternalNote(_mediator, externalNote.ExternalProjectId,
-                    externalNote.ExternalNoteId, externalNote.VerseRefString, comment, SelectedAssignableUser, _logger);
+                var result = await ExternalNoteManager.AddNewCommentToExternalNote(_mediator, SelectedTab.ExternalProjectId,
+                    SelectedTab.ExternalNoteId, SelectedTab.VerseRefString, comment, SelectedAssignableUser!, _logger);
 
                 if (result)
                 {
@@ -291,11 +288,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         /// </summary>
         public async void Resolve(object e)
         {
-            var button = (FrameworkElement)e;
-            var externalNote = (ExternalNoteExtended)button.DataContext;
-
-
-            var result = await ExternalNoteManager.ResolveExternalNote(_mediator, externalNote.ExternalProjectId, externalNote.ExternalNoteId, externalNote.VerseRefString, _logger);
+            var result = await ExternalNoteManager.ResolveExternalNote(_mediator, SelectedTab.ExternalProjectId, SelectedTab.ExternalNoteId, SelectedTab.VerseRefString, _logger);
 
             if (result)
             {
@@ -403,7 +396,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
     [DesignerCategory("code")]
     [System.Xml.Serialization.XmlType(AnonymousType = true)]
     [System.Xml.Serialization.XmlRoot(Namespace = "", IsNullable = false)]
-    public partial class BodyComment
+    public class BodyComment
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public BodyComment(XElement element)
@@ -436,7 +429,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public DateTime CreatedDateTime => DateTime.Parse(Created);
 
-        private BodyCommentParagraphs paragraphsField;
+        private BodyCommentParagraphs _paragraphsField;
 
         private string _createdField = string.Empty;
 
@@ -447,8 +440,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         /// <remarks/>
         public BodyCommentParagraphs Paragraphs
         {
-            get => this.paragraphsField;
-            set => this.paragraphsField = value;
+            get => this._paragraphsField;
+            set => this._paragraphsField = value;
         }
 
         /// <remarks/>
@@ -474,9 +467,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
     }
 
     /// <remarks/>
-    [SerializableAttribute()]
-    [DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [Serializable()]
+    [DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
     public partial class BodyCommentParagraphs
     {
         private string _stringField = string.Empty;
