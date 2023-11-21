@@ -530,6 +530,7 @@ namespace ClearDashboard.Wpf.Application.Services
                                     ManagedLexicon.LemmaOrFormMatchTranslationIds.Contains(translation.TranslationId
                                         .Id);
 
+                                // TODO:  remove
                                 translationMatch = false;
                                 lemmaOrFormMatch = false;
 
