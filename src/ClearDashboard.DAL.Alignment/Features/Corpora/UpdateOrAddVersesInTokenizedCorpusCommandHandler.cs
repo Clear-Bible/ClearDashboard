@@ -233,61 +233,70 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             {
                 //Get the Parallel Corpus
                 var parallelCorpusId = alignmentSetIdToRedo.ParallelCorpusId;
+                if (parallelCorpusId == null)
+                {
+                    continue;
+                }
                 var parallelCorpus = await ParallelCorpus.Get(_mediator, parallelCorpusId, cancellationToken);
 
-              
                 //Train and Align//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                var isTrainedSymmetrizedModel = false;
-
-                var symmetrizationHeuristic = isTrainedSymmetrizedModel
-                    ? SymmetrizationHeuristic.GrowDiagFinalAnd
-                    : SymmetrizationHeuristic.None;
 
                 //static 
-                SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
-                await semaphoreSlim.WaitAsync(cancellationToken);
-                var smtModelType = SmtModelType.FastAlign;
-                TrainSmtModelSet? trainSmtModelSet = null;
-                try
-                {
-                    var wordAlignmentModel = await _translationCommands.TrainSmtModel(
-                        smtModelType,
-                        parallelCorpus,
-                    new ClearBible.Engine.Utils.DelegateProgress(async status =>
-                    {
-                        var message =
-                                $"Training symmetrized {smtModelType} model: {status.PercentCompleted:P}";
-                        //await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running, cancellationToken,
-                        //    message);
-                        Logger!.LogInformation(message);
-                    }), symmetrizationHeuristic);
+                //SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);//what is the semaphore's purpose?
+                var isTrainedSymmetrizedModel = alignmentSetIdToRedo.IsSymmetrized;
+                var smtModelType = Enum.Parse<SmtModelType>(alignmentSetIdToRedo.SmtModel ?? SmtModelType.FastAlign.ToString());
 
-                    //await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
-                    //    cancellationToken, $"Completed SMT Model '{smtModelType}'.");
+                var trainSmtModelSet = await AlignmentUtil.TrainSmtModelAsync(
+                    "Updating Alignments",
+                    isTrainedSymmetrizedModel,
+                    smtModelType,
+                    true,
+                    parallelCorpus,
+                    Logger,
+                    _translationCommands,
+                    cancellationToken);
 
-                    IEnumerable<AlignedTokenPairs>? alignedTokenPairs = null;
-                    
-                    
-                    alignedTokenPairs =
-                        _translationCommands.PredictAllAlignedTokenIdPairs(wordAlignmentModel, parallelCorpus)
-                            .ToList();
-                    
+                //var symmetrizationHeuristic = isTrainedSymmetrizedModel
+                //    ? SymmetrizationHeuristic.GrowDiagFinalAnd
+                //    : SymmetrizationHeuristic.None;
+                //TrainSmtModelSet? trainSmtModelSet = null;
 
-                    trainSmtModelSet = new TrainSmtModelSet(wordAlignmentModel, smtModelType, isTrainedSymmetrizedModel, alignedTokenPairs);
-                }
-                finally
-                {
-                    semaphoreSlim.Release();
-                }
+                //await semaphoreSlim.WaitAsync(cancellationToken);
+                //try
+                //{
+                //    var wordAlignmentModel = await _translationCommands.TrainSmtModel(
+                //        smtModelType,
+                //        parallelCorpus,
+                //    new ClearBible.Engine.Utils.DelegateProgress(async status =>
+                //    {
+                //        var message =
+                //                $"Training symmetrized {smtModelType} model: {status.PercentCompleted:P}";
+                //        Logger!.LogInformation(message);
+                //    }), symmetrizationHeuristic);
+
+                //    IEnumerable<AlignedTokenPairs>? alignedTokenPairs = null;
+
+                //    alignedTokenPairs =
+                //        _translationCommands.PredictAllAlignedTokenIdPairs(wordAlignmentModel, parallelCorpus)
+                //            .ToList();
+                    
+                //    trainSmtModelSet = new TrainSmtModelSet(wordAlignmentModel, smtModelType, isTrainedSymmetrizedModel, alignedTokenPairs);
+                //}
+                //finally
+                //{
+                //    semaphoreSlim.Release();
+                //}
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var verificationTypes = new Dictionary<string, Models.AlignmentVerification>();
-                var originatedTypes = new Dictionary<string, Models.AlignmentOriginatedFrom>();
-
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //Same as CreateAlignmentSetCommandHandler
                 var redoneAlignments = trainSmtModelSet.AlignedTokenPairs.Select(a =>
                     new Alignment.Translation.Alignment(a, "Unverified", "FromAlignmentModel"));
+
+                var verificationTypes = new Dictionary<string, Models.AlignmentVerification>();
+                var originatedTypes = new Dictionary<string, Models.AlignmentOriginatedFrom>();
 
                 foreach (var al in redoneAlignments)
                 {
@@ -317,12 +326,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         );
                     }
                 }
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var oldParallelTextRows = parallelCorpus.Select(v => (EngineParallelTextRow)v).ToList();//SLOW, what if we just just the new text for the alignment managers? SLOW
+                var oldParallelTextRows = parallelCorpus.Cast<EngineParallelTextRow>();
                 var oldAlignmentSet = await AlignmentSet.Get(alignmentSetIdToRedo, _mediator);
-                var oldAlignments = await oldAlignmentSet.GetAlignments(oldParallelTextRows);
+                var oldAlignments = await oldAlignmentSet.GetAlignments(oldParallelTextRows, token: cancellationToken);//Slow
 
                 //Get alignments to be replaced
                 var alignmentsToReplace = oldAlignments.Where(x => x.OriginatedFrom == "FromAlignmentModel");
@@ -341,23 +351,24 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 var dbAlignmentsToReplace = ProjectDbContext!.Alignments
                     .Where(dba => tokenIdsToReplace.Contains(dba.SourceTokenComponentId));
 
-                foreach (var dbAlignmentToReplace in dbAlignmentsToReplace)
+                //var dbAlignmentToReplace = dbAlignmentsToReplace.Where(a=>a.Deleted==null).FirstOrDefault();
+                foreach (var dbAlignmentToReplace in dbAlignmentsToReplace)//Super Super Slow
                 {
-                    if (dbAlignmentToReplace != null && dbAlignmentToReplace.Deleted is null)
+                    if (dbAlignmentToReplace.Deleted is null)
                     {
                         dbAlignmentToReplace.Deleted = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
 
-                        using (var transaction = ProjectDbContext.Database.BeginTransaction())
-                        {
-                            dbAlignmentToReplace.AddDomainEvent(new AlignmentAddingRemovingEvent(
-                                alignmentsToReplaceModel,
+                        //await using (var transaction = await ProjectDbContext.Database.BeginTransactionAsync(cancellationToken))
+                        //{
+                            dbAlignmentToReplace.AddDomainEvent(new AlignmentAddingRemovingEvent(//I don't get why it's not working with only one call
+                                dbAlignmentsToReplace,
                                 null,
                                 ProjectDbContext));
 
                             _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
-                            await transaction.CommitAsync(cancellationToken);
-                        }
+                            //await transaction.CommitAsync(cancellationToken);
+                        //}
 
                         await _mediator.Publish(new AlignmentAddedRemovedEvent(alignmentsToReplaceModel, dbAlignmentToReplace), cancellationToken);
                     }
@@ -374,6 +385,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         AlignmentOriginatedFrom = originatedTypes[al.OriginatedFrom]
                     }).ToList();
 
+                //Insert Replacement Alignments
+                var replacementAlignmentsModel = redoneAlignmentsModel.Where(na => tokenIdsToReplace.Contains(na.SourceTokenComponentId));
+                await using var replacementAlignmentsInsertCommand = AlignmentUtil.CreateAlignmentInsertCommand(connection);
+                await AlignmentUtil.InsertAlignmentsAsync(
+                    replacementAlignmentsModel,
+                    alignmentSetIdToRedo.Id,
+                    replacementAlignmentsInsertCommand,
+                    ProjectDbContext.UserProvider!.CurrentUser!.Id,
+                    cancellationToken);
+
+                //Get New Alignments
                 var displayName = "Temp Alignment";
 
                 var newAlignmentSetId = Guid.NewGuid();
@@ -383,43 +405,31 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     ParallelCorpusId = parallelCorpus.ParallelCorpusId.Id,
                     DisplayName = displayName,
                     SmtModel = smtModelType.ToString(),
-                    IsSyntaxTreeAlignerRefined = false,//how do I know this is false?
+                    IsSyntaxTreeAlignerRefined = alignmentSetIdToRedo.IsSyntaxTreeAlignerRefined,
                     IsSymmetrized = isTrainedSymmetrizedModel,
-                    Metadata = new(),
+                    Metadata = new Dictionary<string, object>(),
                     Alignments = redoneAlignmentsModel
                 };
 
-                var replacementAlignmentsModel = redoneAlignmentsModel.Where(na => tokenIdsToReplace.Contains(na.SourceTokenComponentId));
-                
-
-                //Insert Replacement Alignments
-                using var replacementAlignmentsInsertCommand = AlignmentUtil.CreateAlignmentInsertCommand(connection);
-                await AlignmentUtil.InsertAlignmentsAsync(
-                    replacementAlignmentsModel,
-                    alignmentSetIdToRedo.Id,
-                    replacementAlignmentsInsertCommand,
-                    ProjectDbContext.UserProvider!.CurrentUser!.Id,
-                    cancellationToken);
-
-                //Get New Alignments
                 var oldTokenIds = oldAlignments.Select(oa => oa.AlignedTokenPair.SourceToken.TokenId.Id).ToList();
                 var newAlignments = redoneAlignmentSetModel.Alignments.Where(ra => !oldTokenIds.Contains(ra.SourceTokenComponentId));
 
                 //Insert New Alignments
-                using var newAlignmentsInsertCommand = AlignmentUtil.CreateAlignmentInsertCommand(connection);
-                await AlignmentUtil.InsertAlignmentsAsync(
+                await using var newAlignmentsInsertCommand = AlignmentUtil.CreateAlignmentInsertCommand(connection);
+                await AlignmentUtil.InsertAlignmentsAsync(//Slow
                     newAlignments,
                     alignmentSetIdToRedo.Id,
                     newAlignmentsInsertCommand,
                     ProjectDbContext.UserProvider!.CurrentUser!.Id,
                     cancellationToken);
 
+                //Add task for Translations refresh
                 ProjectDbContext.AlignmentSetDenormalizationTasks.Add(new Models.AlignmentSetDenormalizationTask()
                 {
                     AlignmentSetId = alignmentSetIdToRedo.Id
                 });
 
-                await ProjectDbContext.SaveChangesAsync();
+                await ProjectDbContext.SaveChangesAsync(cancellationToken);//Super Slow
             }
 
             return new RequestResult<AlignmentSet>

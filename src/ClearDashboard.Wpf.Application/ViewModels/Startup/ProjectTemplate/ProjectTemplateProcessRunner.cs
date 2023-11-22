@@ -972,6 +972,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 taskName);
         }
 
+        //Use Alignment.Util here.  Must first figure out SendBackgroundStatus() first
         public async Task<TrainSmtModelSet> TrainSmtModelAsync(string taskName, bool isTrainedSymmetrizedModel, SmtModelType smtModelType, bool generateAlignedTokenPairs, ParallelCorpus parallelCorpus, CancellationToken cancellationToken)
         {
             Logger!.LogInformation($"{nameof(TrainSmtModelAsync)} '{smtModelType}' on '{parallelCorpus.ParallelCorpusId.DisplayName}' called.");

@@ -694,7 +694,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                 var offset = (ushort)ParentViewModel.VerseOffsetRange;
                 var verses = metadatum.ParallelCorpus.GetByVerseRange(new VerseRef(bbbcccvvv), offset, offset);
-                var rows = verses.parallelTextRows.Select(v => (EngineParallelTextRow)v).ToList();
+                var rows = verses.parallelTextRows.Cast<EngineParallelTextRow>().ToList();
                 return rows;
             }
             catch (Exception ex)

@@ -1,20 +1,20 @@
 ﻿using ClearBible.Engine.Corpora;
-using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DAL.Alignment.Translation;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SIL.Machine.Corpora;
-using SIL.Scripture;
+using Microsoft.Extensions.Logging;
+using SIL.Machine.Translation;
 using System.Data.Common;
 using System.Text.Json;
-using static ClearBible.Engine.Persistence.FileGetBookIds;
+using static ClearDashboard.DAL.Alignment.Features.Corpora.UpdateOrAddVersesInTokenizedCorpusCommandHandler;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Common
 {
     public static class AlignmentUtil
     {
+        static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+
         public static DbCommand CreateAlignmentSetInsertCommand(DbConnection connection)
         {
             var command = connection.CreateCommand();
@@ -83,7 +83,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             alignmentCommand.Parameters["@AlignmentSetId"].Value = alignmentSetId;
             alignmentCommand.Parameters["@UserId"].Value = Guid.Empty != alignment.UserId ? alignment.UserId : currentUserId;
             alignmentCommand.Parameters["@Created"].Value = converter.ConvertToProvider(alignment.Created);
-            _ = await alignmentCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+            _ = await alignmentCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);//is there a way to insert a range?
         }
 
         private static void ApplyColumnsToCommand(DbCommand command, Type type, string[] columns)
@@ -100,6 +100,55 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
                 parameter.ParameterName = $"@{column}";
                 command.Parameters.Add(parameter);
             }
+        }
+
+        //Same as ProjectTemplateProcessRunner
+        public static async Task<TrainSmtModelSet> TrainSmtModelAsync(string taskName, bool isTrainedSymmetrizedModel, SmtModelType smtModelType, bool generateAlignedTokenPairs, ParallelCorpus parallelCorpus, ILogger logger, TranslationCommands translationCommands, CancellationToken cancellationToken)
+        {
+            var symmetrizationHeuristic = isTrainedSymmetrizedModel
+                ? SymmetrizationHeuristic.GrowDiagFinalAnd
+                : SymmetrizationHeuristic.None;
+
+            TrainSmtModelSet? trainSmtModelSet = null;
+
+            await semaphoreSlim.WaitAsync(cancellationToken);
+            try
+            {
+                var wordAlignmentModel = await translationCommands.TrainSmtModel(
+                    smtModelType,
+                    parallelCorpus,
+                    new ClearBible.Engine.Utils.DelegateProgress(async status =>
+                    {
+                        var message =
+                            $"Training symmetrized {smtModelType} model: {status.PercentCompleted:P}";
+                        //await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running, cancellationToken,
+                        //    message);
+                        logger!.LogInformation(message);
+
+                    }), symmetrizationHeuristic);
+
+                //await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
+                //    cancellationToken, $"Completed SMT Model '{smtModelType}'.");
+
+                IEnumerable<AlignedTokenPairs>? alignedTokenPairs = null;
+                if (generateAlignedTokenPairs)
+                {
+                    alignedTokenPairs =
+                        translationCommands.PredictAllAlignedTokenIdPairs(wordAlignmentModel, parallelCorpus)
+                            .ToList();
+
+                    //await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
+                    //    cancellationToken, $"Generated AlignedTokenPairs '{smtModelType}'.");
+                }
+
+                trainSmtModelSet = new TrainSmtModelSet(wordAlignmentModel, smtModelType, isTrainedSymmetrizedModel, alignedTokenPairs);
+            }
+            finally
+            {
+                semaphoreSlim.Release();
+            }
+
+            return trainSmtModelSet;
         }
 
     }
