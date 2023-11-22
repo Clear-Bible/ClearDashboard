@@ -16,6 +16,7 @@
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d"
+    MaxWidth="1024"
     MaxHeight="800">
     <UserControl.Resources>
         <Style x:Key="Label" TargetType="{ x:Type TextBlock}">
@@ -201,7 +202,7 @@
 
         </Grid>
         <DataGrid
-             x:Name="LexiconEdit"
+             x:Name="LexiconEditDataGrid"
              Grid.Row="1"
              Grid.Column="0"
              Margin="4"
@@ -217,7 +218,7 @@
              VirtualizingPanel.IsVirtualizingWhenGrouping="False"
              VirtualizingPanel.VirtualizationMode="Standard">
             <DataGrid.Columns>
-                <DataGridTemplateColumn Width="300">
+                <DataGridTemplateColumn Width="250">
                     <DataGridTemplateColumn.HeaderTemplate>
                         <DataTemplate>
                             <TextBlock Text="Action" />
@@ -233,10 +234,12 @@
                                         </DataTemplate>
                                     </Button.ContentTemplate>
                                 </Button>
-                                <Button x:Name="AddButton" Style="{StaticResource RowButtonStyle}"  >
+                                <Button x:Name="AddButton" Style="{StaticResource RowButtonStyle}"  
+                                    cm:Action.TargetWithoutContext="{Binding DataContext, ElementName=LexiconEditDataGrid}"
+                                    cm:Message.Attach="[Event Click] = [Action OnAddButtonClicked($dataContext)]">
                                     <Button.ContentTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding ElementName=LexiconEdit, Path=DataContext.EditButtonLabel}" TextWrapping="Wrap" />
+                                            <TextBlock Text="{Binding ElementName=LexiconEditDataGrid, Path=DataContext.EditButtonLabel}" TextWrapping="Wrap" />
                                         </DataTemplate>
                                     </Button.ContentTemplate>
                                 </Button>
@@ -253,13 +256,25 @@
                      Binding="{Binding Type}"
                      Header="{helpers:Localization  LexiconEdit_Type}" />
                 <DataGridTextColumn
-                    Width="125"
+                    Width="250"
                     Binding="{Binding Forms}"
                     Header="{helpers:Localization  LexiconEdit_Forms}" />
-                <DataGridTextColumn
-                    Width="125"
+                <!--<DataGridTextColumn
+                    Width="250"
                     Binding="{Binding Meanings}"
-                    Header="{helpers:Localization  LexiconEdit_Meanings}" />
+                    Header="{helpers:Localization  LexiconEdit_Meanings}" />-->
+                <DataGridTemplateColumn Width="250">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{helpers:Localization  LexiconEdit_Meanings}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Meanings}" TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
             </DataGrid.Columns>
         </DataGrid>

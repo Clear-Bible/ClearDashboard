@@ -222,14 +222,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             {
                 dialogViewModel.SourceLanguage = lexiconImport.SourceLanguage;
                 dialogViewModel.TargetLanguage = lexiconImport.TargetLanguage;
-                dialogViewModel.EditMode = LexiconEditMode.PartialMatchOnLexemeOrForm;
+                dialogViewModel.EditMode = LexiconEditMode.MatchOnTranslation;
                 dialogViewModel.ToMatch = lexiconImport.TargetWord;
                 dialogViewModel.Other = lexiconImport.SourceWord;
-
+                
                 await dialogViewModel.ActivateAsync();
 
                 var result = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
             }
+          
         }
 
 
@@ -250,7 +251,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             {
                 dialogViewModel.SourceLanguage = lexiconImport.SourceLanguage;
                 dialogViewModel.TargetLanguage = lexiconImport.TargetLanguage;
-                dialogViewModel.EditMode = LexiconEditMode.MatchOnTranslation;
+                dialogViewModel.EditMode = LexiconEditMode.PartialMatchOnLexemeOrForm;
                 dialogViewModel.ToMatch = lexiconImport.SourceWord;
                 dialogViewModel.Other = lexiconImport.TargetWord;
 
@@ -258,6 +259,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
                 var result = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
             }
+
         }
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)

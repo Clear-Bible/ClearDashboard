@@ -17,6 +17,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 {
@@ -226,16 +227,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         public string EditButtonLabel => GetEditButtonLabel();
 
+
+        public async Task OnAddButtonClicked(EditableLexemeViewModel editableLexeme)
+        {
+            switch (EditMode)
+            {
+                case LexiconEditMode.MatchOnTranslation:
+                    await Task.CompletedTask;
+                    break;
+
+                case LexiconEditMode.PartialMatchOnLexemeOrForm:
+                    await Task.CompletedTask;
+                    break;
+
+            }
+        }
+
         private string GetEditButtonLabel()
         {
             switch (EditMode)
             {
                 case LexiconEditMode.MatchOnTranslation:
-                    return string.Format(LocalizationService.Get("LexiconEdit_Edit_MatchOnTranslationTemplate"), Other);
-
+                    return string.Format(LocalizationService.Get("LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate"), Other);
 
                 case LexiconEditMode.PartialMatchOnLexemeOrForm:
-                    return string.Format(LocalizationService.Get("LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate"), Other);
+                    return string.Format(LocalizationService.Get("LexiconEdit_Edit_MatchOnTranslationTemplate"), Other);
+                   
             }
 
             return "[UNKNOWN DIALOG MODE!]";

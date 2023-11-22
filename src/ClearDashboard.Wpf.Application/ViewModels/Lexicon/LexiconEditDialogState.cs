@@ -37,7 +37,7 @@ public class LexiconEditDialogState : PropertyChangedBase
 
     public bool LexemeOrFormsChecked => LexemeChecked | FormsChecked;
 
-    public bool TransitionAndLexemeOrFormsChecked => TranslationChecked & LexemeAndFormsChecked;
+    public bool TransitionAndLexemeOrFormsChecked => TranslationChecked && LexemeAndFormsChecked;
 
     private void NotifyBooleansChanged()
     {

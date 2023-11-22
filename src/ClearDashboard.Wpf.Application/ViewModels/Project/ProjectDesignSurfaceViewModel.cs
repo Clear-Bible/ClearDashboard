@@ -1724,8 +1724,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             settings.ResizeMode = ResizeMode.NoResize;
-            settings.MinWidth = 500;
-            settings.MinHeight = 500;
+            settings.MinWidth = 1342;
+            settings.MinHeight = 938;
             settings.Title = $"{localizedString}";
 
             var viewModel  = LifetimeScope!.Resolve<LexiconImportsViewModel>();
