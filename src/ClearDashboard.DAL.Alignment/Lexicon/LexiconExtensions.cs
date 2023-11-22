@@ -336,6 +336,7 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
                 ));
         }
 
+	[Obsolete("Replaced by GetTranslationMatchTranslationIds")]
         public static IEnumerable<(Guid IncomingTranslationId, Guid CandidateLexemeId)> GetAddAsFormMappings(
             this IEnumerable<Lexeme> first, 
             IEnumerable<Lexeme> second,
@@ -389,6 +390,7 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             return combos;
         }
 
+	[Obsolete("Replaced by GetLemmaOrFormMatchTranslationIds")]
         public static IEnumerable<(Guid IncomingTranslationId, Guid CandidateLexemeId)> GetAddAsTranslationMappings(
             this IEnumerable<Lexeme> first,
             IEnumerable<Lexeme> second,
@@ -444,6 +446,7 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             return combos;
         }
 
+	[Obsolete()]
         private static IEnumerable<Guid> FindFirstTranslationIdsInSecond(IEnumerable<Lexeme> first, IEnumerable<Lexeme> second)
         {
             var (mapping, onlyInFirst, onlyInSecond) = RelateByLexemeMatchValue(first, second);
