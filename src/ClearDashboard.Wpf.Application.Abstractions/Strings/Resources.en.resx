@@ -907,6 +907,12 @@
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
+  <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>Add '{0}' as form</value>
+  </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>Add '{0}' as translation to first meaning</value>
+  </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Find All</value>
   </data>
@@ -1573,11 +1579,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Dictionary</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>External Notes Editor</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>Fit the entire content area to the viewport</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>Fit all nodes to the viewport</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>Get Latest External Notes</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Get Latest from Paratext</value>

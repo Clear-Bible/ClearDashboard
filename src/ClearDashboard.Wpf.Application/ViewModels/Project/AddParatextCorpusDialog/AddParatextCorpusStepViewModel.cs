@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.Application.Helpers;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
@@ -296,57 +297,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         {
             CanOk = false;
 
-            await CheckUsfm(ParentViewModel);
+            ShowSpinner = Visibility.Visible;
+            UsfmErrorsByProject = await UsfmChecker.CheckUsfm(SelectedProject, ProjectManager, LocalizationService);
+            var firstProject = UsfmErrorsByProject.FirstOrDefault();
+            if (firstProject != null)
+            {
+                ErrorTitle = firstProject.ErrorTitle;
+                UsfmErrors = firstProject.UsfmErrors;
+                ParentViewModel.UsfmErrors = firstProject.UsfmErrors;
+            }
+            ShowSpinner = Visibility.Collapsed;
 
             ValidationResult = Validator?.Validate(this);
             CanOk = ValidationResult.IsValid;
         }
-
-        private async Task CheckUsfm(IParatextCorpusDialogViewModel? parentViewModel)
-        {
-            if (SelectedProject is null)
-            {
-                return;
-            }
-
-            ShowSpinner = Visibility.Visible;
-
-            var result = await ProjectManager!.ExecuteRequest(new GetCheckUsfmQuery(SelectedProject!.Id), CancellationToken.None);
-            if (result.Success)
-            {
-                var errors = result.Data;
-
-                if (errors.NumberOfErrors == 0)
-                {
-                    UsfmErrors = new();
-                   
-                    ErrorTitle = LocalizationService!.Get("AddParatextCorpusDialog_NoErrors");
-                }
-                else
-                {
-                    UsfmErrors = new ObservableCollection<UsfmError>(errors.UsfmErrors);
-                    ErrorTitle = LocalizationService!.Get("AddParatextCorpusDialog_ErrorCount");
-                }
-
-                UsfmErrorsByProject = new List<UsfmErrorsWrapper>()
-                {
-                   new() 
-                   {
-                       ProjectName = SelectedProject!.LongName!,
-                       ProjectId = SelectedProject!.Id,
-                       UsfmErrors = UsfmErrors,
-                       ErrorTitle = ErrorTitle
-                   }
-                };
-
-                parentViewModel.UsfmErrors = UsfmErrors;
-
-            }
-
-            ShowSpinner = Visibility.Collapsed;
-        }
-
-
+        
         private bool _canOk;
 
         public async void Ok()

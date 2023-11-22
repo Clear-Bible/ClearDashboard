@@ -19,6 +19,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.Application.Helpers;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
@@ -94,7 +95,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                 NotifyOfPropertyChange(() => ErrorTitle);
             }
         }
-
+        
         #endregion //Observable Properties
 
 
@@ -134,6 +135,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
             await RetrieveParatextProjectMetadata(cancellationToken);
+
+            ShowSpinner = Visibility.Visible;
+            var result = await UsfmChecker.CheckUsfm(SelectedProject, ProjectManager, LocalizationService);
+            var firstProject = result.FirstOrDefault();
+            if (firstProject != null)
+            {
+                UsfmErrors = firstProject.UsfmErrors;
+            }
+            
+            ShowSpinner = Visibility.Collapsed;
 
             var parameters = new List<Autofac.Core.Parameter>
             {

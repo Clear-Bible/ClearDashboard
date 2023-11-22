@@ -6,6 +6,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace ClearDashboard.DataAccessLayer
 {
@@ -18,6 +19,24 @@ namespace ClearDashboard.DataAccessLayer
         public static string LicenseFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft", "UserSecrets", "License");
         public static string LicenseFileName = "license.txt";
         public static string LicenseFilePath = Path.Combine(LicenseFolderPath, LicenseFileName);
+
+        public static async Task<bool> DeleteOldLicense()
+        {
+            try
+            {
+                if (File.Exists(LicenseFilePath) && File.Exists(LegacyLicenseFilePath))
+                {
+                    File.Delete(LegacyLicenseFilePath);
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+
+            return false;
+        }
 
         private static Aes CreateCryptoProvider()
         {

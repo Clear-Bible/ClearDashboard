@@ -416,7 +416,7 @@
     <value>数数</value>
   </data>
   <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>按表面文本计数</value>
+    <value>按地面文本计数</value>
   </data>
   <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
     <value>通过培训文本计数</value>
@@ -467,7 +467,7 @@
     <value>目标</value>
   </data>
   <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
-    <value>目标零件</value>
+    <value>目标部分</value>
   </data>
   <data name="BulkAlignmentReview_Type" xml:space="preserve">
     <value>类型</value>
@@ -614,10 +614,10 @@
     <value>删除对齐</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>删除“ {0}”的对齐？</value>
+    <value>删除“ {0}”的对齐方式？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>删除所有对齐方式？</value>
+    <value>删除所有路线？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>令牌'{0}'具有多个对齐定义。单击'{1}'将删除所有对齐。</value>
@@ -662,7 +662,7 @@
     <value>显示视图控件</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>拆分令牌</value>
+    <value>分开令牌</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>将拆分应用于其他令牌</value>
@@ -907,6 +907,12 @@
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>编辑</value>
   </data>
+  <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>添加'{0}'作为表单</value>
+  </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>将'{0}'添加为第一个含义</value>
+  </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>找到所有</value>
   </data>
@@ -965,7 +971,7 @@
     <value>查找具有与目标匹配的一个或多个翻译的词汇</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
-    <value>导入检查</value>
+    <value>进口检查</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexeme或形式匹配</value>
@@ -1007,10 +1013,10 @@
     <value>需要名字</value>
   </data>
   <data name="LicenseValidator_LastMissing" xml:space="preserve">
-    <value>需要姓</value>
+    <value>需要姓氏</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>需要许可证密钥</value>
+    <value>需要许可密钥</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
@@ -1262,7 +1268,7 @@
     <value>姓</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
-    <value>新的协作用户</value>
+    <value>新的合作用户</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
     <value>密码：</value>
@@ -1361,7 +1367,7 @@
     <value>添加标签组</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>标签组已经存在，名称为</value>
+    <value>一个标签组已经存在</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>初始化标签组</value>
@@ -1484,10 +1490,10 @@
     <value>并行化语料库经文</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>机词对齐算法</value>
+    <value>机器字对准算法</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>机词对齐算法</value>
+    <value>机器字对准算法</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>火车对称模型？</value>
@@ -1550,7 +1556,7 @@
     <value>更改内容的缩放级别</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>顾问说明</value>
+    <value>顾问Notes</value>
   </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>创建新单词对齐</value>
@@ -1573,11 +1579,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>字典</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>外部音符编辑器</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>将整个内容区域适合视口</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>将所有节点适合视口</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>获取最新的外部笔记</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>从Paratext获取最新信息</value>
@@ -1706,7 +1718,7 @@
     <value>字首</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>展示退缩</value>
+    <value>展示反向翻译</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>干</value>
@@ -1775,7 +1787,7 @@
     <value>导入服务器项目</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>选中此框，以在创建项目时包括希腊语和希伯来语圣经文本。</value>
+    <value>在创建项目时，请选中此框，以包括希腊语和希伯来语圣经的文本。</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>包括NT希腊圣经文本？</value>
@@ -1799,7 +1811,7 @@
     <value>paratext不运行</value>
   </data>
   <data name="ProjectPicker_OpenRecent" xml:space="preserve">
-    <value>近期开放</value>
+    <value>公开最近</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
     <value>PARATEXT</value>
@@ -1811,7 +1823,7 @@
     <value>线性圣经（LWC）</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>paratext正在运行但未连接。</value>
+    <value>Paratext正在运行但未连接。</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>PARATEXT项目</value>
@@ -2186,7 +2198,7 @@
     <value>ClearDashboard设置</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>显示与仪表板不同的显示器上展示的视图</value>
+    <value>显示出与仪表板不同的显示器上扩展的视图</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
     <value>对于具有三个或三个或以上监视器的系统，在第三监视器上显示扩展的视图</value>

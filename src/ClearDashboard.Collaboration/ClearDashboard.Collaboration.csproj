@@ -4,12 +4,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>ClearDashboard.Collaboration</AssemblyName>
-    <FileVersion>1.2.0.17</FileVersion>
-    <Version>1.2.0.17</Version>
-    <AssemblyVersion>1.2.0.17</AssemblyVersion>
+    <FileVersion>1.2.0.18</FileVersion>
+    <Version>1.2.0.18</Version>
+    <AssemblyVersion>1.2.0.18</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ClearBible.Engine" Version="2.0.16" />
+    <PackageReference Include="ClearBible.Engine" Version="2.0.21" />
     <PackageReference Include="LibGit2Sharp" Version="0.27.2" />
     <PackageReference Include="MediatR" Version="9.0.0" />
   </ItemGroup>

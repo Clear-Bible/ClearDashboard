@@ -19,6 +19,7 @@ using ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate;
 using ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.CQRS;
+using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using MediatR;
 
 namespace ClearDashboard.Wpf.Application
@@ -194,6 +195,8 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterParatextDialogDependencies();
 
             //builder.RegisterType<AlignmentPopupView>().AsSelf();
+
+            builder.RegisterType<LexiconEditDialogViewModel>().AsSelf().WithParameter(TypedParameter.From("lexiconManager")); ;
            
         }
     }

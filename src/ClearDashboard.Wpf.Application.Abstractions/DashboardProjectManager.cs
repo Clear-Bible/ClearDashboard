@@ -16,7 +16,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 
 namespace ClearDashboard.Wpf.Application;
 
@@ -25,6 +24,9 @@ public class DashboardProjectManager : ProjectManager
 
 
 #nullable disable
+
+
+    #region Member Variables   
 
     private IEventAggregator EventAggregator { get; set; }
 
@@ -36,8 +38,28 @@ public class DashboardProjectManager : ProjectManager
 
     private bool _licenseCleared = false;
     private bool UpdatingCurrentVerse { get; set; }
-    
+
+    #endregion //Member Variables
+
+
+    #region Public Properties
+
     public List<ParatextProjectMetadata> ProjectMetadata = new();
+
+    public FlowDirection CurrentLanguageFlowDirection { get; set; }
+
+    public bool IsParatextConnected => HubConnection != null && HubConnection.State == ConnectionState.Connected;
+
+
+    #endregion //Public Properties
+
+
+    #region Observable Properties
+
+    #endregion //Observable Properties
+
+
+    #region Constructor
 
     public DashboardProjectManager(IEventAggregator eventAggregator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, IWindowManager windowManager, INavigationService navigationService, ILifetimeScope lifetimeScope) : base(paratextProxy, logger, lifetimeScope)
     {
@@ -45,7 +67,6 @@ public class DashboardProjectManager : ProjectManager
         _windowManager = windowManager;
         _navigationService = navigationService;
     }
-    public FlowDirection CurrentLanguageFlowDirection { get; set; }
 
     public override async Task Initialize()
     {
@@ -54,6 +75,11 @@ public class DashboardProjectManager : ProjectManager
         await ConfigureSignalRClient();
 
     }
+
+    #endregion //Constructor
+
+
+    #region Methods
 
     protected async Task ConfigureSignalRClient()
     {
@@ -275,4 +301,11 @@ public class DashboardProjectManager : ProjectManager
             await callback.Invoke(dialogViewModel);
         }
     }
+
+    #endregion // Methods
+
+
+    #region IHandle
+
+    #endregion // IHandle
 }
