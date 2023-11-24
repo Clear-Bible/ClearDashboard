@@ -61,7 +61,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
     public class ProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IProjectDesignSurfaceViewModel,
         IHandle<UiLanguageChangedMessage>, IDisposable, IHandle<RedrawParallelCorpusMenus>,
-        IHandle<RedrawCorpusNodeMenus>, IHandle<ProjectLoadedMessage>, IHandle<RefreshExternalNotesMessage>
+        IHandle<RedrawCorpusNodeMenus>, IHandle<ProjectLoadedMessage>, IHandle<GetExternalNotesMessage>
     {
         #region Member Variables
 
@@ -1981,7 +1981,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #endregion
 
 
-        public Task HandleAsync(RefreshExternalNotesMessage message, CancellationToken cancellationToken)
+        public Task HandleAsync(GetExternalNotesMessage message, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(message.ParatextProjectId) == false)
             {

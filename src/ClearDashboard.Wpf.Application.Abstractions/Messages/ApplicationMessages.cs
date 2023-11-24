@@ -13,7 +13,7 @@ namespace ClearDashboard.Wpf.Application.Messages
     public record RedrawParallelCorpusMenus();
     public record RedrawCorpusNodeMenus();
 
-    public record RefreshExternalNotesMessage(string ParatextProjectId);
+    public record GetExternalNotesMessage(string ParatextProjectId);
     public record SetIsCheckedAlignment(AlignmentSetId AlignmentSetId, bool IsChecked);
 
     public record SetProjectMetadataQuery(List<ParatextProjectMetadata> ProjectMetadata);

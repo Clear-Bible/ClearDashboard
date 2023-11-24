@@ -273,7 +273,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
                 if (result)
                 {
-                    await EventAggregator.PublishOnUIThreadAsync(new RefreshExternalNotesMessage(_externalProjectId));
+                    await EventAggregator.PublishOnUIThreadAsync(new GetExternalNotesMessage(_externalProjectId));
 
                     await this.TryCloseAsync();
                 }
@@ -299,7 +299,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             if (result)
             {
-                await EventAggregator.PublishOnUIThreadAsync(new RefreshExternalNotesMessage(_externalProjectId));
+                await EventAggregator.PublishOnUIThreadAsync(new GetExternalNotesMessage(_externalProjectId));
 
                 await this.TryCloseAsync();
             }

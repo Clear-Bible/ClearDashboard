@@ -46,51 +46,56 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Users
             }
 
 
-            // get the path to the Paratext projects folder
-            var paratextProjectsPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Paratext\8", "Settings_Directory", null);
-            if (paratextProjectsPath == null)
-            {
-                throw new Exception($"Paratext projects path is not set");
-            }
-
-            var projectName = project.ShortName;
-
-            // get the file path to ProjectUserAccess.xml
-            var projectUserAccessFilePath = System.IO.Path.Combine(paratextProjectsPath, projectName, "ProjectUserAccess.xml");
-            if (File.Exists(projectUserAccessFilePath) == false)
-            {
-                return Task.FromResult(result);
-            }
-
-
-            var validUsers = new List<string>();
-            try
-            {
-                // read and parse the xml file
-                var xmlStr = File.ReadAllText(projectUserAccessFilePath);
-                var str = XElement.Parse(xmlStr);
-
-                var users = str.Elements("User")
-                    .ToList();
-
-                foreach (var element in users)
-                {
-                    var username = element.Attribute("UserName").Value;
-                    var role = element.Element("Role").Value;
-
-                    if (role != "None" && role != "Observer" && !string.IsNullOrEmpty(username))
-                    {
-                        validUsers.Add(username);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                result.Message = e.Message;
-            }
-
-            result.Data = validUsers;
+            // return empty list if the project is not a translation project    
+            var users2 = new List<string>(project.NonObserverUsers.Select(x => x.Name).OrderBy(x => x));
+            result.Data = users2;
             return Task.FromResult(result);
+
+            //// get the path to the Paratext projects folder
+            //var paratextProjectsPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Paratext\8", "Settings_Directory", null);
+            //if (paratextProjectsPath == null)
+            //{
+            //    throw new Exception($"Paratext projects path is not set");
+            //}
+
+            //var projectName = project.ShortName;
+
+            //// get the file path to ProjectUserAccess.xml
+            //var projectUserAccessFilePath = System.IO.Path.Combine(paratextProjectsPath, projectName, "ProjectUserAccess.xml");
+            //if (File.Exists(projectUserAccessFilePath) == false)
+            //{
+            //    return Task.FromResult(result);
+            //}
+
+
+            //var validUsers = new List<string>();
+            //try
+            //{
+            //    // read and parse the xml file
+            //    var xmlStr = File.ReadAllText(projectUserAccessFilePath);
+            //    var str = XElement.Parse(xmlStr);
+
+            //    var users = str.Elements("User")
+            //        .ToList();
+
+            //    foreach (var element in users)
+            //    {
+            //        var username = element.Attribute("UserName").Value;
+            //        var role = element.Element("Role").Value;
+
+            //        if (role != "None" && role != "Observer" && !string.IsNullOrEmpty(username))
+            //        {
+            //            validUsers.Add(username);
+            //        }
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    result.Message = e.Message;
+            //}
+
+            //result.Data = validUsers;
+            //return Task.FromResult(result);
         }
     }
 }
