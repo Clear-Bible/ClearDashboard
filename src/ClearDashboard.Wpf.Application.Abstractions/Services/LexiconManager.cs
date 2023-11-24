@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Lexeme = ClearDashboard.DAL.Alignment.Lexicon.Lexeme;
@@ -468,7 +469,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public ObservableCollection<Lexeme>? ManagedLexemes { get; private set; }
 
-        public (IEnumerable<Lexeme> Lexemes, IEnumerable<Guid> LemmaOrFormMatchesOnly, IEnumerable<Guid> TranslationMatchesOnly) ManagedLexicon { get; private set; }
+        public (IEnumerable<Lexeme> Lexemes, IEnumerable<Guid> TranslationMatchTranslationIds, IEnumerable<Guid> LemmaOrFormMatchTranslationIds) ManagedLexicon { get; private set; }
 
         public List<LexiconImportViewModel> ImportedLexiconViewModels { get; private set; }
         
@@ -507,90 +508,136 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task<List<LexiconImportViewModel>> GetLexiconImportViewModels(string? projectId, CancellationToken cancellationToken)
         {
-            LexiconImportViewModels = new List<LexiconImportViewModel>();
-            var externalLexicon = await GetLexiconForProject(projectId);
-            if (externalLexicon != null)
+            try
             {
-                ManagedLexicon = await GetExternalLexiconNotInInternal(externalLexicon, cancellationToken);
-                ManagedLexemes = new ObservableCollection<Lexeme>(ManagedLexicon.Lexemes);
-
-                foreach (var lexeme in ManagedLexemes)
+                LexiconImportViewModels = new List<LexiconImportViewModel>();
+                var externalLexicon = await GetLexiconForProject(projectId);
+                if (externalLexicon != null)
                 {
-                   
-                    foreach (var meaning in lexeme.Meanings)
-                    {
-                       var lemmaOrFormMatch = ManagedLexicon.LemmaOrFormMatchesOnly.Contains(lexeme.LexemeId.Id);
-                       var translationMatch = ManagedLexicon.TranslationMatchesOnly.Contains(lexeme.LexemeId.Id);
+                    ManagedLexicon = await GetExternalLexiconMergedIntoInternal(externalLexicon, cancellationToken);
+                    ManagedLexemes = new ObservableCollection<Lexeme>(ManagedLexicon.Lexemes);
 
-                        foreach (var translation in meaning.Translations)
+                    foreach (var lexeme in ManagedLexemes)
+                    {
+                        foreach (var meaning in lexeme.Meanings)
                         {
-                            var vm = new LexiconImportViewModel
+                            foreach (var translation in meaning.Translations.Where(e => !e.IsInDatabase))
                             {
-                                LexemeId = lexeme.LexemeId.Id,
-                                SourceLanguage = lexeme.Language,
-                                SourceWord = lexeme.Lemma,
-                                SourceType = lexeme.Type,
-                                TargetLanguage = meaning.Language,
-                                TargetWord = translation.Text,
-                                IsSelected = !lemmaOrFormMatch && !translationMatch,
-                                ShowAddAsFormButton = lemmaOrFormMatch,
-                                ShowAddTargetAsTranslationButton = translationMatch
-                            };
-                            LexiconImportViewModels.Add(vm);
+                                var translationMatch =
+                                    ManagedLexicon.TranslationMatchTranslationIds.Contains(translation.TranslationId
+                                        .Id);
+                                var lemmaOrFormMatch =
+                                    ManagedLexicon.LemmaOrFormMatchTranslationIds.Contains(translation.TranslationId
+                                        .Id);
+
+                                // TODO:  remove
+                                translationMatch = false;
+                                lemmaOrFormMatch = false;
+
+                                var vm = new LexiconImportViewModel
+                                {
+                                    LexemeId = lexeme.LexemeId.Id,
+                                    SourceLanguage = lexeme.Language,
+                                    SourceWord = lexeme.Lemma,
+                                    SourceType = lexeme.Type,
+                                    TargetLanguage = meaning.Language,
+                                    TargetWord = translation.Text,
+                                    IsSelected = !translationMatch && !lemmaOrFormMatch,
+                                    ShowAddAsFormButton = translationMatch,
+                                    ShowAddTargetAsTranslationButton = lemmaOrFormMatch
+                                };
+                                LexiconImportViewModels.Add(vm);
+                            }
                         }
                     }
+
+                    // Some Lexeme "filter" examples:
+                    var eg1 = ManagedLexemes.FilterByLexemeAndTranslationText(
+                        "wur",
+                        true,
+                        "sur",
+                        "Word",
+                        "en",
+                        "him").ToList();
+                    var eg2 = ManagedLexemes.FilterByLexemeText("ɗi", false, null, null).ToList();
+                    var eg3 = ManagedLexemes
+                        .FilterByLexemeText(new string[] { "kɨ̀", "ɗiihai", "mishkagham" }, false, null, null).ToList();
+                    var eg4 = ManagedLexemes
+                        .FilterByLexemeText(new string[] { "kɨ̀", "ɗii", "wuri" }, true, null, "Word").ToList();
+                    var eg5 = ManagedLexemes.FilterByTranslationText("sur", "en", "another").ToList();
+
+                    // 
+                    var eg6 = ManagedLexemes
+                        .Where(LexiconExtensions.LexemeMatchPredicate("sur", "Word", null))
+                        .SelectMany(l => l.Meanings
+                            .Where(LexiconExtensions.MeaningMatchPredicate(null, "en", null))
+                            .SelectMany(m =>
+                                m.Translations.Where(LexiconExtensions.TranslationMatchPredicate("him", true))))
+                        .ToList();
                 }
+
+                // AnyPartialMatch example:
+                //var matchStrings = new string[] { "lemma1", "form1", "form2" };
+                //lexemes.Where(e => matchStrings.AnyPartialMatch(e.LemmaPlusFormTexts)).Select(e => ...);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex.ToString());
             }
 
             return LexiconImportViewModels;
         }
 
-        private async Task<(IEnumerable<Lexeme> Lexemes, IEnumerable<Guid> LemmaOrFormMatchesOnly, IEnumerable<Guid> TranslationMatchesOnly)> GetExternalLexiconNotInInternal(Lexicon externalLexicon, CancellationToken cancellationToken)
+        private async Task<(IEnumerable<Lexeme> Lexemes, IEnumerable<Guid> TranslationMatchTranslationIds, IEnumerable<Guid> LemmaOrFormMatchTranslationIds)> GetExternalLexiconMergedIntoInternal(Lexicon externalLexicon, CancellationToken cancellationToken)
         {
             var internalLexicon = await Lexicon.GetInternalLexicon(Mediator, cancellationToken);
-            return GetExternalLexiconNotInInternal(externalLexicon, internalLexicon);
+            return GetExternalLexiconMergedIntoInternal(externalLexicon, internalLexicon);
         }
 
-        private static (IEnumerable<Lexeme> Lexemes, IEnumerable<Guid> LemmaOrFormMatchesOnly, IEnumerable<Guid> TranslationMatchesOnly) GetExternalLexiconNotInInternal(Lexicon externalLexicon, Lexicon internalLexicon)
+        private static (IEnumerable<Lexeme> MergedLexemes, IEnumerable<Guid> TranslationMatchTranslationIds, IEnumerable<Guid> LemmaOrFormMatchTranslationIds) GetExternalLexiconMergedIntoInternal(Lexicon externalLexicon, Lexicon internalLexicon)
         {
-            // Include each external Lexeme for which there are not any internal lexemes for which:
-            //  Any of the external lemma/forms match any of the internal lemma/forms AND
-            //  Any of the external translation texts match any of the internal translation texts
+            var mergedLexemes = externalLexicon.Lexemes.MergeIntoSecond(internalLexicon.Lexemes);
 
-            //var lexemesExternalExceptInternal = externalLexicon.Lexemes
-            //    .Where(el =>
-            //        !internalLexicon.Lexemes.Any(il =>
-            //            (il.Lemma == el.Lemma || 
-            //             el.Forms.Select(e => e.Text).Contains(il.Lemma)) &&
-            //             il.Meanings.SelectMany(m => m.Translations.Select(t => t.Text)).Intersect(
-            //             el.Meanings.SelectMany(m => m.Translations.Select(t => t.Text))).Any()));
+            var translationMatchTranslationIds = mergedLexemes.GetTranslationMatchTranslationIds();
+            var lemmaOrFormMatchTranslationIds = mergedLexemes.GetLemmaOrFormMatchTranslationIds();
 
-            //var lexemesExternalExceptInternal = externalLexicon.Lexemes
-            //    .Where(el =>
-            //        !internalLexicon.Lexemes.Any(il => 
-            //            il.LemmaPlusFormTexts.Intersect(el.LemmaPlusFormTexts).Any() &&
-            //            il.Meanings.SelectMany(m => m.Translations.Select(t => t.Text))
-            //                .Intersect(
-            //            el.Meanings.SelectMany(m => m.Translations.Select(t => t.Text))
-            //                ).Any()
-            //        ));
-
-            return externalLexicon.Lexemes
-                .ExceptByLexemeTranslationMatch(internalLexicon.Lexemes);
-
-           
+            return (mergedLexemes, translationMatchTranslationIds, lemmaOrFormMatchTranslationIds);
         }
 
         public async Task ProcessLexiconToImport()
         {
             if (ManagedLexemes != null)
             {
+                var selectedLexemesToImportIds = LexiconImportViewModels
+                    .Where(vm => vm.IsSelected)
+                    .Select(vm => vm.LexemeId)
+                    .Distinct(); 
 
-                var selectedLexemesToImportIds = LexiconImportViewModels.Where(vm => vm.IsSelected).Select(vm=>vm.LexemeId).Distinct(); 
-                var selectedLexemesToImport = ManagedLexemes.IntersectBy(selectedLexemesToImportIds, l => l.LexemeId.Id);
+                var selectedLexemesToImport = ManagedLexemes
+                    .IntersectBy(selectedLexemesToImportIds, l => l.LexemeId.Id)
+                    .ToDictionary(l => l.LexemeId.Id, l => l);
+
+                LexiconImportViewModels
+                    .Where(vm => !vm.IsSelected)
+                    .Where(vm => selectedLexemesToImport.ContainsKey(vm.LexemeId))
+                    .ToList()
+                    .ForEach(vm =>
+                    {
+                        var lexeme = selectedLexemesToImport[vm.LexemeId];
+                        lexeme.Meanings
+                            .Where(m => m.Language == vm.TargetLanguage)
+                            .SelectMany(m => m.Translations
+                                .Where(t => t.Text == vm.TargetWord))
+                            .ToList()
+                            .ForEach(t =>
+                            {
+                                t.ExcludeFromSave = true;
+                            });
+                    });
+
                 var lexicon = new Lexicon
                 {
-                    Lexemes = new ObservableCollection<Lexeme>(selectedLexemesToImport)
+                    Lexemes = new ObservableCollection<Lexeme>(selectedLexemesToImport.Values)
                 };
 
                 await lexicon.SaveAsync(Mediator);

@@ -114,21 +114,27 @@ public class TokenCompositeBuilder : GeneralModelBuilder<Models.TokenComposite>
 
     public override GeneralModel<TokenComposite> BuildGeneralModel(Dictionary<string, (Type type, object? value)> modelPropertiesTypes)
     {
+        // ===============================================================================
+        // Prototype code - thinking we might want to send both an "Id" and "Ref" and
+        // implement a fallback-comparison (if "Id"s don't match, try "Ref"s).  More
+        // commented/supporting code on line 17 above
+        // ===============================================================================
+
         // If the TokenComposite model properties are the older style - where there is an "Id" instead
         // of a "Ref", convert the Id to a Ref before building the snapshot:
-        if (modelPropertiesTypes.TryGetValue(nameof(Models.TokenComposite.Id), out var idPropertyValue))
-        {
-            if (modelPropertiesTypes.TryGetValue(nameof(Models.TokenComposite.TokenizedCorpusId), out var tokenizedCorpusValue) &&
-                modelPropertiesTypes.TryGetValue(nameof(Models.TokenComposite.EngineTokenId), out var engineTokenIdValue))
-            {
-                modelPropertiesTypes.TryGetValue(nameof(Models.TokenComposite.ParallelCorpusId), out var parallelCorpusIdValue);
+        //if (modelPropertiesTypes.TryGetValue(nameof(Models.TokenComposite.Id), out var idPropertyValue))
+        //{
+        //    if (modelPropertiesTypes.TryGetValue(nameof(Models.TokenComposite.TokenizedCorpusId), out var tokenizedCorpusValue) &&
+        //        modelPropertiesTypes.TryGetValue(nameof(Models.TokenComposite.EngineTokenId), out var engineTokenIdValue))
+        //    {
+        //        modelPropertiesTypes.TryGetValue(nameof(Models.TokenComposite.ParallelCorpusId), out var parallelCorpusIdValue);
 
-                var refId = CalculateRef((Guid)tokenizedCorpusValue.value!, (Guid?)parallelCorpusIdValue.value, (string)engineTokenIdValue.value!);
+        //        var refId = CalculateRef((Guid)tokenizedCorpusValue.value!, (Guid?)parallelCorpusIdValue.value, (string)engineTokenIdValue.value!);
 
-                modelPropertiesTypes.Remove(nameof(Models.TokenComposite.Id));
-                modelPropertiesTypes.Add(IdentityKey, (type: typeof(string), value: refId));
-            }
-        }
+        //        modelPropertiesTypes.Remove(nameof(Models.TokenComposite.Id));
+        //        modelPropertiesTypes.Add(IdentityKey, (type: typeof(string), value: refId));
+        //    }
+        //}
 
         return base.BuildGeneralModel(modelPropertiesTypes);
     }
