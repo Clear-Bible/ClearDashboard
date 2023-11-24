@@ -62,6 +62,7 @@
                 <iconPacks:PackIconModern
                     x:Name="ExternalNotesIcon"
                     Margin="0,2,0,0"
+                    Cursor="Hand"
                     Foreground="Red"
                     MouseDown="PackIconModern_MouseDown"
                     Visibility="{Binding IsFirstExternalNoteToken, Converter={StaticResource BoolToVisibilityConverter}}">
