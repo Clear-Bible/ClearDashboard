@@ -192,6 +192,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             var inlines = new ObservableCollection<Inline>();
 
+            if (externalNote.IndexOfSelectedPlainTextInVersePainText is null)
+            {
+                inlines.Add(new Run(externalNote.VersePlainText) { FontWeight = FontWeights.Normal, Foreground = Brushes.Gray });
+                return inlines;
+            }
+
+
             var firstPart = externalNote.VersePlainText.Substring(0, (int)externalNote.IndexOfSelectedPlainTextInVersePainText!);
             var secondPart = externalNote.VersePlainText.Substring((int)externalNote.IndexOfSelectedPlainTextInVersePainText + externalNote.SelectedPlainText.Length);
 

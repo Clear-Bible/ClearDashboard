@@ -1816,7 +1816,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         }
 
-        private async void PackIconModern_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton != MouseButtonState.Pressed)
             {
