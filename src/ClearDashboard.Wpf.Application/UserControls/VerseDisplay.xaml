@@ -6,6 +6,7 @@
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     d:DesignHeight="450"
@@ -16,6 +17,7 @@
     <UserControl.Resources>
         <converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters:GetIndexBindableCollectionMultiConverter x:Key="GetIndexMultiConverter" />
         <DataTemplate x:Key="SourceTokenDisplay">
             <userControls:TokenDisplay
                 HorizontalAlignment="Left"
@@ -225,12 +227,16 @@
     </UserControl.Resources>
 
     <StackPanel Orientation="Vertical">
-        <Button
-            Width="20px"
-            Height="20px"
-            Content="i"
+        <!--  External Notes  -->
+        <Border
+            MaxWidth="18"
+            Background="LightGray"
+            BorderBrush="Black"
+            BorderThickness="1"
+            CornerRadius="3"
+            MouseDown="Border_MouseDown"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.HasExternalNotes), Converter={StaticResource BoolToVisibilityConverter}}">
-            <Button.ToolTip>
+            <Border.ToolTip>
                 <ToolTip
                     Background="LightYellow"
                     HasDropShadow="false"
@@ -239,30 +245,61 @@
                     PlacementRectangle="50,0,0,0"
                     VerticalOffset="20">
                     <StackPanel Orientation="Vertical">
-
-                        <TextBlock
-                            FontWeight="Bold"
-                            Foreground="Black"
-                            Text="External Notes" />
-                        <TextBlock Foreground="Blue" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.NotesCount)}" />
-
-                        <ListView ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.ExternalNotes)}">
+                        <ListView ItemsSource="{Binding ExternalNotes}">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Vertical">
+                                        <TextBox
+                                            Name="txtFocus"
+                                            MinWidth="80"
+                                            HorizontalAlignment="Left"
+                                            FontWeight="Bold">
+                                            <TextBox.Text>
+                                                <MultiBinding Converter="{StaticResource GetIndexMultiConverter}" ConverterParameter="0">
+                                                    <Binding Path="." />
+                                                    <Binding Path="ItemsSource" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ListView}}" />
+                                                </MultiBinding>
+                                            </TextBox.Text>
+                                        </TextBox>
+
                                         <Label Content="{Binding Message}" />
-                                        <controls:ExtendedPropertiesTreeView
-                                            x:Name="ExternalNoteBodyVerseTreeViewName"
-                                            ExtendedPropertiesXml="{Binding Body}"
-                                            IsExpanded="False" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
                     </StackPanel>
                 </ToolTip>
-            </Button.ToolTip>
-        </Button>
+            </Border.ToolTip>
+            <Grid>
+                <iconPacks:PackIconModern
+                    x:Name="MultipleNotesIcon"
+                    Margin="3,0,0,0"
+                    Foreground="DarkGray"
+                    IsHitTestVisible="False"
+                    Kind="Flag"
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.HasExternalNotes), Converter={StaticResource BoolToVisibilityConverter}}" />
+
+                <iconPacks:PackIconModern
+                    x:Name="ExternalNotesIcon"
+                    Margin="0,2,0,0"
+                    Foreground="Red"
+                    IsHitTestVisible="False"
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.HasExternalNotes), Converter={StaticResource BoolToVisibilityConverter}}">
+                    <iconPacks:PackIconModern.Style>
+                        <Style TargetType="{x:Type iconPacks:PackIconModern}">
+                            <Setter Property="Kind" Value="Flag" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding MultipleExternalNotes}" Value="True">
+                                    <Setter Property="Kind" Value="Flag" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </iconPacks:PackIconModern.Style>
+                </iconPacks:PackIconModern>
+            </Grid>
+
+        </Border>
+
         <TextBlock
             Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleMargin}"
             Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitlePadding}"

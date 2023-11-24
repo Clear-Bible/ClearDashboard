@@ -125,7 +125,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        public string NotesCount => $"Count: {ExternalNotes.Count}";
+        private string _notesCount = string.Empty;
+        public string NotesCount
+        {
+            get => _notesCount;
+            set 
+            { 
+                Set(ref _notesCount, value);
+            }
+        }
 
 
         #endregion //Observable Properties
@@ -264,6 +272,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             if (externalNotes != null && externalNotes.Count() > 0)
             {
                 ExternalNotes.AddRange(externalNotes);
+                NotesCount = $"Count: {externalNotes.Count()}";
                 notifyVerseDisplayViewModelExternalNotesItemsChanged = true;
             }
 
