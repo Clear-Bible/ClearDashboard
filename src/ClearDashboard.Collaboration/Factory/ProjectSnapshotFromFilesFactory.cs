@@ -125,6 +125,7 @@ public class ProjectSnapshotFromFilesFactory
                     {
                         AddGeneralModelChild<Models.Note, Models.Note>(entityItems, modelSnapshot, null, cancellationToken);
                         AddGeneralModelChild<Models.Note, NoteModelRef>(entityItems, modelSnapshot, null, cancellationToken);
+                        AddGeneralModelChild<Models.Note, Models.NoteUserSeenAssociation>(entityItems, modelSnapshot, null, cancellationToken);
                     },
                     cancellationToken));
             }

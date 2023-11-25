@@ -95,6 +95,7 @@ public class ProjectSnapshotFilesFactory
             {
                 SaveGeneralModelChild<Models.Note, Models.Note>(parentPath, modelSnapshot, null, cancellationToken);
                 SaveGeneralModelChild<Models.Note, NoteModelRef>(parentPath, modelSnapshot, null, cancellationToken);
+                SaveGeneralModelChild<Models.Note, Models.NoteUserSeenAssociation>(parentPath, modelSnapshot, null, cancellationToken);
             },
             cancellationToken);
 

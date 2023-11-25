@@ -14,6 +14,7 @@ using ClearDashboard.Collaboration.Factory;
 using SIL.Scripture;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
+using System.IO;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 {
@@ -35,6 +36,14 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         [Trait("Category", "Collaboration")]
         public async Task Test00()
         {
+            //var backupsPath =
+            //    FilePathTemplates.CollabBaseDirectory + Path.DirectorySeparatorChar + "Backups";
+
+            //var factory = new ProjectSnapshotFromFilesFactory(Path.Combine(backupsPath, "merge_test_final_snapshot"), _fixture.Logger);
+            //var snapshotFromFile = factory.LoadSnapshot();
+
+            //return;
+
             await DoMerge();
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
@@ -274,10 +283,14 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             var testNoteId1 = Guid.NewGuid();
             var testNoteId2 = Guid.NewGuid();
             var testNoteId3 = Guid.NewGuid();
+            var testNoteId4 = Guid.NewGuid();
+            var testNoteId5 = Guid.NewGuid();
 
             _fixture.Notes.Add(CollaborationProjectFixture.BuildTestNote(testNoteId1, "boo boo", Models.NoteStatus.Open, testUser.Id));
             _fixture.Notes.Add(CollaborationProjectFixture.BuildTestNote(testNoteId2, "boo boo two", Models.NoteStatus.Resolved, testUser.Id));
             _fixture.Notes.Add(CollaborationProjectFixture.BuildTestNote(testNoteId3, "boo boo three", Models.NoteStatus.Open, testUser.Id));
+            _fixture.Notes.Add(CollaborationProjectFixture.BuildTestNote(testNoteId4, "boo boo four", Models.NoteStatus.Open, testUser.Id));
+            _fixture.Notes.Add(CollaborationProjectFixture.BuildTestNote(testNoteId5, "boo boo five", Models.NoteStatus.Open, testUser.Id));
 
             _fixture.NoteAssociations.Add(CollaborationProjectFixture.BuildTestNoteTokenAssociation(testNoteId1, testTokenizedCorpus.Id, "001001001001001", builderContext));
             _fixture.NoteAssociations.Add(CollaborationProjectFixture.BuildTestNoteTokenAssociation(testNoteId1, testTokenizedCorpus.Id, "001001001002001", builderContext));
@@ -285,12 +298,19 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             _fixture.NoteAssociations.Add(CollaborationProjectFixture.BuildTestNoteTokenAssociation(testNoteId3, testTokenizedCorpus.Id, "001001001003001", builderContext));
             _fixture.NoteAssociations.Add(CollaborationProjectFixture.BuildTestNoteTokenAssociation(testNoteId3, testTokenizedCorpus.Id, "001001001004001", builderContext));
 
+            _fixture.NoteUserSeenAssociations.Add(CollaborationProjectFixture.BuildTestNoteUserSeenAssociation(testNoteId4, _fixture.Users.First().Id, builderContext));
+            foreach (var user in _fixture.Users)
+            {
+                _fixture.NoteUserSeenAssociations.Add(CollaborationProjectFixture.BuildTestNoteUserSeenAssociation(testNoteId5, user.Id, builderContext));
+            }
+
             await DoMerge();
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(3, _fixture.ProjectDbContext.Notes.Count());
+            Assert.Equal(5, _fixture.ProjectDbContext.Notes.Count());
             Assert.Equal(5, _fixture.ProjectDbContext.NoteDomainEntityAssociations.Count());
+            Assert.Equal(1 + _fixture.Users.Count(), _fixture.ProjectDbContext.NoteUserSeenAssociations.Count());
 
             var testNote1TokenIds = _fixture.ProjectDbContext.NoteDomainEntityAssociations
                 .Where(e => e.NoteId == testNoteId1)
@@ -388,7 +408,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(3, _fixture.ProjectDbContext.Notes.Count());
+            Assert.Equal(5, _fixture.ProjectDbContext.Notes.Count());
             Assert.Equal(4, _fixture.ProjectDbContext.NoteDomainEntityAssociations.Count());
             Assert.Null(_fixture.ProjectDbContext.NoteDomainEntityAssociations.Where(e => e.Id == testNote3AssociationToRemove.Item1.Id).FirstOrDefault());
 
@@ -400,7 +420,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(2, _fixture.ProjectDbContext.Notes.Count());
+            Assert.Equal(4, _fixture.ProjectDbContext.Notes.Count());
             Assert.Equal(3, _fixture.ProjectDbContext.NoteDomainEntityAssociations.Count());
             Assert.Null(_fixture.ProjectDbContext.Notes.Where(e => e.Id == testNote3.Id).FirstOrDefault());
 
@@ -423,7 +443,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(1, _fixture.ProjectDbContext.Notes.Count());
+            Assert.Equal(3, _fixture.ProjectDbContext.Notes.Count());
             Assert.Equal(2, _fixture.ProjectDbContext.NoteDomainEntityAssociations.Count());
             Assert.Null(_fixture.ProjectDbContext.Notes.Where(e => e.Id == testNote2.Id).FirstOrDefault());
 
@@ -444,7 +464,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Single(_fixture.ProjectDbContext.Notes);
+            Assert.Equal(3, _fixture.ProjectDbContext.Notes.Count());
             Assert.Equal(newNoteText, _fixture.ProjectDbContext.Notes.First().Text);
         }
 
@@ -581,7 +601,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             _fixture.TokenComposites.Add(splitComposite2);
             _fixture.TokenComposites.Add(extraComposite2);
 
-            await DoMerge();
+            await DoMerge(true);
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
@@ -633,7 +653,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             Assert.Equal("001001020004001", extraCompositeTokensDb[2].EngineTokenId);
         }
 
-        protected async Task DoMerge()
+        protected async Task DoMerge(bool isIt = false)
         {
             var testProject = _fixture.ProjectDbContext.Projects.First();
 
@@ -652,6 +672,17 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             var snapshotLastMerged = _fixture.ProjectSnapshotLastMerged ?? ProjectSnapshotFactoryCommon.BuildEmptySnapshot(testProject.Id);
             var snapshotToMerge = _fixture.ToProjectSnapshot();
             var progress = new Progress<ProgressStatus>(Report);
+
+            if (isIt)
+            {
+                //var backupsPath =
+                //    FilePathTemplates.CollabBaseDirectory + Path.DirectorySeparatorChar + "Backups";
+
+                //Directory.CreateDirectory(backupsPath);
+
+                //var factory = new ProjectSnapshotFilesFactory(Path.Combine(backupsPath, "merge_test_final_snapshot"), _fixture.Logger);
+                //factory.SaveSnapshot(snapshotToMerge);
+            }
 
             await _fixture.MergeIntoDatabase(commitShaToMerge, snapshotLastMerged, snapshotToMerge, progress);
         }

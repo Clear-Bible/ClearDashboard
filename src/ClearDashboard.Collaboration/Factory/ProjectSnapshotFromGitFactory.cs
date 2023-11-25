@@ -149,6 +149,7 @@ public class ProjectSnapshotFromGitFactory
                         {
                             AddGeneralModelChild<Models.Note, Models.Note>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
                             AddGeneralModelChild<Models.Note, NoteModelRef>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
+                            AddGeneralModelChild<Models.Note, Models.NoteUserSeenAssociation>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
                         },
                         cancellationToken));
                 }
