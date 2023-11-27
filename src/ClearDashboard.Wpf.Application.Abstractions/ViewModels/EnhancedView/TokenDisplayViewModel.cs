@@ -25,8 +25,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
     /// </summary>
     public class TokenDisplayViewModel : PropertyChangedBase
     {
-        private Guid Id { get; } = Guid.NewGuid();
-
         /// <summary>
         /// The token itself.
         /// </summary>
@@ -199,7 +197,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             get 
             {
-                //Debug.WriteLine($"TokenGuid: {Id} {ExternalNotes.Count()}");
                 return _externalNotes;
             }
             set
