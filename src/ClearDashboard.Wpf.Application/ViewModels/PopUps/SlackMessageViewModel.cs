@@ -1,20 +1,28 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
 using Markdig;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Paratext.PluginInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Dynamic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using static ClearDashboard.Wpf.Application.Helpers.SlackMessage;
@@ -27,6 +35,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         #region Member Variables   
         private readonly ILogger<SlackMessageViewModel> _logger;
         private readonly CollaborationServerHttpClientServices _collaborationHttpClientServices;
+        private readonly SelectedBookManager _selectedBookManager;
 
         //private Timer _timer = new System.Timers.Timer();
 
@@ -292,11 +301,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         public SlackMessageViewModel(INavigationService navigationService, ILogger<SlackMessageViewModel> logger,
             DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator,
             CollaborationServerHttpClientServices collaborationHttpClientServices,
+            SelectedBookManager selectedBookManager,
             ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             _logger = logger;
             _collaborationHttpClientServices = collaborationHttpClientServices;
+            _selectedBookManager = selectedBookManager;
             var localizationService1 = localizationService;
 
             WorkingMessage = "Gathering Files for Transmission";
@@ -350,6 +361,62 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
 
             base.OnViewLoaded(view);
+        }
+
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            _selectedBookManager.PropertyChanged += OnSelectedBookManagerPropertyChanged;
+
+            var result = await ProjectManager.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
+            if (result.Success)
+            {
+                var projectDesignSurface = LifetimeScope.Resolve<ProjectDesignSurfaceViewModel>();
+
+                var corpusIds = await DAL.Alignment.Corpora.Corpus.GetAllCorpusIds(Mediator);
+
+                List<string> currentNodeIds = new();
+
+                foreach (var corpusId in corpusIds)
+                {
+                    var currentlyRunning = projectDesignSurface.BackgroundTasksViewModel
+                        .CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(corpusId.Name);
+                    if (currentlyRunning)
+                    {
+                        currentNodeIds.Add(corpusId.ParatextGuid);
+                    }
+                }
+
+                var currentNodes = projectDesignSurface.DesignSurfaceViewModel.CorpusNodes;
+                currentNodes.ToList().ForEach(n => currentNodeIds.Add(n.ParatextProjectId));
+
+                if (Projects == null)
+                {
+                    Projects = result.Data.Where(c => !currentNodeIds.Contains(c.Id)).OrderBy(p => p.Name).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(_initialParatextProjectId))
+                {
+                    SelectedProject = Projects.FirstOrDefault(p => p.Id == _initialParatextProjectId);
+                    if (SelectedProject != null)
+                    {
+                        IsEnabledSelectedProject = false;
+                    }
+                }
+
+                // send new metadata results to the Main Window    
+                await EventAggregator.PublishOnUIThreadAsync(new ProjectsMetadataChangedMessage(result.Data), cancellationToken);
+            }
+
+
+            await _selectedBookManager.InitializeBooks(new Dictionary<string, IEnumerable<UsfmError>>(), ParentViewModel.SelectedProject.Id, true, new CancellationToken());
+
+
+            return base.OnActivateAsync(cancellationToken);
+        }
+
+        private void OnSelectedBookManagerPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion //Constructor

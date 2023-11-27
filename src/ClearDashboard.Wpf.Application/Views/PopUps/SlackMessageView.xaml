@@ -11,7 +11,9 @@
     xmlns:mdXaml="clr-namespace:MdXaml;assembly=MdXaml"
     xmlns:popUps="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.PopUps"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:validators="clr-namespace:ClearDashboard.Wpf.Application.Validators;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:controls="clr-namespace:DotNetKit.Windows.Controls;assembly=DotNetKit.Wpf.AutoCompleteComboBox"
     Title="SlackMessageView"
     Width="800"
     Height="650"
@@ -163,8 +165,6 @@
                     </Border>
                 </Grid>
             </TabItem>
-
-
             <!--  SUGGESTION  -->
             <TabItem>
                 <TabItem.Header>
@@ -375,6 +375,93 @@
                     </Grid>
                 </Grid>
             </TabItem>
+
+            <!--  SEND USFM  -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <iconPacks:PackIconPicolIcons
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center"
+                            Kind="Comment" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="14"
+                            Text="Send USFM to Biblica" />
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!--  Row 0  -->
+                    <StackPanel Grid.Row="0" Orientation="Vertical">
+                        <Label Margin="0,0,0,-10" Content="{helpers:Localization AddParatextCorpusDialog_Title}" />
+                        <controls:AutoCompleteComboBox
+                            Height="Auto"
+                            Margin="15"
+                            VerticalAlignment="Top"
+                            cm:Message.Attach="ProjectSelected"
+                            materialDesign:HintAssist.Hint="ParatextCorpus"
+                            FontSize="16"
+                            IsEnabled="{Binding IsEnabledSelectedProject}"
+                            ItemsSource="{Binding Projects}"
+                            ScrollViewer.CanContentScroll="False"
+                            SelectedItem="{Binding SelectedProject}"
+                            Style="{StaticResource MaterialDesignFilledComboBox}"
+                            TextSearch.TextPath="CombinedName">
+                            <controls:AutoCompleteComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
+                                        <TextBlock FontSize="24" Text="{Binding Name}" />
+                                        <TextBlock FontSize="12" Text="{Binding LongName}" />
+                                        <TextBlock FontSize="10" Text="{Binding Id}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </controls:AutoCompleteComboBox.ItemTemplate>
+                        </controls:AutoCompleteComboBox>
+                    </StackPanel>
+
+                    <userControls:SelectBooksControl Grid.Row="1" />
+
+                    <StackPanel
+                        Grid.Row="1"
+                        Margin="10,0"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                        <Button
+                            x:Name="Back"
+                            Width="90"
+                            Margin="0,0,15,15"
+                            HorizontalAlignment="Right"
+                            cm:Message.Attach="Back()"
+                            Content="{helpers:Localization Back}"
+                            FontSize="12"
+                            Style="{StaticResource AlternativeStyle}" />
+                        <Button
+                            x:Name="Ok"
+                            MinWidth="90"
+                            Margin="0,0,15,15"
+                            HorizontalAlignment="Right"
+                            cm:Message.Attach="Ok()"
+                            Content="{Binding OkButtonText}"
+                            FontSize="12"
+                            IsEnabled="{Binding ContinueEnabled}"
+                            Style="{StaticResource TransparentStyle}"
+                            Visibility="{Binding OkVisibility}" />
+                    </StackPanel>
+
+                    <!--  Row 3  -->
+
+                </Grid>
+            </TabItem>
+
         </TabControl>
 
 
