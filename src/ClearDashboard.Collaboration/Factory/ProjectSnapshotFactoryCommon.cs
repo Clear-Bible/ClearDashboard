@@ -45,7 +45,7 @@ public class ProjectSnapshotFactoryCommon
         { typeof(Models.Note), ("Replies", "Replies") },
         { typeof(Models.VerseRow), ("VerseRowsByBook", "VerseRows") },
         { typeof(NoteModelRef), ("NoteModelRefs", "NoteModelRefs") },
-        { typeof(Models.NoteUserSeenAssociation), ("SeenBy", "NoteUserSeenAssociations") },
+        { typeof(Models.NoteUserSeenAssociation), ("UserSeenAssociations", "NoteUserSeenAssociations") },
         { typeof(Models.Lexicon_Meaning), ("Meanings", "Meanings") },
         { typeof(Models.Lexicon_Translation), ("Translations", "Translations") },
         { typeof(Models.Lexicon_Form), ("Forms", "Forms") },
