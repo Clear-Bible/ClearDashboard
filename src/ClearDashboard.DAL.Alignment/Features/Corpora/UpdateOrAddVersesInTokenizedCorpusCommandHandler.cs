@@ -20,6 +20,7 @@ using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using SIL.Machine.SequenceAlignment;
 using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
+using SIL.Machine.FiniteState;
 
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
@@ -205,14 +206,19 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     await _mediator.Publish(new AlignmentAddingRemovingEvent(alignmentsRemoving, null, ProjectDbContext), cancellationToken);
                     await transaction.CommitAsync(cancellationToken);
                     ProjectDbContext.Database.UseTransaction(null);
-                        
-                    await UpdateAlignments(request, connection, cancellationToken);//Make it it's own transaction
+
+                    var tasks = request.AlignmentSetsToRedo.Select(x => Task.Run(async () => await UpdateAlignments(x, connection, cancellationToken)));
+                    var results = await Task.WhenAll(tasks);
+                    //await UpdateAlignments(request, connection, cancellationToken);//Make it it's own transaction
                 }
                 else
                 {
                     await transaction.CommitAsync(cancellationToken);
-                    
-                    await UpdateAlignments(request, connection, cancellationToken);//Make it it's own transaction
+
+                    //Things still aren't fully parallel
+                    var tasks = request.AlignmentSetsToRedo.Select(x => Task.Run(async () => await UpdateAlignments(x, connection, cancellationToken)));
+                    var results = await Task.WhenAll(tasks);
+                    //await UpdateAlignments(request, connection, cancellationToken);//Make it it's own transaction
                 }
             }
             finally
@@ -228,15 +234,20 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             return new RequestResult<IEnumerable<string>>(bookIdsToInsert);
         }
 
-        private async Task<RequestResult<AlignmentSet>> UpdateAlignments(UpdateOrAddVersesInTokenizedCorpusCommand request, DbConnection connection, CancellationToken cancellationToken)
+        private async Task<RequestResult<AlignmentSet>> UpdateAlignments(AlignmentSetId alignmentSetIdToRedo, DbConnection connection, CancellationToken cancellationToken)
         {
-            foreach (var alignmentSetIdToRedo in request.AlignmentSetsToRedo)
-            {
+            //foreach (var alignmentSetIdToRedo in request.AlignmentSetsToRedo)//PARALLELIZE
+            //{
                 //Get the Parallel Corpus
                 var parallelCorpusId = alignmentSetIdToRedo.ParallelCorpusId;
                 if (parallelCorpusId == null)
                 {
-                    continue;
+                //continue;
+                    return new RequestResult<AlignmentSet>
+                    (
+                        success: false,
+                        message: $"ParallelCorpusId was null"
+                    );
                 }
                 var parallelCorpus = await ParallelCorpus.Get(_mediator, parallelCorpusId, cancellationToken);
 
@@ -450,7 +461,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 });
 
                 await ProjectDbContext.SaveChangesAsync(cancellationToken);
-            }
+            //}
 
             return new RequestResult<AlignmentSet>
             (

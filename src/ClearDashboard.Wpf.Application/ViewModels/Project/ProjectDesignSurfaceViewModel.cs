@@ -1391,7 +1391,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                             await EventAggregator.PublishOnUIThreadAsync(new TokenizedCorpusUpdatedMessage(tokenizedTextCorpusId), cancellationToken);
 
-                            await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage(ReloadType.Force), cancellationToken);
+                            await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage(ReloadType.Force), cancellationToken);//move into handler?
 
                             _longRunningTaskManager.TaskComplete(taskName);
 
