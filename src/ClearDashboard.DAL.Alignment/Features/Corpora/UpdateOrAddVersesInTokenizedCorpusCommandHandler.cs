@@ -207,18 +207,18 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     await transaction.CommitAsync(cancellationToken);
                     ProjectDbContext.Database.UseTransaction(null);
 
-                    var tasks = request.AlignmentSetsToRedo.Select(x => Task.Run(async () => await UpdateAlignments(x, connection, cancellationToken)));
-                    var results = await Task.WhenAll(tasks);
-                    //await UpdateAlignments(request, connection, cancellationToken);//Make it it's own transaction
+                    //var tasks = request.AlignmentSetsToRedo.Select(x => Task.Run(async () => await UpdateAlignments(x, connection, cancellationToken)));
+                    //var results = await Task.WhenAll(tasks);
+                    await UpdateAlignments(request, connection, cancellationToken);//Make it it's own transaction
                 }
                 else
                 {
                     await transaction.CommitAsync(cancellationToken);
 
-                    //Things still aren't fully parallel
-                    var tasks = request.AlignmentSetsToRedo.Select(x => Task.Run(async () => await UpdateAlignments(x, connection, cancellationToken)));
-                    var results = await Task.WhenAll(tasks);
-                    //await UpdateAlignments(request, connection, cancellationToken);//Make it it's own transaction
+                    //The Parallel time < cosecutive and > than single alignlent
+                    //var tasks = request.AlignmentSetsToRedo.Select(x => Task.Run(async () => await UpdateAlignments(x, connection, cancellationToken)));
+                    //var results = await Task.WhenAll(tasks);
+                    await UpdateAlignments(request, connection, cancellationToken);//Make it it's own transaction
                 }
             }
             finally
@@ -234,10 +234,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             return new RequestResult<IEnumerable<string>>(bookIdsToInsert);
         }
 
-        private async Task<RequestResult<AlignmentSet>> UpdateAlignments(AlignmentSetId alignmentSetIdToRedo, DbConnection connection, CancellationToken cancellationToken)
+        //private async Task<RequestResult<AlignmentSet>> UpdateAlignments(AlignmentSetId alignmentSetIdToRedo, DbConnection connection, CancellationToken cancellationToken)
+        private async Task<RequestResult<AlignmentSet>> UpdateAlignments(UpdateOrAddVersesInTokenizedCorpusCommand request, DbConnection connection, CancellationToken cancellationToken)
         {
-            //foreach (var alignmentSetIdToRedo in request.AlignmentSetsToRedo)//PARALLELIZE
-            //{
+            foreach (var alignmentSetIdToRedo in request.AlignmentSetsToRedo)
+            {
                 //Get the Parallel Corpus
                 var parallelCorpusId = alignmentSetIdToRedo.ParallelCorpusId;
                 if (parallelCorpusId == null)
@@ -388,15 +389,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     }
                 });
 
-                if (alignmentsRemoving.Any())
+                if (alignmentsRemoving.Any())//Should we do a hard delete to prevent database bloating?
                 {
-                    using (var transaction = ProjectDbContext.Database.BeginTransaction())
-                    {
+                    //using (var transaction = ProjectDbContext.Database.BeginTransaction())
+                    //{
                         await _mediator.Publish(new AlignmentAddingRemovingEvent(alignmentsRemoving, null, ProjectDbContext), cancellationToken);
                         _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
-                        await transaction.CommitAsync(cancellationToken);
-                    }
+                        //await transaction.CommitAsync(cancellationToken);
+                    //}
 
                     await _mediator.Publish(new AlignmentAddedRemovedEvent(alignmentsRemoving, null), cancellationToken);
                 }
@@ -419,7 +420,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 //Insert Replacement Alignments
                 var replacementAlignmentsModel = redoneAlignmentsModel.Where(na => tokenIdsToReplace.Contains(na.SourceTokenComponentId));
                 await using var replacementAlignmentsInsertCommand = AlignmentUtil.CreateAlignmentInsertCommand(connection);
-                await AlignmentUtil.InsertAlignmentsAsync(//SLOW
+                await AlignmentUtil.InsertAlignmentsAsync(//SLOW any way to speed this up?
                     replacementAlignmentsModel,
                     alignmentSetIdToRedo.Id,
                     replacementAlignmentsInsertCommand,
@@ -447,7 +448,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                 //Insert New Alignments
                 await using var newAlignmentsInsertCommand = AlignmentUtil.CreateAlignmentInsertCommand(connection);
-                await AlignmentUtil.InsertAlignmentsAsync(//SLOW
+                await AlignmentUtil.InsertAlignmentsAsync(//SLOW any way to speed this up?
                     newAlignments,
                     alignmentSetIdToRedo.Id,
                     newAlignmentsInsertCommand,
@@ -461,7 +462,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 });
 
                 await ProjectDbContext.SaveChangesAsync(cancellationToken);
-            //}
+            }
 
             return new RequestResult<AlignmentSet>
             (
