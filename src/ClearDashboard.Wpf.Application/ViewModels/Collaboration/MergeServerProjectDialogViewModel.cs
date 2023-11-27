@@ -21,6 +21,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 {
@@ -227,6 +228,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                 NamespaceId = _userInfo.NamespaceId,
                 Organization = _userInfo.Group
             };
+
+
+            var projects = await _gitLabHttpClientServices.GetProjectsForUser(_userInfo);
+
+            var currentProjectId = "P_" + ProjectManager!.CurrentDashboardProject.Id;
+            var project = projects.FirstOrDefault(x => x.Name == currentProjectId);
+
+            if (project is null)
+            {
+                StatusMessage = "User is not a member of the project.\nPlease contact the project owner to be added to the project.";
+                StatusMessageColor = System.Windows.Media.Brushes.Red;
+                CancelAction = "Close";
+
+                await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectPermissionLevelMessage(PermissionLevel.None));
+                return;
+            }
+
             await CreateProjectOnServerIfNotCreated();
 
             Ok();  // run the action - do not await
