@@ -108,6 +108,21 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             Logger.LogInformation($"Private memory usage (BEFORE BULK INSERT): {proc.PrivateMemorySize64}");
 #endif
 
+            //var result = await AlignmentUtil.FillInVerificationAndOriginatedTypes(request.Alignments);
+
+            //if (result.Success)
+            //{
+            //    request.Alignments = result.Data;
+            //}
+            //else
+            //{
+            //    return new RequestResult<AlignmentSet>
+            //    (
+            //        success: result.Success,
+            //        message: result.Message
+            //    );
+            //}
+
             var verificationTypes = new Dictionary<string, ModelVerificationType>();
             var originatedTypes = new Dictionary<string, ModelOriginatedType>();
             foreach (var al in request.Alignments)

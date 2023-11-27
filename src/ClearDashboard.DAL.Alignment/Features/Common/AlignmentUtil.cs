@@ -1,13 +1,16 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DAL.CQRS;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Translation;
 using System.Data.Common;
 using System.Text.Json;
+using ClearDashboard.DAL.Alignment.Features.Translation;
 using static ClearDashboard.DAL.Alignment.Features.Corpora.UpdateOrAddVersesInTokenizedCorpusCommandHandler;
 using Models = ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Common
 {
@@ -103,7 +106,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
         }
 
         //Same as ProjectTemplateProcessRunner
-        public static async Task<TrainSmtModelSet> TrainSmtModelAsync(string taskName, bool isTrainedSymmetrizedModel, SmtModelType smtModelType, bool generateAlignedTokenPairs, ParallelCorpus parallelCorpus, ILogger logger, TranslationCommands translationCommands, CancellationToken cancellationToken)
+        public static async Task<TrainSmtModelSet> TrainSmtModelAsync(string taskName, bool isTrainedSymmetrizedModel, SmtModelType smtModelType, bool generateAlignedTokenPairs, Alignment.Corpora.ParallelCorpus parallelCorpus, ILogger logger, TranslationCommands translationCommands, CancellationToken cancellationToken)
         {
             var symmetrizationHeuristic = isTrainedSymmetrizedModel
                 ? SymmetrizationHeuristic.GrowDiagFinalAnd
@@ -149,6 +152,46 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             }
 
             return trainSmtModelSet;
+        }
+
+        public static async Task<RequestResult<IEnumerable<Alignment.Translation.Alignment>>> FillInVerificationAndOriginatedTypes(IEnumerable<Alignment.Translation.Alignment> request)
+        {
+            var verificationTypes = new Dictionary<string, AlignmentVerification>();
+            var originatedTypes = new Dictionary<string, AlignmentVerification>();
+            foreach (var al in request)
+            {
+                if (Enum.TryParse(al.Verification, out AlignmentVerification verificationType))
+                {
+                    verificationTypes[al.Verification] = verificationType;
+                }
+                else
+                {
+                    return new RequestResult<IEnumerable<Alignment.Translation.Alignment>>
+                    (
+                        success: false,
+                        message: $"Invalid alignment verification type '{al.Verification}' found in request"
+                    );
+                }
+
+                if (Enum.TryParse(al.OriginatedFrom, out AlignmentVerification originatedType))
+                {
+                    originatedTypes[al.OriginatedFrom] = originatedType;
+                }
+                else
+                {
+                    return new RequestResult<IEnumerable<Alignment.Translation.Alignment>>
+                    (
+                        success: false,
+                        message: $"Invalid alignment originated from type '{al.OriginatedFrom}' found in request"
+                    );
+                }
+            }
+
+            return new RequestResult<IEnumerable<Alignment.Translation.Alignment>>
+            (
+                result: request,
+                success: true
+            );
         }
 
     }
