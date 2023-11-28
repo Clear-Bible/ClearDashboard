@@ -81,8 +81,8 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
-
-        <Grid Margin="5">
+        <materialDesign:Card Margin="5">
+            <Grid Margin="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="35" />
                 <RowDefinition Height="*" />
@@ -124,10 +124,12 @@
                 SelectedItem="{Binding SelectedTargetLanguage}" />
             <TextBlock Grid.Row="1" 
                        Grid.Column="0" Style="{StaticResource Label}"
-                       Text="{helpers:Localization LexiconEdit_FindAll}"></TextBlock>
+                       Text="{helpers:Localization LexiconEdit_FindAll}"
+                       HorizontalAlignment="Left"></TextBlock>
             <WrapPanel Grid.Row="2" 
                        Grid.Column="0" 
                        Grid.ColumnSpan="5" 
+                       Margin="5"
                        Orientation="Horizontal">
 
                 <CheckBox x:Name="FindAllLexemeCheckBox" 
@@ -201,6 +203,7 @@
             </WrapPanel>
 
         </Grid>
+        </materialDesign:Card>
         <DataGrid
              x:Name="LexiconEditDataGrid"
              Grid.Row="1"
@@ -227,7 +230,9 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Vertical">
-                                <Button x:Name="EditButton" Style="{StaticResource RowButtonStyle}"  >
+                                <Button x:Name="EditButton" Style="{StaticResource RowButtonStyle}" 
+                                        cm:Action.TargetWithoutContext="{Binding DataContext, ElementName=LexiconEditDataGrid}"
+                                        cm:Message.Attach="[Event Click] = [Action OnEditButtonClicked($dataContext)]">
                                     <Button.ContentTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{helpers:Localization LexiconEdit_Edit}" TextWrapping="Wrap" />
@@ -236,7 +241,7 @@
                                 </Button>
                                 <Button x:Name="AddButton" Style="{StaticResource RowButtonStyle}"  
                                     cm:Action.TargetWithoutContext="{Binding DataContext, ElementName=LexiconEditDataGrid}"
-                                    cm:Message.Attach="[Event Click] = [Action OnAddButtonClicked($dataContext)]">
+                                    cm:Message.Attach="[Event Click] = [Action OnAddButtonClicked($dataContext)]" Visibility="{Binding IsEditing, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                                     <Button.ContentTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding ElementName=LexiconEditDataGrid, Path=DataContext.EditButtonLabel}" TextWrapping="Wrap" />
@@ -255,10 +260,23 @@
                      Width="125"
                      Binding="{Binding Type}"
                      Header="{helpers:Localization  LexiconEdit_Type}" />
-                <DataGridTextColumn
+                <!--<DataGridTextColumn
                     Width="250"
                     Binding="{Binding Forms}"
-                    Header="{helpers:Localization  LexiconEdit_Forms}" />
+                    Header="{helpers:Localization  LexiconEdit_Forms}" />-->
+                <DataGridTemplateColumn Width="250">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{helpers:Localization  LexiconEdit_Forms}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Forms, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" TextWrapping="Wrap" IsReadOnly="{Binding IsEditing, Converter={StaticResource BooleanInversionConverter}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
                 <!--<DataGridTextColumn
                     Width="250"
                     Binding="{Binding Meanings}"
@@ -271,7 +289,7 @@
                     </DataGridTemplateColumn.HeaderTemplate>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Meanings}" TextWrapping="Wrap" />
+                            <TextBox Text="{Binding Meanings, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" TextWrapping="Wrap" IsReadOnly="{Binding IsEditing, Converter={StaticResource BooleanInversionConverter}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
