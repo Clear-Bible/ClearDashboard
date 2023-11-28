@@ -154,10 +154,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             return trainSmtModelSet;
         }
 
-        public static async Task<RequestResult<IEnumerable<Alignment.Translation.Alignment>>> FillInVerificationAndOriginatedTypes(IEnumerable<Alignment.Translation.Alignment> request)
+        public static async Task<RequestResult<IEnumerable<Alignment.Translation.Alignment>>> FillInVerificationAndOriginatedTypes(IEnumerable<Alignment.Translation.Alignment> request, Dictionary<string, AlignmentVerification> verificationTypes, Dictionary<string, AlignmentOriginatedFrom> originatedTypes)
         {
-            var verificationTypes = new Dictionary<string, AlignmentVerification>();
-            var originatedTypes = new Dictionary<string, AlignmentVerification>();
+            //var verificationTypes = new Dictionary<string, AlignmentVerification>();
+            //var originatedTypes = new Dictionary<string, AlignmentOriginatedFrom>();
             foreach (var al in request)
             {
                 if (Enum.TryParse(al.Verification, out AlignmentVerification verificationType))
@@ -173,7 +173,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
                     );
                 }
 
-                if (Enum.TryParse(al.OriginatedFrom, out AlignmentVerification originatedType))
+                if (Enum.TryParse(al.OriginatedFrom, out AlignmentOriginatedFrom originatedType))
                 {
                     originatedTypes[al.OriginatedFrom] = originatedType;
                 }

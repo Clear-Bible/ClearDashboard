@@ -125,34 +125,46 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             var verificationTypes = new Dictionary<string, ModelVerificationType>();
             var originatedTypes = new Dictionary<string, ModelOriginatedType>();
-            foreach (var al in request.Alignments)
-            {
-                if (Enum.TryParse(al.Verification, out ModelVerificationType verificationType))
-                {
-                    verificationTypes[al.Verification] = verificationType;
-                }
-                else
-                {
-                    return new RequestResult<AlignmentSet>
-                    (
-                        success: false,
-                        message: $"Invalid alignment verification type '{al.Verification}' found in request"
-                    );
-                }
 
-                if (Enum.TryParse(al.OriginatedFrom, out ModelOriginatedType originatedType))
-                {
-                    originatedTypes[al.OriginatedFrom] = originatedType;
-                }
-                else
-                {
-                    return new RequestResult<AlignmentSet>
-                    (
-                        success: false,
-                        message: $"Invalid alignment originated from type '{al.OriginatedFrom}' found in request"
-                    );
-                }
+            var result = await AlignmentUtil.FillInVerificationAndOriginatedTypes(request.Alignments, verificationTypes, originatedTypes);
+
+            if (!result.Success)
+            {
+                return new RequestResult<AlignmentSet>
+                (
+                    success: result.Success,
+                    message: result.Message
+                );
             }
+
+            //foreach (var al in request.Alignments)
+            //{
+            //    if (Enum.TryParse(al.Verification, out ModelVerificationType verificationType))
+            //    {
+            //        verificationTypes[al.Verification] = verificationType;
+            //    }
+            //    else
+            //    {
+            //        return new RequestResult<AlignmentSet>
+            //        (
+            //            success: false,
+            //            message: $"Invalid alignment verification type '{al.Verification}' found in request"
+            //        );
+            //    }
+
+            //    if (Enum.TryParse(al.OriginatedFrom, out ModelOriginatedType originatedType))
+            //    {
+            //        originatedTypes[al.OriginatedFrom] = originatedType;
+            //    }
+            //    else
+            //    {
+            //        return new RequestResult<AlignmentSet>
+            //        (
+            //            success: false,
+            //            message: $"Invalid alignment originated from type '{al.OriginatedFrom}' found in request"
+            //        );
+            //    }
+            //}
 
             var alignmentSetId = Guid.NewGuid();
             var alignmentSet = new Models.AlignmentSet
