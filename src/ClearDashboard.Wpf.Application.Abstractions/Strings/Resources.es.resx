@@ -58,9 +58,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="&quot;LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
-    <value>Editar - agregar '{0}' como formulario</value>
-  </data>
   <data name="1CH" xml:space="preserve">
     <value>1CH</value>
   </data>
@@ -545,7 +542,7 @@
     <value>Proyectos</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
-    <value>Proyecto seleccionado</value>
+    <value>Seleccionar proyecto</value>
   </data>
   <data name="Copy" xml:space="preserve">
     <value>Copiar</value>
@@ -662,7 +659,7 @@
     <value>Eliminar corpus</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>Mostrar los controles de la vista</value>
+    <value>Mostrar los controles de vista</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>Token dividido</value>
@@ -677,7 +674,7 @@
     <value>División de tres vías</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Un si unir un token compuesto</value>
+    <value>Un si unión a la token compuesta</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -714,6 +711,9 @@
   </data>
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>Modo de párrafo</value>
+  </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>Mostrar notas externas</value>
   </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>Texto de origen:</value>
@@ -845,7 +845,7 @@
     <value>Cancelar brillo</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
-    <value>Cambiar todos los ocurrencias inseguros</value>
+    <value>Cambiar todos los ocurrencias no establecidos</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Si se verifica, esto cambiará todas las ocurrencias no establecidas de esta palabra</value>
@@ -910,8 +910,11 @@
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Editar</value>
   </data>
+  <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>Agregar '{0}' como formulario</value>
+  </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
-    <value>Editar - Agregar '{0}' como traducción al primer significado</value>
+    <value>Agregar '{0}' como traducción al primer significado</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Encuentra todos</value>
@@ -974,7 +977,7 @@
     <value>Importación comprobada</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
-    <value>Lexeme o coincidencias de forma</value>
+    <value>Lexeme o coincidencias de formulario</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
     <value>No hay más registros para importar.</value>
@@ -1355,7 +1358,7 @@
     <value>¿Quieres eliminar la etiqueta:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>¿Quieres disociar la etiqueta:</value>
+    <value>¿Quieres disociar la etiqueta?</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>del grupo de etiquetas:</value>
@@ -1550,7 +1553,7 @@
     <value>Traducción inversa</value>
   </data>
   <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
-    <value>Calcular el nuevo modelo de traducción</value>
+    <value>Calcule el nuevo modelo de traducción</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
     <value>Cambiar el nivel de zoom del contenido</value>
@@ -2000,7 +2003,7 @@
     <value>Joshua</value>
   </data>
   <data name="ProperCase_Jude" xml:space="preserve">
-    <value>Yacuana</value>
+    <value>Judío</value>
   </data>
   <data name="ProperCase_Judges" xml:space="preserve">
     <value>Jueces</value>
@@ -2216,7 +2219,7 @@
     <value>Validar el código de correo electrónico</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Habilitar visualización de colecciones de texto verso a versiones</value>
+    <value>Habilitar visualización de colecciones de texto verso por verso</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>Cancelar tarea</value>
@@ -2240,7 +2243,7 @@
     <value>Mostrar preleboseos</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
-    <value>Actualizar a la nueva versión de ClearDashboard</value>
+    <value>Actualización de la nueva versión de ClearDashboard</value>
   </data>
   <data name="ShellView_User" xml:space="preserve">
     <value>Usuario</value>

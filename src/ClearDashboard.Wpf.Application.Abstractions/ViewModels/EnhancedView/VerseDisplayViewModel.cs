@@ -26,6 +26,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Collections.ObjectModel;
 using SIL.Extensions;
 using System.Diagnostics;
+using ClearDashboard.Wpf.Application.Helpers;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -36,7 +37,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
     /// Instantiate a concrete <see cref="CorpusDisplayViewModel"/>, <see cref="InterlinearDisplayViewModel"/>,
     /// or <see cref="AlignmentDisplayViewModel"/> depending on the functionality desired.
     /// </remarks>
-    public abstract class VerseDisplayViewModel : PropertyChangedBase, 
+    public abstract class VerseDisplayViewModel : PropertyChangedBase,
         IHandle<SelectionUpdatedMessage>,
         IHandle<NoteAddedMessage>,
         IHandle<NoteDeletedMessage>,
@@ -60,7 +61,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #region Public Properties
 
-        public bool HasExternalNotes => ExternalNotes.Count() > 0;
+        public bool HasExternalNotes => ExternalNotes.Count() > 0 && AbstractionsSettingsHelper.GetShowExternalNotes();
         public TokenizedTextCorpus? SourceCorpus => SourceTokenMap?.Corpus;
         public TokenizedTextCorpus? TargetCorpus => TargetTokenMap?.Corpus;
 

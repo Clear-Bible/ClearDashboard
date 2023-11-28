@@ -17,6 +17,8 @@ using System.Windows.Input;
 using System.Dynamic;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using System.Threading;
+using ClearDashboard.Wpf.Application.Helpers;
+using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -359,13 +361,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             NotifyOfPropertyChange(nameof(TokenHasNote));
         }
         public bool HasExtendedProperties => !string.IsNullOrEmpty(ExtendedProperties);
-        public bool HasExternalNotes => ExternalNotes.Count() > 0;
+        public bool HasExternalNotes => ExternalNotes.Count() > 0 && AbstractionsSettingsHelper.GetShowExternalNotes();
 
 
         private bool _isFirstExternalNoteToken = false;
         public bool IsFirstExternalNoteToken
         {
-            get => _isFirstExternalNoteToken;
+            get => _isFirstExternalNoteToken && AbstractionsSettingsHelper.GetShowExternalNotes();
             set 
             { 
                 _isFirstExternalNoteToken = value;
@@ -376,7 +378,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private bool _multipleExternalNotes;
         public bool MultipleExternalNotes
         {
-            get => _multipleExternalNotes;
+            get => _multipleExternalNotes && AbstractionsSettingsHelper.GetShowExternalNotes();
             set 
             { 
                 _multipleExternalNotes = value;

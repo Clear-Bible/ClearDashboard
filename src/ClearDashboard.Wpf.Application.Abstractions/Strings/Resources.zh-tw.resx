@@ -58,9 +58,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="&quot;LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
-    <value>編輯 - 添加'{0}'作為表單</value>
-  </data>
   <data name="1CH" xml:space="preserve">
     <value>1CH</value>
   </data>
@@ -242,7 +239,7 @@
     <value>建造;宗教活動</value>
   </data>
   <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>建築；畜牧業</value>
+    <value>構造；畜牧業</value>
   </data>
   <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
     <value>容器；畜牧業</value>
@@ -413,13 +410,13 @@
     <value>散裝對齊編輯</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>批量對齊審查</value>
+    <value>批量對準評論</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>數數</value>
   </data>
   <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>按地面文本計數</value>
+    <value>按表面文本計數</value>
   </data>
   <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
     <value>通過培訓文本計數</value>
@@ -455,7 +452,7 @@
     <value>部分</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>樞密性的單詞</value>
+    <value>樞紐的單詞</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>來源</value>
@@ -470,7 +467,7 @@
     <value>目標</value>
   </data>
   <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
-    <value>目標部分</value>
+    <value>目標零件</value>
   </data>
   <data name="BulkAlignmentReview_Type" xml:space="preserve">
     <value>類型</value>
@@ -596,7 +593,7 @@
     <value>添加對齊方式？</value>
   </data>
   <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>用'{1}'對齊'{0}'？</value>
+    <value>與'{1}'對齊'{0}'？</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
     <value>結盟</value>
@@ -620,7 +617,7 @@
     <value>刪除“ {0}”的對齊方式？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>刪除所有路線？</value>
+    <value>刪除所有對齊方式？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>令牌'{0}'具有多個對齊定義。單擊'{1}'將刪除所有對齊。</value>
@@ -714,6 +711,9 @@
   </data>
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>段落模式</value>
+  </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>顯示外部筆記</value>
   </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>源文本：</value>
@@ -910,8 +910,11 @@
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>編輯</value>
   </data>
+  <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>添加'{0}'作為表單</value>
+  </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
-    <value>編輯 - 添加'{0}'作為翻譯到第一個含義</value>
+    <value>將'{0}'添加為第一個含義</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>找到所有</value>
@@ -1013,10 +1016,10 @@
     <value>需要名字</value>
   </data>
   <data name="LicenseValidator_LastMissing" xml:space="preserve">
-    <value>需要姓氏</value>
+    <value>需要姓</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>需要許可密鑰</value>
+    <value>需要許可證密鑰</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
@@ -1268,7 +1271,7 @@
     <value>姓</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
-    <value>新的合作用戶</value>
+    <value>新的協作用戶</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
     <value>密碼：</value>
@@ -1529,13 +1532,13 @@
     <value>創建新單詞對齊</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>創建新的語料庫</value>
+    <value>創建新的語料庫令牌化</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
     <value>添加新的Interlinear</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
-    <value>添加文本查看</value>
+    <value>添加文字以查看</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
     <value>將文本添加到新視圖</value>
@@ -1556,7 +1559,7 @@
     <value>更改內容的縮放級別</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>顧問Notes</value>
+    <value>顧問說明</value>
   </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>創建新單詞對齊</value>
@@ -1664,7 +1667,7 @@
     <value>放大內容</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>從內容中縮小</value>
+    <value>縮小內容</value>
   </data>
   <data name="PHM" xml:space="preserve">
     <value>PHM</value>
@@ -1718,7 +1721,7 @@
     <value>字首</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>展示反向翻譯</value>
+    <value>展示退縮</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>幹</value>
@@ -1742,7 +1745,7 @@
     <value>Cleardashboard</value>
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
-    <value>PARATEXT BETA未運行</value>
+    <value>paratext beta不運行</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
     <value>取消...</value>
@@ -1787,7 +1790,7 @@
     <value>導入服務器項目</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>在創建項目時，請選中此框，以包括希臘語和希伯來語聖經的文本。</value>
+    <value>選中此框，以在創建項目時包括希臘語和希伯來語聖經文本。</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>包括NT希臘聖經文本？</value>
@@ -2120,7 +2123,7 @@
     <value>節省</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>啟用實驗性水上插件</value>
+    <value>啟用實驗水上插件</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
     <value>檢查您的電子郵件並輸入驗證代碼：</value>
@@ -2198,7 +2201,7 @@
     <value>ClearDashboard設置</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>顯示出與儀表板不同的顯示器上擴展的視圖</value>
+    <value>顯示與儀表板不同的顯示器上展示的視圖</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
     <value>對於具有三個或三個或以上監視器的系統，在第三監視器上顯示擴展的視圖</value>
@@ -2249,7 +2252,7 @@
     <value>錯誤報告</value>
   </data>
   <data name="SlackMessageView_Combo1" xml:space="preserve">
-    <value>我在一個項目中丟失了數據</value>
+    <value>我在項目中丟失了數據</value>
   </data>
   <data name="SlackMessageView_Combo2" xml:space="preserve">
     <value>我無法完成任務</value>

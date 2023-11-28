@@ -58,9 +58,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="&quot;LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
-    <value>កែសម្រួល - បន្ថែម '{0}' ជាទម្រង់</value>
-  </data>
   <data name="1CH" xml:space="preserve">
     <value>1CH</value>
   </data>
@@ -715,6 +712,9 @@
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>របៀបកថាខណ្ឌ</value>
   </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>បង្ហាញកំណត់ត្រាខាងក្រៅ</value>
+  </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>អត្ថបទប្រភព:</value>
   </data>
@@ -776,7 +776,7 @@
     <value>លេខសម្ងាត់:</value>
   </data>
   <data name="JiraResultsView_URL" xml:space="preserve">
-    <value>URL:</value>
+    <value>url:</value>
   </data>
   <data name="JiraResultsView_Username" xml:space="preserve">
     <value>ឈ្មោះ​អ្នកប្រើប្រាស់:</value>
@@ -910,8 +910,11 @@
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>បិនិត្យ</value>
   </data>
+  <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>បន្ថែម '{0}' ជាទម្រង់</value>
+  </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
-    <value>កែសម្រួល - បន្ថែម '{0}' ជាការបកប្រែទៅជាអត្ថន័យដំបូង</value>
+    <value>បន្ថែម '{0}' ជាការបកប្រែទៅជាអត្ថន័យដំបូង</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>រកទាំងអស់</value>

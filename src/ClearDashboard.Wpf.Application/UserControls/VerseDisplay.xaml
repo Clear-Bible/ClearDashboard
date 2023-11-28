@@ -226,16 +226,22 @@
         </ItemsPanelTemplate>
     </UserControl.Resources>
 
-    <StackPanel Orientation="Vertical">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
         <!--  External Notes  -->
         <Border
             MaxWidth="18"
-            Background="LightGray"
+            MaxHeight="22"
+            Background="WhiteSmoke"
             BorderBrush="Black"
             BorderThickness="1"
             CornerRadius="3"
-            MouseDown="Border_MouseDown"
             Cursor="Hand"
+            Margin="2"
+            MouseDown="Border_MouseDown"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.HasExternalNotes), Converter={StaticResource BoolToVisibilityConverter}}">
             <Border.ToolTip>
                 <ToolTip
@@ -301,39 +307,42 @@
 
         </Border>
 
-        <TextBlock
-            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleMargin}"
-            Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitlePadding}"
-            HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleHorizontalAlignment}"
-            FlowDirection="LeftToRight"
-            FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleFontSize}"
-            Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Title}"
-            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleVisibility}" />
-        <Border
-            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseMargin}"
-            Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VersePadding}"
-            Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBackground}"
-            BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderBrush}"
-            BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderThickness}">
-            <ItemsControl
-                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
-                ItemTemplate="{StaticResource SourceTokenDisplay}"
-                ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceItemsPanelTemplate}"
-                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceTokens}" />
-        </Border>
-        <Border
-            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseMargin}"
-            Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VersePadding}"
-            Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBackground}"
-            BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderBrush}"
-            BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderThickness}"
-            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetVisibility}">
-            <ItemsControl
-                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsTargetRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
-                ItemTemplate="{StaticResource TargetTokenDisplay}"
-                ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetItemsPanelTemplate}"
-                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetTokens}"
-                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetVisibility}" />
-        </Border>
-    </StackPanel>
+
+        <StackPanel Grid.Column="1" Orientation="Vertical">
+            <TextBlock
+                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleMargin}"
+                Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitlePadding}"
+                HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleHorizontalAlignment}"
+                FlowDirection="LeftToRight"
+                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleFontSize}"
+                Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Title}"
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleVisibility}" />
+            <Border
+                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseMargin}"
+                Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VersePadding}"
+                Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBackground}"
+                BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderBrush}"
+                BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderThickness}">
+                <ItemsControl
+                    FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
+                    ItemTemplate="{StaticResource SourceTokenDisplay}"
+                    ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceItemsPanelTemplate}"
+                    ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceTokens}" />
+            </Border>
+            <Border
+                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseMargin}"
+                Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VersePadding}"
+                Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBackground}"
+                BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderBrush}"
+                BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderThickness}"
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetVisibility}">
+                <ItemsControl
+                    FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsTargetRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
+                    ItemTemplate="{StaticResource TargetTokenDisplay}"
+                    ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetItemsPanelTemplate}"
+                    ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetTokens}"
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetVisibility}" />
+            </Border>
+        </StackPanel>
+    </Grid>
 </userControls:VerseDisplayBase>
