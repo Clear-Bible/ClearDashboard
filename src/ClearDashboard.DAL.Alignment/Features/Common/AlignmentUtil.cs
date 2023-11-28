@@ -105,7 +105,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             }
         }
 
-        //Same as ProjectTemplateProcessRunner
+        //Same as ProjectTemplateProcessRunner, how do we do background tasks?
         public static async Task<TrainSmtModelSet> TrainSmtModelAsync(string taskName, bool isTrainedSymmetrizedModel, SmtModelType smtModelType, bool generateAlignedTokenPairs, Alignment.Corpora.ParallelCorpus parallelCorpus, ILogger logger, TranslationCommands translationCommands, CancellationToken cancellationToken)
         {
             var symmetrizationHeuristic = isTrainedSymmetrizedModel
