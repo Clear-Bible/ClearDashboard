@@ -1387,8 +1387,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             }
 
                             var tokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, tokenizedTextCorpusId);
+                            
+                            //have this return "success"
+                            //mark corpus with "LastTokenized" in database to tell which alignments need to run
                             await tokenizedTextCorpus.UpdateOrAddVerses(Mediator!, textCorpus, alignmentSetsToRedo, cancellationToken);
+                            
+                            var tasks = alignmentSetsToRedo.Select(alignmentSetIdToRedo => Task.Run(async () =>
+                            {
+                                //run TrainSMT here
+                                var alignmentSetToRedo = await AlignmentSet.Get(alignmentSetIdToRedo, Mediator!);
+                                await alignmentSetToRedo.UpdateAutoAlignments();
+                            }));
+                            await Task.WhenAll(tasks);
 
+                            //possibly move to other menu item someday
+                            //do parallelization here
+                            //add alignmentSet.UpdateAlignments
+                                //add second handler in there
                             await EventAggregator.PublishOnUIThreadAsync(new TokenizedCorpusUpdatedMessage(tokenizedTextCorpusId), cancellationToken);
 
                             await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage(ReloadType.Force), cancellationToken);//move into handler?

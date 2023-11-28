@@ -119,10 +119,9 @@ namespace ClearDashboard.DAL.Alignment.Translation
             result.ThrowIfCanceledOrFailed();
         }
 
-        public async Task Update(CancellationToken token = default)
+        public async Task UpdateAutoAlignments(CancellationToken token = default)
         {
-            // call the update handler to update the r/w metadata on the TokenizedTextCorpusId
-            throw new NotImplementedException();
+            
         }
 
         public async Task Delete(IMediator mediator, CancellationToken token = default)

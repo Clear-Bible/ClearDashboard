@@ -25,26 +25,26 @@ using SIL.Machine.FiniteState;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public class UpdateOrAddVersesInTokenizedCorpusCommandHandler : ProjectDbContextCommandHandler<
-        UpdateOrAddVersesInTokenizedCorpusCommand, 
+    public class UpdateAlignmentsCommandHandler : ProjectDbContextCommandHandler<
+        UpdateAlignmentsCommand, 
         RequestResult<IEnumerable<string>>,
         IEnumerable<string>>
     {
         private readonly IMediator _mediator;
         private readonly TranslationCommands _translationCommands;
 
-        public UpdateOrAddVersesInTokenizedCorpusCommandHandler(
+        public UpdateAlignmentsCommandHandler(
             IMediator mediator, 
             ProjectDbContextFactory? projectNameDbContextFactory, 
             IProjectProvider projectProvider, 
             TranslationCommands translationCommands,
-            ILogger<UpdateOrAddVersesInTokenizedCorpusCommandHandler> logger) : base(projectNameDbContextFactory,projectProvider,  logger)
+            ILogger<UpdateAlignmentsCommandHandler> logger) : base(projectNameDbContextFactory,projectProvider,  logger)
         {
             _mediator = mediator;
             _translationCommands = translationCommands;
         }
 
-        protected override async Task<RequestResult<IEnumerable<string>>> SaveDataAsync(UpdateOrAddVersesInTokenizedCorpusCommand request, CancellationToken cancellationToken)
+        protected override async Task<RequestResult<IEnumerable<string>>> SaveDataAsync(UpdateAlignmentsCommand request, CancellationToken cancellationToken)
         {
             var tokenizedCorpusGuid = request.TokenizedTextCorpusId.Id;
             var corpusId = request.TokenizedTextCorpusId.CorpusId!;
