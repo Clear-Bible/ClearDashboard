@@ -1,23 +1,29 @@
 ﻿using Autofac;
 using Caliburn.Micro;
+using CefSharp.DevTools.Network;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
+using ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
+using ClearDashboard.ParatextPlugin.CQRS.Features.UsfmFilePath;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
+using ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
 using Markdig;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Paratext.PluginInterfaces;
+using SIL.Scripture;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
@@ -25,8 +31,11 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Shapes;
+using System.Xml.Linq;
 using static ClearDashboard.Wpf.Application.Helpers.SlackMessage;
 using Markdown = Markdig.Markdown;
+using Path = System.IO.Path;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -35,9 +44,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         #region Member Variables   
         private readonly ILogger<SlackMessageViewModel> _logger;
         private readonly CollaborationServerHttpClientServices _collaborationHttpClientServices;
-        private readonly SelectedBookManager _selectedBookManager;
-
-        //private Timer _timer = new System.Timers.Timer();
+        public SelectedBookManager SelectedBookManager { get; private set; }
 
 
         private User _currentDashboardUser;
@@ -47,7 +54,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         private JiraUser? _jiraUser;
 
-        
+
+
+
 
         #endregion //Member Variables
 
@@ -61,10 +70,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         public List<string> Files { get; set; }
 
 
+        public ObservableCollection<UsfmError> UsfmErrors { get; set; } = new ObservableCollection<UsfmError>();
+
+
         #endregion //Public Properties
 
 
         #region Observable Properties
+
+        private string _errorTitle;
+        public string ErrorTitle
+        {
+            get => _errorTitle;
+            set
+            {
+                _errorTitle = value;
+                NotifyOfPropertyChange(() => ErrorTitle);
+            }
+        }
+
 
         private List<FileItem> _attachedFiles = new();
         public List<FileItem> AttachedFiles
@@ -77,6 +101,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
+        private List<ParatextProjectMetadata>? _projects;
+        public List<ParatextProjectMetadata>? Projects
+        {
+            get => _projects;
+            set => Set(ref _projects, value);
+        }
+
+
+        private ParatextProjectMetadata? _selectedProject;
+        public ParatextProjectMetadata? SelectedProject
+        {
+            get => _selectedProject;
+            set
+            {
+                Set(ref _selectedProject, value);
+            }
+        }
 
 
         private bool _bugReport = true;
@@ -287,6 +328,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
+
+        private Visibility _showSpinner = Visibility.Collapsed;
+        public Visibility ShowSpinner
+        {
+            get => _showSpinner;
+            set
+            {
+                _showSpinner = value;
+                NotifyOfPropertyChange(() => ShowSpinner);
+            }
+        }
+
+        private List<UsfmErrorsWrapper> _usfmErrorsByProject;
+        public List<UsfmErrorsWrapper> UsfmErrorsByProject
+        {
+            get => _usfmErrorsByProject;
+            set => Set(ref _usfmErrorsByProject, value);
+        }
+
         #endregion //Observable Properties
 
 
@@ -307,7 +367,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             _logger = logger;
             _collaborationHttpClientServices = collaborationHttpClientServices;
-            _selectedBookManager = selectedBookManager;
+            SelectedBookManager = selectedBookManager;
             var localizationService1 = localizationService;
 
             WorkingMessage = "Gathering Files for Transmission";
@@ -365,7 +425,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            _selectedBookManager.PropertyChanged += OnSelectedBookManagerPropertyChanged;
+            SelectedBookManager.PropertyChanged += OnSelectedBookManagerPropertyChanged;
 
             var result = await ProjectManager.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
             if (result.Success)
@@ -378,12 +438,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
                 foreach (var corpusId in corpusIds)
                 {
-                    var currentlyRunning = projectDesignSurface.BackgroundTasksViewModel
-                        .CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(corpusId.Name);
-                    if (currentlyRunning)
-                    {
-                        currentNodeIds.Add(corpusId.ParatextGuid);
-                    }
+                    currentNodeIds.Add(corpusId.ParatextGuid);
                 }
 
                 var currentNodes = projectDesignSurface.DesignSurfaceViewModel.CorpusNodes;
@@ -391,32 +446,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
                 if (Projects == null)
                 {
-                    Projects = result.Data.Where(c => !currentNodeIds.Contains(c.Id)).OrderBy(p => p.Name).ToList();
+                    Projects = result.Data.Where(c => currentNodeIds.Contains(c.Id)).OrderBy(p => p.Name).ToList();
                 }
-
-                if (!string.IsNullOrEmpty(_initialParatextProjectId))
-                {
-                    SelectedProject = Projects.FirstOrDefault(p => p.Id == _initialParatextProjectId);
-                    if (SelectedProject != null)
-                    {
-                        IsEnabledSelectedProject = false;
-                    }
-                }
-
-                // send new metadata results to the Main Window    
-                await EventAggregator.PublishOnUIThreadAsync(new ProjectsMetadataChangedMessage(result.Data), cancellationToken);
             }
-
-
-            await _selectedBookManager.InitializeBooks(new Dictionary<string, IEnumerable<UsfmError>>(), ParentViewModel.SelectedProject.Id, true, new CancellationToken());
-
-
-            return base.OnActivateAsync(cancellationToken);
         }
 
-        private void OnSelectedBookManagerPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            SelectedBookManager.PropertyChanged -= OnSelectedBookManagerPropertyChanged;
+            return base.OnDeactivateAsync(close, cancellationToken);
         }
 
         #endregion //Constructor
@@ -532,25 +570,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 }
 
             }
-
-
-            //// Create a timer to get rid of the message and email icon
-            //_timer = new Timer(3000);
-            //_timer.Elapsed += OnTimedEvent;
-            //_timer.AutoReset = false;
-            //_timer.Enabled = true;
         }
 
         private void AddAttachedFilesToZip()
         {
             
         }
-
-        //private void OnTimedEvent(object? sender, ElapsedEventArgs e)
-        //{
-        //    WorkingMessage = "";
-        //    ShowEmailIcon = false;
-        //}
 
         private void CheckJiraButtonEnabled()
         {
@@ -672,13 +697,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 WorkingMessage = "Problem Sending Message";
                 ShowEmailIcon = false;  
             }
-
-            //// Create a timer to get rid of the message and email icon
-            //_timer = new Timer(3500);
-            //_timer.Elapsed += OnTimedEvent;
-            //_timer.AutoReset = false;
-            //_timer.Enabled = true;
-
         }
 
 
@@ -697,6 +715,122 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             manager.ShowWindowAsync(viewModel, null, settings);
 
         }
+
+
+        #region SelectBibleBooks
+
+        public void UnselectAllBooks()
+        {
+            SelectedBookManager.UnselectAllBooks();
+        }
+
+        // ReSharper disable once UnusedMember.Global
+        public void SelectAllBooks()
+        {
+            SelectedBookManager.SelectAllBooks();
+        }
+
+        // ReSharper disable once UnusedMember.Global
+        public void SelectNewTestamentBooks()
+        {
+            SelectedBookManager.SelectNewTestamentBooks();
+        }
+
+        // ReSharper disable once UnusedMember.Global
+        public void SelectOldTestamentBooks()
+        {
+            SelectedBookManager.SelectOldTestamentBooks();
+        }
+
+        public async void ProjectSelected()
+        {
+            ShowSpinner = Visibility.Visible;
+            UsfmErrorsByProject = await UsfmChecker.CheckUsfm(SelectedProject, ProjectManager, LocalizationService);
+            var firstProject = UsfmErrorsByProject.FirstOrDefault();
+            if (firstProject != null)
+            {
+                ErrorTitle = firstProject.ErrorTitle;
+                UsfmErrors = firstProject.UsfmErrors;
+            }
+            var usfmErrors = new Dictionary<string, IEnumerable<UsfmError>>();
+            usfmErrors.Add(SelectedProject.Id!, new List<UsfmError>());
+            await SelectedBookManager.InitializeBooks(usfmErrors, true, true, new CancellationToken());
+
+            ShowSpinner = Visibility.Collapsed;
+        }
+
+        private void OnSelectedBookManagerPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            var somethingSelected = false;
+            var newBooksSelected = false;
+            var oldBooksSelected = false;
+
+            foreach (var book in SelectedBookManager.SelectedBooks)
+            {
+                if (book.IsEnabled && book.IsSelected && !somethingSelected)
+                {
+                    somethingSelected = true;
+                }
+
+                if (!book.IsImported && book.IsEnabled && book.IsSelected)
+                {
+                    newBooksSelected = true;
+                }
+
+                if (book.IsImported && book.IsEnabled && book.IsSelected)
+                {
+                    oldBooksSelected = true;
+                }
+
+                if (somethingSelected && newBooksSelected && oldBooksSelected)
+                {
+                    break;
+                }
+            }
+        }
+
+
+        public async void SendUsfmBooks()
+        {
+            if (SelectedBookManager.SelectedBooks.Count == 0)
+            {
+                return;
+            }
+
+            var result = await ExecuteRequest(new GetUsfmFilePathQuery(SelectedProject.Id), CancellationToken.None);
+            if (result.Success)
+            {
+                var list = result.Data;
+            }
+
+
+
+
+            //var files = new List<string>();
+
+            //// get the project directory
+            //var projectDirectory = SelectedProject.ProjectPath;
+
+            //// get the settings file
+            //var settingsFile = Path.Combine(projectDirectory, "settings.xml");
+            //if (File.Exists(settingsFile))
+            //{
+            //    var xmlStr = File.ReadAllText(settingsFile);
+            //    var str = XElement.Parse(xmlStr);
+
+            //    //var users = str.Elements("User")
+            //    //	.Select(x => x.Attribute("UserName"))
+            //    //	.ToList();
+
+
+            //    var users = str.Elements("User")
+            //        .ToList();
+            //}
+
+
+        }
+
+        #endregion
 
         #endregion // Methods
 
