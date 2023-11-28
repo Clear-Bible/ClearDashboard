@@ -1231,22 +1231,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         protected override async void OnIsKeyboardFocusWithinChanged(DependencyPropertyChangedEventArgs e)
         {
-
-            var tokenDisplay = (TokenDisplayViewModel)DataContext;
-
-            if (tokenDisplay.VerseDisplay is AlignmentDisplayViewModel)
-            {
-                if (e.NewValue != null && (bool)e.NewValue)
-                {
-                    var keyBoardModifiers = Keyboard.Modifiers;
-
-                    if (keyBoardModifiers == ModifierKeys.None || (Keyboard.IsKeyDown(Key.Tab) && keyBoardModifiers == ModifierKeys.Shift))
-                    {
-                        await EventAggregator.PublishOnUIThreadAsync(new HighlightTokensMessage(tokenDisplay.IsSource, tokenDisplay.AlignmentToken.TokenId), CancellationToken.None);
-                    }
-
-                }
-            }
+            HighlightAlignedToken();
             base.OnIsKeyboardFocusWithinChanged(e);
         }
 
@@ -1259,23 +1244,23 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             RaiseTokenEvent(TokenLeftButtonDownEvent, e);
 
+            HighlightAlignedToken();
+            e.Handled = true;
+        }
+
+        private void HighlightAlignedToken()
+        {
             var tokenDisplay = (TokenDisplayViewModel)DataContext;
 
             if (tokenDisplay.VerseDisplay is AlignmentDisplayViewModel)
             {
-                //if (e.NewValue != null && (bool)e.NewValue)
-                //{
-                    var keyBoardModifiers = Keyboard.Modifiers;
+                var keyboardModifiers = Keyboard.Modifiers;
 
-                    if (keyBoardModifiers == ModifierKeys.None || (Keyboard.IsKeyDown(Key.Tab) && keyBoardModifiers == ModifierKeys.Shift))
-                    {
-                        EventAggregator.PublishOnUIThreadAsync(new HighlightTokensMessage(tokenDisplay.IsSource, tokenDisplay.AlignmentToken.TokenId), CancellationToken.None);
-                    }
-
-                //}
+                if (keyboardModifiers == ModifierKeys.None || (Keyboard.IsKeyDown(Key.Tab) && keyboardModifiers == ModifierKeys.Shift))
+                {
+                    EventAggregator.PublishOnUIThreadAsync(new HighlightTokensMessage(tokenDisplay.IsSource, tokenDisplay.AlignmentToken.TokenId), CancellationToken.None);
+                }
             }
-
-            e.Handled = true;
         }
 
         private void OnTokenLeftButtonUp(object sender, RoutedEventArgs e)
