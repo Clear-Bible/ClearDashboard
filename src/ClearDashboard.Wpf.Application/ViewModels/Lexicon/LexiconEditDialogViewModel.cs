@@ -314,7 +314,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                     filteredLexemes = managedLexemes.FilterByTranslationText(SelectedSourceLanguage,
                         SelectedTargetLanguage, Other).ToList();
 
-                    return new BindableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l=> new EditableLexemeViewModel(l)));
+                    return new BindableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l=> new EditableLexemeViewModel(l) {SourceLanguage = SourceLanguage, TargetLanguage = TargetLanguage}));
 
                 case LexiconEditMode.PartialMatchOnLexemeOrForm:
 
@@ -322,7 +322,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
                     filteredLexemes = managedLexemes.FilterByLexemeText(Other, State.FormsOption == MatchOption.Partially, SourceLanguage, null).ToList();
                     
-                    return new BindableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l => new EditableLexemeViewModel(l)));
+                    return new BindableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l => new EditableLexemeViewModel(l) { SourceLanguage = SourceLanguage, TargetLanguage = TargetLanguage }));
 
                 default:
                     return null;

@@ -37,6 +37,18 @@ public class EditableLexemeViewModel : PropertyChangedBase
         }
     }
 
+    public string? SourceLanguage
+    {
+        get;
+        set;
+    }
+
+    public string? TargetLanguage
+    {
+        get;
+        set;
+    }
+
     public bool IsEditing
     {
         get => _isEditing;
@@ -62,7 +74,7 @@ public class EditableLexemeViewModel : PropertyChangedBase
                 var translations = parts[1].TrimEnd(']').Split(',').Select(t => t.Trim()).Where(t => !string.IsNullOrEmpty(t)).ToList();
                 if (meaning == null)
                 {
-                    meaning = new Meaning { Text = parts[0].TrimEnd(), Language = Lexeme.Language };
+                    meaning = new Meaning { Text = parts[0].TrimEnd(), Language = TargetLanguage };
                     AddNewTranslations(translations, meaning);
                     _lexeme.Meanings.Add(meaning);
                 }
@@ -114,7 +126,7 @@ public class EditableLexemeViewModel : PropertyChangedBase
     {
         if (_lexeme.Meanings.All(m => m.Text != meaningText))
         {
-            _lexeme.Meanings.Add(new Meaning { Text = meaningText });
+            _lexeme.Meanings.Add(new Meaning { Text = meaningText, Language = TargetLanguage});
         }
         NotifyOfPropertyChange(nameof(Meanings));
     }
