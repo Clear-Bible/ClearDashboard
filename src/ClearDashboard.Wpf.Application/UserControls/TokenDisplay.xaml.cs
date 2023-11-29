@@ -1140,7 +1140,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 RoutedEvent = routedEvent,
                 TokenDisplay = tokenDisplay!,
-                ModifierKeys = Keyboard.Modifiers
+                ModifierKeys = Keyboard.Modifiers,
+                MouseLeftButton = Mouse.LeftButton,
+                MouseMiddleButton = Mouse.MiddleButton,
+                MouseRightButton = Mouse.RightButton
             });
         }
 

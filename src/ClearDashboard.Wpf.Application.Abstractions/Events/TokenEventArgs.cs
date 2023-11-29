@@ -38,6 +38,36 @@ namespace ClearDashboard.Wpf.Application.Events
         /// </summary>
         public bool IsAltPressed => (ModifierKeys & ModifierKeys.Alt) > 0;
 
+        /// <summary>
+        /// The left button <see cref="MouseButtonState"/> at the time of the event.
+        /// </summary>
+        public MouseButtonState MouseLeftButton { get; set; }
+
+        /// <summary>
+        /// Gets whether the left mouse button is pressed at the time of the event.
+        /// </summary>
+        public bool IsMouseLeftButtonDown => MouseLeftButton == MouseButtonState.Pressed;
+
+        /// <summary>
+        /// The middle button <see cref="MouseButtonState"/> at the time of the event.
+        /// </summary>
+        public MouseButtonState MouseMiddleButton { get; set; }
+
+        /// <summary>
+        /// Gets whether the middle mouse button is pressed at the time of the event.
+        /// </summary>
+        public bool IsMouseMiddleButtonDown => MouseMiddleButton == MouseButtonState.Pressed;
+
+        /// <summary>
+        /// The right button <see cref="MouseButtonState"/> at the time of the event.
+        /// </summary>
+        public MouseButtonState MouseRightButton { get; set; }
+
+        /// <summary>
+        /// Gets whether the right mouse button is pressed at the time of the event.
+        /// </summary>
+        public bool IsMouseRightButtonDown => MouseRightButton == MouseButtonState.Pressed;
+
         public Guid VerseDisplayId { get; set; }
     }
 }

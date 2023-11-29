@@ -78,6 +78,34 @@ namespace ClearDashboard.Wpf.Application.Collections
             RecalculateEntityIds();
         }
 
+        /// <summary>
+        /// Gets a collection containing a sequence of tokens between a beginning token and ending token, inclusive.
+        /// </summary>
+        /// <param name="beginToken">The beginning <see cref="TokenDisplayViewModel"/>.</param>
+        /// <param name="endToken">The ending <see cref="TokenDisplayViewModel"/>.</param>
+        /// <remarks>
+        /// If either <paramref name="beginToken"/> and/or <paramref name="endToken"/> are not found in the collection, then an
+        /// empty <see cref="TokenDisplayViewModelCollection"/> is returned.
+        /// </remarks>
+        /// <returns>
+        /// A new <see cref="TokenDisplayViewModelCollection"/> containing all the <see cref="TokenDisplayViewModel"/>
+        /// instances between the beginning token and ending token, inclusive.
+        /// </returns>
+        public TokenDisplayViewModelCollection GetRange(TokenDisplayViewModel beginToken, TokenDisplayViewModel endToken)
+        {
+            var beginTokenIndex = Math.Min(IndexOf(beginToken), IndexOf(endToken));
+            var endTokenIndex = Math.Max(IndexOf(beginToken), IndexOf(endToken));
+
+            return beginTokenIndex != -1 && endTokenIndex != -1
+                ? new TokenDisplayViewModelCollection(this.Skip(beginTokenIndex).Take(endTokenIndex - beginTokenIndex + 1))
+                : new TokenDisplayViewModelCollection();
+        }
+
+        public TokenDisplayViewModelCollection Copy()
+        {
+            return new TokenDisplayViewModelCollection(this);
+        }
+
         public bool Contains(TokenId tokenId)
         {
             return Items.Any(i => i.Token.TokenId.IdEquals(tokenId));
@@ -167,6 +195,11 @@ namespace ClearDashboard.Wpf.Application.Collections
                 entityIds.Contains(t.Translation?.TranslationId, new IIdEqualityComparer()));
         }
 
+        public IEnumerable<TokenDisplayViewModel> MatchingTokens(IEnumerable<TokenDisplayViewModel> tokens)
+        {
+            return Items.Where(t => Items.Contains(t));
+        }
+
         private IEnumerable<TokenDisplayViewModel> MatchingTokens(Func<TokenDisplayViewModel, bool> conditional)
         {
             return Items.Where(conditional);
@@ -187,6 +220,14 @@ namespace ClearDashboard.Wpf.Application.Collections
             }
         }
 
+        public void MatchingTokenAction(IEnumerable<TokenDisplayViewModel> tokens, Action<TokenDisplayViewModel> action)
+        {
+            foreach (var token in MatchingTokens(tokens))
+            {
+                action(token);
+            }
+        }
+
         public void MatchingTokenAction(Func<TokenDisplayViewModel, bool> conditional, Action<TokenDisplayViewModel> action)
         {
             foreach (var token in MatchingTokens(conditional))
@@ -202,6 +243,33 @@ namespace ClearDashboard.Wpf.Application.Collections
                 action(token);
             }
         }
+
+        public void SelectAllTokens()
+        {
+            foreach (var token in Items)
+            {
+                token.IsTokenSelected = true;
+            }
+        }
+
+        public void DeselectAllTokens()
+        {
+            foreach (var token in Items)
+            {
+                token.IsTokenSelected = false;
+            }
+        }
+
+        public void SelectTokens(IEnumerable<TokenDisplayViewModel> tokens)
+        {
+            MatchingTokenAction(tokens, t => t.IsTokenSelected = true);
+        }        
+        
+        public void DeselectTokens(IEnumerable<TokenDisplayViewModel> tokens)
+        {
+            MatchingTokenAction(tokens, t => t.IsTokenSelected = false);
+        }
+
         public int SelectedAssignedTranslationCount => SelectedTranslations
             .GroupBy(t => t.CompositeToken?.TokenId?.Id?? t.Token.TokenId.Id)
             .Count(g => g.Any(e => e.Translation?.TranslationId!=null));

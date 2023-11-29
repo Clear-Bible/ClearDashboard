@@ -395,6 +395,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
             TokenDisplay.EventAggregator = eventAggregator;
             VerseDisplay.EventAggregator = eventAggregator;
+            VerseDisplay.SelectionManager = selectionManager;
             LabelsEditor.EventAggregator = eventAggregator;
             LabelsDisplay.EventAggregator = eventAggregator;
 
@@ -878,9 +879,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             else
             {
+                SelectionManager.StartSelection(e.TokenDisplay);
                 SelectionManager.UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
                 NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
             }
+        }
+
+        public async void TokenLeftButtonUp(object sender, TokenEventArgs e)
+        {
+            SelectionManager.EndSelection(e.TokenDisplay);
         }
 
         public async void TokenCreateAlignment(object sender, TokenEventArgs e)
