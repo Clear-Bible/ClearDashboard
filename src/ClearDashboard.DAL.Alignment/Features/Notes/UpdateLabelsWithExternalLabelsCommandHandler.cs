@@ -21,9 +21,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
         protected override async Task<RequestResult<bool>> SaveDataAsync(UpdateLabelsWithExternalLabelsCommand request, CancellationToken cancellationToken)
         {
             // FIXME: Chris implement
-            // 1.adds label $"Paratext_{request.Data.ProjectName}" label group if it doesn't exist. If it does exist, removes all associations. 
+            // 1.adds label $"External_{request.Data.ProjectName}" label group if it doesn't exist. If it does exist, removes all associations. 
             // 2. adds all request.Data.ExternalLabel.Where(el => !labels.Select(l => l.Text).Contains(el.Text) (where ExternalLabel.Text is not already in a Label.Text.)
-            // 3. associates all Labels.Where(l => request.Data.ExternalLabelTexts.Contains(l.Text)) with $"Paratext_{request.Data.ProjectName}" label group
+            // 3. associates all Labels.Where(l => request.Data.ExternalLabelTexts.Contains(l.Text)) with $"External_{request.Data.ProjectName}" label group
 
             return new RequestResult<bool>(true);
         }
