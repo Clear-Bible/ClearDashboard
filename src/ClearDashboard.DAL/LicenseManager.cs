@@ -12,23 +12,21 @@ namespace ClearDashboard.DataAccessLayer
 {
     public static class LicenseManager
     {
-        public static readonly string DocumentsDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+        public static  string DocumentsDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
 
-        public static readonly string CollaborationDirectoryName = "Collaboration";
-        public static readonly string CollaborationDirectoryPath = Path.Combine(DocumentsDirectoryPath, CollaborationDirectoryName);
+        public static string CollaborationDirectoryName = "Collaboration";
+        public static string CollaborationDirectoryPath = Path.Combine(DocumentsDirectoryPath, CollaborationDirectoryName);
 
-        public static readonly string ClearDashboardProjectsDirectoryName = "ClearDashboard_Projects";
-        public static readonly string ClearDashboardProjectsDirectoryPath = Path.Combine(DocumentsDirectoryPath, ClearDashboardProjectsDirectoryName);
-        public static readonly string LegacyLicenseFilePath = Path.Combine(ClearDashboardProjectsDirectoryPath, LicenseFileName);
+        public static string ClearDashboardProjectsDirectoryName = "ClearDashboard_Projects";
+        public static string ClearDashboardProjectsDirectoryPath = Path.Combine(DocumentsDirectoryPath, ClearDashboardProjectsDirectoryName);
+        public static string LegacyLicenseFilePath = Path.Combine(ClearDashboardProjectsDirectoryPath, LicenseFileName);
 
-       
-
-        public static readonly string MicrosoftFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft");
-        public static readonly string UserSecretsDirectoryName = "UserSecrets";
-        public static readonly string UserSecretsFolderPath = Path.Combine(MicrosoftFolderPath, UserSecretsDirectoryName);
-        public static readonly string LicenseFolderPath = Path.Combine(UserSecretsFolderPath, "License");
-        public static readonly string LicenseFileName = "license.txt";
-        public static readonly string LicenseFilePath = Path.Combine(LicenseFolderPath, LicenseFileName);
+        public static string MicrosoftFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft");
+        public static string UserSecretsDirectoryName = "UserSecrets";
+        public static string UserSecretsFolderPath = Path.Combine(MicrosoftFolderPath, UserSecretsDirectoryName);
+        public static string LicenseFolderPath = Path.Combine(UserSecretsFolderPath, "License");
+        public static string LicenseFileName = "license.txt";
+        public static string LicenseFilePath = Path.Combine(LicenseFolderPath, LicenseFileName);
 
         public static async Task<bool> DeleteOldLicense()
         {

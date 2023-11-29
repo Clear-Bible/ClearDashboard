@@ -133,6 +133,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         public async void DeactivateCurrentLicense()
         {
             //pop up confirmation dialog
+
             //go to the folders and rename the file
             var activeLicense = LicenseManager.DecryptLicenseFromFileToUser(LicenseManager.LicenseFilePath);
 
@@ -143,7 +144,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             //rename Collab Folder
             Directory.Move(LicenseManager.CollaborationDirectoryPath,
-                Path.Combine(LicenseManager.DocumentsDirectoryPath, $"{LicenseManager.CollaborationDirectoryName}_{activeLicense.Id}"));
+                Path.Combine(LicenseManager.DocumentsDirectoryPath, 
+                    $"{LicenseManager.CollaborationDirectoryName}_{activeLicense.Id}"));
 
             //rename ClearDashboard_Project Folder
             Directory.Move(LicenseManager.ClearDashboardProjectsDirectoryPath,
