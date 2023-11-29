@@ -26,9 +26,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.UsfmFilePath
         private readonly IProject _project;
         private readonly ILogger<GetUsfmFilePathQueryHandler> _logger;
 
-        private string _fileNameBookNameForm = string.Empty;
-        private string _fileNamePrePart = string.Empty;
-        private string _fileNamePostPart = string.Empty;
+
 
 
         public GetUsfmFilePathQueryHandler(IPluginHost host, IProject project, ILogger<GetUsfmFilePathQueryHandler> logger)
@@ -61,90 +59,12 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.UsfmFilePath
                 return Task.FromResult(queryResult);
             }
 
-            // get the project file pattern from the settings.xml file
-            GetProjectSettingsXML(dirPath);
-
-            // get the list of files in the directory to return the file paths
-            foreach (var book in project.AvailableBooks)
-            {
-                // build the file name
-                string fileName;
-
-                if (_fileNameBookNameForm == "41MAT")
-                    fileName = $"{_fileNamePrePart}{book.Number.ToString().PadLeft(2, '0')}{book.Code}{_fileNamePostPart}";
-                else if (_fileNameBookNameForm == "MAT")
-                    fileName = $"{_fileNamePrePart}{book.Code}{_fileNamePostPart}";
-                else
-                    fileName = $"{_fileNamePrePart}{book.Number.ToString().PadLeft(2, '0')}{_fileNamePostPart}";
-
-
-                // get the file path
-                var filePath = Path.Combine(dirPath, fileName);
-                // check if the file exists
-                if (File.Exists(filePath))
-                {
-                    // add the file path to the list
-                    var entry = new ParatextBook
-                    {
-                        Available = true,
-                        BookId = book.Number.ToString().PadLeft(2, '0'),
-                        BookNameShort = book.Code,
-                        FilePath = filePath,
-                        USFM_Num = book.Number
-                    };
-
-                    queryResult.Data.Add(entry);
-                }
-                else
-                {
-                    // add an empty string to the list as the file does not exist
-                    var entry = new ParatextBook
-                    {
-                        Available = false,
-                        BookId = book.Number.ToString().PadLeft(2, '0'),
-                        BookNameShort = book.Code,
-                        FilePath = string.Empty,
-                        USFM_Num = book.Number
-                    };
-                    queryResult.Data.Add(entry);
-                }
-            }
+            var list = ParatextHelpers.GetUsfmFilePaths(dirPath, project);
+            queryResult.Data = list;
 
             return Task.FromResult(queryResult);
         }
 
-        private void GetProjectSettingsXML(string projectDirectory)
-        {
-            var files = new List<string>();
 
-            // get the settings file
-            var settingsFile = Path.Combine(projectDirectory, "settings.xml");
-            if (File.Exists(settingsFile))
-            {
-                var xmlStr = File.ReadAllText(settingsFile);
-                var str = XElement.Parse(xmlStr);
-
-                // get the data using the <Naming> element
-                var prePart = str.Elements("Naming").Attributes("PrePart").FirstOrDefault();
-                var postPart = str.Elements("Naming").Attributes("PostPart").FirstOrDefault();
-                var bookNameForm = str.Elements("Naming").Attributes("BookNameForm").FirstOrDefault();
-
-                if (bookNameForm is not null)
-                {
-                    _fileNameBookNameForm = bookNameForm.Value;
-                    _fileNamePrePart = prePart.Value;
-                    _fileNamePostPart = postPart.Value;
-                }
-                else
-                {
-                    // get the data using the other element names
-                    _fileNamePostPart = str.Elements("FileNamePostPart").FirstOrDefault().Value;
-                    _fileNamePrePart = str.Elements("FileNamePrePart").FirstOrDefault().Value;
-                    _fileNameBookNameForm = str.Elements("FileNameBookNameForm").FirstOrDefault().Value;
-                }
-            }
-
-
-        }
     }
 }

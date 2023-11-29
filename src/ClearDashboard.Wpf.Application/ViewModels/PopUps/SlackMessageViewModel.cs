@@ -55,9 +55,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private JiraUser? _jiraUser;
 
 
-
-
-
         #endregion //Member Variables
 
 
@@ -438,7 +435,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
                 foreach (var corpusId in corpusIds)
                 {
-                    currentNodeIds.Add(corpusId.ParatextGuid);
+                    if (corpusId.CorpusType != "Resource")
+                    {
+                        currentNodeIds.Add(corpusId.ParatextGuid);
+                    }
                 }
 
                 var currentNodes = projectDesignSurface.DesignSurfaceViewModel.CorpusNodes;
@@ -571,6 +571,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             }
         }
+
 
         private void AddAttachedFilesToZip()
         {
@@ -801,6 +802,49 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             if (result.Success)
             {
                 var list = result.Data;
+                var selectedBooks = SelectedBookManager.SelectedBooks.Where(b => b.IsSelected && b.IsEnabled).ToList();
+
+                // get the list of books to send
+                var booksToSend = new List<string>();
+                foreach (var book in selectedBooks)
+                {
+                    var bookPath = list.FirstOrDefault(b => b.BookNameShort == book.BookName);
+
+                    if (bookPath != null)
+                    {
+                        booksToSend.Add(bookPath.FilePath);
+                    }
+                }
+
+                // add in the settings file
+                if (booksToSend.Count > 0)
+                {
+                    var filePath = booksToSend[0];
+                    FileInfo fileInfo = new(filePath);
+                    var directory = fileInfo.DirectoryName;
+                    var settingsFile = Path.Combine(directory!, "settings.xml");
+                    if (File.Exists(settingsFile))
+                    {
+                        booksToSend.Add(settingsFile);
+                    }
+                }
+
+                // zip up the files
+                var guid = Guid.NewGuid().ToString();
+                var zipPath = Path.Combine(Path.GetTempPath(), $"{guid}.zip");
+                ZipFiles zipFiles = new(booksToSend, zipPath);
+                var succcess = zipFiles.Zip();
+
+                if (succcess == false)
+                {
+                    _logger.LogError("Error zipping files");
+                }
+                else
+                {
+                    // send the zip file to slack
+                    SendUsfmFilesMessage(booksToSend);
+
+                }
             }
 
 
@@ -808,6 +852,63 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
 
 
+
+        }
+
+        private async Task SendUsfmFilesMessage(List<string> booksToSend)
+        {
+            var bRet = await NetworkHelper.IsConnectedToInternet();
+            // check internet connection
+            if (bRet == false)
+            {
+                _logger.LogWarning("No internet connection available");
+                return;
+            }
+
+
+            ShowSlackSendButton = false;
+            WorkingMessage = "Sending Message...";
+            await Task.Delay(200);
+
+
+            // add in attached files
+            if (AttachedFiles.Count > 0)
+            {
+                foreach (var file in booksToSend)
+                {
+                    Files.Add(file);
+                }
+
+                ZipFiles();
+            }
+
+
+            var thisVersion = Assembly.GetEntryAssembly()!.GetName().Version;
+            var versionNumber = $"{thisVersion!.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
+
+            string msg =
+                $"*Dashboard User:* {DashboardUser.FullName} \n*Paratext User:* {ParatextUser} \n*Github User:* {GitLabUser.RemoteUserName} \n*Version*: {versionNumber} \n*Message:* \nProject USFM Files for: {SelectedProject.Name}";
+
+            var logger = LifetimeScope!.Resolve<ILogger<SlackMessage>>();
+
+
+            SlackMessage slackMessage = new SlackMessage(msg, this.ZipPathAttachment, logger, SlackMessageType.BugReport);
+            var bSuccess = await slackMessage.SendFileToSlackAsync();
+
+            if (bSuccess)
+            {
+                ShowSlackSendButton = false;
+                SendErrorVisibility = Visibility.Collapsed;
+                WorkingMessage = "Message Sent Successfully";
+                ShowEmailIcon = true;
+            }
+            else
+            {
+                ShowSlackSendButton = true;
+                SendErrorVisibility = Visibility.Visible;
+                WorkingMessage = "Message Sending Problem";
+                ShowEmailIcon = false;
+            }
 
         }
 
