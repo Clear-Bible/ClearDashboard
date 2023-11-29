@@ -138,7 +138,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 {
                     ExternalNoteId = externalNote.ExternalNoteId,
                     ExternalProjectId = externalNote.ExternalProjectId,
-                    LabelIds = externalNote.LabelIds,
+                    ExternalLabelIds = externalNote.ExternalLabelIds,
                     VersePlainText = externalNote.VersePlainText,
                     SelectedPlainText = externalNote.SelectedPlainText,
                     IndexOfSelectedPlainTextInVersePainText = externalNote.IndexOfSelectedPlainTextInVersePainText,

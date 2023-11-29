@@ -6,7 +6,6 @@ public class ExternalNote
 {
     public string ExternalNoteId { get; set; }
     public string ExternalProjectId { get; set; }
-    public IEnumerable<int> LabelIds { get; set; }
     public string VersePlainText { get; set; }
     public string SelectedPlainText { get; set; }
     /// <summary>
@@ -16,5 +15,7 @@ public class ExternalNote
     public string VerseRefString { get; set; }
     public string Message { get; set; }
     public string Body { get; set; }
+    public IEnumerable<int> ExternalLabelIds { get; set; }
+    public List<ExternalLabel> ExternalLabels { get; set; }
 }
 

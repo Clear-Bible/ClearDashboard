@@ -3,6 +3,7 @@ using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Features.Notes;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
@@ -118,6 +119,7 @@ namespace ClearDashboard.Wpf.Application.Services
                     associatedTokens,
                     note.ParatextSendNoteInformation.TokenizedTextCorpusId.Detokenizer,
                     note.Text,
+                    note.Labels,
                     verseFirstTokenId.BookNumber,
                     verseFirstTokenId.ChapterNumber,
                     verseFirstTokenId.VerseNumber
@@ -422,6 +424,74 @@ namespace ClearDashboard.Wpf.Application.Services
                 else
                 {
                     logger?.LogCritical($"Error marking external note id {externalNoteId} resolved in external drafting tool: {result.Message}");
+                    throw new MediatorErrorEngineException(result.Message);
+                }
+            }
+            catch (Exception e)
+            {
+                logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdateLabelsWithExternalLabels(string externalProjectId, IMediator mediator, ILogger logger, CancellationToken cancellationToken = default)
+        {
+            List<ExternalLabel>? externalLabels;
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                var result = await mediator.Send(new GetExternalLabelsQuery(new GetExternalLabelsQueryParam()
+                {
+                    ExternalProjectId = externalProjectId,
+                }), cancellationToken);
+
+                stopwatch.Stop();
+                if (result.Success)
+                {
+                    logger?.LogInformation($"Retrieved external labels for {externalProjectId} in {stopwatch.ElapsedMilliseconds} ms");
+
+                    externalLabels = result.Data?.ToList() ?? null;
+                }
+                else
+                {
+                    logger?.LogCritical($"Error retrieving external labels for {externalProjectId}: {result.Message}");
+                    throw new MediatorErrorEngineException(result.Message);
+                }
+            }
+            catch (Exception e)
+            {
+                logger?.LogCritical(e.ToString());
+                throw;
+            }
+
+            if (externalLabels == null)
+            {
+                var message = $"Retrieval of external labels didn't exception but returned null for {externalProjectId}";
+                logger?.LogCritical(message);
+                throw new Exception(message);
+            }
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                var result = await mediator.Send(new UpdateLabelsWithExternalLabelsCommand(new UpdateLabelsWithExternalLabelsCommandParam()
+                {
+                    ExternalLabels = externalLabels
+                }), cancellationToken);
+
+                stopwatch.Stop();
+                if (result.Success)
+                {
+                    logger?.LogInformation($"Retrieved external labels for {externalProjectId} and updated internal labels and associated with project label group in {stopwatch.ElapsedMilliseconds} ms");
+
+                    return true;
+                }
+                else
+                {
+                    logger?.LogCritical($"Error retrieving external labels for {externalProjectId} and updating internal labels and associating with project label group: {result.Message}");
                     throw new MediatorErrorEngineException(result.Message);
                 }
             }

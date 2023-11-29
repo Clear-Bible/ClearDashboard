@@ -9,8 +9,6 @@ using System.Linq;
 using System.Threading;
 using Xunit;
 using Xunit.Abstractions;
-using ClearDashboard.DataAccessLayer.Models;
-using Token = ClearBible.Engine.Corpora.Token;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 
@@ -65,6 +63,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                     tokensTextRow.Tokens.Where((t,i) => false), 
                     new EngineStringDetokenizer(new WhitespaceDetokenizer()), 
                     "Whole verse note",
+                    new List<Label>(),
                     tokensTextRow.Tokens.First().TokenId.BookNumber,
                     tokensTextRow.Tokens.First().TokenId.ChapterNumber,
                     tokensTextRow.Tokens.First().TokenId.VerseNumber
@@ -88,6 +87,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                     tokensTextRow.Tokens.Where((t, i) => i == 15),
                     new EngineStringDetokenizer(new WhitespaceDetokenizer()),
                     "third occurance of the word 'ni'",
+                    new List<Label>(),
                     tokensTextRow.Tokens.First().TokenId.BookNumber,
                     tokensTextRow.Tokens.First().TokenId.ChapterNumber,
                     tokensTextRow.Tokens.First().TokenId.VerseNumber
@@ -111,6 +111,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                     tokensTextRow.Tokens.Where((t, i) => i == 15 || i == 16 || i == 18),
                     new EngineStringDetokenizer(new WhitespaceDetokenizer()),
                     "shouldn't show up as note",
+                    new List<Label>(),
                     tokensTextRow.Tokens.First().TokenId.BookNumber,
                     tokensTextRow.Tokens.First().TokenId.ChapterNumber,
                     tokensTextRow.Tokens.First().TokenId.VerseNumber
@@ -126,6 +127,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                     tokensTextRow.Tokens.Where((t, i) => i == 15 || i == 16 || i == 17),
                     new EngineStringDetokenizer(new WhitespaceDetokenizer()),
                     "ni a nkoo",
+                    new List<Label>(),
                     tokensTextRow.Tokens.First().TokenId.BookNumber,
                     tokensTextRow.Tokens.First().TokenId.ChapterNumber,
                     tokensTextRow.Tokens.First().TokenId.VerseNumber

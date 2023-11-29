@@ -29,9 +29,10 @@ namespace ClearDashboard.DAL.Alignment.Notes
             IEnumerable<Token> verseContiguousSelectedTokens,
             EngineStringDetokenizer engineStringDetokenizer,
             string noteText,
-            int book = -1,
-            int chapter = -1,
-            int verse = -1,
+            IEnumerable<Label> labels,
+            int book,
+            int chapter,
+            int verse,
             string? userName = null)
         {
             if (verseTokens.Count() == 0)
@@ -44,10 +45,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             addNoteCommandParam.Chapter = chapter;
             addNoteCommandParam.Verse = verse;
 
-            var token = verseTokens.First();
-            addNoteCommandParam.Book = token.TokenId.BookNumber;
-            addNoteCommandParam.Chapter = token.TokenId.ChapterNumber;
-            addNoteCommandParam.Verse = token.TokenId.VerseNumber;
+            addNoteCommandParam.LabelTexts = labels.Select(x => x.Text).ToList();
 
             //addNoteCommandParam.Verse = new VerseRef(int.Parse(verseTokens.First().TokenId.ToString().Substring(0, 9)));
             var verseText = $"{engineStringDetokenizer.Detokenize(verseTokens).Aggregate(string.Empty, (constructedString, tokenWithPadding) => $"{constructedString}{tokenWithPadding.paddingBefore}{tokenWithPadding.token}{tokenWithPadding.paddingAfter}")}";

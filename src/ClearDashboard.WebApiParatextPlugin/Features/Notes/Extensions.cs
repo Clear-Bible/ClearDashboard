@@ -1,4 +1,5 @@
-﻿using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+﻿using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using Microsoft.Extensions.Logging;
 using Paratext.PluginInterfaces;
 using SIL.Linq;
@@ -56,7 +57,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
             {
                 ExternalNoteId = id,
                 ExternalProjectId = project.ID,
-                LabelIds = tagIds,
+                ExternalLabelIds = tagIds,
                 VersePlainText = versePlainText,
                 SelectedPlainText = projectNote.Anchor.SelectedText,
                 IndexOfSelectedPlainTextInVersePainText = indexOfSelectedPlainTextInVersePainText,
@@ -90,6 +91,26 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                 }
             }
             return (id, tagIds);
+        }
+
+        public static ExternalNote SetExternalLabelIdsOnExternalNoteInExternalProject(this ExternalNote externalNote, ParatextProjectMetadata paratextProjectMetadata, ILogger logger, List<string> labelTexts)
+        {
+            var externalLabels = GetExternalLabels(paratextProjectMetadata, logger);
+
+            var labelTextsInExternalLabels = labelTexts
+                .Where(lt => externalLabels
+                    .Select(el => el.ExternalText)
+                    .Contains(lt));
+
+            //FIXME: Russell implement
+            //find note xml and set ExternalNote.ExternalLabels.
+            return externalNote;
+        }
+
+        public static List<ExternalLabel> GetExternalLabels(ParatextProjectMetadata paratextProjectMetadata, ILogger logger)
+        {
+            //FIXME: Russell implement
+            return new List<ExternalLabel>();
         }
         private static string GetMessage(Body body)
         {

@@ -1190,7 +1190,69 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
+        public void UpdateLabelsWithExternalLabels(string externalProjectId)
+        {
+            try
+            {
+                Logger!.LogInformation("UpdateLabelsWithExternalLabels called.");
 
+                var taskName = $"UpdateLabelsWithExternalLabels{externalProjectId}";
+                var task = _longRunningTaskManager!.Create(taskName, LongRunningTaskStatus.Running);
+                var cancellationToken = task.CancellationTokenSource!.Token;
+
+                _ = Task.Run(async () =>
+                {
+                    _busyState.Add(taskName, true);
+
+
+                    try
+                    {
+                        await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
+                            description: $"Retrieving external labels for externalProjectId '{externalProjectId}'...", cancellationToken: cancellationToken);
+
+                        await _noteManager.ExternalNoteManager.UpdateLabelsWithExternalLabels(externalProjectId, Mediator!, Logger!, cancellationToken);
+
+                        await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
+                            description: $"Retrieving external labels for externalProjectId '{externalProjectId}'...Completed", cancellationToken: cancellationToken);
+
+                        _longRunningTaskManager.TaskComplete(taskName);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        Logger!.LogInformation("UpdateLabelsWithExternalLabels() - OperationCanceledException was thrown -> cancellation was requested.");
+                    }
+                    catch (MediatorErrorEngineException ex)
+                    {
+                        if (ex.Message.Contains("The operation was canceled"))
+                        {
+                            Logger!.LogInformation($"UpdateLabelsWithExternalLabels() - OperationCanceledException was thrown -> cancellation was requested.");
+                        }
+                        else
+                        {
+                            Logger!.LogError(ex, "an unexpected Engine exception was thrown.");
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger!.LogError(ex, $"An unexpected error occurred while retrieving external labels for '{externalProjectId}' ");
+                        if (!cancellationToken.IsCancellationRequested)
+                        {
+                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed, exception: ex, cancellationToken: cancellationToken);
+                        }
+                    }
+                    finally
+                    {
+                        _longRunningTaskManager.TaskComplete(taskName);
+                        _busyState.Remove(taskName);
+                    }
+                }, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                Logger!.LogInformation($"UpdateLabelsWithExternalLabels() - Exception was thrown {e}");
+            }
+        }
         public void GetLatestExternalNotes(string externalProjectId)
         {
             try
@@ -1712,6 +1774,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.GetLatestExternalNotes:
                     GetLatestExternalNotes(corpusNodeViewModel.ParatextProjectId);
+                    break;
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.UpdateLabelsWithExternalLabels:
+                    UpdateLabelsWithExternalLabels(corpusNodeViewModel.ParatextProjectId);
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.ShowLexiconDialog:
                     await ShowLexiconDialog(corpusNodeViewModel.CorpusId);

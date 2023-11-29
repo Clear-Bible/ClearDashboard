@@ -6,7 +6,7 @@ using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.DataAccessLayer.Features.BiblicalTerms
+namespace ClearDashboard.DataAccessLayer.Features.Notes
 {
     public class ResolveExternalNoteCommandHandler : ParatextRequestHandler<ResolveExternalNoteCommand, RequestResult<string>, string>
     {

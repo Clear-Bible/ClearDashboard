@@ -1002,6 +1002,16 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             CorpusNodeViewModel = corpusNodeViewModel,
                             Tokenizer = tokenizer.ToString(),
                         });
+
+                        corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
+                        {
+                            Header = LocalizationService.Get("Pds_UpdateLabelsWithExternalLabels"),
+                            Id = DesignSurfaceMenuIds.UpdateLabelsWithExternalLabels,
+                            ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
+                            IconKind = PackIconPicolIconsKind.Edit.ToString(),
+                            CorpusNodeViewModel = corpusNodeViewModel,
+                            Tokenizer = tokenizer.ToString(),
+                        });
                     }
 
 
