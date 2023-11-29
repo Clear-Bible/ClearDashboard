@@ -422,7 +422,7 @@
     <value>Считать учебным текстом</value>
   </data>
   <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
-    <value>Не одобрять</value>
+    <value>Не одобряют</value>
   </data>
   <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
     <value>Не одобрен</value>
@@ -623,7 +623,7 @@
     <value>Токен '{0}' имеет определенные выравнивания. Нажатие '{1}' удалит все выравнивания.</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>Поиск по фильтру</value>
+    <value>Поиск фильтра</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
     <value>Поиск членов фильтра</value>
@@ -662,7 +662,7 @@
     <value>Показать элементы управления представлением</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>Разделенный токен</value>
+    <value>Расколотый токен</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>Применить разделение на другие экземпляры токена</value>
@@ -711,6 +711,9 @@
   </data>
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>Режим абзаца</value>
+  </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>Показать внешние заметки</value>
   </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>Исходный текст:</value>
@@ -875,7 +878,7 @@
     <value>Лемма/формы:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Лемма для новой лексем:</value>
+    <value>Лемма для новой лексеме:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>Лекса</value>
@@ -927,6 +930,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Лекса</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>Загрузка данных...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>При загрузке данных произошла неожиданная ошибка. {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>Соответствующий</value>
@@ -1067,7 +1076,7 @@
     <value>Быстрый новый</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Изменения в сотрудничестве доступны</value>
+    <value>Коллабные изменения доступны</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
     <value>Настройки</value>
@@ -1178,7 +1187,7 @@
     <value>Сильные коды</value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
-    <value>Субсины:</value>
+    <value>Подпагнические домены:</value>
   </data>
   <data name="Marble_Verse" xml:space="preserve">
     <value>Стих</value>
@@ -1376,7 +1385,7 @@
     <value>с ярлыками от:</value>
   </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
-    <value>Название группы лейбла</value>
+    <value>Название группы на этикетке</value>
   </data>
   <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
     <value>Удалить эту группу этикетки?</value>
@@ -1490,10 +1499,10 @@
     <value>Параллелизировать стихи корпораций</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Алгоритм выравнивания машинного слова</value>
+    <value>Алгоритм выравнивания слова</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Алгоритм выравнивания машинного слова</value>
+    <value>Алгоритм выравнивания слова</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Симметризированная модель поезда?</value>
@@ -1532,7 +1541,7 @@
     <value>Создать новую токенизацию корпуса</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>Добавить новый интерлинеар</value>
+    <value>Добавить новый интернетальный</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>Добавьте текст в просмотр</value>
@@ -1652,7 +1661,7 @@
     <value>Транслитерация</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Транслитерация WithIteChoder</value>
+    <value>Транслитерация WithIntEncoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Неизвестный</value>
@@ -1661,7 +1670,7 @@
     <value>XML</value>
   </data>
   <data name="Pds_ZoomIn" xml:space="preserve">
-    <value>Увеличить контент</value>
+    <value>Увеличить содержание</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
     <value>Увеличить контент</value>
@@ -1697,7 +1706,7 @@
     <value>Тип лекса</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
-    <value>Загрузить ссылки</value>
+    <value>Загружать ссылки</value>
   </data>
   <data name="Pins_Match" xml:space="preserve">
     <value>Соответствовать</value>
@@ -1718,7 +1727,7 @@
     <value>Префикс</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Показать переходное время</value>
+    <value>Покажите Backtranslation</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>Корень</value>
@@ -2138,7 +2147,7 @@
     <value>Адрес электронной почты</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>По электронной почте ошибка</value>
+    <value>По электронной почте ошибка отправки</value>
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Код проверки электронной почты</value>
@@ -2180,7 +2189,7 @@
     <value>Зарезервировано для будущего расширения</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Восстановите пользователя сотрудничества</value>
+    <value>Восстановить пользователь сотрудничества</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Сохраняется на удаленном сервере</value>
@@ -2192,7 +2201,7 @@
     <value>Сохранить настройки</value>
   </data>
   <data name="Settings_SendValidationEmail" xml:space="preserve">
-    <value>Отправить валидацию электронной почты</value>
+    <value>Отправить валидацию по электронной почте</value>
   </data>
   <data name="Settings_Settings" xml:space="preserve">
     <value>Настройки ClearDashboard</value>
@@ -2201,7 +2210,7 @@
     <value>Показать расширенные виды на другом мониторе, чем панель панели</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Для систем с тремя или более мониторами показать расширенный просмотр на третьем мониторе</value>
+    <value>Для систем с тремя или более мониторами показать расширенное представление о третьем мониторе</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Текстовая коллекция</value>
@@ -2336,7 +2345,7 @@
     <value>Обновить и добавить новый</value>
   </data>
   <data name="UseDefaults" xml:space="preserve">
-    <value>Создать использование дефолтов</value>
+    <value>Создайте использование дефолтов</value>
   </data>
   <data name="Windows_AlignmentTool" xml:space="preserve">
     <value>Инструмент выравнивания</value>

@@ -712,6 +712,9 @@
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>የአንቀጽ ሁኔታ</value>
   </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>ውጫዊ ማስታወሻዎችን አሳይ</value>
+  </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>ምንጭ ጽሑፍ</value>
   </data>
@@ -927,6 +930,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>ውሂብን በመጫን ላይ ...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>ውሂብን በመጫን ላይ ያልተጠበቀ ስህተት ተከስቷል. {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>ማዛመድ</value>

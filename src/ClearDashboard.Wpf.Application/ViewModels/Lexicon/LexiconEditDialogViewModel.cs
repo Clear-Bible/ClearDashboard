@@ -71,18 +71,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         public async Task Save()
         {
-            var editedLexemes = EditableLexemes.Where(l=>l.Lexeme.Meanings.Any(m=>m.IsDirty) || l.Lexeme.Forms.Any(f=>f.IsDirty)).Select(l=>l.Lexeme).ToList();
-
-            if (editedLexemes.Count == 0) return;
-
-            var lexicon = new DAL.Alignment.Lexicon.Lexicon
+            try
             {
-                Lexemes = new ObservableCollection<Lexeme>(editedLexemes)
-            };
+                var editedLexemes = EditableLexemes
+                    .Where(l => l.Lexeme.Meanings.Any(m => m.IsDirty) || l.Lexeme.Forms.Any(f => f.IsDirty))
+                    .Select(l => l.Lexeme).ToList();
 
-            await lexicon.SaveAsync(Mediator);
+                if (editedLexemes.Count == 0) return;
 
-            await TryCloseAsync(true);
+                var lexicon = new DAL.Alignment.Lexicon.Lexicon
+                {
+                    Lexemes = new ObservableCollection<Lexeme>(editedLexemes)
+                };
+
+                await lexicon.SaveAsync(Mediator);
+
+                await TryCloseAsync(true);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Error saving lexicon");
+                await TryCloseAsync(false);
+            }
+            
         }
 
         public string? SourceLanguage
@@ -267,13 +278,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         {
             switch (EditMode)
             {
-                case LexiconEditMode.MatchOnTranslation:
+                case LexiconEditMode.PartialMatchOnLexemeOrForm:
                     editableLexeme.AddNewMeaning(Other);
                     await Task.CompletedTask;
                     break;
 
-                case LexiconEditMode.PartialMatchOnLexemeOrForm:
-                   editableLexeme.AddNewForm(Other);
+                case LexiconEditMode.MatchOnTranslation:
+                    editableLexeme.AddNewForm(Other);
                     await Task.CompletedTask;
                     break;
 
@@ -291,13 +302,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             switch (EditMode)
             {
                 case LexiconEditMode.MatchOnTranslation:
-                    return string.Format(LocalizationService.Get("LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate"), Other);
+                    return string.Format(LocalizationService.Get("LexiconEdit_Edit_MatchOnTranslationTemplate"), Other);
 
                 case LexiconEditMode.PartialMatchOnLexemeOrForm:
-                    return string.Format(LocalizationService.Get("LexiconEdit_Edit_MatchOnTranslationTemplate"), Other);
-                   
+                    return string.Format(LocalizationService.Get("LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate"), Other);
             }
-
             return "[UNKNOWN DIALOG MODE!]";
         }
 
@@ -306,21 +315,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             var filteredLexemes = new List<Lexeme>();
             var managedLexemes = LexiconManager.ManagedLexemes;
 
+
+            // TODO: Swap these around
             switch (EditMode)
             {
                 case LexiconEditMode.MatchOnTranslation:
-                   
 
-                    filteredLexemes = managedLexemes.FilterByTranslationText(SelectedSourceLanguage,
-                        SelectedTargetLanguage, Other).ToList();
-
+                    filteredLexemes = managedLexemes.FilterByLexemeText(Other, State.FormsOption == MatchOption.Partially, SourceLanguage, null).ToList();
                     return new BindableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l=> new EditableLexemeViewModel(l) {SourceLanguage = SourceLanguage, TargetLanguage = TargetLanguage}));
 
                 case LexiconEditMode.PartialMatchOnLexemeOrForm:
 
                     //filteredLexemes = managedLexemes.FilterByLexemeText(ToMatch, State.FormsOption == MatchOption.Partially, SourceLanguage, null).ToList();
-
-                    filteredLexemes = managedLexemes.FilterByLexemeText(Other, State.FormsOption == MatchOption.Partially, SourceLanguage, null).ToList();
+                    filteredLexemes = managedLexemes.FilterByTranslationText(SelectedSourceLanguage, SelectedTargetLanguage, Other).ToList();
                     
                     return new BindableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l => new EditableLexemeViewModel(l) { SourceLanguage = SourceLanguage, TargetLanguage = TargetLanguage }));
 
@@ -370,12 +377,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         public void OnFormsMatchChanged(object sender, TextChangedEventArgs e)
         {
             var textBox = (TextBox)sender;
+            //State.TranslationMatch = textBox.Text;
             State.FormsMatch = textBox.Text;
         }
 
         public void OnTranslationMatchChanged(object sender, TextChangedEventArgs e)
         {
             var textBox = (TextBox)sender;
+            //State.FormsMatch = textBox.Text;
             State.TranslationMatch = textBox.Text;
         }
 

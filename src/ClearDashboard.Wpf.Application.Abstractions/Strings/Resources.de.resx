@@ -712,6 +712,9 @@
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>Absatzmodus</value>
   </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>Zeigen Sie externe Notizen</value>
+  </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>Quellentext:</value>
   </data>
@@ -928,6 +931,12 @@
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
   </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>Daten werden geladen...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>Beim Laden von Daten trat ein unerwarteter Fehler auf. {0}</value>
+  </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>Matching</value>
   </data>
@@ -962,7 +971,7 @@
     <value>Fügen Sie als Form für ... hinzu</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Finden Sie vollständige oder partielle Lexeme- oder Formularübereinstimmungen für die Quelle</value>
+    <value>Finden Sie vollständige oder teilweise Lexem- oder Formularübereinstimmungen für Quelle</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Ziel als Übersetzung für ...</value>
@@ -1538,7 +1547,7 @@
     <value>Fügen Sie Text zur Anzeige hinzu</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie der neuen Ansicht Text hinzu</value>
+    <value>Fügen Sie Text zur neuen Ansicht hinzu</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Zur Anzeige hinzufügen</value>
@@ -1625,7 +1634,7 @@
     <value>Skalieren Sie den Inhalt auf 100%</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
-    <value>Fügen Sie Text zu einem neuen Fenster hinzu</value>
+    <value>Fügen Sie Text zum neuen Fenster hinzu</value>
   </data>
   <data name="Pds_Source" xml:space="preserve">
     <value>Quelle</value>
@@ -1775,7 +1784,7 @@
     <value>Projekt löschen</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Aktivieren Sie die Buchauswahl</value>
+    <value>Buchauswahl aktivieren</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
     <value>Wenn Sie überprüft werden, können Sie auswählen, welche Bücher zu verarbeiten sind.</value>
@@ -1790,7 +1799,7 @@
     <value>Überprüfen Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>NT Griechische biblische Texte einschließen?</value>
+    <value>NT -griechische biblische Texte einschließen?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>OT hebräische biblische Texte einschließen?</value>
@@ -1847,7 +1856,7 @@
     <value>Projektvorlage Assistent: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Aktualisierungsprojekte Liste aktualisieren</value>
+    <value>Aktualisierung der Kollaborationsprojekte Liste</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>Suchen Sie neu</value>
@@ -1895,7 +1904,7 @@
     <value>1 Thessalonicher</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 Timothy</value>
+    <value>1 Timotheus</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 Chroniken</value>
@@ -1982,7 +1991,7 @@
     <value>James</value>
   </data>
   <data name="ProperCase_Jeremiah" xml:space="preserve">
-    <value>Jeremiah</value>
+    <value>Jeremia</value>
   </data>
   <data name="ProperCase_Job" xml:space="preserve">
     <value>Arbeit</value>
@@ -2216,7 +2225,7 @@
     <value>Validieren Sie den E -Mail -Code</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Aktivieren Sie die Anzeige von Verse-by-Vers-Textsammlungen</value>
+    <value>Aktivieren Sie die Anzeige von Versen durch Versuchssammlungen</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>Aufgabe abbrechen</value>

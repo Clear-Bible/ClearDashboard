@@ -527,7 +527,7 @@
     <value>لديك مستخدمون آخرون متصلون بهذا المشروع. سيتم إزالة هذا المشروع لهم أيضًا. هل من المؤكد أنك تريد حذف هذا المشروع؟</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
-    <value>هل أنت متأكد أنك تريد حذف هذا المشروع؟</value>
+    <value>هل أنت متأكد من أنك تريد حذف هذا المشروع؟</value>
   </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>وصف</value>
@@ -572,7 +572,7 @@
     <value>حذف المشروع</value>
   </data>
   <data name="Delete_Project_Confirmation" xml:space="preserve">
-    <value>هل أنت متأكد أنك تريد حذف هذا المشروع؟</value>
+    <value>هل أنت متأكد من أنك تريد حذف هذا المشروع؟</value>
   </data>
   <data name="DEU" xml:space="preserve">
     <value>DEU</value>
@@ -712,6 +712,9 @@
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>وضع الفقرة</value>
   </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>إظهار الملاحظات الخارجية</value>
+  </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>النص المصدر:</value>
   </data>
@@ -728,7 +731,7 @@
     <value>عنوان:</value>
   </data>
   <data name="FontSettings_TitleFontSize" xml:space="preserve">
-    <value>حجم خط العنوان:</value>
+    <value>حجم خط الخط:</value>
   </data>
   <data name="FontSettings_Translations" xml:space="preserve">
     <value>الترجمات:</value>
@@ -872,7 +875,7 @@
     <value>ليما</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
-    <value>ليما/النماذج:</value>
+    <value>ليما/الأشكال:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
     <value>Lemma من أجل lexeme الجديد:</value>
@@ -881,7 +884,7 @@
     <value>لكلية</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
-    <value>يوجد معجم ل lemma بالفعل</value>
+    <value>يوجد معكم بالفعل لـ Lemma</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>المعاني:</value>
@@ -928,6 +931,12 @@
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>لكلية</value>
   </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>تحميل البيانات...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>حدث خطأ غير متوقع أثناء تحميل البيانات. {0}</value>
+  </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>مطابقة</value>
   </data>
@@ -950,7 +959,7 @@
     <value>اللغة المستهدفة</value>
   </data>
   <data name="LexiconEdit_Title" xml:space="preserve">
-    <value>معجم تحرير</value>
+    <value>تحرير معجم</value>
   </data>
   <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>ترجمة</value>
@@ -959,7 +968,7 @@
     <value>يكتب</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>أضف كشكل ل ...</value>
+    <value>أضف كشكل لـ ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
     <value>ابحث عن lexeme الكامل أو الجزئي أو مباريات النموذج للمصدر</value>
@@ -1082,7 +1091,7 @@
     <value>أداة المحاذاة</value>
   </data>
   <data name="MainView_WindowsBiblicalTerms" xml:space="preserve">
-    <value>شروط الكتاب المقدس</value>
+    <value>مصطلحات الكتاب المقدس</value>
   </data>
   <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
     <value>رموز كوربوس</value>
@@ -1604,7 +1613,7 @@
     <value>العبرية (OT) Macula</value>
   </data>
   <data name="Pds_MARBLE Resource" xml:space="preserve">
-    <value>مورد رخامي</value>
+    <value>مورد الرخام</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>عدد الرموز المختلفة</value>
@@ -1619,7 +1628,7 @@
     <value>إعادة تعيين تعيينات الآية إلى الافتراض الافتراضي</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
-    <value>مورد</value>
+    <value>الموارد</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
     <value>قم بتوسيع المحتوى إلى 100 ٪</value>
@@ -1757,7 +1766,7 @@
     <value>إنشاء مشروع جديد</value>
   </data>
   <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
-    <value>ابدأ سريعًا مشروعًا جديدًا</value>
+    <value>بدء تشغيل سريع مشروع جديد</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>إنشاء مشروع:</value>
@@ -1952,7 +1961,7 @@
     <value>خروج</value>
   </data>
   <data name="ProperCase_Ezekiel" xml:space="preserve">
-    <value>حزن</value>
+    <value>حزقيال</value>
   </data>
   <data name="ProperCase_Ezra" xml:space="preserve">
     <value>عزرا</value>
@@ -2087,7 +2096,7 @@
     <value>المفتاح المقدم هو معيب. عندما تم فك تشفيرها ، لا يمكن العثور على بعض عناصر JSON.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>لا تتطابق محتويات مفتاح الترخيص الذي تم تفكيكه مع المعلومات التي قدمتها.</value>
+    <value>لا تتطابق محتويات مفتاح الترخيص الذي تم فك تشفيره مع المعلومات التي قدمتها.</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
     <value>مفتاح الترخيص الخاص بك إما مفقود أو مكسور.</value>
@@ -2267,7 +2276,7 @@
     <value>لا انترنت</value>
   </data>
   <data name="SlackMessageView_ResetForm" xml:space="preserve">
-    <value>إعادة تعيين الشكل</value>
+    <value>إعادة تعيين النموذج</value>
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>يرسل</value>
@@ -2327,7 +2336,7 @@
     <value>اضف جديد</value>
   </data>
   <data name="UpdateParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>تحديث وأضف كتبًا جديدة</value>
+    <value>تحديث وإضافة كتب جديدة</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
     <value>حدد الكتب</value>
@@ -2342,7 +2351,7 @@
     <value>أداة المحاذاة</value>
   </data>
   <data name="Windows_BiblicalTerms" xml:space="preserve">
-    <value>شروط الكتاب المقدس</value>
+    <value>مصطلحات الكتاب المقدس</value>
   </data>
   <data name="Windows_CorpusTokens" xml:space="preserve">
     <value>رموز كوربوس</value>

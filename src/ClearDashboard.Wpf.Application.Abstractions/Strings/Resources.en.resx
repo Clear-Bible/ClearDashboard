@@ -712,6 +712,9 @@
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>Paragraph Mode</value>
   </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>Show External Notes</value>
+  </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>Source Text:</value>
   </data>
@@ -927,6 +930,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>Loading data...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>An unexpected error occurred while loading data.  {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>Matching</value>

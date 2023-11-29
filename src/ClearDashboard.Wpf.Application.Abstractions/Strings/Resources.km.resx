@@ -712,6 +712,9 @@
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>របៀបកថាខណ្ឌ</value>
   </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>បង្ហាញកំណត់ត្រាខាងក្រៅ</value>
+  </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>អត្ថបទប្រភព:</value>
   </data>
@@ -773,7 +776,7 @@
     <value>លេខសម្ងាត់:</value>
   </data>
   <data name="JiraResultsView_URL" xml:space="preserve">
-    <value>URL:</value>
+    <value>url:</value>
   </data>
   <data name="JiraResultsView_Username" xml:space="preserve">
     <value>ឈ្មោះ​អ្នកប្រើប្រាស់:</value>
@@ -927,6 +930,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>lexme</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>ផ្ទុកទិន្នន័យ ...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>កំហុសដែលមិនបានរំពឹងទុកបានកើតឡើងខណៈពេលផ្ទុកទិន្នន័យ។ {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>ដេលសីក្នា</value>

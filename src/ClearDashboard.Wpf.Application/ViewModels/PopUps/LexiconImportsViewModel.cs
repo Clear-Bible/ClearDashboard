@@ -41,13 +41,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public bool HasLexiconToImport => Enumerable.Any<LexiconImportViewModel>(LexiconToImport);
 
-        public BindableCollection<LexiconImportViewModel> ImportedLexicon { get; private set; } = new BindableCollection<LexiconImportViewModel>();
+        //public BindableCollection<LexiconImportViewModel> ImportedLexicon { get; private set; } = new BindableCollection<LexiconImportViewModel>();
 
         public List<CorpusId> ProjectCorpora { get; } = new List<CorpusId>();
 
         public bool HasSelectedProjectCorpus => SelectedProjectCorpus != null;
 
         public bool ShowNoRecordsToManageMessage => HasSelectedProjectCorpus && !Enumerable.Any<LexiconImportViewModel>(LexiconToImport);
+
+        //public string? NoRecordsToManageMessage => LocalizationService.Get("NoRecordsToManageMessage");
 
         public bool ShowDialog
         {
@@ -104,6 +106,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             LexiconManager = lexiconManager;
             WindowManager = windowManager;
+            Message = LocalizationService.Get("LexiconEdit_LoadingData");
         }
 
 
@@ -124,7 +127,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 try
                 {
                     await GetParatextProjects();
-                    await GetImportedLexiconViewModels(cancellationToken);
+                    await GetToImportLexiconImportViewModels(cancellationToken);
+
+                    if (LexiconToImport.Count == 0)
+                    {
+                        Message = LocalizationService.Get("LexiconImport_NoMoreRecordsToImport");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError(ex, "An unexpected error occurred while loading the Lexicon data.");
+                    Message = string.Format(LocalizationService.Get("LexiconEdit_LoadingData_ErrorTemplate"), ex.Message);
                 }
                 finally
                 {
@@ -167,19 +180,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     //ProjectCorpora.Clear();
                     //ProjectCorpora.Add(selectedProjectCorpus);
                     SelectedProjectCorpus = selectedProjectCorpus;
-                    await ProjectCorpusSelected();
+                    //await ProjectCorpusSelected();
                 }
             }
 
             await Task.CompletedTask;
         }
 
-        private async Task GetImportedLexiconViewModels(CancellationToken cancellationToken)
-        {
-            ImportedLexicon.Clear();
-            var importedLexicon = await LexiconManager.GetImportedLexiconViewModels(null, cancellationToken);
-            Execute.OnUIThread(() => { ImportedLexicon.AddRange(importedLexicon); });
-        }
+        //private async Task GetImportedLexiconViewModels(CancellationToken cancellationToken)
+        //{
+        //    ImportedLexicon.Clear();
+        //    var importedLexicon = await LexiconManager.GetImportedLexiconViewModels(null, cancellationToken);
+        //    Execute.OnUIThread(() => { ImportedLexicon.AddRange(importedLexicon); });
+        //}
 
         private async Task GetToImportLexiconImportViewModels(CancellationToken cancellationToken)
         {
@@ -234,7 +247,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 dialogViewModel.SourceLanguage = lexiconImport.SourceLanguage;
                 dialogViewModel.TargetLanguage = lexiconImport.TargetLanguage;
-                dialogViewModel.EditMode = LexiconEditMode.PartialMatchOnLexemeOrForm;
+                dialogViewModel.EditMode = LexiconEditMode.MatchOnTranslation;
                 dialogViewModel.ToMatch = lexiconImport.TargetWord;
                 dialogViewModel.Other = lexiconImport.SourceWord;
 
@@ -263,7 +276,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 dialogViewModel.SourceLanguage = lexiconImport.SourceLanguage;
                 dialogViewModel.TargetLanguage = lexiconImport.TargetLanguage;
-                dialogViewModel.EditMode = LexiconEditMode.MatchOnTranslation;
+                dialogViewModel.EditMode = LexiconEditMode.PartialMatchOnLexemeOrForm;
                 dialogViewModel.ToMatch = lexiconImport.SourceWord;
                 dialogViewModel.Other = lexiconImport.TargetWord;
 
@@ -301,7 +314,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
                     await LexiconManager.ProcessLexiconToImport();
 
-                    await GetImportedLexiconViewModels(CancellationToken.None);
+                    //await GetImportedLexiconViewModels(CancellationToken.None);
                     await GetToImportLexiconImportViewModels(CancellationToken.None);
                 }
                 catch (Exception ex)

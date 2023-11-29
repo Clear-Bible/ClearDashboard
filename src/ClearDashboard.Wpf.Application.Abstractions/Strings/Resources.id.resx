@@ -251,7 +251,7 @@
     <value>buah</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>Batu permata</value>
+    <value>batu permata</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>rumput</value>
@@ -494,7 +494,7 @@
     <value>Waktu lokal</value>
   </data>
   <data name="ClockUserControl_Name" xml:space="preserve">
-    <value>Beri nama itemnya</value>
+    <value>Beri nama item</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
     <value>grup baru</value>
@@ -611,7 +611,7 @@
     <value>Hapus Penyelarasan?</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>Hapus penyelarasan</value>
+    <value>Hapus Penyelarasan</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
     <value>Hapus Alignment untuk '{0}'?</value>
@@ -711,6 +711,9 @@
   </data>
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>Mode paragraf</value>
+  </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>Tampilkan catatan eksternal</value>
   </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>Teks Sumber:</value>
@@ -928,6 +931,12 @@
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
   </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>Memuat data ...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>Terjadi kesalahan yang tidak terduga saat memuat data. {0}</value>
+  </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>Cocok</value>
   </data>
@@ -962,7 +971,7 @@
     <value>Tambahkan sebagai formulir untuk ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Temukan Lexeme atau Bentuk Penting atau Parsial untuk Sumber</value>
+    <value>Temukan pencocokan leksem atau bentuk penuh atau parsial untuk sumber</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Tambahkan target sebagai terjemahan untuk ...</value>
@@ -1502,7 +1511,7 @@
     <value>Kereta</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Pelatih mesin pelurus mesin</value>
+    <value>Pelatihan mesin pelurus mesin</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Atur pemetaan ayat antara korpora yang disejajarkan</value>
@@ -1568,7 +1577,7 @@
     <value>Anak perempuan</value>
   </data>
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>Hapus penyelarasan</value>
+    <value>Hapus Penyelarasan</value>
   </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Hapus Interlinear</value>
@@ -1637,7 +1646,7 @@
     <value>Standar</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Studybible</value>
+    <value>Studibible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBibleadditions</value>
@@ -2015,7 +2024,7 @@
     <value>Luke</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
-    <value>Malachi</value>
+    <value>Maleakhi</value>
   </data>
   <data name="ProperCase_Mark" xml:space="preserve">
     <value>Tanda</value>

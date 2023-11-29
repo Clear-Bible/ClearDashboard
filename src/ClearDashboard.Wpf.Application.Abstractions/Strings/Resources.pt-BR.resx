@@ -143,7 +143,7 @@
     <value>Sem erros</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
-    <value>Salve erros USFM no arquivo</value>
+    <value>Salvar erros USFM no arquivo</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
     <value>Selecionar tudo</value>
@@ -635,7 +635,7 @@
     <value>Junte -se a tokens</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Junte -se a tokens para par de idiomas</value>
+    <value>Junte -se a tokens para o par de idiomas</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>Marcar o alinhamento como 'inválido'</value>
@@ -674,7 +674,7 @@
     <value>Divisão de três vias</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Token de compósito un -joain</value>
+    <value>Token composto de unidade</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -711,6 +711,9 @@
   </data>
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>Modo de parágrafo</value>
+  </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>Mostre notas externas</value>
   </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>Texto original:</value>
@@ -917,7 +920,7 @@
     <value>Encontrar tudo</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
-    <value>Formulários</value>
+    <value>Formas</value>
   </data>
   <data name="LexiconEdit_Fully" xml:space="preserve">
     <value>Completamente</value>
@@ -927,6 +930,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>Carregando dados...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>Ocorreu um erro inesperado ao carregar dados. {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>Coincidindo</value>
@@ -962,7 +971,7 @@
     <value>Adicione como forma para ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Encontre correspondências completas ou parciais de lexeme ou formulário para fonte</value>
+    <value>Encontre correspondências ou formulários completos ou parciais para a fonte</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Adicione o alvo como tradução para ...</value>
@@ -1187,7 +1196,7 @@
     <value>Versos</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Sentido do verso</value>
+    <value>Verso senso</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Verso total</value>
@@ -1214,7 +1223,7 @@
     <value>MIC</value>
   </data>
   <data name="Migrate_Header" xml:space="preserve">
-    <value>Redefinir mapeamentos de versos para versificação padrão</value>
+    <value>Redefinir mapeamentos de versos para a versificação padrão</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>MRK</value>
@@ -1424,7 +1433,7 @@
     <value>Grupos de etiquetas</value>
   </data>
   <data name="Notes_NoteLabels" xml:space="preserve">
-    <value>Etiquetas</value>
+    <value>Rótulos</value>
   </data>
   <data name="Notes_NoteReplies" xml:space="preserve">
     <value>Respostas</value>
@@ -1505,7 +1514,7 @@
     <value>Alinhador de palavras da máquina de trem</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
-    <value>Defina o mapeamento de versos entre corpora paralela</value>
+    <value>Defina o mapeamento do verso entre corpora paralela</value>
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Paratext Corpus</value>
@@ -1523,7 +1532,7 @@
     <value>Adicionar à nova visão</value>
   </data>
   <data name="Pds_AddCorpora" xml:space="preserve">
-    <value>Adicione corporal</value>
+    <value>Adicione corpora</value>
   </data>
   <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
     <value>Crie novo alinhamento de palavras</value>
@@ -1616,7 +1625,7 @@
     <value>Propriedades</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Redefinir mapeamentos de versos para versificação padrão</value>
+    <value>Redefinir mapeamentos de versos para a versificação padrão</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Recurso</value>
@@ -1682,7 +1691,7 @@
     <value>Filtro:</value>
   </data>
   <data name="Pins_Forms" xml:space="preserve">
-    <value>Formulários</value>
+    <value>Formas</value>
   </data>
   <data name="Pins_Gloss" xml:space="preserve">
     <value>Lustro</value>
@@ -1694,7 +1703,7 @@
     <value>Lexeme</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
-    <value>Lexeme tipo</value>
+    <value>Lexeme Type</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
     <value>Referências de carga</value>
@@ -1745,7 +1754,7 @@
     <value>Paratext beta não está funcionando</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
-    <value>Cancelamento ...</value>
+    <value>Cancelando ...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Projetos de colaboração</value>
@@ -1790,7 +1799,7 @@
     <value>Verifique esta caixa para incluir os textos bíblicos gregos e hebraicos ao criar seu projeto.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Incluir textos bíblicos gregos do NT?</value>
+    <value>Incluir textos bíblicos gregos no NT?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>Incluir textos bíblicos hebraicos?</value>
@@ -1853,7 +1862,7 @@
     <value>Pesquise recente</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
-    <value>Clique aqui para começar a Paratext</value>
+    <value>Clique aqui para começar o Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
     <value>Versão:</value>
@@ -2180,13 +2189,13 @@
     <value>Reservado para expansão futura</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaure o usuário da colaboração</value>
+    <value>Restaurar o usuário de colaboração</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Salvo para servidor remoto</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Salvar o usuário do GitLab no servidor</value>
+    <value>Salve o usuário do GitLab no servidor</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
     <value>Salvar configurações</value>
@@ -2201,7 +2210,7 @@
     <value>Mostrar visualizações expandidas em um monitor diferente do painel</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Para sistemas com três ou mais monitores, mostre visualização expandida no terceiro monitor</value>
+    <value>Para sistemas com três ou mais monitores, mostre uma visualização expandida no terceiro monitor</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Coleção de texto</value>
