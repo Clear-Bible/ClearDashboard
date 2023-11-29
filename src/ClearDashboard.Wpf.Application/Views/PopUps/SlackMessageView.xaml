@@ -51,9 +51,9 @@
                                 x:Name="ColorZoneHeader"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
-                                Background="{StaticResource BrushBackground}"
+                                Background="{StaticResource BackgroundBrush}"
                                 Focusable="False"
-                                Foreground="{StaticResource BrusSecondary}">
+                                Foreground="{StaticResource SecondaryHueMidBrush}">
                                 <materialDesign:Ripple
                                     x:Name="contentPresenter"
                                     Padding="{TemplateBinding Padding}"
@@ -69,7 +69,7 @@
                                     SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                     TextBlock.FontSize="14"
                                     TextBlock.FontWeight="Medium"
-                                    TextBlock.Foreground="{StaticResource BrushBlack}"
+                                    TextBlock.Foreground="{StaticResource BlueVeryDarkBrush}"
                                     TextOptions.TextFormattingMode="Ideal"
                                     TextOptions.TextRenderingMode="Auto"
                                     Typography.Capitals="{TemplateBinding Typography.Capitals}" />
@@ -134,7 +134,7 @@
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter TargetName="contentPresenter" Property="Opacity" Value="1" />
-                                <Setter TargetName="contentPresenter" Property="TextBlock.Foreground" Value="{StaticResource BrusSecondary}" />
+                                <Setter TargetName="contentPresenter" Property="TextBlock.Foreground" Value="{StaticResource SecondaryHueMidBrush}" />
                                 <Setter TargetName="SelectionHighlightBorder" Property="Visibility" Value="Visible" />
                             </Trigger>
                             <DataTrigger Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Bottom">

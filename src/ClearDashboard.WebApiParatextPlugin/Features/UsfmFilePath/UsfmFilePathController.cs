@@ -1,4 +1,5 @@
 ﻿using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.ParatextPlugin.CQRS.Features.UsfmFilePath;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -18,9 +19,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.UsfmFilePath
         }
 
         [HttpPost]
-        public async Task<RequestResult<List<string>>> GetAsync([FromBody] GetUsfmFilePathQuery command)
+        public async Task<RequestResult<List<ParatextBook>>> GetAsync([FromBody] GetUsfmFilePathQuery command)
         {
-            var result = await ExecuteRequestAsync<RequestResult<List<string>>, List<string>>(command, CancellationToken.None);
+            var result = await ExecuteRequestAsync<RequestResult<List<ParatextBook>>, List<ParatextBook>>(command, CancellationToken.None);
             return result;
 
         }

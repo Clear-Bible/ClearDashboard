@@ -32,7 +32,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
                 var response = await client.PostAsJsonAsync<GetUsfmFilePathQuery>("usfmfilepath", new GetUsfmFilePathQuery(paratextId));
 
                 Assert.True(response.IsSuccessStatusCode);
-                var result = await response.Content.ReadAsAsync<RequestResult<List<string>>>();
+                var result = await response.Content.ReadAsAsync<RequestResult<List<ParatextBook>>>();
 
                 Assert.NotNull(result);
                 Assert.True(result.Success);

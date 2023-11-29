@@ -29,7 +29,7 @@ namespace ClearDashboard.DAL.Tests
             var paratextId = "2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f";
 
             var result =
-                await ExecuteAndTestRequest<GetUsfmFilePathQuery, RequestResult<List<string>>, List<string>>(
+                await ExecuteAndTestRequest<GetUsfmFilePathQuery, RequestResult<List<ParatextBook>>, List<ParatextBook>>(
                     new GetUsfmFilePathQuery(paratextId));
 
             Assert.True(result.HasData);

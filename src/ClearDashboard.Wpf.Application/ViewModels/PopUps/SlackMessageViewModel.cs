@@ -806,26 +806,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
 
 
-            //var files = new List<string>();
 
-            //// get the project directory
-            //var projectDirectory = SelectedProject.ProjectPath;
-
-            //// get the settings file
-            //var settingsFile = Path.Combine(projectDirectory, "settings.xml");
-            //if (File.Exists(settingsFile))
-            //{
-            //    var xmlStr = File.ReadAllText(settingsFile);
-            //    var str = XElement.Parse(xmlStr);
-
-            //    //var users = str.Elements("User")
-            //    //	.Select(x => x.Attribute("UserName"))
-            //    //	.ToList();
-
-
-            //    var users = str.Elements("User")
-            //        .ToList();
-            //}
 
 
         }
