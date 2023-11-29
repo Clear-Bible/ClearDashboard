@@ -887,7 +887,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async void TokenLeftButtonUp(object sender, TokenEventArgs e)
         {
+            SelectionManager.UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
             SelectionManager.EndSelection(e.TokenDisplay);
+            NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public async void TokenCreateAlignment(object sender, TokenEventArgs e)
@@ -922,6 +924,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public void TokenMouseEnter(object sender, TokenEventArgs e)
         {
+            if (SelectionManager.IsDragInProcess)
+            {
+                SelectionManager.UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
+            }
+
             Message = $"'{e.TokenDisplay.SurfaceText}' token ({e.TokenDisplay.Token.TokenId}) hovered";
         }
 
