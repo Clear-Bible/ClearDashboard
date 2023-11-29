@@ -9,6 +9,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -133,6 +134,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             //pop up confirmation dialog
             //go to the folders and rename the file
+            var activeLicense = LicenseManager.DecryptLicenseFromFileToUser(LicenseManager.LicenseFilePath);
+
+            //rename UserSecrets Folder
+            Directory.Move(LicenseManager.UserSecretsFolderPath, 
+                Path.Combine(LicenseManager.MicrosoftFolderPath, 
+                    $"{LicenseManager.UserSecretsDirectoryName}_{activeLicense.Id}.txt"));
+
+            //rename Collab Folder
+            Directory.Move(LicenseManager.CollaborationDirectoryPath,
+                Path.Combine(LicenseManager.DocumentsDirectoryPath, $"{LicenseManager.CollaborationDirectoryName}_{activeLicense.Id}"));
+
+            //rename ClearDashboard_Project Folder
+            Directory.Move(LicenseManager.ClearDashboardProjectsDirectoryPath,
+                Path.Combine(LicenseManager.DocumentsDirectoryPath, 
+                    $"{LicenseManager.ClearDashboardProjectsDirectoryName}_{activeLicense.Id}"));
         }
 
         public async void RegisterNewLicense()

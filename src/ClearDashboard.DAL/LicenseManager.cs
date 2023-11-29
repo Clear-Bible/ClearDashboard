@@ -12,13 +12,23 @@ namespace ClearDashboard.DataAccessLayer
 {
     public static class LicenseManager
     {
-        public static string LegacyLicenseFilePath =
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects",
-                "license.txt");
+        public static readonly string DocumentsDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
 
-        public static string LicenseFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft", "UserSecrets", "License");
-        public static string LicenseFileName = "license.txt";
-        public static string LicenseFilePath = Path.Combine(LicenseFolderPath, LicenseFileName);
+        public static readonly string CollaborationDirectoryName = "Collaboration";
+        public static readonly string CollaborationDirectoryPath = Path.Combine(DocumentsDirectoryPath, CollaborationDirectoryName);
+
+        public static readonly string ClearDashboardProjectsDirectoryName = "ClearDashboard_Projects";
+        public static readonly string ClearDashboardProjectsDirectoryPath = Path.Combine(DocumentsDirectoryPath, ClearDashboardProjectsDirectoryName);
+        public static readonly string LegacyLicenseFilePath = Path.Combine(ClearDashboardProjectsDirectoryPath, LicenseFileName);
+
+       
+
+        public static readonly string MicrosoftFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft");
+        public static readonly string UserSecretsDirectoryName = "UserSecrets";
+        public static readonly string UserSecretsFolderPath = Path.Combine(MicrosoftFolderPath, UserSecretsDirectoryName);
+        public static readonly string LicenseFolderPath = Path.Combine(UserSecretsFolderPath, "License");
+        public static readonly string LicenseFileName = "license.txt";
+        public static readonly string LicenseFilePath = Path.Combine(LicenseFolderPath, LicenseFileName);
 
         public static async Task<bool> DeleteOldLicense()
         {

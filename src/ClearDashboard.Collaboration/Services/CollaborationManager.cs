@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
 using System.IO;
 using System.Text.Json;
+using ClearDashboard.DataAccessLayer;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Services;
@@ -26,9 +27,9 @@ public class CollaborationManager
     private readonly IMediator _mediator;
     private readonly IUserProvider _userProvider;
     private readonly IProjectProvider _projectProvider;
-
+    
     private readonly string _repositoryBasePath =
-        FilePathTemplates.CollabBaseDirectory + Path.DirectorySeparatorChar + "Collaboration";
+        FilePathTemplates.CollabBaseDirectory + Path.DirectorySeparatorChar + LicenseManager.CollaborationDirectoryName;
 
     private readonly string _backupsPath =
         FilePathTemplates.CollabBaseDirectory + Path.DirectorySeparatorChar + "Backups";
