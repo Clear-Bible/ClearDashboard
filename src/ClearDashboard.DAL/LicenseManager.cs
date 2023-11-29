@@ -12,20 +12,24 @@ namespace ClearDashboard.DataAccessLayer
 {
     public static class LicenseManager
     {
-        public static  string DocumentsDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+        public static string DocumentsDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
 
         public static string CollaborationDirectoryName = "Collaboration";
         public static string CollaborationDirectoryPath = Path.Combine(DocumentsDirectoryPath, CollaborationDirectoryName);
 
         public static string ClearDashboardProjectsDirectoryName = "ClearDashboard_Projects";
         public static string ClearDashboardProjectsDirectoryPath = Path.Combine(DocumentsDirectoryPath, ClearDashboardProjectsDirectoryName);
+
+        public static string LicenseFileName = "license.txt";
         public static string LegacyLicenseFilePath = Path.Combine(ClearDashboardProjectsDirectoryPath, LicenseFileName);
 
         public static string MicrosoftFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft");
+        
         public static string UserSecretsDirectoryName = "UserSecrets";
         public static string UserSecretsFolderPath = Path.Combine(MicrosoftFolderPath, UserSecretsDirectoryName);
+        
         public static string LicenseFolderPath = Path.Combine(UserSecretsFolderPath, "License");
-        public static string LicenseFileName = "license.txt";
+        
         public static string LicenseFilePath = Path.Combine(LicenseFolderPath, LicenseFileName);
 
         public static async Task<bool> DeleteOldLicense()
