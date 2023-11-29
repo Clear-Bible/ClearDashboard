@@ -13,7 +13,6 @@
     xmlns:popUps="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.PopUps"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:validators="clr-namespace:ClearDashboard.Wpf.Application.Validators;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Title="SlackMessageView"
     Width="800"
     Height="950"
@@ -35,9 +34,9 @@
             <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}" />
 
             <Setter Property="Padding" Value="16,12" />
-            <Setter Property="Height" Value="48" />
+            <Setter Property="Height" Value="Auto" />
             <Setter Property="MinWidth" Value="90" />
-            <Setter Property="MaxWidth" Value="360" />
+            <Setter Property="MaxWidth" Value="150" />
             <Setter Property="materialDesign:RippleAssist.Feedback" Value="{DynamicResource MaterialDesignFlatButtonRipple}" />
             <Setter Property="materialDesign:ColorZoneAssist.Mode" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(materialDesign:ColorZoneAssist.Mode)}" />
             <Setter Property="materialDesign:ColorZoneAssist.Background" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(materialDesign:ColorZoneAssist.Background)}" />
@@ -51,9 +50,9 @@
                                 x:Name="ColorZoneHeader"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
-                                Background="{StaticResource BackgroundBrush}"
+                                Background="{StaticResource MaterialDesignBackground}"
                                 Focusable="False"
-                                Foreground="{StaticResource SecondaryHueMidBrush}">
+                                Foreground="{StaticResource SecondaryHueLightBrush}">
                                 <materialDesign:Ripple
                                     x:Name="contentPresenter"
                                     Padding="{TemplateBinding Padding}"
@@ -69,7 +68,7 @@
                                     SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                     TextBlock.FontSize="14"
                                     TextBlock.FontWeight="Medium"
-                                    TextBlock.Foreground="{StaticResource BlueVeryDarkBrush}"
+                                    TextBlock.Foreground="{StaticResource MahApps.Brushes.Accent}"
                                     TextOptions.TextFormattingMode="Ideal"
                                     TextOptions.TextRenderingMode="Auto"
                                     Typography.Capitals="{TemplateBinding Typography.Capitals}" />
@@ -171,7 +170,7 @@
             Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
             TabStripPlacement="Left">
 
-            <!--  BUGREPORT  -->
+            <!--  BUG REPORT  -->
             <TabItem
                 Margin="4"
                 BorderThickness="0,0,10,0"
@@ -192,12 +191,23 @@
                 </TabItem.Header>
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="100" />
                     </Grid.RowDefinitions>
+                    <TextBlock
+                        Grid.Row="0"
+                        Margin="10,0,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        FontSize="18"
+                        Foreground="{StaticResource SecondaryHueMidBrush}"
+                        Text="{helpers:Localization SlackMessageView_BugReport}" />
                     <TextBox
+                        Grid.Row="1"
                         Margin="10,0,10,10"
+                        Padding="10"
                         AcceptsReturn="True"
                         BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                         BorderThickness="2"
@@ -206,7 +216,7 @@
                         Text="{Binding UserMessage, UpdateSourceTrigger=PropertyChanged}"
                         TextWrapping="Wrap" />
 
-                    <Grid Grid.Row="1" Margin="10,0,10,0">
+                    <Grid Grid.Row="2" Margin="10,0,10,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
@@ -256,8 +266,9 @@
                     </Grid>
 
                     <Border
-                        Grid.Row="2"
+                        Grid.Row="3"
                         Margin="10,0,10,0"
+                        Padding="10"
                         BorderBrush="{StaticResource PrimaryHueMidBrush}"
                         BorderThickness="2"
                         CornerRadius="5">
@@ -274,11 +285,6 @@
 
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <!--<materialDesign:Chip
-                                        cm:Message.Attach="[Event Click] = [Action DeleteAttachedFile]"
-                                        Content="{Binding Path=FileName}"
-                                        IsDeletable="True" />-->
-
                                     <StackPanel Orientation="Horizontal">
                                         <materialDesign:Chip Content="{Binding Path=FileName}" />
                                         <Button
@@ -300,6 +306,7 @@
                     </Border>
                 </Grid>
             </TabItem>
+
             <!--  SUGGESTION  -->
             <TabItem Style="{StaticResource MaterialDesignTabItem2}">
                 <TabItem.Header>
@@ -319,6 +326,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
@@ -332,14 +340,29 @@
 
                     <!--  Row 0  -->
                     <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="10,2,0,2"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        FontSize="18"
+                        Foreground="{StaticResource SecondaryHueMidBrush}"
+                        Text="{helpers:Localization SlackMessageView_Suggestion}" />
+
+                    <!--  Row 1  -->
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="0"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         Text="{helpers:Localization SlackMessageView_SuggestionTitle}" />
                     <TextBox
                         x:Name="JiraTitle"
-                        Grid.Row="0"
+                        Grid.Row="1"
                         Grid.Column="1"
                         Margin="15,0,10,10"
+                        Padding="10,0,0,0"
                         VerticalAlignment="Center"
                         AcceptsReturn="True"
                         BorderBrush="{StaticResource PrimaryHueDarkBrush}"
@@ -349,7 +372,7 @@
                         Text="{Binding JiraTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         TextWrapping="Wrap" />
                     <TextBlock
-                        Grid.Row="0"
+                        Grid.Row="1"
                         Grid.Column="2"
                         VerticalAlignment="Center"
                         FontSize="28"
@@ -357,16 +380,16 @@
                         Text="*"
                         Visibility="{Binding TitleVisibility}" />
 
-                    <!--  Row 1  -->
+                    <!--  Row 2  -->
                     <TextBlock
-                        Grid.Row="1"
+                        Grid.Row="2"
                         Grid.Column="0"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         Text="{helpers:Localization SlackMessageView_SuggestionSeverity}" />
                     <ComboBox
                         x:Name="JiraSeverity"
-                        Grid.Row="1"
+                        Grid.Row="2"
                         Grid.Column="1"
                         Margin="15,0,10,10"
                         VerticalAlignment="Center"
@@ -376,7 +399,7 @@
                         ItemsSource="{Binding SeverityItems}"
                         Text="{Binding JiraSeverity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TextBlock
-                        Grid.Row="1"
+                        Grid.Row="2"
                         Grid.Column="2"
                         VerticalAlignment="Center"
                         FontSize="28"
@@ -384,9 +407,9 @@
                         Text="*"
                         Visibility="{Binding SeverityVisibility}" />
 
-                    <!--  Row 2  -->
+                    <!--  Row 3  -->
                     <TabControl
-                        Grid.Row="2"
+                        Grid.Row="3"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         HorizontalContentAlignment="Center"
@@ -412,7 +435,8 @@
                                 </Grid.ColumnDefinitions>
                                 <TextBox
                                     x:Name="JiraDescription"
-                                    Height="600"
+                                    Height="550"
+                                    Padding="10"
                                     VerticalAlignment="Center"
                                     AcceptsReturn="True"
                                     BorderBrush="{StaticResource PrimaryHueDarkBrush}"
@@ -442,6 +466,7 @@
                                 </StackPanel>
                             </TabItem.Header>
                             <mdXaml:MarkdownScrollViewer
+                                Padding="5"
                                 BorderBrush="{StaticResource SecondaryHueMidBrush}"
                                 BorderThickness="2"
                                 ClickAction="OpenBrowser"
@@ -449,9 +474,9 @@
                         </TabItem>
                     </TabControl>
 
-                    <!--  Row 3  -->
+                    <!--  Row 4  -->
                     <Grid
-                        Grid.Row="3"
+                        Grid.Row="4"
                         Grid.Column="0"
                         Grid.ColumnSpan="3">
                         <Grid.ColumnDefinitions>
@@ -515,29 +540,38 @@
             <TabItem Style="{StaticResource MaterialDesignTabItem2}">
                 <TabItem.Header>
                     <StackPanel Width="auto" Height="auto">
-                        <iconPacks:PackIconPicolIcons
+                        <iconPacks:PackIconVaadinIcons
                             Width="24"
                             Height="24"
                             HorizontalAlignment="Center"
-                            Kind="Comment" />
+                            Kind="Records" />
+
                         <TextBlock
                             HorizontalAlignment="Center"
                             FontSize="14"
-                            Text="Send USFM"
+                            Text="{helpers:Localization SlackMessageView_SendUsfmFiles}"
                             TextWrapping="Wrap" />
                     </StackPanel>
                 </TabItem.Header>
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="150" />
-                        <RowDefinition Height="550" />
+                        <RowDefinition Height="160" />
+                        <RowDefinition Height="530" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <!--  Row 0  -->
                     <StackPanel Grid.Row="0" Orientation="Vertical">
-                        <Label Margin="0,0,0,-10" Content="{helpers:Localization AddParatextCorpusDialog_Title}" />
+                        <!--  Row 0  -->
+                        <TextBlock
+                            Margin="10,2,0,2"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            FontSize="18"
+                            Foreground="{StaticResource SecondaryHueMidBrush}"
+                            Text="{helpers:Localization SlackMessageView_SendUsfmFiles}" />
+
                         <controls:AutoCompleteComboBox
                             Height="Auto"
                             Margin="5"
@@ -587,10 +621,10 @@
                     <!--  Row 3  -->
                     <Button
                         Grid.Row="3"
+                        Margin="10,5,10,0"
                         cm:Message.Attach="SendUsfmBooks"
-                        Style="{StaticResource TransparentStyle}">
-                        Send
-                    </Button>
+                        Content="{helpers:Localization Send}"
+                        Style="{StaticResource TransparentStyle}" />
 
                 </Grid>
             </TabItem>
@@ -604,6 +638,7 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <StackPanel
@@ -675,7 +710,12 @@
                 </iconPacks:PackIconUnicons.Style>
             </iconPacks:PackIconUnicons>
 
-
+            <Button
+                Grid.Column="3"
+                Margin="10,5,10,5"
+                cm:Message.Attach="Close"
+                Content="{helpers:Localization Close}"
+                Style="{StaticResource TransparentStyle}" />
 
         </Grid>
     </Grid>

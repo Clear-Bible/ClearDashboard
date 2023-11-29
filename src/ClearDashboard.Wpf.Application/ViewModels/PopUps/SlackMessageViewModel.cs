@@ -1,29 +1,22 @@
 ﻿using Autofac;
 using Caliburn.Micro;
-using CefSharp.DevTools.Network;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
-using ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.ParatextPlugin.CQRS.Features.UsfmFilePath;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
-using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
 using Markdig;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Paratext.PluginInterfaces;
-using SIL.Scripture;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
@@ -31,8 +24,6 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Shapes;
-using System.Xml.Linq;
 using static ClearDashboard.Wpf.Application.Helpers.SlackMessage;
 using Markdown = Markdig.Markdown;
 using Path = System.IO.Path;
@@ -44,14 +35,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         #region Member Variables   
         private readonly ILogger<SlackMessageViewModel> _logger;
         private readonly CollaborationServerHttpClientServices _collaborationHttpClientServices;
-        public SelectedBookManager SelectedBookManager { get; private set; }
-
+        private readonly ILocalizationService _localizationService;
 
         private User _currentDashboardUser;
         private DashboardUser _dashboardUser;
         private string ZipPathAttachment { get; set; } = string.Empty;
-        private List<JiraUser> _jiraUsersList = new();
-
         private JiraUser? _jiraUser;
 
 
@@ -61,6 +49,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         #region Public Properties
 
+        public SelectedBookManager SelectedBookManager { get; set; }
         public string ParatextUser { get; set; } = string.Empty;
         public User DashboardUser { get; set; }
         public CollaborationConfiguration GitLabUser { get; set; }
@@ -110,10 +99,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         public ParatextProjectMetadata? SelectedProject
         {
             get => _selectedProject;
-            set
-            {
-                Set(ref _selectedProject, value);
-            }
+            set => Set(ref _selectedProject, value);
         }
 
 
@@ -281,7 +267,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private ObservableCollection<string> _severityItems = new();
         public ObservableCollection<string> SeverityItems
         {
-            get { return _severityItems; }
+            get => _severityItems;
             set
             {
                 _severityItems = value;
@@ -344,6 +330,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             set => Set(ref _usfmErrorsByProject, value);
         }
 
+        private string _firstTitleLine = string.Empty;
+        public string FirstTitleLine
+        {
+            get => _firstTitleLine;
+            set
+            {
+                _firstTitleLine = value;
+                NotifyOfPropertyChange(() => FirstTitleLine);
+            }
+        }
+
+
+        private string _secondTitleLine = string.Empty;
+        public string SecondTitleLine
+        {
+            get => _secondTitleLine;
+            set
+            {
+                _secondTitleLine = value;
+                NotifyOfPropertyChange(() => SecondTitleLine);
+            }
+        }
+
+        private string _selectBooksLabelText = string.Empty;
+        public string SelectBooksLabelText
+        {
+            get => _selectBooksLabelText;
+            set
+            {
+                _selectBooksLabelText = value;
+                NotifyOfPropertyChange(() => SelectBooksLabelText);
+            }
+        }
+
+
+        
+
         #endregion //Observable Properties
 
 
@@ -364,21 +387,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             _logger = logger;
             _collaborationHttpClientServices = collaborationHttpClientServices;
+            _localizationService = localizationService;
             SelectedBookManager = selectedBookManager;
-            var localizationService1 = localizationService;
+            
 
             WorkingMessage = "Gathering Files for Transmission";
 
 
-            var combo1 = "[1] " + localizationService1["SlackMessageView_Combo1"];
-            var combo2 = "[2] " + localizationService1["SlackMessageView_Combo2"];
-            var combo3 = "[3] " + localizationService1["SlackMessageView_Combo3"];
-            var combo4 = "[4] " + localizationService1["SlackMessageView_Combo4"];
+            var combo1 = "[1] " + _localizationService["SlackMessageView_Combo1"];
+            var combo2 = "[2] " + _localizationService["SlackMessageView_Combo2"];
+            var combo3 = "[3] " + _localizationService["SlackMessageView_Combo3"];
+            var combo4 = "[4] " + _localizationService["SlackMessageView_Combo4"];
 
             SeverityItems.Add(combo1);
             SeverityItems.Add(combo2);
             SeverityItems.Add(combo3);
             SeverityItems.Add(combo4);
+
+            FirstTitleLine = _localizationService["AddParatextCorpusDialog_SelectUsfmBooks"];
         }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -408,14 +434,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             WorkingMessage = "";
 
             var jiraClient = IoC.Get<JiraClientServices>();
-            _jiraUsersList = await jiraClient.GetAllUsers();
-
 
             _currentDashboardUser = ProjectManager!.CurrentUser!;
             _dashboardUser = await _collaborationHttpClientServices.GetDashboardUserExistsById(_currentDashboardUser.Id);
 
             _jiraUser = await jiraClient.LoadJiraUser();
-
 
             base.OnViewLoaded(view);
         }
@@ -424,30 +447,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             SelectedBookManager.PropertyChanged += OnSelectedBookManagerPropertyChanged;
 
-            var result = await ProjectManager.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
+            var result = await ProjectManager!.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
             if (result.Success)
             {
-                var projectDesignSurface = LifetimeScope.Resolve<ProjectDesignSurfaceViewModel>();
-
-                var corpusIds = await DAL.Alignment.Corpora.Corpus.GetAllCorpusIds(Mediator);
-
-                List<string> currentNodeIds = new();
-
-                foreach (var corpusId in corpusIds)
-                {
-                    if (corpusId.CorpusType != "Resource")
-                    {
-                        currentNodeIds.Add(corpusId.ParatextGuid);
-                    }
-                }
-
-                var currentNodes = projectDesignSurface.DesignSurfaceViewModel.CorpusNodes;
-                currentNodes.ToList().ForEach(n => currentNodeIds.Add(n.ParatextProjectId));
-
-                if (Projects == null)
-                {
-                    Projects = result.Data.Where(c => currentNodeIds.Contains(c.Id)).OrderBy(p => p.Name).ToList();
-                }
+                Projects ??= result.Data!.Where(p =>
+                    p.CorpusType != CorpusType.ConsultantNotes && p.CorpusType != CorpusType.Resource &&
+                    p.CorpusType != CorpusType.Unknown && p.CorpusType != CorpusType.ManuscriptGreek &&
+                    p.CorpusType != CorpusType.ManuscriptHebrew && p.CorpusType != CorpusType.MarbleResource).ToList();
             }
         }
 
@@ -476,9 +482,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 }
 
                 ZipFiles zipFiles = new(Files, ZipPathAttachment);
-                var succcess = zipFiles.Zip();
+                var success = zipFiles.Zip();
 
-                if (succcess == false)
+                if (success == false)
                 {
                     _logger.LogError("Error zipping files");
                 }
@@ -570,12 +576,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 }
 
             }
-        }
-
-
-        private void AddAttachedFilesToZip()
-        {
-            
         }
 
         private void CheckJiraButtonEnabled()
@@ -746,7 +746,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         public async void ProjectSelected()
         {
             ShowSpinner = Visibility.Visible;
-            UsfmErrorsByProject = await UsfmChecker.CheckUsfm(SelectedProject, ProjectManager, LocalizationService);
+            UsfmErrorsByProject = await UsfmChecker.CheckUsfm(SelectedProject!, ProjectManager!, LocalizationService!);
             var firstProject = UsfmErrorsByProject.FirstOrDefault();
             if (firstProject != null)
             {
@@ -754,7 +754,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 UsfmErrors = firstProject.UsfmErrors;
             }
             var usfmErrors = new Dictionary<string, IEnumerable<UsfmError>>();
-            usfmErrors.Add(SelectedProject.Id!, new List<UsfmError>());
+            usfmErrors.Add(SelectedProject!.Id!, new List<UsfmError>());
             await SelectedBookManager.InitializeBooks(usfmErrors, true, true, new CancellationToken());
 
             ShowSpinner = Visibility.Collapsed;
@@ -793,6 +793,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public async void SendUsfmBooks()
         {
+            if (SelectedProject is null)
+            {
+                return;
+            }
+
             if (SelectedBookManager.SelectedBooks.Count == 0)
             {
                 return;
@@ -808,9 +813,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 var booksToSend = new List<string>();
                 foreach (var book in selectedBooks)
                 {
-                    var bookPath = list.FirstOrDefault(b => b.BookNameShort == book.BookName);
+                    var bookPath = list!.FirstOrDefault(b => b.BookNameShort == book.Abbreviation);
 
-                    if (bookPath != null)
+                    if (bookPath is not null)
                     {
                         booksToSend.Add(bookPath.FilePath);
                     }
@@ -829,29 +834,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     }
                 }
 
-                // zip up the files
-                var guid = Guid.NewGuid().ToString();
-                var zipPath = Path.Combine(Path.GetTempPath(), $"{guid}.zip");
-                ZipFiles zipFiles = new(booksToSend, zipPath);
-                var succcess = zipFiles.Zip();
-
-                if (succcess == false)
-                {
-                    _logger.LogError("Error zipping files");
-                }
-                else
-                {
-                    // send the zip file to slack
-                    SendUsfmFilesMessage(booksToSend);
-
-                }
+                // send the zip file to slack
+                await SendUsfmFilesMessage(booksToSend);
             }
-
-
-
-
-
-
 
         }
 
@@ -872,7 +857,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
 
             // add in attached files
-            if (AttachedFiles.Count > 0)
+            if (booksToSend.Count > 0)
             {
                 foreach (var file in booksToSend)
                 {
@@ -887,7 +872,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             var versionNumber = $"{thisVersion!.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
 
             string msg =
-                $"*Dashboard User:* {DashboardUser.FullName} \n*Paratext User:* {ParatextUser} \n*Github User:* {GitLabUser.RemoteUserName} \n*Version*: {versionNumber} \n*Message:* \nProject USFM Files for: {SelectedProject.Name}";
+                $"*Dashboard User:* {DashboardUser.FullName} \n*Paratext User:* {ParatextUser} \n*Github User:* {GitLabUser.RemoteUserName} \n*Version*: {versionNumber} \n \n---> Project USFM Files for: {SelectedProject!.Name} <---";
 
             var logger = LifetimeScope!.Resolve<ILogger<SlackMessage>>();
 
@@ -923,7 +908,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
     public class FileItem
     {
-        public string FileName { get; set; }
-        public string FilePath { get; set; }
+        public string FileName { get; set; } = string.Empty;
+        public string FilePath { get; set; } = string.Empty;
     }
 }
