@@ -9,12 +9,15 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Title="AboutView"
     Width="400"
-    FontFamily="{StaticResource ClearDashboardFont}"
-    Height="300"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
@@ -53,8 +56,44 @@
         </StackPanel>
 
         <Button
-            x:Name="Close"
+            x:Name="DeactivateCurrentLicense"
             Grid.Row="3"
+            Width="150"
+            Height="40"
+            Margin="3,0,3,5"
+            Content="Deactivate Current License"
+            Style="{StaticResource TransparentStyle}" />
+
+        <Button
+            x:Name="RegisterNewLicense"
+            Grid.Row="4"
+            Width="150"
+            Height="40"
+            Margin="3,0,3,5"
+            Content="Register New License"
+            Style="{StaticResource TransparentStyle}" />
+
+        <ListBox Grid.Row="5" ItemsSource="{Binding LicenseList}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Label Content="{Binding Name}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Button
+            x:Name="ActivateSelectedLicense"
+            Grid.Row="6"
+            Width="150"
+            Height="40"
+            Margin="3,0,3,5"
+            Content="Activate Selected License"
+            Style="{StaticResource TransparentStyle}" />
+
+
+        <Button
+            x:Name="Close"
+            Grid.Row="7"
             Width="150"
             Height="40"
             Margin="3,0,3,5"

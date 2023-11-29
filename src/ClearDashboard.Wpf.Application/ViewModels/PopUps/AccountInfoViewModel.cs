@@ -8,7 +8,9 @@ using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.ObjectModel;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -85,6 +87,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
+        private ObservableCollection<string> _licenseList;
+        public ObservableCollection<string> LicenseList
+        {
+            get => _licenseList;
+            set
+            {
+                _licenseList = value;
+                NotifyOfPropertyChange(() => LicenseList);
+            }
+        }
+
 
         public AccountInfoViewModel()
         {
@@ -114,6 +127,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             var config = _collaborationManager.GetConfig();
             CollaborationUsername = config.RemoteUserName;
             CollaborationEmail= config.RemoteEmail;
+        }
+
+        public async void DeactivateCurrentLicense()
+        {
+            //pop up confirmation dialog
+            //go to the folders and rename the file
+        }
+
+        public async void RegisterNewLicense()
+        {
+            //popup the registration dialog
+            //if success then
+            //deactivate the current license
+        }
+
+        public async Task<ObservableCollection<string>> GetLicenseList()
+        {
+            //search in the license folder and for each file attempt to decrypt it
+            //add the name to the list
+            return new ObservableCollection<string>();
+        }
+
+        public async void ActivateSelectedLicense()
+        {
+            //deactivate current license
+            //rename the files for the selected license
         }
 
         public async void Close()
