@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
 {
     [DataContract]
-    internal class Body
+    public class Body
     {
         [DataMember]
         public string AssignedUserName { get; set; }

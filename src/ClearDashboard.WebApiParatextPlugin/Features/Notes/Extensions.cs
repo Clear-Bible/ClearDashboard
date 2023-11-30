@@ -153,7 +153,14 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
 
             externalNote.ExternalLabels = new HashSet<ExternalLabel>(externalNote.ExternalLabelIds
                 .Select(elid => externalLabels
-                    .FirstOrDefault(el => el.ExternalLabelId == elid)));
+                    .FirstOrDefault(el => el.ExternalLabelId == elid) ?? new ExternalLabel()
+                    {
+                        ExternalLabelId = elid,
+                        ExternalProjectId = externalNote.ExternalProjectId,
+                        ExternalProjectName = paratextProjectMetadata.GetExternalProjectName(),
+                        ExternalText = $"<external label id {elid} does not have label text>",
+                        ExternalTemplate = string.Empty 
+                    }));
 
             return externalNote;
         }
@@ -202,6 +209,10 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
             return externalNote;
         }
 
+        public static string GetExternalProjectName(this ParatextProjectMetadata paratextProjectMetadata)
+        {
+            return paratextProjectMetadata.Name;
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -229,7 +240,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                         {
                             ExternalLabelId = int.Parse(t.Attribute("Id").Value),
                             ExternalProjectId = paratextProjectMetadata.Id,
-                            ExternalProjectName = paratextProjectMetadata.Name,
+                            ExternalProjectName = paratextProjectMetadata.GetExternalProjectName(),
                             ExternalText = t.Attribute("Name").Value,
                             ExternalTemplate = t.Element("Template")?.Value ?? string.Empty
                         }

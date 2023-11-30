@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
 {
     [DataContract]
-    internal class BodyComment
+    public class BodyComment
     {
         [DataMember]
         public List<string> Paragraphs { get; set; }
