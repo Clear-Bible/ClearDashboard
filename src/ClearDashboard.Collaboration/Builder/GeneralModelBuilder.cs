@@ -9,6 +9,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Builder;
@@ -29,12 +30,12 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
     public virtual IEnumerable<GeneralModel<T>> BuildModelSnapshots(BuilderContext builderContext) =>
         throw new NotImplementedException($"{nameof(BuildModelSnapshots)} for model type {typeof(T).ShortDisplayName()}");
 
-    protected static GeneralModel<T> ExtractUsingModelIds(object modelInstance, IEnumerable<String>? ignorePropertyNames = null)
+    protected static GeneralModel<T> ExtractUsingModelIds(object modelInstance, IEnumerable<String>? ignorePropertyNames = null, string? comparableRef = null)
     {
-        return ExtractUsingModelIds<T>(modelInstance, ignorePropertyNames);
+        return ExtractUsingModelIds<T>(modelInstance, ignorePropertyNames, comparableRef);
     }
 
-    protected static GeneralModel<E> ExtractUsingModelIds<E>(object modelInstance, IEnumerable<String>? ignorePropertyNames = null)
+    protected static GeneralModel<E> ExtractUsingModelIds<E>(object modelInstance, IEnumerable<String>? ignorePropertyNames = null, string? comparableRef = null)
         where E : Models.IdentifiableEntity
     {
         var identityPropertyName = string.Empty;
@@ -80,7 +81,7 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
             modelProperties.Add(property.Name, (property.PropertyType, property.GetValue(modelInstance, null)));
         }
 
-        var generalModel = new GeneralModel<E>(identityPropertyName, identityPropertyValue);
+        var generalModel = new GeneralModel<E>(identityPropertyName, identityPropertyValue, comparableRef);
         AddPropertyValuesToGeneralModel(generalModel, modelProperties);
 
         return generalModel;
@@ -233,6 +234,11 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
         }
 
         throw new ArgumentException($"Unable to build GeneralModel<{typeof(T).ShortDisplayName()}> due to missing value for IdentityKey '{IdentityKey}'");
+    }
+
+    public virtual void FinalizeTopLevelEntities(List<GeneralModel<T>> topLevelEntities)
+    {
+        // NOOP
     }
 }
 

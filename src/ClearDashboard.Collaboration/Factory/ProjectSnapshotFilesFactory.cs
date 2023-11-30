@@ -107,6 +107,14 @@ public class ProjectSnapshotFilesFactory
             },
             cancellationToken);
 
+        SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.LabelGroup>(),
+            (string parentPath,
+            GeneralModel<Models.LabelGroup> modelSnapshot) =>
+            {
+                SaveGeneralModelChild<Models.LabelGroup, Models.LabelGroupAssociation>(parentPath, modelSnapshot, null, cancellationToken);
+            },
+            cancellationToken);
+
         SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.User>(), null, cancellationToken);
 
         SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.Lexicon_Lexeme>(), 

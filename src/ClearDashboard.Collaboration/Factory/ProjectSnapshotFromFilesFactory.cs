@@ -5,6 +5,8 @@ using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using ClearDashboard.Collaboration.Exceptions;
+using ClearDashboard.Collaboration.Builder;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Factory;
 
@@ -106,6 +108,16 @@ public class ProjectSnapshotFromFilesFactory
             else if (topLevelEntryName == topLevelEntityFolderNameMappings[typeof(Models.Corpus)])
             {
                 projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.Corpus>(topLevelEntry, null, cancellationToken));
+            }
+            else if (topLevelEntryName == topLevelEntityFolderNameMappings[typeof(Models.LabelGroup)])
+            {
+                projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.LabelGroup>(topLevelEntry,
+                    (IEnumerable<string> entityItems,
+                    GeneralModel<Models.LabelGroup> modelSnapshot) =>
+                    {
+                        AddGeneralModelChild<Models.LabelGroup, Models.LabelGroupAssociation>(entityItems, modelSnapshot, null, cancellationToken);
+                    },
+                    cancellationToken));
             }
             else if (topLevelEntryName == topLevelEntityFolderNameMappings[typeof(Models.Label)])
             {
@@ -226,7 +238,7 @@ public class ProjectSnapshotFromFilesFactory
         string topLevelEntry,
         AddGeneralModelChildDelegate<T>? addGeneralModelChildDelegate,
         CancellationToken cancellationToken)
-        where T : notnull
+        where T : IdentifiableEntity
     {
         var modelSnapshots = new List<GeneralModel<T>>();
 
@@ -246,6 +258,9 @@ public class ProjectSnapshotFromFilesFactory
 
             modelSnapshots.Add(modelSnapshot);
         }
+
+        var modelBuilder = GeneralModelBuilder.GetModelBuilder<T>();
+        modelBuilder.FinalizeTopLevelEntities(modelSnapshots);
 
         return modelSnapshots;
     }

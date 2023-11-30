@@ -6,6 +6,8 @@ using LibGit2Sharp;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using ClearDashboard.Collaboration.Exceptions;
+using ClearDashboard.Collaboration.Builder;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Factory;
 
@@ -126,6 +128,18 @@ public class ProjectSnapshotFromGitFactory
                 else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.Corpus)])
                 {
                     projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.Corpus>(topLevelEntry, repo, commitSha, null, cancellationToken));
+                }
+                else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.LabelGroup)])
+                {
+                    projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.LabelGroup>(topLevelEntry, repo, commitSha,
+                        (IEnumerable<TreeEntry> entityItems,
+                        GeneralModel<Models.LabelGroup> modelSnapshot,
+                        Repository repo,
+                        string commitSha) =>
+                        {
+                            AddGeneralModelChild<Models.LabelGroup, Models.LabelGroupAssociation>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
+                        },
+                        cancellationToken));
                 }
                 else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.Label)])
                 {
@@ -288,7 +302,7 @@ public class ProjectSnapshotFromGitFactory
         string commitSha,
         AddGeneralModelChildDelegate<T>? addGeneralModelChildDelegate,
         CancellationToken cancellationToken)
-        where T : notnull
+        where T : IdentifiableEntity
     {
         var modelSnapshots = new List<GeneralModel<T>>();
 
@@ -314,6 +328,9 @@ public class ProjectSnapshotFromGitFactory
 
             modelSnapshots.Add(modelSnapshot);
         }
+
+        var modelBuilder = GeneralModelBuilder.GetModelBuilder<T>();
+        modelBuilder.FinalizeTopLevelEntities(modelSnapshots);
 
         return modelSnapshots;
     }

@@ -874,18 +874,22 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             return noteBuilder;
         }
 
-        public static LabelBuilder ToLabelBuilder(
-            IEnumerable<Models.Label> labels,
-            IEnumerable<Models.LabelNoteAssociation> labelNoteAssociations)
+        public static LabelBuilder ToLabelBuilder(IEnumerable<Models.Label> labels, IEnumerable<Models.LabelNoteAssociation> labelNoteAssociations)
         {
             return new LabelBuilder
             {
                 GetLabels = (projectDbContext) => labels,
-                GetLabelNoteAssociationsByLabelId = (projectDbContext) =>
+                GetLabelNoteAssociationBuilder = () =>
                 {
-                    return labelNoteAssociations
-                        .GroupBy(e => e.LabelId)
-                        .ToDictionary(g => g.Key, g => g.Select(e => e));
+                    return new LabelNoteAssociationBuilder
+                    {
+                        GetLabelNoteAssociationsByLabelId = (projectDbContext) =>
+                        {
+                            return labelNoteAssociations
+                                .GroupBy(e => e.LabelId)
+                                .ToDictionary(g => g.Key, g => g.Select(e => e));
+                        }
+                    };
                 }
             };
         }

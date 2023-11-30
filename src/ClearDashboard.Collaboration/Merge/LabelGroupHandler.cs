@@ -1,0 +1,139 @@
+﻿using System;
+using System.Data.Common;
+using ClearDashboard.Collaboration.Model;
+using ClearDashboard.DataAccessLayer.Data;
+using Models = ClearDashboard.DataAccessLayer.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using ClearDashboard.Collaboration.Exceptions;
+
+namespace ClearDashboard.Collaboration.Merge;
+
+public class LabelGroupHandler : DefaultMergeHandler<IModelSnapshot<Models.LabelGroup>>
+{
+    public static readonly Func<string, ProjectDbContext, ILogger, Task<Guid>> LabelGroupNameToId = async (labelGroupName, projectDbContext, logger) =>
+    {
+        var labelGroupId = await projectDbContext.LabelGroups
+            .Where(e => e.Name! == labelGroupName)
+            .Select(e => e.Id)
+            .FirstOrDefaultAsync();
+
+        logger.LogDebug($"Converted LabelGroup Name ('{labelGroupName}') to LabelId ('{labelGroupId}')");
+        return labelGroupId;
+    };
+
+    public static readonly Func<string, string, ProjectDbContext, ILogger, Task<Guid>> LabelGroupAssociationToId = async (labelGroupName, labelText, projectDbContext, logger) =>
+    {
+        var labelGroupAssociationId = await projectDbContext.LabelGroupAssociations
+            .Include(e => e.Label)
+            .Include(e => e.LabelGroup)
+            .Where(e => e.Label!.Text == labelText)
+            .Where(e => e.LabelGroup!.Name == labelGroupName)
+            .Select(e => e.Id)
+            .FirstOrDefaultAsync();
+
+        logger.LogDebug($"Converted LabelGroup Name ('{labelGroupName}') / Label Text ('{labelText}') to Id ('{labelGroupAssociationId}')");
+        return labelGroupAssociationId;
+    };
+
+    public LabelGroupHandler(MergeContext mergeContext): base(mergeContext)
+    {
+        mergeContext.MergeBehavior.AddEntityValueResolver(
+            (typeof(Models.LabelGroup), nameof(Models.LabelGroup.Id)),
+            entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
+
+                if (modelSnapshot.PropertyValues.TryGetValue(nameof(Models.LabelGroup.Name), out var labelGroupName))
+                {
+                    var labelGroupId = await LabelGroupNameToId((string)labelGroupName!, projectDbContext, logger);
+                    return (labelGroupId != default) ? labelGroupId : null;
+                }
+                else
+                {
+                    throw new PropertyResolutionException($"LabelGroup snapshot does not have {nameof(Models.LabelGroup.Name)} property value, which is required for Id resolution.");
+                }
+
+            });
+
+        mergeContext.MergeBehavior.AddEntityValueResolver(
+            (typeof(Models.LabelGroupAssociation), nameof(Models.LabelGroupAssociation.Id)),
+            entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
+
+                if (modelSnapshot.PropertyValues.TryGetValue(nameof(Models.LabelGroup.Name), out var labelGroupName) &&
+                    modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Label.Text), out var labelText))
+                {
+                    var labelGroupAssociationId = await projectDbContext.LabelGroupAssociations
+                        .Include(e => e.LabelGroup)
+                        .Include(e => e.Label)
+                        .Where(e => e.LabelGroup!.Name! == (string)labelGroupName!)
+                        .Where(e => e.Label!.Text! == (string)labelText!)
+                        .Select(e => e.Id)
+                        .FirstOrDefaultAsync();
+
+                    logger.LogDebug($"Converted Label Text ('{labelText}') / LabelGroup Name ('{labelGroupName}') to LabelGroupAssociationId ('{labelGroupAssociationId}')");
+                    return (labelGroupAssociationId != Guid.Empty) ? labelGroupAssociationId : null;
+                }
+                else
+                {
+                    throw new PropertyResolutionException($"LabelGroupAssociation snapshot does not have both Label Text and LabelGroup Name property values, which are required for Id resolution.");
+                }
+
+            });
+
+        mergeContext.MergeBehavior.AddEntityValueResolver(
+            (typeof(Models.LabelGroupAssociation), nameof(Models.LabelGroupAssociation.LabelGroupId)),
+            entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
+
+                if (modelSnapshot.PropertyValues.TryGetValue(nameof(Models.LabelGroup.Name), out var labelGroupName))
+                {
+                    var labelGroupId = await LabelGroupNameToId((string)labelGroupName!, projectDbContext, logger);
+                    return (labelGroupId != default) ? labelGroupId : null;
+                }
+                else
+                {
+                    throw new PropertyResolutionException($"LabelGroupAssociation snapshot does not have LabelGroup Name property value, which is required for LabelGroupId resolution.");
+                }
+
+            });
+
+        mergeContext.MergeBehavior.AddEntityValueResolver(
+            (typeof(Models.LabelGroupAssociation), nameof(Models.LabelGroupAssociation.LabelId)),
+            entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
+
+                if (modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Label.Text), out var labelText))
+                {
+                    var labelId = await LabelHandler.LabelTextToId((string)labelText!, projectDbContext, logger);
+                    return (labelId != default) ? labelId : null;
+                }
+                else
+                {
+                    throw new PropertyResolutionException($"LabelGroupAssociation snapshot does not have Label Text property value, which is required for LabelId resolution.");
+                }
+
+            });
+
+        mergeContext.MergeBehavior.AddIdPropertyNameMapping(
+            (typeof(Models.LabelGroup), "Ref"),
+            new[] { nameof(Models.LabelGroup.Id) });
+
+        mergeContext.MergeBehavior.AddPropertyNameMapping(
+            (typeof(Models.LabelGroup), "Ref"),
+            new[] { nameof(Models.LabelGroup.Id) });
+
+        mergeContext.MergeBehavior.AddIdPropertyNameMapping(
+            (typeof(Models.LabelGroupAssociation), "Ref"),
+            new[] { nameof(Models.LabelGroupAssociation.Id) });
+
+        mergeContext.MergeBehavior.AddPropertyNameMapping(
+            (typeof(Models.LabelGroupAssociation), "Ref"),
+            new[] { nameof(Models.LabelGroupAssociation.Id) });
+
+        mergeContext.MergeBehavior.AddPropertyNameMapping(
+            (typeof(Models.LabelGroupAssociation), nameof(Models.LabelGroup.Name)),
+            new[] { nameof(Models.LabelGroupAssociation.LabelGroupId) });
+
+        mergeContext.MergeBehavior.AddPropertyNameMapping(
+            (typeof(Models.LabelGroupAssociation), nameof(Models.Label.Text)),
+            new[] { nameof(Models.LabelGroupAssociation.LabelId) });
+    }
+
+}

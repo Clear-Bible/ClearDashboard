@@ -91,7 +91,12 @@ public class GetProjectSnapshotQueryHandler : ProjectDbContextQueryHandler<
         });
 
         projectSnapshot.AddGeneralModelList(notes);
+
         projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.Label>().BuildModelSnapshots(builderContext));
+        cancellationToken.ThrowIfCancellationRequested();
+
+        projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.LabelGroup>().BuildModelSnapshots(builderContext));
+        cancellationToken.ThrowIfCancellationRequested();
 
         return projectSnapshot;
     }

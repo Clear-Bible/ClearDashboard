@@ -31,13 +31,13 @@ namespace ClearDashboard.Collaboration.Model;
 public class GeneralModel<T> : GeneralModel, IModelSnapshot<T>
     where T : notnull
 {
-    public GeneralModel(string identityKey, string identityValue) :
-        base(identityKey, identityValue)
+    public GeneralModel(string identityKey, string identityValue, string? comparableId = null) :
+        base(identityKey, identityValue, comparableId)
     {
     }
 
-    public GeneralModel(string identityKey, ValueType identityValue) :
-        base(identityKey, identityValue)
+    public GeneralModel(string identityKey, ValueType identityValue, string? comparableId = null) :
+        base(identityKey, identityValue, comparableId)
     {
     }
 
@@ -120,11 +120,11 @@ public class GeneralModel<T> : GeneralModel, IModelSnapshot<T>
 
 public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IModelSnapshot>
 {
-    public GeneralModel(string identityKey, string identityValue) : this(identityKey, (object)identityValue)
+    public GeneralModel(string identityKey, string identityValue, string? comparableId) : this(identityKey, (object)identityValue, comparableId)
     {
     }
 
-    public GeneralModel(string identityKey, ValueType identityValue) : this(identityKey, (object)identityValue)
+    public GeneralModel(string identityKey, ValueType identityValue, string? comparableId) : this(identityKey, (object)identityValue, comparableId)
     {
     }
 
@@ -170,19 +170,20 @@ public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IMode
         }
     }
 
-    private GeneralModel(string identityKey, object identityValue)
+    private GeneralModel(string identityKey, object identityValue, string? comparableId)
     {
         _properties = new();
         _children = new();
+        _comparableId = comparableId;
 
         IdentityKey = identityKey;
         AddProperty(identityKey, identityValue);
     }
-
     public string IdentityKey { get; }
     protected Dictionary<string, object?> _properties { get; set; }
     protected Dictionary<string, string>? _addedPropertyTypeNames { get; set; }
     protected Dictionary<string, IEnumerable<IModelDistinguishable>> _children { get; set; } // Not part of equality check, not serialized/deserialized in same container
+    protected string? _comparableId { get; }
 
     // IModelSnapshot:
     public abstract Type EntityType { get; }
@@ -198,11 +199,23 @@ public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IMode
             .ToDictionary(pt => pt.p, pt => pt.t)
             .AsReadOnly();
 
+    public IDictionary<string, (Type type, object? value)> ModelPropertiesTypes =>
+        _properties
+            .ToDictionary(
+                p => p.Key,
+                p => 
+                {
+                    if (TryGetPropertyType(p.Key, out var type))
+                        throw new Exception($"Invalid state - no type information for property {p.Key} of model type {EntityType.ShortDisplayName()}");
+                    return (type!, p.Value);
+                });
+
     public IReadOnlyDictionary<string, IEnumerable<IModelDistinguishable>> Children => _children.AsReadOnly();
     public IReadOnlyDictionary<string, string>? AddedPropertyTypeNames => _addedPropertyTypeNames?.AsReadOnly();
 
     // IModelIdentifiable
     public object GetId() => _properties[IdentityKey] ?? throw new Exception($"Unable to determine identity!");
+    public string GetComparableId() => _comparableId ?? _properties[IdentityKey]?.ToString() ?? throw new Exception($"Unable to determine identity!");
 
     // Limit what property types are accepted:
     public void Add(string key, string? value, Type? nullValueValueType = null) { AddProperty(key, value, nullValueValueType); }

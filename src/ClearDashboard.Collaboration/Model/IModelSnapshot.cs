@@ -16,6 +16,13 @@ public interface IModelSnapshot : IModelDistinguishable<IModelSnapshot> // IMode
     object GetId();
 
     /// <summary>
+    /// Id of the entity represented by this IModelSnapshot to be used for comparison
+    /// between between systems
+    /// </summary>
+    /// <returns></returns>
+    string GetComparableId();
+
+    /// <summary>
     /// Type of Entity Framework entity this IModelSnapshot represents
     /// </summary>
     Type EntityType { get; }

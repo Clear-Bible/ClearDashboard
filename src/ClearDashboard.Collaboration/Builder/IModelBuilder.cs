@@ -8,6 +8,7 @@ namespace ClearDashboard.Collaboration.Builder;
 public interface IModelBuilder<T> : IModelBuilder where T: Models.IdentifiableEntity
 {
     IEnumerable<GeneralModel<T>> BuildModelSnapshots(BuilderContext builderContext);
+    void FinalizeTopLevelEntities(List<GeneralModel<T>> topLevelEntities);
 }
 
 public interface IModelBuilder
