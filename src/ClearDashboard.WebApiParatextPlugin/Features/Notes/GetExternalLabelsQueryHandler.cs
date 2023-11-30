@@ -52,7 +52,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                 throw new Exception(message);
             }
 
-            return Task.FromResult(new RequestResult<IReadOnlyList<ExternalLabel>>(Extensions.GetExternalLabels(paratextProjectMetadata, _logger)));
+            return Task.FromResult(new RequestResult<IReadOnlyList<ExternalLabel>>(paratextProjectMetadata.GetExternalLabelsFromExternalSystem(_logger)));
         }
     }
 }

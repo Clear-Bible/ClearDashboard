@@ -15,7 +15,7 @@ public class ExternalNote
     public string VerseRefString { get; set; }
     public string Message { get; set; }
     public string Body { get; set; }
-    public IEnumerable<int> ExternalLabelIds { get; set; }
-    public List<ExternalLabel> ExternalLabels { get; set; }
+    public HashSet<int> ExternalLabelIds { get; set; }
+    public HashSet<ExternalLabel> ExternalLabels { get; set; }
 }
 

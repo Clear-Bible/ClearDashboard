@@ -468,7 +468,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
             if (externalLabels == null)
             {
-                var message = $"Retrieval of external labels didn't exception but returned null for {externalProjectId}";
+                var message = $"External project {externalProjectId} doesn't have external labels available";
                 logger?.LogCritical(message);
                 throw new Exception(message);
             }

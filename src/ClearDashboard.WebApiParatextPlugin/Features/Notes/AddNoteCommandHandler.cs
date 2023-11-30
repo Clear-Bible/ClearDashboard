@@ -120,7 +120,8 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
             {   // do this after using in case lock needs to be released first before file is written to and released.
                 return Task.FromResult(new RequestResult<ExternalNote>(projectNoteAdded
                     .GetExternalNote(project, _logger)
-                    .SetExternalLabelIdsOnExternalNoteInExternalProject(paratextProjectMetadata, _logger, request.Data.LabelTexts)));
+                    .SetExternalLabelsFromLabelTexts(paratextProjectMetadata, _logger, request.Data.LabelTexts)
+                    .SetExternalLabelsOnExternalSystem(paratextProjectMetadata, _host.UserInfo, _logger)));
             }
             else
                 throw new Exception("IProjectNote returned from paratext is null and no ParatextException thrown");

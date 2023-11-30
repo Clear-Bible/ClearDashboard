@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer.Features.Notes
 {
-    public class GetExternalLabelsQueryHandler : ParatextRequestHandler<GetExternalLabelsQuery, RequestResult<IReadOnlyList<ExternalLabel>>, IReadOnlyList<ExternalLabel>>
+    public class GetExternalLabelsQueryHandler : ParatextRequestHandler<GetExternalLabelsQuery, RequestResult<IReadOnlyList<ExternalLabel>?>, IReadOnlyList<ExternalLabel>?>
     {
 
         public GetExternalLabelsQueryHandler([NotNull] ILogger<GetExternalLabelsQueryHandler> logger) : base(logger)
@@ -17,7 +17,7 @@ namespace ClearDashboard.DataAccessLayer.Features.Notes
             //no-op
         }
 
-        public override async Task<RequestResult<IReadOnlyList<ExternalLabel>>> Handle(GetExternalLabelsQuery request, CancellationToken cancellationToken)
+        public override async Task<RequestResult<IReadOnlyList<ExternalLabel>?>> Handle(GetExternalLabelsQuery request, CancellationToken cancellationToken)
         {
             return await ExecuteRequest("getexternallabelsquery", request, cancellationToken);
         }
