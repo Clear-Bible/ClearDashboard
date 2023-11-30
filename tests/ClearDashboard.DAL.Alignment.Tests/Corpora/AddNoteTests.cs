@@ -143,6 +143,42 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                 {
                     throw new MediatorErrorEngineException(result.Message);
                 }
+                //verify in paratext that a note shows up for the 15th, 16th, and 17th words 'ni a nkoo' of Gen1:2.
+                addNoteCommandParam.SetProperties(
+                    "2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f",
+                    tokensTextRow.Tokens,
+                    tokensTextRow.Tokens.Where((t, i) => i == 17),
+                    new EngineStringDetokenizer(new WhitespaceDetokenizer()),
+                    "nkoo",
+                    new List<Label>()
+                    {
+                        new Label()
+                        {
+                            Text = "Great Job!",
+                            TemplateText = ""
+                        },
+                        new Label()
+                        {
+                            Text = "Not in paratext",
+                            TemplateText = ""
+                        }
+                    },
+                    tokensTextRow.Tokens.First().TokenId.BookNumber,
+                    tokensTextRow.Tokens.First().TokenId.ChapterNumber,
+                    tokensTextRow.Tokens.First().TokenId.VerseNumber
+                    );
+
+                result = await Mediator!.Send(new AddNoteCommand(addNoteCommandParam));
+                if (result.Success)
+                {
+                    var data = result.Data;
+                    Assert.NotNull(data);
+                }
+                else
+                {
+                    throw new MediatorErrorEngineException(result.Message);
+                }
+
             }
             finally
             {

@@ -131,12 +131,10 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
             if (externalLabelsToAdd.Count() == 0)
                 return externalNote; //no labels to set
 
-            externalNote.ExternalLabelIds
-                .AddRange(externalLabelsToAdd
+            externalNote.ExternalLabelIds = new HashSet<int>(externalLabelsToAdd
                     .Select(el => el.ExternalLabelId));
 
-            externalNote.ExternalLabels
-                .AddRange(externalLabelsToAdd);
+            externalNote.ExternalLabels = new HashSet<ExternalLabel>(externalLabelsToAdd);
 
             return externalNote;
         }
@@ -171,6 +169,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
             IUserInfo userInfo,
             ILogger logger)
         {
+            if (externalNote.ExternalLabels == null || externalNote.ExternalLabels.Count() == 0)
+                return externalNote;
+
             var notesFileName = $"Notes_{userInfo.Name}.xml";
             var notesFilePath = Path.Combine(paratextProjectMetadata.ProjectPath, notesFileName);
             if (!File.Exists(notesFilePath))
@@ -180,7 +181,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                 throw new Exception(message);
             }
 
-            XElement root = XElement.Load(notesFilePath);
+            XElement root = XElement.Load(notesFilePath); //element CommentList
             IEnumerable<XElement> comments =
                 from el in root.Elements("Comment")
                 where (string)el.Attribute("Thread") == externalNote.GetExternalSystemNoteId()
@@ -199,6 +200,12 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                 throw new Exception(message);
             }
 
+            comments
+                .First()
+                .Elements("TagAdded")
+                .Select(t => t.Name = "TagRemoved")
+                .ToList();
+                
             comments
                 .First()
                 .Add(externalNote.ExternalLabels
