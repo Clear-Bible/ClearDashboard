@@ -9,6 +9,8 @@ public class ExternalLabel
     public string ExternalProjectName { get; set; }
     public string ExternalText { get; set; }
 
+    public string ExternalTemplate { get; set; }
+
     public override bool Equals(object obj)
     {
         return obj is ExternalLabel label &&

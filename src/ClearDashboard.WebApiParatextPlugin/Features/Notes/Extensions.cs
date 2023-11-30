@@ -221,39 +221,21 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
             if (!File.Exists(labelsFilePath))
                 return null;
 
-            return LoadIntoFileModel<Tags>(labelsFilePath, logger).TagList
-                .Select(t =>
-                    new ExternalLabel()
-                    {
-                        ExternalLabelId = int.Parse(t.Id),
-                        ExternalProjectId = paratextProjectMetadata.Id,
-                        ExternalProjectName = paratextProjectMetadata.Name,
-                        ExternalText = t.Name
-                    }
+            XElement root = XElement.Load(labelsFilePath);
+
+            return
+                (from t in root.Elements("Tag")
+                        select new ExternalLabel()
+                        {
+                            ExternalLabelId = int.Parse(t.Attribute("Id").Value),
+                            ExternalProjectId = paratextProjectMetadata.Id,
+                            ExternalProjectName = paratextProjectMetadata.Name,
+                            ExternalText = t.Attribute("Name").Value,
+                            ExternalTemplate = t.Element("Template")?.Value ?? string.Empty
+                        }
                 )
                 .ToList();
         }
-
-        public static T LoadIntoFileModel<T>(string filePath, ILogger logger) where T : notnull
-        {
-            XmlDocument doc = new();
-            doc.Load(filePath);
-
-            using (XmlNodeReader reader = new(doc))
-            {
-                XmlSerializer serializer = new(typeof(T));
-                try
-                {
-                    return (T)serializer.Deserialize(reader);
-                }
-                catch (Exception e)
-                {
-                    logger.LogError($"Error in deserialization of '{typeof(T).Name}' at path '{filePath}': " + e.Message);
-                    throw e;
-                }
-            }
-        }
-
         internal static Body GetProjectNoteBody(this IProjectNote projectNote, string verseUsfmText)
         {
             var body = new Body();
