@@ -146,7 +146,7 @@ public class LexiconHandler : DefaultMergeHandler<IModelSnapshot<Models.Lexicon_
                     if (lexemeId == default)
                         return null;
 
-                    var meaningId = await ValuesToMeaningId(text, language, lexemeId, projectDbContext, logger);
+                    var meaningId = await ValuesToMeaningId(text, language, lexemeId, projectDbContext, cache, logger);
                     return (meaningId != default) ? meaningId : null;
                 }
                 else
@@ -164,7 +164,7 @@ public class LexiconHandler : DefaultMergeHandler<IModelSnapshot<Models.Lexicon_
                     modelSnapshot.TryGetStringPropertyValue(LexiconBuilder.BuildPropertyRefName(LexiconBuilder.LEXEME_REF_PREFIX), out var lexemeRef))
                 {
                     var (lexemeLemma, lexemeLanguage, lexemeType) = LexiconBuilder.DecodeLexemeRef(lexemeRef);
-                    var lexemeId = await ValuesToLexemeId(lexemeLemma, lexemeLanguage, lexemeType, projectDbContext, logger);
+                    var lexemeId = await ValuesToLexemeId(lexemeLemma, lexemeLanguage, lexemeType, projectDbContext, cache, logger);
 
                     if (lexemeId == default)
                         return null;
@@ -188,13 +188,13 @@ public class LexiconHandler : DefaultMergeHandler<IModelSnapshot<Models.Lexicon_
                     modelSnapshot.TryGetStringPropertyValue(LexiconBuilder.BuildPropertyRefName(LexiconBuilder.LEXEME_REF_PREFIX), out var lexemeRef))
                 {
                     var (lexemeLemma, lexemeLanguage, lexemeType) = LexiconBuilder.DecodeLexemeRef(lexemeRef);
-                    var lexemeId = await ValuesToLexemeId(lexemeLemma, lexemeLanguage, lexemeType, projectDbContext, logger);
+                    var lexemeId = await ValuesToLexemeId(lexemeLemma, lexemeLanguage, lexemeType, projectDbContext, cache, logger);
 
                     if (lexemeId == default)
                         return null;
 
                     var (meaningText, meaningLanguage) = LexiconBuilder.DecodeMeaningRef(meaningRef);
-                    var meaningId = await ValuesToMeaningId(meaningText, meaningLanguage, lexemeId, projectDbContext, logger);
+                    var meaningId = await ValuesToMeaningId(meaningText, meaningLanguage, lexemeId, projectDbContext, cache, logger);
 
                     if (meaningId == default)
                         return null;

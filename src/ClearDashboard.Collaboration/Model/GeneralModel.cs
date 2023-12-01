@@ -239,6 +239,7 @@ public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IMode
         valueAsString = null;
         return false;
     }
+
     public bool TryGetStringPropertyValue(string key, out string valueAsString) 
     {
         if (_properties.TryGetValue(key, out var value) &&
@@ -251,6 +252,7 @@ public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IMode
         valueAsString = string.Empty;
         return false;
     }
+
     public bool TryGetGuidPropertyValue(string key, out Guid valueAsGuid)
     {
         if (_properties.TryGetValue(key, out var value) &&
@@ -263,7 +265,6 @@ public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IMode
         valueAsGuid = Guid.Empty;
         return false;
     }
-
 
     public object? this[string key] => _properties[key];
 

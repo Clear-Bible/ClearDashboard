@@ -14,7 +14,8 @@ using ClearDashboard.Collaboration.Factory;
 using SIL.Scripture;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
-using System.IO;
+using ClearDashboard.DAL.Alignment.Features.Notes;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 {
@@ -36,11 +37,42 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         [Trait("Category", "Collaboration")]
         public async Task Test00()
         {
-            //var backupsPath =
-            //    FilePathTemplates.CollabBaseDirectory + Path.DirectorySeparatorChar + "Backups";
+            //var c = new UpdateLabelsWithExternalLabelsCommand(new UpdateLabelsWithExternalLabelsCommandParam()
+            //{
+            //    ExternalLabels = new List<ExternalLabel>
+            //    {
+            //        new ExternalLabel { ExternalProjectName = "proj1", ExternalText = "text1" },
+            //        new ExternalLabel { ExternalProjectName = "proj2", ExternalText = "text2" },
+            //        new ExternalLabel { ExternalProjectName = "proj3", ExternalText = "text3" },
+            //    }
+            //});
+            //var r = await _fixture.Mediator.Send(c);
 
-            //var factory = new ProjectSnapshotFromFilesFactory(Path.Combine(backupsPath, "merge_test_final_snapshot"), _fixture.Logger);
-            //var snapshotFromFile = factory.LoadSnapshot();
+            //var c2 = new UpdateLabelsWithExternalLabelsCommand(new UpdateLabelsWithExternalLabelsCommandParam()
+            //{
+            //    ExternalLabels = new List<ExternalLabel>
+            //    {
+            //        new ExternalLabel { ExternalProjectName = "proj1", ExternalText = "text4" },
+            //        new ExternalLabel { ExternalProjectName = "proj2", ExternalText = "text5" },
+            //        new ExternalLabel { ExternalProjectName = "proj7", ExternalText = "text7" },
+            //    }
+            //});
+            //var r2 = await _fixture.Mediator.Send(c2);
+
+            //return;
+
+            //try
+            //{
+            //    var backupsPath =
+            //        FilePathTemplates.CollabBaseDirectory + Path.DirectorySeparatorChar + "Backups";
+
+            //    var factory = new ProjectSnapshotFromFilesFactory(Path.Combine(backupsPath, "merge_test_final_snapshot"), _fixture.Logger);
+            //    var snapshotFromFile = factory.LoadSnapshot();
+            //}
+            //catch (Exception ex)
+            //{
+
+            //}
 
             //return;
 

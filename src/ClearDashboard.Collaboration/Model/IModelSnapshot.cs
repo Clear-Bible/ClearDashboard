@@ -57,6 +57,7 @@ public interface IModelSnapshot : IModelDistinguishable<IModelSnapshot> // IMode
     bool TryGetPropertyValue(string key, out object? value);
     bool TryGetNullableStringPropertyValue(string key, out string? valueAsString);
     bool TryGetStringPropertyValue(string key, out string valueAsString);
+    bool TryGetGuidPropertyValue(string key, out Guid valueAsGuid);
 }
 
 //public interface IModelIdentifiable : IModelDistinguishable<IModelIdentifiable>
