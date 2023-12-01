@@ -203,9 +203,9 @@ public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IMode
         _properties
             .ToDictionary(
                 p => p.Key,
-                p => 
+                p =>
                 {
-                    if (TryGetPropertyType(p.Key, out var type))
+                    if (!TryGetPropertyType(p.Key, out var type))
                         throw new Exception($"Invalid state - no type information for property {p.Key} of model type {EntityType.ShortDisplayName()}");
                     return (type!, p.Value);
                 });
@@ -226,10 +226,51 @@ public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IMode
     public void Add(string key, IDictionary<string, object> value) { AddProperty(key, value); }
 
     public bool TryGetPropertyValue(string key, out object? value) => _properties.TryGetValue(key, out value);
+    public bool TryGetNullableStringPropertyValue(string key, out string? valueAsString)
+    {
+        if (TryGetPropertyValue(key, out var value) &&
+            TryGetPropertyType(key, out var type) &&
+            type == typeof(string))
+        {
+            valueAsString = (string?)value;
+            return true;
+        }
+
+        valueAsString = null;
+        return false;
+    }
+    public bool TryGetStringPropertyValue(string key, out string valueAsString) 
+    {
+        if (_properties.TryGetValue(key, out var value) &&
+            value is string str)
+        {
+            valueAsString = str;
+            return true;
+        }
+
+        valueAsString = string.Empty;
+        return false;
+    }
+    public bool TryGetGuidPropertyValue(string key, out Guid valueAsGuid)
+    {
+        if (_properties.TryGetValue(key, out var value) &&
+            value is Guid guid)
+        {
+            valueAsGuid = guid;
+            return true;
+        }
+
+        valueAsGuid = Guid.Empty;
+        return false;
+    }
+
+
     public object? this[string key] => _properties[key];
 
     public void AddChild<C>(string key, IEnumerable<IModelDistinguishable<C>> value) where C : notnull => _children.Add(key, value);
     public bool TryGetChildValue(string key, out IEnumerable<IModelDistinguishable>? value) => _children.TryGetValue(key, out value);
+    internal void ReplaceChildrenForKey<C>(string key, IEnumerable<IModelDistinguishable<C>> childrenForKey) where C : notnull => _children[key] = childrenForKey;
+    internal void CloneAllChildren(GeneralModel childrenSource) => _children = childrenSource._children;
 
     protected abstract void AddProperty(string key, object? value, Type? nullValueValueType = null);
     protected abstract bool TryGetPropertyType(string propertyName, out Type? type);

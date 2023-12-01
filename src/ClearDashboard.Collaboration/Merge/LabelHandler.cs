@@ -6,6 +6,7 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ClearDashboard.Collaboration.Exceptions;
+using ClearDashboard.Collaboration.Builder;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -57,7 +58,8 @@ public class LabelHandler : DefaultMergeHandler<IModelSnapshot<Models.Label>>
             (typeof(Models.LabelNoteAssociation), nameof(Models.LabelNoteAssociation.Id)),
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
-                if (modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Label.Text), out var labelText) &&
+                var labelRefName = LabelBuilder.BuildPropertyRefName(LabelBuilder.LABEL_REF_PREFIX);
+                if (modelSnapshot.PropertyValues.TryGetValue(labelRefName, out var labelText) &&
                     modelSnapshot.PropertyValues.TryGetValue(nameof(Models.LabelNoteAssociation.NoteId), out var noteId))
                 {
                     var labelNoteAssociationId = await LabelNoteAssociationToId((string)labelText!, (Guid)noteId!, projectDbContext, logger);
@@ -74,7 +76,8 @@ public class LabelHandler : DefaultMergeHandler<IModelSnapshot<Models.Label>>
             (typeof(Models.LabelNoteAssociation), nameof(Models.LabelNoteAssociation.LabelId)),
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
-                if (modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Label.Text), out var labelText))
+                var labelRefName = LabelBuilder.BuildPropertyRefName(LabelBuilder.LABEL_REF_PREFIX);
+                if (modelSnapshot.PropertyValues.TryGetValue(labelRefName, out var labelText))
                 {
                     var labelId = await LabelTextToId((string)labelText!, projectDbContext, logger);
                     return (labelId != default) ? labelId : null;
@@ -87,23 +90,23 @@ public class LabelHandler : DefaultMergeHandler<IModelSnapshot<Models.Label>>
             });
 
         mergeContext.MergeBehavior.AddIdPropertyNameMapping(
-            (typeof(Models.Label), "Ref"),
+            (typeof(Models.Label), LabelBuilder.BuildPropertyRefName()),
             new[] { nameof(Models.Label.Id) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.Label), "Ref"),
+            (typeof(Models.Label), LabelBuilder.BuildPropertyRefName()),
             new[] { nameof(Models.Label.Id) });
 
         mergeContext.MergeBehavior.AddIdPropertyNameMapping(
-            (typeof(Models.LabelNoteAssociation), "Ref"),
+            (typeof(Models.LabelNoteAssociation), LabelBuilder.BuildPropertyRefName()),
             new[] { nameof(Models.LabelNoteAssociation.Id) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.LabelNoteAssociation), "Ref"),
+            (typeof(Models.LabelNoteAssociation), LabelBuilder.BuildPropertyRefName()),
             new[] { nameof(Models.LabelNoteAssociation.Id) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.LabelNoteAssociation), nameof(Models.Label.Text)),
+            (typeof(Models.LabelNoteAssociation), LabelBuilder.BuildPropertyRefName(LabelBuilder.LABEL_REF_PREFIX)),
             new[] { nameof(Models.LabelNoteAssociation.LabelId) });
     }
 

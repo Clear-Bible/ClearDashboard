@@ -6,6 +6,7 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ClearDashboard.Collaboration.Exceptions;
+using ClearDashboard.Collaboration.Builder;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -58,8 +59,11 @@ public class LabelGroupHandler : DefaultMergeHandler<IModelSnapshot<Models.Label
             (typeof(Models.LabelGroupAssociation), nameof(Models.LabelGroupAssociation.Id)),
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
-                if (modelSnapshot.PropertyValues.TryGetValue(nameof(Models.LabelGroup.Name), out var labelGroupName) &&
-                    modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Label.Text), out var labelText))
+                var labelGroupRefName = LabelGroupBuilder.BuildPropertyRefName(LabelGroupBuilder.LABELGROUP_REF_PREFIX);
+                var labelRefName = LabelBuilder.BuildPropertyRefName(LabelBuilder.LABEL_REF_PREFIX);
+
+                if (modelSnapshot.PropertyValues.TryGetValue(labelGroupRefName, out var labelGroupName) &&
+                    modelSnapshot.PropertyValues.TryGetValue(labelRefName, out var labelText))
                 {
                     var labelGroupAssociationId = await projectDbContext.LabelGroupAssociations
                         .Include(e => e.LabelGroup)
@@ -83,7 +87,8 @@ public class LabelGroupHandler : DefaultMergeHandler<IModelSnapshot<Models.Label
             (typeof(Models.LabelGroupAssociation), nameof(Models.LabelGroupAssociation.LabelGroupId)),
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
-                if (modelSnapshot.PropertyValues.TryGetValue(nameof(Models.LabelGroup.Name), out var labelGroupName))
+                var labelGroupRefName = LabelGroupBuilder.BuildPropertyRefName(LabelGroupBuilder.LABELGROUP_REF_PREFIX);
+                if (modelSnapshot.PropertyValues.TryGetValue(labelGroupRefName, out var labelGroupName))
                 {
                     var labelGroupId = await LabelGroupNameToId((string)labelGroupName!, projectDbContext, logger);
                     return (labelGroupId != default) ? labelGroupId : null;
@@ -99,7 +104,8 @@ public class LabelGroupHandler : DefaultMergeHandler<IModelSnapshot<Models.Label
             (typeof(Models.LabelGroupAssociation), nameof(Models.LabelGroupAssociation.LabelId)),
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
-                if (modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Label.Text), out var labelText))
+                var labelRefName = LabelBuilder.BuildPropertyRefName(LabelBuilder.LABEL_REF_PREFIX);
+                if (modelSnapshot.PropertyValues.TryGetValue(labelRefName, out var labelText))
                 {
                     var labelId = await LabelHandler.LabelTextToId((string)labelText!, projectDbContext, logger);
                     return (labelId != default) ? labelId : null;
@@ -112,27 +118,27 @@ public class LabelGroupHandler : DefaultMergeHandler<IModelSnapshot<Models.Label
             });
 
         mergeContext.MergeBehavior.AddIdPropertyNameMapping(
-            (typeof(Models.LabelGroup), "Ref"),
+            (typeof(Models.LabelGroup), LabelGroupBuilder.BuildPropertyRefName()),
             new[] { nameof(Models.LabelGroup.Id) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.LabelGroup), "Ref"),
+            (typeof(Models.LabelGroup), LabelGroupBuilder.BuildPropertyRefName()),
             new[] { nameof(Models.LabelGroup.Id) });
 
         mergeContext.MergeBehavior.AddIdPropertyNameMapping(
-            (typeof(Models.LabelGroupAssociation), "Ref"),
+            (typeof(Models.LabelGroupAssociation), LabelGroupBuilder.BuildPropertyRefName()),
             new[] { nameof(Models.LabelGroupAssociation.Id) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.LabelGroupAssociation), "Ref"),
+            (typeof(Models.LabelGroupAssociation), LabelGroupBuilder.BuildPropertyRefName()),
             new[] { nameof(Models.LabelGroupAssociation.Id) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.LabelGroupAssociation), nameof(Models.LabelGroup.Name)),
+            (typeof(Models.LabelGroupAssociation), LabelGroupBuilder.BuildPropertyRefName(LabelGroupBuilder.LABELGROUP_REF_PREFIX)),
             new[] { nameof(Models.LabelGroupAssociation.LabelGroupId) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.LabelGroupAssociation), nameof(Models.Label.Text)),
+            (typeof(Models.LabelGroupAssociation), LabelBuilder.BuildPropertyRefName(LabelBuilder.LABEL_REF_PREFIX)),
             new[] { nameof(Models.LabelGroupAssociation.LabelId) });
     }
 

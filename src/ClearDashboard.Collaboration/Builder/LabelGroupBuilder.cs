@@ -1,10 +1,5 @@
-using System.Data.Entity.Infrastructure;
-using System.Text.Json;
-using ClearDashboard.Collaboration.Exceptions;
 using ClearDashboard.Collaboration.Model;
-using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
@@ -13,6 +8,9 @@ namespace ClearDashboard.Collaboration.Builder;
 public class LabelGroupBuilder : GeneralModelBuilder<Models.LabelGroup>
 {
     public const string LABEL_GROUP_ASSOCIATIONS_CHILD_NAME = "LabelGroupAssociations";
+
+    public const string LABELGROUP_REF_PREFIX = "LabelGroup";
+    public const string LABELGROUPASSOCIATION_REF_PREFIX = "LabelGroupLabel";
 
     public override string IdentityKey => BuildPropertyRefName();
 
@@ -27,90 +25,64 @@ public class LabelGroupBuilder : GeneralModelBuilder<Models.LabelGroup>
         return projectDbContext.LabelGroups.OrderBy(l => l.Name).ToList();
     };
 
+    public Func<ProjectDbContext, Dictionary<Guid, IEnumerable<Models.LabelGroupAssociation>>> GetLabelGroupAssociationsByLabelGroupId = (projectDbContext) =>
+    {
+        return projectDbContext.LabelGroupAssociations
+            .Include(e => e.Label)
+            .Include(e => e.LabelGroup)
+            .ToList()
+            .GroupBy(e => e.LabelGroupId)
+            .ToDictionary(g => g.Key, g => g.Select(e => e));
+    };
+
     public override IEnumerable<GeneralModel<Models.LabelGroup>> BuildModelSnapshots(BuilderContext builderContext)
     {
         var modelSnapshots = new GeneralListModel<GeneralModel<Models.LabelGroup>>();
 
         var labelGroupDbModels = GetLabelGroups(builderContext.ProjectDbContext);
 
-        var labelGroupAssociationBuilder = (LabelGroupAssociationBuilder)GetModelBuilder<Models.LabelGroupAssociation>();
-        var lgaDbModelsByLabelId = labelGroupAssociationBuilder.GetLabelGroupAssociationsByLabelGroupId(builderContext.ProjectDbContext);
+        var lgaDbModelsByLabelId = GetLabelGroupAssociationsByLabelGroupId(builderContext.ProjectDbContext);
 
         foreach (var labelGroupDbModel in labelGroupDbModels)
         {
-            var modelSnapshot = BuildLabelGroupModelSnapshot(labelGroupDbModel, builderContext);
-            if (lgaDbModelsByLabelId.TryGetValue(labelGroupDbModel.Id, out var lgs))
+            var labelGroupRef = CalculateLabelGroupRef(labelGroupDbModel.Name);
+            var labelGroup = BuildRefModelSnapshot(
+                    labelGroupDbModel,
+                    labelGroupRef,
+                    null,
+                    builderContext);
+
+            if (lgaDbModelsByLabelId.TryGetValue(labelGroupDbModel.Id, out var lgas))
             {
                 var labelGroupAssociationModelSnapshots = new GeneralListModel<GeneralModel<Models.LabelGroupAssociation>>();
 
-                foreach (var lg in lgs)
+                foreach (var lga in lgas)
                 {
-                    var lgModelSnapshot = LabelGroupAssociationBuilder.BuildLabelGroupAssociationModelSnapshot(
-                        lg,
-                        labelGroupDbModel.Name,
-                        lg.Label!.Text!,
+                    var labelRef = LabelBuilder.CalculateLabelRef(lga.Label!.Text!);
+                    var lgaModelSnapshot = BuildRefModelSnapshot(
+                        lga,
+                        CalculateLabelGroupAssociationRef(lga.LabelGroup!.Name, lga.Label!.Text!),
+                        new (string, string?, bool)[] { (LABELGROUP_REF_PREFIX, labelGroupDbModel.Name, true), (LabelBuilder.LABEL_REF_PREFIX, lga.Label!.Text!, true) },
                         builderContext);
 
-                    labelGroupAssociationModelSnapshots.Add(lgModelSnapshot);
+                    labelGroupAssociationModelSnapshots.Add(lgaModelSnapshot);
                 }
 
-                modelSnapshot.AddChild(LABEL_GROUP_ASSOCIATIONS_CHILD_NAME, labelGroupAssociationModelSnapshots.AsModelSnapshotChildrenList());
+                labelGroup.AddChild(LABEL_GROUP_ASSOCIATIONS_CHILD_NAME, labelGroupAssociationModelSnapshots.AsModelSnapshotChildrenList());
             }
-            modelSnapshots.Add(modelSnapshot);
+            modelSnapshots.Add(labelGroup);
         }
 
         return modelSnapshots;
     }
 
-    private static GeneralModel<Models.LabelGroup> BuildLabelGroupModelSnapshot(Models.LabelGroup dbModel, BuilderContext builderContext)
-    {
-        var modelSnapshotProperties = ExtractUsingModelRefs(
-            dbModel, 
-            builderContext, 
-            new List<string>() { "Id" });
-
-        var snapshot = new GeneralModel<Models.LabelGroup>(BuildPropertyRefName(), CalculateLabelGroupRef(dbModel.Name));
-        AddPropertyValuesToGeneralModel(snapshot, modelSnapshotProperties);
-
-        return snapshot;
-    }
-
     private static string CalculateLabelGroupRef(string labelGroupName)
     {
-        return $"LabelGroup_{labelGroupName.ToMD5String()}";
+        return EncodePartsToRef(LABELGROUP_REF_PREFIX, labelGroupName);
     }
 
-    public override GeneralModel<Models.LabelGroup> BuildGeneralModel(Dictionary<string, (Type type, object? value)> modelPropertiesTypes)
+    private static string CalculateLabelGroupAssociationRef(string labelGroupName, string labelText)
     {
-        if (!modelPropertiesTypes.ContainsKey(IdentityKey))
-        {
-            if (modelPropertiesTypes.TryGetValue(nameof(Models.LabelGroup.Name), out var labelGroupName))
-            {
-                modelPropertiesTypes.Remove(nameof(Models.Label.Id));
-                modelPropertiesTypes.Add(BuildPropertyRefName(), (typeof(string), CalculateLabelGroupRef((string)labelGroupName.value!)));
-            }
-            else
-            {
-                throw new PropertyResolutionException($"LabelGroup snapshot does not have Name property value, which is required for Ref calculation.");
-            }
-        }
-
-        return base.BuildGeneralModel(modelPropertiesTypes);
-    }
-
-    public override void FinalizeTopLevelEntities(List<GeneralModel<Models.LabelGroup>> topLevelEntities)
-    {
-        for (int i = 0; i < topLevelEntities.Count; i++)
-        {
-            var changed = false;
-            var topLevelEntity = topLevelEntities[i];
-
-            if (topLevelEntity.TryGetChildValue(LABEL_GROUP_ASSOCIATIONS_CHILD_NAME, out var children) && children!.Any() &&
-                children!.GetType().IsAssignableTo(typeof(IEnumerable<GeneralModel<Models.LabelNoteAssociation>>)))
-            {
-                var lgaModelSnapshots = (IEnumerable<GeneralModel<Models.LabelGroupAssociation>>)children!;
-
-            }
-        }
+        return EncodePartsToRef(LABELGROUPASSOCIATION_REF_PREFIX, labelGroupName, labelText);
     }
 }

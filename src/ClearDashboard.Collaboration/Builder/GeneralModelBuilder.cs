@@ -2,6 +2,8 @@
 using System.Data.Entity.Core;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
+using ClearDashboard.Collaboration.DifferenceModel;
 using ClearDashboard.Collaboration.Exceptions;
 using ClearDashboard.Collaboration.Model;
 using ClearDashboard.DataAccessLayer.Data;
@@ -164,7 +166,7 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
         return modelProperties;
     }
 
-    internal static void AddPropertyValuesToGeneralModel<E>(GeneralModel<E> generalModel, IReadOnlyDictionary<string, (Type type, object? value)> modelPropertiesTypes)
+    internal static void AddPropertyValuesToGeneralModel<E>(GeneralModel<E> generalModel, IDictionary<string, (Type type, object? value)> modelPropertiesTypes)
         where E : Models.IdentifiableEntity
     {
         foreach (var kvp in modelPropertiesTypes)
@@ -201,8 +203,56 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
         }
     }
 
-    internal static string BuildPropertyRefName(string propertyName = "") => $"{propertyName}Ref";
-    internal static string BuildPropertyRefValue(string modelName, int index) => $"{modelName}_{index}";
+    public static string BuildPropertyRefName(string propertyName = "") => $"{propertyName}Ref";
+    //internal static string BuildPropertyRefValue(string modelName, int index) => $"{modelName}_{index}";
+
+    internal static string EncodePartsToRef(string refPrefixNoUnderscore, params string?[] parts)
+    {
+        var joinedParts = string.Join('_', parts.Select(e => string.IsNullOrEmpty(e) ? string.Empty : e));
+        var bytes = Encoding.UTF8.GetBytes(joinedParts);
+        return $"{refPrefixNoUnderscore}_{Convert.ToBase64String(bytes)}";
+    }
+
+    internal static string[] DecodeRefToParts(string refPrefixNoUnderscore, string refValue, int expectedNumberOfParts)
+    {
+        var base64String = Regex.Replace(refValue, $@"^{refPrefixNoUnderscore}_", string.Empty);
+        var decodedString = Encoding.UTF8.GetString(Convert.FromBase64String(base64String));
+
+        var parts = decodedString.Split('_');
+
+        if (parts.Length != expectedNumberOfParts)
+        {
+            throw new PropertyResolutionException($"Unable to decode {refPrefixNoUnderscore} Ref {refValue}");
+        }
+
+        return parts;
+    }
+
+    internal static GeneralModel<E> BuildRefModelSnapshot<E>(E dbModel, string refValue, IEnumerable<(string refPrefix, string? refValue, bool removeId)>? additionalRefValues, BuilderContext builderContext)
+        where E : IdentifiableEntity
+    {
+        var modelSnapshotProperties = ExtractUsingModelRefs(
+            dbModel,
+            builderContext,
+            builderContext.CommonIgnoreProperties.Union(new List<string>() { "Id" }));
+
+        if (additionalRefValues is not null && additionalRefValues.Any())
+        {
+            foreach (var rv in additionalRefValues)
+            {
+                if (rv.removeId)
+                    modelSnapshotProperties.Remove(rv.refPrefix + "Id");
+
+                if (rv.refValue is not null)
+                    modelSnapshotProperties.Add(BuildPropertyRefName(rv.refPrefix), (typeof(string), rv.refValue));
+            }
+        }
+
+        var snapshot = new GeneralModel<E>(BuildPropertyRefName(), refValue);
+        AddPropertyValuesToGeneralModel(snapshot, modelSnapshotProperties);
+
+        return snapshot;
+    }
 
     public static IModelBuilder<T> GetModelBuilder()
     {

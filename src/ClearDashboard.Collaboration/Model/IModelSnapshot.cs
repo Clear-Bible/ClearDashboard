@@ -55,7 +55,8 @@ public interface IModelSnapshot : IModelDistinguishable<IModelSnapshot> // IMode
     IReadOnlyDictionary<string, string>? AddedPropertyTypeNames { get; }
 
     bool TryGetPropertyValue(string key, out object? value);
-
+    bool TryGetNullableStringPropertyValue(string key, out string? valueAsString);
+    bool TryGetStringPropertyValue(string key, out string valueAsString);
 }
 
 //public interface IModelIdentifiable : IModelDistinguishable<IModelIdentifiable>

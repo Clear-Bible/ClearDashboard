@@ -879,17 +879,11 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             return new LabelBuilder
             {
                 GetLabels = (projectDbContext) => labels,
-                GetLabelNoteAssociationBuilder = () =>
+                GetLabelNoteAssociationsByLabelId = (projectDbContext) =>
                 {
-                    return new LabelNoteAssociationBuilder
-                    {
-                        GetLabelNoteAssociationsByLabelId = (projectDbContext) =>
-                        {
-                            return labelNoteAssociations
-                                .GroupBy(e => e.LabelId)
-                                .ToDictionary(g => g.Key, g => g.Select(e => e));
-                        }
-                    };
+                    return labelNoteAssociations
+                        .GroupBy(e => e.LabelId)
+                        .ToDictionary(g => g.Key, g => g.Select(e => e));
                 }
             };
         }
