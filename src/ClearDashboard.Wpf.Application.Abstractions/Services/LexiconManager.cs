@@ -28,6 +28,7 @@ namespace ClearDashboard.Wpf.Application.Services
     /// </summary>
     public sealed class LexiconManager : PropertyChangedBase
     {
+        private Lexicon _internalLexicon;
         private IEventAggregator EventAggregator { get; }
         private ILogger<LexiconManager> Logger { get; }
         private IMediator Mediator { get; }
@@ -587,10 +588,16 @@ namespace ClearDashboard.Wpf.Application.Services
             return LexiconImportViewModels;
         }
 
+        public Lexicon InternalLexicon
+        {
+            get => _internalLexicon;
+            private set => Set(ref _internalLexicon, value);
+        }
+
         private async Task<(IEnumerable<Lexeme> Lexemes, IEnumerable<Guid> TranslationMatchTranslationIds, IEnumerable<Guid> LemmaOrFormMatchTranslationIds)> GetExternalLexiconMergedIntoInternal(Lexicon externalLexicon, CancellationToken cancellationToken)
         {
-            var internalLexicon = await Lexicon.GetInternalLexicon(Mediator, cancellationToken);
-            return GetExternalLexiconMergedIntoInternal(externalLexicon, internalLexicon);
+            InternalLexicon = await Lexicon.GetInternalLexicon(Mediator, cancellationToken);
+            return GetExternalLexiconMergedIntoInternal(externalLexicon, InternalLexicon);
         }
 
         private static (IEnumerable<Lexeme> MergedLexemes, IEnumerable<Guid> TranslationMatchTranslationIds, IEnumerable<Guid> LemmaOrFormMatchTranslationIds) GetExternalLexiconMergedIntoInternal(Lexicon externalLexicon, Lexicon internalLexicon)

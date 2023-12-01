@@ -125,7 +125,7 @@
     <value>Выравнивание</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
-    <value>Выберите книги, с которыми вы работаете, вы всегда можете добавить больше книг позже.</value>
+    <value>Выберите книги (ы), с которыми вы работаете, вы всегда можете добавить больше книг позже.</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Проверка USFM</value>
@@ -137,7 +137,7 @@
     <value>Количество ошибок:</value>
   </data>
   <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
-    <value>Межлинейный</value>
+    <value>Межлинейно</value>
   </data>
   <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
     <value>Нет ошибок</value>
@@ -153,6 +153,9 @@
   </data>
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>Избранные книги</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>Выберите книги USFM, чтобы отправить</value>
   </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>Выберите Paratext Project</value>
@@ -623,13 +626,13 @@
     <value>Токен '{0}' имеет определенные выравнивания. Нажатие '{1}' удалит все выравнивания.</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>Поиск фильтра</value>
+    <value>Поиск по фильтру</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>Поиск членов фильтра</value>
+    <value>Поиск члена фильтра</value>
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
-    <value>Межлинейный</value>
+    <value>Межлинейно</value>
   </data>
   <data name="EnhancedView_JoinTokens" xml:space="preserve">
     <value>Присоединяйтесь к токенам</value>
@@ -904,6 +907,9 @@
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>И</value>
   </data>
+  <data name="LexiconEdit_ApplyFilter" xml:space="preserve">
+    <value>Применить фильтр</value>
+  </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
@@ -915,6 +921,9 @@
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>Добавить '{0}' в качестве перевода в первое значение</value>
+  </data>
+  <data name="LexiconEdit_EditingDone" xml:space="preserve">
+    <value>Сохранять</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Найти все</value>
@@ -1076,7 +1085,7 @@
     <value>Быстрый новый</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Коллабные изменения доступны</value>
+    <value>Изменения в сотрудничестве доступны</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
     <value>Настройки</value>
@@ -1223,7 +1232,7 @@
     <value>Мих.</value>
   </data>
   <data name="Migrate_Header" xml:space="preserve">
-    <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
+    <value>Сбросить сопоставления стихов в стихование по умолчанию</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>Мк.</value>
@@ -1241,7 +1250,7 @@
     <value>Токен доступа:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Проверьте свою электронную почту и введите в код проверки:</value>
+    <value>Проверьте свою электронную почту и введите код проверки:</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Проверьте доступность пользователя</value>
@@ -1364,7 +1373,7 @@
     <value>Вы хотите удалить этикетку:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>Вы хотите понизить этикетку:</value>
+    <value>Вы хотите отменить этикетку:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>Из группы лейбла:</value>
@@ -1373,7 +1382,7 @@
     <value>Добавить группу метки</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Добавить группу этикетки</value>
+    <value>Добавить группу ярлыков</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Группа лейблов уже существует с именем</value>
@@ -1499,10 +1508,10 @@
     <value>Параллелизировать стихи корпораций</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Алгоритм выравнивания слова</value>
+    <value>Алгоритм выравнивания машинного слова</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Алгоритм выравнивания слова</value>
+    <value>Алгоритм выравнивания машинного слова</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Симметризированная модель поезда?</value>
@@ -1541,7 +1550,7 @@
     <value>Создать новую токенизацию корпуса</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>Добавить новый интернетальный</value>
+    <value>Добавить новый интерлинеар</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>Добавьте текст в просмотр</value>
@@ -1589,7 +1598,7 @@
     <value>Словарь</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
-    <value>Редактор внешних заметок</value>
+    <value>Внешние заметки редактор</value>
   </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>Установите всю область контента в просмотр</value>
@@ -1625,7 +1634,7 @@
     <value>Характеристики</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
+    <value>Сбросить сопоставления стихов в стихование по умолчанию</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Ресурс</value>
@@ -1661,7 +1670,7 @@
     <value>Транслитерация</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Транслитерация WithIntEncoder</value>
+    <value>Транслитерация WithIteChoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Неизвестный</value>
@@ -1670,7 +1679,7 @@
     <value>XML</value>
   </data>
   <data name="Pds_ZoomIn" xml:space="preserve">
-    <value>Увеличить содержание</value>
+    <value>Увеличить контент</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
     <value>Увеличить контент</value>
@@ -1799,7 +1808,7 @@
     <value>Установите этот флажок, чтобы включить греческие и еврейские библейские тексты при создании вашего проекта.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Включите NT Грико -библейские тексты?</value>
+    <value>Включите NT Греко -библейские тексты?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>Включите ивритские библейские тексты?</value>
@@ -2128,11 +2137,14 @@
   <data name="Save" xml:space="preserve">
     <value>Сохранять</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>Отправлять</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>Включить экспериментальный плагин Aqua</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Проверьте свою электронную почту и введите в код проверки:</value>
+    <value>Проверьте свою электронную почту и введите код проверки:</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Настройки сотрудничества</value>
@@ -2147,7 +2159,7 @@
     <value>Адрес электронной почты</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>По электронной почте ошибка отправки</value>
+    <value>По электронной почте ошибка</value>
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Код проверки электронной почты</value>
@@ -2189,7 +2201,7 @@
     <value>Зарезервировано для будущего расширения</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Восстановить пользователь сотрудничества</value>
+    <value>Восстановите пользователя сотрудничества</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Сохраняется на удаленном сервере</value>
@@ -2201,7 +2213,7 @@
     <value>Сохранить настройки</value>
   </data>
   <data name="Settings_SendValidationEmail" xml:space="preserve">
-    <value>Отправить валидацию по электронной почте</value>
+    <value>Отправить валидацию электронной почты</value>
   </data>
   <data name="Settings_Settings" xml:space="preserve">
     <value>Настройки ClearDashboard</value>
@@ -2210,7 +2222,7 @@
     <value>Показать расширенные виды на другом мониторе, чем панель панели</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Для систем с тремя или более мониторами показать расширенное представление о третьем мониторе</value>
+    <value>Для систем с тремя или более мониторами показать расширенный просмотр на третьем мониторе</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Текстовая коллекция</value>
@@ -2228,7 +2240,7 @@
     <value>Включить стихотворенные текстовые коллекции.</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
-    <value>Отмена задания</value>
+    <value>Отменить задание</value>
   </data>
   <data name="ShellView_Loading" xml:space="preserve">
     <value>Загрузка ...</value>
@@ -2280,6 +2292,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Отправлять</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>Отправьте файлы USFM</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>Предположение</value>
@@ -2345,7 +2360,7 @@
     <value>Обновить и добавить новый</value>
   </data>
   <data name="UseDefaults" xml:space="preserve">
-    <value>Создайте использование дефолтов</value>
+    <value>Создать использование дефолтов</value>
   </data>
   <data name="Windows_AlignmentTool" xml:space="preserve">
     <value>Инструмент выравнивания</value>

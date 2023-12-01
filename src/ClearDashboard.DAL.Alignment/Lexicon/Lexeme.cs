@@ -227,6 +227,16 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             }
         }
 
+        public void DeleteForms(IEnumerable<Form> forms)
+        {
+            foreach (var form in forms)
+            {
+                forms_.Remove(form);
+                formIdsInDatabase_.RemoveAll(e => e.Id == form.FormId.Id);
+            }
+            IsDirty = true;
+        }
+
         public async Task DeleteForm(IMediator mediator, Form form, CancellationToken token = default)
         {
             if (!form.IsInDatabase)

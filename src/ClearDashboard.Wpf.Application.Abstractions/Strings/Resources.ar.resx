@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>كتب مختارة</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>حدد كتب USFM لإرسالها</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>حدد Paratext Project</value>
   </data>
@@ -242,7 +245,7 @@
     <value>اعمال البناء؛ تربية الحيوان</value>
   </data>
   <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
-    <value>حاويات تربية الحيوان</value>
+    <value>الحاويات تربية الحيوان</value>
   </data>
   <data name="BiblicalTermsDomains_CraftsCloth" xml:space="preserve">
     <value>الحرف؛ قماش</value>
@@ -524,10 +527,10 @@
     <value>حذف تعاون المشروع</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>لديك مستخدمون آخرون متصلون بهذا المشروع. سيتم إزالة هذا المشروع لهم أيضًا. هل من المؤكد أنك تريد حذف هذا المشروع؟</value>
+    <value>لديك مستخدمون آخرون متصلون بهذا المشروع. سيتم إزالة هذا المشروع لهم كذلك. هل من المؤكد أنك تريد حذف هذا المشروع؟</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
-    <value>هل أنت متأكد من أنك تريد حذف هذا المشروع؟</value>
+    <value>هل أنت متأكد أنك تريد حذف هذا المشروع؟</value>
   </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>وصف</value>
@@ -572,7 +575,7 @@
     <value>حذف المشروع</value>
   </data>
   <data name="Delete_Project_Confirmation" xml:space="preserve">
-    <value>هل أنت متأكد من أنك تريد حذف هذا المشروع؟</value>
+    <value>هل أنت متأكد أنك تريد حذف هذا المشروع؟</value>
   </data>
   <data name="DEU" xml:space="preserve">
     <value>DEU</value>
@@ -731,7 +734,7 @@
     <value>عنوان:</value>
   </data>
   <data name="FontSettings_TitleFontSize" xml:space="preserve">
-    <value>حجم خط الخط:</value>
+    <value>حجم خط العنوان:</value>
   </data>
   <data name="FontSettings_Translations" xml:space="preserve">
     <value>الترجمات:</value>
@@ -904,6 +907,9 @@
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>و</value>
   </data>
+  <data name="LexiconEdit_ApplyFilter" xml:space="preserve">
+    <value>تطبيق المرشح</value>
+  </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
     <value>يلغي</value>
   </data>
@@ -915,6 +921,9 @@
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>أضف '{0}' كترجمة إلى المعنى الأول</value>
+  </data>
+  <data name="LexiconEdit_EditingDone" xml:space="preserve">
+    <value>يحفظ</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>جد كل</value>
@@ -968,7 +977,7 @@
     <value>يكتب</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>أضف كشكل لـ ...</value>
+    <value>أضف كشكل ل ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
     <value>ابحث عن lexeme الكامل أو الجزئي أو مباريات النموذج للمصدر</value>
@@ -1091,7 +1100,7 @@
     <value>أداة المحاذاة</value>
   </data>
   <data name="MainView_WindowsBiblicalTerms" xml:space="preserve">
-    <value>مصطلحات الكتاب المقدس</value>
+    <value>شروط الكتاب المقدس</value>
   </data>
   <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
     <value>رموز كوربوس</value>
@@ -1373,7 +1382,7 @@
     <value>أضف مجموعة التسمية</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>أضف مجموعة تسمية</value>
+    <value>أضف مجموعة ملصقات</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>مجموعة تسمية موجودة بالفعل مع الاسم</value>
@@ -1523,7 +1532,7 @@
     <value>حدد خوارزمية SMT للتدريب</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>أضف موافقة بالجملة للعرض</value>
+    <value>أضف موافقة كبيرة للعرض</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>أضف للعرض</value>
@@ -1613,7 +1622,7 @@
     <value>العبرية (OT) Macula</value>
   </data>
   <data name="Pds_MARBLE Resource" xml:space="preserve">
-    <value>مورد الرخام</value>
+    <value>مورد رخامي</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>عدد الرموز المختلفة</value>
@@ -1628,7 +1637,7 @@
     <value>إعادة تعيين تعيينات الآية إلى الافتراض الافتراضي</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
-    <value>الموارد</value>
+    <value>مورد</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
     <value>قم بتوسيع المحتوى إلى 100 ٪</value>
@@ -1640,7 +1649,7 @@
     <value>مصدر</value>
   </data>
   <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>SourceLanguage</value>
+    <value>Sourcelanguage</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
     <value>معيار</value>
@@ -1832,7 +1841,7 @@
     <value>الكتاب المقدس بين الخط (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext قيد التشغيل ولكن غير متصل.</value>
+    <value>Paratext قيد التشغيل ولكنه غير متصل.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>مشروع Paratext</value>
@@ -2063,7 +2072,7 @@
     <value>وحي</value>
   </data>
   <data name="ProperCase_Romans" xml:space="preserve">
-    <value>رومان</value>
+    <value>رومية</value>
   </data>
   <data name="ProperCase_Ruth" xml:space="preserve">
     <value>روث</value>
@@ -2096,7 +2105,7 @@
     <value>المفتاح المقدم هو معيب. عندما تم فك تشفيرها ، لا يمكن العثور على بعض عناصر JSON.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>لا تتطابق محتويات مفتاح الترخيص الذي تم فك تشفيره مع المعلومات التي قدمتها.</value>
+    <value>لا تتطابق محتويات مفتاح الترخيص الذي تم تفكيكه مع المعلومات التي قدمتها.</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
     <value>مفتاح الترخيص الخاص بك إما مفقود أو مكسور.</value>
@@ -2127,6 +2136,9 @@
   </data>
   <data name="Save" xml:space="preserve">
     <value>يحفظ</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>يرسل</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>تمكين البرنامج المساعد التجريبي المائي</value>
@@ -2210,7 +2222,7 @@
     <value>عرض طرق عرض موسعة على شاشة مختلفة عن لوحة القيادة</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>بالنسبة للأنظمة التي تحتوي على ثلاثة شاشات أو أكثر ، عرض عرض موسع على الشاشة الثالثة</value>
+    <value>للأنظمة التي لديها ثلاثة شاشات أو أكثر ، عرض عرض موسع على الشاشة الثالثة</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>جمع النص</value>
@@ -2276,10 +2288,13 @@
     <value>لا انترنت</value>
   </data>
   <data name="SlackMessageView_ResetForm" xml:space="preserve">
-    <value>إعادة تعيين النموذج</value>
+    <value>إعادة تعيين الشكل</value>
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>يرسل</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>أرسل ملفات USFM</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>اقتراح</value>
@@ -2300,7 +2315,7 @@
     <value>عنوان:</value>
   </data>
   <data name="SlackMessageView_Title" xml:space="preserve">
-    <value>إرسال رسالة الركود</value>
+    <value>أرسل رسالة الركود</value>
   </data>
   <data name="SNG" xml:space="preserve">
     <value>SNG</value>
@@ -2351,7 +2366,7 @@
     <value>أداة المحاذاة</value>
   </data>
   <data name="Windows_BiblicalTerms" xml:space="preserve">
-    <value>مصطلحات الكتاب المقدس</value>
+    <value>شروط الكتاب المقدس</value>
   </data>
   <data name="Windows_CorpusTokens" xml:space="preserve">
     <value>رموز كوربوس</value>

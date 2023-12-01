@@ -199,8 +199,16 @@
                          Width="100" 
                          Height="30"
                          Visibility="{Binding State.TranslationChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBox>
+                <Button x:Name="ApplyFilterButton" Style="{StaticResource RowButtonStyle}" 
+                         cm:Message.Attach="[Event Click] = [Action OnApplyFilterButtonClicked()]">
+                    <Button.ContentTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{helpers:Localization LexiconEdit_ApplyFilter}" TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </Button.ContentTemplate>
+                </Button>
 
-            </WrapPanel>
+                </WrapPanel>
 
         </Grid>
         </materialDesign:Card>
@@ -235,16 +243,16 @@
                                         cm:Message.Attach="[Event Click] = [Action OnEditButtonClicked($dataContext)]">
                                     <Button.ContentTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{helpers:Localization LexiconEdit_Edit}" TextWrapping="Wrap" />
+                                            <TextBlock Text="{Binding ElementName=LexiconEditDataGrid, Path=DataContext.EditButtonLabel}" TextWrapping="Wrap" />
                                         </DataTemplate>
                                     </Button.ContentTemplate>
                                 </Button>
-                                <Button x:Name="AddButton" Style="{StaticResource RowButtonStyle}"  
+                                <Button x:Name="ActionButton" Style="{StaticResource RowButtonStyle}"  
                                     cm:Action.TargetWithoutContext="{Binding DataContext, ElementName=LexiconEditDataGrid}"
-                                    cm:Message.Attach="[Event Click] = [Action OnAddButtonClicked($dataContext)]" Visibility="{Binding IsEditing, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                                    cm:Message.Attach="[Event Click] = [Action OnAddButtonClicked($dataContext, $source)]" Visibility="{Binding IsEditing, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                                     <Button.ContentTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding ElementName=LexiconEditDataGrid, Path=DataContext.EditButtonLabel}" TextWrapping="Wrap" />
+                                            <TextBlock Text="{Binding ElementName=LexiconEditDataGrid, Path=DataContext.ActionButtonLabel}" TextWrapping="Wrap" />
                                         </DataTemplate>
                                     </Button.ContentTemplate>
                                 </Button>
@@ -272,7 +280,7 @@
                     </DataGridTemplateColumn.HeaderTemplate>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding Forms, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" TextWrapping="Wrap" IsReadOnly="{Binding IsEditing, Converter={StaticResource BooleanInversionConverter}}"/>
+                            <TextBox x:Name="FormsTextBox" Text="{Binding Forms, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" TextWrapping="Wrap" IsReadOnly="{Binding IsEditing, Converter={StaticResource BooleanInversionConverter}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -289,7 +297,7 @@
                     </DataGridTemplateColumn.HeaderTemplate>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding Meanings, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" TextWrapping="Wrap" IsReadOnly="{Binding IsEditing, Converter={StaticResource BooleanInversionConverter}}"/>
+                            <TextBox x:Name="MeaningsTextBox" Text="{Binding Meanings, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" TextWrapping="Wrap" IsReadOnly="{Binding IsEditing, Converter={StaticResource BooleanInversionConverter}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

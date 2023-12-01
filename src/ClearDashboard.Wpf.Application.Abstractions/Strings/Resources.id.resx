@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>Buku yang dipilih</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>Pilih Buku USFM untuk dikirim</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>Pilih Proyek Paratext</value>
   </data>
@@ -494,7 +497,7 @@
     <value>Waktu lokal</value>
   </data>
   <data name="ClockUserControl_Name" xml:space="preserve">
-    <value>Beri nama item</value>
+    <value>Beri nama itemnya</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
     <value>grup baru</value>
@@ -904,6 +907,9 @@
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Dan</value>
   </data>
+  <data name="LexiconEdit_ApplyFilter" xml:space="preserve">
+    <value>Terapkan filter</value>
+  </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
     <value>Membatalkan</value>
   </data>
@@ -915,6 +921,9 @@
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>Tambahkan '{0}' sebagai terjemahan ke makna pertama</value>
+  </data>
+  <data name="LexiconEdit_EditingDone" xml:space="preserve">
+    <value>Menyimpan</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Temukan semua</value>
@@ -1373,7 +1382,7 @@
     <value>Tambahkan grup label</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Tambahkan Grup Label</value>
+    <value>Tambahkan grup label</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Grup label sudah ada dengan nama</value>
@@ -1511,7 +1520,7 @@
     <value>Kereta</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Pelatihan mesin pelurus mesin</value>
+    <value>Pelatih mesin pelurus mesin</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Atur pemetaan ayat antara korpora yang disejajarkan</value>
@@ -1880,7 +1889,7 @@
     <value>Proyek dengan nama yang sama sudah ada. Pilih nama unik.</value>
   </data>
   <data name="ProjectValidator_TooLong" xml:space="preserve">
-    <value>Nama proyek yang diberikan terlalu panjang.</value>
+    <value>Nama proyek yang diberikan terlalu lama.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Tawarikh</value>
@@ -2128,6 +2137,9 @@
   <data name="Save" xml:space="preserve">
     <value>Menyimpan</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>Mengirim</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>Aktifkan plugin Aqua Eksperimental</value>
   </data>
@@ -2280,6 +2292,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Mengirim</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>Kirim file USFM</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>Saran</value>

@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>የተመረጡ መጽሐፍት</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>የ USFM መጽሐፍት ለመላክ ይምረጡ</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>የጥበቃ ፕሮጀክት ይምረጡ</value>
   </data>
@@ -904,6 +907,9 @@
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>እና</value>
   </data>
+  <data name="LexiconEdit_ApplyFilter" xml:space="preserve">
+    <value>ማጣሪያን ይተግብሩ</value>
+  </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
     <value>ይቅር</value>
   </data>
@@ -915,6 +921,9 @@
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>ለመጀመሪያው ትርጉም እንደ ትርጉም '{0}'</value>
+  </data>
+  <data name="LexiconEdit_EditingDone" xml:space="preserve">
+    <value>አስቀምጥ</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>ሁሉንም ያግኙ</value>
@@ -2128,6 +2137,9 @@
   <data name="Save" xml:space="preserve">
     <value>አስቀምጥ</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>ላክ</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>የሙከራ Aqua Pluckin ን ያንቁ</value>
   </data>
@@ -2280,6 +2292,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>ላክ</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>የ USFM ፋይሎችን ይላኩ</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>ጥቆማ</value>

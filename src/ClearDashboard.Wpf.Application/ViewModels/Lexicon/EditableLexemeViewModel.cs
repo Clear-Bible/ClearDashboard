@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Lexicon;
 
@@ -66,21 +67,33 @@ public class EditableLexemeViewModel : PropertyChangedBase
         get => _lexeme.Meanings.Select(m => $"{m.Text} [{m.Translations.Select(t => t.Text).ToDelimitedString()}]").ToDelimitedString(";");
         set
         {
-             var meanings = value?.Split(';').Select(m => m.Trim()).Where(m => !string.IsNullOrEmpty(m)).ToList() ?? new List<string>();
+             var meanings = value?.Unjoin(";") ?? new List<string>();
             foreach (var meaningWithTranslations in meanings)
             {
-                var parts = meaningWithTranslations.Split('[');
-                var meaning = _lexeme.Meanings.FirstOrDefault(m => m.Text == parts[0].TrimEnd());
-                var translations = parts[1].TrimEnd(']').Split(',').Select(t => t.Trim()).Where(t => !string.IsNullOrEmpty(t)).ToList();
-                if (meaning == null)
+                if (meaningWithTranslations.StartsWith("["))
                 {
-                    meaning = new Meaning { Text = parts[0].TrimEnd(), Language = TargetLanguage };
-                    AddNewTranslations(translations, meaning);
-                    _lexeme.Meanings.Add(meaning);
+                    var translations = meaningWithTranslations.TrimStart('[').TrimEnd(']').Unjoin();
+                    var defaultMeaning = _lexeme.Meanings.FirstOrDefault();
+                    ProcessTranslations(defaultMeaning, translations);
                 }
                 else
                 {
-                    AddNewTranslations(translations, meaning);
+                    var parts = meaningWithTranslations.Split('[');
+                    var meaning = _lexeme.Meanings.FirstOrDefault(m => m.Text == parts[0].TrimEnd());
+                    var translations = parts[1].TrimEnd(']').Unjoin();
+                    if (meaning == null)
+                    {
+                        meaning = new Meaning { Text = parts[0].TrimEnd(), Language = TargetLanguage };
+                        //AddNewTranslations(translations, meaning);
+                        //_lexeme.Meanings.Add(meaning);
+                    
+                        ProcessTranslations(meaning, translations);
+                    }
+                    else
+                    {
+                        //AddNewTranslations(translations, meaning);
+                        ProcessTranslations(meaning, translations);
+                    }
                 }
 
             }
@@ -88,23 +101,50 @@ public class EditableLexemeViewModel : PropertyChangedBase
         }
     }
 
-    private void AddNewTranslations(IEnumerable<string> translations, Meaning meaning)
+    
+
+    private void ProcessTranslations(Meaning defaultMeaning, List<string> translations)
     {
-       
-        foreach (var translation in translations.Where(translation => meaning.Translations.All(t => t.Text != translation)))
-        {
-            meaning.Translations.Add(new Translation { Text = translation });
-        }
+        var translationsToDelete = defaultMeaning.Translations.Where(t => !translations.Contains(t.Text)).ToList();
         
+        foreach (var translation in translationsToDelete)
+        {
+            defaultMeaning.Translations.Remove(translation);
+            defaultMeaning.SetInternalProperty("IsDirty", true);
+        }
+
+        var translationsToAdd = translations.Where(t => defaultMeaning.Translations.All(tr => tr.Text != t));
+        foreach (var translation in translationsToAdd)
+        {
+            defaultMeaning.Translations.Add(new Translation { Text = translation });
+        }
     }
+
+    //private void AddNewTranslations(IEnumerable<string> translations, Meaning meaning)
+    //{
+       
+    //    foreach (var translation in translations.Where(translation => meaning.Translations.All(t => t.Text != translation)))
+    //    {
+    //        meaning.Translations.Add(new Translation { Text = translation });
+    //    }
+        
+    //}
 
     public string? Forms
     {
         get => _lexeme.Forms.Select(f => f.Text).ToDelimitedString();
         set
         {
-            var forms = value?.Split(',').Select(f => f.Trim()).Where(f => !string.IsNullOrEmpty(f)).ToList() ?? new List<string>();
-            foreach (var form in forms.Where(form => _lexeme.Forms.All(f => f.Text != form)))
+            var forms = value?.Unjoin() ?? new List<string>();
+
+            var formsToDelete = _lexeme.Forms.Where(f => !forms.Contains(f.Text)).Select(f=>f.Text);
+            foreach (var form in formsToDelete)
+            {
+                _lexeme.Forms.Remove(new Form { Text = form });
+            }
+
+            var formsToAdd = forms.Where(form => _lexeme.Forms.All(f => f.Text != form));
+            foreach (var form in formsToAdd)
             {
                 _lexeme.Forms.Add(new Form { Text = form });
             }
@@ -113,21 +153,51 @@ public class EditableLexemeViewModel : PropertyChangedBase
         }
     }
 
-    public void AddNewForm(string? form)
+    public (int StartIndex, int Length) AddNewForm(string? form)
     {
+        if (form == null)
+        {
+            return (-1, -1);
+        }
+
         if (_lexeme.Forms.All(f => f.Text != form))
         {
             _lexeme.Forms.Add(new Form { Text = form });
+            var startIndex = Forms?.IndexOf(form) ?? -1;
+            NotifyOfPropertyChange(nameof(Forms));
+            return (startIndex, form?.Length ?? -1);
         }
-        NotifyOfPropertyChange(nameof(Forms));
+
+        return (-1, -1);
+
     }
 
-    public void AddNewMeaning(string? meaningText)
+    //public void AddNewMeaning(string? meaningText)
+    //{
+
+    //    if (_lexeme.Meanings.All(m => m.Text != meaningText))
+    //    {
+    //        _lexeme.Meanings.Add(new Meaning { Text = meaningText, Language = TargetLanguage});
+    //    }
+    //    NotifyOfPropertyChange(nameof(Meanings));
+    //}
+
+    public (int StartIndex, int Length) AddTranslationToFirstMeaning(string? translation)
     {
-        if (_lexeme.Meanings.All(m => m.Text != meaningText))
+        var defaultMeaning = _lexeme.Meanings.FirstOrDefault();
+        if (defaultMeaning == null)
         {
-            _lexeme.Meanings.Add(new Meaning { Text = meaningText, Language = TargetLanguage});
+            return (-1, -1);
         }
-        NotifyOfPropertyChange(nameof(Meanings));
+
+        if (defaultMeaning.Translations.All(t => t.Text != translation))
+        {
+            defaultMeaning.Translations.Add(new Translation { Text = translation });
+            var startIndex = Meanings?.IndexOf(translation) ?? -1;
+            NotifyOfPropertyChange(nameof(Meanings));
+            return (startIndex, translation?.Length ?? -1);
+        }
+
+        return (-1, -1);
     }
 }

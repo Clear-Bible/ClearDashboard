@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>សៀវភៅដែលបានជ្រើសរើស</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>ជ្រើសរើសសៀវភៅ USFM ដើម្បីផ្ញើ</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>ជ្រើសគម្រោង Partatetx</value>
   </data>
@@ -904,6 +907,9 @@
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>និង</value>
   </data>
+  <data name="LexiconEdit_ApplyFilter" xml:space="preserve">
+    <value>អនុវត្តតម្រង</value>
+  </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
     <value>លប់ចោល</value>
   </data>
@@ -915,6 +921,9 @@
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>បន្ថែម '{0}' ជាការបកប្រែទៅជាអត្ថន័យដំបូង</value>
+  </data>
+  <data name="LexiconEdit_EditingDone" xml:space="preserve">
+    <value>សរេង្គាហ</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>រកទាំងអស់</value>
@@ -2128,6 +2137,9 @@
   <data name="Save" xml:space="preserve">
     <value>សរេង្គាហ</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>ផ្ញើរ</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>បើកដំណើរការកម្មវិធីជំនួយពិសោធន៍ Aqua</value>
   </data>
@@ -2280,6 +2292,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>ផ្ញើរ</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>ផ្ញើឯកសារ USFM</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>ការផ្ដល់យោបល់</value>

@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>Libros seleccionados</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>Seleccione los libros de USFM para enviar</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>Seleccione el proyecto Paratext</value>
   </data>
@@ -461,7 +464,7 @@
     <value>Parte fuente</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Reflexión de origen</value>
+    <value>Fuente Ref.</value>
   </data>
   <data name="BulkAlignmentReview_Target" xml:space="preserve">
     <value>Objetivo</value>
@@ -611,13 +614,13 @@
     <value>Eliminar la alineación?</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>Eliminar la alineación</value>
+    <value>Eliminar alineación</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
     <value>Eliminar la alineación de '{0}'?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>¿Eliminar todas las alineaciones?</value>
+    <value>Eliminar todas las alineaciones?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>El token '{0}' tiene múltiples alineaciones definidas. Haga clic en '{1}' eliminará todas las alineaciones.</value>
@@ -659,7 +662,7 @@
     <value>Eliminar corpus</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>Mostrar los controles de vista</value>
+    <value>Mostrar los controles de la vista</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>Token dividido</value>
@@ -845,7 +848,7 @@
     <value>Cancelar brillo</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
-    <value>Cambiar todos los ocurrencias no establecidos</value>
+    <value>Cambiar todos los ocurrencias inseguros</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Si se verifica, esto cambiará todas las ocurrencias no establecidas de esta palabra</value>
@@ -904,6 +907,9 @@
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Y</value>
   </data>
+  <data name="LexiconEdit_ApplyFilter" xml:space="preserve">
+    <value>Aplicar filtro</value>
+  </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
     <value>Cancelar</value>
   </data>
@@ -915,6 +921,9 @@
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>Agregar '{0}' como traducción al primer significado</value>
+  </data>
+  <data name="LexiconEdit_EditingDone" xml:space="preserve">
+    <value>Ahorrar</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Encuentra todos</value>
@@ -983,7 +992,7 @@
     <value>Importación comprobada</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
-    <value>Lexeme o coincidencias de formulario</value>
+    <value>Lexeme o coincidencias de forma</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
     <value>No hay más registros para importar.</value>
@@ -1454,7 +1463,7 @@
     <value>¿Enviar esta nota a Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Envía esta nota a Paratext</value>
+    <value>Envíe esta nota a Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Corpus tokenizado</value>
@@ -1559,7 +1568,7 @@
     <value>Traducción inversa</value>
   </data>
   <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
-    <value>Calcular el nuevo modelo de traducción</value>
+    <value>Calcule el nuevo modelo de traducción</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
     <value>Cambiar el nivel de zoom del contenido</value>
@@ -1577,7 +1586,7 @@
     <value>Hija</value>
   </data>
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>Eliminar la alineación</value>
+    <value>Eliminar alineación</value>
   </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Eliminar interlineal</value>
@@ -1646,7 +1655,7 @@
     <value>Estándar</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Estudio de estudio</value>
+    <value>Estudiobible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBIBLeadDitions</value>
@@ -1967,7 +1976,7 @@
     <value>Ezra</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Gálate</value>
+    <value>Gálatas</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>Génesis</value>
@@ -2128,6 +2137,9 @@
   <data name="Save" xml:space="preserve">
     <value>Ahorrar</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>Enviar</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>Habilitar el complemento Aqua experimental</value>
   </data>
@@ -2280,6 +2292,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Enviar</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>Enviar archivos USFM</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>Sugerencia</value>

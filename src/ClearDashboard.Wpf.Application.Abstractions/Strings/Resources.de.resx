@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>Ausgewählte Bücher</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>Wählen Sie USFM -Bücher aus, um sie zu senden</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>Wählen Sie das Paratext -Projekt</value>
   </data>
@@ -437,7 +440,7 @@
     <value>Maschine</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsInvalid" xml:space="preserve">
-    <value>Markieren Sie als "ungültig" ausgewählt.</value>
+    <value>Markieren Sie als "ungültig" ausgewählt</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
     <value>Markieren Sie als "Bedarfsüberprüfung" ausgewählt.</value>
@@ -904,6 +907,9 @@
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Und</value>
   </data>
+  <data name="LexiconEdit_ApplyFilter" xml:space="preserve">
+    <value>Filter anwenden</value>
+  </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
     <value>Stornieren</value>
   </data>
@@ -915,6 +921,9 @@
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>Fügen Sie '{0}' als Übersetzung zur ersten Bedeutung hinzu</value>
+  </data>
+  <data name="LexiconEdit_EditingDone" xml:space="preserve">
+    <value>Speichern</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Finde alle</value>
@@ -971,10 +980,10 @@
     <value>Fügen Sie als Form für ... hinzu</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Finden Sie vollständige oder teilweise Lexem- oder Formularübereinstimmungen für Quelle</value>
+    <value>Finden Sie vollständige oder partielle Lexeme- oder Formularübereinstimmungen für die Quelle</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Ziel als Übersetzung für ...</value>
+    <value>Fügen Sie Ziel als Übersetzung für ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Finden Sie Lexeme mit einer oder mehreren Übersetzung, die dem Ziel entspricht</value>
@@ -1247,7 +1256,7 @@
     <value>Überprüfen Sie die Verfügbarkeit der Benutzer</value>
   </data>
   <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
-    <value>Erstellen Sie einen Kollaborationsbenutzer</value>
+    <value>Erstellen Sie einen Benutzer der Zusammenarbeit</value>
   </data>
   <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
     <value>Kollaborationsbenutzer erstellen</value>
@@ -1328,7 +1337,7 @@
     <value>Diese Notiz löschen?</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Durch Assoziationen</value>
+    <value>Durch Verbände</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filter</value>
@@ -1364,7 +1373,7 @@
     <value>Möchten Sie das Etikett löschen:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>Möchten Sie das Etikett zerlegen:</value>
+    <value>Möchten Sie das Etikett disassoziieren:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>aus der Labelgruppe:</value>
@@ -1547,7 +1556,7 @@
     <value>Fügen Sie Text zur Anzeige hinzu</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie Text zur neuen Ansicht hinzu</value>
+    <value>Fügen Sie der neuen Ansicht Text hinzu</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Zur Anzeige hinzufügen</value>
@@ -1634,7 +1643,7 @@
     <value>Skalieren Sie den Inhalt auf 100%</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
-    <value>Fügen Sie Text zum neuen Fenster hinzu</value>
+    <value>Fügen Sie Text zu einem neuen Fenster hinzu</value>
   </data>
   <data name="Pds_Source" xml:space="preserve">
     <value>Quelle</value>
@@ -1784,7 +1793,7 @@
     <value>Projekt löschen</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Buchauswahl aktivieren</value>
+    <value>Aktivieren Sie die Buchauswahl</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
     <value>Wenn Sie überprüft werden, können Sie auswählen, welche Bücher zu verarbeiten sind.</value>
@@ -1799,7 +1808,7 @@
     <value>Überprüfen Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>NT -griechische biblische Texte einschließen?</value>
+    <value>NT Griechische biblische Texte einschließen?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>OT hebräische biblische Texte einschließen?</value>
@@ -1856,7 +1865,7 @@
     <value>Projektvorlage Assistent: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Aktualisierung der Kollaborationsprojekte Liste</value>
+    <value>Aktualisierungsprojekte Liste aktualisieren</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>Suchen Sie neu</value>
@@ -1904,7 +1913,7 @@
     <value>1 Thessalonicher</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 Timotheus</value>
+    <value>1 Timothy</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 Chroniken</value>
@@ -1991,7 +2000,7 @@
     <value>James</value>
   </data>
   <data name="ProperCase_Jeremiah" xml:space="preserve">
-    <value>Jeremia</value>
+    <value>Jeremiah</value>
   </data>
   <data name="ProperCase_Job" xml:space="preserve">
     <value>Arbeit</value>
@@ -2127,6 +2136,9 @@
   </data>
   <data name="Save" xml:space="preserve">
     <value>Speichern</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Schicken</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>Aktivieren Sie das experimentelle Aqua -Plugin</value>
@@ -2280,6 +2292,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Schicken</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>Senden Sie USFM -Dateien</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>Anregung</value>

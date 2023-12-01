@@ -18,6 +18,24 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
         private readonly List<LexemeId> lexemeIdsInDatabase_;
         public IEnumerable<LexemeId> LexemeIdsToDelete => lexemeIdsInDatabase_.ExceptBy(lexemes_.Select(e => e.LexemeId.Id), e => e.Id);
 
+        public static async Task<Lexicon> MergeAndSaveAsync(IEnumerable<Lexeme> lexemes, Lexicon sourceLexicon, IMediator mediator)
+        {
+            //var sourceLexicon = new Lexicon(new ObservableCollection<Lexeme>(sourceLexemes));
+            var lexemeCollection = new ObservableCollection<Lexeme>(lexemes.DistinctBy(e => e.LexemeId));
+            var lexicon = new Lexicon(lexemeCollection);
+            lexicon.SetLexemeIdsInDatabase(lexemeCollection.Select(e => e.LexemeId)
+                            .IntersectBy(sourceLexicon.lexemeIdsInDatabase_.Select(e => e.Id),
+                                                         e => e.Id).ToList());
+            await lexicon.SaveAsync(mediator);
+            return lexicon;
+        }
+
+        internal void SetLexemeIdsInDatabase(IEnumerable<LexemeId> lexemeIds)
+        {
+            lexemeIdsInDatabase_.Clear();
+            lexemeIdsInDatabase_.AddRange(lexemeIds);
+        }
+
         public ObservableCollection<Lexeme> Lexemes
         {
             get { return lexemes_; }
@@ -41,6 +59,8 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             lexemes_ = new ObservableCollection<Lexeme>(lexemes.DistinctBy(e => e.LexemeId));
             lexemeIdsInDatabase_ = new(lexemes.Select(f => f.LexemeId));
         }
+
+     
 
         public async Task SaveAsync(IMediator mediator, CancellationToken token = default)
         {
