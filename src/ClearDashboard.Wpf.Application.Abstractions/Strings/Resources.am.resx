@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>የተመረጡ መጽሐፍት</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>የ USFM መጽሐፍት ለመላክ ይምረጡ</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>የጥበቃ ፕሮጀክት ይምረጡ</value>
   </data>
@@ -712,6 +715,9 @@
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>የአንቀጽ ሁኔታ</value>
   </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>ውጫዊ ማስታወሻዎችን አሳይ</value>
+  </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>ምንጭ ጽሑፍ</value>
   </data>
@@ -907,6 +913,12 @@
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>አርትዕ</value>
   </data>
+  <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>'{0}' እንደ ቅጽ</value>
+  </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>ለመጀመሪያው ትርጉም እንደ ትርጉም '{0}'</value>
+  </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>ሁሉንም ያግኙ</value>
   </data>
@@ -921,6 +933,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>ውሂብን በመጫን ላይ ...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>ውሂብን በመጫን ላይ ያልተጠበቀ ስህተት ተከስቷል. {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>ማዛመድ</value>
@@ -1573,11 +1591,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>መዝገበ ቃላት</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>ውጫዊ ማስታወሻዎች አርታኢ</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>ከጠቅላላው የይዘት ቦታ ጋር ወደ የእይታ እይታ ይጣጣሙ</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>ሁሉንም አንጓዎች ወደ የእይታ መረብ ይግባኝ</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>የቅርብ ጊዜ ውጫዊ ማስታወሻዎችን ያግኙ</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>ከስርታ ከተለቀቀ የቅርብ ጊዜ ያግኙ</value>
@@ -2107,6 +2131,9 @@
   <data name="Save" xml:space="preserve">
     <value>አስቀምጥ</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>ላክ</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>የሙከራ Aqua Pluckin ን ያንቁ</value>
   </data>
@@ -2259,6 +2286,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>ላክ</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>የ USFM ፋይሎችን ይላኩ</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>ጥቆማ</value>

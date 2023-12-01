@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>選定的書</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>選擇USFM書籍發送</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>選擇Para​​text項目</value>
   </data>
@@ -239,7 +242,7 @@
     <value>建造;宗教活動</value>
   </data>
   <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>建築；畜牧業</value>
+    <value>構造；畜牧業</value>
   </data>
   <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
     <value>容器；畜牧業</value>
@@ -452,7 +455,7 @@
     <value>部分</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>樞密性的單詞</value>
+    <value>樞紐的單詞</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>來源</value>
@@ -662,7 +665,7 @@
     <value>顯示視圖控件</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>拆分令牌</value>
+    <value>分開令牌</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>將拆分應用於其他令牌</value>
@@ -711,6 +714,9 @@
   </data>
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>段落模式</value>
+  </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>顯示外部筆記</value>
   </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>源文本：</value>
@@ -907,6 +913,12 @@
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>編輯</value>
   </data>
+  <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>添加'{0}'作為表單</value>
+  </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>將'{0}'添加為第一個含義</value>
+  </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>找到所有</value>
   </data>
@@ -921,6 +933,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>加載數據中...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>加載數據時發生了意外錯誤。 {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>匹配</value>
@@ -1010,7 +1028,7 @@
     <value>需要姓</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>需要許可密鑰</value>
+    <value>需要許可證密鑰</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
@@ -1262,7 +1280,7 @@
     <value>姓</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
-    <value>新的合作用戶</value>
+    <value>新的協作用戶</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
     <value>密碼：</value>
@@ -1442,7 +1460,7 @@
     <value>將此註釋發送到Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>令牌化語料庫</value>
+    <value>象徵化的語料庫</value>
   </data>
   <data name="Notes_TranslationSet" xml:space="preserve">
     <value>翻譯集</value>
@@ -1573,11 +1591,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>字典</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>外部音符編輯器</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>將整個內容區域適合視口</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>將所有節點適合視口</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>獲取最新的外部筆記</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>從Paratext獲取最新信息</value>
@@ -1739,7 +1763,7 @@
     <value>協作項目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>創建您的項目以開始。</value>
+    <value>創建您的項目以入門。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>創建一個新項目</value>
@@ -2107,8 +2131,11 @@
   <data name="Save" xml:space="preserve">
     <value>節省</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>發送</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>啟用實驗性水上插件</value>
+    <value>啟用實驗水上插件</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
     <value>檢查您的電子郵件並輸入驗證代碼：</value>
@@ -2204,7 +2231,7 @@
     <value>驗證電子郵件代碼</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>啟用逐一文字集合顯示</value>
+    <value>啟用逐節的文本集合顯示</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>取消任務</value>
@@ -2225,7 +2252,7 @@
     <value>發行說明</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>顯示預釋放</value>
+    <value>顯示預發行</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
     <value>更新到新版本的ClearDashboard</value>
@@ -2259,6 +2286,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>發送</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>發送USFM文件</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>建議</value>
@@ -2318,7 +2348,7 @@
     <value>更新並添加新書</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
-    <value>選擇書籍</value>
+    <value>選擇書</value>
   </data>
   <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
     <value>更新並添加新</value>
