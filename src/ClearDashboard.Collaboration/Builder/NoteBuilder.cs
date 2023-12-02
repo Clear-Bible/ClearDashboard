@@ -227,6 +227,12 @@ public class NoteBuilder : GeneralModelBuilder<Models.Note>
         return EncodePartsToRef(NOTESEENASSOCIATION_REF_PREFIX, noteId.ToString(), userId.ToString());
     }
 
+    public static (Guid noteId, Guid userId) DecodeNoteSeenAssociationRef(string refValue)
+    {
+        var parts = DecodeRefToParts(NOTESEENASSOCIATION_REF_PREFIX, refValue, 2);
+        return (noteId: Guid.Parse(parts[0]), userId: Guid.Parse(parts[1]));
+    }
+
     public Func<IEnumerable<Models.NoteUserSeenAssociation>, BuilderContext, IEnumerable<GeneralModel<Models.NoteUserSeenAssociation>>> ExtractNoteUserSeenAssociations = (nusas, builderContext) =>
     {
         var noteUserSeenAssociationModelSnapshots =

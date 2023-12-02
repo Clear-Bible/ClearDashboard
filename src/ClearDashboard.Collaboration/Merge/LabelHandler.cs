@@ -42,9 +42,9 @@ public class LabelHandler : DefaultMergeHandler<IModelSnapshot<Models.Label>>
             (typeof(Models.Label), nameof(Models.Label.Id)),
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
-                if (modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Label.Text), out var labelText))
+                if (modelSnapshot.TryGetStringPropertyValue(nameof(Models.Label.Text), out var labelText))
                 {
-                    var labelId = await LabelTextToId((string)labelText!, projectDbContext, logger);
+                    var labelId = await LabelTextToId(labelText, projectDbContext, logger);
                     return (labelId != default) ? labelId : null;
                 }
                 else
@@ -59,10 +59,10 @@ public class LabelHandler : DefaultMergeHandler<IModelSnapshot<Models.Label>>
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
                 var labelRefName = LabelBuilder.BuildPropertyRefName(LabelBuilder.LABEL_REF_PREFIX);
-                if (modelSnapshot.PropertyValues.TryGetValue(labelRefName, out var labelText) &&
-                    modelSnapshot.PropertyValues.TryGetValue(nameof(Models.LabelNoteAssociation.NoteId), out var noteId))
+                if (modelSnapshot.TryGetStringPropertyValue(labelRefName, out var labelText) &&
+                    modelSnapshot.TryGetGuidPropertyValue(nameof(Models.LabelNoteAssociation.NoteId), out var noteId))
                 {
-                    var labelNoteAssociationId = await LabelNoteAssociationToId((string)labelText!, (Guid)noteId!, projectDbContext, logger);
+                    var labelNoteAssociationId = await LabelNoteAssociationToId(labelText, noteId, projectDbContext, logger);
                     return (labelNoteAssociationId != default) ? labelNoteAssociationId : null;
                 }
                 else
@@ -77,9 +77,9 @@ public class LabelHandler : DefaultMergeHandler<IModelSnapshot<Models.Label>>
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
                 var labelRefName = LabelBuilder.BuildPropertyRefName(LabelBuilder.LABEL_REF_PREFIX);
-                if (modelSnapshot.PropertyValues.TryGetValue(labelRefName, out var labelText))
+                if (modelSnapshot.TryGetStringPropertyValue(labelRefName, out var labelText))
                 {
-                    var labelId = await LabelTextToId((string)labelText!, projectDbContext, logger);
+                    var labelId = await LabelTextToId(labelText, projectDbContext, logger);
                     return (labelId != default) ? labelId : null;
                 }
                 else

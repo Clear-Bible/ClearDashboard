@@ -7,11 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ClearDashboard.Collaboration.Exceptions;
 using ClearDashboard.Collaboration.Builder;
-using Paratext.PluginInterfaces;
-using ClearDashboard.DAL.Alignment.Lexicon;
-using ClearDashboard.DAL.Alignment.Translation;
-using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
-using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -117,42 +112,32 @@ public class LexiconHandler : DefaultMergeHandler<IModelSnapshot<Models.Lexicon_
             (typeof(Models.Lexicon_Lexeme), nameof(Models.Lexicon_Lexeme.Id)),
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
-                if (modelSnapshot.TryGetStringPropertyValue(nameof(Models.Lexicon_Lexeme.Lemma), out var lemma) &&
-                    modelSnapshot.TryGetStringPropertyValue(nameof(Models.Lexicon_Lexeme.Language), out var language))
-                {
-                    modelSnapshot.TryGetNullableStringPropertyValue(nameof(Models.Lexicon_Lexeme.Type), out var type);
-
-                    var lexemeId = await ValuesToLexemeId(lemma, language, type, projectDbContext, cache, logger);
-                    return (lexemeId != default) ? lexemeId : null;
-                }
-                else
-                {
-                    throw new PropertyResolutionException($"Meaning snapshot does not have both of text, language property values, which are required for Id resolution.");
-                }
+                var (lemma, language, type) = ExtractLexemeIdParts(modelSnapshot);
+                var lexemeId = await ValuesToLexemeId(lemma, language, type, projectDbContext, cache, logger);
+                return (lexemeId != default) ? lexemeId : null;
 
             });
 
         mergeContext.MergeBehavior.AddEntityValueResolver(
             (typeof(Models.Lexicon_Meaning), nameof(Models.Lexicon_Meaning.Id)),
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
+                
+                var lexemeId = await LexemeRefToLexemeId(modelSnapshot, projectDbContext, cache, logger);
+                if (lexemeId == default)
+                    return null;
 
-                if (modelSnapshot.TryGetStringPropertyValue(nameof(Models.Lexicon_Meaning.Text), out var text) &&
-                    modelSnapshot.TryGetStringPropertyValue(nameof(Models.Lexicon_Meaning.Language), out var language) &&
-                    modelSnapshot.TryGetStringPropertyValue(LexiconBuilder.BuildPropertyRefName(LexiconBuilder.LEXEME_REF_PREFIX), out var lexemeRef))
-                {
-                    var (lexemeLemma, lexemeLanguage, lexemeType) = LexiconBuilder.DecodeLexemeRef(lexemeRef);
-                    var lexemeId = await ValuesToLexemeId(lexemeLemma, lexemeLanguage, lexemeType, projectDbContext, cache, logger);
+                var (text, language) = ExtractMeaningIdParts(modelSnapshot);
+                var meaningId = await ValuesToMeaningId(text, language, lexemeId, projectDbContext, cache, logger);
+                return (meaningId != default) ? meaningId : null;
 
-                    if (lexemeId == default)
-                        return null;
+            });
 
-                    var meaningId = await ValuesToMeaningId(text, language, lexemeId, projectDbContext, cache, logger);
-                    return (meaningId != default) ? meaningId : null;
-                }
-                else
-                {
-                    throw new PropertyResolutionException($"Meaning snapshot does not have all of text, language, LexemeRef property values, which are required for Id resolution.");
-                }
+        mergeContext.MergeBehavior.AddEntityValueResolver(
+            (typeof(Models.Lexicon_Meaning), nameof(Models.Lexicon_Meaning.LexemeId)),
+            entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
+
+                var lexemeId = await LexemeRefToLexemeId(modelSnapshot, projectDbContext, cache, logger);
+                return (lexemeId != default) ? lexemeId : null;
 
             });
 
@@ -160,22 +145,22 @@ public class LexiconHandler : DefaultMergeHandler<IModelSnapshot<Models.Lexicon_
             (typeof(Models.Lexicon_Form), nameof(Models.Lexicon_Form.Id)),
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
-                if (modelSnapshot.TryGetStringPropertyValue(nameof(Models.Lexicon_Form.Text), out var text) &&
-                    modelSnapshot.TryGetStringPropertyValue(LexiconBuilder.BuildPropertyRefName(LexiconBuilder.LEXEME_REF_PREFIX), out var lexemeRef))
-                {
-                    var (lexemeLemma, lexemeLanguage, lexemeType) = LexiconBuilder.DecodeLexemeRef(lexemeRef);
-                    var lexemeId = await ValuesToLexemeId(lexemeLemma, lexemeLanguage, lexemeType, projectDbContext, cache, logger);
+                var lexemeId = await LexemeRefToLexemeId(modelSnapshot, projectDbContext, cache, logger);
+                if (lexemeId == default)
+                    return null;
 
-                    if (lexemeId == default)
-                        return null;
+                var text = ExtractStringProperty(modelSnapshot, nameof(Models.Lexicon_Form.Text));
+                var formId = await ValuesToFormId(text, lexemeId, projectDbContext, logger);
+                return (formId != default) ? formId : null;
 
-                    var formId = await ValuesToFormId(text, lexemeId, projectDbContext, logger);
-                    return (formId != default) ? formId : null;
-                }
-                else
-                {
-                    throw new PropertyResolutionException($"Form snapshot does not have all of text, LexemeRef property values, which are required for Id resolution.");
-                }
+            });
+
+        mergeContext.MergeBehavior.AddEntityValueResolver(
+            (typeof(Models.Lexicon_Form), nameof(Models.Lexicon_Form.LexemeId)),
+            entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
+
+                var lexemeId = await LexemeRefToLexemeId(modelSnapshot, projectDbContext, cache, logger);
+                return (lexemeId != default) ? lexemeId : null;
 
             });
 
@@ -183,63 +168,123 @@ public class LexiconHandler : DefaultMergeHandler<IModelSnapshot<Models.Lexicon_
             (typeof(Models.Lexicon_Translation), nameof(Models.Lexicon_Translation.Id)),
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
-                if (modelSnapshot.TryGetStringPropertyValue(nameof(Models.Lexicon_Translation.Text), out var text) &&
-                    modelSnapshot.TryGetStringPropertyValue(LexiconBuilder.BuildPropertyRefName(LexiconBuilder.MEANING_REF_PREFIX), out var meaningRef) &&
-                    modelSnapshot.TryGetStringPropertyValue(LexiconBuilder.BuildPropertyRefName(LexiconBuilder.LEXEME_REF_PREFIX), out var lexemeRef))
-                {
-                    var (lexemeLemma, lexemeLanguage, lexemeType) = LexiconBuilder.DecodeLexemeRef(lexemeRef);
-                    var lexemeId = await ValuesToLexemeId(lexemeLemma, lexemeLanguage, lexemeType, projectDbContext, cache, logger);
+                var lexemeId = await LexemeRefToLexemeId(modelSnapshot, projectDbContext, cache, logger);
+                if (lexemeId == default)
+                    return null;
 
-                    if (lexemeId == default)
-                        return null;
+                var meaningId = await MeaningRefLexemeIdToMeaningId(modelSnapshot, lexemeId, projectDbContext, cache, logger);
+                if (meaningId == default)
+                    return null;
 
-                    var (meaningText, meaningLanguage) = LexiconBuilder.DecodeMeaningRef(meaningRef);
-                    var meaningId = await ValuesToMeaningId(meaningText, meaningLanguage, lexemeId, projectDbContext, cache, logger);
-
-                    if (meaningId == default)
-                        return null;
-
-                    var formId = await ValuesToTranslationId(text, meaningId, projectDbContext, logger);
-                    return (formId != default) ? formId : null;
-                }
-                else
-                {
-                    throw new PropertyResolutionException($"Form snapshot does not have all of text, LexemeRef property values, which are required for Id resolution.");
-                }
+                var text = ExtractStringProperty(modelSnapshot, nameof(Models.Lexicon_Translation.Text));
+                var translationId = await ValuesToTranslationId(text, meaningId, projectDbContext, logger);
+                return (translationId != default) ? translationId : null;
 
             });
 
-        mergeContext.MergeBehavior.AddIdPropertyNameMapping(
-            (typeof(Models.Lexicon_Lexeme), LexiconBuilder.BuildPropertyRefName()),
-            new[] { nameof(Models.Lexicon_Lexeme.Id) });
+        mergeContext.MergeBehavior.AddEntityValueResolver(
+            (typeof(Models.Lexicon_Translation), nameof(Models.Lexicon_Translation.MeaningId)),
+            entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
+
+                var lexemeId = await LexemeRefToLexemeId(modelSnapshot, projectDbContext, cache, logger);
+                if (lexemeId == default)
+                    return null;
+
+                var meaningId = await MeaningRefLexemeIdToMeaningId(modelSnapshot, lexemeId, projectDbContext, cache, logger);
+                return (meaningId != default) ? meaningId : null;
+            });
+
+        var L_TYPE = typeof(Models.Lexicon_Lexeme);
+        var M_TYPE = typeof(Models.Lexicon_Meaning);
+        var F_TYPE = typeof(Models.Lexicon_Form);
+        var T_TYPE = typeof(Models.Lexicon_Translation);
+        var refName = LexiconBuilder.BuildPropertyRefName();
+        var idName = nameof(Models.Lexicon_Lexeme.Id);
+
+        mergeContext.MergeBehavior.AddIdPropertyNameMapping((L_TYPE, refName), new[] { idName });
+        mergeContext.MergeBehavior.AddIdPropertyNameMapping((M_TYPE, refName), new[] { idName });
+        mergeContext.MergeBehavior.AddIdPropertyNameMapping((F_TYPE, refName), new[] { idName });
+        mergeContext.MergeBehavior.AddIdPropertyNameMapping((T_TYPE, refName), new[] { idName });
+        mergeContext.MergeBehavior.AddPropertyNameMapping(  (L_TYPE, refName), new[] { idName });
+        mergeContext.MergeBehavior.AddPropertyNameMapping(  (M_TYPE, refName), new[] { idName });
+        mergeContext.MergeBehavior.AddPropertyNameMapping(  (F_TYPE, refName), new[] { idName });
+        mergeContext.MergeBehavior.AddPropertyNameMapping(  (T_TYPE, refName), new[] { idName });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.Lexicon_Lexeme), LexiconBuilder.BuildPropertyRefName()),
-            new[] { nameof(Models.Lexicon_Lexeme.Id) });
-
-        mergeContext.MergeBehavior.AddIdPropertyNameMapping(
-            (typeof(Models.Lexicon_Meaning), LexiconBuilder.BuildPropertyRefName()),
-            new[] { nameof(Models.Lexicon_Meaning.Id) });
+            (M_TYPE, LexiconBuilder.BuildPropertyRefName(LexiconBuilder.LEXEME_REF_PREFIX)),
+            new[] { nameof(Models.Lexicon_Meaning.LexemeId) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.Lexicon_Meaning), LexiconBuilder.BuildPropertyRefName()),
-            new[] { nameof(Models.Lexicon_Meaning.Id) });
-
-        mergeContext.MergeBehavior.AddIdPropertyNameMapping(
-            (typeof(Models.Lexicon_Form), LexiconBuilder.BuildPropertyRefName()),
-            new[] { nameof(Models.Lexicon_Form.Id) });
+            (F_TYPE, LexiconBuilder.BuildPropertyRefName(LexiconBuilder.LEXEME_REF_PREFIX)),
+            new[] { nameof(Models.Lexicon_Form.LexemeId) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.Lexicon_Form), LexiconBuilder.BuildPropertyRefName()),
-            new[] { nameof(Models.Lexicon_Form.Id) });
-
-        mergeContext.MergeBehavior.AddIdPropertyNameMapping(
-            (typeof(Models.Lexicon_Translation), LexiconBuilder.BuildPropertyRefName()),
-            new[] { nameof(Models.Lexicon_Translation.Id) });
+            (T_TYPE, LexiconBuilder.BuildPropertyRefName(LexiconBuilder.LEXEME_REF_PREFIX)),
+            Enumerable.Empty<string>());
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.Lexicon_Translation), LexiconBuilder.BuildPropertyRefName()),
-            new[] { nameof(Models.Lexicon_Translation.Id) });
+            (T_TYPE, LexiconBuilder.BuildPropertyRefName(LexiconBuilder.MEANING_REF_PREFIX)),
+            new[] { nameof(Models.Lexicon_Translation.MeaningId) });
+    }
+
+    private static (string Lemma, string Language, string? Type) ExtractLexemeIdParts(IModelSnapshot modelSnapshot)
+    {
+        if (modelSnapshot.TryGetStringPropertyValue(nameof(Models.Lexicon_Lexeme.Lemma), out var lemma) &&
+            modelSnapshot.TryGetStringPropertyValue(nameof(Models.Lexicon_Lexeme.Language), out var language))
+        {
+            modelSnapshot.TryGetNullableStringPropertyValue(nameof(Models.Lexicon_Lexeme.Type), out var type);
+
+            return (lemma, language, type);
+        }
+        else
+        {
+            throw new PropertyResolutionException($"{modelSnapshot.EntityType} snapshot does not have both of text, language property values, which are required for Id resolution.");
+        }
+    }
+
+    private static (string Text, string Language) ExtractMeaningIdParts(IModelSnapshot modelSnapshot)
+    {
+        if (modelSnapshot.TryGetStringPropertyValue(nameof(Models.Lexicon_Meaning.Text), out var text) &&
+            modelSnapshot.TryGetStringPropertyValue(nameof(Models.Lexicon_Meaning.Language), out var language))
+        {
+            return (text, language);
+        }
+        else
+        {
+            throw new PropertyResolutionException($"{modelSnapshot.EntityType} snapshot does not have text, language property values, which are required for Id resolution.");
+        }
+    }
+
+    private static string ExtractStringProperty(IModelSnapshot modelSnapshot, string propertyName)
+    {
+        if (modelSnapshot.TryGetStringPropertyValue(propertyName, out var refValue))
+        {
+            return refValue;
+        }
+        else
+        {
+            throw new PropertyResolutionException($"{modelSnapshot.EntityType} snapshot does not have {propertyName} property value, which is required for Id resolution.");
+        }
+    }
+
+    public static async Task<Guid> LexemeRefToLexemeId(IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger)
+    {
+        var lexemeRef = ExtractStringProperty(modelSnapshot, LexiconBuilder.BuildPropertyRefName(LexiconBuilder.LEXEME_REF_PREFIX));
+
+        var (lexemeLemma, lexemeLanguage, lexemeType) = LexiconBuilder.DecodeLexemeRef(lexemeRef);
+        var lexemeId = await ValuesToLexemeId(lexemeLemma, lexemeLanguage, lexemeType, projectDbContext, cache, logger);
+
+        return lexemeId;
+    }
+
+    public static async Task<Guid> MeaningRefLexemeIdToMeaningId(IModelSnapshot modelSnapshot, Guid lexemeId, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger)
+    {
+        var meaningRef = ExtractStringProperty(modelSnapshot, LexiconBuilder.BuildPropertyRefName(LexiconBuilder.MEANING_REF_PREFIX));
+
+        var (meaningText, meaningLanguage) = LexiconBuilder.DecodeMeaningRef(meaningRef);
+        var meaningId = await ValuesToMeaningId(meaningText, meaningLanguage, lexemeId, projectDbContext, cache, logger);
+
+        return meaningId;
     }
 
 }
