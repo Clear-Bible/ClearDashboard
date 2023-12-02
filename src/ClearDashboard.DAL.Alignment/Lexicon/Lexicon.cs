@@ -59,8 +59,38 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             lexemes_ = new ObservableCollection<Lexeme>(lexemes.DistinctBy(e => e.LexemeId));
             lexemeIdsInDatabase_ = new(lexemes.Select(f => f.LexemeId));
         }
+        internal Lexicon(IEnumerable<Lexeme> lexemes, List<LexemeId> lexemeIdsInDatabase)
+        {
+            lexemes_ = new ObservableCollection<Lexeme>(lexemes.DistinctBy(e => e.LexemeId));
+            lexemeIdsInDatabase_ = lexemeIdsInDatabase;
+        }
 
-     
+        public static Lexicon MergeFirstIntoSecond(Lexicon first, Lexicon second)
+        {
+            var combinedLexemes = first.Lexemes.MergeIntoSecond(second.Lexemes);
+
+            // Find LexemeIdsInDatabase from first Lexicon that aren't already
+            // in second Lexicon, but only ones for combined lexemes:
+            var additionalLexemeIdsInDatabase = first.lexemeIdsInDatabase_
+                .ExceptBy(second.lexemeIdsInDatabase_.Select(e => e.Id), e => e.Id)
+                .IntersectBy(combinedLexemes.Select(e => e.LexemeId.Id), e => e.Id);
+
+            var combinedLexemeIdsInDatabase = second.lexemeIdsInDatabase_
+                .UnionBy(additionalLexemeIdsInDatabase, e => e.Id)
+                .ToList();
+
+            return new Lexicon(combinedLexemes, combinedLexemeIdsInDatabase);
+        }
+
+        public static async Task<Lexicon> MergeAndSaveAsync(Collection<Lexeme> lexemes, Lexicon sourceLexicon, IMediator mediator)
+        {
+            var lexicon = new Lexicon(lexemes, lexemes.Select(e => e.LexemeId).IntersectBy(
+                sourceLexicon.lexemeIdsInDatabase_.Select(e => e.Id),
+                e => e.Id).ToList());
+
+            await lexicon.SaveAsync(mediator);
+            return lexicon;
+        }
 
         public async Task SaveAsync(IMediator mediator, CancellationToken token = default)
         {

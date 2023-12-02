@@ -470,7 +470,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public ObservableCollection<Lexeme>? ManagedLexemes { get; private set; }
 
-        public (IEnumerable<Lexeme> Lexemes, IEnumerable<Guid> TranslationMatchTranslationIds, IEnumerable<Guid> LemmaOrFormMatchTranslationIds) ManagedLexicon { get; private set; }
+        public (Lexicon Lexicon, IEnumerable<Guid> TranslationMatchTranslationIds, IEnumerable<Guid> LemmaOrFormMatchTranslationIds) ManagedLexicon { get; private set; }
 
         public List<LexiconImportViewModel> ImportedLexiconViewModels { get; private set; }
         
@@ -516,7 +516,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 if (externalLexicon != null)
                 {
                     ManagedLexicon = await GetExternalLexiconMergedIntoInternal(externalLexicon, cancellationToken);
-                    ManagedLexemes = new ObservableCollection<Lexeme>(ManagedLexicon.Lexemes);
+                    ManagedLexemes = new ObservableCollection<Lexeme>(ManagedLexicon.Lexicon.Lexemes);
 
                     foreach (var lexeme in ManagedLexemes)
                     {
@@ -594,20 +594,20 @@ namespace ClearDashboard.Wpf.Application.Services
             private set => Set(ref _internalLexicon, value);
         }
 
-        private async Task<(IEnumerable<Lexeme> Lexemes, IEnumerable<Guid> TranslationMatchTranslationIds, IEnumerable<Guid> LemmaOrFormMatchTranslationIds)> GetExternalLexiconMergedIntoInternal(Lexicon externalLexicon, CancellationToken cancellationToken)
+        private async Task<(Lexicon Lexicon, IEnumerable<Guid> TranslationMatchTranslationIds, IEnumerable<Guid> LemmaOrFormMatchTranslationIds)> GetExternalLexiconMergedIntoInternal(Lexicon externalLexicon, CancellationToken cancellationToken)
         {
             InternalLexicon = await Lexicon.GetInternalLexicon(Mediator, cancellationToken);
             return GetExternalLexiconMergedIntoInternal(externalLexicon, InternalLexicon);
         }
 
-        private static (IEnumerable<Lexeme> MergedLexemes, IEnumerable<Guid> TranslationMatchTranslationIds, IEnumerable<Guid> LemmaOrFormMatchTranslationIds) GetExternalLexiconMergedIntoInternal(Lexicon externalLexicon, Lexicon internalLexicon)
+        private static (Lexicon Lexicon, IEnumerable<Guid> TranslationMatchTranslationIds, IEnumerable<Guid> LemmaOrFormMatchTranslationIds) GetExternalLexiconMergedIntoInternal(Lexicon externalLexicon, Lexicon internalLexicon)
         {
-            var mergedLexemes = externalLexicon.Lexemes.MergeIntoSecond(internalLexicon.Lexemes);
+            var mergedLexicon = Lexicon.MergeFirstIntoSecond(externalLexicon, internalLexicon);
 
-            var translationMatchTranslationIds = mergedLexemes.GetTranslationMatchTranslationIds();
-            var lemmaOrFormMatchTranslationIds = mergedLexemes.GetLemmaOrFormMatchTranslationIds();
+            var translationMatchTranslationIds = mergedLexicon.Lexemes.GetTranslationMatchTranslationIds();
+            var lemmaOrFormMatchTranslationIds = mergedLexicon.Lexemes.GetLemmaOrFormMatchTranslationIds();
 
-            return (mergedLexemes, translationMatchTranslationIds, lemmaOrFormMatchTranslationIds);
+            return (mergedLexicon, translationMatchTranslationIds, lemmaOrFormMatchTranslationIds);
         }
 
         public async Task ProcessLexiconToImport()
