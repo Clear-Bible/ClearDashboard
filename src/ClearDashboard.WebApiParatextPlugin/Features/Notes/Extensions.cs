@@ -2,7 +2,6 @@
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using Microsoft.Extensions.Logging;
 using Paratext.PluginInterfaces;
-using SIL.Extensions;
 using SIL.Linq;
 using SIL.Scripture;
 using System;
@@ -10,12 +9,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
 using System.Text;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
 {
@@ -66,8 +61,10 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                 SelectedPlainText = projectNote.Anchor.SelectedText,
                 IndexOfSelectedPlainTextInVersePainText = indexOfSelectedPlainTextInVersePainText,
                 VerseRefString = verseRef.ToString(),
-                Body = body.SerializeNoteBodyXml(),
-                Message = body.GetMessage()
+                BodyXml = body.SerializeNoteBodyXml(),
+                ExternalUserNameAssignedTo = body.AssignedUserName,
+                IsResolved = body.IsResolved,
+                ExternalNoteMessages = body.GetExternalNoteMessages()
             };
         }
 
@@ -230,9 +227,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
         {
             if (paratextProjectMetadata.ProjectPath == null)
             {
-                var message = "GetExternalLabels paratextProjectMetadata parameter ProjectPath is null";  
+                var message = "Project doesn't have labels available.";  
                 logger.LogError(message);
-                throw new Exception(message);
+                throw new Exception($"{message}: GetExternalLabels paratextProjectMetadata parameter ProjectPath is null");
             }
 
             var labelsFilePath = Path.Combine(paratextProjectMetadata.ProjectPath, EXTERNAL_LABELS_FILENAME);

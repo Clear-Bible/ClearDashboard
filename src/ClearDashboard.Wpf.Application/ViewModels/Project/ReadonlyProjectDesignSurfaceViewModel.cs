@@ -1186,33 +1186,67 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                         await _noteManager.ExternalNoteManager.UpdateLabelsWithExternalLabels(externalProjectId, Mediator!, Logger!, cancellationToken);
 
-                        await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
-                            description: $"Retrieving external labels for externalProjectId '{externalProjectId}'...Completed", cancellationToken: cancellationToken);
-
-                        _longRunningTaskManager.TaskComplete(taskName);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        Logger!.LogInformation("UpdateLabelsWithExternalLabels() - OperationCanceledException was thrown -> cancellation was requested.");
-                    }
-                    catch (MediatorErrorEngineException ex)
-                    {
-                        if (ex.Message.Contains("The operation was canceled"))
+                        if (cancellationToken.IsCancellationRequested)
                         {
-                            Logger!.LogInformation($"UpdateLabelsWithExternalLabels() - OperationCanceledException was thrown -> cancellation was requested.");
+                            await SendBackgroundStatus(taskName,
+                                LongRunningTaskStatus.Cancelled,
+                                cancellationToken,
+                                $"{taskName} canceled.");
+                            Logger!.LogDebug($"{taskName} cancelled.");
                         }
                         else
                         {
-                            Logger!.LogError(ex, "an unexpected Engine exception was thrown.");
+                            await SendBackgroundStatus(
+                                taskName,
+                                LongRunningTaskStatus.Completed,
+                                cancellationToken,
+                                $"{taskName} complete");
+                            Logger!.LogDebug($"{taskName} complete.");
                         }
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        await SendBackgroundStatus(
+                            taskName,
+                            LongRunningTaskStatus.Cancelled,
+                            cancellationToken,
+                            $"{taskName} cancelled.");
+                        Logger!.LogDebug($"{taskName}: cancelled.");
+                    }
+                    catch (MediatorErrorEngineException ex)
+                    {
+                        if (ex.Message.Contains("The operation was canceled."))
+                        {
+                            await SendBackgroundStatus(
+                                taskName,
+                                LongRunningTaskStatus.Cancelled,
+                                cancellationToken,
+                                $"{taskName} cancelled.");
+                            Logger!.LogDebug($"{taskName}: cancelled.");
 
+                        }
+                        else
+                        {
+                            await SendBackgroundStatus(
+                               taskName,
+                               LongRunningTaskStatus.Failed,
+                               cancellationToken,
+                               $"{taskName} failed: {ex.Message}.",
+                               ex);
+                            Logger!.LogError(ex, $"{taskName}: failed: {ex}.");
+                        }
                     }
                     catch (Exception ex)
                     {
-                        Logger!.LogError(ex, $"An unexpected error occurred while retrieving external labels for '{externalProjectId}' ");
                         if (!cancellationToken.IsCancellationRequested)
                         {
-                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed, exception: ex, cancellationToken: cancellationToken);
+                            await SendBackgroundStatus(
+                                taskName,
+                                LongRunningTaskStatus.Failed,
+                                cancellationToken,
+                                $"{taskName} failed: {ex.Message}.",
+                                ex);
+                            Logger!.LogError(ex, $"{taskName}: failed: {ex}.");
                         }
                     }
                     finally
@@ -1227,6 +1261,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 Logger!.LogInformation($"UpdateLabelsWithExternalLabels() - Exception was thrown {e}");
             }
         }
+
         public void GetLatestExternalNotes(string externalProjectId)
         {
             try
@@ -1249,33 +1284,67 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                         await _noteManager.ExternalNoteManager.InvalidateExternalNotesCache(externalProjectId);
 
-                        await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
-                            description: $"Retrieving external notes for externalProjectId '{externalProjectId}'...Completed", cancellationToken: cancellationToken);
-
-                        _longRunningTaskManager.TaskComplete(taskName);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        Logger!.LogInformation("GetLatestExternalNotes() - OperationCanceledException was thrown -> cancellation was requested.");
-                    }
-                    catch (MediatorErrorEngineException ex)
-                    {
-                        if (ex.Message.Contains("The operation was canceled"))
+                        if (cancellationToken.IsCancellationRequested)
                         {
-                            Logger!.LogInformation($"GetLatestExternalNotes() - OperationCanceledException was thrown -> cancellation was requested.");
+                            await SendBackgroundStatus(taskName,
+                                LongRunningTaskStatus.Cancelled,
+                                cancellationToken,
+                                $"{taskName} canceled.");
+                            Logger!.LogDebug($"{taskName} cancelled.");
                         }
                         else
                         {
-                            Logger!.LogError(ex, "an unexpected Engine exception was thrown.");
+                            await SendBackgroundStatus(
+                                taskName,
+                                LongRunningTaskStatus.Completed,
+                                cancellationToken,
+                                $"{taskName} complete");
+                            Logger!.LogDebug($"{taskName} complete.");
                         }
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        await SendBackgroundStatus(
+                            taskName,
+                            LongRunningTaskStatus.Cancelled,
+                            cancellationToken,
+                            $"{taskName} cancelled.");
+                        Logger!.LogDebug($"{taskName}: cancelled.");
+                    }
+                    catch (MediatorErrorEngineException ex)
+                    {
+                        if (ex.Message.Contains("The operation was canceled."))
+                        {
+                            await SendBackgroundStatus(
+                                taskName,
+                                LongRunningTaskStatus.Cancelled,
+                                cancellationToken,
+                                $"{taskName} cancelled.");
+                            Logger!.LogDebug($"{taskName}: cancelled.");
 
+                        }
+                        else
+                        {
+                            await SendBackgroundStatus(
+                               taskName,
+                               LongRunningTaskStatus.Failed,
+                               cancellationToken,
+                               $"{taskName} failed: {ex.Message}.",
+                               ex);
+                            Logger!.LogError(ex, $"{taskName}: failed: {ex}.");
+                        }
                     }
                     catch (Exception ex)
                     {
-                        Logger!.LogError(ex, $"An unexpected error occurred while retrieving external notes for '{externalProjectId}' ");
                         if (!cancellationToken.IsCancellationRequested)
                         {
-                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,exception: ex, cancellationToken: cancellationToken);
+                            await SendBackgroundStatus(
+                                taskName,
+                                LongRunningTaskStatus.Failed,
+                                cancellationToken,
+                                $"{taskName} failed: {ex.Message}.",
+                                ex);
+                            Logger!.LogError(ex, $"{taskName}: failed: {ex}.");
                         }
                     }
                     finally

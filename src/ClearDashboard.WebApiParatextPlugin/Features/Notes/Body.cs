@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -28,10 +30,17 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
         [DataMember]
         public string VerseUsfmText { get; set; }
 
-        internal string GetMessage()
+        internal List<ExternalNoteMessage> GetExternalNoteMessages()
         {
             return Comments
-                .Aggregate("", (str, next) => $"{str}Author {next.Author} {next.Created}:\n{next.Paragraphs.Aggregate("", (innerstring, next) => $"{innerstring}{next}\n")}\n\n");
+                .Select(c => new ExternalNoteMessage()
+                {
+                    Created = DateTime.Parse(c.Created),
+                    Language = c.Language,
+                    ExternalUserNameAuthoredBy = c.Author,
+                    Text = c.Paragraphs.Aggregate("", (innerstring, next) => $"{innerstring}{next}{Environment.NewLine}")
+                })
+                .ToList();
         }
 
         internal string SerializeNoteBodyXml()

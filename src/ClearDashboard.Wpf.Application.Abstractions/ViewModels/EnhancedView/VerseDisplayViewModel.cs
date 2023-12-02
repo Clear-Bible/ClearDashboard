@@ -283,18 +283,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
         protected void SetExternalNotesOnTokenDisplayViewModels(TokenDisplayViewModelCollection tokenDisplayViewModels, List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)> noteInfos)
         {
-
-            Debug.WriteLine($"NOTEINFOS: {noteInfos.Count}");
-            foreach (var noteInfo in noteInfos)
-            {
-                Debug.WriteLine($"NOTEINFO: {noteInfo.tokenIds?.Count}");
-            }
-
             foreach ( var tokenDisplayViewModel in tokenDisplayViewModels)
             {
-                Debug.WriteLine($"{tokenDisplayViewModel.Token.TokenId} {noteInfos[0].tokenIds?.Count}");
-
-                var externalNotes = noteInfos
+                 var externalNotes = noteInfos
                     .Where(noteInfo => noteInfo.tokenIds?.Contains(tokenDisplayViewModel.Token.TokenId) ?? false)
                     .Select(noteInfo => noteInfo.externalNote)
                     .ToList();

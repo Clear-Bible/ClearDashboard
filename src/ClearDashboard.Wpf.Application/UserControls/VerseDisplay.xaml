@@ -268,8 +268,7 @@
                                                 </MultiBinding>
                                             </TextBox.Text>
                                         </TextBox>
-
-                                        <Label Content="{Binding Message}" />
+                                        <Label Content="{Binding ExternalNoteMessagesString}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>

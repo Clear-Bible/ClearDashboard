@@ -103,7 +103,7 @@
                                                     </TextBox.Text>
                                                 </TextBox>
 
-                                                <Label Content="{Binding Message}" />
+                                                <Label Content="{Binding ExternalNoteMessagesString}" />
                                                 <!--<controls:ExtendedPropertiesTreeView
                                                     x:Name="ExternalNoteBodyTokenTreeViewName"
                                                     ExtendedPropertiesXml="{Binding Body}"

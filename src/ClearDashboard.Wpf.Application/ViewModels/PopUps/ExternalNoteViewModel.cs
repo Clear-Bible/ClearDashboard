@@ -129,8 +129,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             int index = 1;
             foreach (var externalNote in externalNotes)
             {
-                var items = ExtractBody(externalNote.Body);
-
                 var inlines = GenerateVerseInlines(externalNote);
 
                 _externalProjectId = externalNote.ExternalProjectId;
@@ -142,11 +140,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     VersePlainText = externalNote.VersePlainText,
                     SelectedPlainText = externalNote.SelectedPlainText,
                     IndexOfSelectedPlainTextInVersePainText = externalNote.IndexOfSelectedPlainTextInVersePainText,
+                    ExternalUserNameAssignedTo = externalNote.ExternalUserNameAssignedTo,
                     VerseRefString = externalNote.VerseRefString,
-                    Message = externalNote.Message,
-                    AssignedUser = items.Item1,
-                    BodyComments = items.Item2,
-                    IsResolved = items.Item3,
+                    ExternalNoteMessages = externalNote.ExternalNoteMessages,
                     Inlines = inlines,
                     TabHeader = $"Note: {index}",
                     Id = Id
@@ -209,47 +205,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             return inlines;
         }
-
-
-        /// <summary>
-        /// Extracts components from the xml string
-        /// </summary>
-        /// <param name="xmlString"></param>
-        /// <returns></returns>
-        private Tuple<string, List<BodyComment>, bool> ExtractBody(string xmlString)
-        {
-            var str = XElement.Parse(xmlString);
-
-            // get the value of the AssignedUserName element
-            var assignedUser = str.Element("Body")!.Element("AssignedUserName")!.Value;
-            if (string.IsNullOrEmpty(assignedUser))
-            {
-                assignedUser = "Unassigned";
-            }
-
-            var isResolved = str.Element("Body")!.Element("IsResolved")!.Value;
-            // ReSharper disable once ReplaceWithSingleAssignment.False
-            bool isResolvedBool = false;
-            if (isResolved == "true")
-            {
-                isResolvedBool = true;
-            }
-
-            // get all the body comments
-            var comments = str.Element("Body")!.Element("Comments")!.Elements("BodyComment").ToList();
-
-            List<BodyComment> bodyComments = new List<BodyComment>();
-            foreach (var element in comments)
-            {
-                bodyComments.Add(new BodyComment(element));
-            }
-
-            // Create a 3-tuple and return it
-            var author = new Tuple<string,
-                List<BodyComment>, bool>(assignedUser, bodyComments, isResolvedBool);
-            return author;
-        }
-
 
         /// <summary>
         /// Saves the external note and or selected assigned user
@@ -342,38 +297,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 OnPropertyChanged();
             }
         }
-
-        private string _assignedUser = "Empty User";
-        public string AssignedUser
+        public new string ExternalUserNameAssignedTo
         {
-            get => _assignedUser;
+            get => base.ExternalUserNameAssignedTo;
             set 
             { 
-                _assignedUser = value;
+                base.ExternalUserNameAssignedTo = value;    
                 OnPropertyChanged();
             }
         }
-
-
-        private List<BodyComment> _bodyComments = new();
-        public List<BodyComment> BodyComments
+        public new List<ExternalNoteMessage> ExternalNoteMessages
         {
-            get => _bodyComments;
+            get => base.ExternalNoteMessages;
             set 
             { 
-                _bodyComments = value; 
+                base.ExternalNoteMessages = value; 
                 OnPropertyChanged();
             }
         }
-
-
-        private bool _isResolved;
-        public bool IsResolved
+        public new bool IsResolved
         {
-            get => _isResolved;
+            get => base.IsResolved;
             set 
             { 
-                _isResolved = value;
+                base.IsResolved = value;
                 OnPropertyChanged();
             }
         }
@@ -397,98 +344,4 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-
-
-    [Serializable()]
-    [DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(AnonymousType = true)]
-    [System.Xml.Serialization.XmlRoot(Namespace = "", IsNullable = false)]
-    public class BodyComment
-    {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public BodyComment(XElement element)
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        {
-            Created = element.Element("Created")!.Value;
-            Language = element.Element("Language")!.Value;
-            Author = element.Element("Author")!.Value;
-
-            var bodyStrings = element.Element("Paragraphs")!.Elements("string").ToList();
-
-            string body = "";
-            foreach (var bodyString in bodyStrings)
-            {
-                if (bodyString.Value is not null)
-                {
-                    body += bodyString.Value + Environment.NewLine;
-                }
-                else
-                {
-                    body += Environment.NewLine;
-                }
-            }
-
-            Paragraphs = new BodyCommentParagraphs
-            {
-                @string = body
-            };
-        }
-
-        public DateTime CreatedDateTime => DateTime.Parse(Created);
-
-        private BodyCommentParagraphs _paragraphsField;
-
-        private string _createdField = string.Empty;
-
-        private string _languageField = string.Empty;
-
-        private string _authorField = string.Empty;
-
-        /// <remarks/>
-        public BodyCommentParagraphs Paragraphs
-        {
-            get => this._paragraphsField;
-            set => this._paragraphsField = value;
-        }
-
-        /// <remarks/>
-        public string Created
-        {
-            get => this._createdField;
-            set => this._createdField = value;
-        }
-
-        /// <remarks/>
-        public string Language
-        {
-            get => this._languageField;
-            set => this._languageField = value;
-        }
-
-        /// <remarks/>
-        public string Author
-        {
-            get => this._authorField;
-            set => this._authorField = value;
-        }
-    }
-
-    /// <remarks/>
-    [Serializable()]
-    [DesignerCategory("code")]
-    [System.Xml.Serialization.XmlType(AnonymousType = true)]
-    public partial class BodyCommentParagraphs
-    {
-        private string _stringField = string.Empty;
-
-        /// <remarks/>
-        public string @string
-        {
-            get => this._stringField;
-            set => this._stringField = value;
-        }
-    }
-
-
-
 }
