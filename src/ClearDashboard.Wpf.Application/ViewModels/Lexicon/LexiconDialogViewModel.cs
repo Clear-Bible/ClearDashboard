@@ -21,6 +21,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using ClearDashboard.Wpf.Application.Helpers;
+using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
+
 // ReSharper disable UnusedMember.Global
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
@@ -81,7 +84,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             set => _interlinearDisplayViewModel = value;
         }
 
-        public string DialogTitle => $"Translation/Lexeme: {TokenDisplay.TranslationSurfaceText}";
+        public string DialogTitle => $"{LocalizationService["BiblicalTermsForm_Gloss"]}: {TokenDisplay.TranslationSurfaceAndTrainingText}";
 
         private LexemeViewModel? _currentLexeme;
         public LexemeViewModel? CurrentLexeme
@@ -167,6 +170,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             }
             finally
             {
+                Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.GlossesConfirmed, 1);
                 OnUIThread(() => ProgressBarVisibility = Visibility.Collapsed);
                 await TryCloseAsync(true);
             }
@@ -174,6 +178,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         public async void CancelTranslation()
         {
+            await InterlinearDisplay.UpdateTokens(true);
             await TryCloseAsync(false);
         }
 

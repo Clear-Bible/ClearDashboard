@@ -1079,6 +1079,11 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         private async Task<bool> IsRelatedParatextProjectAParatextResource(CorpusNodeViewModel corpusNode)
         {
+            if (_projectManager.IsParatextConnected == false)
+            {
+                return false;
+            }
+
             bool isResource;
             if (corpusNode.CorpusType != CorpusType.ManuscriptHebrew && corpusNode.CorpusType != CorpusType.ManuscriptGreek)
             {
@@ -1617,8 +1622,6 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             {
                 Debug.WriteLine("====ConnectionDragCompleted (parallelCorpusConnectorDraggedOver.Id):" + parallelCorpusConnectorDraggedOver.ParatextId);
             }
-
-
 
 
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract

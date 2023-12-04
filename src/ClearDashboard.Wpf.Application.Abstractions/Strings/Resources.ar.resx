@@ -143,7 +143,7 @@
     <value>لا اخطاء</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
-    <value>حفظ أخطاء USFM للملف</value>
+    <value>احفظ أخطاء USFM للملف</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
     <value>اختر الكل</value>
@@ -153,6 +153,9 @@
   </data>
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>كتب مختارة</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>حدد كتب USFM لإرسالها</value>
   </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>حدد Paratext Project</value>
@@ -242,7 +245,7 @@
     <value>اعمال البناء؛ تربية الحيوان</value>
   </data>
   <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
-    <value>الحاويات تربية الحيوان</value>
+    <value>حاويات تربية الحيوان</value>
   </data>
   <data name="BiblicalTermsDomains_CraftsCloth" xml:space="preserve">
     <value>الحرف؛ قماش</value>
@@ -556,6 +559,9 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>انشأ من قبل</value>
   </data>
+  <data name="Current" xml:space="preserve">
+    <value>حاضِر</value>
+  </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
   </data>
@@ -671,7 +677,7 @@
     <value>انقسام ثلاثي الاتجاه</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>un incin composite token</value>
+    <value>un incin مركب مركب</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -708,6 +714,9 @@
   </data>
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>وضع الفقرة</value>
+  </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>إظهار الملاحظات الخارجية</value>
   </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>النص المصدر:</value>
@@ -833,10 +842,10 @@
     <value>إضافة مجال دلالي</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>تطبيق الترجمة</value>
+    <value>تطبيق لمعان</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>إلغاء الترجمة</value>
+    <value>إلغاء اللمعان</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
     <value>تغيير كل الأحداث غير المخلصة</value>
@@ -863,7 +872,7 @@
     <value>أدخل ترجمة جديدة ل</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>أدخل ترجمة جديدة</value>
+    <value>أدخل لمعان جديد</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>ليما</value>
@@ -884,16 +893,16 @@
     <value>المعاني:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>ترجمة جديدة</value>
+    <value>لمعان جديد</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>قم بإزالة هذا المجال الدلالي من هذا المعنى</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
-    <value>قم بإزالة هذا النموذج المعجمي من هذا الليمون</value>
+    <value>قم بإزالة هذا النموذج المعجمي من هذا ليمما</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>تعيين ترجمة ل</value>
+    <value>تعيين لمعان ل</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>و</value>
@@ -903,6 +912,12 @@
   </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>يحرر</value>
+  </data>
+  <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>أضف '{0}' كنموذج</value>
+  </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>أضف '{0}' كترجمة إلى المعنى الأول</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>جد كل</value>
@@ -918,6 +933,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>لكلية</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>تحميل البيانات...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>حدث خطأ غير متوقع أثناء تحميل البيانات. {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>مطابقة</value>
@@ -1073,7 +1094,7 @@
     <value>أداة المحاذاة</value>
   </data>
   <data name="MainView_WindowsBiblicalTerms" xml:space="preserve">
-    <value>مصطلحات الكتاب المقدس</value>
+    <value>شروط الكتاب المقدس</value>
   </data>
   <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
     <value>رموز كوربوس</value>
@@ -1205,7 +1226,7 @@
     <value>MIC</value>
   </data>
   <data name="Migrate_Header" xml:space="preserve">
-    <value>إعادة تعيين تعيينات الآية إلى الافتراض الافتراضي</value>
+    <value>إعادة تعيين تعيينات الآية إلى الافتراضي</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>MRK</value>
@@ -1373,7 +1394,7 @@
     <value>إزالة مجموعة التسمية هذه؟</value>
   </data>
   <data name="Notes_LabelGroupRemoveTooltip" xml:space="preserve">
-    <value>قم بإزالة مجموعة الملصقات هذه</value>
+    <value>قم بإزالة مجموعة التسمية هذه</value>
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
     <value>أزل هذا التسمية</value>
@@ -1475,10 +1496,10 @@
     <value>إنشاء interlinear</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
-    <value>بيانات التعريف json</value>
+    <value>JSON METADATA</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
-    <value>موازية آيات كوربورا</value>
+    <value>موازاة آيات كوربورا</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
     <value>خوارزمية محاذاة كلمة الجهاز</value>
@@ -1570,11 +1591,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>قاموس</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>محرر ملاحظات خارجية</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>قم بتناسب منطقة المحتوى بأكملها مع منفذ العرض</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>قم بتناسب جميع العقد مع منفذ العرض</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>احصل على أحدث الملاحظات الخارجية</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>احصل على الأحدث من Paratext</value>
@@ -1601,10 +1628,10 @@
     <value>ملكيات</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>إعادة تعيين تعيينات الآية إلى الافتراض الافتراضي</value>
+    <value>إعادة تعيين تعيينات الآية إلى الافتراضي</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
-    <value>مورد</value>
+    <value>الموارد</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
     <value>قم بتوسيع المحتوى إلى 100 ٪</value>
@@ -1616,7 +1643,7 @@
     <value>مصدر</value>
   </data>
   <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>Sourcelanguage</value>
+    <value>SourceLanguage</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
     <value>معيار</value>
@@ -1742,7 +1769,7 @@
     <value>إنشاء مشروع جديد</value>
   </data>
   <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
-    <value>بدء تشغيل سريع مشروع جديد</value>
+    <value>ابدأ سريعًا مشروعًا جديدًا</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>إنشاء مشروع:</value>
@@ -1808,7 +1835,7 @@
     <value>الكتاب المقدس بين الخط (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext قيد التشغيل ولكنه غير متصل.</value>
+    <value>Paratext قيد التشغيل ولكن غير متصل.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>مشروع Paratext</value>
@@ -1937,7 +1964,7 @@
     <value>خروج</value>
   </data>
   <data name="ProperCase_Ezekiel" xml:space="preserve">
-    <value>حزقيال</value>
+    <value>حزن</value>
   </data>
   <data name="ProperCase_Ezra" xml:space="preserve">
     <value>عزرا</value>
@@ -2104,6 +2131,9 @@
   <data name="Save" xml:space="preserve">
     <value>يحفظ</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>يرسل</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>تمكين البرنامج المساعد التجريبي المائي</value>
   </data>
@@ -2183,7 +2213,7 @@
     <value>ClearDashboard إعدادات</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>عرض طرق عرض موسعة على شاشة مختلفة عن لوحة القيادة</value>
+    <value>عرض طرق العرض الموسعة على شاشة مختلفة عن لوحة القيادة</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
     <value>بالنسبة للأنظمة التي تحتوي على ثلاثة شاشات أو أكثر ، عرض عرض موسع على الشاشة الثالثة</value>
@@ -2257,6 +2287,9 @@
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>يرسل</value>
   </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>أرسل ملفات USFM</value>
+  </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>اقتراح</value>
   </data>
@@ -2327,7 +2360,7 @@
     <value>أداة المحاذاة</value>
   </data>
   <data name="Windows_BiblicalTerms" xml:space="preserve">
-    <value>مصطلحات الكتاب المقدس</value>
+    <value>شروط الكتاب المقدس</value>
   </data>
   <data name="Windows_CorpusTokens" xml:space="preserve">
     <value>رموز كوربوس</value>

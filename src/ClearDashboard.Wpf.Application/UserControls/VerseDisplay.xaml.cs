@@ -593,17 +593,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenClicked(object sender, RoutedEventArgs e)
         {
-            if (e is not TokenEventArgs args || args is { TokenDisplay: null } )
+            if (e is not TokenEventArgs args || args is { TokenDisplay: null })
             {
                 return;
             }
 
-            // If shift is pressed, then leave any selected tokens selected.
-            if (!args.IsShiftPressed)
-            {
-                UpdateVerseSelection(args.TokenDisplay, args.IsControlPressed);
-            }
-           
+            ////If shift is pressed, then leave any selected tokens selected.
+            //if (!args.IsShiftPressed)
+            //{
+            //    UpdateVerseSelection(args.TokenDisplay, args.IsControlPressed);
+            //}
+
 
             RaiseTokenEvent(TokenClickedEvent, args);
         }
@@ -754,6 +754,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
         
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
+            if (e is not TokenEventArgs args || args is { TokenDisplay: null })
+            {
+                return;
+            }
+
+            // If shift is pressed, then leave any selected tokens selected.
+            if (!args.IsShiftPressed)
+            {
+                UpdateVerseSelection(args.TokenDisplay, args.IsControlPressed);
+            }
+
             RaiseTokenEvent(TokenLeftButtonDownEvent, e);
         }
 
@@ -764,11 +775,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenRightButtonDown(object sender, RoutedEventArgs e)
         {
-            //var control = e.Source as FrameworkElement;
-            //if (control?.DataContext is TokenDisplayViewModel { IsTokenSelected: false } tokenDisplay)
-            //{
-            //    UpdateVerseSelection(tokenDisplay, false);
-            //}
+            var control = e.Source as FrameworkElement;
+            if (control?.DataContext is TokenDisplayViewModel { IsTokenSelected: false } tokenDisplay)
+            {
+                UpdateVerseSelection(tokenDisplay, false);
+            }
 
             RaiseTokenEvent(TokenRightButtonDownEvent, e);
         }

@@ -134,6 +134,7 @@ public class ProjectSnapshotFromFilesFactory
                     (IEnumerable<string> entityItems,
                     GeneralModel<Models.TokenizedCorpus> modelSnapshot) =>
                     {
+                        AddGeneralModelChild<Models.TokenizedCorpus, Models.Token>(entityItems, modelSnapshot, null, cancellationToken);
                         AddGeneralModelChild<Models.TokenizedCorpus, Models.TokenComposite>(entityItems, modelSnapshot, null, cancellationToken);
                         AddGeneralModelChild<Models.TokenizedCorpus, Models.VerseRow>(entityItems, modelSnapshot, null, cancellationToken);
                     },

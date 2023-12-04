@@ -510,7 +510,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         {
             RaiseLexemeEvent(LexemeAddedEvent, new LexemeViewModel
             {
-                Lemma = TokenDisplay.SurfaceText,
+                Lemma = TokenDisplay.TrainingText,
                 Language = GetSourceLanguage()
             });
             
@@ -527,7 +527,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             // Execute this assignment on the UI thread to ensure that data binding doesn't get broken.
             Execute.OnUIThread(() => CurrentLexeme = message.Lexeme);
 
-            if (CurrentLexeme.Lemma != TokenDisplay.SurfaceText && CurrentLexeme.Forms.All(f => f.Text != TokenDisplay.SurfaceText))
+            if (CurrentLexeme != null && CurrentLexeme.Lemma != TokenDisplay.SurfaceText && CurrentLexeme.Forms.All(f => f.Text != TokenDisplay.SurfaceText))
             {
                 var form = new Form{Text = TokenDisplay.SurfaceText};
                 CurrentLexeme.Forms.Add(form);

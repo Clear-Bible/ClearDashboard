@@ -45,14 +45,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return TranslationManager?.GetTranslationForToken(token, compositeToken);
         }
 
-        public override void SetExternalNotes(List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)> sourceTokenizedCorpusNotes,
-            List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>? targetTokenizedCorpusNotes)
-        {
-            SetExternalNotesOnTokenDisplayViewModels(SourceTokenDisplayViewModels, sourceTokenizedCorpusNotes);
-            if (targetTokenizedCorpusNotes != null)
-                SetExternalNotesOnTokenDisplayViewModels(TargetTokenDisplayViewModels, targetTokenizedCorpusNotes);
-        }
-
         /// <summary>
         /// Refreshes the translations for the specified tokens when a composite token is joined or unjoined.
         /// </summary>
@@ -99,7 +91,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             if (TranslationManager == null) throw new InvalidOperationException($"Cannot save translation {translation.TargetTranslationText} for token '{translation.SourceToken.SurfaceText}' ({translation.SourceToken.TokenId.Id}) because the translation manager is invalid.");
 
             await TranslationManager.PutTranslationAsync(translation, translationActionType);
+            await UpdateTokens(false);
+        }
 
+        /// <summary>
+        /// Rebuild the token display view models and broadcast a message that the underlying tokens may have changed.
+        /// </summary>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public async Task UpdateTokens(bool updateTranslations)
+        {
+            if (updateTranslations && TranslationManager != null)
+            {
+                await TranslationManager.GetTranslationsAsync();
+            }
             await BuildTokenDisplayViewModelsAsync();
             await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage());
         }

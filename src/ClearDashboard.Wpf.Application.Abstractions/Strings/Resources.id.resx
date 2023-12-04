@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>Buku yang dipilih</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>Pilih Buku USFM untuk dikirim</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>Pilih Proyek Paratext</value>
   </data>
@@ -458,7 +461,7 @@
     <value>Sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Bagian Sumber</value>
+    <value>Bagian sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Sumber Ref</value>
@@ -555,6 +558,9 @@
   </data>
   <data name="CreatedBy" xml:space="preserve">
     <value>Dibuat oleh</value>
+  </data>
+  <data name="Current" xml:space="preserve">
+    <value>Saat ini</value>
   </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
@@ -709,6 +715,9 @@
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>Mode paragraf</value>
   </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>Tampilkan catatan eksternal</value>
+  </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>Teks Sumber:</value>
   </data>
@@ -833,10 +842,10 @@
     <value>Tambahkan domain semantik</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>Terapkan terjemahan</value>
+    <value>Terapkan gloss</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Batalkan terjemahan</value>
+    <value>Batalkan Gloss</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
     <value>Ubah semua kejadian yang tidak disetel</value>
@@ -863,7 +872,7 @@
     <value>Masukkan terjemahan baru untuk</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>Masukkan terjemahan baru</value>
+    <value>Masukkan Gloss Baru</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Kata pengantar singkat</value>
@@ -884,7 +893,7 @@
     <value>Makna:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Terjemahan baru</value>
+    <value>Gloss Baru</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Hapus domain semantik ini dari makna ini</value>
@@ -893,7 +902,7 @@
     <value>Hapus bentuk leksikal ini dari lemma ini</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>Tetapkan terjemahan untuk</value>
+    <value>Atur gloss untuk</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Dan</value>
@@ -903,6 +912,12 @@
   </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Edit</value>
+  </data>
+  <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>Tambahkan '{0}' sebagai formulir</value>
+  </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>Tambahkan '{0}' sebagai terjemahan ke makna pertama</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Temukan semua</value>
@@ -918,6 +933,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>Memuat data ...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>Terjadi kesalahan yang tidak terduga saat memuat data. {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>Cocok</value>
@@ -953,7 +974,7 @@
     <value>Tambahkan sebagai formulir untuk ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Temukan Lexeme atau Bentuk Penting atau Parsial untuk Sumber</value>
+    <value>Temukan pencocokan leksem atau bentuk penuh atau parsial untuk sumber</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Tambahkan target sebagai terjemahan untuk ...</value>
@@ -1187,7 +1208,7 @@
     <value>MAT</value>
   </data>
   <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>Membuat database ...</value>
+    <value>Membuat basis data ...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
     <value>Gabungkan ... Antarmuka Muat Ulang</value>
@@ -1340,7 +1361,7 @@
     <value>Apakah Anda ingin membuat label:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
-    <value>dan asosiasikan dengan grup label:</value>
+    <value>dan kaitkan dengan grup label:</value>
   </data>
   <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
     <value>Apakah Anda ingin menghapus label:</value>
@@ -1570,11 +1591,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Kamus</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>Editor Catatan Eksternal</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>Pasang seluruh area konten ke viewport</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>Pasang semua node ke viewport</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>Dapatkan catatan eksternal terbaru</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Dapatkan terbaru dari Paratext</value>
@@ -1835,7 +1862,7 @@
     <value>Daftar Proyek Kolaborasi Refresh</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>Cari Terbaru</value>
+    <value>Cari Terkini</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
     <value>Klik di sini untuk memulai Paratext</value>
@@ -2000,7 +2027,7 @@
     <value>Luke</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
-    <value>Maleakhi</value>
+    <value>Malachi</value>
   </data>
   <data name="ProperCase_Mark" xml:space="preserve">
     <value>Tanda</value>
@@ -2103,6 +2130,9 @@
   </data>
   <data name="Save" xml:space="preserve">
     <value>Menyimpan</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Mengirim</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>Aktifkan plugin Aqua Eksperimental</value>
@@ -2256,6 +2286,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Mengirim</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>Kirim file USFM</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>Saran</value>

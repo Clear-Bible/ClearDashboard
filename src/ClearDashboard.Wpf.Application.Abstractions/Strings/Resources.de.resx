@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>Ausgewählte Bücher</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>Wählen Sie USFM -Bücher aus, um sie zu senden</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>Wählen Sie das Paratext -Projekt</value>
   </data>
@@ -458,7 +461,7 @@
     <value>Quelle</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Quellenteil</value>
+    <value>Quellteil</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Quelle Ref</value>
@@ -555,6 +558,9 @@
   </data>
   <data name="CreatedBy" xml:space="preserve">
     <value>Erstellt von</value>
+  </data>
+  <data name="Current" xml:space="preserve">
+    <value>Aktuell</value>
   </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
@@ -709,6 +715,9 @@
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>Absatzmodus</value>
   </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>Zeigen Sie externe Notizen</value>
+  </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>Quellentext:</value>
   </data>
@@ -833,10 +842,10 @@
     <value>Fügen Sie eine semantische Domäne hinzu</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>Übersetzung anwenden</value>
+    <value>Glanz auftragen</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Übersetzung abbrechen</value>
+    <value>Gloss abbrechen</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
     <value>Ändern Sie alle unbegründeten Ereignisse</value>
@@ -863,7 +872,7 @@
     <value>Geben Sie eine neue Übersetzung für ein</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>Geben Sie eine neue Übersetzung ein</value>
+    <value>Geben Sie einen neuen Glanz ein</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lemma</value>
@@ -884,7 +893,7 @@
     <value>Bedeutungen:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Neue Übersetzung</value>
+    <value>Neuer Glanz</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Entfernen Sie diese semantische Domäne aus dieser Bedeutung</value>
@@ -893,7 +902,7 @@
     <value>Entfernen Sie diese lexikalische Form aus diesem Lemma</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>Setzen Sie eine Übersetzung für</value>
+    <value>Setzen Sie einen Glanz für</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Und</value>
@@ -903,6 +912,12 @@
   </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Bearbeiten</value>
+  </data>
+  <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>Fügen Sie '{0}' als Formular hinzu</value>
+  </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>Fügen Sie '{0}' als Übersetzung zur ersten Bedeutung hinzu</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Finde alle</value>
@@ -918,6 +933,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>Daten werden geladen...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>Beim Laden von Daten trat ein unerwarteter Fehler auf. {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>Matching</value>
@@ -1277,7 +1298,7 @@
     <value>Nutzername:</value>
   </data>
   <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
-    <value>Der Benutzer ist bereits auf dem System!</value>
+    <value>Der Benutzer ist bereits im System!</value>
   </data>
   <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
     <value>Validieren Sie den E -Mail -Code</value>
@@ -1358,7 +1379,7 @@
     <value>Fügen Sie eine Etikettengruppe hinzu</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>Eine Labelgruppe existiert bereits mit Namen</value>
+    <value>Eine Etikettengruppe existiert bereits mit Namen</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>Labelgruppe initialisieren</value>
@@ -1505,7 +1526,7 @@
     <value>Wählen Sie einen SMT -Algorithmus zum Training aus</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie die Zulassung der Masse hinzu, um sie anzeigen</value>
+    <value>Fügen Sie die Massengenehmigung hinzu, um sie anzeigen</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>Zur Anzeige hinzufügen</value>
@@ -1570,11 +1591,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Wörterbuch</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>Externe Notes Editor</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>Passen Sie den gesamten Inhaltsbereich in das Ansichtsfenster ein</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>Passen Sie alle Knoten in das Ansichtsfenster ein</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>Holen Sie sich die neuesten externen Notizen</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Holen Sie sich das Neueste von Paratext</value>
@@ -1610,7 +1637,7 @@
     <value>Skalieren Sie den Inhalt auf 100%</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
-    <value>Fügen Sie Text zum neuen Fenster hinzu</value>
+    <value>Fügen Sie Text zu einem neuen Fenster hinzu</value>
   </data>
   <data name="Pds_Source" xml:space="preserve">
     <value>Quelle</value>
@@ -1772,10 +1799,10 @@
     <value>Serverprojekt importieren</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Überprüfen Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
+    <value>Aktivieren Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>NT -griechische biblische Texte einschließen?</value>
+    <value>NT Griechische biblische Texte einschließen?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>OT hebräische biblische Texte einschließen?</value>
@@ -1880,7 +1907,7 @@
     <value>1 Thessalonicher</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 Timothy</value>
+    <value>1 Timotheus</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 Chroniken</value>
@@ -2104,6 +2131,9 @@
   <data name="Save" xml:space="preserve">
     <value>Speichern</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>Schicken</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>Aktivieren Sie das experimentelle Aqua -Plugin</value>
   </data>
@@ -2201,7 +2231,7 @@
     <value>Validieren Sie den E -Mail -Code</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Aktivieren Sie die Anzeige von Versen durch Versuchssammlungen</value>
+    <value>Aktivieren Sie die Anzeige von Verse-by-Vers-Textsammlungen</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>Aufgabe abbrechen</value>
@@ -2256,6 +2286,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Schicken</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>Senden Sie USFM -Dateien</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>Anregung</value>

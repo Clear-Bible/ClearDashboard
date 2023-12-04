@@ -1,20 +1,23 @@
 ﻿using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+using Microsoft.Extensions.Logging;
 using Paratext.PluginInterfaces;
 using SIL.Linq;
 using SIL.Scripture;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
-
+using System.Xml.Serialization;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
 {
     public static class Extensions
     {
-        public static ExternalNote GetExternalNote(this IProjectNote projectNote, IProject project)
+        public static ExternalNote GetExternalNote(this IProjectNote projectNote, IProject project, ILogger logger)
         {
             var verseRef = new VerseRef(projectNote.Anchor.VerseRefStart.BookNum, projectNote.Anchor.VerseRefStart.ChapterNum, projectNote.Anchor.VerseRefStart.VerseNum);
             var (versePlainText, plainTextTokensWithIndexes) = project.GetUSFMTokens(verseRef.BookNum, verseRef.ChapterNum, verseRef.VerseNum)
@@ -35,16 +38,65 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                     (projectNote.Anchor.Offset - tokenOfLastSmallerOrEqualUsfmIndex.indexOfTokenInVerseRawUsfm);
             }
 
+            var body = projectNote.GetProjectNoteBody(project.GetUSFM(verseRef.BookNum, verseRef.ChapterNum));
+
+            string id = null;
+            IEnumerable<int> tagIds = null;
+
+            try
+            {
+                (id, tagIds) = projectNote.GetIdAndLabels();
+            }
+            catch (InvalidCastException)
+            {
+                logger.LogError("Invalid cast in project note when trying to obtain thread, thread.Id, or thread.TagIds.");
+            }
+
             return new ExternalNote()
             {
+                ExternalNoteId = id,
+                ExternalProjectId = project.ID,
+                LabelIds = tagIds,
                 VersePlainText = versePlainText,
                 SelectedPlainText = projectNote.Anchor.SelectedText,
                 IndexOfSelectedPlainTextInVersePainText = indexOfSelectedPlainTextInVersePainText,
                 VerseRefString = verseRef.ToString(),
-                Body = SerializeNoteBody(projectNote.GetProjectNoteBody(project.GetUSFM(verseRef.BookNum, verseRef.ChapterNum)))
+                Body = SerializeNoteBodyXml(body),
+                Message = GetMessage(body)
             };
         }
 
+        public static (string id, IEnumerable<int> labelIds) GetIdAndLabels(this IProjectNote projectNote)
+        {
+            string id = null;
+            IEnumerable<int> tagIds = null;
+
+            MemberInfo[] threadMemberInfos = projectNote.GetType().GetMember("thread", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (threadMemberInfos.Length > 0)
+            {
+                var thread = ((FieldInfo)threadMemberInfos[0]).GetValue(projectNote);
+                if (thread != null)
+                {
+                    MemberInfo[] idMemberInfos = thread.GetType().GetMember("Id");
+                    if (idMemberInfos.Length > 0)
+                    {
+                        id = ((PropertyInfo)idMemberInfos[0]).GetValue(thread) as string;
+                    }
+                    MemberInfo[] tagIdsMemberInfos = thread.GetType().GetMember("TagIds");
+                    if (tagIdsMemberInfos.Length > 0)
+                    {
+                        tagIds = ((PropertyInfo)tagIdsMemberInfos[0]).GetValue(thread) as IEnumerable<int>;
+                    }
+                }
+            }
+            return (id, tagIds);
+        }
+        private static string GetMessage(Body body)
+        {
+            return body
+                .Comments
+                    .Aggregate("", (str, next) => $"{str}Author {next.Author} {next.Created}:\n{next.Paragraphs.Aggregate("", (innerstring, next) => $"{innerstring}{next}\n")}\n\n");
+        }
         [DataContract]
         public class BodyComment
         {
@@ -79,7 +131,17 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
             [DataMember]
             public string VerseUsfmText { get; set; }
         }
-        private static string SerializeNoteBody(Body body)
+
+        private static string SerializeNoteBodyXml(Body body)
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Body>));
+            using (StringWriter textWriter = new StringWriter())
+            {
+                xmlSerializer.Serialize(textWriter, new List<Body> { body });
+                return textWriter.ToString();
+            }
+        }
+        private static string SerializeNoteBodyJson(Body body)
         {
             //from https://learn.microsoft.com/en-us/dotnet/framework/wcf/feature-details/how-to-serialize-and-deserialize-json-data?redirectedfrom=MSDN for
             //.net 4.x

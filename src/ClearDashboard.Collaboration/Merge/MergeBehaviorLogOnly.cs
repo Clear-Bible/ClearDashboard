@@ -12,9 +12,9 @@ namespace ClearDashboard.Collaboration.Merge;
 
 public class MergeBehaviorLogOnly : MergeBehaviorBase
 {
-	public MergeBehaviorLogOnly(/* pass in configuration */ILogger logger, MergeCache mergeCache, IProgress<ProgressStatus> progress) : base(logger, mergeCache, progress)
-	{
-	}
+    public MergeBehaviorLogOnly(/* pass in configuration */ILogger logger, MergeCache mergeCache, IProgress<ProgressStatus> progress) : base(logger, mergeCache, progress)
+    {
+    }
 
     public override async Task MergeStartAsync(CancellationToken cancellationToken)
     {
@@ -34,12 +34,22 @@ public class MergeBehaviorLogOnly : MergeBehaviorBase
         _logger.LogInformation("Rolling back transaction");
     }
 
-    public override async Task<Dictionary<string, object>> DeleteModelAsync(IModelSnapshot itemToDelete, Dictionary<string, object> where, CancellationToken cancellationToken)
+    public override async Task<Dictionary<string, object?>> DeleteModelAsync(IModelSnapshot itemToDelete, Dictionary<string, object?> where, CancellationToken cancellationToken)
     {
         await Task.CompletedTask;
 
         var id = string.Join(", ", where);
         _logger.LogInformation($"HARD DELETING:  '{itemToDelete.EntityType.ShortDisplayName()}' item having id '{id}'");
+
+        return where;
+    }
+
+    public override async Task<Dictionary<string, object?>> ModifyModelAsync(IModelDifference modelDifference, IModelSnapshot itemToModify, Dictionary<string, object?> where, CancellationToken cancellationToken)
+    {
+        await Task.CompletedTask;
+
+        var id = string.Join(", ", where);
+        _logger.LogInformation($"MODIFYING:  '{itemToModify.EntityType.ShortDisplayName()}' item having id '{id}'");
 
         return where;
     }
@@ -61,24 +71,23 @@ public class MergeBehaviorLogOnly : MergeBehaviorBase
         _logger.LogInformation($"Completing INSERT:  '{modelType.ShortDisplayName()}'");
     }
 
-    public override async Task<Dictionary<string, object>> ModifyModelAsync(IModelDifference modelDifference, IModelSnapshot itemToModify, Dictionary<string, object> where, CancellationToken cancellationToken)
-    {
-        await Task.CompletedTask;
-
-        var id = string.Join(", ", where);
-        _logger.LogInformation($"MODIFYING:  '{itemToModify.EntityType.ShortDisplayName()}' item having id '{id}'");
-
-        return where;
-    }
-
     public override async Task RunProjectDbContextQueryAsync(string description, ProjectDbContextMergeQueryAsync query, CancellationToken cancellationToken = default)
     {
-        _logger.LogInformation($"RUNNING:  '{description}'");
         await Task.CompletedTask;
+
+        _logger.LogInformation($"RUNNING:  '{description}'");
+    }
+    public override async Task RunDbConnectionQueryAsync(string description, DbConnectionMergeQueryAsync query, CancellationToken cancellationToken = default)
+    {
+        await Task.CompletedTask;
+
+        _logger.LogInformation($"RUNNING:  '{description}'");
     }
 
-    public override object? RunEntityValueResolver(IModelSnapshot modelSnapshot, string propertyName, EntityValueResolver propertyValueConverter)
+    public override async Task<object?> RunEntityValueResolverAsync(IModelSnapshot modelSnapshot, string propertyName, EntityValueResolverAsync propertyValueConverter)
     {
+        await Task.CompletedTask;
+
         _logger.LogInformation($"RUNNING converter for model type {modelSnapshot.EntityType.ShortDisplayName()} propertyName:  '{propertyName}'");
         return modelSnapshot;
     }

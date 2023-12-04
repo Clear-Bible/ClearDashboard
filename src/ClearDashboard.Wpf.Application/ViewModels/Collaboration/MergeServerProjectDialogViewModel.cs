@@ -21,6 +21,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using System.Windows.Media;
+using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 {
@@ -37,6 +39,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
         #region Member Variables   
 
         private readonly CollaborationManager _collaborationManager;
+        private readonly ILogger<ProjectSetupViewModel> _logger;
         private readonly GitLabHttpClientServices _gitLabHttpClientServices;
         private CancellationTokenSource _cancellationTokenSource;
         private Task? _runningTask;
@@ -209,6 +212,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             _localizationService = localizationService;
             _cancellationTokenSource = new CancellationTokenSource();
             _collaborationManager = collaborationManager;
+            _logger = logger;
             _gitLabHttpClientServices = gitLabHttpClientServices;
 
             //return base.OnInitializeAsync(cancellationToken);
@@ -227,6 +231,45 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                 NamespaceId = _userInfo.NamespaceId,
                 Organization = _userInfo.Group
             };
+
+            _logger.LogInformation($"Entering in MergeServerProjectDialogViewModel");
+            _logger.LogInformation($"UserInfo UserId: {_userInfo.UserId}");
+            _logger.LogInformation($"UserInfo Remote Username: {_userInfo.RemoteUserName}");
+            _logger.LogInformation($"UserInfo NamespaceId: {_userInfo.NamespaceId}");
+            _logger.LogInformation($"GitLabUser Name: {_gitLabUser.Name}");
+            _logger.LogInformation($"GitLabUser Email: {_gitLabUser.Email}");
+            _logger.LogInformation($"GitLabUser Id: {_gitLabUser.Id}");
+            _logger.LogInformation($"GitLabUser NamespaceId: {_gitLabUser.NamespaceId}");
+
+            var projects = await _gitLabHttpClientServices.GetProjectsForUser(_userInfo);
+
+            if (ProjectId != Guid.Empty)
+            {
+                var currentProjectId = "P_" + ProjectId;
+                var project = projects.FirstOrDefault(x => x.Name == currentProjectId);
+
+                if (project is null)
+                {
+                    _logger.LogInformation($"Project {currentProjectId} not found");
+                    _logger.LogInformation($"Projects Count: {projects.Count}");
+                    _logger.LogInformation($"CurrentProjectId: {currentProjectId}");
+
+                    int i = 0;
+                    foreach (var p in projects)
+                    {
+                        _logger.LogInformation($"Project {i} Name: {p.Name}");
+                        i++;
+                    }
+
+                    StatusMessage = "User is not a member of the project.\nPlease contact the project owner to be added to the project.";
+                    StatusMessageColor = Brushes.Red;
+                    CancelAction = "Close";
+
+                    await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectPermissionLevelMessage(PermissionLevel.None));
+                    return;
+                }
+            }
+
             await CreateProjectOnServerIfNotCreated();
 
             Ok();  // run the action - do not await

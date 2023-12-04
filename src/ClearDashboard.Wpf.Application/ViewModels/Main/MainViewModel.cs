@@ -134,6 +134,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         #region Commands
 
+        public ICommand NavigateToNextDocumentForwards => new RelayCommand(param => CycleNextDocuments(Direction.Forwards));
+        public ICommand NavigateToNextDocumentBackwards => new RelayCommand(param => CycleNextDocuments(Direction.Backwards));
 
         #endregion  //Commands
 
@@ -442,17 +444,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         }
 
 
-        private async Task LoadParatextProjectMetadata(CancellationToken cancellationToken)
-        {
-            var result = await ProjectManager?.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken)!;
-            if (result.Success && result.HasData)
-            {
-                //ProjectMetadata = result.Data;
-                ProjectManager!.ProjectMetadata = result.Data;
-            }
-        }
-
-
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             EventAggregator.SubscribeOnUIThread(this);
@@ -460,20 +451,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             _dockingManager.ActiveContentChanged += OnActiveContentChanged;
             _dockingManager.DocumentClosed += OnEnhancedViewClosed;
             await base.OnActivateAsync(cancellationToken);
-        }
-
-        private void OnEnhancedViewClosed(object sender, DocumentClosedEventArgs e)
-        {
-            //throw new NotImplementedException();
-            if (e.Document.Content is EnhancedViewModel enhancedViewModel)
-            {
-                var removed = Items.Remove(enhancedViewModel);
-                if (removed)
-                {
-                    Logger.LogInformation($"Removed EnhancedView '{e.Document.Title}");
-                }
-            }
-
         }
 
         protected override async Task<Task> OnDeactivateAsync(bool close, CancellationToken cancellationToken)
@@ -518,6 +495,45 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // unsubscribe to the event aggregator
             Logger.LogInformation($"Unsubscribing {nameof(MainViewModel)} to the EventAggregator");
             EventAggregator?.Unsubscribe(this);
+        }
+
+        protected override async void OnViewLoaded(object view)
+        {
+            // send out a notice that the project is loaded up
+            await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
+
+            base.OnViewLoaded(view);
+        }
+
+        protected override void OnViewAttached(object view, object context)
+        {
+            base.OnViewAttached(view, context);
+
+            // hook up a reference to the windows dock manager
+            if (view is MainView currentView)
+            {
+                // ReSharper disable once AssignNullToNotNullAttribute
+                _dockingManager = (DockingManager)currentView.FindName("DockManager");
+
+            }
+        }
+
+        #endregion //Constructor
+
+        #region Methods
+
+        private void OnEnhancedViewClosed(object sender, DocumentClosedEventArgs e)
+        {
+            //throw new NotImplementedException();
+            if (e.Document.Content is EnhancedViewModel enhancedViewModel)
+            {
+                var removed = Items.Remove(enhancedViewModel);
+                if (removed)
+                {
+                    Logger.LogInformation($"Removed EnhancedView '{e.Document.Title}");
+                }
+            }
+
         }
 
         public async Task SaveProjectData()
@@ -611,27 +627,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
         }
 
-        protected override async void OnViewLoaded(object view)
+        private async Task LoadParatextProjectMetadata(CancellationToken cancellationToken)
         {
-            // send out a notice that the project is loaded up
-            await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
-
-            base.OnViewLoaded(view);
-        }
-
-        protected override void OnViewAttached(object view, object context)
-        {
-            base.OnViewAttached(view, context);
-
-            // hook up a reference to the windows dock manager
-            if (view is MainView currentView)
+            var result = await ProjectManager?.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken)!;
+            if (result.Success && result.HasData)
             {
-                // ReSharper disable once AssignNullToNotNullAttribute
-                _dockingManager = (DockingManager)currentView.FindName("DockManager");
-
+                //ProjectMetadata = result.Data;
+                ProjectManager!.ProjectMetadata = result.Data;
             }
         }
-
 
         /// <summary>
         /// Binds the viewmodel to it's view prior to activating so that the OnViewAttached method of the
@@ -682,7 +686,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async Task LoadEnhancedViewTabs(CancellationToken cancellationToken)
         {
-            _ = Task.Run(async () =>
+            _ = Task.Run((Func<Task>)(async () =>
             {
                 var sw = Stopwatch.StartNew();
                 var enhancedViews = LoadEnhancedViewTabLayout();
@@ -701,7 +705,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                 sw.Stop();
                 Logger.LogInformation($"LoadEnhancedViewTabs - Total Load Time {enhancedViews.Count} documents in {sw.ElapsedMilliseconds} ms");
-            }, cancellationToken);
+            }), cancellationToken);
 
             await Task.CompletedTask;
         }
@@ -840,7 +844,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     await PinsViewModel.Initialize(cancellationToken);
                 });
             }, cancellationToken);
-            //PinsViewModel = await ActivateItemAsync<PinsViewModel>(cancellationToken);
+            //PinsViewModel = await ActivateItemAsync<PinsViewModel>(cancellationToken);                
             
             await ActivateItemAsync<TextCollectionsViewModel>(cancellationToken);
             //await ActivateItemAsync<WordMeaningsViewModel>();
@@ -886,18 +890,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await Task.CompletedTask;
         }
 
-        #endregion //Constructor
-
-        #region Methods
-
         //public enum Direction
         //{
         //    Up,
         //    Down
         //}
 
-        public ICommand NavigateToNextDocumentForwards => new RelayCommand(param => CycleNextDocuments(Direction.Forwards));
-        public ICommand NavigateToNextDocumentBackwards => new RelayCommand(param => CycleNextDocuments(Direction.Backwards));
         private void CycleNextDocuments(Direction direction)
         {
             var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
@@ -967,7 +965,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // get the application startup directory
             var startupPath = AppDomain.CurrentDomain.BaseDirectory;
             var path = Path.Combine(startupPath, "Dashboard_Instructions.pdf");
-                       
+
             //var programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
             //var path = Path.Combine(programFiles, "ClearDashboard", "Dashboard_Instructions.pdf");
             if (File.Exists(path))
@@ -1235,7 +1233,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
             // get the project layouts
-            if (ProjectManager.CurrentParatextProject.DirectoryPath != null)
+            if (ProjectManager.CurrentParatextProject != null && ProjectManager.CurrentParatextProject.DirectoryPath != null)
             {
                 // ReSharper disable once AssignNullToNotNullAttribute
                 path = Path.Combine(ProjectManager.CurrentParatextProject.DirectoryPath, "shared");
@@ -2286,6 +2284,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             // rebuild the menu system with the new language
             await RebuildMainMenu();
+
+            // redraw the corpus and parallel corpus menus 
+            await EventAggregator.PublishOnUIThreadAsync(new RedrawParallelCorpusMenus(), cancellationToken);
+            await EventAggregator.PublishOnUIThreadAsync(new RedrawCorpusNodeMenus(), cancellationToken);
         }
 
         public async Task HandleAsync(RebuildMainMenuMessage message, CancellationToken cancellationToken)
@@ -2415,9 +2417,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await EventAggregator.PublishOnUIThreadAsync(new ReloadNotesListMessage(), cancellationToken);
         }
 
-
-        #endregion
-
         public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
         {
             Logger.LogInformation($"Reloading panels due to the Paratext project being switched.");
@@ -2439,6 +2438,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await LoadEnhancedViewTabs(cancellationToken);
             
             await OnActivateAsync(CancellationToken.None);
+
+
+            await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadedMessage(), cancellationToken);
         }
+
+        #endregion
     }
 }

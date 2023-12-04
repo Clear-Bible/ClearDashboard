@@ -34,7 +34,10 @@ using Uri = System.Uri;
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     using System.Linq;  //  needed to move this into the namespace to allow the .Reverse() to use this over the SIL.Linq
+    using ClearDashboard.DAL.Alignment;
+    using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
     using ClearDashboard.Wpf.Application.Events.Notes;
+    using Paratext.PluginInterfaces;
 
     public class EnhancedViewModel : VerseAwareConductorOneActive, IEnhancedViewModel, IPaneViewModel,
         IHandle<VerseSelectedMessage>,
@@ -46,7 +49,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<HighlightTokensMessage>,
         IHandle<UnhighlightTokensMessage>,
         IHandle<ParallelCorpusDeletedMessage>,
-        IHandle<CorpusDeletedMessage>
+        IHandle<CorpusDeletedMessage>,
+        IHandle<ExternalNotesUpdatedMessage>
     {
         #region Commands
 
@@ -408,9 +412,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             DisplayName = enhancedViewLayout.Title;
             Title = enhancedViewLayout.Title;
             VerseOffsetRange = enhancedViewLayout.VerseOffset;
-            BcvDictionary = ProjectManager!.CurrentParatextProject.BcvDictionary;
+
+            if (ProjectManager!.CurrentParatextProject is not null)
+            {
+                BcvDictionary = ProjectManager!.CurrentParatextProject.BcvDictionary;
+            }
+            else
+            {
+                // check to see if it has not already been computed
+                if (!BcvDictionary.Any())
+                {
+                    BcvDictionary = await GenerateBcvFromDatabase();
+                }
+            }
+            
             ParatextSync = enhancedViewLayout.ParatextSync;
-            if (ParatextSync)
+            if (ParatextSync && ProjectManager.CurrentVerse is not null)
             {
                 CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
                 VerseChange = ProjectManager.CurrentVerse;
@@ -436,6 +453,40 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EventAggregator.SubscribeOnPublishedThread(this);
 
             await Task.CompletedTask;
+        }
+
+        private async Task<Dictionary<string, string>> GenerateBcvFromDatabase()
+        {
+            // This is a hack to get the BcvDictionary to be populated when there is no Paratext project loaded.
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator);
+
+            // get the first project id
+            var firstProjectId = topLevelProjectIds.CorpusIds.FirstOrDefault(t => t.CorpusType == "Standard");
+
+            var results =
+                await ExecuteRequest(
+                    new GetProjectBBBCCCVVVQuery(ProjectManager.CurrentDashboardProject.FullFilePath, firstProjectId.Id),
+                    CancellationToken.None);
+
+            var bcvDictionary = new Dictionary<string, string>();
+            if (results.Success)
+            {
+                var data = results.Data;
+                foreach (var verse in data)
+                {
+                    bcvDictionary.Add(verse, verse);
+                }
+            }
+
+            if (ProjectManager!.CurrentParatextProject is null)
+            {
+                ProjectManager.CurrentParatextProject = new ParatextProject();
+                ProjectManager.CurrentParatextProject.Language = new ScrLanguageWrapper();
+            }
+
+            ProjectManager!.CurrentParatextProject.BcvDictionary = bcvDictionary;
+
+            return bcvDictionary;
         }
 
         public async Task AddItem(EnhancedViewItemMetadatum item, CancellationToken cancellationToken)
@@ -536,25 +587,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
    
 
 
-        protected override void OnViewAttached(object view, object context)
+        protected override async void OnViewAttached(object view, object context)
         {
-            // grab the dictionary of all the verse lookups
-            if (ProjectManager?.CurrentParatextProject is not null)
+            if (ProjectManager?.CurrentParatextProject is null)
             {
-                BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
-
-                var books = BcvDictionary.Values.GroupBy(b => b.Substring(0, 3))
-                    .Select(g => g.First())
-                    .ToList();
-
-                foreach (var bookName in books.Select(book => book.Substring(0, 3)).Select(BookChapterVerseViewModel.GetShortBookNameFromBookNum))
-                {
-                    CurrentBcv.BibleBookList?.Add(bookName);
-                }
-            }
+                BcvDictionary = await GenerateBcvFromDatabase();
+            } 
             else
             {
-                BcvDictionary = new Dictionary<string, string>();
+                // grab the dictionary of all the verse lookups
+                BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+            }
+
+            var books = BcvDictionary.Values.GroupBy(b => b.Substring(0, 3))
+                .Select(g => g.First())
+                .ToList();
+
+            foreach (var bookName in books.Select(book => book.Substring(0, 3)).Select(BookChapterVerseViewModel.GetShortBookNameFromBookNum))
+            {
+                CurrentBcv.BibleBookList?.Add(bookName);
             }
 
             CurrentBcv.SetVerseFromId(ProjectManager!.CurrentVerse);
@@ -673,7 +724,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             else
             {
-                BcvDictionary = new Dictionary<string, string>();
+                BcvDictionary = await GenerateBcvFromDatabase();
             }
 
             await Task.CompletedTask;
@@ -737,6 +788,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        public async Task HandleAsync(ExternalNotesUpdatedMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var enhancedViewItemViewModel in Items.Where(item => item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>())
+            {
+                await enhancedViewItemViewModel.GetData(cancellationToken);
+            }
+        }
+
         public Task HandleAsync(ParallelCorpusDeletedMessage message, CancellationToken cancellationToken)
         {
             bool deleteHappened = false;
@@ -797,6 +856,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async void TokenClicked(object sender, TokenEventArgs e)
         {
+
+        }
+
+        public async void TokenLeftButtonDown(object sender, TokenEventArgs e)
+        {
             if (e.IsShiftPressed && e.TokenDisplay.VerseDisplay is AlignmentDisplayViewModel alignmentDisplayViewModel)
             {
                 if (SelectionManager.AnySourceTokens && SelectionManager.AnyTargetTokens)
@@ -810,7 +874,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 {
                     Logger!.LogInformation("There are no source tokens, so skipping the call to add an alignment.");
                 }
-                
+
             }
             else
             {

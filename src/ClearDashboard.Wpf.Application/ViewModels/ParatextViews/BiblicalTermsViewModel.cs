@@ -28,6 +28,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ClearApplicationFoundation.Framework.Input;
 using Point = System.Windows.Point;
+using ClearDashboard.Wpf.Application.Messages;
 
 // ReSharper disable InconsistentNaming
 
@@ -36,8 +37,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
     /// <summary>
     /// 
     /// </summary>
-    public class BiblicalTermsViewModel : ToolViewModel
+    public class BiblicalTermsViewModel : ToolViewModel, IHandle<ParatextConnectedMessage>, IHandle<ProjectLoadedMessage>
     {
+        private readonly DashboardProjectManager? _projectManager;
         private readonly LongRunningTaskManager _longRunningTaskManager;
 
         #region Member Variables
@@ -512,6 +514,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager, ILocalizationService localizationService)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope, localizationService)
         {
+            _projectManager = projectManager;
             _longRunningTaskManager = longRunningTaskManager;
             Title = "🕮 " + LocalizationService!.Get("Windows_BiblicalTerms");
             ContentId = "BIBLICALTERMS";
@@ -532,6 +535,48 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         }
 
         protected override async void OnViewReady(object view)
+        {
+            if (_projectManager.IsParatextConnected == false)
+            {
+                ProgressBarVisibility = Visibility.Collapsed;
+                return;
+            }
+
+            await RequestBiblicalTermsData();
+
+            Logger.LogInformation("OnViewReady");
+            base.OnViewReady(view);
+        }
+
+        protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            await CancelLongRunningTask(cancellationToken);
+            await base.OnDeactivateAsync(close, cancellationToken);
+        }
+
+        #endregion //Constructor
+
+        #region Methods
+
+        private async Task CancelLongRunningTask(CancellationToken cancellationToken)
+        {
+            //we need to cancel this process here
+            //check a bool to see if it already cancelled or already completed
+            if (_getBiblicalTermsRunning)
+            {
+                var cancelled = _longRunningTaskManager.CancelTask(TaskName);
+
+                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                {
+                    Name = TaskName,
+                    Description = "Task was cancelled",
+                    EndTime = DateTime.Now,
+                    TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
+                }), cancellationToken);
+            }
+        }
+
+        private async Task RequestBiblicalTermsData()
         {
             await GetBiblicalTerms(BiblicalTermsType.Project);
 
@@ -559,7 +604,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 OnUIThread(() =>
                 {
                     BiblicalTermsCollectionView = CollectionViewSource.GetDefaultView(_biblicalTerms);
-                    
+
                     // setup the method that we go to for filtering
                     BiblicalTermsCollectionView.Filter = FilterGridItems;
                 });
@@ -573,7 +618,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             NotifyOfPropertyChange(() => BiblicalTermsCollectionView);
 
 
-
             if (ProjectManager.CurrentParatextProject != null)
             {
                 var paratextProject = ProjectManager.CurrentParatextProject;
@@ -582,35 +626,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 _fontSize = paratextProject.Language.Size;
                 IsRtl = paratextProject.Language.IsRtol;
             }
-
-
-            Logger.LogInformation("OnViewReady");
-            base.OnViewReady(view);
         }
 
-        protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
-        {
-            //we need to cancel this process here
-            //check a bool to see if it already cancelled or already completed
-            if (_getBiblicalTermsRunning)
-            {
-                var cancelled = _longRunningTaskManager.CancelTask(TaskName);
-
-                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                {
-                    Name = TaskName,
-                    Description = "Task was cancelled",
-                    EndTime = DateTime.Now,
-                    TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
-                }), cancellationToken);
-            }
-            await base.OnDeactivateAsync(close, cancellationToken);
-        }
-
-
-        #endregion //Constructor
-
-        #region Methods
 
         /// <summary>
         /// TODO
@@ -1265,5 +1282,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             LaunchMirrorView<BiblicalTermsView>.Show(this, actualWidth, actualHeight, this.Title);
         }
         #endregion // Methods
+
+        #region   IHandle
+
+        public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)
+        {
+            if (message.Connected)
+            {
+                await RequestBiblicalTermsData();
+            }
+        }
+
+
+        public async Task HandleAsync(ProjectLoadedMessage message, CancellationToken cancellationToken)
+        {
+            // cancel any existing BT task if present
+            await CancelLongRunningTask(cancellationToken);
+
+            // refresh the biblical terms
+            await RequestBiblicalTermsData();
+        }
+
+        #endregion
     }
 }

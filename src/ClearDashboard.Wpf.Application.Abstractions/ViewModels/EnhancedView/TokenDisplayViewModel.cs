@@ -12,7 +12,6 @@ using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
-using System.Collections.Generic;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -186,32 +185,51 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private List<ExternalNote>? _externalNote;
-
-        /// <summary>
-        /// The <see cref="Translation"/> associated with the token.
-        /// </summary>
-        public List<ExternalNote>? ExternalNotes
+        private BindableCollection<ExternalNote> _externalNotes = new();
+        public BindableCollection<ExternalNote> ExternalNotes
         {
-            get => _externalNote;
+            get => _externalNotes;
             set
             {
-                if (Set(ref _externalNote, value))
+                if (Set(ref _externalNotes, value))
                 {
                     NotifyOfPropertyChange(nameof(ExternalNotes));
+                    NotifyOfPropertyChange(nameof(HasExternalNotes));
                 }
             }
         }
+        public void NotifyExternalNotesItemsChanged()
+        {
+            NotifyOfPropertyChange(nameof(ExternalNotes));
+            NotifyOfPropertyChange(nameof(HasExternalNotes));
+        }
+
         /// <summary>
         /// The surface text of the token to be displayed.  
         /// </summary>
         public string SurfaceText => Token.SurfaceText;
 
         /// <summary>
+        /// The training text of the token to be displayed.  
+        /// </summary>
+        public string TrainingText => Token.TrainingText;
+
+        /// <summary>
         /// The surface text of the token to be displayed for translations.
         /// </summary>
         public string TranslationSurfaceText => IsCompositeTokenMember ? string.Join(" ", CompositeToken!.Tokens.Select(t => t.SurfaceText))
                                                                        : Token.SurfaceText;
+
+        /// <summary>
+        /// The training text of the token to be displayed for translations.
+        /// </summary>
+        public string TranslationTrainingText => IsCompositeTokenMember ? string.Join(" ", CompositeToken!.Tokens.Select(t => t.TrainingText))
+                                                                       : Token.TrainingText;
+
+        /// <summary>
+        /// The surface and training text of the token to be displayed for translations.
+        /// </summary>
+        public string TranslationSurfaceAndTrainingText => $"{TranslationSurfaceText} ({TranslationTrainingText})";
 
         /// <summary>
         /// The extended properties of the token to be displayed.
@@ -330,9 +348,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             TokenNoteIds.RemoveIfExists(note.NoteId!);
             NotifyOfPropertyChange(nameof(TokenHasNote));
         }
-
         public bool HasExtendedProperties => !string.IsNullOrEmpty(ExtendedProperties);
-
+        public bool HasExternalNotes => 
+            ExternalNotes.Count() > 0;
         public void OnToolTipOpening(ToolTipEventArgs e)
         {
             if (!IsHighlighted && string.IsNullOrWhiteSpace(ExtendedProperties))

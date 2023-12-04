@@ -64,6 +64,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private CancellationToken? _cancellationToken;
         private readonly ProjectDbContextFactory _projectNameDbContextFactory;
+        private readonly SystemPowerModes _systemPowerModes;
 
         private readonly string _createAction;
         private readonly string _backAction;
@@ -152,12 +153,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             IMediator mediator,
             ILifetimeScope? lifetimeScope,
             ILocalizationService localizationService,
-            ProjectDbContextFactory projectNameDbContextFactory)
+            ProjectDbContextFactory projectNameDbContextFactory,
+            SystemPowerModes systemPowerModes)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             _backgroundTasksViewModel = backgroundTasksViewModel;
             _processRunner = processRunner;
             _projectNameDbContextFactory = projectNameDbContextFactory;
+            _systemPowerModes = systemPowerModes;
 
             _createAction = LocalizationService!.Get("Create");
             _backAction = LocalizationService!.Get("Back");
@@ -307,8 +310,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
                 cancellationToken?.ThrowIfCancellationRequested();
 
+                if (Properties.Settings.Default.EnablePowerModes && _systemPowerModes.IsLaptop)
+                {
+                    await _systemPowerModes.TurnOnHighPerformanceMode();
+                }
+                
                 _runningTask = _processRunner.RunRegisteredTasks(stopwatch);
                 await _runningTask;
+
+                var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+                if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
+                {
+                    // shut down high performance mode
+                    await _systemPowerModes.TurnOffHighPerformanceMode();
+                }
 
 
                 await UpdateDesignSurfaceData();

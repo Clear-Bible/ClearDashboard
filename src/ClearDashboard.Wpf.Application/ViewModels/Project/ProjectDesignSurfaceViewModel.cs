@@ -61,7 +61,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
     public class ProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IProjectDesignSurfaceViewModel,
         IHandle<UiLanguageChangedMessage>, IDisposable, IHandle<RedrawParallelCorpusMenus>,
-        IHandle<RedrawCorpusNodeMenus>
+        IHandle<RedrawCorpusNodeMenus>, IHandle<ProjectLoadedMessage>
     {
         #region Member Variables
 
@@ -72,13 +72,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public readonly BackgroundTasksViewModel BackgroundTasksViewModel;
         private readonly LongRunningTaskManager? _longRunningTaskManager;
         private readonly ILocalizationService _localizationService;
+        private readonly NoteManager _noteManager;
         private readonly SystemPowerModes _systemPowerModes;
+        private readonly ObservableDictionary<string, bool> _busyState = new();
 
         private const string TaskName = "Alignment Deletion";
 
         #endregion //Member Variables
 
         #region Observable Properties
+
+        public new bool IsBusy => _busyState.Count > 0;
 
         public IEnhancedViewManager EnhancedViewManager { get; }
 
@@ -143,6 +147,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _projectName, value);
         }
 
+        public bool _addParatextButtonEnabled = false;
+        public bool AddParatextButtonEnabled
+        {
+            get => _addParatextButtonEnabled;
+            set => Set(ref _addParatextButtonEnabled, value);
+        }
+
         #endregion //Observable Properties
 
         #region Constructor
@@ -166,10 +177,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             ILifetimeScope lifetimeScope,
             LongRunningTaskManager longRunningTaskManager,
             ILocalizationService localizationService,
-            IEnhancedViewManager enhancedViewManager)
+            IEnhancedViewManager enhancedViewManager,
+            NoteManager noteManager)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             EnhancedViewManager = enhancedViewManager;
+            _noteManager = noteManager;
             _systemPowerModes = systemPowerModes;
             _windowManager = windowManager;
             BackgroundTasksViewModel = backgroundTasksViewModel;
@@ -237,6 +250,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             await DrawDesignSurface();
 
             _busyState.CollectionChanged += BusyStateOnCollectionChanged;
+
+
+            if(ProjectManager.IsParatextConnected)
+            {
+                AddParatextButtonEnabled = true;
+            }
+
         }
 
         private void BusyStateOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -398,7 +418,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             }
                         }
 
-                        if (corpus.CorpusId.ParatextGuid == ProjectManager.CurrentParatextProject.Guid)
+                        if (ProjectManager.CurrentParatextProject != null && 
+                            corpus.CorpusId.ParatextGuid == ProjectManager.CurrentParatextProject!.Guid)
                         {
                             currentParatextProjectPresent = true;
                         }
@@ -410,7 +431,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         await DesignSurfaceViewModel!.CreateCorpusNodeMenu(node, tokenizedCorpora);
                     }
 
-                    if (projectCorporaPresent  && !currentParatextProjectPresent)
+                    if (projectCorporaPresent  && !currentParatextProjectPresent && ProjectManager!.IsParatextConnected)
                     {
                         var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
 
@@ -505,11 +526,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             return JsonSerializer.Deserialize<ProjectDesignSurfaceSerializationModel>(json, options);
         }
-
-
-        private readonly ObservableDictionary<string, bool> _busyState = new();
-
-        public new bool IsBusy => _busyState.Count > 0;
 
 
         // ReSharper disable once UnusedMember.Global
@@ -912,15 +928,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                     .Tokenize<LatinWordTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>()
                                     .Transform<SetTrainingBySurfaceLowercase>(),
+
                                 Tokenizers.WhitespaceTokenizer =>
                                     (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
                                     .Tokenize<WhitespaceTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>()
                                     .Transform<SetTrainingBySurfaceLowercase>(),
-                                Tokenizers.ZwspWordTokenizer => (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
+
+                                Tokenizers.ZwspWordTokenizer => 
+                                    (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
                                     .Tokenize<ZwspWordTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>()
                                     .Transform<SetTrainingBySurfaceLowercase>(),
+
+                                Tokenizers.ChineseBibleWordTokenizer => 
+                                    (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
+                                    .Tokenize<ChineseBibleWordTokenizer>()
+                                    .Transform<IntoTokensTextRowProcessor>()
+                                    .Transform<SetTrainingBySurfaceLowercase>(),
+
                                 _ => (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, null, cancellationToken))
                                     .Tokenize<WhitespaceTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>()
@@ -1160,6 +1186,69 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             finally
             {
                 await SaveDesignSurfaceData();
+            }
+        }
+        public void GetLatestExternalNotes(string externalProjectId)
+        {
+            try
+            {
+                Logger!.LogInformation("GetLatestExternalNotes called.");
+
+                var taskName = $"GetLatestExternalNotesFor{externalProjectId}";
+                var task = _longRunningTaskManager!.Create(taskName, LongRunningTaskStatus.Running);
+                var cancellationToken = task.CancellationTokenSource!.Token;
+
+                _ = Task.Run(async () =>
+                {
+                    _busyState.Add(taskName, true);
+
+
+                    try
+                    {
+                        await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
+                            description: $"Retrieving external notes for externalProjectId '{externalProjectId}'...", cancellationToken: cancellationToken);
+
+                        await _noteManager.ExternalNoteManager.InvalidateExternalNotesCache(externalProjectId);
+
+                        await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
+                            description: $"Retrieving external notes for externalProjectId '{externalProjectId}'...Completed", cancellationToken: cancellationToken);
+
+                        _longRunningTaskManager.TaskComplete(taskName);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        Logger!.LogInformation("GetLatestExternalNotes() - OperationCanceledException was thrown -> cancellation was requested.");
+                    }
+                    catch (MediatorErrorEngineException ex)
+                    {
+                        if (ex.Message.Contains("The operation was canceled"))
+                        {
+                            Logger!.LogInformation($"GetLatestExternalNotes() - OperationCanceledException was thrown -> cancellation was requested.");
+                        }
+                        else
+                        {
+                            Logger!.LogError(ex, "an unexpected Engine exception was thrown.");
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger!.LogError(ex, $"An unexpected error occurred while retrieving external notes for '{externalProjectId}' ");
+                        if (!cancellationToken.IsCancellationRequested)
+                        {
+                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed, exception: ex, cancellationToken: cancellationToken);
+                        }
+                    }
+                    finally
+                    {
+                        _longRunningTaskManager.TaskComplete(taskName);
+                        _busyState.Remove(taskName);
+                    }
+                }, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                Logger!.LogInformation($"GetLatestExternalNotes() - Exception was thrown {e}");
             }
         }
 
@@ -1618,6 +1707,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.UpdateParatextCorpus:
                     await UpdateParatextCorpus(corpusNodeViewModel.ParatextProjectId, corpusNodeMenuItem.Tokenizer);
                     break;
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.GetLatestExternalNotes:
+                    GetLatestExternalNotes(corpusNodeViewModel.ParatextProjectId);
+                    break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.ShowLexiconDialog:
                     await ShowLexiconDialog(corpusNodeViewModel.CorpusId);
                     break;
@@ -1824,6 +1916,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }));
         }
 
+        #endregion // Methods
+
         #region IHandle
 
         public async Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
@@ -1860,11 +1954,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        #endregion
-
-        #endregion // Methods
-
-
         public async Task HandleAsync(RedrawCorpusNodeMenus message, CancellationToken cancellationToken)
         {
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator);
@@ -1876,5 +1965,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 await DesignSurfaceViewModel!.CreateCorpusNodeMenu(node, tokenizedCorpora);
             }
         }
+
+        public Task HandleAsync(ProjectLoadedMessage message, CancellationToken cancellationToken)
+        {
+            AddParatextButtonEnabled = true;
+
+            return Task.CompletedTask;
+        }
+
+        #endregion
+
+
     }
 }
