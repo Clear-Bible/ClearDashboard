@@ -2,24 +2,21 @@
 using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.ObjectModel;
-using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.DataAccessLayer.Models;
-using Microsoft.Extensions.Configuration;
-using Autofac.Configuration;
-using System.Windows.Forms;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -265,7 +262,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 var licensePath = Path.Combine(userSecretsFolderPath, LicenseManager.LicenseFolderName, LicenseManager.LicenseFileName);
                 var user = LicenseManager.DecryptLicenseFromFileToUser(licensePath);
-                //what happens there is no good license in the folder and this decryption fails?
+                //what happens when there's no good license in the folder and this decryption fails?
                 UserAndPathList.Add(Tuple.Create(user, userSecretsFolderPath));
             }
 
@@ -277,7 +274,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         public async void DeactivateCurrentLicense(Tuple<User, string> selectedUserAndPath)
         {
             IsEnabled = false;
-            //pop up confirmation dialog
 
             var activeLicense = LicenseManager.DecryptLicenseFromFileToUser(LicenseManager.LicenseFilePath);
 
@@ -306,6 +302,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
             catch(Exception ex)
             {
+                //Do I need to now create a Collab Folder?
                 Logger.LogInformation("There is no active license.", ex);
             }
 
