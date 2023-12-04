@@ -84,7 +84,7 @@
                                 <DataTrigger Binding="{Binding MultipleExternalNotes}" Value="True">
                                     <Setter Property="Kind" Value="Flag" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding MultipleExternalNotes}" Value="True">
+                                <DataTrigger Binding="{Binding IsFirstExternalNoteToken}" Value="True">
                                     <Setter Property="Visibility" Value="Visible" />
                                 </DataTrigger>
                             </Style.Triggers>
