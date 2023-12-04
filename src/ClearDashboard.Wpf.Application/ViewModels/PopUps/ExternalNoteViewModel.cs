@@ -137,6 +137,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     ExternalNoteId = externalNote.ExternalNoteId,
                     ExternalProjectId = externalNote.ExternalProjectId,
                     ExternalLabelIds = externalNote.ExternalLabelIds,
+                    ExternalLabels = externalNote.ExternalLabels,
                     VersePlainText = externalNote.VersePlainText,
                     SelectedPlainText = externalNote.SelectedPlainText,
                     IndexOfSelectedPlainTextInVersePainText = externalNote.IndexOfSelectedPlainTextInVersePainText,
@@ -306,6 +307,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 OnPropertyChanged();
             }
         }
+        public string ExternalLabelText => ExternalLabels.FirstOrDefault()?.ExternalText ?? "";
         public new List<ExternalNoteMessage> ExternalNoteMessages
         {
             get => base.ExternalNoteMessages;

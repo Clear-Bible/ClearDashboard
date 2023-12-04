@@ -109,19 +109,18 @@
                     Margin="5,0,0,0"
                     Foreground="Red"
                     Kind="Flag" />
-                <TextBlock
-                    Grid.Column="1"
-                    Margin="15,0,0,0"
-                    VerticalAlignment="Center"
-                    Foreground="Blue"
-                    Text="{Binding SelectedTab.VerseRefString}" />
-
-                <TextBlock
-                    Grid.Column="1"
-                    Margin="15,0,0,0"
-                    VerticalAlignment="Center"
-                    Foreground="Blue"
-                    Text="{Binding SelectedTab.VerseRefString}" />
+                <StackPanel Orientation="Horizontal" Grid.Column="1">
+                    <TextBlock
+                        Margin="15,0,0,0"
+                        VerticalAlignment="Center"
+                        Foreground="Black" Text="{Binding  Mode=OneWay, Path=SelectedTab.ExternalLabelText}">
+                    </TextBlock>
+                    <TextBlock
+                        Margin="15,0,0,0"
+                        VerticalAlignment="Center"
+                        Foreground="Blue" Text="{Binding SelectedTab.VerseRefString}">
+                    </TextBlock>
+                </StackPanel>
 
                 <TextBlock
                     Grid.Column="2"
