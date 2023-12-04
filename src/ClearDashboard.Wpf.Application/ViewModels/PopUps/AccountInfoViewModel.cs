@@ -29,6 +29,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private readonly ParatextProxy _paratextProxy;
         private readonly CollaborationManager _collaborationManager;
         public string VersionInfo { get; set; } = string.Empty;
+        
+        private bool _isEnabled = true;
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set
+            {
+                _isEnabled = value;
+                NotifyOfPropertyChange(() => IsEnabled);
+            }
+        }
 
         private User _originalLicense = new();
 
@@ -183,6 +194,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             ParatextProxy paratextProxy)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
         {
+            IsEnabled = false;
             Version thisVersion = Assembly.GetEntryAssembly().GetName().Version;
 
             var localizedString = LocalizationService!.Get("AboutView_Version");
@@ -195,6 +207,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _originalLicense = _currentLicense;
 
             GetUserAndPathList();
+            IsEnabled = true;
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -263,6 +276,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public async void DeactivateCurrentLicense(Tuple<User, string> selectedUserAndPath)
         {
+            IsEnabled = false;
             //pop up confirmation dialog
 
             var activeLicense = LicenseManager.DecryptLicenseFromFileToUser(LicenseManager.LicenseFilePath);
@@ -297,8 +311,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             await OnInitializeAsync(CancellationToken.None);
             await GetUserAndPathList();
-
-            //Force Shutdown
+            
+            IsEnabled = true;
         }
 
         private async void ActivateSelectedLicense(Tuple<User, string> selectedUserAndPath)
@@ -334,11 +348,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public async void SwitchToSelectedLicense(Tuple<User, string> selectedUserAndPath)
         {
+            IsEnabled = false;
             DeactivateCurrentLicense(selectedUserAndPath);
 
             ActivateSelectedLicense(selectedUserAndPath);
 
             await OnInitializeAsync(CancellationToken.None);
+            IsEnabled = true;
         }
 
         public async void Close()
@@ -348,7 +364,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public async void CloseApplication()
         {
-            await this.TryCloseAsync();
+            System.Windows.Application.Current.Shutdown();
         }
     }
 }
