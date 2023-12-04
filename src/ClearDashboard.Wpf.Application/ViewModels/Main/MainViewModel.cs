@@ -1176,7 +1176,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             var viewModel = IoC.Get<AccountInfoViewModel>();
 
-            IWindowManager manager = new WindowManager();
+            IWindowManager manager = new NoExitWindowManager();
             manager.ShowDialogAsync(viewModel, null, settings);
         }
 

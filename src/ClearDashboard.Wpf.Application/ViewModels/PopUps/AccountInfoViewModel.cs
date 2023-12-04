@@ -9,9 +9,17 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.ObjectModel;
+using System.Dynamic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using ClearDashboard.DataAccessLayer.Models;
+using Microsoft.Extensions.Configuration;
+using Autofac.Configuration;
+using System.Windows.Forms;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -21,6 +29,57 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private readonly ParatextProxy _paratextProxy;
         private readonly CollaborationManager _collaborationManager;
         public string VersionInfo { get; set; } = string.Empty;
+
+        private User _originalLicense = new();
+
+        private User _currentLicense = new();
+        public User CurrentLicense
+        {
+            get => _currentLicense;
+            set
+            {
+                _currentLicense = value;
+                NotifyOfPropertyChange(() => CurrentLicense);
+
+                UserAndPathListVisibility = UserAndPathList.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+                CloseWindowVisibility = _originalLicense.Id == _currentLicense.Id ? Visibility.Visible : Visibility.Collapsed;
+                CloseApplicationVisibility = CloseWindowVisibility == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
+
+            }
+        }
+
+        private Visibility _userAndPathListVisibility = Visibility.Collapsed;
+        public Visibility UserAndPathListVisibility
+        {
+            get => _userAndPathListVisibility;
+            set
+            {
+                _userAndPathListVisibility = value;
+                NotifyOfPropertyChange(() => UserAndPathListVisibility);
+            }
+        }
+
+        private Visibility _closeWindowVisibility = Visibility.Visible;
+        public Visibility CloseWindowVisibility
+        {
+            get => _closeWindowVisibility;
+            set
+            {
+                _closeWindowVisibility = value;
+                NotifyOfPropertyChange(() => CloseWindowVisibility);
+            }
+        }
+
+        private Visibility _closeApplicationVisibility = Visibility.Collapsed;
+        public Visibility CloseApplicationVisibility
+        {
+            get => _closeApplicationVisibility;
+            set
+            {
+                _closeApplicationVisibility = value;
+                NotifyOfPropertyChange(() => CloseApplicationVisibility);
+            }
+        }
 
         private string _paratextUsername = "Unknown";
         public string ParatextUsername
@@ -88,18 +147,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
-        private ObservableCollection<string> _licenseList;
-        public ObservableCollection<string> LicenseList
+        private ObservableCollection<Tuple<User, string>> _userAndPathList = new();
+        public ObservableCollection<Tuple<User, string>> UserAndPathList
         {
-            get => _licenseList;
+            get => _userAndPathList;
             set
             {
-                _licenseList = value;
-                NotifyOfPropertyChange(() => LicenseList);
+                _userAndPathList = value;
+                NotifyOfPropertyChange(() => UserAndPathList);
             }
         }
 
+        private Tuple<User, string> _selectedUserAndPath;
+        public Tuple<User, string> SelectedUserAndPath
+        {
+            get => _selectedUserAndPath;
+            set
+            {
+                if (value != null)
+                {
+                    SwitchToSelectedLicense(value);
+                }
 
+                _selectedUserAndPath = value;
+                NotifyOfPropertyChange(() => SelectedUserAndPath);
+            }
+        }
         public AccountInfoViewModel()
         {
             //no-op
@@ -118,58 +191,162 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _collaborationManager = collaborationManager;
             _paratextProxy = paratextProxy;
 
+            OnInitializeAsync(CancellationToken.None);
+            _originalLicense = _currentLicense;
+
+            GetUserAndPathList();
+        }
+
+        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+        {
             var registration = _paratextProxy.GetParatextRegistrationData();
             ParatextUsername =registration.Name;
             ParatextEmail = registration.Email;
 
             var license = LicenseManager.DecryptLicenseFromFileToUser(LicenseManager.LicenseFilePath);
+            CurrentLicense = license;
             ClearDashboardUsername = license.FullName;
 
-            var config = _collaborationManager.GetConfig();
+            var configBuilder = new ConfigurationBuilder();
+            configBuilder.AddUserSecrets<Bootstrapper>();
+            var iConfigRoot = configBuilder.Build();
+            var section = iConfigRoot.GetSection("Collaboration");
+
+            int userId;
+            int nameSpaceId;
+            try
+            {
+                userId = Convert.ToInt16(section["userId"]);
+                nameSpaceId = Convert.ToInt16(section["NamespaceId"]);
+            }
+            catch (Exception)
+            {
+                userId = 2;
+                nameSpaceId = 0;
+            }
+            var config = new CollaborationConfiguration()
+            {
+                RemoteUrl = section["RemoteUrl"],
+                RemoteEmail = section["RemoteEmail"],
+                RemoteUserName = section["RemoteUserName"],
+                RemotePersonalAccessToken = section["RemotePersonalAccessToken"],
+                Group  = section["Group"],
+                RemotePersonalPassword = section["RemotePersonalPassword"],
+                UserId = userId,
+                NamespaceId = nameSpaceId
+            };
+
             CollaborationUsername = config.RemoteUserName;
             CollaborationEmail= config.RemoteEmail;
+
+            return base.OnInitializeAsync(cancellationToken);
         }
 
-        public async void DeactivateCurrentLicense()
+        private async Task<ObservableCollection<Tuple<User, string>>> GetUserAndPathList()
+        {
+            var allMicrosoftFolders = Directory.GetDirectories(LicenseManager.MicrosoftFolderPath);
+            var userSecretsFolders = allMicrosoftFolders.Where(name => name.Contains(LicenseManager.UserSecretsDirectoryName));
+
+            UserAndPathList.Clear();
+            foreach (var userSecretsFolderPath in userSecretsFolders)
+            {
+                var licensePath = Path.Combine(userSecretsFolderPath, LicenseManager.LicenseFolderName, LicenseManager.LicenseFileName);
+                var user = LicenseManager.DecryptLicenseFromFileToUser(licensePath);
+                //what happens there is no good license in the folder and this decryption fails?
+                UserAndPathList.Add(Tuple.Create(user, userSecretsFolderPath));
+            }
+
+            UserAndPathList= new ObservableCollection<Tuple<User, string>>(UserAndPathList.OrderBy(x => x.Item1.Id.ToString()).ToList());
+
+            return UserAndPathList;
+        }
+
+        public async void DeactivateCurrentLicense(Tuple<User, string> selectedUserAndPath)
         {
             //pop up confirmation dialog
-            var somePlace = 2;
 
-            //go to the folders and rename the file
             var activeLicense = LicenseManager.DecryptLicenseFromFileToUser(LicenseManager.LicenseFilePath);
 
-            //rename UserSecrets Folder
-            Directory.Move(LicenseManager.UserSecretsFolderPath,
-                Path.Combine(LicenseManager.MicrosoftFolderPath,
-                    $"{LicenseManager.UserSecretsDirectoryName}_{activeLicense.Id}"));
+            if (selectedUserAndPath != null && activeLicense.Id == selectedUserAndPath.Item1.Id)
+            {
+                return;
+            }
 
-            //rename Collab Folder
-            Directory.Move(LicenseManager.CollaborationDirectoryPath,
-                Path.Combine(LicenseManager.DocumentsDirectoryPath,
-                    $"{LicenseManager.CollaborationDirectoryName}_{activeLicense.Id}"));
+            try
+            {
+                Directory.Move(
+                    LicenseManager.UserSecretsFolderPath,
+                    Path.Combine(LicenseManager.MicrosoftFolderPath, $"{LicenseManager.UserSecretsDirectoryName}_{activeLicense.Id}"));
+            }
+            catch (Exception ex)
+            {
+                //Do I need to now create a UserSecrets Folder?
+                Logger.LogError("Deactivate Current License failed", ex);
+            }
+
+            try
+            {
+                Directory.Move(
+                        LicenseManager.CollaborationDirectoryPath,
+                        Path.Combine(LicenseManager.DocumentsDirectoryPath, $"{LicenseManager.CollaborationDirectoryName}_{activeLicense.Id}"));
+            }
+            catch(Exception ex)
+            {
+                Logger.LogInformation("There is no active license.", ex);
+            }
+
+            await OnInitializeAsync(CancellationToken.None);
+            await GetUserAndPathList();
+
+            //Force Shutdown
         }
 
-        public async void RegisterNewLicense()
+        private async void ActivateSelectedLicense(Tuple<User, string> selectedUserAndPath)
         {
-            //popup the registration dialog
-            //if success then
-            //deactivate the current license
+            try
+            {
+                Directory.Move(
+                    selectedUserAndPath.Item2,
+                    LicenseManager.UserSecretsFolderPath);
+            }
+            catch (Exception ex)
+            {
+                //Do I need to now create a UserSecrets Folder?
+                Logger.LogError("Deactivate Current License failed", ex);
+            }
+
+            try
+            {
+                Directory.Move(
+                    Path.Combine(LicenseManager.DocumentsDirectoryPath, $"{LicenseManager.CollaborationDirectoryName}_{selectedUserAndPath.Item1.Id}"),
+                    LicenseManager.CollaborationDirectoryPath);
+
+            }
+            catch (Exception ex)
+            {
+                //Do I need to now create a Collaboration Folder?
+                Logger.LogError("Deactivate Current License failed", ex);
+            }
+
+            await OnInitializeAsync(CancellationToken.None);
+            await GetUserAndPathList();
         }
 
-        public async Task<ObservableCollection<string>> GetLicenseList()
+        public async void SwitchToSelectedLicense(Tuple<User, string> selectedUserAndPath)
         {
-            //search in the license folder and for each file attempt to decrypt it
-            //add the name to the list
-            return new ObservableCollection<string>();
-        }
+            DeactivateCurrentLicense(selectedUserAndPath);
 
-        public async void ActivateSelectedLicense()
-        {
-            //deactivate current license
-            //rename the files for the selected license
+            ActivateSelectedLicense(selectedUserAndPath);
+
+            await OnInitializeAsync(CancellationToken.None);
         }
 
         public async void Close()
+        {
+            await this.TryCloseAsync();
+        }
+
+        public async void CloseApplication()
         {
             await this.TryCloseAsync();
         }

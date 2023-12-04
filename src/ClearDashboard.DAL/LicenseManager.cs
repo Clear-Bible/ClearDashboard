@@ -27,8 +27,9 @@ namespace ClearDashboard.DataAccessLayer
         
         public static string UserSecretsDirectoryName = "UserSecrets";
         public static string UserSecretsFolderPath = Path.Combine(MicrosoftFolderPath, UserSecretsDirectoryName);
-        
-        public static string LicenseFolderPath = Path.Combine(UserSecretsFolderPath, "License");
+
+        public static string LicenseFolderName = "License";
+        public static string LicenseFolderPath = Path.Combine(UserSecretsFolderPath, LicenseFolderName);
         
         public static string LicenseFilePath = Path.Combine(LicenseFolderPath, LicenseFileName);
 
