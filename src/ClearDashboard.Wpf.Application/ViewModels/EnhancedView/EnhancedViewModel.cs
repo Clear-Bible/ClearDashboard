@@ -313,7 +313,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     AbstractionsSettingsHelper.SaveShowExternalNotes(value);
                     NotifyOfPropertyChange(() => ShowExternalNotes);
 
-                    Task.Run(() => EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage()).GetAwaiter());
+                    EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage()).GetAwaiter();
                 }
             }
         }

@@ -285,6 +285,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             foreach ( var tokenDisplayViewModel in tokenDisplayViewModels)
             {
+                tokenDisplayViewModel.MultipleExternalNotes = false;
+                tokenDisplayViewModel.IsFirstExternalNoteToken = false;
+
                  var externalNotes = noteInfos
                     .Where(noteInfo => noteInfo.tokenIds?.Contains(tokenDisplayViewModel.Token.TokenId) ?? false)
                     .Select(noteInfo => noteInfo.externalNote)

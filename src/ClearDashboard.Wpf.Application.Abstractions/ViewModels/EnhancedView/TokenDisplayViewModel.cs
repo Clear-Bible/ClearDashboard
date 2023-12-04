@@ -197,10 +197,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private BindableCollection<ExternalNote> _externalNotes = new();
         public BindableCollection<ExternalNote> ExternalNotes
         {
-            get 
-            {
-                return _externalNotes;
-            }
+            get => _externalNotes;
             set
             {
                 if (Set(ref _externalNotes, value))
@@ -375,7 +372,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private bool _multipleExternalNotes;
+        private bool _multipleExternalNotes = false;
         public bool MultipleExternalNotes
         {
             get => _multipleExternalNotes && AbstractionsSettingsHelper.GetShowExternalNotes();

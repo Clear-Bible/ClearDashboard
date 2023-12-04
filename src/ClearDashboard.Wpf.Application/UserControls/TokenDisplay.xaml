@@ -56,22 +56,36 @@
                     Margin="3,0,0,0"
                     Foreground="DarkGray"
                     IsHitTestVisible="False"
-                    Kind="Flag"
-                    Visibility="{Binding MultipleExternalNotes, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    Kind="Flag">
+                    <iconPacks:PackIconModern.Style>
+                        <Style TargetType="iconPacks:PackIconModern">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding MultipleExternalNotes}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </iconPacks:PackIconModern.Style>
+
+                </iconPacks:PackIconModern>
 
                 <iconPacks:PackIconModern
                     x:Name="ExternalNotesIcon"
                     Margin="0,2,0,0"
                     Cursor="Hand"
                     Foreground="Red"
-                    MouseDown="PackIconModern_MouseDown"
-                    Visibility="{Binding IsFirstExternalNoteToken, Converter={StaticResource BoolToVisibilityConverter}}">
+                    MouseDown="PackIconModern_MouseDown">
                     <iconPacks:PackIconModern.Style>
                         <Style TargetType="{x:Type iconPacks:PackIconModern}">
                             <Setter Property="Kind" Value="Flag" />
+                            <Setter Property="Visibility" Value="Collapsed" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding MultipleExternalNotes}" Value="True">
                                     <Setter Property="Kind" Value="Flag" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding MultipleExternalNotes}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -90,7 +104,7 @@
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Vertical">
-                                                <TextBox
+                                                <!--<TextBox
                                                     Name="txtFocus"
                                                     MinWidth="80"
                                                     HorizontalAlignment="Left"
@@ -101,9 +115,11 @@
                                                             <Binding Path="ItemsSource" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ListView}}" />
                                                         </MultiBinding>
                                                     </TextBox.Text>
-                                                </TextBox>
+                                                </TextBox>-->
 
                                                 <Label Content="{Binding ExternalNoteMessagesString}" />
+
+                                                <Separator />
                                                 <!--<controls:ExtendedPropertiesTreeView
                                                     x:Name="ExternalNoteBodyTokenTreeViewName"
                                                     ExtendedPropertiesXml="{Binding Body}"
@@ -280,7 +296,7 @@
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Vertical">
-                                            <TextBox
+                                            <!--<TextBox
                                                 Name="txtFocus"
                                                 MinWidth="80"
                                                 HorizontalAlignment="Left"
@@ -291,9 +307,11 @@
                                                         <Binding Path="ItemsSource" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ListView}}" />
                                                     </MultiBinding>
                                                 </TextBox.Text>
-                                            </TextBox>
+                                            </TextBox>-->
 
-                                            <Label Content="{Binding Message}" />
+                                            <Label Content="{Binding ExternalNoteMessagesString}" />
+
+                                            <Separator />
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>

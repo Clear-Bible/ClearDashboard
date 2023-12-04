@@ -235,12 +235,12 @@
         <Border
             MaxWidth="18"
             MaxHeight="22"
+            Margin="2"
             Background="WhiteSmoke"
             BorderBrush="Black"
             BorderThickness="1"
             CornerRadius="3"
             Cursor="Hand"
-            Margin="2"
             MouseDown="Border_MouseDown"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.HasExternalNotes), Converter={StaticResource BoolToVisibilityConverter}}">
             <Border.ToolTip>
@@ -256,7 +256,7 @@
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Vertical">
-                                        <TextBox
+                                        <!--<TextBox
                                             Name="txtFocus"
                                             MinWidth="80"
                                             HorizontalAlignment="Left"
@@ -267,8 +267,10 @@
                                                     <Binding Path="ItemsSource" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ListView}}" />
                                                 </MultiBinding>
                                             </TextBox.Text>
-                                        </TextBox>
+                                        </TextBox>-->
                                         <Label Content="{Binding ExternalNoteMessagesString}" />
+                                        <Separator/>
+                                        <Label Content="{Binding ExternalLabel[0]}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>

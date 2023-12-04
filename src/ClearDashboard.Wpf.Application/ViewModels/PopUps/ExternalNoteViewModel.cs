@@ -48,9 +48,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         public ObservableCollection<ExternalNoteExtended> Tabs
         {
             get => _tabs;
-            set 
-            { 
-                _tabs = value; 
+            set
+            {
+                _tabs = value;
                 NotifyOfPropertyChange(() => Tabs);
             }
         }
@@ -60,8 +60,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         public ExternalNoteExtended SelectedTab
         {
             get => _selectedTab;
-            set 
-            { 
+            set
+            {
                 _selectedTab = value;
                 NotifyOfPropertyChange(() => SelectedTab);
             }
@@ -90,6 +90,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 NotifyOfPropertyChange(() => SelectedAssignableUser);
             }
         }
+
+        private Visibility _showTabControl = Visibility.Collapsed;
+        public Visibility ShowTabControl
+        {
+            get => _showTabControl;
+            set
+            {
+                _showTabControl = value;
+                NotifyOfPropertyChange(() => ShowTabControl);
+            }
+        }
+
 
 
         // ReSharper disable once MemberCanBePrivate.Global
@@ -159,15 +171,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             var result = await ExecuteRequest(new GetAllEditableProjectUsersQuery(_externalProjectId), CancellationToken.None);
             if (result.Success && result.HasData)
             {
-                if (result.Data != null) 
+                if (result.Data != null)
                     AssignableUsers = new ObservableCollection<string>(result.Data);
             }
 
             NotifyOfPropertyChange(nameof(AssignableUsers));
             SelectedAssignableUser = null;
 
-            SelectedTab= Tabs[0];
+            SelectedTab = Tabs[0];
             NotifyOfPropertyChange(nameof(SelectedTab));
+
+            if (Tabs.Count > 1)
+            {
+                ShowTabControl = Visibility.Visible;
+            }
+
         }
 
         #endregion //Constructor
@@ -301,9 +319,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         public new string ExternalUserNameAssignedTo
         {
             get => base.ExternalUserNameAssignedTo;
-            set 
-            { 
-                base.ExternalUserNameAssignedTo = value;    
+            set
+            {
+                base.ExternalUserNameAssignedTo = value;
                 OnPropertyChanged();
             }
         }
@@ -311,17 +329,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         public new List<ExternalNoteMessage> ExternalNoteMessages
         {
             get => base.ExternalNoteMessages;
-            set 
-            { 
-                base.ExternalNoteMessages = value; 
+            set
+            {
+                base.ExternalNoteMessages = value;
                 OnPropertyChanged();
             }
         }
         public new bool IsResolved
         {
             get => base.IsResolved;
-            set 
-            { 
+            set
+            {
                 base.IsResolved = value;
                 OnPropertyChanged();
             }
@@ -333,9 +351,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         public string TabHeader
         {
             get => _tabHeader;
-            set 
-            { 
-                _tabHeader = value; 
+            set
+            {
+                _tabHeader = value;
                 OnPropertyChanged();
             }
         }
