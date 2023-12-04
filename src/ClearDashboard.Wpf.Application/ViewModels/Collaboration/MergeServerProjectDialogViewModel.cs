@@ -222,7 +222,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
         protected override async void OnViewLoaded(object view)
         {
             _userInfo = _collaborationManager.GetConfig();
-
             _gitLabUser = new Models.HttpClientFactory.GitLabUser
             {
                 Id = _userInfo.UserId,
@@ -232,45 +231,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                 Organization = _userInfo.Group
             };
 
-            _logger.LogInformation($"Entering in MergeServerProjectDialogViewModel");
-            _logger.LogInformation($"UserInfo UserId: {_userInfo.UserId}");
-            _logger.LogInformation($"UserInfo Remote Username: {_userInfo.RemoteUserName}");
-            _logger.LogInformation($"UserInfo NamespaceId: {_userInfo.NamespaceId}");
-            _logger.LogInformation($"GitLabUser Name: {_gitLabUser.Name}");
-            _logger.LogInformation($"GitLabUser Email: {_gitLabUser.Email}");
-            _logger.LogInformation($"GitLabUser Id: {_gitLabUser.Id}");
-            _logger.LogInformation($"GitLabUser NamespaceId: {_gitLabUser.NamespaceId}");
+            var projectCreated = await CreateProjectOnServerIfNotCreated();
 
-            var projects = await _gitLabHttpClientServices.GetProjectsForUser(_userInfo);
-
-            if (ProjectId != Guid.Empty)
+            if (projectCreated == false)
             {
-                var currentProjectId = "P_" + ProjectId;
-                var project = projects.FirstOrDefault(x => x.Name == currentProjectId);
+                // an existing project so we need to check to see if the user is a member of the project
 
-                if (project is null)
+
+                var projects = await _gitLabHttpClientServices.GetProjectsForUser(_userInfo);
+
+                if (ProjectId != Guid.Empty)
                 {
-                    _logger.LogInformation($"Project {currentProjectId} not found");
-                    _logger.LogInformation($"Projects Count: {projects.Count}");
-                    _logger.LogInformation($"CurrentProjectId: {currentProjectId}");
+                    var currentProjectId = "P_" + ProjectId;
+                    var project = projects.FirstOrDefault(x => x.Name == currentProjectId);
 
-                    int i = 0;
-                    foreach (var p in projects)
+                    if (project is null)
                     {
-                        _logger.LogInformation($"Project {i} Name: {p.Name}");
-                        i++;
+                        _logger.LogInformation($"Project {currentProjectId} not found");
+                        _logger.LogInformation($"Projects Count: {projects.Count}");
+                        _logger.LogInformation($"CurrentProjectId: {currentProjectId}");
+
+                        int i = 0;
+                        foreach (var p in projects)
+                        {
+                            _logger.LogInformation($"Project {i} Name: {p.Name}");
+                            i++;
+                        }
+
+                        StatusMessage = "User is not a member of the project.\nPlease contact the project owner to be added to the project.";
+                        StatusMessageColor = Brushes.Red;
+                        CancelAction = "Close";
+
+                        await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectPermissionLevelMessage(PermissionLevel.None));
+                        return;
                     }
-
-                    StatusMessage = "User is not a member of the project.\nPlease contact the project owner to be added to the project.";
-                    StatusMessageColor = Brushes.Red;
-                    CancelAction = "Close";
-
-                    await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectPermissionLevelMessage(PermissionLevel.None));
-                    return;
                 }
-            }
 
-            await CreateProjectOnServerIfNotCreated();
+            }
 
             Ok();  // run the action - do not await
 
@@ -301,13 +298,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
         #region Methods
 
-        private async Task CreateProjectOnServerIfNotCreated()
+        private async Task<bool> CreateProjectOnServerIfNotCreated()
         {
+            bool projectCreated = false;
+
             var projects = await _gitLabHttpClientServices.GetProjectsForUser(_userInfo);
             var project = projects.FirstOrDefault(x => x.Name == $"P_{ProjectId}");
 
             if (project is null)
             {
+                projectCreated = true;
                 project =
                     await _gitLabHttpClientServices.CreateNewProjectForUser(_gitLabUser, $"P_{ProjectId}", ProjectName);
             }
@@ -328,6 +328,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             {
                 Logger!.LogError(ex, "Unable to fetch from server");
             }
+
+            return projectCreated;
         }
 
 
