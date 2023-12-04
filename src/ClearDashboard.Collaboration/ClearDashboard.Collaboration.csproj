@@ -9,11 +9,12 @@
     <AssemblyVersion>1.2.0.18</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ClearBible.Engine" Version="2.0.18-alpha" />
     <PackageReference Include="LibGit2Sharp" Version="0.27.2" />
     <PackageReference Include="MediatR" Version="9.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\ClearEngine\src\ClearBible.Engine\ClearBible.Engine.csproj" />
+    <ProjectReference Include="..\..\..\ClearEngine\src\ClearBible.Macula.PropertiesSources\ClearBible.Macula.PropertiesSources.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS.Features\ClearDashboard.DAL.CQRS.Features.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS\ClearDashboard.DAL.CQRS.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Data\ClearDashboard.DAL.Data.csproj" />

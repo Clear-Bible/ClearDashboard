@@ -1,18 +1,10 @@
-﻿using System.Diagnostics;
-using ClearBible.Engine.Corpora;
-using ClearBible.Engine.SyntaxTree.Aligner.Legacy;
-using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Translation;
-using ClearDashboard.DAL.CQRS;
+﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using SIL.Extensions;
-using SIL.Linq;
-
+using System.Diagnostics;
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
 

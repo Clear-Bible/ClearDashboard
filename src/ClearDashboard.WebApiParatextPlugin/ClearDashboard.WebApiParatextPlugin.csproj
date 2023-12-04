@@ -28,7 +28,6 @@
   </ItemGroup>
   <ItemGroup>
     <!--<PackageReference Include="Microsoft.AspNet.SignalR.SelfHost" Version="2.4.3" />-->
-    <PackageReference Include="Clear.SIL.Machine" Version="2.5.15-alpha" />
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.3" />

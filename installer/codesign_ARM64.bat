@@ -10,7 +10,7 @@ rem get the absolute path to the relative key file
 CALL :NORMALIZEPATH "..\code_signing_key\ClearBible.pfx"
 
 
-rem echo ========== PUBLISH 64-Bit Version of PluginManager ==============
+rem echo ========== PUBLISH ARM64-Bit Version of PluginManager ==============
 rem cd ..\tools\PluginManager
 rem dotnet clean --configuration Release
 rem dotnet publish -r win-x64 -c Release
@@ -81,7 +81,7 @@ echo code sign the Dashboard installer
 	sign /v /f %RETVAL% ^
 	/p "%PASSWORD%" ^
 	/t http://timestamp.comodoca.com/authenticode ^
-	"%CURRENTPATH%\Output\ClearDashboard.exe"
+	"%CURRENTPATH%\Output\ClearDashboard_ARM64.exe"
 
 pause
 

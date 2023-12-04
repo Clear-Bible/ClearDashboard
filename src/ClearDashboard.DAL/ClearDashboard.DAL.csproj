@@ -515,7 +515,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="Clear.SIL.Machine" Version="2.5.15-alpha" />
     <PackageReference Include="Dapper" Version="2.0.143" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.3" />
@@ -533,6 +532,7 @@
     <PackageReference Include="Unidecode.NET" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\machine\src\SIL.Machine\SIL.Machine.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS.Features\ClearDashboard.DAL.CQRS.Features.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS\ClearDashboard.DAL.CQRS.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Data\ClearDashboard.DAL.Data.csproj" />

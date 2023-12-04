@@ -1,19 +1,14 @@
-﻿using ClearBible.Engine.Corpora;
+﻿using Caliburn.Micro;
+using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
-using ClearBible.Engine.Translation;
-using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearBible.Engine.SyntaxTree.Aligner.Translation;
 using ClearBible.Engine.SyntaxTree.Corpora;
-using ClearDashboard.DAL.Alignment.Features.Translation;
-using MediatR;
-using SIL.Machine.Corpora;
+using ClearBible.Engine.Translation;
+using Microsoft.Extensions.Logging;
 using SIL.Machine.Translation;
 using SIL.Machine.Translation.Thot;
 using SIL.Machine.Utils;
-using static ClearDashboard.DAL.Alignment.Translation.ITranslationCommandable;
 using System.Diagnostics;
-using Microsoft.Extensions.Logging;
-using Caliburn.Micro;
 
 namespace ClearDashboard.DAL.Alignment.Translation
 {

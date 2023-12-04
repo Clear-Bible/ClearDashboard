@@ -1,22 +1,21 @@
-﻿using System;
+﻿using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Persistence;
 using ClearBible.Engine.SyntaxTree.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearBible.Macula.PropertiesSources.Tokenization;
 using ClearDashboard.Collaboration.DifferenceModel;
+using ClearDashboard.Collaboration.Exceptions;
+using ClearDashboard.Collaboration.Factory;
 using ClearDashboard.Collaboration.Model;
-using Models = ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Features.Common;
+using ClearDashboard.DataAccessLayer.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Corpora;
-using SIL.Scripture;
-using ClearBible.Engine.Corpora;
-using ClearDashboard.Collaboration.Exceptions;
-using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DAL.Alignment.Features.Common;
-using Microsoft.EntityFrameworkCore;
-using ClearBible.Engine.Persistence;
-using ClearDashboard.Collaboration.Factory;
 using SIL.Machine.Utils;
-using ClearDashboard.DAL.Alignment.Corpora;
+using SIL.Scripture;
+using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Merge;
 

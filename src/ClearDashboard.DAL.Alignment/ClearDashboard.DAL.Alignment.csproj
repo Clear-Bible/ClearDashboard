@@ -12,12 +12,13 @@
     <AssemblyVersion>1.2.0.18</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ClearBible.Engine" Version="2.0.18-alpha" />
     <PackageReference Include="Caliburn.Micro.Core" Version="4.0.212" />
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.9" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\ClearEngine\src\ClearBible.Engine.SyntaxTree.Aligner\ClearBible.Engine.SyntaxTree.Aligner.csproj" />
+    <ProjectReference Include="..\..\..\ClearEngine\src\ClearBible.Engine\ClearBible.Engine.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS.Features\ClearDashboard.DAL.CQRS.Features.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS\ClearDashboard.DAL.CQRS.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Interfaces\ClearDashboard.DAL.Interfaces.csproj" />

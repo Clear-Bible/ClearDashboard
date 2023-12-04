@@ -1,6 +1,5 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.SyntaxTree.Aligner.Translation;
-using ClearDashboard.DAL.Alignment.Corpora;
 using SIL.Machine.Translation;
 using SIL.Machine.Utils;
 

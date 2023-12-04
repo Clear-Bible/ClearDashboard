@@ -135,7 +135,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}";
 
 [Files]
-Source: "windowsdesktop-runtime-7.0.5-win-x64.exe"; Flags: dontcopy noencryption
+Source: "windowsdesktop-runtime-7.0.13-win-arm64.exe"; Flags: dontcopy noencryption
 Source: "VC_redist.x64.exe"; Flags: dontcopy noencryption
 
 ; Install PluginManager
@@ -158,14 +158,22 @@ Source: "..\src\ClearDashboard.Wpf.Application\Resources\NotoSerif-Italic-Variab
 Source: "..\src\ClearDashboard.Wpf.Application\Resources\NotoSerif-VariableFont_wdth,wght.ttf"; DestDir: "{fonts}"; Flags: onlyifdoesntexist uninsneveruninstall; FontInstall: "Noto Serif"
 
 ; Install Paratext Regular Plugin
-Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\*"; DestDir: "{code:GetParatextInstallationPath}\plugins\{#MyAppPluginFolder}"; Check: ShouldInstallParatextRegular; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\ClearDashboard.WebApiParatextPlugin.dll"; DestDir: "{code:GetParatextInstallationPath}\plugins\{#MyAppPluginFolder}"; DestName: "ClearDashboard.WebApiParatextPlugin.ptxplg"; Check: ShouldInstallParatextRegular; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\*"; DestDir: "{code:GetParatextInstallationPath}\plugins\{#MyAppPluginFolder}"; Flags: ignoreversion recursesubdirs createallsubdirs; Check: ShouldInstallParatextRegular
+Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\ClearDashboard.WebApiParatextPlugin.dll"; DestDir: "{code:GetParatextInstallationPath}\plugins\{#MyAppPluginFolder}"; DestName: "ClearDashboard.WebApiParatextPlugin.ptxplg"; Flags: ignoreversion recursesubdirs createallsubdirs; Check: ShouldInstallParatextRegular
 
 
 ; Install Paratext Beta Plugin
-Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\*"; DestDir: "{code:GetParatextBetaInstallationPath}\plugins\{#MyAppPluginFolder}"; Check: ShouldInstallParatextBeta; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\ClearDashboard.WebApiParatextPlugin.dll"; DestDir: "{code:GetParatextBetaInstallationPath}\plugins\{#MyAppPluginFolder}"; DestName: "ClearDashboard.WebApiParatextPlugin.ptxplg"; Check: ShouldInstallParatextBeta; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\*"; DestDir: "{code:GetParatextBetaInstallationPath}\plugins\{#MyAppPluginFolder}"; Flags: ignoreversion recursesubdirs createallsubdirs; Check: ShouldInstallParatextBeta
+Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\ClearDashboard.WebApiParatextPlugin.dll"; DestDir: "{code:GetParatextBetaInstallationPath}\plugins\{#MyAppPluginFolder}"; DestName: "ClearDashboard.WebApiParatextPlugin.ptxplg"; Flags: ignoreversion recursesubdirs createallsubdirs; Check: ShouldInstallParatextBeta
 
+
+; Install Missing ARM files
+Source: "ARM_Libs\msvcp140d.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "ARM_Libs\msvcp140d_atomic_wait.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "ARM_Libs\msvcp140d_codecvt_ids.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "ARM_Libs\ucrtbased.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "ARM_Libs\vcomp140d.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "ARM_Libs\vcruntime140d.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 [Registry]
 Root: HKA; Subkey: "Software\Classes\{#MyAppAssocExt}\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppAssocKey}"; ValueData: ""; Flags: uninsdeletevalue
@@ -286,11 +294,11 @@ begin
     end;  
     
     // install the .NET Runtime
-     if not DirExists('C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\7.0.5\') then begin
-      if not FileExists(ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-7.0.5-win-x64.exe') then begin          
-        ExtractTemporaryFile('windowsdesktop-runtime-7.0.5-win-x64.exe');
+     if not DirExists('C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\7.0.13\') then begin
+      if not FileExists(ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-7.0.13-win-arm64.exe') then begin          
+        ExtractTemporaryFile('windowsdesktop-runtime-7.0.13-win-arm64.exe');
       end;
-     Result := ShellExec('', ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-7.0.5-win-x64.exe', '/passive', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
+     Result := ShellExec('', ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-7.0.13-win-arm64.exe', '/passive', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
     end;
     Result := true;
   end;
