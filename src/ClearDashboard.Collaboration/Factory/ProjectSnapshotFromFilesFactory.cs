@@ -213,6 +213,14 @@ public class ProjectSnapshotFromFilesFactory
             }
         }
 
+        // Any top level entity types for which there may be existing
+        // serializations in older formats that need to be updated:
+        var updateMappings = new Dictionary<Type, Dictionary<Guid, Dictionary<string, string>>>();
+
+        GeneralModelBuilder.GetModelBuilder<Models.Label>().UpdateModelSnapshotFormat(projectSnapshot, updateMappings);
+        GeneralModelBuilder.GetModelBuilder<Models.Lexicon_Lexeme>().UpdateModelSnapshotFormat(projectSnapshot, updateMappings);
+        GeneralModelBuilder.GetModelBuilder<Models.Lexicon_SemanticDomain>().UpdateModelSnapshotFormat(projectSnapshot, updateMappings);
+
         return projectSnapshot;
     }
 
@@ -258,9 +266,6 @@ public class ProjectSnapshotFromFilesFactory
 
             modelSnapshots.Add(modelSnapshot);
         }
-
-        var modelBuilder = GeneralModelBuilder.GetModelBuilder<T>();
-        modelBuilder.FinalizeTopLevelEntities(modelSnapshots);
 
         return modelSnapshots;
     }

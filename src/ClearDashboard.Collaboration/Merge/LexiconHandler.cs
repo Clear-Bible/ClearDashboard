@@ -255,7 +255,7 @@ public class LexiconHandler : DefaultMergeHandler<IModelSnapshot<Models.Lexicon_
         }
     }
 
-    private static string ExtractStringProperty(IModelSnapshot modelSnapshot, string propertyName)
+    public static string ExtractStringProperty(IModelSnapshot modelSnapshot, string propertyName)
     {
         if (modelSnapshot.TryGetStringPropertyValue(propertyName, out var refValue))
         {

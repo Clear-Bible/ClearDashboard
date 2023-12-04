@@ -104,7 +104,7 @@ public class LexiconBuilder : GeneralModelBuilder<Models.Lexicon_Lexeme>
         return modelSnapshot;
     }
 
-    private static string CalculateLexemeRef(string lemma, string language, string? type)
+    public static string CalculateLexemeRef(string lemma, string language, string? type)
     {
         return EncodePartsToRef(LEXEME_REF_PREFIX, lemma, language, type);
     }
@@ -115,7 +115,7 @@ public class LexiconBuilder : GeneralModelBuilder<Models.Lexicon_Lexeme>
         return (lemma: parts[0], language: parts[1], type: string.IsNullOrEmpty(parts[2]) ? null : parts[2]);
     }
 
-    private static string CalculateMeaningRef(string text, string language)
+    public static string CalculateMeaningRef(string text, string language)
     {
         return EncodePartsToRef(MEANING_REF_PREFIX, text, language);
     }
@@ -159,16 +159,18 @@ public class LexiconBuilder : GeneralModelBuilder<Models.Lexicon_Lexeme>
         return base.BuildGeneralModel(modelPropertiesTypes);
     }
 
-    public override void FinalizeTopLevelEntities(List<GeneralModel<Models.Lexicon_Lexeme>> topLevelEntities)
+    public override void UpdateModelSnapshotFormat(ProjectSnapshot projectSnapshot, Dictionary<Type, Dictionary<Guid, Dictionary<string, string>>> updateMappings)
     {
-        foreach (var topLevelEntity in topLevelEntities)
+        updateMappings[typeof(Models.Lexicon_Meaning)] = new();
+
+        foreach (var topLevelEntity in projectSnapshot.GetGeneralModelList<Models.Lexicon_Lexeme>())
         {
-            UpdateMeaningChildren(topLevelEntity);
+            UpdateMeaningChildren(topLevelEntity, updateMappings);
             UpdateFormChildren(topLevelEntity);
         }
     }
 
-    private static void UpdateMeaningChildren(GeneralModel<Lexicon_Lexeme> parentSnapshot)
+    private static void UpdateMeaningChildren(GeneralModel<Lexicon_Lexeme> parentSnapshot, Dictionary<Type, Dictionary<Guid, Dictionary<string, string>>> updateMappings)
     {
         if (parentSnapshot.TryGetChildValue(MEANINGS_CHILD_NAME, out var children) &&
             children!.Any() &&
@@ -214,6 +216,12 @@ public class LexiconBuilder : GeneralModelBuilder<Models.Lexicon_Lexeme>
                     AddPropertyValuesToGeneralModel(childSnapshotToAdd, modelPropertiesTypes);
                     childSnapshotToAdd.Add(BuildPropertyRefName(LEXEME_REF_PREFIX), (string)parentSnapshot.GetId(), typeof(string));
                     childSnapshotToAdd.CloneAllChildren(modelSnapshotExisting);
+
+                    updateMappings[typeof(Models.Lexicon_Meaning)].Add((Guid)modelSnapshotExisting.GetId(), new() 
+                    {
+                        { BuildPropertyRefName(LEXEME_REF_PREFIX), (string)parentSnapshot.GetId() },
+                        { BuildPropertyRefName(MEANING_REF_PREFIX), (string)childSnapshotToAdd.GetId() }
+                    });
                 }
 
                 childSnapshotToAdd ??= modelSnapshotExisting;

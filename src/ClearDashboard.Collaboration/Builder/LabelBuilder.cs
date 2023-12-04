@@ -105,11 +105,11 @@ public class LabelBuilder : GeneralModelBuilder<Models.Label>
         return base.BuildGeneralModel(modelPropertiesTypes);
     }
 
-    public override void FinalizeTopLevelEntities(List<GeneralModel<Models.Label>> topLevelEntities)
+    public override void UpdateModelSnapshotFormat(ProjectSnapshot projectSnapshot, Dictionary<Type, Dictionary<Guid, Dictionary<string, string>>> updateMappings)
     {
-        foreach (var topLevelEntity in topLevelEntities)
+        foreach (var labelSnapshot in projectSnapshot.GetGeneralModelList<Models.Label>())
         {
-            UpdateLabelNoteAssociationChildren(topLevelEntity);
+            UpdateLabelNoteAssociationChildren(labelSnapshot);
         }
     }
 
