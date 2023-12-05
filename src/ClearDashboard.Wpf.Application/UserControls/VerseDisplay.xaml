@@ -17,7 +17,6 @@
     <UserControl.Resources>
         <converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        <converters:GetIndexBindableCollectionMultiConverter x:Key="GetIndexMultiConverter" />
         <DataTemplate x:Key="SourceTokenDisplay">
             <userControls:TokenDisplay
                 HorizontalAlignment="Left"
@@ -256,20 +255,9 @@
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Vertical">
-                                        <!--<TextBox
-                                            Name="txtFocus"
-                                            MinWidth="80"
-                                            HorizontalAlignment="Left"
-                                            FontWeight="Bold">
-                                            <TextBox.Text>
-                                                <MultiBinding Converter="{StaticResource GetIndexMultiConverter}" ConverterParameter="0">
-                                                    <Binding Path="." />
-                                                    <Binding Path="ItemsSource" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ListView}}" />
-                                                </MultiBinding>
-                                            </TextBox.Text>
-                                        </TextBox>-->
+                                        <Separator />
+                                        <Label Content="{Binding ExternalLabelsString}" Foreground="{StaticResource BlueMidBrush}" />
                                         <Label Content="{Binding ExternalNoteMessagesString}" />
-                                        <Separator/>
                                         <Label Content="{Binding ExternalLabel[0]}" />
                                     </StackPanel>
                                 </DataTemplate>

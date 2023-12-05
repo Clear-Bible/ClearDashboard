@@ -14,7 +14,6 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:usercontrols="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     x:Name="TokenDisplayBase"
     d:DataContext="{d:DesignInstance Type=enhancedView:TokenDisplayViewModel}"
@@ -29,7 +28,6 @@
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
             <converters1:ValuesAdditionConverter x:Key="ValuesAddition" />
             <converters1:MarginLeftConverter x:Key="MarginLeftConverter" />
-            <converters1:GetIndexBindableCollectionMultiConverter x:Key="GetIndexMultiConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -104,26 +102,9 @@
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Vertical">
-                                                <!--<TextBox
-                                                    Name="txtFocus"
-                                                    MinWidth="80"
-                                                    HorizontalAlignment="Left"
-                                                    FontWeight="Bold">
-                                                    <TextBox.Text>
-                                                        <MultiBinding Converter="{StaticResource GetIndexMultiConverter}" ConverterParameter="0">
-                                                            <Binding Path="." />
-                                                            <Binding Path="ItemsSource" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ListView}}" />
-                                                        </MultiBinding>
-                                                    </TextBox.Text>
-                                                </TextBox>-->
-
-                                                <Label Content="{Binding ExternalNoteMessagesString}" />
-
                                                 <Separator />
-                                                <!--<controls:ExtendedPropertiesTreeView
-                                                    x:Name="ExternalNoteBodyTokenTreeViewName"
-                                                    ExtendedPropertiesXml="{Binding Body}"
-                                                    IsExpanded="False" />-->
+                                                <Label Content="{Binding ExternalLabelsString}" Foreground="{StaticResource BlueMidBrush}" />
+                                                <Label Content="{Binding ExternalNoteMessagesString}" />
                                             </StackPanel>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
@@ -296,22 +277,10 @@
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Vertical">
-                                            <!--<TextBox
-                                                Name="txtFocus"
-                                                MinWidth="80"
-                                                HorizontalAlignment="Left"
-                                                FontWeight="Bold">
-                                                <TextBox.Text>
-                                                    <MultiBinding Converter="{StaticResource GetIndexMultiConverter}" ConverterParameter="0">
-                                                        <Binding Path="." />
-                                                        <Binding Path="ItemsSource" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ListView}}" />
-                                                    </MultiBinding>
-                                                </TextBox.Text>
-                                            </TextBox>-->
-
+                                            <Separator />
+                                            <Label Content="{Binding ExternalLabelsString}" Foreground="{StaticResource BlueMidBrush}" />
                                             <Label Content="{Binding ExternalNoteMessagesString}" />
 
-                                            <Separator />
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>

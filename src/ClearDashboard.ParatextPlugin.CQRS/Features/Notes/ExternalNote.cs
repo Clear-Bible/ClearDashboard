@@ -17,6 +17,20 @@ public class ExternalNote
     public HashSet<int> ExternalLabelIds { get; set; }
     public HashSet<ExternalLabel> ExternalLabels { get; set; }
 
+    public string ExternalLabelsString
+    {
+        get
+        {
+            var label = ExternalLabels.FirstOrDefault()?.ExternalText ?? "";
+            if (label == "<external label id -3 does not have label text>")
+            {
+                return "";
+            }
+            return label;
+        }
+    }
+
+
     /// <summary>
     /// includes external note's inner details, the contents of which is not compatible between different external notes systems.
     /// PLEASE DO NOT use in Dashboard UI implementation. If more fields are needed by ui -- AND are likely applicable to external systems
