@@ -196,6 +196,17 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
                 (anyMeaningMatchesPredicate is null || lexeme.Meanings.Any(anyMeaningMatchesPredicate));
         }
 
+        public static Func<Lexeme, bool> LexemeMatchPredicateOrMeaningPredicate(string lemmaOrFormText, bool allowPartialMatch, string? lexemeLanguage, string? lexemeType, Func<Meaning, bool>? anyMeaningMatchesPredicate)
+        {
+            return lexeme =>
+                ((allowPartialMatch
+                    ? lemmaOrFormText.AnyPartialMatches(lexeme.LemmaPlusFormTexts)
+                    : lemmaOrFormText.AnyFullMatches(lexeme.LemmaPlusFormTexts)) &&
+                (lexemeLanguage is null || lexeme.Language == lexemeLanguage) &&
+                (lexemeType is null || lexeme.Type == lexemeType)) ||
+                ((anyMeaningMatchesPredicate is null || lexeme.Meanings.Any(anyMeaningMatchesPredicate)));
+        }
+
         public static Func<Lexeme, bool> LexemeMatchPredicate(IEnumerable<string> lemmaOrFormTexts, bool allowPartialMatch, string? lexemeLanguage, string? lexemeType, Func<Meaning, bool>? anyMeaningMatchesPredicate)
         {
             return lexeme =>
@@ -250,6 +261,26 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
                     lemmaOrFormText, 
                     allowPartialMatch, 
                     lexemeLanguage, 
+                    lexemeType,
+                    MeaningMatchPredicate(null, meaningLanguage, TranslationMatchPredicate(translationText, false))
+                ));
+        }
+
+        public static IEnumerable<Lexeme> FilterByLexemeOrTranslationText(
+            this IEnumerable<Lexeme> lexemes,
+            string lemmaOrFormText,
+            bool allowPartialMatch,
+            string? lexemeLanguage,
+            string? lexemeType,
+            string? meaningLanguage,
+            string translationText
+            )
+        {
+            return lexemes.Where(
+                LexemeMatchPredicateOrMeaningPredicate(
+                    lemmaOrFormText,
+                    allowPartialMatch,
+                    lexemeLanguage,
                     lexemeType,
                     MeaningMatchPredicate(null, meaningLanguage, TranslationMatchPredicate(translationText, false))
                 ));
