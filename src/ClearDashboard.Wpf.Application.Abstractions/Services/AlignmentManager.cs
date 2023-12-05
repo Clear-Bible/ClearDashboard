@@ -227,6 +227,8 @@ namespace ClearDashboard.Wpf.Application.Services
                         await EventAggregator.PublishOnUIThreadAsync(new AlignmentDeletedMessage(alignment));
                     }
                 }
+            }
+        }
 
         private AlignmentId? FindAlignmentId(TokenDisplayViewModel tokenDisplay)
         {
