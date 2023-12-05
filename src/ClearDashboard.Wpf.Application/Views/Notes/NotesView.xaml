@@ -312,9 +312,9 @@
             VerticalGridLinesBrush="{StaticResource GridBrush}">
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
-                    <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
+                    <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
                     <Setter Property="HorizontalContentAlignment" Value="Center" />
-                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryHueMidForegroundBrush}" />
                 </Style>
             </DataGrid.ColumnHeaderStyle>
 

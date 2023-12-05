@@ -318,7 +318,7 @@
                     materialDesign:ShadowAssist.ShadowDepth="Depth0"
                     Background="DarkGray"
                     BorderThickness="0"
-                    IsEnabled="{Binding Connected}"
+                    IsEnabled="{Binding IsParatextRunning}"
                     Style="{StaticResource TransparentStyle}">
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                         <Image
@@ -354,7 +354,7 @@
                     materialDesign:ShadowAssist.ShadowDepth="Depth0"
                     Background="DarkGray"
                     BorderThickness="0"
-                    IsEnabled="{Binding Connected}"
+                    IsEnabled="{Binding IsParatextRunning}"
                     Style="{StaticResource TransparentStyle}">
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                         <iconPacks:PackIconJamIcons
@@ -959,7 +959,19 @@
         </Grid>
 
         <!--  Errors  -->
-        <StackPanel Grid.Row="3" Grid.Column="0">
+        <StackPanel
+            Grid.Row="3"
+            Grid.Column="0"
+            Orientation="Horizontal">
+            <ProgressBar
+                Margin="10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                IsIndeterminate="True"
+                Style="{StaticResource ClearDashboardCircularProgressBar}"
+                Visibility="{Binding ProjectLoadingProgressBarVisibility}"
+                Value="0" />
+
             <TextBlock
                 Width="500"
                 MaxWidth="340"

@@ -1,10 +1,12 @@
 ﻿using ClearDashboard.DataAccessLayer.Models.Common;
+using Icu;
 using Microsoft.Win32;
 using Paratext.PluginInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -46,7 +48,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
             }
 
             // copy over the project's settings file
-            string settingsFile = Path.Combine(GetParatextProjectsPath(), project.ShortName, "settings.xml");
+            string settingsFile = Path.Combine(ParatextHelpers.GetParatextProjectsPath(), project.ShortName, "settings.xml");
             if (File.Exists(settingsFile))
             {
                 try
@@ -68,7 +70,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
             }
 
             // copy over the project's custom versification file
-            string versificationFile = Path.Combine(GetParatextProjectsPath(), project.ShortName, "custom.vrs");
+            string versificationFile = Path.Combine(ParatextHelpers.GetParatextProjectsPath(), project.ShortName, "custom.vrs");
             if (File.Exists(versificationFile))
             {
                 try
@@ -83,19 +85,19 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
 
             // copy over project's usfm.sty
             bool bFound = false;
-            if (File.Exists(Path.Combine(GetParatextProjectsPath(), project.ShortName, "settings.xml")))
+            if (File.Exists(Path.Combine(ParatextHelpers.GetParatextProjectsPath(), project.ShortName, "settings.xml")))
             {
-                string stylePath = GetAttributeFromSettingsXML.GetValue(Path.Combine(GetParatextProjectsPath(), project.ShortName, "settings.xml"), "StyleSheet");
+                string stylePath = GetAttributeFromSettingsXML.GetValue(Path.Combine(ParatextHelpers.GetParatextProjectsPath(), project.ShortName, "settings.xml"), "StyleSheet");
 
                 if (stylePath != "")
                 {
                     if (stylePath != "usfm.sty") // standard stylesheet
                     {
-                        if (File.Exists(Path.Combine(GetParatextProjectsPath(), project.ShortName, stylePath)))
+                        if (File.Exists(Path.Combine(ParatextHelpers.GetParatextProjectsPath(), project.ShortName, stylePath)))
                         {
                             try
                             {
-                                File.Copy(Path.Combine(GetParatextProjectsPath(), project.ShortName, stylePath),
+                                File.Copy(Path.Combine(ParatextHelpers.GetParatextProjectsPath(), project.ShortName, stylePath),
                                     Path.Combine(exportPath, "usfm.sty"), true);
                                 bFound = true;
                             }
@@ -111,11 +113,11 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
             if (!bFound)
             {
                 // standard stylesheet
-                if (File.Exists(Path.Combine(GetParatextProjectsPath(), "usfm.sty")))
+                if (File.Exists(Path.Combine(ParatextHelpers.GetParatextProjectsPath(), "usfm.sty")))
                 {
                     try
                     {
-                        File.Copy(Path.Combine(GetParatextProjectsPath(), "usfm.sty"),
+                        File.Copy(Path.Combine(ParatextHelpers.GetParatextProjectsPath(), "usfm.sty"),
                             Path.Combine(exportPath, "usfm.sty"), true);
                     }
                     catch (Exception e)
@@ -184,6 +186,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                         sb.AppendLine();
                                     }
                                     // this includes single verses (\v 1) and multiline (\v 1-3)
+                                    // \v 2,3 and \v 2b-4d are OK so is \v 2ബി-4ഡി (Malayalam)
                                     if (marker.Data != null)
                                     {
                                         string verseMarker = marker.Data.Trim();
@@ -192,10 +195,11 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                         {
                                             bool foundMatch = false;
                                             string key = $"{project.AvailableBooks[bookNum].Number}{lastChapter.PadLeft(3, '0')}{marker.Data.Trim().PadLeft(3, '0')}";
-
                                             // look for numbers, space, and a dash as being valid
                                             // also match thins like \v 43a
-                                            foundMatch = Regex.IsMatch(verseMarker, "^[0-9* -abc]+$");
+                                            //foundMatch = Regex.IsMatch(verseMarker, "^[0-9* -abc]+$");  // original regex
+                                            foundMatch = Regex.IsMatch(verseMarker, @"[0-9]+[\p{L}\p{Mn}]*(\u200F?[\-,][0-9]+[\p{L}\p{Mn}]*)*");  // new regex from Kent Spielman that handles RTL characters
+
                                             if (foundMatch)
                                             {
                                                 // check to see if the verse ends in '-'
@@ -215,18 +219,15 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                                     // check if this has already been entered and is a duplicate
                                                     if (verseKey.ContainsKey(key))
                                                     {
-                                                        if (lastVerseRef != marker.VerseRef.ToString())
-                                                        {
-                                                            mainWindow.AppendText(Color.Red,
+                                                        mainWindow.AppendText(Color.Red,
                                                                 $"Duplicate verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)}");
-                                                            usfmError.Add(new UsfmError
-                                                            {
-                                                                Reference = UsfmReferenceHelper
-                                                                    .ConvertBbbcccvvvToReadable(key),
-                                                                Error =
-                                                                    $"Duplicate verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)}",
-                                                            });
-                                                        }
+                                                        usfmError.Add(new UsfmError
+                                                        {
+                                                            Reference = UsfmReferenceHelper
+                                                                .ConvertBbbcccvvvToReadable(key),
+                                                            Error =
+                                                                $"Duplicate verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)}",
+                                                        });
                                                     }
                                                     else
                                                     {
@@ -396,25 +397,6 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
             }
 
             doc.Save(path);
-        }
-
-
-        /// <summary>
-        /// Returns the Paratext Project's path.  Usually:
-        /// {drive}:\My Paratext 9 Projects\
-        /// </summary>
-        /// <returns></returns>
-        private string GetParatextProjectsPath()
-        {
-            string paratextProjectPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Paratext\8", "Settings_Directory", null);
-            // check if directory exists
-            if (!Directory.Exists(paratextProjectPath))
-            {
-                // directory doesn't exist so null this out
-                paratextProjectPath = "";
-            }
-
-            return paratextProjectPath;
         }
 
     }

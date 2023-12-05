@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>Cărți selectate</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>Selectați cărțile USFM pentru a trimite</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>Selectați Proiectul Paratext</value>
   </data>
@@ -556,6 +559,9 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>Creat de</value>
   </data>
+  <data name="Current" xml:space="preserve">
+    <value>Actual</value>
+  </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
   </data>
@@ -709,6 +715,9 @@
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>Modul de paragraf</value>
   </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>Afișați note externe</value>
+  </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>Text sursă:</value>
   </data>
@@ -833,10 +842,10 @@
     <value>Adăugați un domeniu semantic</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>Aplicați traducerea</value>
+    <value>Aplicați luciu</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Anulați traducerea</value>
+    <value>Anulați luciul</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
     <value>Schimbați toate aparițiile nesemnificative</value>
@@ -863,10 +872,10 @@
     <value>Introduceți o nouă traducere pentru</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>Introduceți o nouă traducere</value>
+    <value>Introduceți un nou luciu</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
-    <value>LEMMA</value>
+    <value>Lemma</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
     <value>Lemma/forme:</value>
@@ -884,7 +893,7 @@
     <value>Sensuri:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Noi traducere</value>
+    <value>Nou luciu</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Îndepărtați acest domeniu semantic din acest sens</value>
@@ -893,7 +902,7 @@
     <value>Scoateți această formă lexicală din această lemmă</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>Se stabili o traducere pentru</value>
+    <value>Pune pe cineva</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Și</value>
@@ -903,6 +912,12 @@
   </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Editați | ×</value>
+  </data>
+  <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>Adăugați „{0}” ca formă</value>
+  </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>Adăugați „{0}” ca traducere la primul sens</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Găsiți toate</value>
@@ -918,6 +933,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexem</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>Încărcare date...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>A apărut o eroare neașteptată la încărcarea datelor. {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>Potrivire</value>
@@ -1349,7 +1370,7 @@
     <value>Doriți să dezasociați eticheta:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
-    <value>din Grupul de etichete:</value>
+    <value>din grupul de etichete:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Adăugați grupul de etichete</value>
@@ -1493,7 +1514,7 @@
     <value>Tren</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>ALIGNIER DE CUMPĂRĂ A CAMERULUI DE TRAIN</value>
+    <value>ALIGNER WORD MASINE DE TRAIN</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Setați cartografierea versului între Corpora paralelizată</value>
@@ -1570,11 +1591,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Dicţionar</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>Editor de note externe</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>Montați întreaga zonă de conținut la Viewport</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>Montați toate nodurile la Viewport</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>Obțineți cele mai recente note externe</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Obțineți cele mai recente de la paratext</value>
@@ -1808,7 +1835,7 @@
     <value>Biblia interlinear (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext funcționează, dar nu este conectat.</value>
+    <value>Paratext rulează, dar nu este conectat.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>Proiect paratext</value>
@@ -1820,7 +1847,7 @@
     <value>Suntem aproape acolo!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>Faceți clic aici pentru a vizualiza videoclipurile „tabloul de bord”</value>
+    <value>Faceți clic aici pentru a vizualiza videoclipurile „bordul de bord”</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
     <value>După ce faceți clic pe butonul „Creați” de mai jos, vom fi tokenizarea, alinierea și pregătirea proiectului dvs. Toți pașii vor apărea aici pe măsură ce sunt procesate. În timp ce așteptați, nu ezitați să faceți clic pe linkul de mai jos și să vizionați câteva videoclipuri utile pentru a începe utilizarea ClearDashboard!</value>
@@ -2104,6 +2131,9 @@
   <data name="Save" xml:space="preserve">
     <value>Salvați</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>Trimite</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>Activați pluginul Aqua experimental</value>
   </data>
@@ -2130,6 +2160,12 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Activați editarea alinierii</value>
+  </data>
+  <data name="Settings_EnableLexiconImport" xml:space="preserve">
+    <value>Activați importul de lexic</value>
+  </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>Activați divizarea jetoanelor</value>
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Experimental</value>
@@ -2251,6 +2287,9 @@
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Trimite</value>
   </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>Trimiteți fișiere USFM</value>
+  </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>Sugestie</value>
   </data>
@@ -2258,7 +2297,7 @@
     <value>Editor</value>
   </data>
   <data name="SlackMessageView_SuggestionMarkdown" xml:space="preserve">
-    <value>Suportă formatul Markdown</value>
+    <value>Acceptă formatul de marcare</value>
   </data>
   <data name="SlackMessageView_SuggestionPreview" xml:space="preserve">
     <value>previzualizare</value>
@@ -2295,6 +2334,9 @@
   </data>
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>Setați luciu</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Actualizați</value>

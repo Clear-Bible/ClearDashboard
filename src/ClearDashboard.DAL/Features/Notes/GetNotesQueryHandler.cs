@@ -6,11 +6,10 @@ using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using Microsoft.Extensions.Logging;
-using Paratext.PluginInterfaces;
 
 namespace ClearDashboard.DataAccessLayer.Features.BiblicalTerms
 {
-    public class GetNotesQueryHandler : ParatextRequestHandler<GetNotesQuery, RequestResult<IReadOnlyList<IProjectNote>>, IReadOnlyList<IProjectNote>>
+    public class GetNotesQueryHandler : ParatextRequestHandler<GetNotesQuery, RequestResult<IReadOnlyList<ExternalNote>>, IReadOnlyList<ExternalNote>>
     {
 
         public GetNotesQueryHandler([NotNull] ILogger<GetNotesQueryHandler> logger) : base(logger)
@@ -18,7 +17,7 @@ namespace ClearDashboard.DataAccessLayer.Features.BiblicalTerms
             //no-op
         }
 
-        public override async Task<RequestResult<IReadOnlyList<IProjectNote>>> Handle(GetNotesQuery request, CancellationToken cancellationToken)
+        public override async Task<RequestResult<IReadOnlyList<ExternalNote>>> Handle(GetNotesQuery request, CancellationToken cancellationToken)
         {
             return await ExecuteRequest("getnotesquery", request, cancellationToken);
         }

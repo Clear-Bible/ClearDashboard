@@ -1,0 +1,211 @@
+﻿using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+using Microsoft.Extensions.Logging;
+using Paratext.PluginInterfaces;
+using SIL.Linq;
+using SIL.Scripture;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
+using System.Text;
+using System.Xml.Serialization;
+
+namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
+{
+    public static class Extensions
+    {
+        public static ExternalNote GetExternalNote(this IProjectNote projectNote, IProject project, ILogger logger)
+        {
+            var verseRef = new VerseRef(projectNote.Anchor.VerseRefStart.BookNum, projectNote.Anchor.VerseRefStart.ChapterNum, projectNote.Anchor.VerseRefStart.VerseNum);
+            var (versePlainText, plainTextTokensWithIndexes) = project.GetUSFMTokens(verseRef.BookNum, verseRef.ChapterNum, verseRef.VerseNum)
+                .GetPlainTextTokensAndIndexes();
+
+            int? indexOfSelectedPlainTextInVersePainText;
+            if (projectNote.Anchor.Offset == 0) // a note applied to the whole verse
+            {
+                indexOfSelectedPlainTextInVersePainText = null;
+            }
+            else
+            {
+                var tokenOfLastSmallerOrEqualUsfmIndex = plainTextTokensWithIndexes
+                        .OrderBy(i => i.indexOfTokenInVerseRawUsfm)
+                        .Where(i => i.indexOfTokenInVerseRawUsfm <= projectNote.Anchor.Offset)
+                        .Last();
+                indexOfSelectedPlainTextInVersePainText = tokenOfLastSmallerOrEqualUsfmIndex.indexOfTokenInVersePlainText +
+                    (projectNote.Anchor.Offset - tokenOfLastSmallerOrEqualUsfmIndex.indexOfTokenInVerseRawUsfm);
+            }
+
+            var body = projectNote.GetProjectNoteBody(project.GetUSFM(verseRef.BookNum, verseRef.ChapterNum));
+
+            string id = null;
+            IEnumerable<int> tagIds = null;
+
+            try
+            {
+                (id, tagIds) = projectNote.GetIdAndLabels();
+            }
+            catch (InvalidCastException)
+            {
+                logger.LogError("Invalid cast in project note when trying to obtain thread, thread.Id, or thread.TagIds.");
+            }
+
+            return new ExternalNote()
+            {
+                ExternalNoteId = id,
+                ExternalProjectId = project.ID,
+                LabelIds = tagIds,
+                VersePlainText = versePlainText,
+                SelectedPlainText = projectNote.Anchor.SelectedText,
+                IndexOfSelectedPlainTextInVersePainText = indexOfSelectedPlainTextInVersePainText,
+                VerseRefString = verseRef.ToString(),
+                Body = SerializeNoteBodyXml(body),
+                Message = GetMessage(body)
+            };
+        }
+
+        public static (string id, IEnumerable<int> labelIds) GetIdAndLabels(this IProjectNote projectNote)
+        {
+            string id = null;
+            IEnumerable<int> tagIds = null;
+
+            MemberInfo[] threadMemberInfos = projectNote.GetType().GetMember("thread", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (threadMemberInfos.Length > 0)
+            {
+                var thread = ((FieldInfo)threadMemberInfos[0]).GetValue(projectNote);
+                if (thread != null)
+                {
+                    MemberInfo[] idMemberInfos = thread.GetType().GetMember("Id");
+                    if (idMemberInfos.Length > 0)
+                    {
+                        id = ((PropertyInfo)idMemberInfos[0]).GetValue(thread) as string;
+                    }
+                    MemberInfo[] tagIdsMemberInfos = thread.GetType().GetMember("TagIds");
+                    if (tagIdsMemberInfos.Length > 0)
+                    {
+                        tagIds = ((PropertyInfo)tagIdsMemberInfos[0]).GetValue(thread) as IEnumerable<int>;
+                    }
+                }
+            }
+            return (id, tagIds);
+        }
+        private static string GetMessage(Body body)
+        {
+            return body
+                .Comments
+                    .Aggregate("", (str, next) => $"{str}Author {next.Author} {next.Created}:\n{next.Paragraphs.Aggregate("", (innerstring, next) => $"{innerstring}{next}\n")}\n\n");
+        }
+        [DataContract]
+        public class BodyComment
+        {
+            [DataMember]
+            public List<string> Paragraphs { get; set; }
+            [DataMember]
+            public string Created { get; set; }
+            [DataMember]
+            public string Language { get; set; }
+            [DataMember]
+            public string AssignedUserName { get; set; }
+            [DataMember]
+            public string Author { get; set; }
+        }
+        [DataContract]
+        public class Body
+        {
+            [DataMember]
+            public string AssignedUserName { get; set; }
+            [DataMember]
+            public string ReplyToUserName { get; set; }
+            [DataMember]
+            public bool IsRead { get; set; }
+            [DataMember]
+            public bool IsResolved { get; set; }
+            [DataMember]
+            public List<BodyComment> Comments { get; set; }
+            [DataMember]
+            public string VerseUsfmBeforeSelectedText { get; set; }
+            [DataMember]
+            public string VerseUsfmAfterSelectedText { get; set; }
+            [DataMember]
+            public string VerseUsfmText { get; set; }
+        }
+
+        private static string SerializeNoteBodyXml(Body body)
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Body>));
+            using (StringWriter textWriter = new StringWriter())
+            {
+                xmlSerializer.Serialize(textWriter, new List<Body> { body });
+                return textWriter.ToString();
+            }
+        }
+        private static string SerializeNoteBodyJson(Body body)
+        {
+            //from https://learn.microsoft.com/en-us/dotnet/framework/wcf/feature-details/how-to-serialize-and-deserialize-json-data?redirectedfrom=MSDN for
+            //.net 4.x
+            // Create a stream to serialize the object to.
+            var ms = new MemoryStream();
+
+            // Serializer the User object to the stream.
+            var ser = new DataContractJsonSerializer(typeof(Body));
+            ser.WriteObject(ms, body);
+            byte[] json = ms.ToArray();
+            ms.Close();
+            return Encoding.UTF8.GetString(json, 0, json.Length);
+        }
+        private static Body GetProjectNoteBody(this IProjectNote projectNote, string verseUsfmText)
+        {
+            var body = new Body();
+            body.AssignedUserName = projectNote.AssignedUser?.Name ?? "";
+            body.ReplyToUserName = projectNote.ReplyToUser?.Name ?? "";
+            body.IsRead = projectNote.IsRead;
+            body.IsResolved = projectNote.IsResolved;
+            body.VerseUsfmBeforeSelectedText = projectNote.Anchor.BeforeContext;
+            body.VerseUsfmAfterSelectedText = projectNote.Anchor.AfterContext;
+            body.VerseUsfmText = verseUsfmText;
+            body.Comments = new List<BodyComment>();
+            projectNote.Comments.ForEach(comment =>
+            {
+                var bodyComment = new BodyComment();
+                bodyComment.Created = comment.Created.ToString();
+                bodyComment.Language = comment.Language.Id;
+                bodyComment.AssignedUserName = comment.AssignedUser.Name;
+                bodyComment.Author = comment.Author.Name;
+
+                bodyComment.Paragraphs = new List<string>();
+
+                if (comment.Contents != null)
+                {
+                    foreach (var paragraph in comment.Contents)
+                    {
+                        bodyComment.Paragraphs.Add(paragraph.ToString());
+                    }
+                }
+                body.Comments.Add(bodyComment);
+            });
+            return body;
+        }
+        public static (string versePlainText, List<(string tokenPlainText, int indexOfTokenInVersePlainText, int indexOfTokenInVerseRawUsfm)>) GetPlainTextTokensAndIndexes(
+            this IEnumerable<IUSFMToken> usfmTokens)
+        {
+            var plainTextTokenTuples = new List<(string tokenPlainText, int indexOfTokenInVersePlainText, int indexOfTokenInVerseRawUsfm)>();
+            var versePlainText = new StringBuilder();
+            int indexInPlainText = 0;
+            
+            usfmTokens.ForEach(usfmToken =>
+            {
+                if (usfmToken is IUSFMTextToken textToken &&
+                    textToken.IsScripture)
+                {
+                    plainTextTokenTuples.Add((textToken.Text, indexInPlainText, textToken.VerseOffset));
+
+                    versePlainText.Append(textToken.Text);
+                    indexInPlainText += textToken.Text.Length; //FIXME: ask dirk about TrimStart()
+                }
+            });
+            return (versePlainText.ToString().Trim(), plainTextTokenTuples);
+        }
+    }
+}

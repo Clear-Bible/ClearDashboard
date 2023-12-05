@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    FontFamily="{StaticResource ClearDashboardFont}"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:lexiconControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Lexicon"
     xmlns:lexiconViewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Lexicon"
@@ -13,11 +12,12 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     d:DataContext="{d:DesignInstance Type=lexiconViewModels:LexiconDialogViewModel}"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     IsEnabled="{Binding IsLoaded}"
     mc:Ignorable="d">
     <Grid MinWidth="500">
         <Grid.RowDefinitions>
-            <RowDefinition Height="35" />
+            <RowDefinition Height="40" />
             <RowDefinition Height="40" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="25" />
@@ -37,7 +37,7 @@
         <Label
             Grid.Row="1"
             HorizontalContentAlignment="Center"
-            Content="{Binding TokenDisplay.TranslationSurfaceText}"
+            Content="{Binding TokenDisplay.TranslationSurfaceAndTrainingText}"
             FontFamily="{Binding SourceFontFamily}"
             FontSize="22"
             FontWeight="Bold" />

@@ -34,12 +34,12 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         /// Event raised while the user is dragging a connection.
         /// NB:  This method cannot be moved to the view model as Mouse.GetPosition always returns a Point - (0,0)
         /// </summary>
-        private void OnProjectDesignSurfaceConnectionDragging(object sender, ConnectionDraggingEventArgs e)
-        {
-            var curDragPoint = Mouse.GetPosition(ProjectDesignSurface);
-            var connection = (ParallelCorpusConnectionViewModel)e.Connection;
-            this.ProjectDesignSurfaceViewModel.DesignSurfaceViewModel!.ConnectionDragging(curDragPoint, connection);
-        }
+        //private void OnProjectDesignSurfaceConnectionDragging(object sender, ConnectionDraggingEventArgs e)
+        //{
+        //    var curDragPoint = Mouse.GetPosition(ProjectDesignSurface);
+        //    var connection = (ParallelCorpusConnectionViewModel)e.Connection;
+        //    this.ProjectDesignSurfaceViewModel.DesignSurfaceViewModel!.ConnectionDragging(curDragPoint, connection);
+        //}
 
         ///// <summary>
         ///// Event raised to delete the selected node.

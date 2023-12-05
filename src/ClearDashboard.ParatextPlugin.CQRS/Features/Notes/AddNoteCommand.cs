@@ -1,12 +1,9 @@
-﻿using System.Collections.Generic;
-using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DataAccessLayer.Models;
+﻿using ClearDashboard.DAL.CQRS;
 using MediatR;
-using Paratext.PluginInterfaces;
 
 namespace ClearDashboard.ParatextPlugin.CQRS.Features.Notes
 {
-    public record AddNoteCommand(AddNoteCommandParam Data) : IRequest<RequestResult<IProjectNote>>
+    public record AddNoteCommand(AddNoteCommandParam Data) : IRequest<RequestResult<ExternalNote>>
     {
         public AddNoteCommandParam Data { get; } = Data;
     }

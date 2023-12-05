@@ -59,153 +59,156 @@
         <GroupBox
             Grid.Row="1"
             Grid.Column="0"
-            Margin="16"
+            Margin="5"
             materialDesign:ColorZoneAssist.Mode="PrimaryMid"
             Header="{helpers:Localization NewCollabUserView_NewCollabUser}"
             Style="{DynamicResource MaterialDesignGroupBox}">
 
-            <StackPanel Orientation="Vertical">
-                <controls:AutoCompleteComboBox
-                    Height="Auto"
-                    Margin="15"
-                    VerticalAlignment="Top"
-                    cm:Message.Attach="GroupSelected"
-                    materialDesign:HintAssist.Hint="{helpers:Localization NewCollabUserView_SelectOrganization}"
-                    FontSize="16"
-                    IsEnabled="{Binding SelectedGroupEnabled}"
-                    ItemsSource="{Binding Groups}"
-                    ScrollViewer.CanContentScroll="False"
-                    SelectedItem="{Binding SelectedGroup}"
-                    Style="{StaticResource MaterialDesignFilledComboBox}"
-                    TextSearch.TextPath="CombinedStrings">
-                    <controls:AutoCompleteComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock FontSize="18" Text="{Binding Name}" />
-                                <TextBlock FontSize="12" Text="{Binding Description}" />
-                                <!--<TextBlock FontSize="12" Text="{Binding Id}" />-->
-                            </StackPanel>
-                        </DataTemplate>
-                    </controls:AutoCompleteComboBox.ItemTemplate>
-                </controls:AutoCompleteComboBox>
-                <TextBox
-                    x:Name="FirstName"
-                    Margin="10,5,10,5"
-                    materialDesign:HintAssist.Foreground="Green"
-                    materialDesign:HintAssist.Hint="{helpers:Localization NewCollabUserView_FirstName}"
-                    materialDesign:TextFieldAssist.UnderlineBrush="Green"
-                    IsEnabled="{Binding FirstNameEnabled}"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-
-
-                <!--  Last Name  -->
-                <TextBox
-                    x:Name="LastName"
-                    Margin="10,5,10,5"
-                    materialDesign:HintAssist.Foreground="Green"
-                    materialDesign:HintAssist.Hint="{helpers:Localization NewCollabUserView_LastName}"
-                    materialDesign:TextFieldAssist.UnderlineBrush="Green"
-                    IsEnabled="{Binding LastNameEnabled}"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-
-                <!--  Email  -->
-                <TextBox
-                    x:Name="Email"
-                    Margin="10,5,10,5"
-                    materialDesign:HintAssist.Foreground="Green"
-                    materialDesign:HintAssist.Hint="{helpers:Localization NewCollabUserView_EmailAddress}"
-                    materialDesign:TextFieldAssist.UnderlineBrush="Green"
-                    IsEnabled="{Binding EmailEnabled}"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                    <TextBox.Text>
-                        <Binding Path="Email" UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
-                                <validatorsAbstracted:EmailValidator />
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox.Text>
-                </TextBox>
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <Button
-                        x:Name="CheckUser"
-                        Grid.Column="0"
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Orientation="Vertical">
+                    <controls:AutoCompleteComboBox
+                        Height="Auto"
                         Margin="5"
-                        Content="{helpers:Localization NewCollabUserView_CheckUserAvailability}"
-                        IsEnabled="{Binding ShowCheckUserButtonEnabled}"
-                        Style="{StaticResource TransparentStyle}" />
-                    <materialDesign:PackIcon
-                        Grid.Column="1"
-                        Width="48"
-                        Height="48"
+                        VerticalAlignment="Top"
+                        cm:Message.Attach="GroupSelected"
+                        materialDesign:HintAssist.Hint="{helpers:Localization NewCollabUserView_SelectOrganization}"
+                        FontSize="16"
+                        IsEnabled="{Binding SelectedGroupEnabled}"
+                        ItemsSource="{Binding Groups}"
+                        ScrollViewer.CanContentScroll="False"
+                        SelectedItem="{Binding SelectedGroup}"
+                        Style="{StaticResource MaterialDesignFilledComboBox}"
+                        TextSearch.TextPath="CombinedStrings">
+                        <controls:AutoCompleteComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontSize="18" Text="{Binding Name}" />
+                                    <TextBlock FontSize="12" Text="{Binding Description}" />
+                                    <!--<TextBlock FontSize="12" Text="{Binding Id}" />-->
+                                </StackPanel>
+                            </DataTemplate>
+                        </controls:AutoCompleteComboBox.ItemTemplate>
+                    </controls:AutoCompleteComboBox>
+                    <TextBox
+                        x:Name="FirstName"
                         Margin="5"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Kind="EmailFastOutline">
-                        <materialDesign:PackIcon.Style>
-                            <Style TargetType="materialDesign:PackIcon">
-                                <Setter Property="Foreground" Value="DimGray" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=EmailSent}" Value="True">
-                                        <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </materialDesign:PackIcon.Style>
-                    </materialDesign:PackIcon>
-                </Grid>
+                        materialDesign:HintAssist.Foreground="Green"
+                        materialDesign:HintAssist.Hint="{helpers:Localization NewCollabUserView_FirstName}"
+                        materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                        IsEnabled="{Binding FirstNameEnabled}"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
 
-            </StackPanel>
+                    <!--  Last Name  -->
+                    <TextBox
+                        x:Name="LastName"
+                        Margin="5"
+                        materialDesign:HintAssist.Foreground="Green"
+                        materialDesign:HintAssist.Hint="{helpers:Localization NewCollabUserView_LastName}"
+                        materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                        IsEnabled="{Binding LastNameEnabled}"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+                    <!--  Email  -->
+                    <TextBox
+                        x:Name="Email"
+                        Margin="5"
+                        materialDesign:HintAssist.Foreground="Green"
+                        materialDesign:HintAssist.Hint="{helpers:Localization NewCollabUserView_EmailAddress}"
+                        materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                        IsEnabled="{Binding EmailEnabled}"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                        <TextBox.Text>
+                            <Binding Path="Email" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <validatorsAbstracted:EmailValidator />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Button
+                            x:Name="CheckUser"
+                            Grid.Column="0"
+                            Margin="5"
+                            Content="{helpers:Localization NewCollabUserView_CheckUserAvailability}"
+                            IsEnabled="{Binding ShowCheckUserButtonEnabled}"
+                            Style="{StaticResource TransparentStyle}" />
+                        <materialDesign:PackIcon
+                            Grid.Column="1"
+                            Width="48"
+                            Height="48"
+                            Margin="5"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Kind="EmailFastOutline">
+                            <materialDesign:PackIcon.Style>
+                                <Style TargetType="materialDesign:PackIcon">
+                                    <Setter Property="Foreground" Value="DimGray" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=EmailSent}" Value="True">
+                                            <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </materialDesign:PackIcon.Style>
+                        </materialDesign:PackIcon>
+                    </Grid>
+
+                </StackPanel>
+            </ScrollViewer>
         </GroupBox>
 
         <GroupBox
             Grid.Row="2"
             Grid.Column="0"
-            Margin="16"
+            Margin="5"
             materialDesign:ColorZoneAssist.Mode="PrimaryMid"
             Header="{helpers:Localization NewCollabUserView_ValidateEmailCode}"
             IsEnabled="{Binding ShowValidateEmailButtonEnabled}"
             Style="{DynamicResource MaterialDesignGroupBox}">
-            <StackPanel Orientation="Vertical">
-                <Label Content="{helpers:Localization NewCollabUserView_CheckEmail}" />
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <TextBox
-                        x:Name="EmailCode"
-                        Width="85"
-                        Height="45"
-                        Style="{StaticResource MaterialDesignFilledTextBox}" />
-                    <Button
-                        x:Name="ValidateEmailCode"
-                        Height="45"
-                        Margin="10,0,0,0"
-                        Content="{helpers:Localization NewCollabUserView_ValidateEmailCode}"
-                        IsEnabled="{Binding ShowValidateEmailButtonEnabled}"
-                        Style="{StaticResource TransparentStyle}" />
-                    <iconPacks:PackIconMaterial
-                        Width="40"
-                        Height="40"
-                        Margin="5"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Kind="EmailCheckOutline">
-                        <iconPacks:PackIconMaterial.Style>
-                            <Style TargetType="iconPacks:PackIconMaterial">
-                                <Setter Property="Foreground" Value="DimGray" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=BadEmailValidationCode}" Value="True">
-                                        <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </iconPacks:PackIconMaterial.Style>
-                    </iconPacks:PackIconMaterial>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Orientation="Vertical">
+                    <Label Content="{helpers:Localization NewCollabUserView_CheckEmail}" />
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                        <TextBox
+                            x:Name="EmailCode"
+                            Width="85"
+                            Height="40"
+                            Style="{StaticResource MaterialDesignFilledTextBox}" />
+                        <Button
+                            x:Name="ValidateEmailCode"
+                            Height="40"
+                            Margin="10,0,0,0"
+                            Content="{helpers:Localization NewCollabUserView_ValidateEmailCode}"
+                            IsEnabled="{Binding ShowValidateEmailButtonEnabled}"
+                            Style="{StaticResource TransparentStyle}" />
+                        <iconPacks:PackIconMaterial
+                            Width="35"
+                            Height="35"
+                            Margin="5"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Kind="EmailCheckOutline">
+                            <iconPacks:PackIconMaterial.Style>
+                                <Style TargetType="iconPacks:PackIconMaterial">
+                                    <Setter Property="Foreground" Value="DimGray" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=BadEmailValidationCode}" Value="True">
+                                            <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </iconPacks:PackIconMaterial.Style>
+                        </iconPacks:PackIconMaterial>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
+            </ScrollViewer>
         </GroupBox>
 
 

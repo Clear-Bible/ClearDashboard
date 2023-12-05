@@ -39,6 +39,7 @@ public class ProjectSnapshotFactoryCommon
     public static readonly Dictionary<Type, (string folderName, string childName)> childFolderNameMappings = new() {
         { typeof(Models.Alignment), ("Alignments", "Alignments") },
         { typeof(Models.TokenComposite), ("CompositeTokens", "CompositeTokens") },
+        { typeof(Models.Token), ("Tokens", "Tokens") },
         { typeof(Models.Translation), ("Translations", "Translations") },
         { typeof(Models.LabelNoteAssociation), ("LabelNoteAssociations", "LabelNoteAssociations") },
         { typeof(Models.Note), ("Replies", "Replies") },

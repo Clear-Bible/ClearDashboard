@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>Buku yang dipilih</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>Pilih Buku USFM untuk dikirim</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>Pilih Proyek Paratext</value>
   </data>
@@ -251,7 +254,7 @@
     <value>buah</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>Batu permata</value>
+    <value>batu permata</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>rumput</value>
@@ -458,7 +461,7 @@
     <value>Sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Bagian Sumber</value>
+    <value>Bagian sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Sumber Ref</value>
@@ -556,6 +559,9 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>Dibuat oleh</value>
   </data>
+  <data name="Current" xml:space="preserve">
+    <value>Saat ini</value>
+  </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
   </data>
@@ -608,7 +614,7 @@
     <value>Hapus Penyelarasan?</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>Hapus Penyelarasan</value>
+    <value>Hapus penyelarasan</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
     <value>Hapus Alignment untuk '{0}'?</value>
@@ -708,6 +714,9 @@
   </data>
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>Mode paragraf</value>
+  </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>Tampilkan catatan eksternal</value>
   </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>Teks Sumber:</value>
@@ -833,10 +842,10 @@
     <value>Tambahkan domain semantik</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>Terapkan terjemahan</value>
+    <value>Terapkan gloss</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Batalkan terjemahan</value>
+    <value>Batalkan Gloss</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
     <value>Ubah semua kejadian yang tidak disetel</value>
@@ -863,7 +872,7 @@
     <value>Masukkan terjemahan baru untuk</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>Masukkan terjemahan baru</value>
+    <value>Masukkan Gloss Baru</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Kata pengantar singkat</value>
@@ -884,7 +893,7 @@
     <value>Makna:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Terjemahan baru</value>
+    <value>Gloss Baru</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Hapus domain semantik ini dari makna ini</value>
@@ -893,7 +902,7 @@
     <value>Hapus bentuk leksikal ini dari lemma ini</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>Tetapkan terjemahan untuk</value>
+    <value>Atur gloss untuk</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Dan</value>
@@ -903,6 +912,12 @@
   </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Edit</value>
+  </data>
+  <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>Tambahkan '{0}' sebagai formulir</value>
+  </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>Tambahkan '{0}' sebagai terjemahan ke makna pertama</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Temukan semua</value>
@@ -918,6 +933,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>Memuat data ...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>Terjadi kesalahan yang tidak terduga saat memuat data. {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>Cocok</value>
@@ -1559,7 +1580,7 @@
     <value>Anak perempuan</value>
   </data>
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>Hapus Penyelarasan</value>
+    <value>Hapus penyelarasan</value>
   </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Hapus Interlinear</value>
@@ -1570,11 +1591,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Kamus</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>Editor Catatan Eksternal</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>Pasang seluruh area konten ke viewport</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>Pasang semua node ke viewport</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>Dapatkan catatan eksternal terbaru</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Dapatkan terbaru dari Paratext</value>
@@ -2000,7 +2027,7 @@
     <value>Luke</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
-    <value>Maleakhi</value>
+    <value>Malachi</value>
   </data>
   <data name="ProperCase_Mark" xml:space="preserve">
     <value>Tanda</value>
@@ -2072,7 +2099,7 @@
     <value>Kunci yang disediakan salah. Ketika didekripsi, elemen -elemen JSON tertentu tidak dapat ditemukan.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>Isi kunci lisensi yang didekripsi tidak cocok dengan informasi yang Anda berikan.</value>
+    <value>Isi kunci lisensi yang didekripsi tidak sesuai dengan informasi yang Anda berikan.</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
     <value>Kunci lisensi Anda hilang atau rusak.</value>
@@ -2104,6 +2131,9 @@
   <data name="Save" xml:space="preserve">
     <value>Menyimpan</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>Mengirim</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>Aktifkan plugin Aqua Eksperimental</value>
   </data>
@@ -2130,6 +2160,12 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Aktifkan pengeditan penyelarasan</value>
+  </data>
+  <data name="Settings_EnableLexiconImport" xml:space="preserve">
+    <value>Aktifkan impor leksikon</value>
+  </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>Aktifkan pemisahan token</value>
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Eksperimental</value>
@@ -2251,6 +2287,9 @@
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Mengirim</value>
   </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>Kirim file USFM</value>
+  </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>Saran</value>
   </data>
@@ -2295,6 +2334,9 @@
   </data>
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>Atur gloss</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Memperbarui</value>

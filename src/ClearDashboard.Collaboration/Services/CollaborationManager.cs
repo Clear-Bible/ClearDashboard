@@ -11,6 +11,7 @@ using LibGit2Sharp.Handlers;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
+using System.IO;
 using System.Text.Json;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
@@ -230,6 +231,8 @@ public class CollaborationManager
 
     public bool IsCurrentProjectInRepository()
     {
+        _repositoryPath = Path.Combine(_repositoryBasePath, "P_" + _projectProvider.CurrentProject!.Id);
+
         if (IsRepositoryInitialized() && _projectProvider.HasCurrentProject)
         {
             var currentProjectId = _projectProvider.CurrentProject!.Id;
@@ -295,7 +298,7 @@ public class CollaborationManager
 
     public bool AreUnmergedChanges()
     {
-        if (_repositoryPath == "LocalOnly")
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
         {
             return false;
         }
@@ -409,6 +412,11 @@ public class CollaborationManager
 
     public void FetchMergeRemote()
     {
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
+        {
+            return;
+        }
+
         EnsureValidRepository(_repositoryPath);
 
         string logMessage = "";
@@ -449,6 +457,11 @@ public class CollaborationManager
 
     public void PullRemoteCommits()
     {
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
+        {
+            return;
+        }
+        
         EnsureValidRepository(_repositoryPath);
 
         using (var repo = new Repository(_repositoryPath))
@@ -475,6 +488,11 @@ public class CollaborationManager
     public async Task<string?> MergeProjectLatestChangesAsync(MergeMode mergeMode, bool createBackupSnapshot,
         CancellationToken cancellationToken, IProgress<ProgressStatus> progress)
     {
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
+        {
+            return string.Empty;
+        }
+
         progress.Report(new ProgressStatus(0, "Finding latest commit"));
 
         EnsureValidRepository(_repositoryPath);
@@ -576,6 +594,11 @@ public class CollaborationManager
     // isn't there or doesn't match the current repository configuration
     public async Task StageProjectChangesAsync(CancellationToken cancellationToken, IProgress<ProgressStatus> progress)
     {
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
+        {
+            return;
+        }
+
         EnsureValidRepository(_repositoryPath);
         var project = EnsureCurrentProject();
 
@@ -611,6 +634,11 @@ public class CollaborationManager
 
     public void HardResetChanges()
     {
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
+        {
+            return;
+        }
+
         EnsureValidRepository(_repositoryPath);
         var project = EnsureCurrentProject();
 
@@ -628,6 +656,11 @@ public class CollaborationManager
 
     public IEnumerable<string> RetrieveFileStatuses(Guid? projectIdFilter = default)
     {
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
+        {
+            return Enumerable.Empty<string>();
+        }
+
         EnsureValidRepository(_repositoryPath);
 
         var statusOptions = new LibGit2Sharp.StatusOptions();
@@ -667,6 +700,11 @@ public class CollaborationManager
 
     public string? CommitChanges(string commitMessage, IProgress<ProgressStatus> progress)
     {
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
+        {
+            return string.Empty;
+        }
+
         EnsureValidRepository(_repositoryPath);
 
         //GitHelper.RetrieveStatus(path, Logger, LibGit2Sharp.FileStatus.NewInIndex, LibGit2Sharp.FileStatus.ModifiedInIndex, LibGit2Sharp.FileStatus.RenamedInIndex, LibGit2Sharp.FileStatus.DeletedFromIndex);
@@ -698,6 +736,11 @@ public class CollaborationManager
 
     public void PushChangesToRemote()
     {
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
+        {
+            return;
+        }
+
         EnsureValidRepository(_repositoryPath);
 
         using (var repo = new Repository(_repositoryPath))
@@ -787,6 +830,11 @@ public class CollaborationManager
 
     public void DumpDifferencesBetweenLastMergedCommitAndHead()
     {
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
+        {
+            return;
+        }
+
         EnsureValidRepository(_repositoryPath);
         var project = EnsureCurrentProject();
 
@@ -831,6 +879,11 @@ public class CollaborationManager
 
     public async Task DumpDifferencesBetweenHeadAndCurrentDatabaseAsync()
     {
+        if (_repositoryPath == "LocalOnly" || Directory.Exists(_repositoryPath) == false)
+        {
+            return;
+        }
+
         EnsureValidRepository(_repositoryPath);
         var project = EnsureCurrentProject();
 

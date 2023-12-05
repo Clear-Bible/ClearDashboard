@@ -10,7 +10,6 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    FontFamily="{StaticResource ClearDashboardFont}"
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
     xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;assembly=ClearDashboard.Wpf.Application.Abstractions"
@@ -22,6 +21,7 @@
     d:DesignHeight="450"
     d:DesignWidth="500"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -512,6 +512,7 @@
                         Margin="10,0,10,10"
                         cm:Message.Attach="AddParatextCorpus()"
                         Content="{helpers:Localization ProjectPicker_Paratext}"
+                        IsEnabled="{Binding AddParatextButtonEnabled}"
                         Style="{StaticResource BigParatextButton}"
                         Tag=" ScriptTextOutline" />
 

@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.ViewModels;
@@ -17,9 +18,11 @@ using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using SIL.Machine.Corpora;
 using SIL.Scripture;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -38,12 +41,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     public class VerseAwareEnhancedViewItemViewModel : EnhancedViewItemViewModel,
             IHandle<TokensJoinedMessage>, 
+            IHandle<TokenSplitMessage>,
             IHandle<TokenUnjoinedMessage>,
             IHandle<AlignmentAddedMessage>,
             IHandle<AlignmentDeletedMessage>
     {
         public IWindowManager WindowManager { get; }
-
+        public NoteManager? NoteManager { get; }
      
         public VerseAwareConductorOneActive ParentViewModel => (VerseAwareConductorOneActive)Parent;
 
@@ -148,11 +152,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _selectedVerseDisplayViewModel, value);
         }
 
-        public VerseAwareEnhancedViewItemViewModel(DashboardProjectManager? projectManager, IEnhancedViewManager enhancedViewManager,
-            INavigationService? navigationService, ILogger<VerseAwareEnhancedViewItemViewModel>? logger, IEventAggregator? eventAggregator,
-            IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager, ILocalizationService localizationService, EditMode editMode = EditMode.MainViewOnly) : base(projectManager, enhancedViewManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService, editMode)
+        public VerseAwareEnhancedViewItemViewModel(
+            DashboardProjectManager? projectManager, 
+            IEnhancedViewManager enhancedViewManager,
+            INavigationService? navigationService, 
+            ILogger<VerseAwareEnhancedViewItemViewModel>? logger, 
+            IEventAggregator? eventAggregator,
+            IMediator? mediator, 
+            ILifetimeScope? lifetimeScope, 
+            IWindowManager windowManager, 
+            ILocalizationService localizationService,
+            NoteManager? noteManager = null,
+            EditMode editMode = EditMode.MainViewOnly
+            ) : base(
+                projectManager, 
+                enhancedViewManager, 
+                navigationService, 
+                logger, 
+                eventAggregator, 
+                mediator, 
+                lifetimeScope, 
+                localizationService, 
+                editMode)
         {
             WindowManager = windowManager;
+            NoteManager = noteManager;
         }
 
       
@@ -194,6 +218,46 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await GetData(reloadType, cancellationToken);
         }
 
+        private async Task SetExternalNotesAsync(
+            IEnumerable<TokenizedTextCorpusId> tokenizedTextCorpusIds,
+            CancellationToken cancellationToken)
+        {
+            if (NoteManager != null && Rows != null && Verses.Count() > 0 && tokenizedTextCorpusIds.Count() > 0)
+            {
+                await Task.Run(() => //put this in a task.run so that it can be called in a UI main thread as well.
+                {
+                    try
+                    {
+                        // this method blocks.
+                        var tokenizedCorpusNotes = NoteManager!.ExternalNoteManager.GetExternalNotes(
+                            Mediator!,
+                            tokenizedTextCorpusIds,
+                            Rows.Select(ptr => (VerseRef)ptr.Ref),
+                            Logger,
+                            cancellationToken);
+
+                        Execute.OnUIThread(() =>
+                        {
+                            foreach (var verseDisplayViewModel in Verses)
+                            {
+                                //FIXME: EXTERNALNOTES - uncomment following line
+                                //verseDisplayViewModel.SetExternalNotes(tokenizedCorpusNotes);
+                            }
+                        });
+                    }
+                    catch (EngineException ex)
+                    {
+                        Logger?.LogError($"ExternalNoteManager.GetExternalNotes threw exception{ex}");
+                        Execute.OnUIThread(() =>
+                        {
+                            //update the UI here with error info.
+                        });
+                    }
+                });
+            }
+        }
+        protected virtual List<TokenizedTextCorpusId> TokenizedTextCorpusIds => new();
+        protected virtual IEnumerable<IRow>? Rows => null;
         private async Task GetData(ReloadType reloadType = ReloadType.Refresh, CancellationToken cancellationToken = default)
         {
             try
@@ -251,7 +315,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                     ShowTranslation = false;
                                     IsRtl = tokenizedCorpusEnhancedViewItemMetadatum.IsRtl ?? false;
                                 });
-                             
+
                                 break;
                         }
                     }, cancellationToken);
@@ -328,13 +392,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     OnUIThread(() => { Title = CreateNoVerseDataTitle(metadatum); });
                     return;
                 }
-
-
+                
                 var bookFound = metadata.AvailableBooks.Any(b => b.Code == ParentViewModel.CurrentBcv.BookName);
 
                 if (bookFound)
                 {
-                    BindableCollection<VerseDisplayViewModel> verses = new();
+                    Verses.Clear();
                     if (IsParagraphMode)
                     {
                         // For "paragraph mode" concatenate the tokens in the rows into a single verse display.
@@ -343,22 +406,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         {
                             tokens.AddRange(row.Tokens);
                         }
-                        verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, tokens, metadatum.TokenizedTextCorpus.TokenizedTextCorpusId.Detokenizer, metadatum.IsRtl ?? false));
+                        Verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, tokens, metadatum.TokenizedTextCorpus));
                     }
                     else
                     {
                         // Otherwise, create a separate verse display for each row.
                         foreach (var textRow in tokensTextRowsRange)
                         {
-                            verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, textRow.Tokens, metadatum.TokenizedTextCorpus.TokenizedTextCorpusId.Detokenizer, metadatum.IsRtl ?? false));
+                            Verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, textRow.Tokens, metadatum.TokenizedTextCorpus));
                         }
                     }
-                    OnUIThread(() =>
-                    {
-                        Verses = verses;
-                    });
+                    //run this after Verses has been set so they are there to set once complete, but don't await so loading can continue.
+                    _ = SetExternalNotesAsync(
+                            TokenizedTextCorpusIds,
+                            cancellationToken);
                 }
-               
 
                 CreateTitle(metadatum, tokensTextRowsRange, currentBcv, bookFound);
             }
@@ -475,17 +537,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     {
                         if (row.SourceTokens != null) tokens.AddRange(row.SourceTokens);
                     }
-                    Verses.Add(await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, tokens, metadatum.ParallelCorpus.ParallelCorpusId, metadatum.ParallelCorpus.Detokenizer, metadatum.IsRtl ?? false, new TranslationSetId(Guid.Parse(metadatum.TranslationSetId))));
+                    Verses.Add(await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, tokens, metadatum.ParallelCorpus!, new TranslationSetId(Guid.Parse(metadatum.TranslationSetId!))));
                 }
                 else
                 {
                     // Otherwise, create a separate verse display for each row.
                     foreach (var row in rows)
                     {
-                        Verses.Add(await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row.SourceTokens, metadatum.ParallelCorpus.ParallelCorpusId, metadatum.ParallelCorpus.Detokenizer, metadatum.IsRtl ?? false, new TranslationSetId(Guid.Parse(metadatum.TranslationSetId))));
+                        Verses.Add(await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row.SourceTokens!, metadatum.ParallelCorpus!, new TranslationSetId(Guid.Parse(metadatum.TranslationSetId!))));
                     }
                 }
 
+                //run this after Verses has been set so they are there to set once complete, but don't await so loading can continue.
+                _ = SetExternalNotesAsync(
+                        TokenizedTextCorpusIds,
+                        cancellationToken);
                 Title = CreateParallelCorpusItemTitle(metadatum, "EnhancedView_Interlinear", rows.Count);
             }
             catch (Exception)
@@ -512,11 +578,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     // For "paragraph mode" include all of the rows in a single verse display.
                     Verses.Add(await AlignmentDisplayViewModel.CreateAsync(LifetimeScope!,
                         rows,
-                        metadatum.ParallelCorpus.ParallelCorpusId,
-                        metadatum.ParallelCorpus.ParallelCorpusId.SourceTokenizedCorpusId.Detokenizer,
-                        metadatum.IsRtl ?? false,
-                        metadatum.ParallelCorpus.ParallelCorpusId.TargetTokenizedCorpusId.Detokenizer,
-                        metadatum.IsTargetRtl ?? false,
+                        metadatum.ParallelCorpus,
                         new AlignmentSetId(Guid.Parse(metadatum.AlignmentSetId))
                     ));
                 }
@@ -527,15 +589,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     {
                         Verses.Add(await AlignmentDisplayViewModel.CreateAsync(LifetimeScope!, 
                             new List<EngineParallelTextRow> {row}, 
-                            metadatum.ParallelCorpus.ParallelCorpusId, 
-                            metadatum.ParallelCorpus.ParallelCorpusId.SourceTokenizedCorpusId.Detokenizer,
-                            metadatum.IsRtl ?? false,
-                            metadatum.ParallelCorpus.ParallelCorpusId.TargetTokenizedCorpusId.Detokenizer,
-                            metadatum.IsTargetRtl ?? false,
+                            metadatum.ParallelCorpus, 
                             new AlignmentSetId(Guid.Parse(metadatum.AlignmentSetId))
                             ));
                     }
                 }
+
+                //run this after Verses has been set so they are there to set once complete, but don't await so loading can continue.
+                _ = SetExternalNotesAsync(
+                        TokenizedTextCorpusIds,
+                        cancellationToken);
                 Title = CreateParallelCorpusItemTitle(metadatum, "EnhancedView_Alignment", rows.Count);
             }
             catch (Exception)
@@ -738,6 +801,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         public async Task HandleAsync(TokenUnjoinedMessage message, CancellationToken cancellationToken)
+        {
+            if (EnhancedViewItemMetadatum is TokenizedCorpusEnhancedViewItemMetadatum tokenizedCorpusMetadatum)
+            {
+                tokenizedCorpusMetadatum.TokenizedTextCorpus = null;
+            }
+            if (EnhancedViewItemMetadatum is ParallelCorpusEnhancedViewItemMetadatum parallelCorpusMetadatum)
+            {
+                parallelCorpusMetadatum.ParallelCorpus = null;
+            }
+
+            await Task.CompletedTask;
+        }        
+        
+        public async Task HandleAsync(TokenSplitMessage message, CancellationToken cancellationToken)
         {
             if (EnhancedViewItemMetadatum is TokenizedCorpusEnhancedViewItemMetadatum tokenizedCorpusMetadatum)
             {

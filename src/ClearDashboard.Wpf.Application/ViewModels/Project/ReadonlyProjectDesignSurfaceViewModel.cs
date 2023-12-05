@@ -72,6 +72,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public readonly BackgroundTasksViewModel BackgroundTasksViewModel;
         private readonly LongRunningTaskManager? _longRunningTaskManager;
         private readonly ILocalizationService _localizationService;
+        private readonly NoteManager _noteManager;
         private readonly SystemPowerModes _systemPowerModes; 
         #endregion //Member Variables
 
@@ -161,10 +162,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             ILifetimeScope lifetimeScope,
             LongRunningTaskManager longRunningTaskManager,
             ILocalizationService localizationService,
-            IEnhancedViewManager enhancedViewManager)
+            IEnhancedViewManager enhancedViewManager,
+            NoteManager noteManager)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             EnhancedViewManager = enhancedViewManager;
+            _noteManager = noteManager;
             _systemPowerModes = systemPowerModes;
             _windowManager = windowManager;
             BackgroundTasksViewModel = backgroundTasksViewModel;
@@ -574,7 +577,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         mediator: Mediator!,
                         IsRtl: true,
                         Name: MaculaCorporaNames.HebrewCorpusName,
-                        Language: "Hebrew",
+                        Language: ManuscriptIds.HebrewManuscriptLanguageId,
                         CorpusType: CorpusType.ManuscriptHebrew.ToString(),
                         ParatextId: ManuscriptIds.HebrewManuscriptId,
                         token: cancellationToken);
@@ -720,7 +723,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         mediator: Mediator!,
                         IsRtl: false,
                         Name: MaculaCorporaNames.GreekCorpusName,
-                        Language: "Greek",
+                        Language: ManuscriptIds.GreekManuscriptLanguageId,
                         CorpusType: CorpusType.ManuscriptGreek.ToString(),
                         ParatextId: ManuscriptIds.GreekManuscriptId,
                         token: cancellationToken);
@@ -876,7 +879,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                     IsRtl: selectedProject.IsRtl,
                                     FontFamily: selectedProject.FontFamily,
                                     Name: selectedProject.Name,
-                                    Language: selectedProject.LanguageName,
+                                    Language: selectedProject.LanguageId,
                                     CorpusType: selectedProject.CorpusTypeDisplay,
                                     ParatextId: selectedProject.Id,
                                     token: cancellationToken);
@@ -900,15 +903,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                     .Tokenize<LatinWordTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>()
                                     .Transform<SetTrainingBySurfaceLowercase>(),
+
                                 Tokenizers.WhitespaceTokenizer =>
                                     (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
                                     .Tokenize<WhitespaceTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>()
                                     .Transform<SetTrainingBySurfaceLowercase>(),
-                                Tokenizers.ZwspWordTokenizer => (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
+
+                                Tokenizers.ZwspWordTokenizer =>
+                                    (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
                                     .Tokenize<ZwspWordTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>()
                                     .Transform<SetTrainingBySurfaceLowercase>(),
+
+                                Tokenizers.ChineseBibleWordTokenizer =>
+                                    (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
+                                    .Tokenize<ChineseBibleWordTokenizer>()
+                                    .Transform<IntoTokensTextRowProcessor>()
+                                    .Transform<SetTrainingBySurfaceLowercase>(),
+
                                 _ => (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, null, cancellationToken))
                                     .Tokenize<WhitespaceTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>()
@@ -1151,6 +1164,69 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
+        public void GetLatestExternalNotes(string externalProjectId)
+        {
+            try
+            {
+                Logger!.LogInformation("GetLatestExternalNotes called.");
+
+                var taskName = $"GetLatestExternalNotesFor{externalProjectId}";
+                var task = _longRunningTaskManager!.Create(taskName, LongRunningTaskStatus.Running);
+                var cancellationToken = task.CancellationTokenSource!.Token;
+
+                _ = Task.Run(async () =>
+                {
+                    _busyState.Add(taskName, true);
+
+
+                    try
+                    {
+                        await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
+                            description: $"Retrieving external notes for externalProjectId '{externalProjectId}'...", cancellationToken: cancellationToken);
+
+                        await _noteManager.ExternalNoteManager.InvalidateExternalNotesCache(externalProjectId);
+
+                        await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
+                            description: $"Retrieving external notes for externalProjectId '{externalProjectId}'...Completed", cancellationToken: cancellationToken);
+
+                        _longRunningTaskManager.TaskComplete(taskName);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        Logger!.LogInformation("GetLatestExternalNotes() - OperationCanceledException was thrown -> cancellation was requested.");
+                    }
+                    catch (MediatorErrorEngineException ex)
+                    {
+                        if (ex.Message.Contains("The operation was canceled"))
+                        {
+                            Logger!.LogInformation($"GetLatestExternalNotes() - OperationCanceledException was thrown -> cancellation was requested.");
+                        }
+                        else
+                        {
+                            Logger!.LogError(ex, "an unexpected Engine exception was thrown.");
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger!.LogError(ex, $"An unexpected error occurred while retrieving external notes for '{externalProjectId}' ");
+                        if (!cancellationToken.IsCancellationRequested)
+                        {
+                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,exception: ex, cancellationToken: cancellationToken);
+                        }
+                    }
+                    finally
+                    {
+                        _longRunningTaskManager.TaskComplete(taskName);
+                        _busyState.Remove(taskName);
+                    }
+                }, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                Logger!.LogInformation($"GetLatestExternalNotes() - Exception was thrown {e}");
+            }
+        }
         public async Task UpdateParatextCorpus(string selectedParatextProjectId, string? selectedTokenizer)
         {
             Logger!.LogInformation("UpdateParatextCorpus called.");
@@ -1561,6 +1637,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.UpdateParatextCorpus:
                     await UpdateParatextCorpus(corpusNodeViewModel.ParatextProjectId, corpusNodeMenuItem.Tokenizer);
+                    break;
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.GetLatestExternalNotes:
+                    GetLatestExternalNotes(corpusNodeViewModel.ParatextProjectId);
                     break;
             }
         }

@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>Libros seleccionados</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>Seleccione los libros de USFM para enviar</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>Seleccione el proyecto Paratext</value>
   </data>
@@ -556,6 +559,9 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>Creado por</value>
   </data>
+  <data name="Current" xml:space="preserve">
+    <value>Actual</value>
+  </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
   </data>
@@ -614,7 +620,7 @@
     <value>Eliminar la alineación de '{0}'?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>Eliminar todas las alineaciones?</value>
+    <value>¿Eliminar todas las alineaciones?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>El token '{0}' tiene múltiples alineaciones definidas. Haga clic en '{1}' eliminará todas las alineaciones.</value>
@@ -656,7 +662,7 @@
     <value>Eliminar corpus</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>Mostrar los controles de la vista</value>
+    <value>Mostrar los controles de vista</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>Token dividido</value>
@@ -671,7 +677,7 @@
     <value>División de tres vías</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Un si unir un token compuesto</value>
+    <value>Un si unión a la token compuesta</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -708,6 +714,9 @@
   </data>
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>Modo de párrafo</value>
+  </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>Mostrar notas externas</value>
   </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>Texto de origen:</value>
@@ -827,19 +836,19 @@
     <value>Agregar significado</value>
   </data>
   <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
-    <value>Agregue un significado para este lema</value>
+    <value>Agregar un significado para este lema</value>
   </data>
   <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
     <value>Agregar un dominio semántico</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>Aplicar traducción</value>
+    <value>Aplicar brillo</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Cancelar traducción</value>
+    <value>Cancelar brillo</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
-    <value>Cambiar todos los ocurrencias inseguros</value>
+    <value>Cambiar todos los ocurrencias no establecidos</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Si se verifica, esto cambiará todas las ocurrencias no establecidas de esta palabra</value>
@@ -863,7 +872,7 @@
     <value>Ingrese una nueva traducción para</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>Ingrese una nueva traducción</value>
+    <value>Ingrese un nuevo brillo</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lema</value>
@@ -884,7 +893,7 @@
     <value>Significados:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Nueva traducción</value>
+    <value>Nuevo brillo</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Eliminar este dominio semántico de este significado</value>
@@ -893,7 +902,7 @@
     <value>Eliminar esta forma léxica de este lema</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>Establecer una traducción para</value>
+    <value>Establecer un brillo para</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Y</value>
@@ -903,6 +912,12 @@
   </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Editar</value>
+  </data>
+  <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>Agregar '{0}' como formulario</value>
+  </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>Agregar '{0}' como traducción al primer significado</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Encuentra todos</value>
@@ -918,6 +933,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>Cargando datos...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>Se produjo un error inesperado al cargar datos. {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>Pareo</value>
@@ -1355,7 +1376,7 @@
     <value>Agregar grupo de etiquetas</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Agregar un grupo de etiqueta</value>
+    <value>Agregar un grupo de etiquetas</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Un grupo de etiquetas ya existe con el nombre</value>
@@ -1541,7 +1562,7 @@
     <value>Traducción inversa</value>
   </data>
   <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
-    <value>Calcular el nuevo modelo de traducción</value>
+    <value>Calcule el nuevo modelo de traducción</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
     <value>Cambiar el nivel de zoom del contenido</value>
@@ -1570,11 +1591,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Diccionario</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>Editor de notas externos</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>Coloque toda el área de contenido a la ventana gráfica</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>Coloque todos los nodos a la ventana gráfica</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>Obtenga las últimas notas externas</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Obtenga lo último de Paratext</value>
@@ -1985,7 +2012,7 @@
     <value>Joshua</value>
   </data>
   <data name="ProperCase_Jude" xml:space="preserve">
-    <value>Yacuana</value>
+    <value>Judío</value>
   </data>
   <data name="ProperCase_Judges" xml:space="preserve">
     <value>Jueces</value>
@@ -2104,6 +2131,9 @@
   <data name="Save" xml:space="preserve">
     <value>Ahorrar</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>Enviar</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>Habilitar el complemento Aqua experimental</value>
   </data>
@@ -2130,6 +2160,12 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Habilitar la edición de alineación</value>
+  </data>
+  <data name="Settings_EnableLexiconImport" xml:space="preserve">
+    <value>Habilitar la importación de léxico</value>
+  </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>Habilitar división de token</value>
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Experimental</value>
@@ -2251,6 +2287,9 @@
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Enviar</value>
   </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>Enviar archivos USFM</value>
+  </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>Sugerencia</value>
   </data>
@@ -2295,6 +2334,9 @@
   </data>
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>Poner brillo</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Actualizar</value>

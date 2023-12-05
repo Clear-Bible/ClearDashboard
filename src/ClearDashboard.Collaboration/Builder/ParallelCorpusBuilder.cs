@@ -8,7 +8,7 @@ namespace ClearDashboard.Collaboration.Builder;
 
 public class ParallelCorpusBuilder : GeneralModelBuilder<Models.ParallelCorpus>
 {
-    public TokenBuilder? TokenBuilder = null;
+    public TokenCompositeBuilder? TokenCompositeBuilder = null;
 
     public Func<ProjectDbContext, IEnumerable<Models.ParallelCorpus>> GetParallelCorpora = (projectDbContext) =>
     {
@@ -35,15 +35,15 @@ public class ParallelCorpusBuilder : GeneralModelBuilder<Models.ParallelCorpus>
         // TODO:  Verses (once they can be altered in Dashboard)
         // TODO:  TokenVerseAssociations (once they can be created in Dashboard)
 
-        var tokenBuilder = TokenBuilder ?? new TokenBuilder();
-        var tokenCompositeTokens = tokenBuilder.GetParallelCorpusCompositeTokens(builderContext.ProjectDbContext, parallelCorpus.Id);
+        var tokenCompositeBuilder = TokenCompositeBuilder ?? new TokenCompositeBuilder();
+        var tokenCompositeTokens = tokenCompositeBuilder.GetParallelCorpusCompositeTokens(builderContext.ProjectDbContext, parallelCorpus.Id);
         if (tokenCompositeTokens.Any())
         {
             var compositeModelSnapshots = new GeneralListModel<GeneralModel<Models.TokenComposite>>();
 
             foreach (var tct in tokenCompositeTokens)
             {
-                compositeModelSnapshots.Add(TokenBuilder.BuildModelSnapshot(tct.TokenComposite, tct.Tokens, builderContext));
+                compositeModelSnapshots.Add(TokenCompositeBuilder.BuildModelSnapshot(tct.TokenComposite, tct.Tokens, builderContext));
             }
 
             modelSnapshot.AddChild("CompositeTokens", compositeModelSnapshots.AsModelSnapshotChildrenList());

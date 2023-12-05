@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SIL.Machine.Corpora;
 using SIL.Scripture;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Text.Json;
 using static ClearBible.Engine.Persistence.FileGetBookIds;
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -16,7 +17,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
     {
         public static IEnumerable<TokensTextRow> ExtractValidateBook(ITextCorpus textCorpus, string bookId, string? corpusName)
         {
-            var tokensTextRows = textCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>().ToList();
+            List<TokensTextRow> tokensTextRows = new();
+            try
+            {
+                tokensTextRows = textCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>().ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
 
             var dups = tokensTextRows
                 .SelectMany(ttr => ttr.Tokens)
@@ -136,9 +145,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
         {
             var command = connection.CreateCommand();
             var columns = new string[] { "OriginalText", "IsSentenceStart", "IsInRange", "IsRangeStart", "IsEmpty", "Modified" };
-            var whereColumns = new string[] { "Id" };
+            var whereColumns = new (string, DataUtil.WhereEquality)[] { ("Id", DataUtil.WhereEquality.Equals) };
 
-            DataUtil.ApplyColumnsToUpdateCommand(command, typeof(Models.VerseRow), columns, whereColumns);
+            DataUtil.ApplyColumnsToUpdateCommand(command, typeof(Models.VerseRow), columns, whereColumns, Array.Empty<(string, int)>());
 
             command.Prepare();
 
@@ -317,9 +326,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
         {
             var command = connection.CreateCommand();
             var columns = new string[] { "TokenCompositeId" };
-            var whereColumns = new string[] { "Id" };
+            var whereColumns = new (string, DataUtil.WhereEquality)[] { ("Id", DataUtil.WhereEquality.Equals) };
 
-            DataUtil.ApplyColumnsToUpdateCommand(command, typeof(Models.TokenComponent), columns, whereColumns);
+            DataUtil.ApplyColumnsToUpdateCommand(command, typeof(Models.TokenComponent), columns, whereColumns, Array.Empty<(string, int)>());
 
             command.Prepare();
 

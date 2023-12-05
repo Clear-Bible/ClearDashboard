@@ -145,6 +145,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             (nameof(TokenJoinLanguagePair), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
+        /// Identifies the TokenSplit routed event.
+        /// </summary>
+        public static readonly RoutedEvent TokenSplitEvent = EventManager.RegisterRoutedEvent
+          (nameof(TokenSplit), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
         /// Identifies the TokenUnjoinEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenUnjoinEvent = EventManager.RegisterRoutedEvent
@@ -587,17 +593,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenClicked(object sender, RoutedEventArgs e)
         {
-            if (e is not TokenEventArgs args || args is { TokenDisplay: null } )
+            if (e is not TokenEventArgs args || args is { TokenDisplay: null })
             {
                 return;
             }
 
-            // If shift is pressed, then leave any selected tokens selected.
-            if (!args.IsShiftPressed)
-            {
-                UpdateVerseSelection(args.TokenDisplay, args.IsControlPressed);
-            }
-           
+            ////If shift is pressed, then leave any selected tokens selected.
+            //if (!args.IsShiftPressed)
+            //{
+            //    UpdateVerseSelection(args.TokenDisplay, args.IsControlPressed);
+            //}
+
 
             RaiseTokenEvent(TokenClickedEvent, args);
         }
@@ -748,6 +754,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
         
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
+            if (e is not TokenEventArgs args || args is { TokenDisplay: null })
+            {
+                return;
+            }
+
+            // If shift is pressed, then leave any selected tokens selected.
+            if (!args.IsShiftPressed)
+            {
+                UpdateVerseSelection(args.TokenDisplay, args.IsControlPressed);
+            }
+
             RaiseTokenEvent(TokenLeftButtonDownEvent, e);
         }
 
@@ -758,11 +775,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenRightButtonDown(object sender, RoutedEventArgs e)
         {
-            //var control = e.Source as FrameworkElement;
-            //if (control?.DataContext is TokenDisplayViewModel { IsTokenSelected: false } tokenDisplay)
-            //{
-            //    UpdateVerseSelection(tokenDisplay, false);
-            //}
+            var control = e.Source as FrameworkElement;
+            if (control?.DataContext is TokenDisplayViewModel { IsTokenSelected: false } tokenDisplay)
+            {
+                UpdateVerseSelection(tokenDisplay, false);
+            }
 
             RaiseTokenEvent(TokenRightButtonDownEvent, e);
         }
@@ -818,6 +835,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenMouseWheelEvent, e);
         }
 
+        private void OnTokenSplit(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenSplitEvent, e);
+        }        
+        
         private void OnTokenUnjoin(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenUnjoinEvent, e);
@@ -1183,6 +1205,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(TokenJoinLanguagePairEvent, value);
             remove => RemoveHandler(TokenJoinLanguagePairEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user requests to split a token.
+        /// </summary>
+        public event RoutedEventHandler TokenSplit
+        {
+          add => AddHandler(TokenSplitEvent, value);
+          remove => RemoveHandler(TokenSplitEvent, value);
         }
 
         /// <summary>

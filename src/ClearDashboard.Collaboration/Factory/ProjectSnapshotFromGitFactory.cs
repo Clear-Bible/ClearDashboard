@@ -160,6 +160,7 @@ public class ProjectSnapshotFromGitFactory
                         Repository repo,
                         string commitSha) =>
                         {
+                            AddGeneralModelChild<Models.TokenizedCorpus, Models.Token>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
                             AddGeneralModelChild<Models.TokenizedCorpus, Models.TokenComposite>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
                             AddGeneralModelChild<Models.TokenizedCorpus, Models.VerseRow>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
                         },

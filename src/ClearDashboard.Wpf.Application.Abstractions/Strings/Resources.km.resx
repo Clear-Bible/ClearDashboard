@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>សៀវភៅដែលបានជ្រើសរើស</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>ជ្រើសរើសសៀវភៅ USFM ដើម្បីផ្ញើ</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>ជ្រើសគម្រោង Partatetx</value>
   </data>
@@ -556,6 +559,9 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>បង្កើត​ឡើង​ដោយ</value>
   </data>
+  <data name="Current" xml:space="preserve">
+    <value>នា​ពេល​បច្ចុប្បន្ន</value>
+  </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
   </data>
@@ -709,6 +715,9 @@
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>របៀបកថាខណ្ឌ</value>
   </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>បង្ហាញកំណត់ត្រាខាងក្រៅ</value>
+  </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>អត្ថបទប្រភព:</value>
   </data>
@@ -833,10 +842,10 @@
     <value>បន្ថែមដែន semantic</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>អនុវត្តការបកប្រែ</value>
+    <value>លាបរលោង</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>បោះបង់ការបកប្រែ</value>
+    <value>បោះបង់ STARST</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
     <value>ផ្លាស់ប្តូររាល់ការកើតឡើងដែលមិនបានសំរេច</value>
@@ -863,7 +872,7 @@
     <value>បញ្ចូលការបកប្រែថ្មីសម្រាប់</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>បញ្ចូលការបកប្រែថ្មី</value>
+    <value>បញ្ចូលរលោងថ្មី</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>រេក្យងល្ផើម</value>
@@ -884,7 +893,7 @@
     <value>អត្ថន័យ:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>ការបកប្រែថ្មី</value>
+    <value>រលោងថ្មី</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>យកដែន semory នេះចេញពីអត្ថន័យនេះ</value>
@@ -893,7 +902,7 @@
     <value>យកទម្រង់ lexical នេះចេញពីក្រែមល្ហែមនេះ</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>កំណត់ការបកប្រែសម្រាប់</value>
+    <value>កំណត់រលោងសម្រាប់</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>និង</value>
@@ -903,6 +912,12 @@
   </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>បិនិត្យ</value>
+  </data>
+  <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>បន្ថែម '{0}' ជាទម្រង់</value>
+  </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>បន្ថែម '{0}' ជាការបកប្រែទៅជាអត្ថន័យដំបូង</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>រកទាំងអស់</value>
@@ -918,6 +933,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>lexme</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>ផ្ទុកទិន្នន័យ ...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>កំហុសដែលមិនបានរំពឹងទុកបានកើតឡើងខណៈពេលផ្ទុកទិន្នន័យ។ {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>ដេលសីក្នា</value>
@@ -1570,11 +1591,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>វចនានុរកម</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>កម្មវិធីនិពន្ធកំណត់ត្រាខាងក្រៅ</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>សមនឹងផ្ទៃមាតិកាទាំងមូលទៅអ្នកមើល</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>សមនឹងថ្នាំងទាំងអស់ទៅអ្នកមើល</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>ទទួលបានកំណត់ត្រាខាងក្រៅចុងក្រោយ</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>ទទួលបានចុងក្រោយពី Paratext</value>
@@ -2104,6 +2131,9 @@
   <data name="Save" xml:space="preserve">
     <value>សរេង្គាហ</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>ផ្ញើរ</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>បើកដំណើរការកម្មវិធីជំនួយពិសោធន៍ Aqua</value>
   </data>
@@ -2130,6 +2160,12 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>បើកដំណើរការការកែសំរួលការតម្រឹម</value>
+  </data>
+  <data name="Settings_EnableLexiconImport" xml:space="preserve">
+    <value>បើកដំណើរការការនាំចូល lexicon</value>
+  </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>បើកការបំបែកថូខឹន</value>
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>ដេលល្បាប់</value>
@@ -2251,6 +2287,9 @@
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>ផ្ញើរ</value>
   </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>ផ្ញើឯកសារ USFM</value>
+  </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>ការផ្ដល់យោបល់</value>
   </data>
@@ -2295,6 +2334,9 @@
   </data>
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>កំណត់ស្នាមរលោង</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>ធេវីអាេយយរមយរ</value>

@@ -33,6 +33,7 @@ using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
 using BookInfo = ClearDashboard.DataAccessLayer.Models.BookInfo;
 using CorpusType = ClearDashboard.DataAccessLayer.Models.CorpusType;
 using ParatextProjectMetadata = ClearDashboard.DataAccessLayer.Models.ParatextProjectMetadata;
+using ClearDashboard.DataAccessLayer;
 
 namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 {
@@ -40,7 +41,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
     {
 
         #region Member Variables   
-
+        
         private abstract record BackgroundTask
         {
             public BackgroundTask(Type taskReturnType, string? taskName = null) { TaskReturnType = taskReturnType; TaskName = taskName ?? Guid.NewGuid().ToString(); }
@@ -696,8 +697,9 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                     Id = DataAccessLayer.ManuscriptIds.HebrewManuscriptId,
                     Name = MaculaCorporaNames.HebrewCorpusName,
                     CorpusType = corpusType,
+                    IsRtl = true,
                     FontFamily = DataAccessLayer.FontNames.HebrewFontFamily,
-                    LanguageName = "Hebrew" // FIXME:  shouldn't this be bcp-47 code?
+                    LanguageId = ManuscriptIds.HebrewManuscriptLanguageId
                 };
                 languageCode = LanguageCodeEnum.H;
             }
@@ -708,8 +710,9 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                     Id = DataAccessLayer.ManuscriptIds.GreekManuscriptId,
                     Name = MaculaCorporaNames.GreekCorpusName,
                     CorpusType = corpusType,
+                    IsRtl = false,
                     FontFamily = DataAccessLayer.FontNames.GreekFontFamily,
-                    LanguageName = "Greek" // FIXME:  shouldn't this be bcp-47 code?
+                    LanguageId = ManuscriptIds.GreekManuscriptLanguageId
                 };
                 languageCode = LanguageCodeEnum.G;
             }
@@ -750,9 +753,9 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 
             var corpus = await Corpus.Create(
                 mediator: Mediator!,
-                IsRtl: false,
+                IsRtl: metadata.IsRtl,
                 Name: metadata.Name!,
-                Language: metadata.LanguageName!,
+                Language: metadata.LanguageId!,
                 CorpusType: metadata.CorpusType.ToString(),
                 ParatextId: metadata.Id!,
                 token: cancellationToken);
@@ -812,7 +815,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                     IsRtl: metadata.IsRtl,
                     FontFamily: metadata.FontFamily,
                     Name: metadata.Name!,
-                    Language: metadata.LanguageName!,
+                    Language: metadata.LanguageId!,
                     CorpusType: metadata.CorpusTypeDisplay,
                     ParatextId: metadata.Id!,
                     token: cancellationToken);
@@ -833,15 +836,25 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                     .Tokenize<LatinWordTokenizer>()
                     .Transform<IntoTokensTextRowProcessor>()
                     .Transform<SetTrainingBySurfaceLowercase>(),
+
                 Tokenizers.WhitespaceTokenizer =>
                     (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, bookIds, cancellationToken))
                     .Tokenize<WhitespaceTokenizer>()
                     .Transform<IntoTokensTextRowProcessor>()
                     .Transform<SetTrainingBySurfaceLowercase>(),
-                Tokenizers.ZwspWordTokenizer => (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, bookIds, cancellationToken))
+
+                Tokenizers.ZwspWordTokenizer => 
+                    (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, bookIds, cancellationToken))
                     .Tokenize<ZwspWordTokenizer>()
                     .Transform<IntoTokensTextRowProcessor>()
                     .Transform<SetTrainingBySurfaceLowercase>(),
+
+                Tokenizers.ChineseBibleWordTokenizer =>
+                    (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, bookIds, cancellationToken))
+                    .Tokenize<ChineseBibleWordTokenizer>()
+                    .Transform<IntoTokensTextRowProcessor>()
+                    .Transform<SetTrainingBySurfaceLowercase>(),
+
                 _ => (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, null, cancellationToken))
                     .Tokenize<WhitespaceTokenizer>()
                     .Transform<IntoTokensTextRowProcessor>()

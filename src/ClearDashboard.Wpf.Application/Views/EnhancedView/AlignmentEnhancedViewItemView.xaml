@@ -95,6 +95,9 @@
                                 <b:EventTrigger EventName="TokenClicked">
                                     <b:CallMethodAction MethodName="TokenClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
                                 </b:EventTrigger>
+                                <b:EventTrigger EventName="TokenLeftButtonDown">
+                                    <b:CallMethodAction MethodName="TokenLeftButtonDown" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                                </b:EventTrigger>
                                 <b:EventTrigger EventName="TokenRightButtonDown">
                                     <b:CallMethodAction MethodName="TokenRightButtonDown" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
                                 </b:EventTrigger>
@@ -136,6 +139,9 @@
                                 </b:EventTrigger>
                                 <b:EventTrigger EventName="TokenUnjoin">
                                     <b:CallMethodAction MethodName="TokenUnjoin" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                                </b:EventTrigger>
+                                <b:EventTrigger EventName="TokenSplit">
+                                    <b:CallMethodAction MethodName="TokenSplit" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
                                 </b:EventTrigger>
                             </b:Interaction.Triggers>
                         </userControls:VerseDisplay>

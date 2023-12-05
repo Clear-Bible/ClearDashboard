@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ClearDashboard.Collaboration.Model;
 using ClearDashboard.DataAccessLayer.Data;
 using Models = ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Collaboration.Factory;
 
 namespace ClearDashboard.Collaboration.Builder;
 
@@ -17,6 +18,7 @@ public class TokenizedCorpusBuilder : GeneralModelBuilder<Models.TokenizedCorpus
         };
 
     public VerseRowBuilder? VerseRowBuilder = null;
+    public TokenCompositeBuilder? TokenCompositeBuilder = null;
     public TokenBuilder? TokenBuilder = null;
 
     public Func<ProjectDbContext, IEnumerable<Models.TokenizedCorpus>> GetTokenizedCorpora = (projectDbContext) =>
@@ -59,24 +61,42 @@ public class TokenizedCorpusBuilder : GeneralModelBuilder<Models.TokenizedCorpus
         if (tokenizedCorpus.Corpus!.CorpusType != Models.CorpusType.ManuscriptHebrew &&
             tokenizedCorpus.Corpus!.CorpusType != Models.CorpusType.ManuscriptGreek)
         {
-            modelSnapshot.Add("BookNumbers", GetBookNumbers(builderContext.ProjectDbContext, tokenizedCorpus.Id));
-            modelSnapshot.AddChild("VerseRows", (VerseRowBuilder ?? new VerseRowBuilder())
+            modelSnapshot.Add(BOOK_NUMBERS, GetBookNumbers(builderContext.ProjectDbContext, tokenizedCorpus.Id));
+
+            var verseRowChildName = ProjectSnapshotFactoryCommon.childFolderNameMappings[typeof(Models.VerseRow)].childName;
+            modelSnapshot.AddChild(verseRowChildName, (VerseRowBuilder ?? new VerseRowBuilder())
                 .BuildModelSnapshots(tokenizedCorpus.Id, builderContext)
                 .AsModelSnapshotChildrenList());
         }
 
-        var tokenBuilder = TokenBuilder ?? new TokenBuilder();
-        var tokenCompositeTokens = tokenBuilder.GetTokenizedCorpusCompositeTokens(builderContext.ProjectDbContext, tokenizedCorpus.Id);
+        var tokenCompositeBuilder = TokenCompositeBuilder ?? new TokenCompositeBuilder();
+        var tokenCompositeTokens = tokenCompositeBuilder.GetTokenizedCorpusCompositeTokens(builderContext.ProjectDbContext, tokenizedCorpus.Id);
         if (tokenCompositeTokens.Any())
         {
             var compositeModelSnapshots = new GeneralListModel<GeneralModel<Models.TokenComposite>>();
 
             foreach (var (TokenComposite, Tokens) in tokenCompositeTokens)
             {
-                compositeModelSnapshots.Add(TokenBuilder.BuildModelSnapshot(TokenComposite, Tokens, builderContext));
+                compositeModelSnapshots.Add(TokenCompositeBuilder.BuildModelSnapshot(TokenComposite, Tokens, builderContext));
             }
-            
-            modelSnapshot.AddChild("CompositeTokens", compositeModelSnapshots.AsModelSnapshotChildrenList());
+
+            var compositeChildName = ProjectSnapshotFactoryCommon.childFolderNameMappings[typeof(Models.TokenComposite)].childName;
+            modelSnapshot.AddChild(compositeChildName, compositeModelSnapshots.AsModelSnapshotChildrenList());
+        }
+
+        var tokenBuilder = TokenBuilder ?? new TokenBuilder();
+        var tokens = tokenBuilder.GetTokenizedCorpusTokens(builderContext.ProjectDbContext, tokenizedCorpus.Id);
+        if (tokens.Any())
+        {
+            var tokenModelSnapshots = new GeneralListModel<GeneralModel<Models.Token>>();
+
+            foreach (var token in tokens)
+            {
+                tokenModelSnapshots.Add(TokenBuilder.BuildModelSnapshot(token, builderContext));
+            }
+
+            var tokenChildName = ProjectSnapshotFactoryCommon.childFolderNameMappings[typeof(Models.Token)].childName;
+            modelSnapshot.AddChild(tokenChildName, tokenModelSnapshots.AsModelSnapshotChildrenList());
         }
 
         return modelSnapshot;

@@ -82,13 +82,5 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
         {
             FilterBox.Focus();
         }
-
-        private void DialogHost_OnDialogOpened(object sender, DialogOpenedEventArgs eventargs)
-        {
-            if (ListView.Items.Count > 0)
-            {
-                ListView.ScrollIntoView(ListView.Items[0]);
-            }
-        }
     }
 }

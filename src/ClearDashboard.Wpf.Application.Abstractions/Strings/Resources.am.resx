@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>የተመረጡ መጽሐፍት</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>የ USFM መጽሐፍት ለመላክ ይምረጡ</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>የጥበቃ ፕሮጀክት ይምረጡ</value>
   </data>
@@ -556,6 +559,9 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>የተፈጠረ</value>
   </data>
+  <data name="Current" xml:space="preserve">
+    <value>የአሁኑ</value>
+  </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
   </data>
@@ -709,6 +715,9 @@
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>የአንቀጽ ሁኔታ</value>
   </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>ውጫዊ ማስታወሻዎችን አሳይ</value>
+  </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>ምንጭ ጽሑፍ</value>
   </data>
@@ -833,10 +842,10 @@
     <value>የ &lt;SELMACE&gt; ጎራ ያክሉ</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>ትርጉም ይተግብሩ</value>
+    <value>አንጥረኛ አተገባበር</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>ትርጉም ሰርዝ</value>
+    <value>መጮህ መሰረዝ</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
     <value>ሁሉንም ያልተለመዱ ክስተቶች ይለውጡ</value>
@@ -863,7 +872,7 @@
     <value>አዲስ ትርጉም ያስገቡ ለ</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>አዲስ ትርጉም ያስገቡ</value>
+    <value>አዲስ አንጸባራቂውን ያስገቡ</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>ሎሚ</value>
@@ -884,7 +893,7 @@
     <value>ትርጉሞች</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>አዲስ ትርጉም</value>
+    <value>አዲስ አንጸባራቂ</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>ከዚህ ትርጉም ይህንን የትርጉም ጎራ ያስወግዱ</value>
@@ -893,7 +902,7 @@
     <value>ከዚህ ሎማ ውስጥ ይህን ሌክሳይክ ቅፅ ያስወግዱ</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>ትርጉም ያዘጋጁ</value>
+    <value>አንድ አፍቃሪ ያዘጋጁ</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>እና</value>
@@ -903,6 +912,12 @@
   </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>አርትዕ</value>
+  </data>
+  <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>'{0}' እንደ ቅጽ</value>
+  </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>ለመጀመሪያው ትርጉም እንደ ትርጉም '{0}'</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>ሁሉንም ያግኙ</value>
@@ -918,6 +933,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>ውሂብን በመጫን ላይ ...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>ውሂብን በመጫን ላይ ያልተጠበቀ ስህተት ተከስቷል. {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>ማዛመድ</value>
@@ -1570,11 +1591,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>መዝገበ ቃላት</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>ውጫዊ ማስታወሻዎች አርታኢ</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>ከጠቅላላው የይዘት ቦታ ጋር ወደ የእይታ እይታ ይጣጣሙ</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>ሁሉንም አንጓዎች ወደ የእይታ መረብ ይግባኝ</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>የቅርብ ጊዜ ውጫዊ ማስታወሻዎችን ያግኙ</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>ከስርታ ከተለቀቀ የቅርብ ጊዜ ያግኙ</value>
@@ -2104,6 +2131,9 @@
   <data name="Save" xml:space="preserve">
     <value>አስቀምጥ</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>ላክ</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>የሙከራ Aqua Pluckin ን ያንቁ</value>
   </data>
@@ -2130,6 +2160,12 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>የምደባ አርት editing ትን አንቃ</value>
+  </data>
+  <data name="Settings_EnableLexiconImport" xml:space="preserve">
+    <value>Lexicon ማስመጣትን አንቃ</value>
+  </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>የመረበሽ መከፋፈል ያንቁ</value>
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>ሙከራ</value>
@@ -2251,6 +2287,9 @@
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>ላክ</value>
   </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>የ USFM ፋይሎችን ይላኩ</value>
+  </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>ጥቆማ</value>
   </data>
@@ -2295,6 +2334,9 @@
   </data>
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>የሸንበቆ ግንድ</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>ዝመና</value>

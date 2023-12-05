@@ -20,10 +20,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.ViewModels;
 using Alignment = ClearDashboard.DAL.Alignment.Translation.Alignment;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Token = ClearBible.Engine.Corpora.Token;
+using ClearBible.Engine.Exceptions;
+using SIL.Scripture;
+using SIL.Machine.Corpora;
 
 
 // ReSharper disable UnusedMember.Global
@@ -44,8 +48,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                                   ILifetimeScope? lifetimeScope,
                                                   IWindowManager windowManager,
                                                   ILocalizationService localizationService,
+                                                  NoteManager noteManager,
                                                   EditMode editMode = EditMode.MainViewOnly)
-            : base(projectManager, enhancedViewManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, windowManager, localizationService, editMode)
+            : base(
+                  projectManager, 
+                  enhancedViewManager, 
+                  navigationService, 
+                  logger, 
+                  eventAggregator, 
+                  mediator, 
+                  lifetimeScope, 
+                  windowManager, 
+                  localizationService, 
+                  noteManager, 
+                  editMode)
         {
             ShowEditButton = EditMode == EditMode.ManualToggle;
             EnableEditMode = false;
@@ -377,10 +393,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         TargetVerseTokens = verseContext.targetVerseTokens,
                         TargetVerseTokensIndex = verseContext.targetVerseTokensIndex
                     },
-                    AlignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.Detokenizer,
-                    AlignmentSet.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.IsRtl,
-                    AlignmentSet.ParallelCorpusId.TargetTokenizedCorpusId.Detokenizer,
-                    AlignmentSet.ParallelCorpusId.TargetTokenizedCorpusId.CorpusId.IsRtl
+                    ParallelCorpus
                 )
             };
         }
@@ -594,6 +607,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             });
         }
 
+        private ParallelCorpus ParallelCorpus { get; set; }
         private async Task EnsureAlignmentSet()
         {
             if (AlignmentSet == null && EnhancedViewItemMetadatum is AlignmentEnhancedViewItemMetadatum)
@@ -601,6 +615,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 AlignmentSetId = Guid.Parse(((AlignmentEnhancedViewItemMetadatum)EnhancedViewItemMetadatum)
                     .AlignmentSetId!);
                 AlignmentSet = await AlignmentSet.Get(new AlignmentSetId(AlignmentSetId), Mediator!);
+                ParallelCorpus = await ParallelCorpus.Get(Mediator!, AlignmentSet.ParallelCorpusId);
             }
         }
 
@@ -630,6 +645,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 { AlignmentTypes.Assigned_Invalid, LocalizationService.Get("BulkAlignmentReview_Invalid") },
                 { AlignmentTypes.Assigned_Unverified, LocalizationService.Get("BulkAlignmentReview_NeedsReview") },
             };
+        }
+
+        protected override IEnumerable<IRow> Rows
+        {
+            get
+            {
+                var verses = (EnhancedViewItemMetadatum as AlignmentEnhancedViewItemMetadatum)
+                    ?.ParallelCorpus
+                    ?.GetByVerseRange(
+                        new VerseRef(ParentViewModel.CurrentBcv.GetBBBCCCVVV()),
+                        (ushort)ParentViewModel.VerseOffsetRange,
+                        (ushort)ParentViewModel.VerseOffsetRange)
+                    ?? throw new InvalidDataEngineException(name: "metadata or parallelcorpus", value: "null");
+                return verses.parallelTextRows;
+            }
+        }
+        protected override List<TokenizedTextCorpusId> TokenizedTextCorpusIds
+        {
+            get
+            {
+                var metadatum = EnhancedViewItemMetadatum as AlignmentEnhancedViewItemMetadatum;
+                return new List<TokenizedTextCorpusId>()
+                {
+                    metadatum?.ParallelCorpus?.ParallelCorpusId?.SourceTokenizedCorpusId
+                        ?? throw new InvalidStateEngineException(name: "metadatum, metadatum.ParallelCorpus, or ParallelCorpusId", value: "null"),
+                    metadatum.ParallelCorpus.ParallelCorpusId.TargetTokenizedCorpusId
+                        ?? throw new InvalidStateEngineException(name: "metadatum, metadatum.ParallelCorpus, or ParallelCorpusId", value: "null")
+                };
+            }
         }
     }
 }

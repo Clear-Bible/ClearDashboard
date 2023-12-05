@@ -20,6 +20,9 @@ using ClearDashboard.Wpf.Application.Collections.Notes;
 using Token = ClearBible.Engine.Corpora.Token;
 using TokenId = ClearBible.Engine.Corpora.TokenId;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+using SIL.Scripture;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -37,7 +40,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<NoteMouseEnterMessage>,
         IHandle<NoteMouseLeaveMessage>,
         IHandle<TokensJoinedMessage>,
-        IHandle<TokenUnjoinedMessage>
+        IHandle<TokenUnjoinedMessage>,
+        IHandle<TokenSplitMessage>
     {
         protected NoteManager NoteManager { get; }
         protected IMediator Mediator { get; }
@@ -66,6 +70,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 NotifyOfPropertyChange(nameof(IsTargetRtl));
             }
         }
+
+        private BindableCollection<ExternalNote> _externalNotes = new();
+        public BindableCollection<ExternalNote> ExternalNotes
+        {
+            get => _externalNotes;
+            set
+            {
+                Set(ref _externalNotes, value);
+                NotifyOfPropertyChange(nameof(ExternalNotes));
+                NotifyOfPropertyChange(nameof(HasExternalNotes));
+            }
+        }
+
+        public bool HasExternalNotes => ExternalNotes.Count() > 0;
+
+        public void NotifyExternalNotesItemsChanged()
+        {
+            NotifyOfPropertyChange(nameof(ExternalNotes));
+            NotifyOfPropertyChange(nameof(HasExternalNotes));
+        }
+        public TokenizedTextCorpus? SourceCorpus => SourceTokenMap?.Corpus;
+        public TokenizedTextCorpus? TargetCorpus => TargetTokenMap?.Corpus;
 
         /// <summary>
         /// Gets the <see cref="ParallelCorpusId"/> for the verse.
@@ -107,6 +133,105 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return null;
         }
 
+        private class VerseRefVerseNoVersificationEqualityComparer : IEqualityComparer<VerseRef>
+        {
+            public bool Equals(VerseRef x, VerseRef y)
+            {
+                return x.BookNum == y.BookNum
+                    && x.ChapterNum == y.ChapterNum
+                    && x.VerseNum == y.VerseNum;
+            }
+            public int GetHashCode([DisallowNull] VerseRef obj) => obj.BookNum ^ obj.ChapterNum ^ obj.VerseNum;
+        }
+        private class TokenIdVerseEqualityComparer : IEqualityComparer<TokenId>
+        {
+            public bool Equals(TokenId? x, TokenId? y)
+            {
+                if (ReferenceEquals(x, y))
+                    return true;
+
+                if (y is null || x is null)
+                    return false;
+
+                return x.BookNumber == y.BookNumber
+                    && x.ChapterNumber == y.ChapterNumber
+                    && x.VerseNumber == y.VerseNumber;
+            }
+
+            public int GetHashCode([DisallowNull] TokenId obj) => obj.BookNumber ^ obj.ChapterNumber ^ obj.VerseNumber;
+        }
+        public virtual void SetExternalNotes(List<List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>> tokenizedCorpusNotes)
+        {
+            //update tokens explicitly associated with external notes
+            SetExternalNotesOnTokenDisplayViewModels(SourceTokenDisplayViewModels, tokenizedCorpusNotes.First());
+            if (tokenizedCorpusNotes.Count() > 1)
+                SetExternalNotesOnTokenDisplayViewModels(TargetTokenDisplayViewModels, tokenizedCorpusNotes.Skip(1).First());
+
+            // update verse with external notes associated with verse but not explicitly with tokens in verse.
+            TokenIdVerseEqualityComparer tokenIdVerseEqualityComparer = new();
+            var uniqueVersesRepresentedByTokens = SourceTokenDisplayViewModels
+                .Select(tdvm => tdvm.Token.TokenId)
+                .Distinct(tokenIdVerseEqualityComparer)
+                .Select(tid => new VerseRef(tid.BookNumber, tid.ChapterNumber, tid.VerseNumber))
+                .ToList();
+
+            uniqueVersesRepresentedByTokens.AddRange(TargetTokenDisplayViewModels
+                .Select(tdvm => tdvm.Token.TokenId)
+                .Distinct(tokenIdVerseEqualityComparer)
+                .Select(tid => new VerseRef(tid.BookNumber, tid.ChapterNumber, tid.VerseNumber)));
+
+
+            VerseRefVerseNoVersificationEqualityComparer verseRefNoVersificationComparer = new();
+            var externalNotes = tokenizedCorpusNotes
+                .SelectMany(tcn => tcn)
+                .Where(noteInfos => uniqueVersesRepresentedByTokens.Contains(noteInfos.verseRef))
+                .Where(noteInfos => noteInfos.tokenIds == null || noteInfos.tokenIds.Count() == 0)
+                .Select(noteInfo => noteInfo.externalNote)
+                .ToList();
+
+            bool notifyVerseDisplayViewModelExternalNotesItemsChanged = false;
+            if (ExternalNotes.Count() > 0)
+            {
+                ExternalNotes.Clear();
+                notifyVerseDisplayViewModelExternalNotesItemsChanged = true;
+            }
+
+            if (externalNotes != null && externalNotes.Count() > 0)
+            {
+                ExternalNotes.AddRange(externalNotes);
+                notifyVerseDisplayViewModelExternalNotesItemsChanged = true;
+            }
+
+            if (notifyVerseDisplayViewModelExternalNotesItemsChanged)
+                NotifyExternalNotesItemsChanged();
+
+        }
+        protected void SetExternalNotesOnTokenDisplayViewModels(TokenDisplayViewModelCollection tokenDisplayViewModels, List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)> noteInfos)
+        {
+            foreach( var tokenDisplayViewModel in tokenDisplayViewModels)
+            {
+                var externalNotes = noteInfos
+                    .Where(noteInfo => noteInfo.tokenIds?.Contains(tokenDisplayViewModel.Token.TokenId) ?? false)
+                    .Select(noteInfo => noteInfo.externalNote)
+                    .ToList();
+
+                bool notifyTokenViewModelExternalNotesItemsChanged = false;
+                if (tokenDisplayViewModel.ExternalNotes.Count() > 0)
+                {
+                    tokenDisplayViewModel.ExternalNotes.Clear();
+                    notifyTokenViewModelExternalNotesItemsChanged = true;
+                }
+
+                if (externalNotes != null && externalNotes.Count() > 0)
+                {
+                    tokenDisplayViewModel.ExternalNotes.AddRange(externalNotes);
+                    notifyTokenViewModelExternalNotesItemsChanged = true;
+                }
+
+                if (notifyTokenViewModelExternalNotesItemsChanged)
+                    tokenDisplayViewModel.NotifyExternalNotesItemsChanged();
+            }
+        }
         protected virtual void HighlightSourceTokens(bool isSource, TokenId tokenId)
         {
             var sourceTokens = GetSourceTokens(isSource, tokenId);
@@ -335,6 +460,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await Task.CompletedTask;
         }
 
+        public async Task HandleAsync(TokensJoinedMessage message, CancellationToken cancellationToken)
+        {
+            MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = message.CompositeToken);
+            SourceTokenMap?.AddCompositeToken(message.CompositeToken);
+            TargetTokenMap?.AddCompositeToken(message.CompositeToken);
+            await RefreshTranslationsAsync(message.Tokens, message.CompositeToken);
+        }        
+        
+        public async Task HandleAsync(TokenSplitMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var kvp in message.SplitCompositeTokensByIncomingTokenId)
+            {
+                var compositeToken = kvp.Value.FirstOrDefault();    // For now, the user can only split one token at a time.
+                if (compositeToken != null)
+                {
+                    SourceTokenMap?.ReplaceToken(kvp.Key, compositeToken);
+                    TargetTokenMap?.ReplaceToken(kvp.Key, compositeToken);
+                }
+            }
+            await BuildTokenDisplayViewModelsAsync();
+            await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage(), cancellationToken);
+
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(TokenUnjoinedMessage message, CancellationToken cancellationToken)
+        {
+            MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = null);
+            SourceTokenMap?.RemoveCompositeToken(message.CompositeToken, message.Tokens);
+            TargetTokenMap?.RemoveCompositeToken(message.CompositeToken, message.Tokens);
+            await RefreshTranslationsAsync(message.Tokens);
+        }
+
+        protected virtual async Task RefreshTranslationsAsync(TokenCollection tokens, CompositeToken? compositeToken = null)
+        {
+            await Task.CompletedTask;
+        }
         protected virtual async Task InitializeAsync()
         {
             await BuildTokenDisplayViewModelsAsync();
@@ -349,25 +511,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             Logger = logger;
 
             EventAggregator.SubscribeOnUIThread(this);
-        }
-
-        public async Task HandleAsync(TokensJoinedMessage message, CancellationToken cancellationToken)
-        {
-            MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = message.CompositeToken);
-            SourceTokenMap!.AddCompositeToken(message.CompositeToken);
-            await RefreshTranslationsAsync(message.Tokens, message.CompositeToken);
-        }
-
-        public async Task HandleAsync(TokenUnjoinedMessage message, CancellationToken cancellationToken)
-        {
-            MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = null);
-            SourceTokenMap!.RemoveCompositeToken(message.CompositeToken, message.Tokens);
-            await RefreshTranslationsAsync(message.Tokens);
-        }
-
-        protected virtual async Task RefreshTranslationsAsync(TokenCollection tokens, CompositeToken? compositeToken = null)
-        {
-            await Task.CompletedTask;
         }
     }
 }

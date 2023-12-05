@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>Selected Books</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>Select USFM Books to Send</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>Select Paratext Project</value>
   </data>
@@ -556,6 +559,9 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>Created By</value>
   </data>
+  <data name="Current" xml:space="preserve">
+    <value>Current</value>
+  </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
   </data>
@@ -709,6 +715,9 @@
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>Paragraph Mode</value>
   </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>Show External Notes</value>
+  </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>Source Text:</value>
   </data>
@@ -833,10 +842,10 @@
     <value>Add a semantic domain</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>Apply Translation</value>
+    <value>Apply Gloss</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Cancel Translation</value>
+    <value>Cancel Gloss</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
     <value>Change all unset occurrences</value>
@@ -863,7 +872,7 @@
     <value>Enter a new translation for</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>Enter a new translation</value>
+    <value>Enter a new gloss</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lemma</value>
@@ -884,7 +893,7 @@
     <value>Meanings:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>New Translation</value>
+    <value>New Gloss</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Remove this semantic domain from this meaning</value>
@@ -893,7 +902,7 @@
     <value>Remove this lexical form from this lemma</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>Set a translation for</value>
+    <value>Set a gloss for</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>And</value>
@@ -903,6 +912,12 @@
   </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Edit</value>
+  </data>
+  <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>Add '{0}' as form</value>
+  </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>Add '{0}' as translation to first meaning</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Find All</value>
@@ -918,6 +933,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>Loading data...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>An unexpected error occurred while loading data.  {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>Matching</value>
@@ -1570,11 +1591,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Dictionary</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>External Notes Editor</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>Fit the entire content area to the viewport</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>Fit all nodes to the viewport</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>Get Latest External Notes</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Get Latest from Paratext</value>
@@ -2104,6 +2131,9 @@
   <data name="Save" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>Enable Experimental AQUA Plugin</value>
   </data>
@@ -2130,6 +2160,12 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Enable Alignment Editing</value>
+  </data>
+  <data name="Settings_EnableLexiconImport" xml:space="preserve">
+    <value>Enable Lexicon Import</value>
+  </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>Enable Token Splitting</value>
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Experimental</value>
@@ -2251,6 +2287,9 @@
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Send</value>
   </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>Send USFM Files</value>
+  </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>Suggestion</value>
   </data>
@@ -2295,6 +2334,9 @@
   </data>
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>Set Gloss</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Update</value>

@@ -64,6 +64,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private CancellationToken? _cancellationToken;
         private readonly ProjectDbContextFactory _projectNameDbContextFactory;
+        private readonly SystemPowerModes _systemPowerModes;
 
         private readonly string _createAction;
         private readonly string _backAction;
@@ -152,12 +153,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             IMediator mediator,
             ILifetimeScope? lifetimeScope,
             ILocalizationService localizationService,
-            ProjectDbContextFactory projectNameDbContextFactory)
+            ProjectDbContextFactory projectNameDbContextFactory,
+            SystemPowerModes systemPowerModes)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             _backgroundTasksViewModel = backgroundTasksViewModel;
             _processRunner = processRunner;
             _projectNameDbContextFactory = projectNameDbContextFactory;
+            _systemPowerModes = systemPowerModes;
 
             _createAction = LocalizationService!.Get("Create");
             _backAction = LocalizationService!.Get("Back");
@@ -204,6 +207,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
         protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             await BackgroundTasksViewModel.DeactivateAsync(true);
+
+            await ProjectDesignSurfaceViewModel.DeactivateAsync(close);
+
             await base.OnDeactivateAsync(close, cancellationToken);
         }
 
@@ -304,8 +310,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
                 cancellationToken?.ThrowIfCancellationRequested();
 
+                if (Properties.Settings.Default.EnablePowerModes && _systemPowerModes.IsLaptop)
+                {
+                    await _systemPowerModes.TurnOnHighPerformanceMode();
+                }
+                
                 _runningTask = _processRunner.RunRegisteredTasks(stopwatch);
                 await _runningTask;
+
+                var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+                if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
+                {
+                    // shut down high performance mode
+                    await _systemPowerModes.TurnOffHighPerformanceMode();
+                }
 
 
                 await UpdateDesignSurfaceData();
@@ -345,7 +363,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
                 _cancellationToken = null;
 
-                //ProgressIndicatorVisibility = Visibility.Hidden;
                 CanMoveForwards = false;
                 CanMoveBackwards = false;
 
@@ -353,8 +370,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
 
                 ProjectManager!.PauseDenormalization = false;
 
-                await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(ProjectManager!.CurrentDashboardProject.ProjectName));
+                var projectName = ProjectManager!.CurrentDashboardProject.ProjectName;
+                var projectPath = ProjectManager!.CurrentDashboardProject.FullFilePath;
+                ProjectManager.CurrentDashboardProject = new();
 
+                await EventAggregator.PublishOnUIThreadAsync(new DashboardProjectNameMessage(projectName));
                 stopwatch.Stop();
 
                 // turn back on the ability to go into screen saver mode

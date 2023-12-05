@@ -1,14 +1,17 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
 namespace ClearDashboard.Wpf.Application.UserControls.Notes
@@ -16,7 +19,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
     /// <summary>
     /// A control for displaying a collection of <see cref="NotesLabel"/> values.
     /// </summary>
-    public partial class LabelsDisplay : INotifyPropertyChanged
+    public partial class LabelsDisplay : INotifyPropertyChanged, IHandle<NoteLabelAttachedMessage>, IHandle<NoteLabelDetachedMessage>
     {
         #region Static Routed Events
 
@@ -133,14 +136,14 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             return true;
         }
 
-        private NotesLabel _currentLabel;
+        private NotesLabel? _currentLabel;
         private string? _currentLabelText;
         private string? _currentLabelTemplate;
 
         /// <summary>
         /// Gets or sets the label being edited.
         /// </summary>
-        public NotesLabel CurrentLabel
+        public NotesLabel? CurrentLabel
         {
             get => _currentLabel;
             set
@@ -178,6 +181,11 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="EventAggregator"/> to be used for participating in the Caliburn Micro eventing system.
+        /// </summary>
+        public static IEventAggregator? EventAggregator { get; set; }
+
         private void OnEditLabelClicked(object sender, RoutedEventArgs e)
         {
             if (sender is MenuItem item)
@@ -193,9 +201,9 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         private void OnEditLabelConfirmed(object sender, RoutedEventArgs e)
         {
-            if (CurrentLabel.TemplateText != CurrentLabelTemplate)
+            if (CurrentLabel != null && CurrentLabel?.TemplateText != CurrentLabelTemplate)
             {
-                CurrentLabel.TemplateText = CurrentLabelTemplate;
+                CurrentLabel!.TemplateText = CurrentLabelTemplate;
                 RaiseLabelEvent(LabelUpdatedEvent, CurrentLabel);
             }
             EditLabelTextPopup.IsOpen = false;
@@ -204,6 +212,31 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         private void OnEditLabelCancelled(object sender, RoutedEventArgs e)
         {
             EditLabelTextPopup.IsOpen = false;
+        }
+
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            Unloaded -= OnUnloaded;
+            EventAggregator?.Unsubscribe(this);
+        }
+
+        private void RefreshLabels()
+        {
+            OnPropertyChanged(nameof(Labels));
+            Labels.Refresh();
+        }
+
+        public async Task HandleAsync(NoteLabelDetachedMessage message, CancellationToken cancellationToken)
+        {
+            Execute.OnUIThread(RefreshLabels);
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(NoteLabelAttachedMessage message, CancellationToken cancellationToken)
+        {
+            Execute.OnUIThread(RefreshLabels);
+
+            await Task.CompletedTask;
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -350,6 +383,9 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         public LabelsDisplay()
         {
             InitializeComponent();
+
+            Unloaded += OnUnloaded;
+            EventAggregator?.SubscribeOnUIThread(this);
         }
     }
 }

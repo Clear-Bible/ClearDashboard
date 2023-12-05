@@ -93,8 +93,8 @@
             <!--  The 'ConnectorItem' or anchor point for the connector.  -->
             <controls:ConnectorItem
                 Grid.Column="0"
-                Width="15"
-                Height="15"
+                Width="25"
+                Height="25"
                 Cursor="Hand" />
 
             <!--  The name of the connector.  -->
@@ -155,8 +155,8 @@
 
             <Grid
                 Grid.Column="1"
-                Width="15"
-                Height="15"
+                Width="25"
+                Height="25"
                 Cursor="Hand">
 
                 <!--  The 'ConnectorItem' or anchor point for the connector.  -->
@@ -164,6 +164,8 @@
 
                 <!--  Show a black dot at the start of the arrow when connected.  -->
                 <Ellipse
+                    Width="12"
+                    Height="12"
                     Margin="3"
                     Fill="{StaticResource ConnectionBrush}"
                     IsHitTestVisible="False"

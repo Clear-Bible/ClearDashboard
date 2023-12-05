@@ -30,5 +30,17 @@ namespace ClearDashboard.Wpf.Application.Helpers
             Settings.Default.IsAlignmentEditingEnabled = value;
             Settings.Default.Save();
         }
+
+
+        public static bool GetEnabledLexiconImport()
+        {
+            return Settings.Default.IsLexiconImportEnabled;
+        }
+
+        public static void SaveEnabledLexiconImport(bool value)
+        {
+            Settings.Default.IsLexiconImportEnabled = value;
+            Settings.Default.Save();
+        }
     }
 }

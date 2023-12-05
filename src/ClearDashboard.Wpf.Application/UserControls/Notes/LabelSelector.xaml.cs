@@ -6,9 +6,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.Events.Notes;
+using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
 namespace ClearDashboard.Wpf.Application.UserControls.Notes
@@ -41,6 +44,11 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         #endregion
         #region Static Dependency Properties
 
+        /// <summary>
+        /// Identifies the LabelGroup dependency property.
+        /// </summary>
+        public static readonly DependencyProperty LabelGroupProperty = DependencyProperty.Register(nameof(LabelGroup), typeof(LabelGroupViewModel), typeof(LabelSelector));
+        
         /// <summary>
         /// Identifies the LabelSuggestions dependency property.
         /// </summary>
@@ -78,7 +86,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             }
         }
 
-        private void CloseTextBox()
+        public void CloseTextBox()
         {
             LabelTextBox.Text = string.Empty;
             LabelSuggestionListBox.SelectedIndex = -1;
@@ -137,6 +145,17 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             RaiseLabelEvent(LabelDeletedEvent, (sender as Button).DataContext as NotesLabel);
         }
 
+        private void OnToolTipOpening(object sender, ToolTipEventArgs e)
+        {
+            var button = (FrameworkElement) sender;
+            var label = button.DataContext as NotesLabel;
+
+            var tooltipText = LabelGroup.IsNoneLabelGroup
+                ? $"{LocalizationService!["Notes_LabelTooltipDelete"]} '{label!.Text}'"
+                : $"{LocalizationService!["Notes_LabelTooltipDisassociate"]} '{label!.Text}' {LocalizationService["Notes_LabelFromLabelGroup"]} '{LabelGroup.Name}'";
+            button.ToolTip = new ToolTip { Content = new TextBlock { Text = tooltipText } };
+        }
+
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
@@ -146,6 +165,19 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         #endregion
         #region Public properties
 
+        /// <summary>
+        /// Gets or sets the <see cref="ILocalizationService"/> to be used for participating in the Caliburn Micro eventing system.
+        /// </summary>
+        public static ILocalizationService? LocalizationService { get; set; }
+
+        /// <summary>
+        /// Gets or sets the currently-selected <see cref="LabelGroupViewModel"/>.
+        /// </summary>
+        public LabelGroupViewModel LabelGroup
+        {
+            get => (LabelGroupViewModel)GetValue(LabelGroupProperty);
+            set => SetValue(LabelGroupProperty, value);
+        }
 
         /// <summary>
         /// Gets or sets a collection of <see cref="Label"/> objects for auto selection in the control.
@@ -204,7 +236,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             LabelSuggestionListBox.Visibility = Visibility.Visible;
         }
 
-        private void CloseSuggestionPopup()
+        public void CloseSuggestionPopup()
         {
             LabelPopup.Visibility = Visibility.Collapsed;
             LabelPopup.IsOpen = false;

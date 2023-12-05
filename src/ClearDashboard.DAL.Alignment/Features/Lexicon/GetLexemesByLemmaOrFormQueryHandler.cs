@@ -41,6 +41,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                         .ThenInclude(sda => sda.SemanticDomain)
                             .ThenInclude(sd => sd!.User)
                 .Include(e => e.Forms)
+                    .ThenInclude(e => e.User)
                 .Include(e => e.User)
                 .Where(e =>
                     (e.Lemma == request.LemmaOrForm || e.Forms.Any(f => f.Text == request.LemmaOrForm)) &&

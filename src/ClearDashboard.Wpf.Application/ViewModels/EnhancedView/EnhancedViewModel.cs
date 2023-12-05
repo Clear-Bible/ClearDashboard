@@ -34,7 +34,10 @@ using Uri = System.Uri;
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     using System.Linq;  //  needed to move this into the namespace to allow the .Reverse() to use this over the SIL.Linq
+    using ClearDashboard.DAL.Alignment;
+    using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
     using ClearDashboard.Wpf.Application.Events.Notes;
+    using Paratext.PluginInterfaces;
 
     public class EnhancedViewModel : VerseAwareConductorOneActive, IEnhancedViewModel, IPaneViewModel,
         IHandle<VerseSelectedMessage>,
@@ -46,7 +49,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<HighlightTokensMessage>,
         IHandle<UnhighlightTokensMessage>,
         IHandle<ParallelCorpusDeletedMessage>,
-        IHandle<CorpusDeletedMessage>
+        IHandle<CorpusDeletedMessage>,
+        IHandle<ExternalNotesUpdatedMessage>
     {
         #region Commands
 
@@ -102,6 +106,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         protected IEnhancedViewManager EnhancedViewManager { get; }
         private VerseManager VerseManager { get; }
         public SelectionManager SelectionManager { get; }
+        public IWindowManager WindowManager { get; }
 
         private IEnumerable<VerseAwareEnhancedViewItemViewModel> VerseAwareEnhancedViewItemViewModels => Items.Where(item => item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>();
 
@@ -368,7 +373,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             SelectionManager selectionManager, 
             IEventAggregator? eventAggregator,
             IMediator mediator,
-            ILifetimeScope? lifetimeScope, ILocalizationService localizationService) :
+            ILifetimeScope? lifetimeScope, ILocalizationService localizationService, IWindowManager windowManager) :
             base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
 #pragma warning restore CS8618
         {
@@ -376,6 +381,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             NoteManager = noteManager;
             VerseManager = verseManager;
             SelectionManager = selectionManager;
+            WindowManager = windowManager;
             EnhancedViewManager = enhancedViewManager;
             
             Title = "⳼ " + LocalizationService!.Get("Windows_EnhancedView");
@@ -390,9 +396,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             TokenDisplay.EventAggregator = eventAggregator;
             VerseDisplay.EventAggregator = eventAggregator;
             LabelsEditor.EventAggregator = eventAggregator;
-            PaneId = Guid.NewGuid();
+            LabelsDisplay.EventAggregator = eventAggregator;
 
-            
+            LabelSelector.LocalizationService = localizationService;
+
+            PaneId = Guid.NewGuid();
         }
 
         public async Task Initialize(EnhancedViewLayout enhancedViewLayout, EnhancedViewItemMetadatum? metadatum, CancellationToken cancellationToken)
@@ -404,9 +412,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             DisplayName = enhancedViewLayout.Title;
             Title = enhancedViewLayout.Title;
             VerseOffsetRange = enhancedViewLayout.VerseOffset;
-            BcvDictionary = ProjectManager!.CurrentParatextProject.BcvDictionary;
+
+            if (ProjectManager!.CurrentParatextProject is not null)
+            {
+                BcvDictionary = ProjectManager!.CurrentParatextProject.BcvDictionary;
+            }
+            else
+            {
+                // check to see if it has not already been computed
+                if (!BcvDictionary.Any())
+                {
+                    BcvDictionary = await GenerateBcvFromDatabase();
+                }
+            }
+            
             ParatextSync = enhancedViewLayout.ParatextSync;
-            if (ParatextSync)
+            if (ParatextSync && ProjectManager.CurrentVerse is not null)
             {
                 CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
                 VerseChange = ProjectManager.CurrentVerse;
@@ -432,6 +453,50 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EventAggregator.SubscribeOnPublishedThread(this);
 
             await Task.CompletedTask;
+        }
+
+        private async Task<Dictionary<string, string>> GenerateBcvFromDatabase()
+        {
+            // This is a hack to get the BcvDictionary to be populated when there is no Paratext project loaded.
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator);
+
+            if (topLevelProjectIds.CorpusIds is null)
+            {
+                return new Dictionary<string, string>();
+            }
+
+            // get the first project id
+            var firstProjectId = topLevelProjectIds.CorpusIds.FirstOrDefault(t => t.CorpusType == "Standard");
+
+            if (firstProjectId is null)
+            {
+                return new Dictionary<string, string>();
+            }
+
+            var results =
+                await ExecuteRequest(
+                    new GetProjectBBBCCCVVVQuery(ProjectManager.CurrentDashboardProject.FullFilePath, firstProjectId.Id),
+                    CancellationToken.None);
+
+            var bcvDictionary = new Dictionary<string, string>();
+            if (results.Success)
+            {
+                var data = results.Data;
+                foreach (var verse in data)
+                {
+                    bcvDictionary.Add(verse, verse);
+                }
+            }
+
+            if (ProjectManager!.CurrentParatextProject is null)
+            {
+                ProjectManager.CurrentParatextProject = new ParatextProject();
+                ProjectManager.CurrentParatextProject.Language = new ScrLanguageWrapper();
+            }
+
+            ProjectManager!.CurrentParatextProject.BcvDictionary = bcvDictionary;
+
+            return bcvDictionary;
         }
 
         public async Task AddItem(EnhancedViewItemMetadatum item, CancellationToken cancellationToken)
@@ -532,25 +597,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
    
 
 
-        protected override void OnViewAttached(object view, object context)
+        protected override async void OnViewAttached(object view, object context)
         {
-            // grab the dictionary of all the verse lookups
-            if (ProjectManager?.CurrentParatextProject is not null)
+            if (ProjectManager?.CurrentParatextProject is null)
             {
-                BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
-
-                var books = BcvDictionary.Values.GroupBy(b => b.Substring(0, 3))
-                    .Select(g => g.First())
-                    .ToList();
-
-                foreach (var bookName in books.Select(book => book.Substring(0, 3)).Select(BookChapterVerseViewModel.GetShortBookNameFromBookNum))
-                {
-                    CurrentBcv.BibleBookList?.Add(bookName);
-                }
-            }
+                BcvDictionary = await GenerateBcvFromDatabase();
+            } 
             else
             {
-                BcvDictionary = new Dictionary<string, string>();
+                // grab the dictionary of all the verse lookups
+                BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+            }
+
+            var books = BcvDictionary.Values.GroupBy(b => b.Substring(0, 3))
+                .Select(g => g.First())
+                .ToList();
+
+            foreach (var bookName in books.Select(book => book.Substring(0, 3)).Select(BookChapterVerseViewModel.GetShortBookNameFromBookNum))
+            {
+                CurrentBcv.BibleBookList?.Add(bookName);
             }
 
             CurrentBcv.SetVerseFromId(ProjectManager!.CurrentVerse);
@@ -669,7 +734,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             else
             {
-                BcvDictionary = new Dictionary<string, string>();
+                BcvDictionary = await GenerateBcvFromDatabase();
             }
 
             await Task.CompletedTask;
@@ -733,6 +798,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        public async Task HandleAsync(ExternalNotesUpdatedMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var enhancedViewItemViewModel in Items.Where(item => item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>())
+            {
+                await enhancedViewItemViewModel.GetData(cancellationToken);
+            }
+        }
+
         public Task HandleAsync(ParallelCorpusDeletedMessage message, CancellationToken cancellationToken)
         {
             bool deleteHappened = false;
@@ -793,6 +866,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async void TokenClicked(object sender, TokenEventArgs e)
         {
+
+        }
+
+        public async void TokenLeftButtonDown(object sender, TokenEventArgs e)
+        {
             if (e.IsShiftPressed && e.TokenDisplay.VerseDisplay is AlignmentDisplayViewModel alignmentDisplayViewModel)
             {
                 if (SelectionManager.AnySourceTokens && SelectionManager.AnyTargetTokens)
@@ -806,7 +884,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 {
                     Logger!.LogInformation("There are no source tokens, so skipping the call to add an alignment.");
                 }
-                
+
             }
             else
             {
@@ -873,6 +951,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public async Task TokenJoinLanguagePairAsync(TokenEventArgs e)
         {
             await VerseManager.JoinTokensAsync(e.SelectedTokens.TokenCollection, e.TokenDisplay.VerseDisplay.ParallelCorpusId);
+        }
+
+        public void TokenSplit(object sender, TokenEventArgs e)
+        {
+            Task.Run(() => TokenSplitAsync(e).GetAwaiter());
+        }
+
+        public async Task TokenSplitAsync(TokenEventArgs args)
+        {
+            async Task ShowSplitTokenDialog()
+            {
+                var item = ActiveItem as VerseAwareEnhancedViewItemViewModel;
+                var dialogViewModel = LifetimeScope!.Resolve<SplitTokenDialogViewModel>();
+                dialogViewModel.TokenDisplay = args.TokenDisplay;
+                dialogViewModel.TokenFontFamily = item.SourceFontFamily;
+                _ = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
+            }
+            await System.Windows.Application.Current.Dispatcher.InvokeAsync(ShowSplitTokenDialog);
         }
 
         public void TokenUnjoin(object sender, TokenEventArgs e)
@@ -979,6 +1075,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             await Execute.OnUIThreadAsync(async () =>
             {
+                //TODO This is a TEMPORAY FIX just for the hotfix, this needs to be resolved by ANDY in the longterm
+                e.Note.Labels.Clear();
                 await NoteManager.AddNoteAsync(e.Note, e.EntityIds);
                 NotifyOfPropertyChange(() => Items);
             });
@@ -1105,8 +1203,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             if (e.Note.NoteId != null)
             {
                 await NoteManager.AssociateNoteLabelAsync(e.Note, e.Label);
+                Message = $"Label '{e.Label.Text}' selected for note";
             }
-            Message = $"Label '{e.Label.Text}' selected for note";
+
+            if (e.LabelGroup != null && !e.LabelGroup.Labels.ContainsMatchingLabel(e.Label.Text))
+            {
+                await NoteManager.AssociateLabelToLabelGroupAsync(e.LabelGroup, e.Label);
+                Message += $" and associated to label group {e.LabelGroup.Name}";
+            }
         }
 
         public void LabelRemoved(object sender, LabelEventArgs e)

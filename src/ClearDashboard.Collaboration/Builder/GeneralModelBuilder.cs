@@ -170,11 +170,11 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
         {
             if (kvp.Value.type == typeof(string))
             {
-                generalModel.Add(kvp.Key, (string?)kvp.Value.value);
+                generalModel.Add(kvp.Key, (string?)kvp.Value.value, kvp.Value.type);
             }
             else if (kvp.Value.type.IsValueType)
             {
-                generalModel.Add(kvp.Key, (ValueType?)kvp.Value.value);
+                generalModel.Add(kvp.Key, (ValueType?)kvp.Value.value, kvp.Value.type);
             }
             else if (kvp.Value.type.IsAssignableTo(typeof(ModelRef)))
             {
@@ -264,7 +264,8 @@ public abstract class GeneralModelBuilder : IModelBuilder
             //Type modelType when modelType == typeof(GeneralModel<Models.TranslationSet>) => new TranslationSetBuilder(),
             Type modelType when modelType == typeof(GeneralModel<Models.Lexicon_Lexeme>) => new LexiconBuilder(),
             Type modelType when modelType == typeof(GeneralModel<Models.Lexicon_SemanticDomain>) => new SemanticDomainBuilder(),
-            Type modelType when modelType == typeof(GeneralModel<Models.TokenComposite>) => new TokenBuilder(),
+            Type modelType when modelType == typeof(GeneralModel<Models.TokenComposite>) => new TokenCompositeBuilder(),
+            Type modelType when modelType == typeof(GeneralModel<Models.Token>) => new TokenBuilder(),
             _ => BuildDefaultModelBuilder(generalModelType)
 //            _ => throw new ArgumentOutOfRangeException(generalModelType.ShortDisplayName(), $"No IModelBuilder found for type argument")
 

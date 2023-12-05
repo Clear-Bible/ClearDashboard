@@ -23,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,10 +40,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         IHandle<NoteUpdatedMessage>,
         IHandle<NoteLabelAttachedMessage>,
         IHandle<NoteLabelDetachedMessage>,
-        IHandle<TokenizedCorpusUpdatedMessage>,
-        IHandle<ReloadProjectMessage>
+        IHandle<TokenizedCorpusUpdatedMessage>, IHandle<ReloadNotesListMessage>
     {
         #region Member Variables   
+
+        private Guid Guid = Guid.NewGuid();
 
         private const string TaskName = "Notes";
         private const int ToleranceContainsFuzzyAssociationsDescriptions = 1;
@@ -359,16 +361,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         {
             if (obj is NoteViewModel noteViewModel)
             {
-                var associationDescriptions = noteViewModel.Associations
-                    .Select(a => a.Description)
-                    .Aggregate((all, next) => $"{all} {next}");
+                var associationDescriptions = noteViewModel.AssociationVerse;
 
                 if (
                     (FilterStatus.Equals(FilterNoteStatusEnum.Any) || FilterStatus.ToString().Equals(noteViewModel.NoteStatus.ToString())) &&
                     (FilterUsers.Count() == 0 || FilterUsers.Contains(noteViewModel.ModifiedBy)) &&
                     (FilterLabels.Count() == 0 || FilterLabels.Intersect(noteViewModel.Labels).Any()) &&
-                    associationDescriptions.ContainsFuzzy(FilterAssociationsDescriptionText, ToleranceContainsFuzzyAssociationsDescriptions) &&
-                    noteViewModel.Text.ContainsFuzzy(FilterNoteText, ToleranceContainsFuzzyNoteText)
+                    associationDescriptions.ToUpper().ContainsFuzzy(FilterAssociationsDescriptionText.ToUpper(), ToleranceContainsFuzzyAssociationsDescriptions, 7) &&
+                    noteViewModel.Text.ContainsFuzzy(FilterNoteText, ToleranceContainsFuzzyNoteText, 3)
                 )
                 {
                     return true;
@@ -441,6 +441,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         {
             try
             {
+                //Debug.WriteLine($"GetNotesAndSetNoteViewModelsAsync GUID: {Guid}");
 
                 var selectedNoteId = SelectedNoteViewModel?.NoteId ?? null;
 
@@ -485,7 +486,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
                         FilterLabelsChoices.Clear();
                         noteVms
                             .SelectMany(nvm => nvm.Labels)
-                            .Distinct()
+                            .GroupBy(l=>l.Text)
+                            .Select(l=>l.First())
                             .OrderBy(l => l.Text)
                             .Select(l =>
                             {
@@ -687,24 +689,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await GetAllNotesAndSetNoteViewModelsAsync();
         }
 
-        public async Task HandleAsync(ReloadProjectMessage message, CancellationToken cancellationToken)
+
+        //public async Task HandleAsync(ReloadProjectMessage message, CancellationToken cancellationToken)
+        //{
+        //    await GetAllNotesAndSetNoteViewModelsAsync(true);
+        //}
+
+        public async Task HandleAsync(ReloadNotesListMessage message, CancellationToken cancellationToken)
         {
             await GetAllNotesAndSetNoteViewModelsAsync(true);
         }
 
+
         #endregion // Methods
+
+
+
     }
 
     public static class Extensions
     {
-        public static bool ContainsFuzzy(this string? str, string input, int tolerance)
+        public static bool ContainsFuzzy(this string? str, string input, int tolerance, int minCharsNeededForFuzzy)
         {
             if (str == null)
                 throw new InvalidParameterEngineException(name: "str", value: "null");
 
             if (input.Length == 0)
                 return true;
-            if (input.Length > 3)
+            if (input.Length > minCharsNeededForFuzzy)
             {
                 //see https://github.com/kdjones/fuzzystring
                 return str.LongestCommonSubsequence(input).Length

@@ -3,7 +3,6 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using ClearDashboard.WebApiParatextPlugin.Features.AllProjects;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Paratext.PluginInterfaces;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,9 +18,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
         }
 
         [HttpPost]
-        public async Task<RequestResult<IReadOnlyList<IProjectNote>>> GetAsync([FromBody] GetNotesQuery command)
+        public async Task<RequestResult<IReadOnlyList<ExternalNote>>> GetAsync([FromBody] GetNotesQuery command)
         {
-            var result = await ExecuteRequestAsync<RequestResult<IReadOnlyList<IProjectNote>>, IReadOnlyList<IProjectNote>>(command, CancellationToken.None);
+            var result = await ExecuteRequestAsync<RequestResult<IReadOnlyList<ExternalNote>>, IReadOnlyList<ExternalNote>>(command, CancellationToken.None);
             return result;
         }
     }

@@ -1,5 +1,64 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -153,6 +212,9 @@
   </data>
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>Sách được chọn</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>Chọn Sách USFM để gửi</value>
   </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>Chọn Dự án Paratext</value>
@@ -428,7 +490,7 @@
     <value>Không chấp thuận</value>
   </data>
   <data name="BulkAlignmentReview_DisapproveSelected" xml:space="preserve">
-    <value>Không chấp thuận được chọn</value>
+    <value>Đã chọn không từ chối</value>
   </data>
   <data name="BulkAlignmentReview_Invalid" xml:space="preserve">
     <value>Không hợp lệ</value>
@@ -515,7 +577,7 @@
     <value>Người dùng cộng tác có sẵn:</value>
   </data>
   <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
-    <value>Quản lý các dự án cộng tác</value>
+    <value>Quản lý các dự án hợp tác</value>
   </data>
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Người dùng dự án hiện tại:</value>
@@ -555,6 +617,9 @@
   </data>
   <data name="CreatedBy" xml:space="preserve">
     <value>Được tạo bởi</value>
+  </data>
+  <data name="Current" xml:space="preserve">
+    <value>Hiện hành</value>
   </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
@@ -665,7 +730,7 @@
     <value>Áp dụng chia tách cho các phiên bản mã thông báo khác</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>Chọn WHERE để chia mã thông báo:</value>
+    <value>Chọn nơi để chia mã thông báo:</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>Chia ba chiều</value>
@@ -708,6 +773,9 @@
   </data>
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>Chế độ đoạn văn</value>
+  </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>Hiển thị ghi chú bên ngoài</value>
   </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>Nguồn văn bản:</value>
@@ -815,7 +883,7 @@
     <value>Thêm một miền ngữ nghĩa vào ý nghĩa này</value>
   </data>
   <data name="Lexicon_AddForm" xml:space="preserve">
-    <value>Thêm một dạng từ vựng vào bổ đề này</value>
+    <value>Thêm một hình thức từ vựng vào bổ đề này</value>
   </data>
   <data name="Lexicon_AddLexeme" xml:space="preserve">
     <value>Thêm từ vựng</value>
@@ -833,10 +901,10 @@
     <value>Thêm một miền ngữ nghĩa</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>Áp dụng dịch</value>
+    <value>Áp dụng bóng</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Hủy dịch</value>
+    <value>Hủy bóng</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
     <value>Thay đổi tất cả các lần xuất hiện không được đặt</value>
@@ -863,7 +931,7 @@
     <value>Nhập một bản dịch mới cho</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>Nhập một bản dịch mới</value>
+    <value>Nhập một độ bóng mới</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Bổ đề</value>
@@ -878,22 +946,22 @@
     <value>Từ vựng</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
-    <value>Một từ vựng đã tồn tại cho Bổ đề</value>
+    <value>Một từ vựng đã tồn tại cho bổ đề</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Ý nghĩa:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Bản dịch mới</value>
+    <value>Bóng mới</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>Loại bỏ miền ngữ nghĩa này khỏi ý nghĩa này</value>
+    <value>Xóa miền ngữ nghĩa này khỏi ý nghĩa này</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
     <value>Loại bỏ hình thức từ vựng này khỏi bổ đề này</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>Đặt bản dịch cho</value>
+    <value>Đặt độ bóng cho</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Và</value>
@@ -903,6 +971,12 @@
   </data>
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Biên tập</value>
+  </data>
+  <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>Thêm '{0}' dưới dạng hình thức</value>
+  </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>Thêm '{0}' như bản dịch sang ý nghĩa đầu tiên</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Tìm tất cả</value>
@@ -919,11 +993,17 @@
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Từ vựng</value>
   </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>Tải dữ liệu ...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>Một lỗi bất ngờ xảy ra trong khi tải dữ liệu. {0}</value>
+  </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>Phù hợp</value>
   </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
-    <value>Ý nghĩa [dịch]</value>
+    <value>Ý nghĩa [Dịch]</value>
   </data>
   <data name="LexiconEdit_Or" xml:space="preserve">
     <value>Hoặc</value>
@@ -1349,7 +1429,7 @@
     <value>Bạn có muốn tháo rời nhãn:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
-    <value>từ nhóm nhãn:</value>
+    <value>Từ nhóm nhãn:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Thêm nhóm nhãn</value>
@@ -1478,7 +1558,7 @@
     <value>Siêu dữ liệu JSON</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
-    <value>Song song hóa câu thơ</value>
+    <value>Song song với những câu thơ</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
     <value>Thuật toán căn chỉnh từ máy</value>
@@ -1544,7 +1624,7 @@
     <value>Tính toán mô hình dịch mới</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Thay đổi mức độ zoom của nội dung</value>
+    <value>Thay đổi mức thu phóng của nội dung</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
     <value>Chuyên gia tư vấn</value>
@@ -1570,11 +1650,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Từ điển</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>Biên tập viên ghi chú bên ngoài</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>Lắp toàn bộ khu vực nội dung vào chế độ xem</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>Phù hợp với tất cả các nút vào chế độ xem</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>Nhận các ghi chú bên ngoài mới nhất</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Nhận mới nhất từ ​​paratext</value>
@@ -1616,7 +1702,7 @@
     <value>Nguồn</value>
   </data>
   <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>Language chua</value>
+    <value>Language Sourcel</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
     <value>Tiêu chuẩn</value>
@@ -1637,7 +1723,7 @@
     <value>Phiên âm</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Phiên dịchWithEncoder</value>
+    <value>Transitationwithencoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>không xác định</value>
@@ -1769,7 +1855,7 @@
     <value>Bắt đầu</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>Dự án máy chủ nhập khẩu</value>
+    <value>Nhập dự án máy chủ</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>Kiểm tra hộp này để bao gồm các văn bản Kinh thánh Hy Lạp và tiếng Do Thái khi tạo dự án của bạn.</value>
@@ -1781,7 +1867,7 @@
     <value>Bao gồm các văn bản Kinh thánh tiếng Do Thái OT?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
-    <value>Quản lý các dự án cộng tác</value>
+    <value>Quản lý các dự án hợp tác</value>
   </data>
   <data name="ProjectPicker_NoMatches" xml:space="preserve">
     <value>Không có trận đấu.</value>
@@ -1904,7 +1990,7 @@
     <value>2 Tê -sa -lô -ni -ca</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2 Timothy</value>
+    <value>2 Ti -mô -thê</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3 John</value>
@@ -2104,6 +2190,9 @@
   <data name="Save" xml:space="preserve">
     <value>Cứu</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>Gửi</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>Bật plugin Aqua thử nghiệm</value>
   </data>
@@ -2130,6 +2219,12 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Bật chỉnh sửa căn chỉnh</value>
+  </data>
+  <data name="Settings_EnableLexiconImport" xml:space="preserve">
+    <value>Bật nhập từ Lexicon</value>
+  </data>
+  <data name="Settings_EnableTokenSplitting" xml:space="preserve">
+    <value>Cho phép phân tách mã thông báo</value>
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Thực nghiệm</value>
@@ -2180,7 +2275,7 @@
     <value>Hiển thị chế độ xem mở rộng trên một màn hình khác với bảng điều khiển</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Đối với các hệ thống có ba màn hình trở lên, hãy hiển thị chế độ xem mở rộng trên màn hình thứ ba</value>
+    <value>Đối với các hệ thống có ba hoặc nhiều màn hình, hãy hiển thị chế độ xem mở rộng trên màn hình thứ ba</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Bộ sưu tập văn bản</value>
@@ -2251,6 +2346,9 @@
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Gửi</value>
   </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>Gửi các tập tin USFM</value>
+  </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>Gợi ý</value>
   </data>
@@ -2295,6 +2393,9 @@
   </data>
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>Đặt bóng</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Cập nhật</value>

@@ -107,5 +107,8 @@
     <Setting Name="JiraBaseUrl" Type="System.String" Scope="User">
       <Value Profile="(Default)">https://clearbible.atlassian.net</Value>
     </Setting>
+    <Setting Name="IsTokenSplittingEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

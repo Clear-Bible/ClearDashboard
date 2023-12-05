@@ -25,9 +25,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         private DashboardProjectManager ProjectManager { get; }
         public bool MimicParatextConnection { get; set; }
-        public static bool InitialStartup = true;
         public static bool GoToSetup = false;
         public static bool GoToTemplate = false;
+        public static bool ProjectAlreadyOpened = false;
+
         public string Version { get; set; }
 
         #endregion //Member Variables
@@ -166,7 +167,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 CurrentStep = Steps![2];
                 GoToSetup = false;
             }
-            if (GoToTemplate)
+            else if (GoToTemplate)
             {
                 CurrentStep = Steps![3];
                 GoToTemplate = false;
@@ -226,6 +227,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
+
+        protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            foreach (var step in Steps.Cast<ApplicationScreen>())
+            {
+                await step.DeactivateAsync(close);
+            }
+
+            await base.OnDeactivateAsync(close, cancellationToken);
+        }
+
         public async void Cancel()
         {
             await TryCloseAsync(false);
@@ -234,7 +246,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async void Ok()
         {
-            InitialStartup = false;
             await TryCloseAsync(true);
         }
 

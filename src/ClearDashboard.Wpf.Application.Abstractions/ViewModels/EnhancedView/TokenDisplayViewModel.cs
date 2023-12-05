@@ -6,10 +6,12 @@ using System.Windows.Media;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.Collections.Notes;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -36,6 +38,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public bool IsTargetRtl => VerseDisplay.IsTargetRtl;
 
+        public bool IsCorpusView => VerseDisplay is CorpusDisplayViewModel;
+
         /// <summary>
         /// Gets or sets whether this is a source token.
         /// </summary>
@@ -51,6 +55,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 NotifyOfPropertyChange(nameof(IsTarget));
             }
         }
+
+        public TokenizedTextCorpus? Corpus => IsSource ? VerseDisplay.SourceCorpus : VerseDisplay.TargetCorpus;
 
         /// <summary>
         /// Placeholder for when we will need to support RTL for the selected application language.
@@ -179,16 +185,51 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        private BindableCollection<ExternalNote> _externalNotes = new();
+        public BindableCollection<ExternalNote> ExternalNotes
+        {
+            get => _externalNotes;
+            set
+            {
+                if (Set(ref _externalNotes, value))
+                {
+                    NotifyOfPropertyChange(nameof(ExternalNotes));
+                    NotifyOfPropertyChange(nameof(HasExternalNotes));
+                }
+            }
+        }
+        public void NotifyExternalNotesItemsChanged()
+        {
+            NotifyOfPropertyChange(nameof(ExternalNotes));
+            NotifyOfPropertyChange(nameof(HasExternalNotes));
+        }
+
         /// <summary>
         /// The surface text of the token to be displayed.  
         /// </summary>
         public string SurfaceText => Token.SurfaceText;
 
         /// <summary>
+        /// The training text of the token to be displayed.  
+        /// </summary>
+        public string TrainingText => Token.TrainingText;
+
+        /// <summary>
         /// The surface text of the token to be displayed for translations.
         /// </summary>
         public string TranslationSurfaceText => IsCompositeTokenMember ? string.Join(" ", CompositeToken!.Tokens.Select(t => t.SurfaceText))
                                                                        : Token.SurfaceText;
+
+        /// <summary>
+        /// The training text of the token to be displayed for translations.
+        /// </summary>
+        public string TranslationTrainingText => IsCompositeTokenMember ? string.Join(" ", CompositeToken!.Tokens.Select(t => t.TrainingText))
+                                                                       : Token.TrainingText;
+
+        /// <summary>
+        /// The surface and training text of the token to be displayed for translations.
+        /// </summary>
+        public string TranslationSurfaceAndTrainingText => $"{TranslationSurfaceText} ({TranslationTrainingText})";
 
         /// <summary>
         /// The extended properties of the token to be displayed.
@@ -307,9 +348,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             TokenNoteIds.RemoveIfExists(note.NoteId!);
             NotifyOfPropertyChange(nameof(TokenHasNote));
         }
-
         public bool HasExtendedProperties => !string.IsNullOrEmpty(ExtendedProperties);
-
+        public bool HasExternalNotes => 
+            ExternalNotes.Count() > 0;
         public void OnToolTipOpening(ToolTipEventArgs e)
         {
             if (!IsHighlighted && string.IsNullOrWhiteSpace(ExtendedProperties))

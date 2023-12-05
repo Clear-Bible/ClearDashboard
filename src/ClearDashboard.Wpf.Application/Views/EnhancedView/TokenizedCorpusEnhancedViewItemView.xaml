@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:cm="http://caliburnmicro.com"
-    FontFamily="{StaticResource ClearDashboardFont}"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:input="clr-namespace:ClearApplicationFoundation.Framework.Input;assembly=ClearApplicationFoundation"
@@ -13,6 +12,7 @@
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    FontFamily="{StaticResource ClearDashboardFont}"
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -93,6 +93,9 @@
                             <b:EventTrigger EventName="TokenClicked">
                                 <b:CallMethodAction MethodName="TokenClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
                             </b:EventTrigger>
+                            <b:EventTrigger EventName="TokenLeftButtonDown">
+                                <b:CallMethodAction MethodName="TokenLeftButtonDown" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                            </b:EventTrigger>
                             <b:EventTrigger EventName="TokenRightButtonDown">
                                 <b:CallMethodAction MethodName="TokenRightButtonDown" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
                             </b:EventTrigger>
@@ -134,6 +137,9 @@
                             </b:EventTrigger>
                             <b:EventTrigger EventName="TokenUnjoin">
                                 <b:CallMethodAction MethodName="TokenUnjoin" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                            </b:EventTrigger>
+                            <b:EventTrigger EventName="TokenSplit">
+                                <b:CallMethodAction MethodName="TokenSplit" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
                             </b:EventTrigger>
                         </b:Interaction.Triggers>
                     </userControls:VerseDisplay>

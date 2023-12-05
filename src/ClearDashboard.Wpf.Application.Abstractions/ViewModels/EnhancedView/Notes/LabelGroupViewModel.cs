@@ -8,6 +8,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes
     {
         public LabelGroup Entity { get; }
         public LabelGroupId? LabelGroupId => Entity.LabelGroupId;
+        public bool IsNoneLabelGroup => LabelGroupId == null;
         public LabelCollection Labels { get; set; } = new();
 
         public string? Name

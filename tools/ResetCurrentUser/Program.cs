@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Net.Mime;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 
@@ -29,20 +30,26 @@ namespace ResetCurrentUser
         {
             // get the current logged in user by querying the explorer process
             var loggedInUser = GetCurrentLoggedInUser();
-            // make an NTAccount object from the user name
+
+            Console.WriteLine($"Logged In User: {loggedInUser}");
+
+                        // make an NTAccount object from the user name
 #pragma warning disable CA1416
 #pragma warning disable CS8604 // Possible null reference argument.
             var ntAccount = new NTAccount(loggedInUser);
 #pragma warning restore CS8604 // Possible null reference argument.
 #pragma warning restore CA1416
 
-
+            Console.WriteLine($"NT Account info for: {ntAccount.Value}");
 
             // loop through all files in the directory and subdirectories in the Collaboration folder
             var collabDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Collaboration");
 
+            Console.WriteLine($"Collab Dir: {collabDir}");
+
             if (Directory.Exists(collabDir))
             {
+                Console.WriteLine($"Resetting Collab Dir Files");
                 foreach (var file in Directory.GetFiles(collabDir, "*.*", SearchOption.AllDirectories))
                 {
                     var fileInfo = new FileInfo(file);
@@ -55,6 +62,8 @@ namespace ResetCurrentUser
                     }
 #pragma warning restore CA1416
                 }
+                Console.WriteLine($"Resetting Collab Dir Files - Complete");
+
 
                 foreach (var dir in Directory.GetDirectories(collabDir, "*.*", SearchOption.AllDirectories))
                 {
@@ -62,14 +71,47 @@ namespace ResetCurrentUser
 #pragma warning disable CA1416
                     var dirOwner = dirInfo.GetAccessControl().GetOwner(typeof(NTAccount));
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
+
+                    Console.WriteLine($"Dir: {dirInfo.FullName}\n\tOwner: {dirOwner.Value}");
+
                     if (dirOwner.ToString() != loggedInUser)
                     {
                         // if it is a different user, change the ownership to the current user
                         SetDirectoryOwnershipToUser(dirInfo, ntAccount);
+
+                        Console.WriteLine($"Reset: {dirInfo.FullName}\n\tTo: {ntAccount.Value}");
                     }
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 #pragma warning restore CA1416
                 }
+            }
+
+
+            // exit the app after 5 seconds unless key press
+            var done = new ManualResetEvent(false);
+            
+            Console.CancelKeyPress += (sender, e) =>
+            {
+                e.Cancel = true;
+                done.Set();
+            };
+
+            WaitForExitOrBreak();
+
+            if (!done.WaitOne(5000))
+                Console.WriteLine("Time out, exiting program.");
+
+            Console.WriteLine("Exit program.");
+
+        }
+
+
+        static void WaitForExitOrBreak()
+        {
+            for (int i = 5 - 1; i >= 0; i--)
+            {
+                Console.Write("Working {0}... ", i);
+                Thread.Sleep(1000);
             }
         }
 
