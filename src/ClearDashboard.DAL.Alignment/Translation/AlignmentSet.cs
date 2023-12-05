@@ -1,16 +1,10 @@
 ﻿using ClearBible.Engine.Corpora;
-using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features;
+using ClearDashboard.DAL.Alignment.Features.Common;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Translation;
-using ClearDashboard.DAL.CQRS;
 using MediatR;
-using SIL.Machine.Corpora;
-using System.Collections;
-using ClearDashboard.DAL.Alignment.Features.Common;
-using Caliburn.Micro;
 
 namespace ClearDashboard.DAL.Alignment.Translation
 {
