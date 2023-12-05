@@ -40,5 +40,8 @@ public enum Tokenizers
 
     // ReSharper disable once UnusedMember.Global
     [Description("Zwsp Word")]
-    ZwspWordTokenizer
+    ZwspWordTokenizer,
+
+    [Description("Chinese Word Parser")]
+    ChineseBibleWordTokenizer,
 }
