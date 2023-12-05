@@ -25,63 +25,73 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             // 1.adds label $"External_{request.Data.ProjectName}" label group
             // if it doesn't exist. If it does exist, removes all associations. 
 
-            var labelGroupNames = request.Data.ExternalLabels
-                .Select(el => el.ExternalProjectName)
+            //unique label group names represented in external labels
+            var labelGroupNamesInExternalLabels = request.Data.ExternalLabels
+                .Select(el => $"External_{el.ExternalProjectName}")
+                .Distinct()
                 .ToList();
 
-            var labelGroupsDb = ProjectDbContext!.LabelGroups
-                .Include(e => e.LabelGroupAssociations)
-                .Where(e => labelGroupNames.Contains(e.Name))
-                .ToDictionary(e => e.Name, e => e);
+            //unique label group names represented in external labels already in database
+            var labelGroupsAlreadyInDb = ProjectDbContext!.LabelGroups
+                .Include(lg => lg.LabelGroupAssociations)
+                .Where(e => labelGroupNamesInExternalLabels.Contains(e.Name))
+                .ToDictionary(lg => lg.Name, e => e);
 
-            var labelGroupsToAdd = labelGroupNames
-                .Except(labelGroupsDb.Keys)
-                .Select(e => new Models.LabelGroup
+            //add only label group names represented in external labels not already in db
+            var labelGroupsToAdd = labelGroupNamesInExternalLabels
+                .Except(labelGroupsAlreadyInDb.Keys)
+                .Select(str => new Models.LabelGroup
                 {
                     Id = Guid.NewGuid(),
-                    Name = e
+                    Name = str
                 })
                 .ToList();
-
             await ProjectDbContext.LabelGroups.AddRangeAsync(labelGroupsToAdd, cancellationToken);
-            ProjectDbContext.LabelGroupAssociations.RemoveRange(labelGroupsDb.Values
-                .SelectMany(e => e.LabelGroupAssociations));
 
-            labelGroupsToAdd.ForEach(e => labelGroupsDb.Add(e.Name, e));
+            // for label groups represented in external labels not already in db, remove their associations.
+            ProjectDbContext.LabelGroupAssociations.RemoveRange(labelGroupsAlreadyInDb.Values
+                .SelectMany(lg => lg.LabelGroupAssociations));
+
+            // add ones added to labelGroupNamesAlreadyInDb since they were added a couple lines back.
+            labelGroupsToAdd.ForEach(lg => labelGroupsAlreadyInDb.Add(lg.Name, lg));
 
             // 2. adds all request.Data.ExternalLabel.Where(el => !labels.Select(l => l.Text).Contains(el.Text)
             // (where ExternalLabel.Text is not already in a Label.Text.)
 
-            var labelTexts = request.Data.ExternalLabels
+            //unique label names represented in external labels
+            var labelTextsInExternalLabels = request.Data.ExternalLabels
                 .Select(el => el.ExternalText)
+                .Distinct()
                 .ToList();
 
-            var labelTextsDb = ProjectDbContext.Labels
-                .Where(e => labelTexts.Contains(e.Text!))
-                .ToDictionary(e => e.Text!, e => e);
+            //unique label group names represented in external labels already in database
+            var labelsAlreadyInDb = ProjectDbContext.Labels
+                .Where(l => labelTextsInExternalLabels.Contains(l.Text!))
+                .ToDictionary(l => l.Text!, e => e);
 
-            var labelsToAdd = labelTexts
-                .Except(labelTextsDb.Keys)
-                .Select(e => new Models.Label
+            //add only label names represented in external labels not already in db
+            var labelsToAdd = labelTextsInExternalLabels
+                .Except(labelsAlreadyInDb.Keys)
+                .Select(str => new Models.Label
                 {
                     Id = Guid.NewGuid(),
-                    Text = e
+                    Text = str
                 })
                 .ToList();
-
             await ProjectDbContext.Labels.AddRangeAsync(labelsToAdd, cancellationToken);
 
-            labelsToAdd.ForEach(e => labelTextsDb.Add(e.Text!, e));
+            // add ones added to labelTextsAlreadyInDb since they were added a couple lines back.
+            labelsToAdd.ForEach(l => labelsAlreadyInDb.Add(l.Text!, l));
 
             // 3. associates all Labels.Where(l => request.Data.ExternalLabelTexts.Contains(l.Text))
             // with $"External_{request.Data.ProjectName}" label group
 
             await ProjectDbContext.LabelGroupAssociations.AddRangeAsync(request.Data.ExternalLabels
-                .Select(e => new Models.LabelGroupAssociation
+                .Select(el => new Models.LabelGroupAssociation
                 {
                     Id = Guid.NewGuid(),
-                    LabelId = labelTextsDb[e.ExternalText].Id,
-                    LabelGroupId = labelGroupsDb[e.ExternalProjectName].Id
+                    LabelId = labelsAlreadyInDb[el.ExternalText].Id,
+                    LabelGroupId = labelGroupsAlreadyInDb[$"External_{el.ExternalProjectName}"].Id
                 }), 
                 cancellationToken);
 
