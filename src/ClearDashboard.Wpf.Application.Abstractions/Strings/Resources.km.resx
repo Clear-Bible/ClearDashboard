@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>សៀវភៅដែលបានជ្រើសរើស</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>ជ្រើសរើសសៀវភៅ USFM ដើម្បីផ្ញើ</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>ជ្រើសគម្រោង Partatetx</value>
   </data>
@@ -712,6 +715,9 @@
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>របៀបកថាខណ្ឌ</value>
   </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>បង្ហាញកំណត់ត្រាខាងក្រៅ</value>
+  </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>អត្ថបទប្រភព:</value>
   </data>
@@ -907,6 +913,12 @@
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>បិនិត្យ</value>
   </data>
+  <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>បន្ថែម '{0}' ជាទម្រង់</value>
+  </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>បន្ថែម '{0}' ជាការបកប្រែទៅជាអត្ថន័យដំបូង</value>
+  </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>រកទាំងអស់</value>
   </data>
@@ -921,6 +933,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>lexme</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>ផ្ទុកទិន្នន័យ ...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>កំហុសដែលមិនបានរំពឹងទុកបានកើតឡើងខណៈពេលផ្ទុកទិន្នន័យ។ {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>ដេលសីក្នា</value>
@@ -1573,11 +1591,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>វចនានុរកម</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>កម្មវិធីនិពន្ធកំណត់ត្រាខាងក្រៅ</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>សមនឹងផ្ទៃមាតិកាទាំងមូលទៅអ្នកមើល</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>សមនឹងថ្នាំងទាំងអស់ទៅអ្នកមើល</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>ទទួលបានកំណត់ត្រាខាងក្រៅចុងក្រោយ</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>ទទួលបានចុងក្រោយពី Paratext</value>
@@ -2107,6 +2131,9 @@
   <data name="Save" xml:space="preserve">
     <value>សរេង្គាហ</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>ផ្ញើរ</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>បើកដំណើរការកម្មវិធីជំនួយពិសោធន៍ Aqua</value>
   </data>
@@ -2259,6 +2286,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>ផ្ញើរ</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>ផ្ញើឯកសារ USFM</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>ការផ្ដល់យោបល់</value>

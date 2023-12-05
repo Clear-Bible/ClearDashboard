@@ -1,5 +1,64 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -137,7 +196,7 @@
     <value>Количество ошибок:</value>
   </data>
   <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
-    <value>Межлинейно</value>
+    <value>Межлинейный</value>
   </data>
   <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
     <value>Нет ошибок</value>
@@ -153,6 +212,9 @@
   </data>
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>Избранные книги</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>Выберите книги USFM, чтобы отправить</value>
   </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>Выберите Paratext Project</value>
@@ -629,7 +691,7 @@
     <value>Поиск члена фильтра</value>
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
-    <value>Межлинейно</value>
+    <value>Межлинейный</value>
   </data>
   <data name="EnhancedView_JoinTokens" xml:space="preserve">
     <value>Присоединяйтесь к токенам</value>
@@ -711,6 +773,9 @@
   </data>
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>Режим абзаца</value>
+  </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>Показать внешние заметки</value>
   </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>Исходный текст:</value>
@@ -907,6 +972,12 @@
   <data name="LexiconEdit_Edit" xml:space="preserve">
     <value>Редактировать</value>
   </data>
+  <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
+    <value>Добавить '{0}' как форма</value>
+  </data>
+  <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
+    <value>Добавить '{0}' в качестве перевода в первое значение</value>
+  </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Найти все</value>
   </data>
@@ -921,6 +992,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Лекса</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>Загрузка данных...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>При загрузке данных произошла неожиданная ошибка. {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>Соответствующий</value>
@@ -1061,7 +1138,7 @@
     <value>Быстрый новый</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Коллабные изменения доступны</value>
+    <value>Изменения в сотрудничестве доступны</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
     <value>Настройки</value>
@@ -1172,7 +1249,7 @@
     <value>Сильные коды</value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
-    <value>Подпагнические домены:</value>
+    <value>Субсины:</value>
   </data>
   <data name="Marble_Verse" xml:space="preserve">
     <value>Стих</value>
@@ -1484,10 +1561,10 @@
     <value>Параллелизировать стихи корпораций</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Алгоритм выравнивания слова</value>
+    <value>Алгоритм выравнивания машинного слова</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Алгоритм выравнивания слова</value>
+    <value>Алгоритм выравнивания машинного слова</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Симметризированная модель поезда?</value>
@@ -1526,7 +1603,7 @@
     <value>Создать новую токенизацию корпуса</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>Добавить новый интерлинеар</value>
+    <value>Добавить новый интернетальный</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>Добавьте текст в просмотр</value>
@@ -1573,11 +1650,17 @@
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Словарь</value>
   </data>
+  <data name="Pds_ExternalNotesEditor" xml:space="preserve">
+    <value>Редактор внешних заметок</value>
+  </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>Установите всю область контента в просмотр</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>Подключить все узлы к видовому доку</value>
+    <value>Установите все узлы в Viewport</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>Получите последние внешние заметки</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Получите последние из Paratext</value>
@@ -1640,7 +1723,7 @@
     <value>Транслитерация</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Транслитерация WithIntEncoder</value>
+    <value>Транслитерация WithIteChoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Неизвестный</value>
@@ -1649,7 +1732,7 @@
     <value>XML</value>
   </data>
   <data name="Pds_ZoomIn" xml:space="preserve">
-    <value>Увеличить контент</value>
+    <value>Увеличить содержание</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
     <value>Увеличить контент</value>
@@ -1778,7 +1861,7 @@
     <value>Установите этот флажок, чтобы включить греческие и еврейские библейские тексты при создании вашего проекта.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Включите NT Грико -библейские тексты?</value>
+    <value>Включите NT Греко -библейские тексты?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>Включите ивритские библейские тексты?</value>
@@ -2107,6 +2190,9 @@
   <data name="Save" xml:space="preserve">
     <value>Сохранять</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>Отправлять</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>Включить экспериментальный плагин Aqua</value>
   </data>
@@ -2168,7 +2254,7 @@
     <value>Зарезервировано для будущего расширения</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Восстановить пользователь сотрудничества</value>
+    <value>Восстановите пользователя сотрудничества</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Сохраняется на удаленном сервере</value>
@@ -2207,7 +2293,7 @@
     <value>Включить стихотворенные текстовые коллекции.</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
-    <value>Отменить задание</value>
+    <value>Отмена задания</value>
   </data>
   <data name="ShellView_Loading" xml:space="preserve">
     <value>Загрузка ...</value>
@@ -2259,6 +2345,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Отправлять</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>Отправьте файлы USFM</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>Предположение</value>

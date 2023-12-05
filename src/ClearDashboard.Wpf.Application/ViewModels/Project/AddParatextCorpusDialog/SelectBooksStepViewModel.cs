@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.ComponentModel;
+using ClearDashboard.Wpf.Application.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
 
@@ -83,6 +84,28 @@ public class SelectBooksStepViewModel : DashboardApplicationValidatingWorkflowSt
         }
     }
 
+    private string _firstTitleLine = string.Empty;
+    public string FirstTitleLine
+    {
+        get { return _firstTitleLine; }
+        set
+        {
+            _firstTitleLine = value;
+            NotifyOfPropertyChange(() => FirstTitleLine);
+        }
+    }
+
+    private string _secondTitleLine = string.Empty;
+    public string SecondTitleLine
+    {
+        get { return _secondTitleLine; }
+        set
+        {
+            _secondTitleLine = value;
+            NotifyOfPropertyChange(() => SecondTitleLine);
+        }
+    }
+
     #endregion //Observable Properties
 
 
@@ -123,6 +146,8 @@ public class SelectBooksStepViewModel : DashboardApplicationValidatingWorkflowSt
 
         ContinueEnabled = false;
 
+        FirstTitleLine = _localizationService["AddParatextCorpusDialog_SelectBooks"];
+        SecondTitleLine = _localizationService["AddParatextCorpusDialog_CanAddLater"];
     }
 
     protected override async Task OnActivateAsync(CancellationToken cancellationToken)
@@ -228,7 +253,6 @@ public class SelectBooksStepViewModel : DashboardApplicationValidatingWorkflowSt
     }
 
     #endregion // Methods
-
 
 
 }

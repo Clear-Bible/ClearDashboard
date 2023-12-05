@@ -40,7 +40,18 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition>
+                <RowDefinition.Style>
+                    <Style TargetType="RowDefinition">
+                        <Setter Property="Height" Value="Auto" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SecondTitleLine}" Value="">
+                                <Setter Property="Height" Value="0" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </RowDefinition.Style>
+            </RowDefinition>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -51,7 +62,7 @@
             Grid.Row="0"
             Margin="15,15,0,0"
             HorizontalAlignment="Left"
-            Content="{helpers:Localization AddParatextCorpusDialog_SelectBooks}"
+            Content="{Binding FirstTitleLine}"
             FontSize="20"
             Visibility="{Binding IsEnabled, ElementName=SelectBookControl, Converter={StaticResource BoolToVisibilityConverter}}" />
 
@@ -67,7 +78,7 @@
             Grid.Row="1"
             Margin="15,0,0,0"
             HorizontalAlignment="Left"
-            Content="{helpers:Localization AddParatextCorpusDialog_CanAddLater}"
+            Content="{Binding SecondTitleLine}"
             FontSize="11"
             Visibility="{Binding IsEnabled, ElementName=SelectBookControl, Converter={StaticResource BoolToVisibilityConverter}}" />
 
