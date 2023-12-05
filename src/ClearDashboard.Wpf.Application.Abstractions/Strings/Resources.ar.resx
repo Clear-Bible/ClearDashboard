@@ -245,7 +245,7 @@
     <value>اعمال البناء؛ تربية الحيوان</value>
   </data>
   <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
-    <value>الحاويات تربية الحيوان</value>
+    <value>حاويات تربية الحيوان</value>
   </data>
   <data name="BiblicalTermsDomains_CraftsCloth" xml:space="preserve">
     <value>الحرف؛ قماش</value>
@@ -527,7 +527,7 @@
     <value>حذف تعاون المشروع</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>لديك مستخدمون آخرون متصلون بهذا المشروع. سيتم إزالة هذا المشروع لهم كذلك. هل من المؤكد أنك تريد حذف هذا المشروع؟</value>
+    <value>لديك مستخدمون آخرون متصلون بهذا المشروع. سيتم إزالة هذا المشروع لهم أيضًا. هل من المؤكد أنك تريد حذف هذا المشروع؟</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
     <value>هل أنت متأكد أنك تريد حذف هذا المشروع؟</value>
@@ -881,7 +881,7 @@
     <value>ليما/الأشكال:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Lemma من أجل lexeme الجديد:</value>
+    <value>Lemma من أجل Lexeme الجديد:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>لكلية</value>
@@ -923,7 +923,7 @@
     <value>أضف '{0}' كترجمة إلى المعنى الأول</value>
   </data>
   <data name="LexiconEdit_EditingDone" xml:space="preserve">
-    <value>يحفظ</value>
+    <value>منتهي</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>جد كل</value>
@@ -977,7 +977,7 @@
     <value>يكتب</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>أضف كشكل ل ...</value>
+    <value>أضف كشكل لـ ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
     <value>ابحث عن lexeme الكامل أو الجزئي أو مباريات النموذج للمصدر</value>
@@ -1223,7 +1223,7 @@
     <value>تم إلغاء العملية</value>
   </data>
   <data name="MergeDialog_OperationComplete" xml:space="preserve">
-    <value>عملية كاملة!</value>
+    <value>العملية كاملة!</value>
   </data>
   <data name="MergeDialog_OperationErrored" xml:space="preserve">
     <value>خطأ واجه</value>
@@ -1382,7 +1382,7 @@
     <value>أضف مجموعة التسمية</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>أضف مجموعة ملصقات</value>
+    <value>أضف مجموعة تسمية</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>مجموعة تسمية موجودة بالفعل مع الاسم</value>
@@ -1532,7 +1532,7 @@
     <value>حدد خوارزمية SMT للتدريب</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>أضف موافقة كبيرة للعرض</value>
+    <value>أضف موافقة بالجملة للعرض</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>أضف للعرض</value>
@@ -1649,7 +1649,7 @@
     <value>مصدر</value>
   </data>
   <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>Sourcelanguage</value>
+    <value>SourceLanguage</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
     <value>معيار</value>
@@ -1775,7 +1775,7 @@
     <value>إنشاء مشروع جديد</value>
   </data>
   <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
-    <value>بدء تشغيل سريع مشروع جديد</value>
+    <value>ابدأ سريعًا مشروعًا جديدًا</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>إنشاء مشروع:</value>
@@ -1970,7 +1970,7 @@
     <value>خروج</value>
   </data>
   <data name="ProperCase_Ezekiel" xml:space="preserve">
-    <value>حزقيال</value>
+    <value>حزن</value>
   </data>
   <data name="ProperCase_Ezra" xml:space="preserve">
     <value>عزرا</value>
@@ -2105,7 +2105,7 @@
     <value>المفتاح المقدم هو معيب. عندما تم فك تشفيرها ، لا يمكن العثور على بعض عناصر JSON.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>لا تتطابق محتويات مفتاح الترخيص الذي تم تفكيكه مع المعلومات التي قدمتها.</value>
+    <value>لا تتطابق محتويات مفتاح الترخيص الذي تم فك تشفيره مع المعلومات التي قدمتها.</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
     <value>مفتاح الترخيص الخاص بك إما مفقود أو مكسور.</value>
@@ -2222,7 +2222,7 @@
     <value>عرض طرق عرض موسعة على شاشة مختلفة عن لوحة القيادة</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>للأنظمة التي لديها ثلاثة شاشات أو أكثر ، عرض عرض موسع على الشاشة الثالثة</value>
+    <value>بالنسبة للأنظمة التي تحتوي على ثلاثة شاشات أو أكثر ، عرض عرض موسع على الشاشة الثالثة</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>جمع النص</value>
@@ -2351,7 +2351,7 @@
     <value>اضف جديد</value>
   </data>
   <data name="UpdateParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>تحديث وإضافة كتب جديدة</value>
+    <value>تحديث وأضف كتبًا جديدة</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
     <value>حدد الكتب</value>

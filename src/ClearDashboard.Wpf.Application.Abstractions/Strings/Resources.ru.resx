@@ -125,7 +125,7 @@
     <value>Выравнивание</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
-    <value>Выберите книги (ы), с которыми вы работаете, вы всегда можете добавить больше книг позже.</value>
+    <value>Выберите книги, с которыми вы работаете, вы всегда можете добавить больше книг позже.</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Проверка USFM</value>
@@ -626,10 +626,10 @@
     <value>Токен '{0}' имеет определенные выравнивания. Нажатие '{1}' удалит все выравнивания.</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>Поиск по фильтру</value>
+    <value>Поиск фильтра</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>Поиск члена фильтра</value>
+    <value>Поиск членов фильтра</value>
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
     <value>Межлинейно</value>
@@ -923,7 +923,7 @@
     <value>Добавить '{0}' в качестве перевода в первое значение</value>
   </data>
   <data name="LexiconEdit_EditingDone" xml:space="preserve">
-    <value>Сохранять</value>
+    <value>Сделанный</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Найти все</value>
@@ -986,7 +986,7 @@
     <value>Добавьте цель в качестве перевода для ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Найдите лексы, которые имеют один или несколько переводов, которые соответствуют цели</value>
+    <value>Найдите Lexemes, которые имеют один или несколько переводов, которые соответствуют цели</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Импорт проверен</value>
@@ -1085,7 +1085,7 @@
     <value>Быстрый новый</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Изменения в сотрудничестве доступны</value>
+    <value>Коллабные изменения доступны</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
     <value>Настройки</value>
@@ -1232,7 +1232,7 @@
     <value>Мих.</value>
   </data>
   <data name="Migrate_Header" xml:space="preserve">
-    <value>Сбросить сопоставления стихов в стихование по умолчанию</value>
+    <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>Мк.</value>
@@ -1382,7 +1382,7 @@
     <value>Добавить группу метки</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Добавить группу ярлыков</value>
+    <value>Добавить группу этикетки</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Группа лейблов уже существует с именем</value>
@@ -1508,10 +1508,10 @@
     <value>Параллелизировать стихи корпораций</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Алгоритм выравнивания машинного слова</value>
+    <value>Алгоритм выравнивания слова</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Алгоритм выравнивания машинного слова</value>
+    <value>Алгоритм выравнивания слова</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Симметризированная модель поезда?</value>
@@ -1550,7 +1550,7 @@
     <value>Создать новую токенизацию корпуса</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>Добавить новый интерлинеар</value>
+    <value>Добавить новый интернетальный</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>Добавьте текст в просмотр</value>
@@ -1598,13 +1598,13 @@
     <value>Словарь</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
-    <value>Внешние заметки редактор</value>
+    <value>Редактор внешних заметок</value>
   </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>Установите всю область контента в просмотр</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>Подключить все узлы к видовому доку</value>
+    <value>Установите все узлы в Viewport</value>
   </data>
   <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
     <value>Получите последние внешние заметки</value>
@@ -1634,7 +1634,7 @@
     <value>Характеристики</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Сбросить сопоставления стихов в стихование по умолчанию</value>
+    <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Ресурс</value>
@@ -1670,7 +1670,7 @@
     <value>Транслитерация</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Транслитерация WithIteChoder</value>
+    <value>Транслитерация WithIntEncoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Неизвестный</value>
@@ -1679,7 +1679,7 @@
     <value>XML</value>
   </data>
   <data name="Pds_ZoomIn" xml:space="preserve">
-    <value>Увеличить контент</value>
+    <value>Увеличить содержание</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
     <value>Увеличить контент</value>
@@ -1811,7 +1811,7 @@
     <value>Включите NT Греко -библейские тексты?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
-    <value>Включите ивритские библейские тексты?</value>
+    <value>Включите OT ивритские библейские тексты?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Управление совместными проектами</value>
@@ -2159,7 +2159,7 @@
     <value>Адрес электронной почты</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>По электронной почте ошибка</value>
+    <value>По электронной почте ошибка отправки</value>
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Код проверки электронной почты</value>
@@ -2201,7 +2201,7 @@
     <value>Зарезервировано для будущего расширения</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Восстановите пользователя сотрудничества</value>
+    <value>Восстановить пользователь сотрудничества</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Сохраняется на удаленном сервере</value>
@@ -2213,13 +2213,13 @@
     <value>Сохранить настройки</value>
   </data>
   <data name="Settings_SendValidationEmail" xml:space="preserve">
-    <value>Отправить валидацию электронной почты</value>
+    <value>Отправить валидацию по электронной почте</value>
   </data>
   <data name="Settings_Settings" xml:space="preserve">
     <value>Настройки ClearDashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Показать расширенные виды на другом мониторе, чем панель панели</value>
+    <value>Показать расширенные представления на другом мониторе, чем панель инструментов</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
     <value>Для систем с тремя или более мониторами показать расширенный просмотр на третьем мониторе</value>
@@ -2360,7 +2360,7 @@
     <value>Обновить и добавить новый</value>
   </data>
   <data name="UseDefaults" xml:space="preserve">
-    <value>Создать использование дефолтов</value>
+    <value>Создайте использование дефолтов</value>
   </data>
   <data name="Windows_AlignmentTool" xml:space="preserve">
     <value>Инструмент выравнивания</value>

@@ -923,7 +923,7 @@
     <value>ለመጀመሪያው ትርጉም እንደ ትርጉም '{0}'</value>
   </data>
   <data name="LexiconEdit_EditingDone" xml:space="preserve">
-    <value>አስቀምጥ</value>
+    <value>ተከናውኗል</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>ሁሉንም ያግኙ</value>

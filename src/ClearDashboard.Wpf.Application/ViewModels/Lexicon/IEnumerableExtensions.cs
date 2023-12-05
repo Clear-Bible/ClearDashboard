@@ -28,7 +28,7 @@ public static class IEnumerableExtensions
 
     public static void SetInternalProperty(this object obj, string propertyName, object value)
     {
-        var propertyInfo = obj.GetType().GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Instance);
+        var propertyInfo = obj.GetType().GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
         if (propertyInfo != null && propertyInfo.CanWrite)
         {
             propertyInfo.SetValue(obj, value);

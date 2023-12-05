@@ -69,15 +69,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         {
             try
             {
-                //var editedLexemes = EditableLexemes!
-                //    .Where(l => l.Lexeme.Meanings.Any(m => m.IsDirty) || l.Lexeme.Forms.Any(f => f.IsDirty))
-                //    .Select(l => l.Lexeme).ToList();
+                var editedLexemes = EditableLexemes!
+                    .Where(l => l.Lexeme.Meanings.Any(m => m.IsDirty || m.Translations.Any(t=>t.IsDirty)) || l.Lexeme.Forms.Any(f => f.IsDirty))
+                    .Select(l => l.Lexeme).ToList();
 
 
-                //if (editedLexemes.Count == 0) return;
+                if (editedLexemes.Count == 0) return;
 
-                _ = await DAL.Alignment.Lexicon.Lexicon.MergeAndSaveAsync(
-                    EditableLexemes!.Select(l => l.Lexeme), LexiconManager.InternalLexicon, Mediator!);
+                _ = await DAL.Alignment.Lexicon.Lexicon.MergeAndSaveAsync(editedLexemes, LexiconManager.ManagedLexicon.Lexicon, Mediator!);
 
                 await TryCloseAsync(true);
             }
@@ -148,6 +147,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             get => _targetLanguages;
             set => Set(ref _targetLanguages, value);
         }
+
+
 
         public bool EnableSourceLanguageComboBox => SelectedSourceLanguage != null && !SelectedSourceLanguage.Equals(SourceLanguage);
 
@@ -225,7 +226,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                 State.Configure(EditMode, ToMatch);
 
                 EditableLexemes = GetFilteredLexemes();
-                EditButtonLabel = LocalizationService.Get("LexiconEdit_Edit");
+                //EditButtonLabel = LocalizationService.Get("LexiconEdit_Edit");
 
                 EditableLexemes!.HookItemPropertyChanged(UpdateCanSave);
             }
@@ -336,11 +337,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             editableLexeme.IsEditing = !editableLexeme.IsEditing;
             if (editableLexeme.IsEditing)
             {
-                EditButtonLabel = LocalizationService.Get("LexiconEdit_EditingDone");
+                editableLexeme.EditButtonLabel = LocalizationService.Get("LexiconEdit_EditingDone");
             }
             else
             {
-                EditButtonLabel = LocalizationService.Get("LexiconEdit_Edit");
+                editableLexeme.EditButtonLabel = LocalizationService.Get("LexiconEdit_Edit");
             }
             await Task.CompletedTask;
         }
@@ -358,6 +359,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             return "[UNKNOWN DIALOG MODE!]";
         }
 
+        public bool ActionButtonIsEnabled(EditableLexemeViewModel editableLexeme)
+        {
+            switch (EditMode)
+            {
+                case LexiconEditMode.MatchOnTranslation:
+                    return editableLexeme.Meanings != null && !editableLexeme.Forms.Contains(Other);
+
+                case LexiconEditMode.PartialMatchOnLexemeOrForm:
+                    return editableLexeme.Forms != null && !editableLexeme.Meanings.Contains(Other);
+                default:                    
+                    return false;
+            }
+        }
+
        
 
         private BindableCollection<EditableLexemeViewModel>? GetFilteredLexemes()
@@ -365,18 +380,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             var filteredLexemes = new List<Lexeme>();
             var managedLexemes = LexiconManager.ManagedLexemes;
 
+            var editLabel = LocalizationService.Get("LexiconEdit_Edit");
+            var doneLabel = LocalizationService.Get("LexiconEdit_EditingDone");
+
             switch (EditMode)
             {
                 case LexiconEditMode.MatchOnTranslation:
 
                     filteredLexemes = managedLexemes.FilterByTranslationText(SelectedSourceLanguage, SelectedTargetLanguage, ToMatch).ToList();
-                    return new BindableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l=> new EditableLexemeViewModel(l) {SourceLanguage = SourceLanguage, TargetLanguage = TargetLanguage}));
-
+                    return new BindableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l=> new EditableLexemeViewModel(l) {SourceLanguage = SourceLanguage, TargetLanguage = TargetLanguage, EditButtonLabel = LocalizationService.Get("LexiconEdit_Edit"), DoneLabel = doneLabel, EditLabel = editLabel}));
+       
                 case LexiconEditMode.PartialMatchOnLexemeOrForm:
                     // .Where(l=>l.IsInDatabase)
                     filteredLexemes = managedLexemes.FilterByLexemeText(ToMatch, State.FormsOption == MatchOption.Partially, SourceLanguage, null).ToList();
-                    return new BindableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l => new EditableLexemeViewModel(l) { SourceLanguage = SourceLanguage, TargetLanguage = TargetLanguage }));
-
+                    return new BindableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l => new EditableLexemeViewModel(l) { SourceLanguage = SourceLanguage, TargetLanguage = TargetLanguage, EditButtonLabel = LocalizationService.Get("LexiconEdit_Edit"), DoneLabel = doneLabel, EditLabel = editLabel }));
+   
                 default:
                     return null;
 

@@ -389,7 +389,7 @@
     <value>Tous</value>
   </data>
   <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
-    <value>Rendages manquants</value>
+    <value>Rendements manquants</value>
   </data>
   <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
     <value>Mots alignés</value>
@@ -446,7 +446,7 @@
     <value>Mark sélectionné comme «Revue des besoins»</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
-    <value>Mark sélectionné comme «valide»</value>
+    <value>Marque sélectionnée comme «valide»</value>
   </data>
   <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
     <value>Besoin d'examen</value>
@@ -503,7 +503,7 @@
     <value>nouveau groupe</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
-    <value>nouveau individu</value>
+    <value>Nouveau individu</value>
   </data>
   <data name="ClockUserControl_Select" xml:space="preserve">
     <value>Sélectionnez le fuseau horaire</value>
@@ -635,7 +635,7 @@
     <value>Interlinéaire</value>
   </data>
   <data name="EnhancedView_JoinTokens" xml:space="preserve">
-    <value>Rejoignez les jetons</value>
+    <value>Rejoignez des jetons</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
     <value>Rejoignez des jetons pour la paire de langues</value>
@@ -923,7 +923,7 @@
     <value>Ajouter '{0}' comme traduction en premier sens</value>
   </data>
   <data name="LexiconEdit_EditingDone" xml:space="preserve">
-    <value>Sauvegarder</value>
+    <value>Fait</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Trouver tout</value>
@@ -1571,7 +1571,7 @@
     <value>Calculer le nouveau modèle de traduction</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Changer le niveau de zoom du contenu</value>
+    <value>Modifier le niveau de zoom du contenu</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
     <value>Consultant Notes</value>
@@ -1793,7 +1793,7 @@
     <value>Supprimer le projet</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Activer la sélection des livres</value>
+    <value>Activer la sélection du livre</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
     <value>En cas de vérification, vous pourrez sélectionner les livres à traiter.</value>
@@ -1832,7 +1832,7 @@
     <value>Ouverte récente</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>Paratext</value>
+    <value>Paratex</value>
   </data>
   <data name="ProjectPicker_ParatextBackTranslation" xml:space="preserve">
     <value>Traduction de dos paratext</value>
@@ -1844,7 +1844,7 @@
     <value>PARATEXT est en cours d'exécution mais n'est pas connecté.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
-    <value>Projet de parattex</value>
+    <value>Projet PARATEXT</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
     <value>Projet:</value>
@@ -2012,7 +2012,7 @@
     <value>John</value>
   </data>
   <data name="ProperCase_Jonah" xml:space="preserve">
-    <value>Jonie</value>
+    <value>Jona</value>
   </data>
   <data name="ProperCase_Joshua" xml:space="preserve">
     <value>Joshua</value>
@@ -2024,13 +2024,13 @@
     <value>Juges</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentations</value>
+    <value>Lamentation</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
     <value>Lévitique</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
-    <value>Las</value>
+    <value>Luck</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
     <value>Malachi</value>

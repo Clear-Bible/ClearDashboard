@@ -134,7 +134,7 @@
     <value>Copiați erorile USFM pe clipboard</value>
   </data>
   <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
-    <value>Numărul de erori:</value>
+    <value>Numărul erorilor:</value>
   </data>
   <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
     <value>Interlinear</value>
@@ -659,7 +659,7 @@
     <value>Nu există date de versuri în acest interval de versuri.</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
-    <value>Îndepărtați corpusul</value>
+    <value>Eliminați corpusul</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
     <value>Afișați controalele de vizualizare</value>
@@ -923,7 +923,7 @@
     <value>Adăugați „{0}” ca traducere la primul sens</value>
   </data>
   <data name="LexiconEdit_EditingDone" xml:space="preserve">
-    <value>Salvați</value>
+    <value>Terminat</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Găsiți toate</value>
@@ -1070,7 +1070,7 @@
     <value>Ștergeți aspectul salvat</value>
   </data>
   <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
-    <value>Aspecte de proiect</value>
+    <value>Machete de proiect</value>
   </data>
   <data name="MainView_LayoutsSave" xml:space="preserve">
     <value>Salvați aspectul curent</value>
@@ -1616,7 +1616,7 @@
     <value>Afișați informații despre acest proiect</value>
   </data>
   <data name="Pds_ManuscriptGreek" xml:space="preserve">
-    <value>Macula greacă (NT)</value>
+    <value>Greacă (NT) macula</value>
   </data>
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>Ebraică (OT) macula</value>
@@ -1736,7 +1736,7 @@
     <value>Prefix</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Arată backtranslație</value>
+    <value>Afișați backtranslația</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>Tulpină</value>
@@ -2222,7 +2222,7 @@
     <value>Afișați vizualizări extinse pe un monitor diferit de tabloul de bord</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Pentru sistemele cu trei sau mai multe monitoare, afișați vizualizare extinsă pe a treia monitor</value>
+    <value>Pentru sistemele cu trei sau mai multe monitoare, afișați o vizualizare extinsă pe a treia monitor</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Colecția de text</value>
@@ -2258,7 +2258,7 @@
     <value>Note de lansare</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>Afișați pre-lansarea</value>
+    <value>Afișați pre-versiuni</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
     <value>Actualizați la noua versiune a ClearDashboard</value>
@@ -2303,7 +2303,7 @@
     <value>Editor</value>
   </data>
   <data name="SlackMessageView_SuggestionMarkdown" xml:space="preserve">
-    <value>Suportă formatul Markdown</value>
+    <value>Acceptă formatul de marcare</value>
   </data>
   <data name="SlackMessageView_SuggestionPreview" xml:space="preserve">
     <value>previzualizare</value>

@@ -923,7 +923,7 @@
     <value>Add '{0}' as translation to first meaning</value>
   </data>
   <data name="LexiconEdit_EditingDone" xml:space="preserve">
-    <value>Save</value>
+    <value>Done</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Find All</value>

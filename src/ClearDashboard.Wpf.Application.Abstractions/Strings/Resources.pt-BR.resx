@@ -143,7 +143,7 @@
     <value>Sem erros</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
-    <value>Salvar erros USFM no arquivo</value>
+    <value>Salve erros USFM no arquivo</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
     <value>Selecionar tudo</value>
@@ -638,7 +638,7 @@
     <value>Junte -se a tokens</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Junte -se a tokens para par de idiomas</value>
+    <value>Junte -se a tokens para o par de idiomas</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>Marcar o alinhamento como 'inválido'</value>
@@ -923,7 +923,7 @@
     <value>Adicione '{0}' como tradução para o primeiro significado</value>
   </data>
   <data name="LexiconEdit_EditingDone" xml:space="preserve">
-    <value>Salvar</value>
+    <value>Feito</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Encontrar tudo</value>
@@ -1184,7 +1184,7 @@
     <value>Pesquisar por brilho inglês</value>
   </data>
   <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>Pesquise por hebraico/grego</value>
+    <value>Pesquisar por hebraico/grego</value>
   </data>
   <data name="Marble_Sense" xml:space="preserve">
     <value>Senso</value>
@@ -1205,7 +1205,7 @@
     <value>Versos</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Verso senso</value>
+    <value>Sentido do verso</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Verso total</value>
@@ -1250,7 +1250,7 @@
     <value>Token de acesso:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Verifique seu e -mail e insira o código de validação:</value>
+    <value>Verifique seu e -mail e digite o código de validação:</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Verifique a disponibilidade do usuário</value>
@@ -1442,7 +1442,7 @@
     <value>Grupos de etiquetas</value>
   </data>
   <data name="Notes_NoteLabels" xml:space="preserve">
-    <value>Etiquetas</value>
+    <value>Rótulos</value>
   </data>
   <data name="Notes_NoteReplies" xml:space="preserve">
     <value>Respostas</value>
@@ -1670,7 +1670,7 @@
     <value>Transliteração manual</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>TransliteraçãoWithEncoder</value>
+    <value>Transliteração comncoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Desconhecido</value>
@@ -1712,7 +1712,7 @@
     <value>Lexeme</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
-    <value>Lexeme tipo</value>
+    <value>Lexeme Type</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
     <value>Referências de carga</value>
@@ -1763,7 +1763,7 @@
     <value>Paratext beta não está funcionando</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
-    <value>Cancelamento ...</value>
+    <value>Cancelando ...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Projetos de colaboração</value>
@@ -1808,7 +1808,7 @@
     <value>Verifique esta caixa para incluir os textos bíblicos gregos e hebraicos ao criar seu projeto.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Incluir textos bíblicos gregos do NT?</value>
+    <value>Incluir textos bíblicos gregos no NT?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>Incluir textos bíblicos hebraicos?</value>
@@ -1853,7 +1853,7 @@
     <value>Estamos quase lá!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>Clique aqui para ver os vídeos 'Painel de início'</value>
+    <value>Clique aqui para visualizar vídeos 'Painel de início'</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
     <value>Depois de clicar no botão 'Criar' abaixo, estaremos tokenizando, alinhando e preparando seu projeto. Todas as etapas aparecerão aqui à medida que são processadas. Enquanto você espera, fique à vontade para clicar no link abaixo e assistir a alguns vídeos úteis para começar a usar o ClearDashboard!</value>
@@ -1871,7 +1871,7 @@
     <value>Pesquise recente</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
-    <value>Clique aqui para começar a Paratext</value>
+    <value>Clique aqui para começar o Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
     <value>Versão:</value>
@@ -2144,7 +2144,7 @@
     <value>Ativar plug -in experimental aqua</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Verifique seu e -mail e insira o código de validação:</value>
+    <value>Verifique seu e -mail e digite o código de validação:</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Configurações de colaboração</value>

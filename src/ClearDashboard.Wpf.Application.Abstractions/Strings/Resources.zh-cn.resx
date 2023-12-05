@@ -242,7 +242,7 @@
     <value>建造;宗教活动</value>
   </data>
   <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>构造；畜牧业</value>
+    <value>建筑；畜牧业</value>
   </data>
   <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
     <value>容器；畜牧业</value>
@@ -413,13 +413,13 @@
     <value>散装对齐编辑</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>批量对准评论</value>
+    <value>批量对齐审查</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>数数</value>
   </data>
   <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>按表面文本计数</value>
+    <value>按地面文本计数</value>
   </data>
   <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
     <value>通过培训文本计数</value>
@@ -455,7 +455,7 @@
     <value>部分</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>枢纽的单词</value>
+    <value>枢密性的单词</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>来源</value>
@@ -596,7 +596,7 @@
     <value>添加对齐方式？</value>
   </data>
   <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>用'{1}'对齐'{0}'？</value>
+    <value>与'{1}'对齐'{0}'？</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
     <value>结盟</value>
@@ -620,7 +620,7 @@
     <value>删除“ {0}”的对齐？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>删除所有对齐方式？</value>
+    <value>删除所有路线？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>令牌'{0}'具有多个对齐定义。单击'{1}'将删除所有对齐。</value>
@@ -665,7 +665,7 @@
     <value>显示视图控件</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>分开令牌</value>
+    <value>拆分令牌</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>将拆分应用于其他令牌</value>
@@ -920,10 +920,10 @@
     <value>添加'{0}'作为表单</value>
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
-    <value>添加'{0}'作为第一个含义</value>
+    <value>将'{0}'添加为第一个含义</value>
   </data>
   <data name="LexiconEdit_EditingDone" xml:space="preserve">
-    <value>节省</value>
+    <value>完毕</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>找到所有</value>
@@ -1034,7 +1034,7 @@
     <value>需要姓氏</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>需要许可证密钥</value>
+    <value>需要许可密钥</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
@@ -1286,7 +1286,7 @@
     <value>姓</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
-    <value>新的协作用户</value>
+    <value>新的合作用户</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
     <value>密码：</value>
@@ -1466,7 +1466,7 @@
     <value>将此注释发送到Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>象征化的语料库</value>
+    <value>令牌化语料库</value>
   </data>
   <data name="Notes_TranslationSet" xml:space="preserve">
     <value>翻译集</value>
@@ -1574,7 +1574,7 @@
     <value>更改内容的缩放级别</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>顾问说明</value>
+    <value>顾问Notes</value>
   </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>创建新单词对齐</value>
@@ -1736,7 +1736,7 @@
     <value>字首</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>展示退缩</value>
+    <value>展示反向翻译</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>干</value>
@@ -1805,7 +1805,7 @@
     <value>导入服务器项目</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>选中此框，以在创建项目时包括希腊语和希伯来语圣经文本。</value>
+    <value>在创建项目时，请选中此框，以包括希腊语和希伯来语圣经的文本。</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>包括NT希腊圣经文本？</value>
@@ -1829,7 +1829,7 @@
     <value>paratext不运行</value>
   </data>
   <data name="ProjectPicker_OpenRecent" xml:space="preserve">
-    <value>公开最近</value>
+    <value>近期开放</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
     <value>PARATEXT</value>
@@ -1841,7 +1841,7 @@
     <value>线性圣经（LWC）</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext正在运行但未连接。</value>
+    <value>paratext正在运行但未连接。</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>PARATEXT项目</value>
@@ -2141,7 +2141,7 @@
     <value>发送</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>启用实验水上插件</value>
+    <value>启用实验性水上插件</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
     <value>检查您的电子邮件并输入验证代码：</value>
@@ -2270,7 +2270,7 @@
     <value>错误报告</value>
   </data>
   <data name="SlackMessageView_Combo1" xml:space="preserve">
-    <value>我在项目中丢失了数据</value>
+    <value>我在一个项目中丢失了数据</value>
   </data>
   <data name="SlackMessageView_Combo2" xml:space="preserve">
     <value>我无法完成任务</value>
@@ -2354,7 +2354,7 @@
     <value>更新并添加新书</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
-    <value>选择书</value>
+    <value>选择书籍</value>
   </data>
   <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
     <value>更新并添加新</value>

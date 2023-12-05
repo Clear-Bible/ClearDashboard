@@ -254,7 +254,7 @@
     <value>buah</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>batu permata</value>
+    <value>Batu permata</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>rumput</value>
@@ -461,7 +461,7 @@
     <value>Sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Bagian Sumber</value>
+    <value>Bagian sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Sumber Ref</value>
@@ -518,7 +518,7 @@
     <value>Pengguna kolaborasi yang tersedia:</value>
   </data>
   <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
-    <value>Kelola proyek kolaborasi</value>
+    <value>Mengelola proyek kolaborasi</value>
   </data>
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Pengguna proyek saat ini:</value>
@@ -923,7 +923,7 @@
     <value>Tambahkan '{0}' sebagai terjemahan ke makna pertama</value>
   </data>
   <data name="LexiconEdit_EditingDone" xml:space="preserve">
-    <value>Menyimpan</value>
+    <value>Selesai</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Temukan semua</value>
@@ -980,7 +980,7 @@
     <value>Tambahkan sebagai formulir untuk ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Temukan pencocokan leksem atau bentuk penuh atau parsial untuk sumber</value>
+    <value>Temukan Lexeme atau Bentuk Penting atau Parsial untuk Sumber</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Tambahkan target sebagai terjemahan untuk ...</value>
@@ -1367,7 +1367,7 @@
     <value>Apakah Anda ingin membuat label:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
-    <value>dan kaitkan dengan grup label:</value>
+    <value>dan asosiasikan dengan grup label:</value>
   </data>
   <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
     <value>Apakah Anda ingin menghapus label:</value>
@@ -1520,7 +1520,7 @@
     <value>Kereta</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Pelatih mesin pelurus mesin</value>
+    <value>Pelatihan mesin pelurus mesin</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Atur pemetaan ayat antara korpora yang disejajarkan</value>
@@ -1655,7 +1655,7 @@
     <value>Standar</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Studibible</value>
+    <value>Studybible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBibleadditions</value>
@@ -1814,7 +1814,7 @@
     <value>Sertakan teks -teks Alkitab Ibrani?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
-    <value>Kelola proyek kolaborasi</value>
+    <value>Mengelola proyek kolaborasi</value>
   </data>
   <data name="ProjectPicker_NoMatches" xml:space="preserve">
     <value>Tidak ada yang cocok.</value>
@@ -1889,7 +1889,7 @@
     <value>Proyek dengan nama yang sama sudah ada. Pilih nama unik.</value>
   </data>
   <data name="ProjectValidator_TooLong" xml:space="preserve">
-    <value>Nama proyek yang diberikan terlalu lama.</value>
+    <value>Nama proyek yang diberikan terlalu panjang.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Tawarikh</value>
@@ -2033,7 +2033,7 @@
     <value>Luke</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
-    <value>Maleakhi</value>
+    <value>Malachi</value>
   </data>
   <data name="ProperCase_Mark" xml:space="preserve">
     <value>Tanda</value>

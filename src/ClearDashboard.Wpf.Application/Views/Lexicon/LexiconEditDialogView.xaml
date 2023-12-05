@@ -11,6 +11,7 @@
     xmlns:cm="http://caliburnmicro.com"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     d:DataContext="{d:DesignInstance Type=lexicon:LexiconEditDialogViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -18,7 +19,9 @@
     mc:Ignorable="d"
     MaxWidth="1024"
     MaxHeight="800">
+
     <UserControl.Resources>
+       
         <Style x:Key="Label" TargetType="{ x:Type TextBlock}">
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -73,7 +76,9 @@
                     <Setter Property="Background" Value="LightGray" />
                 </Trigger>
             </Style.Triggers>
+           
         </Style>
+       
     </UserControl.Resources>
     <Grid MinWidth="800">
         <Grid.RowDefinitions>
@@ -239,17 +244,26 @@
                         <DataTemplate>
                             <StackPanel Orientation="Vertical">
                                 <Button x:Name="EditButton" Style="{StaticResource RowButtonStyle}" 
-                                        cm:Action.TargetWithoutContext="{Binding DataContext, ElementName=LexiconEditDataGrid}"
-                                        cm:Message.Attach="[Event Click] = [Action OnEditButtonClicked($dataContext)]">
-                                    <Button.ContentTemplate>
+                                        cm:Action.TargetWithoutContext="{Binding }"
+                                        cm:Message.Attach="[Event Click] = [Action OnEditButtonClicked()]" Content="{Binding EditButtonLabel}">
+                                    <!--<Button.ContentTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding ElementName=LexiconEditDataGrid, Path=DataContext.EditButtonLabel}" TextWrapping="Wrap" />
+                                            <TextBlock Text="{Binding  Path=EditButtonLabel}" TextWrapping="Wrap" />
                                         </DataTemplate>
-                                    </Button.ContentTemplate>
+                                    </Button.ContentTemplate>-->
                                 </Button>
                                 <Button x:Name="ActionButton" Style="{StaticResource RowButtonStyle}"  
                                     cm:Action.TargetWithoutContext="{Binding DataContext, ElementName=LexiconEditDataGrid}"
-                                    cm:Message.Attach="[Event Click] = [Action OnAddButtonClicked($dataContext, $source)]" Visibility="{Binding IsEditing, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                                    cm:Message.Attach="[Event Click] = [Action OnAddButtonClicked($dataContext, $source)]" 
+                                     Visibility="{Binding IsEditing, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                                    <Button.IsEnabled>
+
+                                        <MultiBinding Converter="{StaticResource LexiconEditDialogViewModelToBooleanConverter}">
+                                            <Binding ElementName="LexiconEditDataGrid" Path="DataContext" />
+                                            <Binding/>
+                                        </MultiBinding>
+                          
+                                    </Button.IsEnabled>
                                     <Button.ContentTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding ElementName=LexiconEditDataGrid, Path=DataContext.ActionButtonLabel}" TextWrapping="Wrap" />

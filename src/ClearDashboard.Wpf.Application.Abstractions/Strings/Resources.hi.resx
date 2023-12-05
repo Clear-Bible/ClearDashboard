@@ -644,7 +644,7 @@
     <value>'अमान्य' के रूप में चिह्न संरेखण</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
-    <value>मार्क संरेखण 'समीक्षा की आवश्यकता' के रूप में</value>
+    <value>मार्क संरेखण को 'समीक्षा की आवश्यकता' के रूप में संरेखित करें</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
     <value>'मान्य' के रूप में चिह्न संरेखण</value>
@@ -881,7 +881,7 @@
     <value>Lemma/रूप:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>नए लेक्सेम के लिए लेम्मा:</value>
+    <value>न्यू लेक्सेम के लिए लेम्मा:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>शब्दिम</value>
@@ -923,7 +923,7 @@
     <value>पहले अर्थ में अनुवाद के रूप में '{0}' जोड़ें</value>
   </data>
   <data name="LexiconEdit_EditingDone" xml:space="preserve">
-    <value>बचाना</value>
+    <value>हो गया</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>सब ढूँढ़ो</value>
@@ -1106,7 +1106,7 @@
     <value>कॉरपस टोकन</value>
   </data>
   <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>चापलूसी</value>
+    <value>चकरानेवाला</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>देखना</value>
@@ -1796,7 +1796,7 @@
     <value>पुस्तक चयन सक्षम करें</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
-    <value>यदि जाँच की जाती है, तो आप किन पुस्तकों को संसाधित करने के लिए चयन कर पाएंगे।</value>
+    <value>यदि जाँच की जाती है, तो आप कौन सी पुस्तकों को संसाधित करने में सक्षम होंगे।</value>
   </data>
   <data name="ProjectPicker_GetStarted" xml:space="preserve">
     <value>शुरू हो जाओ</value>
@@ -1901,7 +1901,7 @@
     <value>1 जॉन</value>
   </data>
   <data name="ProperCase_1_Kings" xml:space="preserve">
-    <value>1 किंग्स</value>
+    <value>1 राजा</value>
   </data>
   <data name="ProperCase_1_Peter" xml:space="preserve">
     <value>1 पीटर</value>
@@ -2372,7 +2372,7 @@
     <value>कॉरपस टोकन</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
-    <value>चापलूसी</value>
+    <value>चकरानेवाला</value>
   </data>
   <data name="Windows_EnhancedView" xml:space="preserve">
     <value>देखना</value>
@@ -2393,7 +2393,7 @@
     <value>समझ:</value>
   </data>
   <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>उपडोमेन:</value>
+    <value>सबडोमेन:</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>हाँ</value>
