@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using ClearDashboard.DAL.Alignment.Features.Notes;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+using System.IO;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 {
@@ -71,7 +72,6 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             //}
             //catch (Exception ex)
             //{
-
             //}
 
             //return;
@@ -296,9 +296,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 .Include(e => e.SemanticDomains)
                 .ToDictionary(e => e.Id, e => e);
 
-            Assert.Empty(lexiconLexemeMeaningsDb[lexiconLexeme1Meaning1.Id].SemanticDomains);
-            Assert.Single(lexiconLexemeMeaningsDb[lexiconLexeme1Meaning2.Id].SemanticDomains);
-            Assert.Equal(2, lexiconLexemeMeaningsDb[lexiconLexeme2Meaning1.Id].SemanticDomains.Count);
+            Assert.Empty(lexiconLexemeMeaningsDb.Where(e => e.Value.Text == lexiconLexeme1Meaning1.Text).First().Value.SemanticDomains);
+            Assert.Single(lexiconLexemeMeaningsDb.Where(e => e.Value.Text == lexiconLexeme1Meaning2.Text).First().Value.SemanticDomains);
+            Assert.Equal(2, lexiconLexemeMeaningsDb.Where(e => e.Value.Text == lexiconLexeme2Meaning1.Text).First().Value.SemanticDomains.Count);
         }
 
         [Fact]
@@ -400,29 +400,62 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         {
             // Add a label 
 
-            var testNotes = _fixture.Notes.Take(2).ToArray();
-            Assert.Equal(2, testNotes.Length);
+            var testNotes = _fixture.Notes.Take(3).ToArray();
+            Assert.Equal(3, testNotes.Length);
 
             var testLabelId1 = Guid.NewGuid();
+            var testLabel1 = new Models.Label { Id = testLabelId1, Text = "test label 1" };
 
-            _fixture.Labels.Add(new Models.Label { Id = testLabelId1, Text = "test label 1" });
+            var testLabelId2 = Guid.NewGuid();
+            var testLabel2 = new Models.Label { Id = testLabelId2, Text = "test label 2" };
 
-            _fixture.LabelNoteAssociations.Add(new Models.LabelNoteAssociation { Id = Guid.NewGuid(), LabelId = testLabelId1, NoteId = testNotes[0].Id });
-            _fixture.LabelNoteAssociations.Add(new Models.LabelNoteAssociation { Id = Guid.NewGuid(), LabelId = testLabelId1, NoteId = testNotes[1].Id });
+            var testLabelId3 = Guid.NewGuid();
+            var testLabel3 = new Models.Label { Id = testLabelId3, Text = "test label 3" };
+
+            _fixture.Labels.Add(testLabel1);
+            _fixture.Labels.Add(testLabel2);
+            _fixture.Labels.Add(testLabel3);
+
+            _fixture.LabelNoteAssociations.Add(new Models.LabelNoteAssociation { Id = Guid.NewGuid(), Label = testLabel1, LabelId = testLabelId1, NoteId = testNotes[0].Id });
+            _fixture.LabelNoteAssociations.Add(new Models.LabelNoteAssociation { Id = Guid.NewGuid(), Label = testLabel1, LabelId = testLabelId1, NoteId = testNotes[1].Id });
+            _fixture.LabelNoteAssociations.Add(new Models.LabelNoteAssociation { Id = Guid.NewGuid(), Label = testLabel2, LabelId = testLabelId2, NoteId = testNotes[1].Id });
+            _fixture.LabelNoteAssociations.Add(new Models.LabelNoteAssociation { Id = Guid.NewGuid(), Label = testLabel3, LabelId = testLabelId3, NoteId = testNotes[1].Id });
+            _fixture.LabelNoteAssociations.Add(new Models.LabelNoteAssociation { Id = Guid.NewGuid(), Label = testLabel3, LabelId = testLabelId3, NoteId = testNotes[2].Id });
+
+            var testLabelGroupId1 = Guid.NewGuid();
+            var testLabelGroup1 = new Models.LabelGroup { Id = testLabelGroupId1, Name = "test label group 1" };
+
+            var testLabelGroupId2 = Guid.NewGuid();
+            var testLabelGroup2 = new Models.LabelGroup { Id = testLabelGroupId2, Name = "test label group 2" };
+
+            _fixture.LabelGroups.Add(testLabelGroup1);
+            _fixture.LabelGroups.Add(testLabelGroup2);
+
+            _fixture.LabelGroupAssociations.Add(new Models.LabelGroupAssociation { Id = Guid.NewGuid(), Label = testLabel1, LabelId = testLabelId1, LabelGroup = testLabelGroup1, LabelGroupId = testLabelGroupId1 });
+            _fixture.LabelGroupAssociations.Add(new Models.LabelGroupAssociation { Id = Guid.NewGuid(), Label = testLabel1, LabelId = testLabelId1, LabelGroup = testLabelGroup2, LabelGroupId = testLabelGroupId2 });
+            _fixture.LabelGroupAssociations.Add(new Models.LabelGroupAssociation { Id = Guid.NewGuid(), Label = testLabel2, LabelId = testLabelId2, LabelGroup = testLabelGroup2, LabelGroupId = testLabelGroupId2 });
 
             await DoMerge();
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(1, _fixture.ProjectDbContext.Labels.Count());
-            Assert.Equal(2, _fixture.ProjectDbContext.LabelNoteAssociations.Count());
+            Assert.Equal(3, _fixture.ProjectDbContext.Labels.Count());
+            Assert.Equal(5, _fixture.ProjectDbContext.LabelNoteAssociations.Count());
 
             Assert.Single(_fixture.ProjectDbContext.LabelNoteAssociations
                 .Where(e => e.NoteId == testNotes[0].Id));
 
-            Assert.Single(_fixture.ProjectDbContext.LabelNoteAssociations
-                .Where(e => e.NoteId == testNotes[1].Id));
+            Assert.Equal(3, _fixture.ProjectDbContext.LabelNoteAssociations
+                .Where(e => e.NoteId == testNotes[1].Id).Count());
 
+            Assert.Equal(2, _fixture.ProjectDbContext.LabelGroups.Count());
+            Assert.Equal(3, _fixture.ProjectDbContext.LabelGroupAssociations.Count());
+
+            Assert.Equal(2, _fixture.ProjectDbContext.LabelGroupAssociations.Include(e => e.Label)
+                .Where(e => e.Label!.Text == testLabel1.Text).Count());
+
+            Assert.Single(_fixture.ProjectDbContext.LabelGroupAssociations.Include(e => e.Label)
+                .Where(e => e.Label!.Text == testLabel2.Text));
         }
 
         [Fact]
@@ -523,7 +556,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            var trDb = _fixture.ProjectDbContext.Lexicon_Translations.Where(e => e.Id == testTranslation1.Id).FirstOrDefault();
+            var trDb = _fixture.ProjectDbContext.Lexicon_Translations.Where(e => e.Text == testTranslation1.Text).FirstOrDefault();
             Assert.NotNull(trDb);
             Assert.Equal(newTranslationText, trDb.Text);
             Assert.Single(_fixture.ProjectDbContext.Lexicon_Meanings
@@ -707,13 +740,13 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             if (isIt)
             {
-                //var backupsPath =
-                //    FilePathTemplates.CollabBaseDirectory + Path.DirectorySeparatorChar + "Backups";
+                var backupsPath =
+                    FilePathTemplates.CollabBaseDirectory + Path.DirectorySeparatorChar + "Backups";
 
-                //Directory.CreateDirectory(backupsPath);
+                Directory.CreateDirectory(backupsPath);
 
-                //var factory = new ProjectSnapshotFilesFactory(Path.Combine(backupsPath, "merge_test_final_snapshot"), _fixture.Logger);
-                //factory.SaveSnapshot(snapshotToMerge);
+                var factory = new ProjectSnapshotFilesFactory(Path.Combine(backupsPath, "merge_test_final_snapshot"), _fixture.Logger);
+                factory.SaveSnapshot(snapshotToMerge);
             }
 
             await _fixture.MergeIntoDatabase(commitShaToMerge, snapshotLastMerged, snapshotToMerge, progress);

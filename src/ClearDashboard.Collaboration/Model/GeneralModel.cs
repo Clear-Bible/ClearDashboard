@@ -31,13 +31,13 @@ namespace ClearDashboard.Collaboration.Model;
 public class GeneralModel<T> : GeneralModel, IModelSnapshot<T>
     where T : notnull
 {
-    public GeneralModel(string identityKey, string identityValue, string? comparableId = null) :
-        base(identityKey, identityValue, comparableId)
+    public GeneralModel(string identityKey, string identityValue, string? idForFilesystem = null) :
+        base(identityKey, identityValue, idForFilesystem)
     {
     }
 
-    public GeneralModel(string identityKey, ValueType identityValue, string? comparableId = null) :
-        base(identityKey, identityValue, comparableId)
+    public GeneralModel(string identityKey, ValueType identityValue, string? idForFilesystem = null) :
+        base(identityKey, identityValue, idForFilesystem)
     {
     }
 
@@ -120,11 +120,11 @@ public class GeneralModel<T> : GeneralModel, IModelSnapshot<T>
 
 public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IModelSnapshot>
 {
-    public GeneralModel(string identityKey, string identityValue, string? comparableId) : this(identityKey, (object)identityValue, comparableId)
+    public GeneralModel(string identityKey, string identityValue, string? idForFilesystem) : this(identityKey, (object)identityValue, idForFilesystem)
     {
     }
 
-    public GeneralModel(string identityKey, ValueType identityValue, string? comparableId) : this(identityKey, (object)identityValue, comparableId)
+    public GeneralModel(string identityKey, ValueType identityValue, string? idForFilesystem) : this(identityKey, (object)identityValue, idForFilesystem)
     {
     }
 
@@ -170,20 +170,21 @@ public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IMode
         }
     }
 
-    private GeneralModel(string identityKey, object identityValue, string? comparableId)
+    private GeneralModel(string identityKey, object identityValue, string? idForFilesystem)
     {
+        _idForFilesystem = idForFilesystem;
         _properties = new();
         _children = new();
-        _comparableId = comparableId;
 
         IdentityKey = identityKey;
         AddProperty(identityKey, identityValue);
     }
     public string IdentityKey { get; }
+
+    protected string? _idForFilesystem { get; }
     protected Dictionary<string, object?> _properties { get; set; }
     protected Dictionary<string, string>? _addedPropertyTypeNames { get; set; }
     protected Dictionary<string, IEnumerable<IModelDistinguishable>> _children { get; set; } // Not part of equality check, not serialized/deserialized in same container
-    protected string? _comparableId { get; }
 
     // IModelSnapshot:
     public abstract Type EntityType { get; }
@@ -215,7 +216,7 @@ public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IMode
 
     // IModelIdentifiable
     public object GetId() => _properties[IdentityKey] ?? throw new Exception($"Unable to determine identity!");
-    public string GetComparableId() => _comparableId ?? _properties[IdentityKey]?.ToString() ?? throw new Exception($"Unable to determine identity!");
+    public string GetIdForFilesystem() => _idForFilesystem ?? GetId().ToString() ?? throw new Exception($"Unable to determine identity for filesystem!");
 
     // Limit what property types are accepted:
     public void Add(string key, string? value, Type? nullValueValueType = null) { AddProperty(key, value, nullValueValueType); }

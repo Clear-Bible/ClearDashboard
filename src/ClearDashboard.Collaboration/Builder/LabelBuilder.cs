@@ -45,10 +45,11 @@ public class LabelBuilder : GeneralModelBuilder<Models.Label>
 
         foreach (var labelDbModel in labelDbModels)
         {
-            var labelRef = CalculateLabelRef(labelDbModel.Text!);
+            var labelRef = EncodeLabelRef(labelDbModel.Text!);
             var label = BuildRefModelSnapshot(
                     labelDbModel,
                     labelRef,
+                    GetLabelRef(labelDbModel.Text!),
                     null,
                     builderContext);
 
@@ -60,8 +61,9 @@ public class LabelBuilder : GeneralModelBuilder<Models.Label>
                 {
                     var lgaModelSnapshot = BuildRefModelSnapshot(
                         lna,
-                        CalculateLabelNoteAssociationRef(lna.Label!.Text!, lna.NoteId),
-                        new (string, string?, bool)[] { (LABEL_REF_PREFIX, lna.Label!.Text!, true) },
+                        GetLabelNoteAssociationRef(lna.Label!.Text!, lna.NoteId),
+                        null,
+                        new (string, string?, bool)[] { (LABEL_REF_PREFIX, labelRef, true) },
                         builderContext);
 
                     labelNoteAssociationModelSnapshots.Add(lgaModelSnapshot);
@@ -75,15 +77,10 @@ public class LabelBuilder : GeneralModelBuilder<Models.Label>
         return modelSnapshots;
     }
 
-    public static string CalculateLabelRef(string labelText)
-    {
-        return EncodePartsToRef(LABEL_REF_PREFIX, labelText);
-    }
-
-    private static string CalculateLabelNoteAssociationRef(string labelName, Guid noteId)
-    {
-        return EncodePartsToRef(LABELNOTEASSOCIATION_REF_PREFIX, labelName, noteId.ToString());
-    }
+    public static string GetLabelRef(string labelText) => HashPartsToRef(LABEL_REF_PREFIX, labelText);
+    private static string GetLabelNoteAssociationRef(string labelName, Guid noteId) => HashPartsToRef(LABELNOTEASSOCIATION_REF_PREFIX, labelName, noteId.ToString());
+    public static string EncodeLabelRef(string labelText) => EncodePartsToRef(LABEL_REF_PREFIX, labelText);
+    public static string DecodeLabelRef(string labelRef) => DecodeRefToParts(LABEL_REF_PREFIX, labelRef, 1)[0];
 
     public override GeneralModel<Models.Label> BuildGeneralModel(Dictionary<string, (Type type, object? value)> modelPropertiesTypes)
     {
@@ -94,7 +91,7 @@ public class LabelBuilder : GeneralModelBuilder<Models.Label>
             if (modelPropertiesTypes.TryGetValue(nameof(Models.Label.Text), out var labelText))
             {
                 modelPropertiesTypes.Remove(nameof(Models.Label.Id));
-                modelPropertiesTypes.Add(BuildPropertyRefName(), (typeof(string), CalculateLabelRef((string)labelText.value!)));
+                modelPropertiesTypes.Add(BuildPropertyRefName(), (typeof(string), EncodeLabelRef((string)labelText.value!)));
             }
             else
             {
@@ -159,7 +156,7 @@ public class LabelBuilder : GeneralModelBuilder<Models.Label>
 
                     childSnapshotToAdd = new GeneralModel<Models.LabelNoteAssociation>(
                         BuildPropertyRefName(),
-                        CalculateLabelNoteAssociationRef(labelText, noteId));
+                        GetLabelNoteAssociationRef(labelText, noteId));
 
                     AddPropertyValuesToGeneralModel(childSnapshotToAdd, modelPropertiesTypes);
                 }

@@ -129,6 +129,7 @@ public abstract class NoteModelRef : IModelSnapshot<Models.NoteDomainEntityAssoc
     }
 
     public object GetId() => NoteDomainEntityAssociationId;
+    public string GetIdForFilesystem() => NoteDomainEntityAssociationId.ToString();
     public string GetComparableId() => NoteDomainEntityAssociationId.ToString();
 
     [JsonIgnore]

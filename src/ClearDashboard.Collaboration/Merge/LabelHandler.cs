@@ -42,15 +42,10 @@ public class LabelHandler : DefaultMergeHandler<IModelSnapshot<Models.Label>>
             (typeof(Models.Label), nameof(Models.Label.Id)),
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
-                if (modelSnapshot.TryGetStringPropertyValue(nameof(Models.Label.Text), out var labelText))
-                {
-                    var labelId = await LabelTextToId(labelText, projectDbContext, logger);
-                    return (labelId != default) ? labelId : null;
-                }
-                else
-                {
-                    throw new PropertyResolutionException($"Label snapshot does not have Text property value, which is required for Id resolution.");
-                }
+                var labelText = LexiconHandler.ExtractStringProperty(modelSnapshot, nameof(Models.Label.Text));
+
+                var labelId = await LabelTextToId(labelText, projectDbContext, logger);
+                return (labelId != default) ? labelId : null;
 
             });
 
@@ -59,16 +54,13 @@ public class LabelHandler : DefaultMergeHandler<IModelSnapshot<Models.Label>>
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
                 var labelRefName = LabelBuilder.BuildPropertyRefName(LabelBuilder.LABEL_REF_PREFIX);
-                if (modelSnapshot.TryGetStringPropertyValue(labelRefName, out var labelText) &&
-                    modelSnapshot.TryGetGuidPropertyValue(nameof(Models.LabelNoteAssociation.NoteId), out var noteId))
-                {
-                    var labelNoteAssociationId = await LabelNoteAssociationToId(labelText, noteId, projectDbContext, logger);
-                    return (labelNoteAssociationId != default) ? labelNoteAssociationId : null;
-                }
-                else
-                {
-                    throw new PropertyResolutionException($"LabelNoteAssociation snapshot does not have both Text and NoteId property values, which are required for Id resolution.");
-                }
+                var labelRef = LexiconHandler.ExtractStringProperty(modelSnapshot, labelRefName);
+                var labelText = LabelBuilder.DecodeLabelRef(labelRef);
+
+                var noteId = LexiconHandler.ExtractGuidProperty(modelSnapshot, nameof(Models.LabelNoteAssociation.NoteId));
+
+                var labelNoteAssociationId = await LabelNoteAssociationToId(labelText, noteId, projectDbContext, logger);
+                return (labelNoteAssociationId != default) ? labelNoteAssociationId : null;
 
             });
 
@@ -77,15 +69,11 @@ public class LabelHandler : DefaultMergeHandler<IModelSnapshot<Models.Label>>
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
                 var labelRefName = LabelBuilder.BuildPropertyRefName(LabelBuilder.LABEL_REF_PREFIX);
-                if (modelSnapshot.TryGetStringPropertyValue(labelRefName, out var labelText))
-                {
-                    var labelId = await LabelTextToId(labelText, projectDbContext, logger);
-                    return (labelId != default) ? labelId : null;
-                }
-                else
-                {
-                    throw new PropertyResolutionException($"LabelNoteAssociation snapshot does not have Text property value, which is required for LabelId resolution.");
-                }
+                var labelRef = LexiconHandler.ExtractStringProperty(modelSnapshot, labelRefName);
+                var labelText = LabelBuilder.DecodeLabelRef(labelRef);
+
+                var labelId = await LabelTextToId(labelText, projectDbContext, logger);
+                return (labelId != default) ? labelId : null;
 
             });
 

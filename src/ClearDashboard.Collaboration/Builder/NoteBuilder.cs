@@ -14,7 +14,7 @@ namespace ClearDashboard.Collaboration.Builder;
 
 public class NoteBuilder : GeneralModelBuilder<Models.Note>
 {
-    public const string NOTESEENASSOCIATION_REF_PREFIX = "NoteSeen";
+    public const string NOTEUSERSEENASSOCIATION_REF_PREFIX = "UserSeen";
 
     private Dictionary<Guid, Dictionary<string, IEnumerable<Models.NoteDomainEntityAssociation>>>? _ndaByNoteId = null;
     private Dictionary<Guid, IEnumerable<Models.Note>>? _repliesByThreadId = null;
@@ -222,16 +222,7 @@ public class NoteBuilder : GeneralModelBuilder<Models.Note>
         return noteModelRefs;
     };
 
-    public static string CalculateNoteSeenAssociationRef(Guid noteId, Guid userId)
-    {
-        return EncodePartsToRef(NOTESEENASSOCIATION_REF_PREFIX, noteId.ToString(), userId.ToString());
-    }
-
-    public static (Guid noteId, Guid userId) DecodeNoteSeenAssociationRef(string refValue)
-    {
-        var parts = DecodeRefToParts(NOTESEENASSOCIATION_REF_PREFIX, refValue, 2);
-        return (noteId: Guid.Parse(parts[0]), userId: Guid.Parse(parts[1]));
-    }
+    public static string GetNoteSeenAssociationRef(Guid noteId, Guid userId) => HashPartsToRef(NOTEUSERSEENASSOCIATION_REF_PREFIX, noteId.ToString(), userId.ToString());
 
     public Func<IEnumerable<Models.NoteUserSeenAssociation>, BuilderContext, IEnumerable<GeneralModel<Models.NoteUserSeenAssociation>>> ExtractNoteUserSeenAssociations = (nusas, builderContext) =>
     {
@@ -242,7 +233,8 @@ public class NoteBuilder : GeneralModelBuilder<Models.Note>
         {
             var nusaSnapshot = BuildRefModelSnapshot(
                 nusa,
-                CalculateNoteSeenAssociationRef(nusa.NoteId, nusa.UserId),
+                GetNoteSeenAssociationRef(nusa.NoteId, nusa.UserId),
+                null,
                 null,
                 builderContext);
 

@@ -45,10 +45,11 @@ public class LabelGroupBuilder : GeneralModelBuilder<Models.LabelGroup>
 
         foreach (var labelGroupDbModel in labelGroupDbModels)
         {
-            var labelGroupRef = CalculateLabelGroupRef(labelGroupDbModel.Name);
+            var labelGroupRef = EncodeLabelGroupRef(labelGroupDbModel.Name);
             var labelGroup = BuildRefModelSnapshot(
                     labelGroupDbModel,
                     labelGroupRef,
+                    GetLabelGroupRef(labelGroupDbModel.Name),
                     null,
                     builderContext);
 
@@ -58,11 +59,12 @@ public class LabelGroupBuilder : GeneralModelBuilder<Models.LabelGroup>
 
                 foreach (var lga in lgas)
                 {
-                    var labelRef = LabelBuilder.CalculateLabelRef(lga.Label!.Text!);
+                    var labelRef = LabelBuilder.EncodeLabelRef(lga.Label!.Text!);
                     var lgaModelSnapshot = BuildRefModelSnapshot(
                         lga,
-                        CalculateLabelGroupAssociationRef(lga.LabelGroup!.Name, lga.Label!.Text!),
-                        new (string, string?, bool)[] { (LABELGROUP_REF_PREFIX, labelGroupDbModel.Name, true), (LabelBuilder.LABEL_REF_PREFIX, lga.Label!.Text!, true) },
+                        GetLabelGroupAssociationRef(lga.LabelGroup!.Name, lga.Label!.Text!),
+                        null,
+                        new (string, string?, bool)[] { (LABELGROUP_REF_PREFIX, labelGroupRef, true), (LabelBuilder.LABEL_REF_PREFIX, labelRef, true) },
                         builderContext);
 
                     labelGroupAssociationModelSnapshots.Add(lgaModelSnapshot);
@@ -76,13 +78,8 @@ public class LabelGroupBuilder : GeneralModelBuilder<Models.LabelGroup>
         return modelSnapshots;
     }
 
-    private static string CalculateLabelGroupRef(string labelGroupName)
-    {
-        return EncodePartsToRef(LABELGROUP_REF_PREFIX, labelGroupName);
-    }
-
-    private static string CalculateLabelGroupAssociationRef(string labelGroupName, string labelText)
-    {
-        return EncodePartsToRef(LABELGROUPASSOCIATION_REF_PREFIX, labelGroupName, labelText);
-    }
+    private static string GetLabelGroupRef(string labelGroupName) => HashPartsToRef(LABELGROUP_REF_PREFIX, labelGroupName);
+    private static string GetLabelGroupAssociationRef(string labelGroupName, string labelText) => HashPartsToRef(LABELGROUPASSOCIATION_REF_PREFIX, labelGroupName, labelText);
+    private static string EncodeLabelGroupRef(string labelGroupName) => EncodePartsToRef(LABELGROUP_REF_PREFIX, labelGroupName);
+    public static string DecodeLabelGroupRef(string labelGroupRef) => DecodeRefToParts(LABELGROUP_REF_PREFIX, labelGroupRef, 1)[0];
 }

@@ -16,11 +16,11 @@ public interface IModelSnapshot : IModelDistinguishable<IModelSnapshot> // IMode
     object GetId();
 
     /// <summary>
-    /// Id of the entity represented by this IModelSnapshot to be used for comparison
-    /// between between systems
+    /// Representation of entity that can be used as a file or directory name, 
+    /// even on a case insensitive filesystem such as Windows.  
     /// </summary>
     /// <returns></returns>
-    string GetComparableId();
+    string GetIdForFilesystem();
 
     /// <summary>
     /// Type of Entity Framework entity this IModelSnapshot represents

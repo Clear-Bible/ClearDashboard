@@ -44,15 +44,9 @@ public class LabelGroupHandler : DefaultMergeHandler<IModelSnapshot<Models.Label
             (typeof(Models.LabelGroup), nameof(Models.LabelGroup.Id)),
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
-                if (modelSnapshot.TryGetStringPropertyValue(nameof(Models.LabelGroup.Name), out var labelGroupName))
-                {
-                    var labelGroupId = await LabelGroupNameToId(labelGroupName, projectDbContext, logger);
-                    return (labelGroupId != default) ? labelGroupId : null;
-                }
-                else
-                {
-                    throw new PropertyResolutionException($"LabelGroup snapshot does not have {nameof(Models.LabelGroup.Name)} property value, which is required for Id resolution.");
-                }
+                var labelGroupName = LexiconHandler.ExtractStringProperty(modelSnapshot, nameof(Models.LabelGroup.Name));
+                var labelGroupId = await LabelGroupNameToId(labelGroupName, projectDbContext, logger);
+                return (labelGroupId != default) ? labelGroupId : null;
 
             });
 
@@ -61,18 +55,15 @@ public class LabelGroupHandler : DefaultMergeHandler<IModelSnapshot<Models.Label
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
                 var labelGroupRefName = LabelGroupBuilder.BuildPropertyRefName(LabelGroupBuilder.LABELGROUP_REF_PREFIX);
-                var labelRefName = LabelBuilder.BuildPropertyRefName(LabelBuilder.LABEL_REF_PREFIX);
+                var labelGroupRef = LexiconHandler.ExtractStringProperty(modelSnapshot, labelGroupRefName);
+                var labelGroupName = LabelGroupBuilder.DecodeLabelGroupRef(labelGroupRef);
 
-                if (modelSnapshot.TryGetStringPropertyValue(labelGroupRefName, out var labelGroupName) &&
-                    modelSnapshot.TryGetStringPropertyValue(labelRefName, out var labelText))
-                {
-                    var labelGroupAssociationId = await LabelGroupAssociationToId(labelGroupName, labelText, projectDbContext, logger);
-                    return (labelGroupAssociationId != Guid.Empty) ? labelGroupAssociationId : null;
-                }
-                else
-                {
-                    throw new PropertyResolutionException($"LabelGroupAssociation snapshot does not have both Label Text and LabelGroup Name property values, which are required for Id resolution.");
-                }
+                var labelRefName = LabelBuilder.BuildPropertyRefName(LabelBuilder.LABEL_REF_PREFIX);
+                var labelRef = LexiconHandler.ExtractStringProperty(modelSnapshot, labelRefName);
+                var labelText = LabelBuilder.DecodeLabelRef(labelRef);
+
+                var labelGroupAssociationId = await LabelGroupAssociationToId(labelGroupName, labelText, projectDbContext, logger);
+                return (labelGroupAssociationId != Guid.Empty) ? labelGroupAssociationId : null;
 
             });
 
@@ -81,15 +72,11 @@ public class LabelGroupHandler : DefaultMergeHandler<IModelSnapshot<Models.Label
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
                 var labelGroupRefName = LabelGroupBuilder.BuildPropertyRefName(LabelGroupBuilder.LABELGROUP_REF_PREFIX);
-                if (modelSnapshot.TryGetStringPropertyValue(labelGroupRefName, out var labelGroupName))
-                {
-                    var labelGroupId = await LabelGroupNameToId(labelGroupName, projectDbContext, logger);
-                    return (labelGroupId != default) ? labelGroupId : null;
-                }
-                else
-                {
-                    throw new PropertyResolutionException($"LabelGroupAssociation snapshot does not have LabelGroup Name property value, which is required for LabelGroupId resolution.");
-                }
+                var labelGroupRef = LexiconHandler.ExtractStringProperty(modelSnapshot, labelGroupRefName);
+                var labelGroupName = LabelGroupBuilder.DecodeLabelGroupRef(labelGroupRef);
+
+                var labelGroupId = await LabelGroupNameToId(labelGroupName, projectDbContext, logger);
+                return (labelGroupId != default) ? labelGroupId : null;
 
             });
 
@@ -98,15 +85,11 @@ public class LabelGroupHandler : DefaultMergeHandler<IModelSnapshot<Models.Label
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
                 var labelRefName = LabelBuilder.BuildPropertyRefName(LabelBuilder.LABEL_REF_PREFIX);
-                if (modelSnapshot.TryGetStringPropertyValue(labelRefName, out var labelText))
-                {
-                    var labelId = await LabelHandler.LabelTextToId(labelText, projectDbContext, logger);
-                    return (labelId != default) ? labelId : null;
-                }
-                else
-                {
-                    throw new PropertyResolutionException($"LabelGroupAssociation snapshot does not have Label Text property value, which is required for LabelId resolution.");
-                }
+                var labelRef = LexiconHandler.ExtractStringProperty(modelSnapshot, labelRefName);
+                var labelText = LabelBuilder.DecodeLabelRef(labelRef);
+
+                var labelId = await LabelHandler.LabelTextToId(labelText, projectDbContext, logger);
+                return (labelId != default) ? labelId : null;
 
             });
 

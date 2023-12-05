@@ -61,10 +61,9 @@ public class SemanticDomainHandler : DefaultMergeHandler<IModelSnapshot<Models.L
                 if (meaningId == default)
                     return null;
 
-                var semanticDomainRefValue = LexiconHandler.ExtractStringProperty(
-                    modelSnapshot, 
-                    SemanticDomainBuilder.BuildPropertyRefName(SemanticDomainBuilder.SEMANTIC_DOMAIN_REF_PREFIX));
-                var semanticDomainText = SemanticDomainBuilder.DecodeSemanticDomainRef(semanticDomainRefValue);
+                var semanticDomainRefName = SemanticDomainBuilder.BuildPropertyRefName(SemanticDomainBuilder.SEMANTIC_DOMAIN_REF_PREFIX);
+                var semanticDomainRef = LexiconHandler.ExtractStringProperty(modelSnapshot, semanticDomainRefName);
+                var semanticDomainText = SemanticDomainBuilder.DecodeSemanticDomainRef(semanticDomainRef);
 
                 var associationId = await ValuesToSemanticDomainMeaningAssociationId(semanticDomainText, meaningId, projectDbContext, logger);
                 return (associationId != default) ? associationId : null;
@@ -75,10 +74,10 @@ public class SemanticDomainHandler : DefaultMergeHandler<IModelSnapshot<Models.L
             (typeof(Models.Lexicon_SemanticDomainMeaningAssociation), nameof(Models.Lexicon_SemanticDomainMeaningAssociation.SemanticDomainId)),
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
-                var semanticDomainRefValue = LexiconHandler.ExtractStringProperty(
-                    modelSnapshot,
-                    SemanticDomainBuilder.BuildPropertyRefName(SemanticDomainBuilder.SEMANTIC_DOMAIN_REF_PREFIX));
-                var semanticDomainText = SemanticDomainBuilder.DecodeSemanticDomainRef(semanticDomainRefValue);
+                var semanticDomainRefName = SemanticDomainBuilder.BuildPropertyRefName(SemanticDomainBuilder.SEMANTIC_DOMAIN_REF_PREFIX);
+                var semanticDomainRef = LexiconHandler.ExtractStringProperty(modelSnapshot, semanticDomainRefName);
+                var semanticDomainText = SemanticDomainBuilder.DecodeSemanticDomainRef(semanticDomainRef);
+
                 var semanticDomainId = await ValuesToSemanticDomainId(semanticDomainText, projectDbContext, logger);
                 return (semanticDomainId != default) ? semanticDomainId : null;
 

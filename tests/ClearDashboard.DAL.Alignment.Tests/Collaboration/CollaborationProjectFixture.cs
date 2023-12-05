@@ -48,6 +48,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         public List<Models.NoteUserSeenAssociation> NoteUserSeenAssociations { get; private set; } = new();
         public List<Models.Label> Labels { get; private set; } = new();
         public List<Models.LabelNoteAssociation> LabelNoteAssociations { get; private set; } = new();
+        public List<Models.LabelGroup> LabelGroups { get; private set; } = new();
+        public List<Models.LabelGroupAssociation> LabelGroupAssociations { get; private set; } = new();
 
         public ProjectSnapshot? ProjectSnapshotLastMerged { get; private set; } = null;
 
@@ -106,6 +108,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             projectSnapshot.AddGeneralModelList(ToTranslationSetBuilder(TranslationSets, Translations).BuildModelSnapshots(builderContext));
             projectSnapshot.AddGeneralModelList(ToNoteBuilder(Notes, RepliesByThread, NoteAssociations, NoteUserSeenAssociations).BuildModelSnapshots(builderContext));
             projectSnapshot.AddGeneralModelList(ToLabelBuilder(Labels, LabelNoteAssociations).BuildModelSnapshots(builderContext));
+            projectSnapshot.AddGeneralModelList(ToLabelGroupBuilder(LabelGroups, LabelGroupAssociations).BuildModelSnapshots(builderContext));
             projectSnapshot.AddGeneralModelList(ToLexiconBuilder(LexiconLexemes).BuildModelSnapshots(builderContext));
             projectSnapshot.AddGeneralModelList(ToSemanticDomainBuilder(LexiconSemanticDomains).BuildModelSnapshots(builderContext));
 
@@ -883,6 +886,20 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 {
                     return labelNoteAssociations
                         .GroupBy(e => e.LabelId)
+                        .ToDictionary(g => g.Key, g => g.Select(e => e));
+                }
+            };
+        }
+
+        public static LabelGroupBuilder ToLabelGroupBuilder(IEnumerable<Models.LabelGroup> labelGroups, IEnumerable<Models.LabelGroupAssociation> labelGroupAssociations)
+        {
+            return new LabelGroupBuilder
+            {
+                GetLabelGroups = (projectDbContext) => labelGroups,
+                GetLabelGroupAssociationsByLabelGroupId = (projectDbContext) =>
+                {
+                    return labelGroupAssociations
+                        .GroupBy(e => e.LabelGroupId)
                         .ToDictionary(g => g.Key, g => g.Select(e => e));
                 }
             };

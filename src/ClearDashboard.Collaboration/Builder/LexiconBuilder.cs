@@ -52,18 +52,21 @@ public class LexiconBuilder : GeneralModelBuilder<Models.Lexicon_Lexeme>
 
     public static GeneralModel<Models.Lexicon_Lexeme> BuildModelSnapshot(Models.Lexicon_Lexeme lexeme, BuilderContext builderContext)
     {
-        var lexemeRef = CalculateLexemeRef(lexeme.Lemma!, lexeme.Language!, lexeme.Type);
-        var modelSnapshot = BuildRefModelSnapshot(lexeme, lexemeRef, null, builderContext);
+        var lexemeRef = EncodeLexemeRef(lexeme.Lemma!, lexeme.Language!, lexeme.Type);
+        var lexemeFilesystemId = GetLexemeRef(lexeme.Lemma!, lexeme.Language!, lexeme.Type);
+
+        var modelSnapshot = BuildRefModelSnapshot(lexeme, lexemeRef, lexemeFilesystemId, null, builderContext);
 
         if (lexeme.Meanings.Any())
         {
             var modelSnapshotMeanings = new GeneralListModel<GeneralModel<Models.Lexicon_Meaning>>();
             foreach (var meaning in lexeme.Meanings)
             {
-                var meaningRef = CalculateMeaningRef(meaning.Text!, meaning.Language!);
+                var meaningRef = EncodeMeaningRef(meaning.Text!, meaning.Language!);
                 var lexiconMeaning = BuildRefModelSnapshot(
                     meaning, 
                     meaningRef, 
+                    GetMeaningRef(meaning.Text!, meaning.Language!),
                     new (string, string?, bool)[] { (LEXEME_REF_PREFIX, lexemeRef, true) }, 
                     builderContext);
 
@@ -74,7 +77,8 @@ public class LexiconBuilder : GeneralModelBuilder<Models.Lexicon_Lexeme>
                     {
                         modelSnapshotTranslations.Add(BuildRefModelSnapshot(
                             translation,
-                            CalculateTranslationRef(translation.Text!),
+                            EncodeTranslationRef(translation.Text!),
+                            GetTranslationRef(translation.Text!),
                             new (string, string?, bool)[] { (LEXEME_REF_PREFIX, lexemeRef, false), (MEANING_REF_PREFIX, meaningRef, true) },
                             builderContext));
                     }
@@ -95,7 +99,8 @@ public class LexiconBuilder : GeneralModelBuilder<Models.Lexicon_Lexeme>
             {
                 modelSnapshotForms.Add(BuildRefModelSnapshot(
                     form, 
-                    CalculateFormRef(form.Text!),
+                    EncodeFormRef(form.Text!),
+                    GetFormRef(form.Text!),
                     new (string, string?, bool)[] { (LEXEME_REF_PREFIX, lexemeRef, true) },
                     builderContext));
             }
@@ -104,37 +109,28 @@ public class LexiconBuilder : GeneralModelBuilder<Models.Lexicon_Lexeme>
         return modelSnapshot;
     }
 
-    public static string CalculateLexemeRef(string lemma, string language, string? type)
-    {
-        return EncodePartsToRef(LEXEME_REF_PREFIX, lemma, language, type);
-    }
+    private static string GetLexemeRef(string lemma, string language, string? type) => HashPartsToRef(LEXEME_REF_PREFIX, lemma, language, type);
+    private static string GetMeaningRef(string text, string language) => HashPartsToRef(MEANING_REF_PREFIX, text, language);
+    private static string GetTranslationRef(string text) => HashPartsToRef(TRANSLATION_REF_PREFIX, text);
+    private static string GetFormRef(string text) => HashPartsToRef(FORM_REF_PREFIX, text);
 
+    public static string EncodeLexemeRef(string lemma, string language, string? type) => EncodePartsToRef(LEXEME_REF_PREFIX, lemma, language, type);
     public static (string lemma, string language, string? type) DecodeLexemeRef(string lexemeRef)
     {
         var parts = DecodeRefToParts(LEXEME_REF_PREFIX, lexemeRef, 3);
         return (lemma: parts[0], language: parts[1], type: string.IsNullOrEmpty(parts[2]) ? null : parts[2]);
     }
 
-    public static string CalculateMeaningRef(string text, string language)
-    {
-        return EncodePartsToRef(MEANING_REF_PREFIX, text, language);
-    }
-
+    public static string EncodeMeaningRef(string text, string language) => EncodePartsToRef(MEANING_REF_PREFIX, text, language);
     public static (string text, string language) DecodeMeaningRef(string meaningRef)
     {
         var parts = DecodeRefToParts(MEANING_REF_PREFIX, meaningRef, 2);
         return (text: parts[0], language: parts[1]);
     }
 
-    private static string CalculateTranslationRef(string text)
-    {
-        return EncodePartsToRef(TRANSLATION_REF_PREFIX, text);
-    }
+    private static string EncodeTranslationRef(string text) => EncodePartsToRef(TRANSLATION_REF_PREFIX, text);
 
-    private static string CalculateFormRef(string text)
-    {
-        return EncodePartsToRef(FORM_REF_PREFIX, text);
-    }
+    private static string EncodeFormRef(string text) => EncodePartsToRef(FORM_REF_PREFIX, text);
 
     public override GeneralModel<Models.Lexicon_Lexeme> BuildGeneralModel(Dictionary<string, (Type type, object? value)> modelPropertiesTypes)
     {
@@ -148,7 +144,7 @@ public class LexiconBuilder : GeneralModelBuilder<Models.Lexicon_Lexeme>
                 modelPropertiesTypes.TryGetValue(nameof(Models.Lexicon_Lexeme.Type), out var type);
 
                 modelPropertiesTypes.Remove(nameof(Models.Lexicon_Lexeme.Id));
-                modelPropertiesTypes.Add(BuildPropertyRefName(), (typeof(string), CalculateLexemeRef((string)lemma.value!, (string)language.value!, (string?)type.value)));
+                modelPropertiesTypes.Add(BuildPropertyRefName(), (typeof(string), EncodeLexemeRef((string)lemma.value!, (string)language.value!, (string?)type.value)));
             }
             else
             {
@@ -211,7 +207,7 @@ public class LexiconBuilder : GeneralModelBuilder<Models.Lexicon_Lexeme>
 
                     childSnapshotToAdd = new GeneralModel<Models.Lexicon_Meaning>(
                         BuildPropertyRefName(),
-                        CalculateMeaningRef(meaningText, meaningLanguage));
+                        EncodeMeaningRef(meaningText, meaningLanguage));
 
                     AddPropertyValuesToGeneralModel(childSnapshotToAdd, modelPropertiesTypes);
                     childSnapshotToAdd.Add(BuildPropertyRefName(LEXEME_REF_PREFIX), (string)parentSnapshot.GetId(), typeof(string));
@@ -277,7 +273,7 @@ public class LexiconBuilder : GeneralModelBuilder<Models.Lexicon_Lexeme>
 
                     childSnapshotToAdd = new GeneralModel<Models.Lexicon_Form>(
                         BuildPropertyRefName(),
-                        CalculateFormRef(formText));
+                        EncodeFormRef(formText));
 
                     AddPropertyValuesToGeneralModel(childSnapshotToAdd, modelPropertiesTypes);
                     childSnapshotToAdd.Add(BuildPropertyRefName(LEXEME_REF_PREFIX), (string)parentSnapshot.GetId(), typeof(string));
@@ -334,7 +330,7 @@ public class LexiconBuilder : GeneralModelBuilder<Models.Lexicon_Lexeme>
 
                     childSnapshotToAdd = new GeneralModel<Models.Lexicon_Translation>(
                         BuildPropertyRefName(),
-                        CalculateTranslationRef(translationText));
+                        EncodeTranslationRef(translationText));
 
                     AddPropertyValuesToGeneralModel(childSnapshotToAdd, modelPropertiesTypes);
                     childSnapshotToAdd.Add(BuildPropertyRefName(LEXEME_REF_PREFIX), lexemeRef, typeof(string));

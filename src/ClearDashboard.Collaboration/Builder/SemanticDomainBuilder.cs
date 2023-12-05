@@ -27,7 +27,7 @@ public class SemanticDomainBuilder : GeneralModelBuilder<Models.Lexicon_Semantic
         return projectDbContext.Lexicon_SemanticDomains
             .Include(e => e.SemanticDomainMeaningAssociations)
                 .ThenInclude(e => e.Meaning)
-                    .ThenInclude(e => e.Lexeme)
+                    .ThenInclude(e => e!.Lexeme)
             .OrderBy(c => c.Created)
             .ToList();
     };
@@ -47,10 +47,11 @@ public class SemanticDomainBuilder : GeneralModelBuilder<Models.Lexicon_Semantic
 
     public static GeneralModel<Models.Lexicon_SemanticDomain> BuildModelSnapshot(Models.Lexicon_SemanticDomain semanticDomain, BuilderContext builderContext)
     {
-        var semanticDomainRef = CalculateSemanticDomainRef(semanticDomain.Text!);
+        var semanticDomainRef = EncodeSemanticDomainRef(semanticDomain.Text!);
         var modelSnapshot = BuildRefModelSnapshot(
                 semanticDomain,
                 semanticDomainRef,
+                GetSemanticDomainRef(semanticDomain.Text!),
                 null,
                 builderContext);
 
@@ -60,18 +61,19 @@ public class SemanticDomainBuilder : GeneralModelBuilder<Models.Lexicon_Semantic
             var modelSnapshotAssociations = new GeneralListModel<GeneralModel<Models.Lexicon_SemanticDomainMeaningAssociation>>();
             foreach (var association in semanticDomain.SemanticDomainMeaningAssociations)
             {
-                var meaningRef = LexiconBuilder.CalculateMeaningRef(association.Meaning!.Text!, association.Meaning!.Language!);
-                var lexemeRef = LexiconBuilder.CalculateLexemeRef(association.Meaning!.Lexeme!.Lemma!, association.Meaning!.Lexeme!.Language!, association.Meaning!.Lexeme!.Type);
+                var meaningRef = LexiconBuilder.EncodeMeaningRef(association.Meaning!.Text!, association.Meaning!.Language!);
+                var lexemeRef = LexiconBuilder.EncodeLexemeRef(association.Meaning!.Lexeme!.Lemma!, association.Meaning!.Lexeme!.Language!, association.Meaning!.Lexeme!.Type);
 
                 var sdmaModelSnapshot = BuildRefModelSnapshot(
                     association,
-                    CalculateSemanticDomainMeaningAssociationRef(
+                    GetSemanticDomainMeaningAssociationRef(
                         association.Meaning!.Lexeme!.Lemma!,
                         association.Meaning!.Lexeme!.Language!,
                         association.Meaning!.Lexeme!.Type,
                         association.Meaning!.Text!, 
                         association.Meaning!.Language!, 
                         semanticDomain.Text!),
+                    null,
                     new (string, string?, bool)[] {
                         (SEMANTIC_DOMAIN_REF_PREFIX, semanticDomainRef, true),
                         (LexiconBuilder.MEANING_REF_PREFIX, meaningRef, true),
@@ -88,21 +90,17 @@ public class SemanticDomainBuilder : GeneralModelBuilder<Models.Lexicon_Semantic
         return modelSnapshot;
     }
 
-    private static string CalculateSemanticDomainRef(string semanticDomainText)
-    {
-        return EncodePartsToRef(SEMANTIC_DOMAIN_REF_PREFIX, semanticDomainText);
-    }
-
-    public static string DecodeSemanticDomainRef(string semanticDomainRef)
-    {
-        var parts = DecodeRefToParts(SEMANTIC_DOMAIN_REF_PREFIX, semanticDomainRef, 1);
-        return parts[0];
-    }
-
-    private static string CalculateSemanticDomainMeaningAssociationRef(string lexemeLemma, string lexemeLanguage, string? lexemeType, string meaningText, string meaningLanguage, string semanticDomainText)
-    {
-        return EncodePartsToRef(SEMANTIC_DOMAIN_MEANING_ASSOCIATION_REF_PREFIX, lexemeLemma, lexemeLanguage, lexemeType, meaningText, meaningLanguage, semanticDomainText);
-    }
+    private static string GetSemanticDomainRef(string semanticDomainText) => HashPartsToRef(SEMANTIC_DOMAIN_REF_PREFIX, semanticDomainText);
+    private static string GetSemanticDomainMeaningAssociationRef(
+        string lexemeLemma, 
+        string lexemeLanguage, 
+        string? lexemeType, 
+        string meaningText, 
+        string meaningLanguage, 
+        string semanticDomainText) =>
+        HashPartsToRef(SEMANTIC_DOMAIN_MEANING_ASSOCIATION_REF_PREFIX, lexemeLemma, lexemeLanguage, lexemeType, meaningText, meaningLanguage, semanticDomainText);
+    private static string EncodeSemanticDomainRef(string semanticDomainText) => EncodePartsToRef(SEMANTIC_DOMAIN_REF_PREFIX, semanticDomainText);
+    public static string DecodeSemanticDomainRef(string semanticDomainRef) => DecodeRefToParts(SEMANTIC_DOMAIN_REF_PREFIX, semanticDomainRef, 1)[0];
 
     public override GeneralModel<Models.Lexicon_SemanticDomain> BuildGeneralModel(Dictionary<string, (Type type, object? value)> modelPropertiesTypes)
     {
@@ -113,7 +111,7 @@ public class SemanticDomainBuilder : GeneralModelBuilder<Models.Lexicon_Semantic
             if (modelPropertiesTypes.TryGetValue(nameof(Models.Lexicon_SemanticDomain.Text), out var semanticDomainText))
             {
                 modelPropertiesTypes.Remove(nameof(Models.Lexicon_SemanticDomain.Id));
-                modelPropertiesTypes.Add(BuildPropertyRefName(), (typeof(string), CalculateSemanticDomainRef((string)semanticDomainText.value!)));
+                modelPropertiesTypes.Add(BuildPropertyRefName(), (typeof(string), EncodeSemanticDomainRef((string)semanticDomainText.value!)));
             }
             else
             {
@@ -203,7 +201,7 @@ public class SemanticDomainBuilder : GeneralModelBuilder<Models.Lexicon_Semantic
 
                     childSnapshotToAdd = new GeneralModel<Models.Lexicon_SemanticDomainMeaningAssociation>(
                         BuildPropertyRefName(),
-                        CalculateSemanticDomainMeaningAssociationRef(lexemeLemma, lexemeLanguage, lexemeType, meaningText, meaningLanguage, semanticDomainText));
+                        GetSemanticDomainMeaningAssociationRef(lexemeLemma, lexemeLanguage, lexemeType, meaningText, meaningLanguage, semanticDomainText));
 
                     AddPropertyValuesToGeneralModel(childSnapshotToAdd, modelPropertiesTypes);
                 }

@@ -238,7 +238,7 @@ public class LexiconHandler : DefaultMergeHandler<IModelSnapshot<Models.Lexicon_
         }
         else
         {
-            throw new PropertyResolutionException($"{modelSnapshot.EntityType} snapshot does not have both of text, language property values, which are required for Id resolution.");
+            throw new PropertyResolutionException($"{modelSnapshot.EntityType} snapshot does not have both of text, language property values, which are required for property resolution.");
         }
     }
 
@@ -251,7 +251,7 @@ public class LexiconHandler : DefaultMergeHandler<IModelSnapshot<Models.Lexicon_
         }
         else
         {
-            throw new PropertyResolutionException($"{modelSnapshot.EntityType} snapshot does not have text, language property values, which are required for Id resolution.");
+            throw new PropertyResolutionException($"{modelSnapshot.EntityType} snapshot does not have text, language property values, which are required for property resolution.");
         }
     }
 
@@ -263,7 +263,19 @@ public class LexiconHandler : DefaultMergeHandler<IModelSnapshot<Models.Lexicon_
         }
         else
         {
-            throw new PropertyResolutionException($"{modelSnapshot.EntityType} snapshot does not have {propertyName} property value, which is required for Id resolution.");
+            throw new PropertyResolutionException($"{modelSnapshot.EntityType} snapshot does not have {propertyName} string property value, which is required for property resolution.");
+        }
+    }
+
+    public static Guid ExtractGuidProperty(IModelSnapshot modelSnapshot, string propertyName)
+    {
+        if (modelSnapshot.TryGetGuidPropertyValue(propertyName, out var refValue))
+        {
+            return refValue;
+        }
+        else
+        {
+            throw new PropertyResolutionException($"{modelSnapshot.EntityType} snapshot does not have {propertyName} Guid property value, which is required for property resolution.");
         }
     }
 

@@ -30,15 +30,15 @@ public class NoteHandler : DefaultMergeHandler<IModelSnapshot<Models.Note>>
             (typeof(Models.NoteUserSeenAssociation), nameof(Models.NoteUserSeenAssociation.Id)),
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
-                if (modelSnapshot.TryGetStringPropertyValue(NoteBuilder.BuildPropertyRefName(), out var refValue))
+                if (modelSnapshot.TryGetGuidPropertyValue(nameof(Models.NoteUserSeenAssociation.NoteId), out var noteId) &&
+                    modelSnapshot.TryGetGuidPropertyValue(nameof(Models.NoteUserSeenAssociation.UserId), out var userId))
                 {
-                    var (noteId, userId) = NoteBuilder.DecodeNoteSeenAssociationRef(refValue);
                     var noteUserSeenId = await NoteIdUserIdToNoteSeenAssociationId(noteId, userId, projectDbContext, logger);
                     return (noteUserSeenId != default) ? noteUserSeenId : null;
                 }
                 else
                 {
-                    throw new PropertyResolutionException($"NoteSeen snapshot does not have Ref property value, which is required for Id resolution.");
+                    throw new PropertyResolutionException($"UserSeen snapshot does not have both NoteId and UserId property values, which are required for Id resolution.");
                 }
 
             });

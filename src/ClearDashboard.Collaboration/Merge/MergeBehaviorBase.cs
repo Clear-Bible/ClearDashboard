@@ -456,6 +456,10 @@ public static class DbCommandExtensions
             {
                 return Activator.CreateInstance(property.PropertyType);
             }
+            else if (property.PropertyType == typeof(string))
+            {
+                return string.Empty;
+            }
             else
             {
                 throw new NotImplementedException($"Default value generator for non-nullable property of type '{property.PropertyType.ShortDisplayName()}' not implemented.");
