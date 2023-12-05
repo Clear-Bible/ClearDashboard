@@ -195,4 +195,20 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
         }
 
     }
+
+    public record TrainSmtModelSet
+    {
+        public TrainSmtModelSet(IWordAlignmentModel wordAlignmentModel, SmtModelType smtModelType, bool isTrainedSymmetrizedModel, IEnumerable<AlignedTokenPairs>? alignedTokenPairs)
+        {
+            WordAlignmentModel = wordAlignmentModel;
+            SmtModelType = smtModelType;
+            IsTrainedSymmetrizedModel = isTrainedSymmetrizedModel;
+            AlignedTokenPairs = alignedTokenPairs;
+        }
+
+        public IWordAlignmentModel WordAlignmentModel { get; set; }
+        public SmtModelType SmtModelType { get; set; }
+        public bool IsTrainedSymmetrizedModel { get; set; }
+        public IEnumerable<AlignedTokenPairs>? AlignedTokenPairs { get; set; }
+    }
 }

@@ -59,6 +59,8 @@ using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using ClearDashboard.DataAccessLayer.Features.Corpa;
 
 using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.DAL.Alignment.Features.Common;
+using ClearDashboard.DAL.CQRS;
 
 
 // ReSharper disable once CheckNamespace
@@ -81,6 +83,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private readonly NoteManager _noteManager;
         private readonly SystemPowerModes _systemPowerModes;
         private readonly ObservableDictionary<string, bool> _busyState = new();
+        private readonly TranslationCommands _translationCommands;
 
         private const string TaskName = "Alignment Deletion";
 
@@ -184,7 +187,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             LongRunningTaskManager longRunningTaskManager,
             ILocalizationService localizationService,
             IEnhancedViewManager enhancedViewManager,
-            NoteManager noteManager)
+            NoteManager noteManager,
+            TranslationCommands translationCommands)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             EnhancedViewManager = enhancedViewManager;
@@ -194,6 +198,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             BackgroundTasksViewModel = backgroundTasksViewModel;
             _longRunningTaskManager = longRunningTaskManager;
             _localizationService = localizationService;
+            _translationCommands = translationCommands;
 
             EventAggregator.SubscribeOnUIThread(this);
 
@@ -1394,9 +1399,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             
                             var tasks = alignmentSetsToRedo.Select(alignmentSetIdToRedo => Task.Run(async () =>
                             {
-                                //run TrainSMT here
+                                var parallelCorpusId = alignmentSetIdToRedo.ParallelCorpusId;
+                                if (parallelCorpusId == null)
+                                {
+                                    return;
+                                }
+
+                                var parallelCorpus = await ParallelCorpus.Get(Mediator!, parallelCorpusId, cancellationToken);
+                                var oldParallelTextRows = parallelCorpus.Cast<EngineParallelTextRow>();
+
+                                var trainSmtModelSet = await AlignmentUtil.TrainSmtModelAsync(//should I take this out of parallel?
+                                    "Updating Alignments",
+                                    alignmentSetIdToRedo.IsSymmetrized,
+                                    Enum.Parse<SmtModelType>(alignmentSetIdToRedo.SmtModel ?? SmtModelType.FastAlign.ToString()),
+                                    true,
+                                    parallelCorpus,
+                                    Logger,
+                                    _translationCommands,
+                                    cancellationToken);
+
                                 var alignmentSetToRedo = await AlignmentSet.Get(alignmentSetIdToRedo, Mediator!);
-                                await alignmentSetToRedo.UpdateAutoAlignments();
+                                await alignmentSetToRedo.UpdateAutoAlignments(alignmentSetIdToRedo, trainSmtModelSet, oldParallelTextRows, cancellationToken);
                             }));
                             await Task.WhenAll(tasks);
 
