@@ -22,10 +22,15 @@ namespace ClearDashboard.Wpf.Application.Converters
                 return 0;
             }
 
-            double sum = 0;
+            double sum = -5; // start 5 pixels to the left of the first column
             for (int i = 0; i < values.Count(); i++)
             {
                 sum += (double)values[i];
+            }
+
+            if (sum < 0)
+            {
+                sum = 0;
             }
 
             return sum;

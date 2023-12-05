@@ -227,6 +227,7 @@
 
         <!--  Dashboard Notes  -->
         <Rectangle
+            x:Name="NoteIndicator"
             Width="{Binding Path=ActualWidth, ElementName=TokenButton}"
             Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorHeight}"
             Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorMargin}"
@@ -287,31 +288,6 @@
                             </ListView>
                         </StackPanel>
                     </ToolTip>
-                    <!--<ToolTip
-                        Background="LightYellow"
-                        HasDropShadow="false"
-                        HorizontalOffset="10"
-                        Placement="Left"
-                        PlacementRectangle="50,0,0,0"
-                        VerticalOffset="20">
-                        <StackPanel Orientation="Vertical">
-                            <ListView ItemsSource="{Binding ExternalNotes}">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Vertical">
-                                            <Label Content="{Binding Message}" />
-                    -->
-                    <!--<controls:ExtendedPropertiesTreeView
-                                                x:Name="ExternalNoteBodyTokenTreeViewName"
-                                                ExtendedPropertiesXml="{Binding Body}"
-                                                IsExpanded="False" />-->
-                    <!--
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </StackPanel>
-                    </ToolTip>-->
                 </Rectangle.ToolTip>
             </Rectangle>
 
@@ -324,7 +300,7 @@
                 Stroke="Red"
                 StrokeDashArray="0.75 0.75"
                 StrokeThickness="2"
-                X1="{Binding ElementName=TokenButton, Path=Margin.Left}"
+                X1="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorMargin, Converter={converters1:WidthAddition}, ConverterParameter='-6'}"
                 Y1="0"
                 Y2="0">
                 <Line.Style>
