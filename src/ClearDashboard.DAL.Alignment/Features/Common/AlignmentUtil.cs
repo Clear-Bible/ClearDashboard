@@ -11,6 +11,7 @@ using ClearDashboard.DAL.Alignment.Features.Translation;
 using static ClearDashboard.DAL.Alignment.Features.Corpora.UpdateOrAddVersesInTokenizedCorpusCommandHandler;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models;
+using SIL.Machine.SequenceAlignment;
 
 namespace ClearDashboard.DAL.Alignment.Features.Common
 {
@@ -86,7 +87,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             alignmentCommand.Parameters["@AlignmentSetId"].Value = alignmentSetId;
             alignmentCommand.Parameters["@UserId"].Value = Guid.Empty != alignment.UserId ? alignment.UserId : currentUserId;
             alignmentCommand.Parameters["@Created"].Value = converter.ConvertToProvider(alignment.Created);
-            _ = await alignmentCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);//is there a way to insert a range?
+            _ = await alignmentCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 
         private static void ApplyColumnsToCommand(DbCommand command, Type type, string[] columns)
@@ -103,6 +104,76 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
                 parameter.ParameterName = $"@{column}";
                 command.Parameters.Add(parameter);
             }
+        }
+
+        public static DbCommand CreateDeleteMachineAlignmentsByAlignmentSetIdCommand(DbConnection connection)
+        {
+            var command = connection.CreateCommand();
+            var columns = new string[] { "Id", "ParallelCorpusId", "DisplayName", "SmtModel", "IsSyntaxTreeAlignerRefined", "IsSymmetrized", "Metadata", "UserId", "Created" };
+
+            ApplyColumnsToCommand(command, typeof(Models.AlignmentSet), columns);
+
+            command.Prepare();
+
+            return command;
+        }
+
+        public static async Task DeleteMachineAlignmentsByAlignmentSetIdAsync(Guid alignmentSetId, DbConnection connection, CancellationToken cancellationToken)//IEnumerable<Guid> alignmentTopTargetTrainingTextGuidsToDelete,
+        {   
+            await using var command = connection.CreateCommand();
+            command.CommandText = $@"
+                DELETE FROM Alignment
+                WHERE AlignmentOriginatedFrom = '0' AND AlignmentSetId = '{alignmentSetId.ToString().ToUpper()}'    
+            ";
+
+
+
+            //user parameters to prevent SQL injection
+
+            //var converter = new DateTimeOffsetToBinaryConverter();
+
+            //alignmentCommand.Parameters["@Id"].Value = (Guid.Empty != alignment.Id) ? alignment.Id : Guid.NewGuid();
+            //alignmentCommand.Parameters["@SourceTokenComponentId"].Value = alignment.SourceTokenComponentId;
+            //alignmentCommand.Parameters["@TargetTokenComponentId"].Value = alignment.TargetTokenComponentId;
+            //alignmentCommand.Parameters["@AlignmentVerification"].Value = alignment.AlignmentVerification;
+            //alignmentCommand.Parameters["@AlignmentOriginatedFrom"].Value = alignment.AlignmentOriginatedFrom;
+            //alignmentCommand.Parameters["@Score"].Value = alignment.Score;
+            //alignmentCommand.Parameters["@AlignmentSetId"].Value = alignmentSetId;
+            //alignmentCommand.Parameters["@UserId"].Value = Guid.Empty != alignment.UserId ? alignment.UserId : currentUserId;
+            //alignmentCommand.Parameters["@Created"].Value = converter.ConvertToProvider(alignment.Created);
+            //_ = await alignmentCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+
+            //var parameter = command.CreateParameter();
+            //parameter.ParameterName = "@AlignmentSetId";
+            //command.Parameters.Add(parameter);
+            //command.Parameters["@AlignmentSetId"].Value = alignmentSetId;
+
+            //if (alignmentTopTargetTrainingTextGuidsToDelete.Any())
+            //{
+            //    command.CommandText += "AND Id IN (";
+
+            //    alignmentTopTargetTrainingTextGuidsToDelete
+            //        .Select((t, index) => new
+            //        {
+            //            index,
+            //            name = "@t" + index,
+            //            value = t
+            //        })
+            //        .ToList()
+            //        .ForEach(pi =>
+            //        {
+            //            command.CommandText += (pi.index > 0) ? $", {pi.name}" : pi.name;
+
+            //            var parameter = command.CreateParameter();
+            //            parameter.ParameterName = pi.name;
+            //            command.Parameters.Add(parameter);
+            //            command.Parameters[pi.name].Value = pi.value;
+            //        });
+
+            //    command.CommandText += ")";
+            //}
+
+            _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 
         //Same as ProjectTemplateProcessRunner, how do we do background tasks?
@@ -154,7 +225,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             return trainSmtModelSet;
         }
 
-        public static async Task<RequestResult<IEnumerable<Alignment.Translation.Alignment>>> FillInVerificationAndOriginatedTypes(IEnumerable<Alignment.Translation.Alignment> request, Dictionary<string, AlignmentVerification> verificationTypes, Dictionary<string, AlignmentOriginatedFrom> originatedTypes)
+        public static async Task<RequestResult<IEnumerable<Alignment.Translation.Alignment>>> FillInVerificationAndOriginatedEnums(IEnumerable<Alignment.Translation.Alignment> request, Dictionary<string, AlignmentVerification> verificationTypes, Dictionary<string, AlignmentOriginatedFrom> originatedTypes)
         {
             //var verificationTypes = new Dictionary<string, AlignmentVerification>();
             //var originatedTypes = new Dictionary<string, AlignmentOriginatedFrom>();

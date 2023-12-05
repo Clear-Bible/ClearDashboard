@@ -126,7 +126,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             var verificationTypes = new Dictionary<string, ModelVerificationType>();
             var originatedTypes = new Dictionary<string, ModelOriginatedType>();
 
-            var result = await AlignmentUtil.FillInVerificationAndOriginatedTypes(request.Alignments, verificationTypes, originatedTypes);
+            var result = await AlignmentUtil.FillInVerificationAndOriginatedEnums(request.Alignments, verificationTypes, originatedTypes);
 
             if (!result.Success)
             {

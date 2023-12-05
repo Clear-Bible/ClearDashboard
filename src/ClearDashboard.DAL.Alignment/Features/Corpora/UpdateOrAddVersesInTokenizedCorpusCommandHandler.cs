@@ -207,9 +207,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     await transaction.CommitAsync(cancellationToken);
                     ProjectDbContext.Database.UseTransaction(null);
 
-                    var tasks = request.AlignmentSetsToRedo
-                        .Select(x => Task.Run(async () => await UpdateAlignments(x, connection, cancellationToken)));
-                    var results = await Task.WhenAll(tasks);
+                    //var tasks = request.AlignmentSetsToRedo
+                    //    .Select(x => Task.Run(async () => await UpdateAlignments(x, connection, cancellationToken)));
+                    //var results = await Task.WhenAll(tasks);
                     //await UpdateAlignments(request, connection, cancellationToken);//Make it it's own transaction
                 }
                 else
@@ -218,14 +218,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                     //The Parallel time < consecutive and > than single alignment
 
-                    using (var alignmentTransaction = ProjectDbContext.Database.BeginTransaction())
-                    {
-                        var tasks = request.AlignmentSetsToRedo
-                            .Select(x => Task.Run(async () => await UpdateAlignments(x, connection, cancellationToken)));
-                        var results = await Task.WhenAll(tasks);
+                    //using (var alignmentTransaction = ProjectDbContext.Database.BeginTransaction())
+                    //{
+                    //    var tasks = request.AlignmentSetsToRedo
+                    //        .Select(x => Task.Run(async () => await UpdateAlignments(x, connection, cancellationToken)));
+                    //    var results = await Task.WhenAll(tasks);
 
-                        await alignmentTransaction.CommitAsync(cancellationToken);
-                    }
+                    //    await alignmentTransaction.CommitAsync(cancellationToken);
+                    //}
 
 
                     //await UpdateAlignments(request, connection, cancellationToken);//Make it it's own transaction
@@ -321,7 +321,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 var verificationTypes = new Dictionary<string, Models.AlignmentVerification>();
                 var originatedTypes = new Dictionary<string, Models.AlignmentOriginatedFrom>();
 
-                var result = await AlignmentUtil.FillInVerificationAndOriginatedTypes(redoneAlignments, verificationTypes, originatedTypes);
+                var result = await AlignmentUtil.FillInVerificationAndOriginatedEnums(redoneAlignments, verificationTypes, originatedTypes);
 
                 if (!result.Success)
                 {

@@ -9,7 +9,7 @@ using SIL.Machine.Corpora;
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public record UpdateAlignmentsCommand(
-        AlignmentSetId AlignmentSetsToRedo,
+        AlignmentSetId AlignmentSetToRedo,
         TrainSmtModelSet TrainSmtModelSet,
         IEnumerable<EngineParallelTextRow> OldParallelTextRows
         ) : ProjectRequestCommand<AlignmentSet>;
