@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>Selected Books</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>Select USFM Books to Send</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>Select Paratext Project</value>
   </data>
@@ -712,6 +715,9 @@
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>Paragraph Mode</value>
   </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>Show External Notes</value>
+  </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>Source Text:</value>
   </data>
@@ -927,6 +933,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>Loading data...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>An unexpected error occurred while loading data.  {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>Matching</value>
@@ -2119,6 +2131,9 @@
   <data name="Save" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>Enable Experimental AQUA Plugin</value>
   </data>
@@ -2271,6 +2286,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Send</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>Send USFM Files</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>Suggestion</value>

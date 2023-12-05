@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>चयनित पुस्तकें</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>भेजने के लिए USFM पुस्तकों का चयन करें</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>Paratext प्रोजेक्ट का चयन करें</value>
   </data>
@@ -635,7 +638,7 @@
     <value>टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>भाषा जोड़ी के लिए टोकन में शामिल हों</value>
+    <value>भाषा की जोड़ी के लिए टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>'अमान्य' के रूप में चिह्न संरेखण</value>
@@ -711,6 +714,9 @@
   </data>
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>अनुच्छेद विधा</value>
+  </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>बाहरी नोट दिखाएं</value>
   </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>स्रोत इबारत:</value>
@@ -927,6 +933,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>शब्दिम</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>डेटा लोड हो रहा है...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>डेटा लोड करते समय एक अप्रत्याशित त्रुटि हुई। {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>मेल मिलाना</value>
@@ -1754,7 +1766,7 @@
     <value>आरंभ करने के लिए अपनी परियोजना बनाएं।</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
-    <value>एक नई परियोजना बनाएं</value>
+    <value>एक नया प्रोजेक्ट बनाएं</value>
   </data>
   <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
     <value>त्वरित शुरुआत नई परियोजना</value>
@@ -2119,6 +2131,9 @@
   <data name="Save" xml:space="preserve">
     <value>बचाना</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>भेजना</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>प्रयोगात्मक एक्वा प्लगइन सक्षम करें</value>
   </data>
@@ -2271,6 +2286,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>भेजना</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>USFM फ़ाइलें भेजें</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>सुझाव</value>

@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>Livres sélectionnés</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>Sélectionnez des livres USFM à envoyer</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>Sélectionner le projet PARATEXT</value>
   </data>
@@ -712,6 +715,9 @@
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>Mode paragraphe</value>
   </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>Afficher les notes externes</value>
+  </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>Texte source:</value>
   </data>
@@ -927,6 +933,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexème</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>Chargement des données...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>Une erreur inattendue s'est produite lors du chargement des données. {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>Correspondant à</value>
@@ -1502,7 +1514,7 @@
     <value>Former</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Aligneur de la machine à train</value>
+    <value>Aligneur de mot de machine de train</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Définissez la cartographie du verset entre les corpus parallélisés</value>
@@ -1775,7 +1787,7 @@
     <value>Supprimer le projet</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Activer la sélection des livres</value>
+    <value>Activer la sélection du livre</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
     <value>En cas de vérification, vous pourrez sélectionner les livres à traiter.</value>
@@ -1814,7 +1826,7 @@
     <value>Ouverte récente</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>Paratext</value>
+    <value>Paratex</value>
   </data>
   <data name="ProjectPicker_ParatextBackTranslation" xml:space="preserve">
     <value>Traduction de dos paratext</value>
@@ -1826,7 +1838,7 @@
     <value>PARATEXT est en cours d'exécution mais n'est pas connecté.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
-    <value>Projet PARATEXT</value>
+    <value>Projet de parattex</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
     <value>Projet:</value>
@@ -2012,7 +2024,7 @@
     <value>Lévitique</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
-    <value>Luck</value>
+    <value>Las</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
     <value>Malachi</value>
@@ -2118,6 +2130,9 @@
   </data>
   <data name="Save" xml:space="preserve">
     <value>Sauvegarder</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Envoyer</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>Activer le plugin aqua expérimental</value>
@@ -2272,6 +2287,9 @@
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Envoyer</value>
   </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>Envoyer des fichiers USFM</value>
+  </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>Suggestion</value>
   </data>
@@ -2336,7 +2354,7 @@
     <value>Mettre à jour et ajouter nouveau</value>
   </data>
   <data name="UseDefaults" xml:space="preserve">
-    <value>Créer en utilisant les valeurs par défaut</value>
+    <value>Créer à l'aide de valeurs par défaut</value>
   </data>
   <data name="Windows_AlignmentTool" xml:space="preserve">
     <value>Outil d'alignement</value>

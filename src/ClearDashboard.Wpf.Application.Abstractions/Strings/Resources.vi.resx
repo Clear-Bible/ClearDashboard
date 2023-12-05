@@ -1,5 +1,64 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -119,7 +178,7 @@
     <value>Thêm vào</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Chọn cách để mã hóa xác chết</value>
+    <value>Chọn cách để mã hóa Quả văn</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Liên kết</value>
@@ -153,6 +212,9 @@
   </data>
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>Sách được chọn</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>Chọn Sách USFM để gửi</value>
   </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>Chọn Dự án Paratext</value>
@@ -712,6 +774,9 @@
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>Chế độ đoạn văn</value>
   </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>Hiển thị ghi chú bên ngoài</value>
+  </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>Nguồn văn bản:</value>
   </data>
@@ -818,7 +883,7 @@
     <value>Thêm một miền ngữ nghĩa vào ý nghĩa này</value>
   </data>
   <data name="Lexicon_AddForm" xml:space="preserve">
-    <value>Thêm một dạng từ vựng vào bổ đề này</value>
+    <value>Thêm một hình thức từ vựng vào bổ đề này</value>
   </data>
   <data name="Lexicon_AddLexeme" xml:space="preserve">
     <value>Thêm từ vựng</value>
@@ -881,7 +946,7 @@
     <value>Từ vựng</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
-    <value>Một từ vựng đã tồn tại cho Bổ đề</value>
+    <value>Một từ vựng đã tồn tại cho bổ đề</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Ý nghĩa:</value>
@@ -927,6 +992,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Từ vựng</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>Tải dữ liệu ...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>Một lỗi bất ngờ xảy ra trong khi tải dữ liệu. {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>Phù hợp</value>
@@ -1151,7 +1222,7 @@
     <value>Glosses:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Các phần của bài phát biểu</value>
+    <value>Các phần của lời nói</value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
     <value>Bổ số liên quan</value>
@@ -1358,7 +1429,7 @@
     <value>Bạn có muốn tháo rời nhãn:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
-    <value>từ nhóm nhãn:</value>
+    <value>Từ nhóm nhãn:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Thêm nhóm nhãn</value>
@@ -1394,7 +1465,7 @@
     <value>Xóa nhãn</value>
   </data>
   <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
-    <value>Disleciate Nhãn</value>
+    <value>Disassociate Label</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Tạo</value>
@@ -1883,7 +1954,7 @@
     <value>1 John</value>
   </data>
   <data name="ProperCase_1_Kings" xml:space="preserve">
-    <value>1 Kings</value>
+    <value>1 vị vua</value>
   </data>
   <data name="ProperCase_1_Peter" xml:space="preserve">
     <value>1 Peter</value>
@@ -2119,6 +2190,9 @@
   <data name="Save" xml:space="preserve">
     <value>Cứu</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>Gửi</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>Bật plugin Aqua thử nghiệm</value>
   </data>
@@ -2271,6 +2345,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Gửi</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>Gửi các tập tin USFM</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>Gợi ý</value>

@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>Cărți selectate</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>Selectați cărțile USFM pentru a trimite</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>Selectați Proiectul Paratext</value>
   </data>
@@ -338,7 +341,7 @@
     <value>copaci; Parfumuri și condimente</value>
   </data>
   <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>înțelepciune, înțelegere</value>
+    <value>Înțelepciune, înțelegere</value>
   </data>
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>Toate</value>
@@ -712,6 +715,9 @@
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>Modul de paragraf</value>
   </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>Afișați note externe</value>
+  </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>Text sursă:</value>
   </data>
@@ -927,6 +933,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexem</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>Încărcare date...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>A apărut o eroare neașteptată la încărcarea datelor. {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>Potrivire</value>
@@ -1358,7 +1370,7 @@
     <value>Doriți să dezasociați eticheta:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
-    <value>din Grupul de etichete:</value>
+    <value>din grupul de etichete:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Adăugați grupul de etichete</value>
@@ -1502,7 +1514,7 @@
     <value>Tren</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>ALIGNIER DE CUMPĂRĂ A CAMERULUI DE TRAIN</value>
+    <value>ALIGNER WORD MASINE DE TRAIN</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Setați cartografierea versului între Corpora paralelizată</value>
@@ -2119,6 +2131,9 @@
   <data name="Save" xml:space="preserve">
     <value>Salvați</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>Trimite</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>Activați pluginul Aqua experimental</value>
   </data>
@@ -2271,6 +2286,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Trimite</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>Trimiteți fișiere USFM</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>Sugestie</value>

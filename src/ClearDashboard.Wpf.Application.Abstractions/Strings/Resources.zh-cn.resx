@@ -154,6 +154,9 @@
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>选定的书</value>
   </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>选择USFM书籍发送</value>
+  </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>选择Para​​text项目</value>
   </data>
@@ -239,7 +242,7 @@
     <value>建造;宗教活动</value>
   </data>
   <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>建筑；畜牧业</value>
+    <value>构造；畜牧业</value>
   </data>
   <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
     <value>容器；畜牧业</value>
@@ -410,7 +413,7 @@
     <value>散装对齐编辑</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>批量对齐审查</value>
+    <value>批量对准评论</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>数数</value>
@@ -452,7 +455,7 @@
     <value>部分</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>枢密性的单词</value>
+    <value>枢纽的单词</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>来源</value>
@@ -593,7 +596,7 @@
     <value>添加对齐方式？</value>
   </data>
   <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>用'{1}'对齐'{0}'？</value>
+    <value>与'{1}'对齐'{0}'？</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
     <value>结盟</value>
@@ -711,6 +714,9 @@
   </data>
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>段落模式</value>
+  </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>显示外部笔记</value>
   </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>源文本：</value>
@@ -927,6 +933,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>加载数据中...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>加载数据时发生了意外错误。 {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>匹配</value>
@@ -1529,13 +1541,13 @@
     <value>创建新单词对齐</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>创建新的语料库</value>
+    <value>创建新的语料库令牌化</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
     <value>添加新的Interlinear</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
-    <value>添加文本查看</value>
+    <value>添加文字以查看</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
     <value>将文本添加到新视图</value>
@@ -1664,7 +1676,7 @@
     <value>放大内容</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>从内容中缩小</value>
+    <value>缩小内容</value>
   </data>
   <data name="PHM" xml:space="preserve">
     <value>PHM</value>
@@ -1742,7 +1754,7 @@
     <value>Cleardashboard</value>
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
-    <value>PARATEXT BETA未运行</value>
+    <value>paratext beta不运行</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
     <value>取消...</value>
@@ -2119,8 +2131,11 @@
   <data name="Save" xml:space="preserve">
     <value>节省</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>发送</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>启用实验性水上插件</value>
+    <value>启用实验水上插件</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
     <value>检查您的电子邮件并输入验证代码：</value>
@@ -2249,7 +2264,7 @@
     <value>错误报告</value>
   </data>
   <data name="SlackMessageView_Combo1" xml:space="preserve">
-    <value>我在一个项目中丢失了数据</value>
+    <value>我在项目中丢失了数据</value>
   </data>
   <data name="SlackMessageView_Combo2" xml:space="preserve">
     <value>我无法完成任务</value>
@@ -2271,6 +2286,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>发送</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>发送USFM文件</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>建议</value>

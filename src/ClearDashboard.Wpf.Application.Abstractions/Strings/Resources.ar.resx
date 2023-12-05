@@ -143,7 +143,7 @@
     <value>لا اخطاء</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
-    <value>حفظ أخطاء USFM للملف</value>
+    <value>احفظ أخطاء USFM للملف</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
     <value>اختر الكل</value>
@@ -153,6 +153,9 @@
   </data>
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>كتب مختارة</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>حدد كتب USFM لإرسالها</value>
   </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>حدد Paratext Project</value>
@@ -712,6 +715,9 @@
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>وضع الفقرة</value>
   </data>
+  <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
+    <value>إظهار الملاحظات الخارجية</value>
+  </data>
   <data name="FontSettings_Source" xml:space="preserve">
     <value>النص المصدر:</value>
   </data>
@@ -927,6 +933,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>لكلية</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>تحميل البيانات...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>حدث خطأ غير متوقع أثناء تحميل البيانات. {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>مطابقة</value>
@@ -1214,7 +1226,7 @@
     <value>MIC</value>
   </data>
   <data name="Migrate_Header" xml:space="preserve">
-    <value>إعادة تعيين تعيينات الآية إلى الافتراض الافتراضي</value>
+    <value>إعادة تعيين تعيينات الآية إلى الافتراضي</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>MRK</value>
@@ -1616,7 +1628,7 @@
     <value>ملكيات</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>إعادة تعيين تعيينات الآية إلى الافتراض الافتراضي</value>
+    <value>إعادة تعيين تعيينات الآية إلى الافتراضي</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>مورد</value>
@@ -2054,7 +2066,7 @@
     <value>وحي</value>
   </data>
   <data name="ProperCase_Romans" xml:space="preserve">
-    <value>رومان</value>
+    <value>رومية</value>
   </data>
   <data name="ProperCase_Ruth" xml:space="preserve">
     <value>روث</value>
@@ -2118,6 +2130,9 @@
   </data>
   <data name="Save" xml:space="preserve">
     <value>يحفظ</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>يرسل</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>تمكين البرنامج المساعد التجريبي المائي</value>
@@ -2198,7 +2213,7 @@
     <value>ClearDashboard إعدادات</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>عرض طرق عرض موسعة على شاشة مختلفة عن لوحة القيادة</value>
+    <value>عرض طرق العرض الموسعة على شاشة مختلفة عن لوحة القيادة</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
     <value>بالنسبة للأنظمة التي تحتوي على ثلاثة شاشات أو أكثر ، عرض عرض موسع على الشاشة الثالثة</value>
@@ -2271,6 +2286,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>يرسل</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>أرسل ملفات USFM</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>اقتراح</value>
