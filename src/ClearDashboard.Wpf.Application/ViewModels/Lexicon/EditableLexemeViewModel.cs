@@ -141,8 +141,8 @@ public class EditableLexemeViewModel : PropertyChangedBase
 
         foreach (var translation in translationsToDelete)
         {
-            var translationToDelete = defaultMeaning.Translations.FirstOrDefault(t => t.Text == translation.Text);
-            var index = defaultMeaning.Translations.IndexOf(translationToDelete);
+            //var translationToDelete = defaultMeaning.Translations.FirstOrDefault(t => t.Text == translation.Text);
+            var index = defaultMeaning.Translations.IndexOf(translation);
             if (index > -1)
             {
                 defaultMeaning.Translations.RemoveAt(index);

@@ -391,8 +391,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                     return new BindableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l=> new EditableLexemeViewModel(l) {SourceLanguage = SourceLanguage, TargetLanguage = TargetLanguage, EditButtonLabel = LocalizationService.Get("LexiconEdit_Edit"), DoneLabel = doneLabel, EditLabel = editLabel}));
        
                 case LexiconEditMode.PartialMatchOnLexemeOrForm:
-                    // .Where(l=>l.IsInDatabase)
-                    filteredLexemes = managedLexemes.FilterByLexemeText(ToMatch, State.FormsOption == MatchOption.Partially, SourceLanguage, null).ToList();
+              
+                    //filteredLexemes = managedLexemes.FilterByLexemeText(ToMatch, State.FormsOption == MatchOption.Partially, SourceLanguage, null).ToList();
+                    filteredLexemes = managedLexemes.FilterByLexemeText(ToMatch, State.FormsOrLexemeOption == MatchOption.Partially, SourceLanguage, null).ToList();
                     return new BindableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l => new EditableLexemeViewModel(l) { SourceLanguage = SourceLanguage, TargetLanguage = TargetLanguage, EditButtonLabel = LocalizationService.Get("LexiconEdit_Edit"), DoneLabel = doneLabel, EditLabel = editLabel }));
    
                 default:
@@ -418,6 +419,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             {
 
                 State.FormsOption =
+                    (MatchOption)Enum.Parse(typeof(MatchOption), (item.Tag as string));
+            }
+        }
+
+        public void OnFormsOrLexemeOptionChanged(SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0 && e.AddedItems[0] is ListBoxItem item)
+            {
+
+                State.FormsOrLexemeOption =
                     (MatchOption)Enum.Parse(typeof(MatchOption), (item.Tag as string));
             }
         }

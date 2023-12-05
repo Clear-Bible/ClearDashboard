@@ -282,7 +282,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
                 await dialogViewModel.ActivateAsync();
 
-                var result = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
+
+                var dialogSettings = dialogViewModel.DialogSettings();
+                //dialogSettings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+                dialogSettings.Top = App.Current.MainWindow.ActualHeight / 2 - 800;
+                dialogSettings.Left = App.Current.MainWindow.ActualWidth / 2 - 258;
+
+                var result = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogSettings());
             }
         }
 
