@@ -9,6 +9,5 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
     public record UpdateOrAddVersesInTokenizedCorpusCommand(
         TokenizedTextCorpusId TokenizedTextCorpusId,
         ITextCorpus TextCorpus,
-        IEnumerable<string> ExistingBookIds,
-        List<AlignmentSetId> AlignmentSetsToRedo) : ProjectRequestCommand<IEnumerable<string>>;
+        IEnumerable<string> ExistingBookIds) : ProjectRequestCommand<IEnumerable<string>>;
 }

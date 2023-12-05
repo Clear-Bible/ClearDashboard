@@ -1284,7 +1284,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             }
 
                             var tokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, tokenizedTextCorpusId);
-                            await tokenizedTextCorpus.UpdateOrAddVerses(Mediator!, textCorpus, new List<AlignmentSetId>(), cancellationToken);
+                            await tokenizedTextCorpus.UpdateOrAddVerses(Mediator!, textCorpus, cancellationToken);
 
                             //await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage(ReloadType.Force), cancellationToken);
 

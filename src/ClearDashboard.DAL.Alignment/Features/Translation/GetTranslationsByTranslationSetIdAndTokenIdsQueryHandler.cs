@@ -322,7 +322,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 }
                 else
                 {
-                    var translationsFromAlignmentModel = await ProjectDbContext.AlignmentTopTargetTrainingTexts//how to I update this?
+                    var translationsFromAlignmentModel = await ProjectDbContext.AlignmentTopTargetTrainingTexts
                         .Include(a => a.SourceTokenComponent!)
                             .ThenInclude(tc => ((TokenComposite)tc).Tokens)
                         .Where(a => a.AlignmentSetId == translationSet.AlignmentSetId)

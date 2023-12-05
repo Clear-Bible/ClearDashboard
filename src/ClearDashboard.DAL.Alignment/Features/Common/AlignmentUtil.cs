@@ -126,53 +126,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
                 WHERE AlignmentOriginatedFrom = '0' AND AlignmentSetId = '{alignmentSetId.ToString().ToUpper()}'    
             ";
 
-
-
-            //user parameters to prevent SQL injection
-
-            //var converter = new DateTimeOffsetToBinaryConverter();
-
-            //alignmentCommand.Parameters["@Id"].Value = (Guid.Empty != alignment.Id) ? alignment.Id : Guid.NewGuid();
-            //alignmentCommand.Parameters["@SourceTokenComponentId"].Value = alignment.SourceTokenComponentId;
-            //alignmentCommand.Parameters["@TargetTokenComponentId"].Value = alignment.TargetTokenComponentId;
-            //alignmentCommand.Parameters["@AlignmentVerification"].Value = alignment.AlignmentVerification;
-            //alignmentCommand.Parameters["@AlignmentOriginatedFrom"].Value = alignment.AlignmentOriginatedFrom;
-            //alignmentCommand.Parameters["@Score"].Value = alignment.Score;
-            //alignmentCommand.Parameters["@AlignmentSetId"].Value = alignmentSetId;
-            //alignmentCommand.Parameters["@UserId"].Value = Guid.Empty != alignment.UserId ? alignment.UserId : currentUserId;
-            //alignmentCommand.Parameters["@Created"].Value = converter.ConvertToProvider(alignment.Created);
-            //_ = await alignmentCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
-
-            //var parameter = command.CreateParameter();
-            //parameter.ParameterName = "@AlignmentSetId";
-            //command.Parameters.Add(parameter);
-            //command.Parameters["@AlignmentSetId"].Value = alignmentSetId;
-
-            //if (alignmentTopTargetTrainingTextGuidsToDelete.Any())
-            //{
-            //    command.CommandText += "AND Id IN (";
-
-            //    alignmentTopTargetTrainingTextGuidsToDelete
-            //        .Select((t, index) => new
-            //        {
-            //            index,
-            //            name = "@t" + index,
-            //            value = t
-            //        })
-            //        .ToList()
-            //        .ForEach(pi =>
-            //        {
-            //            command.CommandText += (pi.index > 0) ? $", {pi.name}" : pi.name;
-
-            //            var parameter = command.CreateParameter();
-            //            parameter.ParameterName = pi.name;
-            //            command.Parameters.Add(parameter);
-            //            command.Parameters[pi.name].Value = pi.value;
-            //        });
-
-            //    command.CommandText += ")";
-            //}
-
             _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 

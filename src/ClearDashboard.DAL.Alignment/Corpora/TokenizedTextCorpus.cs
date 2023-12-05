@@ -86,7 +86,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             }
         }
 
-        public async Task UpdateOrAddVerses(IMediator mediator, ITextCorpus textCorpus, List<AlignmentSetId> alignmentSetsToRedo, CancellationToken token = default)
+        public async Task UpdateOrAddVerses(IMediator mediator, ITextCorpus textCorpus, CancellationToken token = default)
         {
             try
             {
@@ -103,7 +103,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             result.ThrowIfCanceledOrFailed();
 
             var updateOrAddResult = await mediator.Send(
-                new UpdateOrAddVersesInTokenizedCorpusCommand(TokenizedTextCorpusId, textCorpus, result.Data.bookIds, alignmentSetsToRedo), 
+                new UpdateOrAddVersesInTokenizedCorpusCommand(TokenizedTextCorpusId, textCorpus, result.Data.bookIds), 
                 token);
             updateOrAddResult.ThrowIfCanceledOrFailed();
 

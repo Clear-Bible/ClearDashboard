@@ -168,21 +168,6 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        //public async Task AddAlignments(IEnumerable<Alignment> alignments)
-        //{
-        //    try
-        //    {
-        //        await AlignmentSet!.PutAlignments(alignments);
-
-        //        Alignments!.AddRange(alignments.Where(x => x.AlignmentId!=null));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.LogError(ex, $"An unexpected error occurred while placing multiple alignments at once.");
-        //    }
-
-        //}
-
         private AlignmentPopupViewModel GetAlignmentPopupViewModel(SimpleMessagePopupMode mode, TokenDisplayViewModel? targetTokenDisplay = null,
             TokenDisplayViewModel? sourceTokenDisplay = null)
         {
@@ -198,19 +183,13 @@ namespace ClearDashboard.Wpf.Application.Services
             return alignmentPopupViewModel;
         }
 
-        public async Task DeleteAlignment(TokenDisplayViewModel tokenDisplay)//, bool autoConfirm = false
+        public async Task DeleteAlignment(TokenDisplayViewModel tokenDisplay)
         {
             var alignmentPopupViewModel = GetAlignmentPopupViewModel(SimpleMessagePopupMode.Delete);
             alignmentPopupViewModel.TargetTokenDisplay = tokenDisplay;
 
-            var result = false;
-            //if (!autoConfirm)
-            //{
-            result = await WindowManager.ShowDialogAsync(alignmentPopupViewModel, null, SimpleMessagePopupViewModel.CreateDialogSettings(alignmentPopupViewModel.Title));
-            //}
+            var result = await WindowManager.ShowDialogAsync(alignmentPopupViewModel, null, SimpleMessagePopupViewModel.CreateDialogSettings(alignmentPopupViewModel.Title));
             
-            //if (result == true || autoConfirm)
-            //{
             var alignmentIds = FindAlignmentIds(tokenDisplay);
      
             // gather all of the alignments which can be removed and delete them form the database.
@@ -241,15 +220,11 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 Alignments!.RemoveRange(alignmentsToRemove);
                 // Message the rest of the app that the alignments have been removed.
-                //if (!autoConfirm)
-                //{
                 foreach (var alignment in alignmentsToRemove)
                 {
                     await EventAggregator.PublishOnUIThreadAsync(new AlignmentDeletedMessage(alignment));
                 }
-                //}
             }
-            //}
         }
 
         private AlignmentId? FindAlignmentId(TokenDisplayViewModel tokenDisplay)

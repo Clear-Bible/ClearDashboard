@@ -72,7 +72,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 
         private record ParatextProjectCorpusBackgroundTask : CorpusBackgroundTask
         {
-            public ParatextProjectCorpusBackgroundTask(string taskName, ParatextProjectMetadata projectMetadata, Tokenizers tokenizer, IEnumerable<string> bookIds)//, bool alreadyTokenized = false
+            public ParatextProjectCorpusBackgroundTask(string taskName, ParatextProjectMetadata projectMetadata, Tokenizers tokenizer, IEnumerable<string> bookIds)
                 : base(typeof(TokenizedTextCorpus), taskName)
             {
                 if (!bookIds.Any())
@@ -81,14 +81,12 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 ProjectMetadata = projectMetadata;
                 Tokenizer = tokenizer;
                 BookIds = bookIds;
-                //AlreadyTokenized = alreadyTokenized;
             }
 
             public ParatextProjectMetadata ProjectMetadata { get; init; }
             public Tokenizers Tokenizer { get; init; }
             public IEnumerable<string> BookIds { get; init; }
             public override string CorpusName => ProjectMetadata.Name!;
-            //public bool AlreadyTokenized { get; init; }
         }
 
         private record ParallelCorpusBackgroundTask : BackgroundTask
@@ -249,7 +247,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             return taskName;
         }
 
-        public string RegisterParatextProjectCorpusTask(ParatextProjectMetadata projectMetadata, Tokenizers tokenizer, IEnumerable<string> bookIds, string? taskName = null)//, bool alreadyTokenized = false
+        public string RegisterParatextProjectCorpusTask(ParatextProjectMetadata projectMetadata, Tokenizers tokenizer, IEnumerable<string> bookIds, string? taskName = null)
         {
             if (string.IsNullOrEmpty(projectMetadata.Name))
                 throw new ArgumentNullException(nameof(projectMetadata.Name));
@@ -263,7 +261,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 taskName,
                 projectMetadata,
                 tokenizer,
-                bookIds)); //alreadyTokenized
+                bookIds));
 
             return taskName;
         }
@@ -311,41 +309,6 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 
             return parallelizationTaskNameSet;
         }
-
-        //public IDictionary<Type, string> RegisterAlignmentTasks(
-        //    string sourceCorpusTaskName,
-        //    string targetCorpusTaskName,
-        //    bool isTrainedSymmetrizedModel,
-        //    string? smtModelName)
-        //{
-        //    var sourceTask = backgroundTasksToRun.FirstOrDefault(e => e.TaskName == sourceCorpusTaskName);
-
-        //    if (sourceTask is null || sourceTask is not CorpusBackgroundTask)
-        //        throw new ArgumentException($"Source corpus background task name '{sourceCorpusTaskName}' not found: ", nameof(sourceCorpusTaskName));
-
-        //    var targetTask = backgroundTasksToRun.FirstOrDefault(e => e.TaskName == targetCorpusTaskName);
-
-        //    if (targetTask is null || targetTask is not CorpusBackgroundTask)
-        //        throw new ArgumentException($"Target corpus background task name '{targetCorpusTaskName}' not found: ", nameof(targetCorpusTaskName));
-
-        //    var parallelizationTaskNameSet = DefaultParallizationTaskNameSet(
-        //        (sourceTask as CorpusBackgroundTask)!.CorpusName,
-        //        (targetTask as CorpusBackgroundTask)!.CorpusName);
-
-        //    RegisterTrainSmtModelTask(
-        //        parallelizationTaskNameSet[typeof(TrainSmtModelSet)],
-        //        parallelizationTaskNameSet[typeof(ParallelCorpus)],
-        //        isTrainedSymmetrizedModel,
-        //        smtModelName,
-        //        false);
-        //    RegisterAlignmentSetTask(
-        //        parallelizationTaskNameSet[typeof(AlignmentSet)],
-        //        parallelizationTaskNameSet[typeof(TrainSmtModelSet)],
-        //        parallelizationTaskNameSet[typeof(ParallelCorpus)]
-        //    );
-
-        //    return parallelizationTaskNameSet;
-        //}
 
         public void RegisterParallelCorpusTask(string taskName, string sourceBackgroundTaskName, string targetBackgroundTaskName)
         {
@@ -440,8 +403,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                         endOfSequenceTasks.Add(task.TaskName, corpusTasksByName[task.TaskName]);
                         break;
                     case ParatextProjectCorpusBackgroundTask task:
-                        //if(!task.AlreadyTokenized)
-                        corpusTasksByName.Add(task.TaskName, RunBackgroundAddParatextProjectCorpusAsync(task.TaskName, task.ProjectMetadata, task.Tokenizer, task.BookIds));//, task.AlreadyTokenized
+                        corpusTasksByName.Add(task.TaskName, RunBackgroundAddParatextProjectCorpusAsync(task.TaskName, task.ProjectMetadata, task.Tokenizer, task.BookIds));
                         endOfSequenceTasks.Add(task.TaskName, corpusTasksByName[task.TaskName]);
                         break;
                     case ParallelCorpusBackgroundTask task:
@@ -821,7 +783,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             return tokenizedTextCorpus;
         }
 
-        public async Task<TokenizedTextCorpus> RunBackgroundAddParatextProjectCorpusAsync(string taskName, ParatextProjectMetadata metadata, Tokenizers tokenizer, IEnumerable<string> bookIds)//, bool alreadyTokenized
+        public async Task<TokenizedTextCorpus> RunBackgroundAddParatextProjectCorpusAsync(string taskName, ParatextProjectMetadata metadata, Tokenizers tokenizer, IEnumerable<string> bookIds)
         {
             if (!bookIds.Any())
             {
@@ -829,11 +791,11 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             }
 
             return await RunBackgroundLongRunningTaskAsync(
-                (string taskName, CancellationToken cancellationToken) => AddParatextProjectCorpusAsync(taskName, metadata, tokenizer, bookIds, cancellationToken),//, alreadyTokenized
+                (string taskName, CancellationToken cancellationToken) => AddParatextProjectCorpusAsync(taskName, metadata, tokenizer, bookIds, cancellationToken),
                 taskName);
         }
 
-        public async Task<TokenizedTextCorpus> AddParatextProjectCorpusAsync(string taskName, ParatextProjectMetadata metadata, Tokenizers tokenizer, IEnumerable<string> bookIds, CancellationToken cancellationToken)//, bool alreadyTokenized = false
+        public async Task<TokenizedTextCorpus> AddParatextProjectCorpusAsync(string taskName, ParatextProjectMetadata metadata, Tokenizers tokenizer, IEnumerable<string> bookIds, CancellationToken cancellationToken)
         {
             Logger!.LogInformation($"{nameof(AddParatextProjectCorpusAsync)} '{metadata.Name}' called.");
 
@@ -841,14 +803,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             var corpusId = topLevelProjectIds.CorpusIds.FirstOrDefault(c => c.ParatextGuid == metadata.Id);
             var corpus = corpusId != null ? await Corpus.Get(Mediator, corpusId) : null;
 
-            //if (alreadyTokenized)
-            //{
-                //var tokenizedTextCorpusId = topLevelProjectIds.TokenizedTextCorpusIds.FirstOrDefault(c => c.CorpusId == corpusId);
-                //return await TokenizedTextCorpus.Get(Mediator, tokenizedTextCorpusId);
-            //}
-            //else
-            //{
-                // first time for this corpus
+            // first time for this corpus
             if (corpus is null)
             {
                 await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
@@ -911,7 +866,6 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 cancellationToken: cancellationToken, backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
             return tokenizedTextCorpus;
-            //}
         }
 
         public async Task<ParallelCorpus> AddParallelCorpusAsync(string taskName, string parallelCorpusDisplayName, TokenizedTextCorpusId sourceTokenizedTextCorpusId, TokenizedTextCorpusId targetTokenizedTextCorpusId, CancellationToken cancellationToken)

@@ -7,8 +7,11 @@ using ClearBible.Engine.Tokenization;
 using ClearBible.Macula.PropertiesSources.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Features.Common;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Features.Corpa;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
@@ -49,18 +52,11 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate;
 using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
-using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
-using ClearDashboard.DAL.ViewModels;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
-using ClearDashboard.DataAccessLayer.Features.Corpa;
-
-using ClearDashboard.Wpf.Application.Collections;
-using ClearDashboard.DAL.Alignment.Features.Common;
-using ClearDashboard.DAL.CQRS;
+using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 
 
 // ReSharper disable once CheckNamespace
@@ -1158,17 +1154,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // get TranslationSet , etc from the dialogViewModel
                     //var translationSet = dialogViewModel!.TranslationSet;
 
-                    //var verses = metadatum.ParallelCorpus.GetByVerseRange(new VerseRef(bbbcccvvv), offset, offset);
-                    //var rows = verses.parallelTextRows.Select(v => (EngineParallelTextRow)v).ToList();
-
-
-
-                    //.ParallelTokenizedCorpus.GetByVerseRange()..
-
-                    //var alignmentId = dialogViewModel?.AlignmentSet?.AlignmentSetId;
-                    //var parallelTextRows = dialogViewModel.ParallelTokenizedCorpus.Select(v => (EngineParallelTextRow)v).ToList();
-                    //NewAlignmentManager = await AlignmentManager.CreateAsync(LifetimeScope, parallelTextRows, alignmentId);
-
                     if (parallelProjectType == ParallelProjectType.WholeProcess)
                     {
                         newParallelCorpusConnection.ParallelCorpusId =
@@ -1263,7 +1248,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        public async Task UpdateParatextCorpus(string selectedParatextProjectId, string? selectedTokenizer, CorpusNodeViewModel corpusNodeViewModel)//, CorpusNodeMenuItemViewModel connectionMenuItem
+        public async Task UpdateParatextCorpus(string selectedParatextProjectId, string? selectedTokenizer, CorpusNodeViewModel corpusNodeViewModel)
         {
             Logger!.LogInformation("UpdateParatextCorpus called.");
 
@@ -1395,8 +1380,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             
                             //have this return "success"
                             //mark corpus with "LastTokenized" in database to tell which alignments need to run
-                            await tokenizedTextCorpus.UpdateOrAddVerses(Mediator!, textCorpus, alignmentSetsToRedo, cancellationToken);
+                            await tokenizedTextCorpus.UpdateOrAddVerses(Mediator!, textCorpus, cancellationToken);
                             
+                            //move loop into handler so that it all fails or succeeds
                             var tasks = alignmentSetsToRedo.Select(alignmentSetIdToRedo => Task.Run(async () =>
                             {
                                 var parallelCorpusId = alignmentSetIdToRedo.ParallelCorpusId;
@@ -1408,7 +1394,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 var parallelCorpus = await ParallelCorpus.Get(Mediator!, parallelCorpusId, cancellationToken);
                                 var oldParallelTextRows = parallelCorpus.Cast<EngineParallelTextRow>();
 
-                                var trainSmtModelSet = await AlignmentUtil.TrainSmtModelAsync(//should I take this out of parallel?
+                                var trainSmtModelSet = await AlignmentUtil.TrainSmtModelAsync(
                                     "Updating Alignments",
                                     alignmentSetIdToRedo.IsSymmetrized,
                                     Enum.Parse<SmtModelType>(alignmentSetIdToRedo.SmtModel ?? SmtModelType.FastAlign.ToString()),
@@ -1422,14 +1408,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 await alignmentSetToRedo.UpdateAutoAlignments(alignmentSetIdToRedo, trainSmtModelSet, oldParallelTextRows, cancellationToken);
                             }));
                             await Task.WhenAll(tasks);
-
-                            //possibly move to other menu item someday
-                            //do parallelization here
-                            //add alignmentSet.UpdateAlignments
-                                //add second handler in there
+                            
                             await EventAggregator.PublishOnUIThreadAsync(new TokenizedCorpusUpdatedMessage(tokenizedTextCorpusId), cancellationToken);
 
-                            await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage(ReloadType.Force), cancellationToken);//move into handler?
+                            await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage(ReloadType.Force), cancellationToken);
 
                             _longRunningTaskManager.TaskComplete(taskName);
 
@@ -1815,7 +1797,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     //#pragma warning restore CS8601
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.UpdateParatextCorpus:
-                    await UpdateParatextCorpus(corpusNodeViewModel.ParatextProjectId, corpusNodeMenuItem.Tokenizer, corpusNodeViewModel);//corpusNodeMenuItem
+                    await UpdateParatextCorpus(corpusNodeViewModel.ParatextProjectId, corpusNodeMenuItem.Tokenizer, corpusNodeViewModel);
 
 
                     break;
