@@ -125,7 +125,7 @@
     <value>结盟</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
-    <value>选择您正在合作的书籍，您稍后可以随时添加更多书籍。</value>
+    <value>选择与您合作的书籍，您稍后可以随时添加更多书籍。</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>检查USFM</value>
@@ -242,7 +242,7 @@
     <value>建造;宗教活动</value>
   </data>
   <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>构造；畜牧业</value>
+    <value>建筑；畜牧业</value>
   </data>
   <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
     <value>容器；畜牧业</value>
@@ -413,13 +413,13 @@
     <value>散装对齐编辑</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>批量对准评论</value>
+    <value>批量对齐审查</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>数数</value>
   </data>
   <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>按表面文本计数</value>
+    <value>按地面文本计数</value>
   </data>
   <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
     <value>通过培训文本计数</value>
@@ -455,7 +455,7 @@
     <value>部分</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>枢纽的单词</value>
+    <value>枢密性的单词</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>来源</value>
@@ -596,7 +596,7 @@
     <value>添加对齐方式？</value>
   </data>
   <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>与'{1}'对齐'{0}'？</value>
+    <value>用'{1}'对齐'{0}'？</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
     <value>结盟</value>
@@ -617,10 +617,10 @@
     <value>删除对齐</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>删除“ {0}”的对齐方式？</value>
+    <value>删除“ {0}”的对齐？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>删除所有对齐方式？</value>
+    <value>删除所有路线？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>令牌'{0}'具有多个对齐定义。单击'{1}'将删除所有对齐。</value>
@@ -665,7 +665,7 @@
     <value>显示视图控件</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>分开令牌</value>
+    <value>拆分令牌</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>将拆分应用于其他令牌</value>
@@ -851,7 +851,7 @@
     <value>更改所有不设置的事件</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>如果检查了，这将改变此词的所有不设置的情况</value>
+    <value>如果检查了，这将改变此词的所有不设置</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>一致性</value>
@@ -907,6 +907,9 @@
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>和</value>
   </data>
+  <data name="LexiconEdit_ApplyFilter" xml:space="preserve">
+    <value>应用过滤器</value>
+  </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
     <value>取消</value>
   </data>
@@ -918,6 +921,9 @@
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>将'{0}'添加为第一个含义</value>
+  </data>
+  <data name="LexiconEdit_EditingDone" xml:space="preserve">
+    <value>完毕</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>找到所有</value>
@@ -1028,7 +1034,7 @@
     <value>需要姓</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>需要许可证密钥</value>
+    <value>需要许可密钥</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
@@ -1280,7 +1286,7 @@
     <value>姓</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
-    <value>新的协作用户</value>
+    <value>新的合作用户</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
     <value>密码：</value>
@@ -1337,7 +1343,7 @@
     <value>过滤器</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>由标签</value>
+    <value>通过标签</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
     <value>通过注意文本</value>
@@ -1379,7 +1385,7 @@
     <value>添加标签组</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>一个标签组已经存在</value>
+    <value>标签组已经存在，名称为</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>初始化标签组</value>
@@ -1502,10 +1508,10 @@
     <value>并行化语料库经文</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>机器字对准算法</value>
+    <value>机词对齐算法</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>机器字对准算法</value>
+    <value>机词对齐算法</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>火车对称模型？</value>
@@ -1541,13 +1547,13 @@
     <value>创建新单词对齐</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>创建新的语料库令牌化</value>
+    <value>创建新的语料库</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
     <value>添加新的Interlinear</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
-    <value>添加文字以查看</value>
+    <value>添加文本查看</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
     <value>将文本添加到新视图</value>
@@ -1568,7 +1574,7 @@
     <value>更改内容的缩放级别</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>顾问说明</value>
+    <value>顾问Notes</value>
   </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>创建新单词对齐</value>
@@ -1676,7 +1682,7 @@
     <value>放大内容</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>缩小内容</value>
+    <value>从内容中缩小</value>
   </data>
   <data name="PHM" xml:space="preserve">
     <value>PHM</value>
@@ -1763,7 +1769,7 @@
     <value>协作项目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>创建您的项目以入门。</value>
+    <value>创建您的项目以开始。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>创建一个新项目</value>
@@ -1799,7 +1805,7 @@
     <value>导入服务器项目</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>选中此框，以在创建项目时包括希腊语和希伯来语圣经文本。</value>
+    <value>在创建项目时，请选中此框，以包括希腊语和希伯来语圣经的文本。</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>包括NT希腊圣经文本？</value>
@@ -1823,7 +1829,7 @@
     <value>paratext不运行</value>
   </data>
   <data name="ProjectPicker_OpenRecent" xml:space="preserve">
-    <value>公开最近</value>
+    <value>近期开放</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
     <value>PARATEXT</value>
@@ -1832,10 +1838,10 @@
     <value>PARATEXT背面翻译</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>线性圣经（LWC）</value>
+    <value>模型文本（LWC）</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext正在运行但未连接。</value>
+    <value>paratext正在运行但未连接。</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>PARATEXT项目</value>
@@ -1931,7 +1937,7 @@
     <value>帖撒罗尼迦后书</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2提摩太</value>
+    <value>2蒂莫西</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3约翰</value>
@@ -2102,7 +2108,7 @@
     <value>解密许可证密钥的内容与您提供的信息不符。</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
-    <value>您的许可证密钥要么缺少或损坏。</value>
+    <value>您的许可密钥丢失或损坏。</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
     <value>欢迎来到Cleardashboard！请输入您的注册信息。</value>
@@ -2135,7 +2141,7 @@
     <value>发送</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>启用实验水上插件</value>
+    <value>启用实验性水上插件</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
     <value>检查您的电子邮件并输入验证代码：</value>
@@ -2213,7 +2219,7 @@
     <value>ClearDashboard设置</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>显示与仪表板不同的显示器上展示的视图</value>
+    <value>显示出与仪表板不同的显示器上扩展的视图</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
     <value>对于具有三个或三个或以上监视器的系统，在第三监视器上显示扩展的视图</value>
@@ -2231,7 +2237,7 @@
     <value>验证电子邮件代码</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>启用逐节的文本集合显示</value>
+    <value>启用逐一文字集合显示</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>取消任务</value>
@@ -2264,7 +2270,7 @@
     <value>错误报告</value>
   </data>
   <data name="SlackMessageView_Combo1" xml:space="preserve">
-    <value>我在项目中丢失了数据</value>
+    <value>我在一个项目中丢失了数据</value>
   </data>
   <data name="SlackMessageView_Combo2" xml:space="preserve">
     <value>我无法完成任务</value>
@@ -2348,7 +2354,7 @@
     <value>更新并添加新书</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
-    <value>选择书</value>
+    <value>选择书籍</value>
   </data>
   <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
     <value>更新并添加新</value>

@@ -503,7 +503,7 @@
     <value>nouveau groupe</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
-    <value>nouveau individu</value>
+    <value>Nouveau individu</value>
   </data>
   <data name="ClockUserControl_Select" xml:space="preserve">
     <value>Sélectionnez le fuseau horaire</value>
@@ -605,7 +605,7 @@
     <value>Supprimer cette vue?</value>
   </data>
   <data name="EnhancedView_CreateAlignment" xml:space="preserve">
-    <value>Créer un alignement</value>
+    <value>Créer l'alignement</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
     <value>Afficher / créer des notes</value>
@@ -665,7 +665,7 @@
     <value>Afficher les commandes de la vue</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>Jeton fendu</value>
+    <value>Jeton divisé</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>Appliquer la fente à d'autres cas de jeton</value>
@@ -907,6 +907,9 @@
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Et</value>
   </data>
+  <data name="LexiconEdit_ApplyFilter" xml:space="preserve">
+    <value>Appliquer le filtre</value>
+  </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
     <value>Annuler</value>
   </data>
@@ -918,6 +921,9 @@
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>Ajouter '{0}' comme traduction en premier sens</value>
+  </data>
+  <data name="LexiconEdit_EditingDone" xml:space="preserve">
+    <value>Fait</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Trouver tout</value>
@@ -1016,7 +1022,7 @@
     <value>Importation du lexique</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
-    <value>Matchs de traduction</value>
+    <value>Correspondance de traduction</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Tout déselectionner</value>
@@ -1514,7 +1520,7 @@
     <value>Former</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Aligneur de mot de machine de train</value>
+    <value>Aligneur de la machine à train</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Définissez la cartographie du verset entre les corpus parallélisés</value>
@@ -1826,13 +1832,13 @@
     <value>Ouverte récente</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>Paratex</value>
+    <value>Paratext</value>
   </data>
   <data name="ProjectPicker_ParatextBackTranslation" xml:space="preserve">
     <value>Traduction de dos paratext</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>Bible interlinéaire (LWC)</value>
+    <value>Texte du modèle (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
     <value>PARATEXT est en cours d'exécution mais n'est pas connecté.</value>
@@ -1952,7 +1958,7 @@
     <value>Deutéronomie</value>
   </data>
   <data name="ProperCase_Ecclesiastes" xml:space="preserve">
-    <value>Ecclésiaste</value>
+    <value>Ecclésiastes</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
     <value>Éphésiens</value>
@@ -2018,13 +2024,13 @@
     <value>Juges</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentations</value>
+    <value>Lamentation</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
     <value>Lévitique</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
-    <value>Las</value>
+    <value>Luck</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
     <value>Malachi</value>
@@ -2078,7 +2084,7 @@
     <value>Tirus</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>Zécharie</value>
+    <value>Zécharia</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
     <value>Zéphanie</value>
@@ -2195,7 +2201,7 @@
     <value>Réservé à l'expansion future</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaurer l'utilisateur de la collaboration</value>
+    <value>Restaurer l'utilisateur de collaboration</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Enregistré sur le serveur distant</value>

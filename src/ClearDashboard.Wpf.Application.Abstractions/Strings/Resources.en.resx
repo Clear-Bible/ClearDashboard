@@ -907,6 +907,9 @@
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>And</value>
   </data>
+  <data name="LexiconEdit_ApplyFilter" xml:space="preserve">
+    <value>Apply Filter</value>
+  </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
@@ -918,6 +921,9 @@
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>Add '{0}' as translation to first meaning</value>
+  </data>
+  <data name="LexiconEdit_EditingDone" xml:space="preserve">
+    <value>Done</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Find All</value>
@@ -938,7 +944,7 @@
     <value>Loading data...</value>
   </data>
   <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
-    <value>An unexpected error occurred while loading data.  {0}</value>
+    <value>An unexpected error occurred while loading data. {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>Matching</value>
@@ -1832,7 +1838,7 @@
     <value>Paratext Back Translation</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>Interlinear Bible (LWC)</value>
+    <value>Model Text (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
     <value>Paratext is running but not connected.</value>
