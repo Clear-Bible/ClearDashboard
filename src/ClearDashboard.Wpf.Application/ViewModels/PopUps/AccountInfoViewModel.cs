@@ -9,7 +9,9 @@ using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -17,6 +19,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -122,6 +125,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
+        private string _clearDashboardId = "Unknown";
+        public string ClearDashboardId
+        {
+            get => _clearDashboardId;
+            set
+            {
+                _clearDashboardId = value;
+                NotifyOfPropertyChange(() => ClearDashboardId);
+            }
+        }
+
         private string _clearDashboardEmail = "Unknown";
         public string ClearDashboardEmail
         {
@@ -155,8 +169,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
-        private ObservableCollection<Tuple<User, string>> _userAndPathList = new();
-        public ObservableCollection<Tuple<User, string>> UserAndPathList
+        private string _collaborationId = "Unknown";
+        public string CollaborationId
+        {
+            get => _collaborationId;
+            set
+            {
+                _collaborationId = value;
+                NotifyOfPropertyChange(() => CollaborationId);
+            }
+        }
+
+        private ObservableCollection<Tuple<User, string, CollaborationConfiguration>> _userAndPathList = new();
+        public ObservableCollection<Tuple<User, string, CollaborationConfiguration>> UserAndPathList
         {
             get => _userAndPathList;
             set
@@ -166,8 +191,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
-        private Tuple<User, string> _selectedUserAndPath;
-        public Tuple<User, string> SelectedUserAndPath
+        private Tuple<User, string, CollaborationConfiguration> _selectedUserAndPath;
+        public Tuple<User, string, CollaborationConfiguration> SelectedUserAndPath
         {
             get => _selectedUserAndPath;
             set
@@ -212,10 +237,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             var registration = _paratextProxy.GetParatextRegistrationData();
             ParatextUsername =registration.Name;
             ParatextEmail = registration.Email;
-
+            
             var license = LicenseManager.DecryptLicenseFromFileToUser(LicenseManager.LicenseFilePath);
             CurrentLicense = license;
             ClearDashboardUsername = license.FullName;
+            ClearDashboardId = license.Id.ToString();
 
             var configBuilder = new ConfigurationBuilder();
             configBuilder.AddUserSecrets<Bootstrapper>();
@@ -248,11 +274,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             CollaborationUsername = config.RemoteUserName;
             CollaborationEmail= config.RemoteEmail;
+            CollaborationId = config.UserId.ToString();
 
             return base.OnInitializeAsync(cancellationToken);
         }
 
-        private async Task<ObservableCollection<Tuple<User, string>>> GetUserAndPathList()
+        private async Task<ObservableCollection<Tuple<User, string, CollaborationConfiguration>>> GetUserAndPathList()
         {
             var allMicrosoftFolders = Directory.GetDirectories(LicenseManager.MicrosoftFolderPath);
             var userSecretsFolders = allMicrosoftFolders.Where(name => name.Contains(LicenseManager.UserSecretsDirectoryName));
@@ -260,21 +287,40 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             UserAndPathList.Clear();
             foreach (var userSecretsFolderPath in userSecretsFolders)
             {
-                var licensePath = Path.Combine(userSecretsFolderPath, LicenseManager.LicenseFolderName, LicenseManager.LicenseFileName);
+                var licensePath = Path.Combine(userSecretsFolderPath, LicenseManager.LicenseFolderName,
+                    LicenseManager.LicenseFileName);
                 var user = LicenseManager.DecryptLicenseFromFileToUser(licensePath);
                 //what happens when there's no good license in the folder and this decryption fails?
-                UserAndPathList.Add(Tuple.Create(user, userSecretsFolderPath));
+
+                var collabConfig = new CollaborationConfiguration();
+
+                var collabConfigFilePath = Path.Combine(
+                    userSecretsFolderPath,
+                    CollaborationManager.UserSecretsId,
+                    CollaborationManager.SecretsFileName
+                    );
+
+            if (File.Exists(collabConfigFilePath))
+                {
+                    using (StreamReader r = new StreamReader(collabConfigFilePath))
+                    {
+                        string json = r.ReadToEnd();
+                        dynamic jsonObj = JsonConvert.DeserializeObject(json);
+                        var configJson = jsonObj["Collaboration"];
+                        collabConfig = JsonConvert.DeserializeObject<CollaborationConfiguration>(configJson.ToString());
+                    }
+                }
+                
+                UserAndPathList.Add(Tuple.Create(user, userSecretsFolderPath, collabConfig));
             }
 
-            UserAndPathList= new ObservableCollection<Tuple<User, string>>(UserAndPathList.OrderBy(x => x.Item1.Id.ToString()).ToList());
+            UserAndPathList= new ObservableCollection<Tuple<User, string, CollaborationConfiguration>>(UserAndPathList.OrderBy(x => x.Item1.Id.ToString()).ToList());
 
             return UserAndPathList;
         }
 
-        public async void DeactivateCurrentLicense(Tuple<User, string> selectedUserAndPath)
+        public async void DeactivateCurrentLicense(Tuple<User, string, CollaborationConfiguration> selectedUserAndPath)
         {
-            IsEnabled = false;
-
             var activeLicense = LicenseManager.DecryptLicenseFromFileToUser(LicenseManager.LicenseFilePath);
 
             if (selectedUserAndPath != null && activeLicense.Id == selectedUserAndPath.Item1.Id)
@@ -286,7 +332,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 Directory.Move(
                     LicenseManager.UserSecretsFolderPath,
-                    Path.Combine(LicenseManager.MicrosoftFolderPath, $"{LicenseManager.UserSecretsDirectoryName}_{activeLicense.Id}"));
+                    Path.Combine(LicenseManager.MicrosoftFolderPath, $"{LicenseManager.UserSecretsDirectoryName}_{CollaborationEmail}_{activeLicense.Id}"));
             }
             catch (Exception ex)
             {
@@ -298,7 +344,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 Directory.Move(
                         LicenseManager.CollaborationDirectoryPath,
-                        Path.Combine(LicenseManager.DocumentsDirectoryPath, $"{LicenseManager.CollaborationDirectoryName}_{activeLicense.Id}"));
+                        Path.Combine(LicenseManager.DocumentsDirectoryPath, $"{LicenseManager.CollaborationDirectoryName}_{CollaborationEmail}_{activeLicense.Id}"));
             }
             catch(Exception ex)
             {
@@ -308,11 +354,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             await OnInitializeAsync(CancellationToken.None);
             await GetUserAndPathList();
-            
-            IsEnabled = true;
         }
 
-        private async void ActivateSelectedLicense(Tuple<User, string> selectedUserAndPath)
+        private async void ActivateSelectedLicense(Tuple<User, string, CollaborationConfiguration> selectedUserAndPath)
         {
             try
             {
@@ -329,7 +373,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             try
             {
                 Directory.Move(
-                    Path.Combine(LicenseManager.DocumentsDirectoryPath, $"{LicenseManager.CollaborationDirectoryName}_{selectedUserAndPath.Item1.Id}"),
+                    Path.Combine(LicenseManager.DocumentsDirectoryPath, $"{LicenseManager.CollaborationDirectoryName}_{selectedUserAndPath.Item3.RemoteEmail}_{selectedUserAndPath.Item1.Id}"),
                     LicenseManager.CollaborationDirectoryPath);
 
             }
@@ -343,7 +387,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             await GetUserAndPathList();
         }
 
-        public async void SwitchToSelectedLicense(Tuple<User, string> selectedUserAndPath)
+        public async void SwitchToSelectedLicense(Tuple<User, string, CollaborationConfiguration> selectedUserAndPath)
         {
             IsEnabled = false;
             DeactivateCurrentLicense(selectedUserAndPath);
@@ -359,8 +403,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             await this.TryCloseAsync();
         }
 
-        public async void CloseApplication()
+        public async void RestartApplication()
         {
+#if RELEASE
+            System.Windows.Forms.Application.Restart();
+#endif
             System.Windows.Application.Current.Shutdown();
         }
     }

@@ -5,16 +5,20 @@ using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
+using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -275,6 +279,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 Logger.LogError("LicenseUserMatchType switch statement failed: "+ex);
             }
             Logger.LogInformation("MatchType is: "+MatchType);
+        }
+
+        public async void ShowAccountInfoWindow()
+        {
+            var localizedString = _localizationService!["MainView_AccountInfo"];
+
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.ResizeMode = ResizeMode.NoResize;
+            settings.Title = $"{localizedString}";
+
+            var viewModel = IoC.Get<AccountInfoViewModel>();
+
+            IWindowManager manager = new NoExitWindowManager();
+            manager.ShowDialogAsync(viewModel, null, settings);
         }
         #endregion  Methods
 
