@@ -220,18 +220,7 @@
                        cm:Message.Attach="[Event Checked] = [Action OnLexemeChecked($source)]" 
                        Content="{helpers:Localization LexiconEdit_Lexeme}" 
                        IsChecked="{Binding State.LexemeChecked}"  />
-                    <!--<ListBox x:Name="FindAllLexemeOptions"
-                          Height="28"
-                          Margin="4"
-                          cm:Message.Attach="[Event SelectionChanged] = [Action OnLexemeOptionChanged($eventArgs)]"
-                          IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}"
-                          SelectedIndex="0"
-                          SelectionMode="Single"
-                          Style="{StaticResource MaterialDesignToolToggleListBox}"
-                          Visibility="{Binding State.LexemeChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <ListBoxItem Content="{helpers:Localization LexiconEdit_Partially}" Tag="{x:Static lexicon:LexiconEditTags.Partially}" />
-                        <ListBoxItem Content="{helpers:Localization LexiconEdit_Fully}" Tag="{x:Static lexicon:LexiconEditTags.Fully}" />
-                    </ListBox>-->
+                   
                     <TextBlock Text="{helpers:Localization LexiconEdit_Or}" Style="{StaticResource Label}"
                         Visibility="{Binding State.LexemeAndFormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>
                     <CheckBox x:Name="FormsCheckBox" cm:Message.Attach="[Event Checked] = [Action OnFormsChecked($source)]" Content="{helpers:Localization LexiconEdit_Forms}" IsChecked="{Binding State.FormsChecked}"  />
@@ -260,7 +249,7 @@
                     <ListBox x:Name="PredicateOptions"
                           Height="28"
                           Margin="4"
-                          cm:Message.Attach="[Event SelectionChanged] = [Action OnFormsOptionChanged($eventArgs)]"
+                          cm:Message.Attach="[Event SelectionChanged] = [Action OnPredicateOptionChanged($eventArgs)]"
                           IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}"
                           SelectedIndex="0"
                           SelectionMode="Single"

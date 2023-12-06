@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Lexicon;
-using ClearDashboard.Wpf.Application.Converters;
-using ClearDashboard.Wpf.Application.Services;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 
@@ -76,6 +73,12 @@ public class EditableLexemeViewModel : PropertyChangedBase
         set
         {
             var meanings = value?.Unjoin(";") ?? new List<string>();
+
+            //if (meanings.Count == 0)
+            //{
+            //    return;
+            //}
+
             foreach (var meaningWithTranslations in meanings)
             {
                 if (meaningWithTranslations.StartsWith("["))
@@ -92,14 +95,10 @@ public class EditableLexemeViewModel : PropertyChangedBase
                     if (meaning == null)
                     {
                         meaning = new Meaning { Text = parts[0].TrimEnd(), Language = TargetLanguage };
-                        //AddNewTranslations(translations, meaning);
-                        //_lexeme.Meanings.Add(meaning);
-
                         ProcessTranslations(meaning, translations);
                     }
                     else
                     {
-                        //AddNewTranslations(translations, meaning);
                         ProcessTranslations(meaning, translations);
                     }
                 }
@@ -141,8 +140,8 @@ public class EditableLexemeViewModel : PropertyChangedBase
 
         foreach (var translation in translationsToDelete)
         {
-            //var translationToDelete = defaultMeaning.Translations.FirstOrDefault(t => t.Text == translation.Text);
-            var index = defaultMeaning.Translations.IndexOf(translation);
+            var translationToDelete = defaultMeaning.Translations.FirstOrDefault(t => t.Text == translation.Text);
+            var index = defaultMeaning.Translations.IndexOf(translationToDelete);
             if (index > -1)
             {
                 defaultMeaning.Translations.RemoveAt(index);
@@ -154,7 +153,7 @@ public class EditableLexemeViewModel : PropertyChangedBase
         }
 
         var translationsToAdd =
-            translations.Where(translation => defaultMeaning.Translations.All(t => t.Text != translation));
+            translations.Where(translation => defaultMeaning.Translations.All(t => t.Text != translation)).ToList();
         foreach (var translation in translationsToAdd)
         {
             defaultMeaning.Translations.Add(new Translation { Text = translation });
@@ -162,43 +161,51 @@ public class EditableLexemeViewModel : PropertyChangedBase
         }
     }
 
-    //private void AddNewTranslations(IEnumerable<string> translations, Meaning meaning)
-    //{
-
-    //    foreach (var translation in translations.Where(translation => meaning.Translations.All(t => t.Text != translation)))
-    //    {
-    //        meaning.Translations.Add(new Translation { Text = translation });
-    //    }
-
-    //}
-
-   
-
-
-public string? Forms
+    public string? Forms
     {
         get => _lexeme.Forms.Select(f => f.Text).ToDelimitedString();
         set
         {
             var forms = value?.Unjoin() ?? new List<string>();
 
-            var formsToDelete = _lexeme.Forms.Where(f => !forms.Contains(f.Text));
+            //if (forms.Count == 0)
+            //{
+            //    return;
+            //}
+
+
+            var formsToDelete = _lexeme.Forms.Where(f => !forms.Contains(f.Text)).ToList();
             foreach (var form in formsToDelete)
             {
                 var index = _lexeme.Forms.IndexOf(form);
                 _lexeme.Forms.RemoveAt(index);
+                if (_lexeme.IsDirty == false)
+                {
+                    _lexeme.SetInternalProperty(nameof(Lexeme.IsDirty), true);
+                }
             }
 
-            var formsToAdd = forms.Where(form => _lexeme.Forms.All(f => f.Text != form));
+            var formsToAdd = forms.Where(form => _lexeme.Forms.All(f => f.Text != form)).ToList();
             foreach (var form in formsToAdd)
             {
                 _lexeme.Forms.Add(new Form { Text = form });
+                if (_lexeme.IsDirty == false)
+                {
+                    _lexeme.SetInternalProperty(nameof(Lexeme.IsDirty), true);
+                }
+               
             }
 
             NotifyOfPropertyChange(nameof(Forms));
         }
     }
 
+
+    /// <summary>
+    /// Adds a new form to the lexeme.
+    /// </summary>
+    /// <param name="form">The form to add.</param>
+    /// <returns>The StartIndex and Length of the newly added form in the first Forms string so it can be highlighted in the UI.</returns>
     public (int StartIndex, int Length) AddNewForm(string? form)
     {
         if (form == null)
@@ -218,16 +225,11 @@ public string? Forms
 
     }
 
-    //public void AddNewMeaning(string? meaningText)
-    //{
-
-    //    if (_lexeme.Meanings.All(m => m.Text != meaningText))
-    //    {
-    //        _lexeme.Meanings.Add(new Meaning { Text = meaningText, Language = TargetLanguage});
-    //    }
-    //    NotifyOfPropertyChange(nameof(Meanings));
-    //}
-
+    /// <summary>
+    /// Adds a translation to the first meaning of the lexeme.
+    /// </summary>
+    /// <param name="translation">The translation to add.</param>
+    /// <returns>The StartIndex and Length of the newly added translation in the first meaning string so it can be highlighted in the UI.</returns>
     public (int StartIndex, int Length) AddTranslationToFirstMeaning(string? translation)
     {
         var defaultMeaning = _lexeme.Meanings.FirstOrDefault();
