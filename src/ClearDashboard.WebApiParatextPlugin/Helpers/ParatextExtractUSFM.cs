@@ -48,7 +48,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
             }
 
             // copy over the project's settings file
-            string settingsFile = Path.Combine(GetParatextProjectsPath(), project.ShortName, "settings.xml");
+            string settingsFile = Path.Combine(ParatextHelpers.GetParatextProjectsPath(), project.ShortName, "settings.xml");
             if (File.Exists(settingsFile))
             {
                 try
@@ -70,7 +70,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
             }
 
             // copy over the project's custom versification file
-            string versificationFile = Path.Combine(GetParatextProjectsPath(), project.ShortName, "custom.vrs");
+            string versificationFile = Path.Combine(ParatextHelpers.GetParatextProjectsPath(), project.ShortName, "custom.vrs");
             if (File.Exists(versificationFile))
             {
                 try
@@ -85,19 +85,19 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
 
             // copy over project's usfm.sty
             bool bFound = false;
-            if (File.Exists(Path.Combine(GetParatextProjectsPath(), project.ShortName, "settings.xml")))
+            if (File.Exists(Path.Combine(ParatextHelpers.GetParatextProjectsPath(), project.ShortName, "settings.xml")))
             {
-                string stylePath = GetAttributeFromSettingsXML.GetValue(Path.Combine(GetParatextProjectsPath(), project.ShortName, "settings.xml"), "StyleSheet");
+                string stylePath = GetAttributeFromSettingsXML.GetValue(Path.Combine(ParatextHelpers.GetParatextProjectsPath(), project.ShortName, "settings.xml"), "StyleSheet");
 
                 if (stylePath != "")
                 {
                     if (stylePath != "usfm.sty") // standard stylesheet
                     {
-                        if (File.Exists(Path.Combine(GetParatextProjectsPath(), project.ShortName, stylePath)))
+                        if (File.Exists(Path.Combine(ParatextHelpers.GetParatextProjectsPath(), project.ShortName, stylePath)))
                         {
                             try
                             {
-                                File.Copy(Path.Combine(GetParatextProjectsPath(), project.ShortName, stylePath),
+                                File.Copy(Path.Combine(ParatextHelpers.GetParatextProjectsPath(), project.ShortName, stylePath),
                                     Path.Combine(exportPath, "usfm.sty"), true);
                                 bFound = true;
                             }
@@ -113,11 +113,11 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
             if (!bFound)
             {
                 // standard stylesheet
-                if (File.Exists(Path.Combine(GetParatextProjectsPath(), "usfm.sty")))
+                if (File.Exists(Path.Combine(ParatextHelpers.GetParatextProjectsPath(), "usfm.sty")))
                 {
                     try
                     {
-                        File.Copy(Path.Combine(GetParatextProjectsPath(), "usfm.sty"),
+                        File.Copy(Path.Combine(ParatextHelpers.GetParatextProjectsPath(), "usfm.sty"),
                             Path.Combine(exportPath, "usfm.sty"), true);
                     }
                     catch (Exception e)
@@ -397,25 +397,6 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
             }
 
             doc.Save(path);
-        }
-
-
-        /// <summary>
-        /// Returns the Paratext Project's path.  Usually:
-        /// {drive}:\My Paratext 9 Projects\
-        /// </summary>
-        /// <returns></returns>
-        private string GetParatextProjectsPath()
-        {
-            string paratextProjectPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Paratext\8", "Settings_Directory", null);
-            // check if directory exists
-            if (!Directory.Exists(paratextProjectPath))
-            {
-                // directory doesn't exist so null this out
-                paratextProjectPath = "";
-            }
-
-            return paratextProjectPath;
         }
 
     }

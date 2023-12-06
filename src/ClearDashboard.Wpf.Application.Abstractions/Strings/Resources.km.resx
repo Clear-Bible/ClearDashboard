@@ -968,7 +968,7 @@
     <value>ភាសាគោលដៅ</value>
   </data>
   <data name="LexiconEdit_Title" xml:space="preserve">
-    <value>lexicon កែប្រែ</value>
+    <value>lexicon កែសម្រួល</value>
   </data>
   <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>ការបករេប</value>
@@ -1838,7 +1838,7 @@
     <value>ការបកប្រែត្រលប់មកវិញ</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>ព្រះគម្ពីរអន្តរភាសា (LWC)</value>
+    <value>អត្ថបទគំរូ (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
     <value>ParateXT កំពុងដំណើរការប៉ុន្តែមិនបានភ្ជាប់ទេ។</value>

@@ -677,7 +677,7 @@
     <value>Divisão de três vias</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Token de compósito un -joain</value>
+    <value>Token composto de unidade</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -1658,7 +1658,7 @@
     <value>Estudobible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
-    <value>Estudarbibleaddditions</value>
+    <value>Estudobibleadditions</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
     <value>Vá para projetos Paratext e troca. O projeto Paratext atualmente conectado ao plug -in ClearDashboard não é o mesmo que o corpus neste projeto ClearDashboard.</value>
@@ -1838,7 +1838,7 @@
     <value>Paratext back tradução</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>Bíblia interlinear (LWC)</value>
+    <value>Texto do modelo (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
     <value>O Paratext está em execução, mas não está conectado.</value>
@@ -2222,7 +2222,7 @@
     <value>Mostrar visualizações expandidas em um monitor diferente do painel</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Para sistemas com três ou mais monitores, mostre visualização expandida no terceiro monitor</value>
+    <value>Para sistemas com três ou mais monitores, mostre uma visualização expandida no terceiro monitor</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Coleção de texto</value>

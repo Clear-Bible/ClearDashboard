@@ -1838,7 +1838,7 @@
     <value>PARATEXT背面翻譯</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>線性聖經（LWC）</value>
+    <value>模型文本（LWC）</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
     <value>paratext正在運行但未連接。</value>
