@@ -1,11 +1,10 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features;
+using ClearDashboard.DAL.Alignment.Features.Common;
+using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Translation;
-using ClearDashboard.DAL.CQRS;
 using MediatR;
-using System.Collections;
 
 namespace ClearDashboard.DAL.Alignment.Translation
 {
@@ -119,10 +118,13 @@ namespace ClearDashboard.DAL.Alignment.Translation
             result.ThrowIfCanceledOrFailed();
         }
 
-        public async Task Update(CancellationToken token = default)
+        public async Task UpdateAutoAlignments(AlignmentSetId alignmentSetToRedo, TrainSmtModelSet trainSmtModelSet, IEnumerable<EngineParallelTextRow> oldParallelTextRows, CancellationToken cancellationToken = default)
         {
-            // call the update handler to update the r/w metadata on the TokenizedTextCorpusId
-            throw new NotImplementedException();
+            var updateAlignmentResult = await mediator_.Send(new UpdateAlignmentsCommand(
+                alignmentSetToRedo,
+                trainSmtModelSet,
+                oldParallelTextRows
+                ), cancellationToken);
         }
 
         public async Task Delete(IMediator mediator, CancellationToken token = default)
