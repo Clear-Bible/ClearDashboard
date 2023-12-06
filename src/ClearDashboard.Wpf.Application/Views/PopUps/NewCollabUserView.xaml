@@ -179,8 +179,10 @@
                         <TextBox
                             x:Name="EmailCode"
                             Width="85"
-                            Height="40"
-                            Style="{StaticResource MaterialDesignFilledTextBox}" />
+                            Height="Auto"
+                            Background="LightGray"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
                         <Button
                             x:Name="ValidateEmailCode"
                             Height="40"
