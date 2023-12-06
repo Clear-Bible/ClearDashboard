@@ -16,6 +16,8 @@
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     Title="ClearDashboard"
+    MinWidth="1000"
+    MinHeight="800"
     d:DataContext="{d:DesignInstance Type=shell:ShellViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="800"

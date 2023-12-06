@@ -291,6 +291,7 @@ namespace ClearDashboard.Wpf.Application
         {
             //EnsureApplicationMainWindowVisible();
             //NavigateToViewModel<EnhancedViewDemoViewModel>();
+            var mainWindow = DashboardApplication.Current.MainWindow;
 
             await ShowStartupDialog<StartupDialogViewModel, MainViewModel>();
         }
