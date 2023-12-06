@@ -24,7 +24,7 @@ using ClearDashboard.DAL.Alignment.Translation;
 namespace ClearDashboard.Wpf.Application.Services
 {
     public sealed class NoteManager : PropertyChangedBase,
-        IHandle<SelectionUpdatedMessage>
+        IHandle<SelectionUpdatedMessage>, IHandle<LabelsUpdatedMessage>
     {
         private NoteViewModelCollection _currentNotes = new();
         private IEventAggregator EventAggregator { get; }
@@ -906,15 +906,23 @@ namespace ClearDashboard.Wpf.Application.Services
             DefaultLabelGroup = NoneLabelGroup;
         }
 
-        public async Task InitializeAsync()
+        private async Task PopulateLabelsAsync()
         {
             LabelSuggestions = await GetLabelSuggestionsAsync();
             NoneLabelGroup.Labels = LabelSuggestions;
             LabelGroups = await GetLabelGroupsAsync();
 
-            // For the hotfix only; do not merge to DEV.
-            //DefaultLabelGroup = await GetUserDefaultLabelGroupAsync();
-            DefaultLabelGroup = NoneLabelGroup;
+            DefaultLabelGroup = await GetUserDefaultLabelGroupAsync();
+        }
+
+        public async Task InitializeAsync()
+        {
+            await PopulateLabelsAsync();
+        }
+
+        public async Task HandleAsync(LabelsUpdatedMessage message, CancellationToken cancellationToken = default)
+        {
+            await PopulateLabelsAsync();
         }
 
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)

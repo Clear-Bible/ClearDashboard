@@ -486,7 +486,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 if (result.Success)
                 {
                     logger?.LogInformation($"Retrieved external labels for {externalProjectId} and updated internal labels and associated with project label group in {stopwatch.ElapsedMilliseconds} ms");
-
+                    await _eventAggregator.PublishOnUIThreadAsync(new LabelsUpdatedMessage(), cancellationToken);
                     return true;
                 }
                 else
