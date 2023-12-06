@@ -907,6 +907,9 @@
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>እና</value>
   </data>
+  <data name="LexiconEdit_ApplyFilter" xml:space="preserve">
+    <value>ማጣሪያን ይተግብሩ</value>
+  </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
     <value>ይቅር</value>
   </data>
@@ -918,6 +921,9 @@
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>ለመጀመሪያው ትርጉም እንደ ትርጉም '{0}'</value>
+  </data>
+  <data name="LexiconEdit_EditingDone" xml:space="preserve">
+    <value>ተከናውኗል</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>ሁሉንም ያግኙ</value>
@@ -1634,7 +1640,7 @@
     <value>ሀብት</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
-    <value>ይዘቱን እስከ 100% ሚዛን</value>
+    <value>ይዘቱን ወደ 100% ሚዛን</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
     <value>ወደ አዲስ መስኮት ጽሑፍ ያክሉ</value>
@@ -1832,7 +1838,7 @@
     <value>የመከላከያ የጀርባ ትርጉም</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>ኢንተርናሽናል መጽሐፍ ቅዱስ (LWC)</value>
+    <value>የሞዴል ጽሑፍ (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
     <value>ጥበቃዎች እየሰራ ነው ግን አልተገናኘም.</value>

@@ -936,6 +936,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 taskName);
         }
 
+        //Use Alignment.Util here.  Must first figure out SendBackgroundStatus() first
         public async Task<TrainSmtModelSet> TrainSmtModelAsync(string taskName, bool isTrainedSymmetrizedModel, SmtModelType smtModelType, bool generateAlignedTokenPairs, ParallelCorpus parallelCorpus, CancellationToken cancellationToken)
         {
             Logger!.LogInformation($"{nameof(TrainSmtModelAsync)} '{smtModelType}' on '{parallelCorpus.ParallelCorpusId.DisplayName}' called.");
@@ -1065,7 +1066,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             cancellationToken.ThrowIfCancellationRequested();
 
             // RUSSELL - code review
-            var translationSet = await TranslationSet.Create(null, alignmentSetId,
+            var translationSet = await TranslationSet.Create(null, alignmentSetId,//why put null rather than use the translationModel?
                 displayName, new Dictionary<string, object>(),
                 parallelCorpusId, Mediator, cancellationToken);
 

@@ -1,4 +1,5 @@
 ﻿using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.CQRS.Features;
 using MediatR;
 using SIL.Machine.Corpora;
