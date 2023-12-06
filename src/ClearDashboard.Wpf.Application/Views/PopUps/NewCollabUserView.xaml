@@ -183,6 +183,14 @@
                             Background="LightGray"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
+                        <!--<TextBox
+                            x:Name="EmailCode"
+                            Width="85"
+                            Height="Auto"
+                            Background="LightGray"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}" />-->
+
+
                         <Button
                             x:Name="ValidateEmailCode"
                             Height="40"
