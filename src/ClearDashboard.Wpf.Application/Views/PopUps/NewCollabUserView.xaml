@@ -170,7 +170,6 @@
             Margin="5"
             materialDesign:ColorZoneAssist.Mode="PrimaryMid"
             Header="{helpers:Localization NewCollabUserView_ValidateEmailCode}"
-            IsEnabled="{Binding ShowValidateEmailButtonEnabled}"
             Style="{DynamicResource MaterialDesignGroupBox}">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel Orientation="Vertical">
@@ -180,17 +179,9 @@
                             x:Name="EmailCode"
                             Width="85"
                             Height="Auto"
+                            HorizontalContentAlignment="Center"
                             Background="LightGray"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-
-                        <!--<TextBox
-                            x:Name="EmailCode"
-                            Width="85"
-                            Height="Auto"
-                            Background="LightGray"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}" />-->
-
-
                         <Button
                             x:Name="ValidateEmailCode"
                             Height="40"
