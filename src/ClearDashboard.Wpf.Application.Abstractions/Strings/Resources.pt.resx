@@ -112,6 +112,42 @@
   <data name="AboutView_Version" xml:space="preserve">
     <value>Versão</value>
   </data>
+  <data name="AccountInfo_ClearDashboardUserIdLabel" xml:space="preserve">
+    <value>ClearDashboard UserID:</value>
+  </data>
+  <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
+    <value>Nome de usuário do ClearDashboard:</value>
+  </data>
+  <data name="AccountInfo_CollaborationEmailLabel" xml:space="preserve">
+    <value>E -mail de colaboração:</value>
+  </data>
+  <data name="AccountInfo_CollaborationUserIdLabel" xml:space="preserve">
+    <value>Colaboração UserID:</value>
+  </data>
+  <data name="AccountInfo_CollaborationUsernameLabel" xml:space="preserve">
+    <value>Nome de usuário da colaboração:</value>
+  </data>
+  <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AccountInfo_DeactivateButton" xml:space="preserve">
+    <value>Desative a licença atual</value>
+  </data>
+  <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
+    <value>-Ou outro contas-</value>
+  </data>
+  <data name="AccountInfo_ParatextEmailLabel" xml:space="preserve">
+    <value>Email Paratext:</value>
+  </data>
+  <data name="AccountInfo_ParatextUsernameLabel" xml:space="preserve">
+    <value>Nome de usuário do Paratext:</value>
+  </data>
+  <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
+    <value>Reinicie a aplicação</value>
+  </data>
+  <data name="AccountInfo_SelectAccountLabel" xml:space="preserve">
+    <value>Selecione uma conta para mudar para:</value>
+  </data>
   <data name="ACT" xml:space="preserve">
     <value>ACT</value>
   </data>
@@ -143,7 +179,7 @@
     <value>Sem erros</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
-    <value>Salvar erros USFM no arquivo</value>
+    <value>Salve erros USFM no arquivo</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
     <value>Selecionar tudo</value>
@@ -677,7 +713,7 @@
     <value>Divisão de três vias</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Token de compósito un -joain</value>
+    <value>Token composto de unidade</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -907,6 +943,9 @@
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>E</value>
   </data>
+  <data name="LexiconEdit_ApplyFilter" xml:space="preserve">
+    <value>Aplicar filtro</value>
+  </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
     <value>Cancelar</value>
   </data>
@@ -919,11 +958,14 @@
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>Adicione '{0}' como tradução para o primeiro significado</value>
   </data>
+  <data name="LexiconEdit_EditingDone" xml:space="preserve">
+    <value>Feito</value>
+  </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Encontrar tudo</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
-    <value>Formas</value>
+    <value>Formulários</value>
   </data>
   <data name="LexiconEdit_Fully" xml:space="preserve">
     <value>Completamente</value>
@@ -974,7 +1016,7 @@
     <value>Adicione como forma para ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Encontre correspondências ou formulários completos ou parciais para a fonte</value>
+    <value>Encontre correspondências completas ou parciais de lexeme ou formulário para fonte</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Adicione o alvo como tradução para ...</value>
@@ -1199,7 +1241,7 @@
     <value>Versos</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Verso senso</value>
+    <value>Sentido do verso</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Verso total</value>
@@ -1358,7 +1400,7 @@
     <value>Adicione um rótulo</value>
   </data>
   <data name="Notes_LabelAddConfirm" xml:space="preserve">
-    <value>Você quer criar rótulo:</value>
+    <value>Você quer criar o rótulo:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>e associe -o ao grupo de etiquetas:</value>
@@ -1535,7 +1577,7 @@
     <value>Adicionar à nova visão</value>
   </data>
   <data name="Pds_AddCorpora" xml:space="preserve">
-    <value>Adicione corpora</value>
+    <value>Adicione corporal</value>
   </data>
   <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
     <value>Crie novo alinhamento de palavras</value>
@@ -1652,7 +1694,7 @@
     <value>Estudobible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
-    <value>Estudarbibleaddditions</value>
+    <value>Estudobibleadditions</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
     <value>Vá para projetos Paratext e troca. O projeto Paratext atualmente conectado ao plug -in ClearDashboard não é o mesmo que o corpus neste projeto ClearDashboard.</value>
@@ -1694,7 +1736,7 @@
     <value>Filtro:</value>
   </data>
   <data name="Pins_Forms" xml:space="preserve">
-    <value>Formas</value>
+    <value>Formulários</value>
   </data>
   <data name="Pins_Gloss" xml:space="preserve">
     <value>Lustro</value>
@@ -1757,7 +1799,7 @@
     <value>Paratext beta não está funcionando</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
-    <value>Cancelamento ...</value>
+    <value>Cancelando ...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Projetos de colaboração</value>
@@ -1832,7 +1874,7 @@
     <value>Paratext back tradução</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>Bíblia interlinear (LWC)</value>
+    <value>Texto do modelo (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
     <value>O Paratext está em execução, mas não está conectado.</value>
@@ -1847,7 +1889,7 @@
     <value>Estamos quase lá!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>Clique aqui para ver os vídeos 'Painel de início'</value>
+    <value>Clique aqui para visualizar vídeos 'Painel de início'</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
     <value>Depois de clicar no botão 'Criar' abaixo, estaremos tokenizando, alinhando e preparando seu projeto. Todas as etapas aparecerão aqui à medida que são processadas. Enquanto você espera, fique à vontade para clicar no link abaixo e assistir a alguns vídeos úteis para começar a usar o ClearDashboard!</value>
@@ -2195,7 +2237,7 @@
     <value>Reservado para expansão futura</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaurar o usuário de colaboração</value>
+    <value>Restaure o usuário da colaboração</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Salvo para servidor remoto</value>

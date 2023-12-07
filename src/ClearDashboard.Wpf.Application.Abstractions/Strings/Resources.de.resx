@@ -112,6 +112,42 @@
   <data name="AboutView_Version" xml:space="preserve">
     <value>Ausführung</value>
   </data>
+  <data name="AccountInfo_ClearDashboardUserIdLabel" xml:space="preserve">
+    <value>ClearDashboard UserId:</value>
+  </data>
+  <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
+    <value>Cleardashboard -Benutzername:</value>
+  </data>
+  <data name="AccountInfo_CollaborationEmailLabel" xml:space="preserve">
+    <value>Zusammenarbeit E -Mail:</value>
+  </data>
+  <data name="AccountInfo_CollaborationUserIdLabel" xml:space="preserve">
+    <value>Kollaboration BenutzerID:</value>
+  </data>
+  <data name="AccountInfo_CollaborationUsernameLabel" xml:space="preserve">
+    <value>Kollaboration Benutzername:</value>
+  </data>
+  <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AccountInfo_DeactivateButton" xml:space="preserve">
+    <value>Deaktivieren Sie die aktuelle Lizenz</value>
+  </data>
+  <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
+    <value>-OTHER ANTWORTEN-</value>
+  </data>
+  <data name="AccountInfo_ParatextEmailLabel" xml:space="preserve">
+    <value>Paratext -E -Mail:</value>
+  </data>
+  <data name="AccountInfo_ParatextUsernameLabel" xml:space="preserve">
+    <value>Paratext -Benutzername:</value>
+  </data>
+  <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
+    <value>Applikation neustarten</value>
+  </data>
+  <data name="AccountInfo_SelectAccountLabel" xml:space="preserve">
+    <value>Wählen Sie ein Konto aus, um zu wechseln zu:</value>
+  </data>
   <data name="ACT" xml:space="preserve">
     <value>ACT</value>
   </data>
@@ -461,7 +497,7 @@
     <value>Quelle</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Quellteil</value>
+    <value>Quellenteil</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Quelle Ref</value>
@@ -907,6 +943,9 @@
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Und</value>
   </data>
+  <data name="LexiconEdit_ApplyFilter" xml:space="preserve">
+    <value>Filter anwenden</value>
+  </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
     <value>Stornieren</value>
   </data>
@@ -918,6 +957,9 @@
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>Fügen Sie '{0}' als Übersetzung zur ersten Bedeutung hinzu</value>
+  </data>
+  <data name="LexiconEdit_EditingDone" xml:space="preserve">
+    <value>Erledigt</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Finde alle</value>
@@ -974,7 +1016,7 @@
     <value>Fügen Sie als Form für ... hinzu</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Finden Sie vollständige oder partielle Lexeme- oder Formularübereinstimmungen für die Quelle</value>
+    <value>Finden Sie vollständige oder teilweise Lexem- oder Formularübereinstimmungen für Quelle</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Ziel als Übersetzung für ...</value>
@@ -1298,7 +1340,7 @@
     <value>Nutzername:</value>
   </data>
   <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
-    <value>Der Benutzer ist bereits im System!</value>
+    <value>Der Benutzer ist bereits auf dem System!</value>
   </data>
   <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
     <value>Validieren Sie den E -Mail -Code</value>
@@ -1367,7 +1409,7 @@
     <value>Möchten Sie das Etikett löschen:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>Möchten Sie das Etikett zerlegen:</value>
+    <value>Möchten Sie das Etikett disassoziieren:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>aus der Labelgruppe:</value>
@@ -1502,10 +1544,10 @@
     <value>Korpora -Verse parallelisieren</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Algorithmus für maschinelle Wortausrichtungen</value>
+    <value>Algorithmus für maschinelles Wortausrichtungen</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Algorithmus für maschinelle Wortausrichtungen</value>
+    <value>Algorithmus für maschinelles Wortausrichtungen</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Zuges symmetisiertes Modell?</value>
@@ -1550,7 +1592,7 @@
     <value>Fügen Sie Text zur Anzeige hinzu</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie Text zur neuen Ansicht hinzu</value>
+    <value>Fügen Sie der neuen Ansicht Text hinzu</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Zur Anzeige hinzufügen</value>
@@ -1637,7 +1679,7 @@
     <value>Skalieren Sie den Inhalt auf 100%</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
-    <value>Fügen Sie Text zu einem neuen Fenster hinzu</value>
+    <value>Fügen Sie Text zum neuen Fenster hinzu</value>
   </data>
   <data name="Pds_Source" xml:space="preserve">
     <value>Quelle</value>
@@ -1799,7 +1841,7 @@
     <value>Serverprojekt importieren</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Aktivieren Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
+    <value>Überprüfen Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>NT Griechische biblische Texte einschließen?</value>
@@ -1832,7 +1874,7 @@
     <value>Paratext -Back -Übersetzung</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>Interlineare Bibel (LWC)</value>
+    <value>Modelltext (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
     <value>Paratext läuft, aber nicht verbunden.</value>
@@ -1907,7 +1949,7 @@
     <value>1 Thessalonicher</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 Timotheus</value>
+    <value>1 Timothy</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 Chroniken</value>

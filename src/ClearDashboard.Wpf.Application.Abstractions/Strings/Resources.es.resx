@@ -112,6 +112,42 @@
   <data name="AboutView_Version" xml:space="preserve">
     <value>Versión</value>
   </data>
+  <data name="AccountInfo_ClearDashboardUserIdLabel" xml:space="preserve">
+    <value>ClearDashboard UserID:</value>
+  </data>
+  <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
+    <value>Nombre de usuario de ClearDashboard:</value>
+  </data>
+  <data name="AccountInfo_CollaborationEmailLabel" xml:space="preserve">
+    <value>Correo electrónico de colaboración:</value>
+  </data>
+  <data name="AccountInfo_CollaborationUserIdLabel" xml:space="preserve">
+    <value>Collaboration UserId:</value>
+  </data>
+  <data name="AccountInfo_CollaborationUsernameLabel" xml:space="preserve">
+    <value>Nombre de usuario de colaboración:</value>
+  </data>
+  <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AccountInfo_DeactivateButton" xml:space="preserve">
+    <value>Desactivar la licencia actual</value>
+  </data>
+  <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
+    <value>-Otras cuentas-</value>
+  </data>
+  <data name="AccountInfo_ParatextEmailLabel" xml:space="preserve">
+    <value>Correo electrónico de paratext:</value>
+  </data>
+  <data name="AccountInfo_ParatextUsernameLabel" xml:space="preserve">
+    <value>PARATEXT Nombre de usuario:</value>
+  </data>
+  <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
+    <value>Reiniciar aplicación</value>
+  </data>
+  <data name="AccountInfo_SelectAccountLabel" xml:space="preserve">
+    <value>Seleccione una cuenta para cambiar a:</value>
+  </data>
   <data name="ACT" xml:space="preserve">
     <value>ACT</value>
   </data>
@@ -464,7 +500,7 @@
     <value>Parte fuente</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Fuente Ref.</value>
+    <value>Reflexión de origen</value>
   </data>
   <data name="BulkAlignmentReview_Target" xml:space="preserve">
     <value>Objetivo</value>
@@ -614,13 +650,13 @@
     <value>Eliminar la alineación?</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>Eliminar alineación</value>
+    <value>Eliminar la alineación</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
     <value>Eliminar la alineación de '{0}'?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>¿Eliminar todas las alineaciones?</value>
+    <value>Eliminar todas las alineaciones?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>El token '{0}' tiene múltiples alineaciones definidas. Haga clic en '{1}' eliminará todas las alineaciones.</value>
@@ -836,7 +872,7 @@
     <value>Agregar significado</value>
   </data>
   <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
-    <value>Agregar un significado para este lema</value>
+    <value>Agregue un significado para este lema</value>
   </data>
   <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
     <value>Agregar un dominio semántico</value>
@@ -848,7 +884,7 @@
     <value>Cancelar brillo</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
-    <value>Cambiar todos los ocurrencias no establecidos</value>
+    <value>Cambiar todos los ocurrencias inseguros</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Si se verifica, esto cambiará todas las ocurrencias no establecidas de esta palabra</value>
@@ -907,6 +943,9 @@
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Y</value>
   </data>
+  <data name="LexiconEdit_ApplyFilter" xml:space="preserve">
+    <value>Aplicar filtro</value>
+  </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
     <value>Cancelar</value>
   </data>
@@ -918,6 +957,9 @@
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>Agregar '{0}' como traducción al primer significado</value>
+  </data>
+  <data name="LexiconEdit_EditingDone" xml:space="preserve">
+    <value>Hecho</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Encuentra todos</value>
@@ -986,7 +1028,7 @@
     <value>Importación comprobada</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
-    <value>Lexeme o coincidencias de formulario</value>
+    <value>Lexeme o coincidencias de forma</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
     <value>No hay más registros para importar.</value>
@@ -1367,7 +1409,7 @@
     <value>¿Quieres eliminar la etiqueta:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>¿Quieres disociar la etiqueta?</value>
+    <value>¿Quieres disociar la etiqueta:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>del grupo de etiquetas:</value>
@@ -1457,7 +1499,7 @@
     <value>¿Enviar esta nota a Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Envíe esta nota a Paratext</value>
+    <value>Envía esta nota a Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Corpus tokenizado</value>
@@ -1580,7 +1622,7 @@
     <value>Hija</value>
   </data>
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>Eliminar alineación</value>
+    <value>Eliminar la alineación</value>
   </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Eliminar interlineal</value>
@@ -1649,7 +1691,7 @@
     <value>Estándar</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Estudiobible</value>
+    <value>Estudio de estudio</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBIBLeadDitions</value>
@@ -1832,7 +1874,7 @@
     <value>Traducción de la espalda de paratext</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>Biblia interlineal (LWC)</value>
+    <value>Texto modelo (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
     <value>Paratext se está ejecutando pero no está conectado.</value>
@@ -1970,7 +2012,7 @@
     <value>Ezra</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Gálatas</value>
+    <value>Gálate</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>Génesis</value>
@@ -2012,7 +2054,7 @@
     <value>Joshua</value>
   </data>
   <data name="ProperCase_Jude" xml:space="preserve">
-    <value>Judío</value>
+    <value>Yacuana</value>
   </data>
   <data name="ProperCase_Judges" xml:space="preserve">
     <value>Jueces</value>
@@ -2201,7 +2243,7 @@
     <value>Guardado en servidor remoto</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Guardar el usuario de GitLab en el servidor</value>
+    <value>Guardar el usuario de GitLab al servidor</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
     <value>Guardar ajustes</value>

@@ -112,6 +112,42 @@
   <data name="AboutView_Version" xml:space="preserve">
     <value>إصدار</value>
   </data>
+  <data name="AccountInfo_ClearDashboardUserIdLabel" xml:space="preserve">
+    <value>ClearDashboard UserId:</value>
+  </data>
+  <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
+    <value>اسم المستخدم ClearDashboard:</value>
+  </data>
+  <data name="AccountInfo_CollaborationEmailLabel" xml:space="preserve">
+    <value>البريد الإلكتروني التعاون:</value>
+  </data>
+  <data name="AccountInfo_CollaborationUserIdLabel" xml:space="preserve">
+    <value>تعاون مستخدم user:</value>
+  </data>
+  <data name="AccountInfo_CollaborationUsernameLabel" xml:space="preserve">
+    <value>اسم المستخدم التعاون:</value>
+  </data>
+  <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AccountInfo_DeactivateButton" xml:space="preserve">
+    <value>إلغاء تنشيط الترخيص الحالي</value>
+  </data>
+  <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
+    <value>-حسابات أخرى-</value>
+  </data>
+  <data name="AccountInfo_ParatextEmailLabel" xml:space="preserve">
+    <value>البريد الإلكتروني paratext:</value>
+  </data>
+  <data name="AccountInfo_ParatextUsernameLabel" xml:space="preserve">
+    <value>اسم المستخدم Paratext:</value>
+  </data>
+  <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
+    <value>إعادة تشغيل التطبيق</value>
+  </data>
+  <data name="AccountInfo_SelectAccountLabel" xml:space="preserve">
+    <value />
+  </data>
   <data name="ACT" xml:space="preserve">
     <value>ACT</value>
   </data>
@@ -143,7 +179,7 @@
     <value>لا اخطاء</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
-    <value>احفظ أخطاء USFM للملف</value>
+    <value>حفظ أخطاء USFM للملف</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
     <value>اختر الكل</value>
@@ -677,7 +713,7 @@
     <value>انقسام ثلاثي الاتجاه</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>un incin مركب مركب</value>
+    <value>un incin composite token</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -887,7 +923,7 @@
     <value>لكلية</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
-    <value>يوجد معكم بالفعل لـ Lemma</value>
+    <value>يوجد معجم ل lemma بالفعل</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>المعاني:</value>
@@ -907,6 +943,9 @@
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>و</value>
   </data>
+  <data name="LexiconEdit_ApplyFilter" xml:space="preserve">
+    <value>تطبيق المرشح</value>
+  </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
     <value>يلغي</value>
   </data>
@@ -918,6 +957,9 @@
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>أضف '{0}' كترجمة إلى المعنى الأول</value>
+  </data>
+  <data name="LexiconEdit_EditingDone" xml:space="preserve">
+    <value>منتهي</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>جد كل</value>
@@ -1226,7 +1268,7 @@
     <value>MIC</value>
   </data>
   <data name="Migrate_Header" xml:space="preserve">
-    <value>إعادة تعيين تعيينات الآية إلى الافتراضي</value>
+    <value>إعادة تعيين تعيينات الآية إلى الافتراض الافتراضي</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>MRK</value>
@@ -1628,7 +1670,7 @@
     <value>ملكيات</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>إعادة تعيين تعيينات الآية إلى الافتراضي</value>
+    <value>إعادة تعيين تعيينات الآية إلى الافتراض الافتراضي</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>الموارد</value>
@@ -1832,10 +1874,10 @@
     <value>ترجمة BARATEXT</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>الكتاب المقدس بين الخط (LWC)</value>
+    <value>نص النموذج (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext قيد التشغيل ولكن غير متصل.</value>
+    <value>Paratext قيد التشغيل ولكنه غير متصل.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>مشروع Paratext</value>
@@ -1964,7 +2006,7 @@
     <value>خروج</value>
   </data>
   <data name="ProperCase_Ezekiel" xml:space="preserve">
-    <value>حزن</value>
+    <value>حزقيال</value>
   </data>
   <data name="ProperCase_Ezra" xml:space="preserve">
     <value>عزرا</value>
@@ -2099,7 +2141,7 @@
     <value>المفتاح المقدم هو معيب. عندما تم فك تشفيرها ، لا يمكن العثور على بعض عناصر JSON.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>لا تتطابق محتويات مفتاح الترخيص الذي تم تفكيكه مع المعلومات التي قدمتها.</value>
+    <value>لا تتطابق محتويات مفتاح الترخيص الذي تم فك تشفيره مع المعلومات التي قدمتها.</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
     <value>مفتاح الترخيص الخاص بك إما مفقود أو مكسور.</value>
@@ -2213,10 +2255,10 @@
     <value>ClearDashboard إعدادات</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>عرض طرق العرض الموسعة على شاشة مختلفة عن لوحة القيادة</value>
+    <value>عرض طرق عرض موسعة على شاشة مختلفة عن لوحة القيادة</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>بالنسبة للأنظمة التي تحتوي على ثلاثة شاشات أو أكثر ، عرض عرض موسع على الشاشة الثالثة</value>
+    <value>للأنظمة التي لديها ثلاثة شاشات أو أكثر ، عرض عرض موسع على الشاشة الثالثة</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>جمع النص</value>
@@ -2309,7 +2351,7 @@
     <value>عنوان:</value>
   </data>
   <data name="SlackMessageView_Title" xml:space="preserve">
-    <value>إرسال رسالة الركود</value>
+    <value>أرسل رسالة الركود</value>
   </data>
   <data name="SNG" xml:space="preserve">
     <value>SNG</value>
