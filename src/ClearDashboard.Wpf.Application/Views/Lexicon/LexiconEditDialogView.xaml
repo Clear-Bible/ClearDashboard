@@ -21,7 +21,7 @@
     MaxHeight="800">
 
     <UserControl.Resources>
-       
+
         <Style x:Key="Label" TargetType="{ x:Type TextBlock}">
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -76,9 +76,9 @@
                     <Setter Property="Background" Value="LightGray" />
                 </Trigger>
             </Style.Triggers>
-           
+
         </Style>
-       
+
     </UserControl.Resources>
     <Grid MinWidth="800">
         <Grid.RowDefinitions>
@@ -88,25 +88,25 @@
         </Grid.RowDefinitions>
         <materialDesign:Card Margin="5">
             <Grid Margin="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="35" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="150" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="150" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <TextBlock
+                <TextBlock
                 Grid.Row="0"
                 Grid.Column="0"
                 Text="{helpers:Localization LexiconEdit_SourceLanguage}" 
                 Style="{StaticResource Label}"/>
-            <ComboBox
+                <ComboBox
                 x:Name="SourceLanguage"
                 Grid.Row="0"
                 Grid.Column="1"
@@ -114,12 +114,12 @@
                 IsEnabled="{Binding EnableSourceLanguageComboBox}"
                 ItemsSource="{Binding SourceLanguages}"
                 SelectedItem="{Binding SelectedSourceLanguage}" />
-            <TextBlock
+                <TextBlock
                 Grid.Row="0"
                 Grid.Column="2"
                 Style="{StaticResource Label}"
                 Text="{helpers:Localization LexiconEdit_TargetLanguage}" />
-            <ComboBox
+                <ComboBox
                 x:Name="TargetLanguage"
                 Grid.Row="0"
                 Grid.Column="3"
@@ -127,21 +127,22 @@
                 IsEnabled="{Binding EnableTargetLanguageComboBox}"
                 ItemsSource="{Binding TargetLanguages}"
                 SelectedItem="{Binding SelectedTargetLanguage}" />
-            <TextBlock Grid.Row="1" 
+                <TextBlock Grid.Row="1" 
                        Grid.Column="0" Style="{StaticResource Label}"
                        Text="{helpers:Localization LexiconEdit_FindAll}"
                        HorizontalAlignment="Left"></TextBlock>
-            <WrapPanel Grid.Row="2" 
+                <!-- NB:  This is the XAML for the UI described in GitHub issue #812.  We're using a simplified version of the XAML below. -->
+                <!--<WrapPanel Grid.Row="2" 
                        Grid.Column="0" 
                        Grid.ColumnSpan="5" 
                        Margin="5"
                        Orientation="Horizontal">
 
-                <CheckBox x:Name="FindAllLexemeCheckBox" 
+                    <CheckBox x:Name="FindAllLexemeCheckBox" 
                           cm:Message.Attach="[Event Checked] = [Action OnLexemeChecked($source)]" 
                           Content="{helpers:Localization LexiconEdit_Lexeme}" 
                           IsChecked="{Binding State.LexemeChecked}"  />
-                <ListBox x:Name="FindAllLexemeOptions"
+                    <ListBox x:Name="FindAllLexemeOptions"
                          Height="28"
                          Margin="4"
                          cm:Message.Attach="[Event SelectionChanged] = [Action OnLexemeOptionChanged($eventArgs)]"
@@ -150,14 +151,14 @@
                          SelectionMode="Single"
                          Style="{StaticResource MaterialDesignToolToggleListBox}"
                          Visibility="{Binding State.LexemeChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <ListBoxItem Content="{helpers:Localization LexiconEdit_Partially}" Tag="{x:Static lexicon:LexiconEditTags.Partially}" />
-                    <ListBoxItem Content="{helpers:Localization LexiconEdit_Fully}" Tag="{x:Static lexicon:LexiconEditTags.Fully}" />
-                </ListBox>
-                <TextBlock Text="{helpers:Localization LexiconEdit_Or}" 
+                        <ListBoxItem Content="{helpers:Localization LexiconEdit_Partially}" Tag="{x:Static lexicon:LexiconEditTags.Partially}" />
+                        <ListBoxItem Content="{helpers:Localization LexiconEdit_Fully}" Tag="{x:Static lexicon:LexiconEditTags.Fully}" />
+                    </ListBox>
+                    <TextBlock Text="{helpers:Localization LexiconEdit_Or}" 
                            Style="{StaticResource Label}"
                            Visibility="{Binding State.LexemeAndFormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>
-                <CheckBox x:Name="FormsCheckBox" cm:Message.Attach="[Event Checked] = [Action OnFormsChecked($source)]" Content="{helpers:Localization LexiconEdit_Forms}" IsChecked="{Binding State.FormsChecked}"  />
-                <ListBox x:Name="FormsOptions"
+                    <CheckBox x:Name="FormsCheckBox" cm:Message.Attach="[Event Checked] = [Action OnFormsChecked($source)]" Content="{helpers:Localization LexiconEdit_Forms}" IsChecked="{Binding State.FormsChecked}"  />
+                    <ListBox x:Name="FormsOptions"
                          Height="28"
                          Margin="4"
                          cm:Message.Attach="[Event SelectionChanged] = [Action OnFormsOptionChanged($eventArgs)]"
@@ -166,13 +167,11 @@
                          SelectionMode="Single"
                          Style="{StaticResource MaterialDesignToolToggleListBox}"
                          Visibility="{Binding State.FormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <ListBoxItem Content="{helpers:Localization LexiconEdit_Partially}" Tag="{x:Static lexicon:LexiconEditTags.Partially}" />
-                    <ListBoxItem Content="{helpers:Localization LexiconEdit_Fully}" Tag="{x:Static lexicon:LexiconEditTags.Fully}" />
-                </ListBox>
-                <!--<TextBlock Text="{helpers:Localization LexiconEdit_Matching}" 
-                           Style="{StaticResource Label}"
-                           Visibility="{Binding State.LexemeOrFormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>-->
-                <TextBox x:Name="FormsMatch"  
+                        <ListBoxItem Content="{helpers:Localization LexiconEdit_Partially}" Tag="{x:Static lexicon:LexiconEditTags.Partially}" />
+                        <ListBoxItem Content="{helpers:Localization LexiconEdit_Fully}" Tag="{x:Static lexicon:LexiconEditTags.Fully}" />
+                    </ListBox>
+
+                    <TextBox x:Name="FormsMatch"  
                          cm:Message.Attach="[Event TextChanged] = [Action OnFormsMatchChanged($source, $eventArgs)]" 
                          materialDesign:HintAssist.Hint="{helpers:Localization LexiconEdit_Matching}"
                          Style="{StaticResource HintTextBox}"
@@ -181,7 +180,7 @@
                          Height="30"
                          Visibility="{Binding State.LexemeOrFormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBox>
 
-                <ListBox x:Name="PredicateOptions"
+                    <ListBox x:Name="PredicateOptions"
                          Height="28"
                          Margin="4"
                          cm:Message.Attach="[Event SelectionChanged] = [Action OnFormsOptionChanged($eventArgs)]"
@@ -190,32 +189,94 @@
                          SelectionMode="Single"
                          Style="{StaticResource MaterialDesignToolToggleListBox}"
                          Visibility="{Binding State.TransitionAndLexemeOrFormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <ListBoxItem Content="{helpers:Localization LexiconEdit_And}" Tag="{x:Static lexicon:LexiconEditTags.And}" />
-                    <ListBoxItem Content="{helpers:Localization LexiconEdit_Or}" Tag="{x:Static lexicon:LexiconEditTags.Or}" />
-                </ListBox>
-                <CheckBox x:Name="TranslationCheckBox"  cm:Message.Attach="[Event Checked] = [Action OnTranslationChecked($source)]" Content="{helpers:Localization LexiconEdit_Translation}" IsChecked="{Binding State.TranslationChecked}"  />
-                <!--<TextBlock Text="{helpers:Localization LexiconEdit_FullyMatching}" 
-                           Style="{StaticResource Label}"
-                           Visibility="{Binding State.TranslationChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>-->
-                <TextBox x:Name="TranslationMatch"  cm:Message.Attach="[Event TextChanged] = [Action OnTranslationMatchChanged($source, $eventArgs)]" 
+                        <ListBoxItem Content="{helpers:Localization LexiconEdit_And}" Tag="{x:Static lexicon:LexiconEditTags.And}" />
+                        <ListBoxItem Content="{helpers:Localization LexiconEdit_Or}" Tag="{x:Static lexicon:LexiconEditTags.Or}" />
+                    </ListBox>
+                    <CheckBox x:Name="TranslationCheckBox"  cm:Message.Attach="[Event Checked] = [Action OnTranslationChecked($source)]" Content="{helpers:Localization LexiconEdit_Translation}" IsChecked="{Binding State.TranslationChecked}"  />
+                    <TextBox x:Name="TranslationMatch"  cm:Message.Attach="[Event TextChanged] = [Action OnTranslationMatchChanged($source, $eventArgs)]" 
                          materialDesign:HintAssist.Hint="{helpers:Localization LexiconEdit_FullyMatching}"
                         Text ="{Binding State.TranslationMatch}"
                          Style="{StaticResource HintTextBox}"
                          Width="100" 
                          Height="30"
                          Visibility="{Binding State.TranslationChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBox>
-                <Button x:Name="ApplyFilterButton" Style="{StaticResource RowButtonStyle}" 
+                    <Button x:Name="ApplyFilterButton" Style="{StaticResource RowButtonStyle}" 
                          cm:Message.Attach="[Event Click] = [Action OnApplyFilterButtonClicked()]">
-                    <Button.ContentTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{helpers:Localization LexiconEdit_ApplyFilter}" TextWrapping="Wrap" />
-                        </DataTemplate>
-                    </Button.ContentTemplate>
-                </Button>
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{helpers:Localization LexiconEdit_ApplyFilter}" TextWrapping="Wrap" />
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+
+                </WrapPanel>-->
+                <WrapPanel Grid.Row="2" 
+                        Grid.Column="0" 
+                        Grid.ColumnSpan="5" 
+                        Margin="5"
+                        Orientation="Horizontal">
+
+                    <CheckBox x:Name="FindAllLexemeCheckBox" 
+                       cm:Message.Attach="[Event Checked] = [Action OnLexemeChecked($source)]" 
+                       Content="{helpers:Localization LexiconEdit_Lexeme}" 
+                       IsChecked="{Binding State.LexemeChecked}"  />
+                   
+                    <TextBlock Text="{helpers:Localization LexiconEdit_Or}" Style="{StaticResource Label}"
+                        Visibility="{Binding State.LexemeAndFormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>
+                    <CheckBox x:Name="FormsCheckBox" cm:Message.Attach="[Event Checked] = [Action OnFormsChecked($source)]" Content="{helpers:Localization LexiconEdit_Forms}" IsChecked="{Binding State.FormsChecked}"  />
+                    <ListBox x:Name="FormsOrLexemeOptions"
+                          Height="28"
+                          Margin="4"
+                          cm:Message.Attach="[Event SelectionChanged] = [Action OnFormsOrLexemeOptionChanged($eventArgs)]"
+                          IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}"
+                          SelectedIndex="0"
+                          SelectionMode="Single"
+                          Style="{StaticResource MaterialDesignToolToggleListBox}"
+                          Visibility="{Binding State.FormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <ListBoxItem Content="{helpers:Localization LexiconEdit_Partially}" Tag="{x:Static lexicon:LexiconEditTags.Partially}" />
+                        <ListBoxItem Content="{helpers:Localization LexiconEdit_Fully}" Tag="{x:Static lexicon:LexiconEditTags.Fully}" />
+                    </ListBox>
+
+                    <TextBox x:Name="FormsMatch"  
+                          cm:Message.Attach="[Event TextChanged] = [Action OnFormsMatchChanged($source, $eventArgs)]" 
+                          materialDesign:HintAssist.Hint="{helpers:Localization LexiconEdit_Matching}"
+                          Style="{StaticResource HintTextBox}"
+                          Text="{Binding State.FormsMatch}"
+                          Width="100" 
+                          Height="30"
+                          Visibility="{Binding State.LexemeOrFormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBox>
+
+                    <ListBox x:Name="PredicateOptions"
+                          Height="28"
+                          Margin="4"
+                          cm:Message.Attach="[Event SelectionChanged] = [Action OnPredicateOptionChanged($eventArgs)]"
+                          IsEnabled="{Binding FetchingData, Converter={StaticResource BooleanInversionConverter}}"
+                          SelectedIndex="0"
+                          SelectionMode="Single"
+                          Style="{StaticResource MaterialDesignToolToggleListBox}"
+                          Visibility="{Binding State.TransitionAndLexemeOrFormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <ListBoxItem Content="{helpers:Localization LexiconEdit_And}" Tag="{x:Static lexicon:LexiconEditTags.And}" />
+                        <ListBoxItem Content="{helpers:Localization LexiconEdit_Or}" Tag="{x:Static lexicon:LexiconEditTags.Or}" />
+                    </ListBox>
+                    <CheckBox x:Name="TranslationCheckBox"  cm:Message.Attach="[Event Checked] = [Action OnTranslationChecked($source)]" Content="{helpers:Localization LexiconEdit_Translation}" IsChecked="{Binding State.TranslationChecked}"  />
+                    <TextBox x:Name="TranslationMatch"  cm:Message.Attach="[Event TextChanged] = [Action OnTranslationMatchChanged($source, $eventArgs)]" 
+                      materialDesign:HintAssist.Hint="{helpers:Localization LexiconEdit_FullyMatching}"
+                     Text ="{Binding State.TranslationMatch}"
+                      Style="{StaticResource HintTextBox}"
+                      Width="100" 
+                      Height="30"
+                      Visibility="{Binding State.TranslationChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBox>
+                    <Button x:Name="ApplyFilterButton" Style="{StaticResource RowButtonStyle}" 
+                        cm:Message.Attach="[Event Click] = [Action OnApplyFilterButtonClicked()]">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{helpers:Localization LexiconEdit_ApplyFilter}" TextWrapping="Wrap" />
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
 
                 </WrapPanel>
-
-        </Grid>
+            </Grid>
         </materialDesign:Card>
         <DataGrid
              x:Name="LexiconEditDataGrid"
@@ -246,11 +307,6 @@
                                 <Button x:Name="EditButton" Style="{StaticResource RowButtonStyle}" 
                                         cm:Action.TargetWithoutContext="{Binding }"
                                         cm:Message.Attach="[Event Click] = [Action OnEditButtonClicked()]" Content="{Binding EditButtonLabel}">
-                                    <!--<Button.ContentTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding  Path=EditButtonLabel}" TextWrapping="Wrap" />
-                                        </DataTemplate>
-                                    </Button.ContentTemplate>-->
                                 </Button>
                                 <Button x:Name="ActionButton" Style="{StaticResource RowButtonStyle}"  
                                     cm:Action.TargetWithoutContext="{Binding DataContext, ElementName=LexiconEditDataGrid}"
@@ -262,7 +318,7 @@
                                             <Binding ElementName="LexiconEditDataGrid" Path="DataContext" />
                                             <Binding/>
                                         </MultiBinding>
-                          
+
                                     </Button.IsEnabled>
                                     <Button.ContentTemplate>
                                         <DataTemplate>

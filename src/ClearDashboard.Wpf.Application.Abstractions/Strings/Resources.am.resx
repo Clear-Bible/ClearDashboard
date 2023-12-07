@@ -1640,7 +1640,7 @@
     <value>ሀብት</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
-    <value>ይዘቱን እስከ 100% ሚዛን</value>
+    <value>ይዘቱን ወደ 100% ሚዛን</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
     <value>ወደ አዲስ መስኮት ጽሑፍ ያክሉ</value>
@@ -1838,7 +1838,7 @@
     <value>የመከላከያ የጀርባ ትርጉም</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>ኢንተርናሽናል መጽሐፍ ቅዱስ (LWC)</value>
+    <value>የሞዴል ጽሑፍ (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
     <value>ጥበቃዎች እየሰራ ነው ግን አልተገናኘም.</value>

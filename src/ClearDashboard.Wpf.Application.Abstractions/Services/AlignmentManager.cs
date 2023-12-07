@@ -189,10 +189,11 @@ namespace ClearDashboard.Wpf.Application.Services
             alignmentPopupViewModel.TargetTokenDisplay = tokenDisplay;
 
             var result = await WindowManager.ShowDialogAsync(alignmentPopupViewModel, null, SimpleMessagePopupViewModel.CreateDialogSettings(alignmentPopupViewModel.Title));
+
             if (result == true)
             {
                 var alignmentIds = FindAlignmentIds(tokenDisplay);
-         
+
                 // gather all of the alignments which can be removed and delete them form the database.
                 var alignmentsToRemove = new List<Alignment>();
                 foreach (var alignmentId in alignmentIds)

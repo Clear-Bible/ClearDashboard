@@ -7,6 +7,7 @@ using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Scripture;
 using ClearDashboard.DAL.Alignment.Features.Translation;
+using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {

@@ -460,8 +460,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             // This is a hack to get the BcvDictionary to be populated when there is no Paratext project loaded.
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator);
 
+            if (topLevelProjectIds.CorpusIds is null)
+            {
+                return new Dictionary<string, string>();
+            }
+
             // get the first project id
             var firstProjectId = topLevelProjectIds.CorpusIds.FirstOrDefault(t => t.CorpusType == "Standard");
+
+            if (firstProjectId is null)
+            {
+                return new Dictionary<string, string>();
+            }
 
             var results =
                 await ExecuteRequest(
@@ -1021,7 +1031,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public void Copy(object sender, NoteEventArgs e)
         {
-            TokenDisplayViewModelCollection sortedTokens = new TokenDisplayViewModelCollection(e.SelectedTokens.OrderBy(x => x.AlignmentToken.Position));
+            TokenDisplayViewModelCollection sortedTokens = new TokenDisplayViewModelCollection(e.SelectedTokens.OrderBy(x => x.Token.Position));
             sortedTokens.Refresh();
             var surfaceText = sortedTokens.CombinedSurfaceText.Replace(",", "");
             Clipboard.SetText(surfaceText);

@@ -7,8 +7,11 @@ using ClearBible.Engine.Tokenization;
 using ClearBible.Macula.PropertiesSources.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Features.Common;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Features.Corpa;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
@@ -52,6 +55,7 @@ using System.Windows;
 using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
+using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 
 
@@ -75,6 +79,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private readonly NoteManager _noteManager;
         private readonly SystemPowerModes _systemPowerModes;
         private readonly ObservableDictionary<string, bool> _busyState = new();
+        private readonly TranslationCommands _translationCommands;
 
         private const string TaskName = "Alignment Deletion";
 
@@ -178,7 +183,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             LongRunningTaskManager longRunningTaskManager,
             ILocalizationService localizationService,
             IEnhancedViewManager enhancedViewManager,
-            NoteManager noteManager)
+            NoteManager noteManager,
+            TranslationCommands translationCommands)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             EnhancedViewManager = enhancedViewManager;
@@ -188,6 +194,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             BackgroundTasksViewModel = backgroundTasksViewModel;
             _longRunningTaskManager = longRunningTaskManager;
             _localizationService = localizationService;
+            _translationCommands = translationCommands;
 
             EventAggregator.SubscribeOnUIThread(this);
 
@@ -1158,7 +1165,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // get TranslationSet , etc from the dialogViewModel
                     //var translationSet = dialogViewModel!.TranslationSet;
 
-
                     if (parallelProjectType == ParallelProjectType.WholeProcess)
                     {
                         newParallelCorpusConnection.ParallelCorpusId =
@@ -1253,9 +1259,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        public async Task UpdateParatextCorpus(string selectedParatextProjectId, string? selectedTokenizer)
+        public async Task UpdateParatextCorpus(string selectedParatextProjectId, string? selectedTokenizer, CorpusNodeViewModel corpusNodeViewModel)
         {
             Logger!.LogInformation("UpdateParatextCorpus called.");
+
+            var bookIds = new List<string>();
 
             var parameters = new List<Autofac.Core.Parameter>
             {
@@ -1265,7 +1273,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             if (!Enum.TryParse(selectedTokenizer, out Tokenizers tokenizer))
             {
-                Logger!.LogError($"UpdateParatextCorups received an invalid selectedTokenizer value '{selectedTokenizer}'");
+                Logger!.LogError($"UpdateParatextCorpus received an invalid selectedTokenizer value '{selectedTokenizer}'");
                 throw new ArgumentException($@"Unable to parse value as Enum '{selectedTokenizer}'", nameof(selectedTokenizer));
             }
 
@@ -1275,11 +1283,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 var result = await _windowManager!.ShowDialogAsync(dialogViewModel, null,
                     DialogSettings.AddParatextCorpusDialogSettings);
-
                 if (result)
                 {
                     var selectedProject = dialogViewModel!.SelectedProject;
-                    var bookIds = dialogViewModel.BookIds;
+                    bookIds = dialogViewModel.BookIds;
 
                     var taskName = $"{selectedProject!.Name}";
                     _busyState.Add(taskName, true);
@@ -1292,6 +1299,71 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         var soundType = SoundType.Success;
                         try
                         {
+                            ProjectManager!.PauseDenormalization = true;
+                            
+                            if (bookIds.Count == 0)
+                            {
+                                return;
+                            }
+
+                            //Get all connections for a text
+                            var connections = corpusNodeViewModel.AttachedConnections.ToList();
+
+                            var alignmentSetsToRedo = new List<AlignmentSetId>();
+
+                            //foreach connection
+                            foreach (var connection in connections)
+                            {
+                                var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+
+                                //Checking if common books are present
+                                var commonBookPresent = false;
+                                var updatedNodeIsSource = connection.SourceConnector.ParentNode.Id == corpusNodeViewModel.Id;
+                                if (updatedNodeIsSource)
+                                {
+                                    //why are we using the paratextProjectId to get a tokenized corpus?  What if there are multiple instances of a corpus tokenized
+                                    var tokenizedBookRequest = await Mediator.Send(new GetBooksFromTokenizedCorpusQuery(connection.DestinationConnector.ParentNode.ParatextProjectId), CancellationToken.None);
+
+                                    foreach (var bookId in bookIds)
+                                    {
+                                        if (tokenizedBookRequest.Data.Contains(BookChapterVerseViewModel.GetBookNumFromBookName(bookId)))
+                                        {
+                                            commonBookPresent = true;
+                                            continue;
+                                        }
+                                    }
+
+                                }
+                                else
+                                {
+                                    //why are we using the paratextProjectId to get a tokenized corpus?  What if there are multiple instances of a corpus tokenized
+                                    var tokenizedBookRequest = await Mediator.Send(new GetBooksFromTokenizedCorpusQuery(connection.SourceConnector.ParentNode.ParatextProjectId), CancellationToken.None);
+
+                                    foreach (var bookId in bookIds)
+                                    {
+                                        if (tokenizedBookRequest.Data.Contains(BookChapterVerseViewModel.GetBookNumFromBookName(bookId)))
+                                        {
+                                            commonBookPresent = true;
+                                            continue;
+                                        }
+                                    }
+                                }
+
+                                if (!commonBookPresent)
+                                {
+                                    continue;
+                                }
+
+                                //Get Old Alignments
+                                var oldParallelCorpus = await ParallelCorpus.Get(Mediator!, connection.ParallelCorpusId);
+                                var oldAlignmentSetIds = topLevelProjectIds.AlignmentSetIds.Where(x => x.ParallelCorpusId == oldParallelCorpus.ParallelCorpusId);
+                                if (oldAlignmentSetIds == null)
+                                {
+                                    continue;
+                                }
+                                alignmentSetsToRedo.AddRange(oldAlignmentSetIds);
+                            }
+
                             var node = DesignSurfaceViewModel!.CorpusNodes
                                 .Single(cn => cn.ParatextProjectId == selectedProject.Id);
 
@@ -1316,11 +1388,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             }
 
                             var tokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, tokenizedTextCorpusId);
+                            
+                            //have this return "success"
+                            //mark corpus with "LastTokenized" in database to tell which alignments need to run
                             await tokenizedTextCorpus.UpdateOrAddVerses(Mediator!, textCorpus, cancellationToken);
+                            
+                            //move loop into handler so that it all fails or succeeds
+                            var tasks = alignmentSetsToRedo.Select(alignmentSetIdToRedo => Task.Run(async () =>
+                            {
+                                var parallelCorpusId = alignmentSetIdToRedo.ParallelCorpusId;
+                                if (parallelCorpusId == null)
+                                {
+                                    return;
+                                }
 
-                            //await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage(ReloadType.Force), cancellationToken);
+                                var parallelCorpus = await ParallelCorpus.Get(Mediator!, parallelCorpusId, cancellationToken);
+                                var oldParallelTextRows = parallelCorpus.Cast<EngineParallelTextRow>();
 
+                                var trainSmtModelSet = await AlignmentUtil.TrainSmtModelAsync(
+                                    "Updating Alignments",
+                                    alignmentSetIdToRedo.IsSymmetrized,
+                                    Enum.Parse<SmtModelType>(alignmentSetIdToRedo.SmtModel ?? SmtModelType.FastAlign.ToString()),
+                                    true,
+                                    parallelCorpus,
+                                    Logger,
+                                    _translationCommands,
+                                    cancellationToken);
+
+                                var alignmentSetToRedo = await AlignmentSet.Get(alignmentSetIdToRedo, Mediator!);
+                                await alignmentSetToRedo.UpdateAutoAlignments(alignmentSetIdToRedo, trainSmtModelSet, oldParallelTextRows, cancellationToken);
+                            }));
+                            await Task.WhenAll(tasks);
+                            
                             await EventAggregator.PublishOnUIThreadAsync(new TokenizedCorpusUpdatedMessage(tokenizedTextCorpusId), cancellationToken);
+
+                            await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage(ReloadType.Force), cancellationToken);
 
                             _longRunningTaskManager.TaskComplete(taskName);
 
@@ -1357,6 +1459,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         {
                             _longRunningTaskManager.TaskComplete(taskName);
                             _busyState.Remove(taskName);
+                            ProjectManager!.PauseDenormalization = false;
 
                             PlaySound.PlaySoundFromResource(soundType);
                         }
@@ -1371,7 +1474,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 await SaveDesignSurfaceData();
             }
-
         }
 
         private static ITokenizer<string, int, string> InstantiateTokenizer(Tokenizers tokenizerEnum)
@@ -1706,7 +1808,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     //#pragma warning restore CS8601
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.UpdateParatextCorpus:
-                    await UpdateParatextCorpus(corpusNodeViewModel.ParatextProjectId, corpusNodeMenuItem.Tokenizer);
+                    await UpdateParatextCorpus(corpusNodeViewModel.ParatextProjectId, corpusNodeMenuItem.Tokenizer, corpusNodeViewModel);
+
+
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.GetLatestExternalNotes:
                     GetLatestExternalNotes(corpusNodeViewModel.ParatextProjectId);
@@ -1919,7 +2023,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }));
         }
 
-        #endregion // Methods
+#endregion // Methods
 
         #region IHandle
 

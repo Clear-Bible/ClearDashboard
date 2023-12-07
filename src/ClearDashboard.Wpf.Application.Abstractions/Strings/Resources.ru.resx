@@ -1598,13 +1598,16 @@
     <value>Словарь</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
-    <value>Редактор внешних заметок</value>
+    <value>Внешние заметки редактор</value>
   </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>Установите всю область контента в просмотр</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>Установите все узлы в Viewport</value>
+  </data>
+  <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
+    <value>Получите последние внешние заметки</value>
   </data>
   <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
     <value>Получите последние внешние заметки</value>
@@ -1838,7 +1841,7 @@
     <value>Paratext Back Перевод</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>Межлинейная Библия (LWC)</value>
+    <value>Модель текст (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
     <value>Paratext работает, но не подключен.</value>

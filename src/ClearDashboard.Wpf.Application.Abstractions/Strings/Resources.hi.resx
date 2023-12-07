@@ -131,7 +131,7 @@
     <value>USFM की जाँच करना</value>
   </data>
   <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
-    <value>क्लिपबोर्ड के लिए USFM त्रुटियों की प्रतिलिपि बनाएँ</value>
+    <value>क्लिपबोर्ड पर USFM त्रुटियों की प्रतिलिपि बनाएँ</value>
   </data>
   <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
     <value>त्रुटियों की संख्या:</value>
@@ -1085,7 +1085,7 @@
     <value>त्वरित नया</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Collab परिवर्तन उपलब्ध हैं</value>
+    <value>Collab परिवर्तन उपलब्ध है</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
     <value>समायोजन</value>
@@ -1220,7 +1220,7 @@
     <value>मर्ज पूर्ण ... पुनः लोडिंग इंटरफ़ेस</value>
   </data>
   <data name="MergeDialog_OperationCancelled" xml:space="preserve">
-    <value>अभियान रद्द किया गया</value>
+    <value>रद्द किया गया ऑपरेशन</value>
   </data>
   <data name="MergeDialog_OperationComplete" xml:space="preserve">
     <value>ऑपरेशन पूरा!</value>
@@ -1499,7 +1499,7 @@
     <value>कॉर्पोरा छंदों के समानांतरकरण करें</value>
   </data>
   <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
-    <value>Interlinear बनाएँ</value>
+    <value>Internear बनाएँ</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
     <value>ज्सन मेटाडेटा</value>
@@ -1802,7 +1802,7 @@
     <value>शुरू हो जाओ</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>आयात सर्वर परियोजना</value>
+    <value>आयात सर्वर प्रोजेक्ट</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>अपनी परियोजना बनाते समय ग्रीक और हिब्रू बाइबिल ग्रंथों को शामिल करने के लिए इस बॉक्स को देखें।</value>
@@ -1838,7 +1838,7 @@
     <value>Paratext वापस अनुवाद</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>अंतर -बाइबिल (LWC)</value>
+    <value>मॉडल पाठ (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
     <value>Paratext चल रहा है लेकिन जुड़ा नहीं है।</value>
@@ -2393,7 +2393,7 @@
     <value>समझ:</value>
   </data>
   <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>सबडोमेन:</value>
+    <value>उपडोमेन:</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>हाँ</value>

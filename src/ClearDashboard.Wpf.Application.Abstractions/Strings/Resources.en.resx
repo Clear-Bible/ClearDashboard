@@ -1838,7 +1838,7 @@
     <value>Paratext Back Translation</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>Interlinear Bible (LWC)</value>
+    <value>Model Text (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
     <value>Paratext is running but not connected.</value>

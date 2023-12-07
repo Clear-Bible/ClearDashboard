@@ -257,7 +257,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
                 await dialogViewModel.ActivateAsync();
 
-                var result = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
+                var dialogSettings = dialogViewModel.DialogSettings();
+                dialogSettings.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
+                var result = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogSettings());
             }
 
         }

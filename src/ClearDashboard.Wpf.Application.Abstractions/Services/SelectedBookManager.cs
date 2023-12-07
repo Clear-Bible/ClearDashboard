@@ -18,20 +18,30 @@ namespace ClearDashboard.Wpf.Application.Services;
 
 public class SelectedBookManager : PropertyChangedBase
 {
-    private ObservableCollection<SelectedBook> _selectedBooks;
+    #region Member Variables
 
     private readonly IMediator _mediator;
+    private readonly int _firstNewTestamentBookNumber = 39;
 
-    public SelectedBookManager(IMediator mediator)
-    {
-        _mediator = mediator;
-        Initialize();
-    }
+    #endregion //Member Variables
 
-    public void Initialize()
-    {
-        _selectedBooks = new(CreateBooks());
-    }
+
+    #region Public Properties
+
+    public List<SelectedBook> SelectedAndEnabledBooks => SelectedBooks.Where(b => b.IsEnabled && b.IsSelected).ToList();
+
+    public IEnumerable<string> SelectedAndEnabledBookAbbreviations => SelectedAndEnabledBooks.Select(b => b.Abbreviation);
+
+    public bool HasSelectedAndEnabledOldTestamentBooks => SelectedAndEnabledBooks.Any(b => b.IsOldTestament);
+
+    public bool HasSelectedAndEnabledNewTestamentBooks => SelectedAndEnabledBooks.Any(b => !b.IsOldTestament);
+
+    #endregion //Public Properties
+
+
+    #region Observable Properties
+
+    private ObservableCollection<SelectedBook> _selectedBooks;
 
     public ObservableCollection<SelectedBook> SelectedBooks
     {
@@ -45,6 +55,35 @@ public class SelectedBookManager : PropertyChangedBase
             });
         }
     }
+
+    private Visibility _secondLineVisibility = Visibility.Visible;
+    public Visibility SecondLineVisibility
+    {
+        get { return _secondLineVisibility; }
+        set { Set(ref _secondLineVisibility, value); }
+    }
+
+
+    #endregion //Observable Properties
+
+
+    #region Constructor
+
+    public SelectedBookManager(IMediator mediator)
+    {
+        _mediator = mediator;
+        Initialize();
+    }
+
+    public void Initialize()
+    {
+        _selectedBooks = new(CreateBooks());
+    }
+
+    #endregion //Constructor
+
+
+    #region Methods
 
     public async Task InitializeBooks(IDictionary<string, IEnumerable<UsfmError>> usfmErrorsByParatextProjectId, bool enableTokenizedBooks, bool selectAllEnabledBooks, CancellationToken cancellationToken)
     {
@@ -184,8 +223,6 @@ public class SelectedBookManager : PropertyChangedBase
         NotifyOfPropertyChange(() => SelectedBooks);
     }
 
-
-    private readonly int _firstNewTestamentBookNumber = 39;
     public void SelectNewTestamentBooks()
     {
         for (var i = _firstNewTestamentBookNumber; i < _selectedBooks.Count; i++)
@@ -218,14 +255,6 @@ public class SelectedBookManager : PropertyChangedBase
     {
         NotifyOfPropertyChange(() => SelectedBooks);
     }
-
-    public List<SelectedBook> SelectedAndEnabledBooks => SelectedBooks.Where(b => b.IsEnabled && b.IsSelected).ToList();
-
-    public IEnumerable<string> SelectedAndEnabledBookAbbreviations => SelectedAndEnabledBooks.Select(b => b.Abbreviation);
-
-    public bool HasSelectedAndEnabledOldTestamentBooks => SelectedAndEnabledBooks.Any(b => b.IsOldTestament);
-
-    public bool HasSelectedAndEnabledNewTestamentBooks => SelectedAndEnabledBooks.Any(b => !b.IsOldTestament);
 
     public static List<SelectedBook> CreateBooks(bool isEnabledDefault = false, bool isSelectedDefault = false)
     {
@@ -893,4 +922,7 @@ public class SelectedBookManager : PropertyChangedBase
             }
         };
     }
+
+    #endregion // Methods
+
 }

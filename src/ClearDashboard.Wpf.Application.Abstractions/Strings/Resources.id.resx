@@ -677,7 +677,7 @@
     <value>Split tiga arah</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Token Komposit Unjoin</value>
+    <value>Unjoin Token Komposit</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -980,7 +980,7 @@
     <value>Tambahkan sebagai formulir untuk ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Temukan Lexeme atau Bentuk Penting atau Parsial untuk Sumber</value>
+    <value>Temukan pencocokan leksem atau bentuk penuh atau parsial untuk sumber</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Tambahkan target sebagai terjemahan untuk ...</value>
@@ -1838,7 +1838,7 @@
     <value>Terjemahan paratext kembali</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>Interlinear Bible (LWC)</value>
+    <value>Teks Model (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
     <value>Paratext sedang berjalan tetapi tidak terhubung.</value>
@@ -1889,7 +1889,7 @@
     <value>Proyek dengan nama yang sama sudah ada. Pilih nama unik.</value>
   </data>
   <data name="ProjectValidator_TooLong" xml:space="preserve">
-    <value>Nama proyek yang diberikan terlalu panjang.</value>
+    <value>Nama proyek yang diberikan terlalu lama.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Tawarikh</value>

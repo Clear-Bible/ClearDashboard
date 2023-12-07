@@ -282,6 +282,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
                 await dialogViewModel.ActivateAsync();
 
+
                 var result = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
             }
         }

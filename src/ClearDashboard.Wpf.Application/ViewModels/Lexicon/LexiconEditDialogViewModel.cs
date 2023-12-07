@@ -70,7 +70,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             try
             {
                 var editedLexemes = EditableLexemes!
-                    .Where(l => l.Lexeme.Meanings.Any(m => m.IsDirty || m.Translations.Any(t=>t.IsDirty)) || l.Lexeme.Forms.Any(f => f.IsDirty))
+                    .Where(l => l.Lexeme.IsDirty || l.Lexeme.Meanings.Any(m => m.IsDirty || m.Translations.Any(t=>t.IsDirty)) || l.Lexeme.Forms.Any(f => f.IsDirty))
                     .Select(l => l.Lexeme).ToList();
 
 
@@ -245,10 +245,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             switch (e.PropertyName)
             {
                 case nameof(EditableLexemeViewModel.Meanings):
-                    CanSave = true;
+                    CanSave = !viewModel.IsEditing;
                     break;
                 case nameof(EditableLexemeViewModel.Forms):
-                    CanSave = true;
+                    CanSave = !viewModel.IsEditing; 
+                    break;
+                case nameof(EditableLexemeViewModel.IsEditing):
+
+                    CanSave = !viewModel.IsEditing && 
+                              EditableLexemes!
+                                    .Any(l => l.Lexeme.IsDirty ||
+                                                l.Lexeme.Meanings.Any(m => m.IsDirty || m.Translations.Any(t => t.IsDirty)) ||
+                                                l.Lexeme.Forms.Any(f => f.IsDirty));
+                        
                     break;
             }
            
@@ -387,12 +396,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             {
                 case LexiconEditMode.MatchOnTranslation:
 
-                    filteredLexemes = managedLexemes.FilterByTranslationText(SelectedSourceLanguage, SelectedTargetLanguage, ToMatch).ToList();
+                    if (State.FormsOrLexemeAndTranslationChecked)
+                    {
+                        filteredLexemes = managedLexemes.FilterByLexemeAndTranslationText(ToMatch,
+                            State.PredicateOption == PredicateOption.Or, SourceLanguage, null, TargetLanguage,
+                            Other).ToList();
+                    }
+                    else
+                    {
+                        filteredLexemes = managedLexemes
+                            .FilterByTranslationText(SelectedSourceLanguage, SelectedTargetLanguage, ToMatch).ToList();
+                    }
+
                     return new BindableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l=> new EditableLexemeViewModel(l) {SourceLanguage = SourceLanguage, TargetLanguage = TargetLanguage, EditButtonLabel = LocalizationService.Get("LexiconEdit_Edit"), DoneLabel = doneLabel, EditLabel = editLabel}));
        
                 case LexiconEditMode.PartialMatchOnLexemeOrForm:
-                    // .Where(l=>l.IsInDatabase)
-                    filteredLexemes = managedLexemes.FilterByLexemeText(ToMatch, State.FormsOption == MatchOption.Partially, SourceLanguage, null).ToList();
+
+                    if (State.FormsOrLexemeAndTranslationChecked)
+                    {
+                        filteredLexemes = managedLexemes.FilterByLexemeAndTranslationText(ToMatch,
+                            State.PredicateOption == PredicateOption.Or, SourceLanguage, null, TargetLanguage,
+                            Other).ToList();
+                    }
+                    else
+                    {
+                        filteredLexemes = managedLexemes.FilterByLexemeText(ToMatch,
+                            State.FormsOrLexemeOption == MatchOption.Partially, SourceLanguage, null).ToList();
+                    }
+
                     return new BindableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l => new EditableLexemeViewModel(l) { SourceLanguage = SourceLanguage, TargetLanguage = TargetLanguage, EditButtonLabel = LocalizationService.Get("LexiconEdit_Edit"), DoneLabel = doneLabel, EditLabel = editLabel }));
    
                 default:
@@ -418,6 +449,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             {
 
                 State.FormsOption =
+                    (MatchOption)Enum.Parse(typeof(MatchOption), (item.Tag as string));
+            }
+        }
+
+        public void OnFormsOrLexemeOptionChanged(SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0 && e.AddedItems[0] is ListBoxItem item)
+            {
+
+                State.FormsOrLexemeOption =
                     (MatchOption)Enum.Parse(typeof(MatchOption), (item.Tag as string));
             }
         }
