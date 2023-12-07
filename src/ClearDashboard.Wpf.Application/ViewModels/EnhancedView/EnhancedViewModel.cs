@@ -857,7 +857,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async void TokenClicked(object sender, TokenEventArgs e)
         {
-
         }
 
         public async void TokenLeftButtonDown(object sender, TokenEventArgs e)
@@ -879,7 +878,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             else
             {
-                SelectionManager.StartSelection(e.TokenDisplay);
+                if (e.TokenDisplay.IsTokenSelected)
+                {
+                    SelectionManager.StartDragSelection(e.TokenDisplay);
+                }
+                else
+                {
+                    SelectionManager.EndDragSelection(e.TokenDisplay);
+                }
                 SelectionManager.UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
                 NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
             }
@@ -888,7 +894,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public async void TokenLeftButtonUp(object sender, TokenEventArgs e)
         {
             SelectionManager.UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
-            SelectionManager.EndSelection(e.TokenDisplay);
+            SelectionManager.EndDragSelection(e.TokenDisplay);
             NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
         }
 

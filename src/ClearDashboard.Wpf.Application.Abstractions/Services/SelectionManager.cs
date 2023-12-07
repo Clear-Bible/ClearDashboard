@@ -38,7 +38,7 @@ namespace ClearDashboard.Wpf.Application.Services
         private TokenDisplayViewModelCollection DragVerseTokens => DragIsSource ? DragVerseSourceTokens : DragVerseTargetTokens;
         public TokenDisplayViewModelCollection SelectedTokensBeforeDrag { get; private set; } = new();
 
-        public void StartSelection(TokenDisplayViewModel tokenDisplay)
+        public void StartDragSelection(TokenDisplayViewModel tokenDisplay)
         {
             DragStartToken = tokenDisplay;
             SelectedTokensBeforeDrag = SelectedTokens.Copy();
@@ -49,7 +49,7 @@ namespace ClearDashboard.Wpf.Application.Services
             return IsDragInProcess ? DragVerseTokens.GetRange(DragStartToken!, tokenDisplay) : new TokenDisplayViewModelCollection();
         }
 
-        public void EndSelection(TokenDisplayViewModel tokenDisplay)
+        public void EndDragSelection(TokenDisplayViewModel tokenDisplay)
         {
             DragStartToken = null;
             SelectedTokensBeforeDrag.Clear();
