@@ -554,6 +554,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             await manager.ShowWindowAsync(viewmodel, null, settings);
         }
 
+        public void ShowAccountInfoWindow()
+        {
+            AccountWindow.ShowAccountInfoWindow(_localizationService, new NoExitWindowManager());
+        }
+
         public async Task StartParatext()
         {
             if (!_paratextProxy.IsParatextRunning())

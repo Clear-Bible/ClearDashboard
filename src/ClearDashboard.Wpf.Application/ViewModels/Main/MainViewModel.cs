@@ -1167,17 +1167,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         }
         private void ShowAccountInfoWindow()
         {
-            var localizedString = _localizationService!["MainView_AccountInfo"];
-
-            dynamic settings = new ExpandoObject();
-            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            settings.ResizeMode = ResizeMode.NoResize;
-            settings.Title = $"{localizedString}";
-
-            var viewModel = IoC.Get<AccountInfoViewModel>();
-
-            IWindowManager manager = new NoExitWindowManager();
-            manager.ShowDialogAsync(viewModel, null, settings);
+            AccountWindow.ShowAccountInfoWindow(_localizationService, new NoExitWindowManager());
         }
 
         private async Task AddNewEnhancedView()

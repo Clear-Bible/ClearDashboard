@@ -5,6 +5,7 @@ using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
@@ -283,17 +284,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async void ShowAccountInfoWindow()
         {
-            var localizedString = _localizationService!["MainView_AccountInfo"];
-
-            dynamic settings = new ExpandoObject();
-            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            settings.ResizeMode = ResizeMode.NoResize;
-            settings.Title = $"{localizedString}";
-
-            var viewModel = IoC.Get<AccountInfoViewModel>();
-
-            IWindowManager manager = new NoExitWindowManager();
-            manager.ShowDialogAsync(viewModel, null, settings);
+            AccountWindow.ShowAccountInfoWindow(_localizationService, new NoExitWindowManager());
         }
         #endregion  Methods
 
