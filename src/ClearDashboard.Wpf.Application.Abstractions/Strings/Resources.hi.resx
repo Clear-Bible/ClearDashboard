@@ -674,7 +674,7 @@
     <value>टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>भाषा जोड़ी के लिए टोकन में शामिल हों</value>
+    <value>भाषा की जोड़ी के लिए टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>'अमान्य' के रूप में चिह्न संरेखण</value>
@@ -917,7 +917,7 @@
     <value>Lemma/रूप:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>न्यू लेक्सेम के लिए लेम्मा:</value>
+    <value>नए लेक्सेम के लिए लेम्मा:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>शब्दिम</value>
@@ -1142,7 +1142,7 @@
     <value>कॉरपस टोकन</value>
   </data>
   <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>चापलूसी</value>
+    <value>चकरानेवाला</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>देखना</value>
@@ -1772,7 +1772,7 @@
     <value>उपसर्ग</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>दिखावा दिखाना</value>
+    <value>दिखावा दिखाओ</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>तना</value>
@@ -1808,7 +1808,7 @@
     <value>आरंभ करने के लिए अपनी परियोजना बनाएं।</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
-    <value>एक नई परियोजना बनाएं</value>
+    <value>एक नया प्रोजेक्ट बनाएं</value>
   </data>
   <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
     <value>त्वरित शुरुआत नई परियोजना</value>
@@ -2408,7 +2408,7 @@
     <value>कॉरपस टोकन</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
-    <value>चापलूसी</value>
+    <value>चकरानेवाला</value>
   </data>
   <data name="Windows_EnhancedView" xml:space="preserve">
     <value>देखना</value>

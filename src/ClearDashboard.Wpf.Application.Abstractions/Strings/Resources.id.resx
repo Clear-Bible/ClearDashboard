@@ -290,7 +290,7 @@
     <value>buah</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>Batu permata</value>
+    <value>batu permata</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>rumput</value>
@@ -497,7 +497,7 @@
     <value>Sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Bagian Sumber</value>
+    <value>Bagian sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Sumber Ref</value>
@@ -1691,7 +1691,7 @@
     <value>Standar</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Studybible</value>
+    <value>Studibible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBibleadditions</value>

@@ -1,4 +1,5 @@
-﻿using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+﻿using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using Microsoft.Extensions.Logging;
 using Paratext.PluginInterfaces;
 using SIL.Linq;
@@ -8,15 +9,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
 using System.Text;
-using System.Xml.Serialization;
+using System.Xml.Linq;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
 {
     public static class Extensions
     {
+        private const string EXTERNAL_LABELS_FILENAME = "CommentTags.xml";
         public static ExternalNote GetExternalNote(this IProjectNote projectNote, IProject project, ILogger logger)
         {
             var verseRef = new VerseRef(projectNote.Anchor.VerseRefStart.BookNum, projectNote.Anchor.VerseRefStart.ChapterNum, projectNote.Anchor.VerseRefStart.VerseNum);
@@ -40,12 +40,12 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
 
             var body = projectNote.GetProjectNoteBody(project.GetUSFM(verseRef.BookNum, verseRef.ChapterNum));
 
-            string id = null;
+            string externalNoteId = null;
             IEnumerable<int> tagIds = null;
 
             try
             {
-                (id, tagIds) = projectNote.GetIdAndLabels();
+                (externalNoteId, tagIds) = projectNote.GetExternalNoteIdAndLabelIds();
             }
             catch (InvalidCastException)
             {
@@ -54,21 +54,30 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
 
             return new ExternalNote()
             {
-                ExternalNoteId = id,
+                ExternalNoteId = externalNoteId,
                 ExternalProjectId = project.ID,
-                LabelIds = tagIds,
+                ExternalLabelIds = new HashSet<int>(tagIds), //ensure only unique tag ids are added.
                 VersePlainText = versePlainText,
                 SelectedPlainText = projectNote.Anchor.SelectedText,
                 IndexOfSelectedPlainTextInVersePainText = indexOfSelectedPlainTextInVersePainText,
                 VerseRefString = verseRef.ToString(),
-                Body = SerializeNoteBodyXml(body),
-                Message = GetMessage(body)
+                BodyXml = body.SerializeNoteBodyXml(),
+                ExternalUserNameAssignedTo = body.AssignedUserName,
+                IsResolved = body.IsResolved,
+                ExternalNoteMessages = body.GetExternalNoteMessages()
             };
         }
 
-        public static (string id, IEnumerable<int> labelIds) GetIdAndLabels(this IProjectNote projectNote)
+
+        /// <summary>
+        /// Extracts externalNoteId and labelIds, 
+        /// including converting from external system note id to externalNoteId.
+        /// </summary>
+        /// <param name="projectNote"></param>
+        /// <returns></returns>
+        public static (string externalNoteId, IEnumerable<int> labelIds) GetExternalNoteIdAndLabelIds(this IProjectNote projectNote)
         {
-            string id = null;
+            string externalNoteId = null;
             IEnumerable<int> tagIds = null;
 
             MemberInfo[] threadMemberInfos = projectNote.GetType().GetMember("thread", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -80,7 +89,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                     MemberInfo[] idMemberInfos = thread.GetType().GetMember("Id");
                     if (idMemberInfos.Length > 0)
                     {
-                        id = ((PropertyInfo)idMemberInfos[0]).GetValue(thread) as string;
+                        externalNoteId = ((PropertyInfo)idMemberInfos[0]).GetValue(thread) as string;
                     }
                     MemberInfo[] tagIdsMemberInfos = thread.GetType().GetMember("TagIds");
                     if (tagIdsMemberInfos.Length > 0)
@@ -89,73 +98,160 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                     }
                 }
             }
-            return (id, tagIds);
-        }
-        private static string GetMessage(Body body)
-        {
-            return body
-                .Comments
-                    .Aggregate("", (str, next) => $"{str}Author {next.Author} {next.Created}:\n{next.Paragraphs.Aggregate("", (innerstring, next) => $"{innerstring}{next}\n")}\n\n");
-        }
-        [DataContract]
-        public class BodyComment
-        {
-            [DataMember]
-            public List<string> Paragraphs { get; set; }
-            [DataMember]
-            public string Created { get; set; }
-            [DataMember]
-            public string Language { get; set; }
-            [DataMember]
-            public string AssignedUserName { get; set; }
-            [DataMember]
-            public string Author { get; set; }
-        }
-        [DataContract]
-        public class Body
-        {
-            [DataMember]
-            public string AssignedUserName { get; set; }
-            [DataMember]
-            public string ReplyToUserName { get; set; }
-            [DataMember]
-            public bool IsRead { get; set; }
-            [DataMember]
-            public bool IsResolved { get; set; }
-            [DataMember]
-            public List<BodyComment> Comments { get; set; }
-            [DataMember]
-            public string VerseUsfmBeforeSelectedText { get; set; }
-            [DataMember]
-            public string VerseUsfmAfterSelectedText { get; set; }
-            [DataMember]
-            public string VerseUsfmText { get; set; }
+            return (externalNoteId, tagIds);
         }
 
-        private static string SerializeNoteBodyXml(Body body)
+        /// <summary>
+        /// converts from externalNote id to the external system's note id
+        /// </summary>
+        /// <param name="externalNote"></param>
+        /// <returns></returns>
+        static string GetExternalSystemNoteId(this ExternalNote externalNote)
         {
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Body>));
-            using (StringWriter textWriter = new StringWriter())
+            return externalNote.ExternalNoteId;
+        }
+
+        public static ExternalNote SetExternalLabelsFromLabelTexts(
+            this ExternalNote externalNote,
+            ParatextProjectMetadata paratextProjectMetadata,
+            ILogger logger,
+            List<string> labelTexts)
+        {
+            var externalLabels = GetExternalLabelsFromExternalSystem(paratextProjectMetadata, logger);
+
+            if (externalLabels == null) // project in external system doesn't have any external labels available.
+                return externalNote;
+
+            var externalLabelsToAdd = externalLabels
+                .Where(el => labelTexts.Contains(el.ExternalText));
+
+            if (externalLabelsToAdd.Count() == 0)
+                return externalNote; //no labels to set
+
+            externalNote.ExternalLabelIds = new HashSet<int>(externalLabelsToAdd
+                    .Select(el => el.ExternalLabelId));
+
+            externalNote.ExternalLabels = new HashSet<ExternalLabel>(externalLabelsToAdd);
+
+            return externalNote;
+        }
+
+        public static ExternalNote SetExternalLabelsFromExternalLabelIds(
+            this ExternalNote externalNote,
+            ParatextProjectMetadata paratextProjectMetadata,
+            ILogger logger)
+        {
+            var externalLabels = GetExternalLabelsFromExternalSystem(paratextProjectMetadata, logger);
+
+            if (externalLabels == null) // project in external system doesn't have any external labels available.
+                return externalNote;
+
+            externalNote.ExternalLabels = new HashSet<ExternalLabel>(externalNote.ExternalLabelIds
+                .Select(elid => externalLabels
+                    .FirstOrDefault(el => el.ExternalLabelId == elid) ?? new ExternalLabel()
+                    {
+                        ExternalLabelId = elid,
+                        ExternalProjectId = externalNote.ExternalProjectId,
+                        ExternalProjectName = paratextProjectMetadata.GetExternalProjectName(),
+                        ExternalText = $"<external label id {elid} does not have label text>",
+                        ExternalTemplate = string.Empty 
+                    }));
+
+            return externalNote;
+        }
+
+        public static ExternalNote SetExternalLabelsOnExternalSystem(
+            this ExternalNote externalNote, 
+            ParatextProjectMetadata paratextProjectMetadata, 
+            IUserInfo userInfo,
+            ILogger logger)
+        {
+            if (externalNote.ExternalLabels == null || externalNote.ExternalLabels.Count() == 0)
+                return externalNote;
+
+            var notesFileName = $"Notes_{userInfo.Name}.xml";
+            var notesFilePath = Path.Combine(paratextProjectMetadata.ProjectPath, notesFileName);
+            if (!File.Exists(notesFilePath))
             {
-                xmlSerializer.Serialize(textWriter, new List<Body> { body });
-                return textWriter.ToString();
+                var message = $"Have labels to add to ExternalNoteId {externalNote.ExternalNoteId} but could not find file {notesFilePath}";
+                logger.LogError(message);
+                throw new Exception(message);
             }
-        }
-        private static string SerializeNoteBodyJson(Body body)
-        {
-            //from https://learn.microsoft.com/en-us/dotnet/framework/wcf/feature-details/how-to-serialize-and-deserialize-json-data?redirectedfrom=MSDN for
-            //.net 4.x
-            // Create a stream to serialize the object to.
-            var ms = new MemoryStream();
 
-            // Serializer the User object to the stream.
-            var ser = new DataContractJsonSerializer(typeof(Body));
-            ser.WriteObject(ms, body);
-            byte[] json = ms.ToArray();
-            ms.Close();
-            return Encoding.UTF8.GetString(json, 0, json.Length);
+            XElement root = XElement.Load(notesFilePath); //element CommentList
+            IEnumerable<XElement> comments =
+                from el in root.Elements("Comment")
+                where (string)el.Attribute("Thread") == externalNote.GetExternalSystemNoteId()
+                select el;
+
+            if (comments.Count() == 0)
+            {
+                var message = $"Have labels to add to ExternalNoteId {externalNote.ExternalNoteId} and found file {notesFilePath} but could not find Comment with Thread={externalNote.GetExternalSystemNoteId()}";
+                logger.LogError(message);
+                throw new Exception(message);
+            }
+            else if (comments.Count() > 1)
+            {
+                var message = $"Have labels to add to ExternalNoteId {externalNote.ExternalNoteId} and found file {notesFilePath} but found more than one Comment with Thread={externalNote.GetExternalSystemNoteId()}";
+                logger.LogError(message);
+                throw new Exception(message);
+            }
+
+            comments
+                .First()
+                .Elements("TagAdded")
+                .Select(t => t.Name = "TagRemoved")
+                .ToList();
+                
+            comments
+                .First()
+                .Add(externalNote.ExternalLabels
+                    .Select(el => new XElement("TagAdded", el.ExternalLabelId)));
+
+            root.Save(notesFilePath);
+
+            return externalNote;
         }
-        private static Body GetProjectNoteBody(this IProjectNote projectNote, string verseUsfmText)
+
+        public static string GetExternalProjectName(this ParatextProjectMetadata paratextProjectMetadata)
+        {
+            return paratextProjectMetadata.Name;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="paratextProjectMetadata"></param>
+        /// <param name="logger"></param>
+        /// <returns>null means external project doesn't have external labels available.</returns>
+        public static List<ExternalLabel> GetExternalLabelsFromExternalSystem(this ParatextProjectMetadata paratextProjectMetadata, ILogger logger)
+        {
+            if (paratextProjectMetadata.ProjectPath == null)
+            {
+                var message = "Project doesn't have labels available.";  
+                logger.LogError(message);
+                throw new Exception($"{message}: GetExternalLabels paratextProjectMetadata parameter ProjectPath is null");
+            }
+
+            var labelsFilePath = Path.Combine(paratextProjectMetadata.ProjectPath, EXTERNAL_LABELS_FILENAME);
+            if (!File.Exists(labelsFilePath))
+                return null;
+
+            XElement root = XElement.Load(labelsFilePath);
+
+            return
+                (from t in root.Elements("Tag")
+                        select new ExternalLabel()
+                        {
+                            ExternalLabelId = int.Parse(t.Attribute("Id").Value),
+                            ExternalProjectId = paratextProjectMetadata.Id,
+                            ExternalProjectName = paratextProjectMetadata.GetExternalProjectName(),
+                            ExternalText = t.Attribute("Name").Value,
+                            ExternalTemplate = t.Element("Template")?.Value ?? string.Empty
+                        }
+                )
+                .ToList();
+        }
+        internal static Body GetProjectNoteBody(this IProjectNote projectNote, string verseUsfmText)
         {
             var body = new Body();
             body.AssignedUserName = projectNote.AssignedUser?.Name ?? "";

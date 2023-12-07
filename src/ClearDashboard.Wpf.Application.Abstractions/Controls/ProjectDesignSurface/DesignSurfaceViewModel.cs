@@ -993,15 +993,25 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                         });
 
                         //FIXME: EXTERNALNOTES uncomment following to add
-                        //corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
-                        //{
-                        //    Header = LocalizationService.Get("Pds_GetLatestExternalNotes"),
-                        //    Id = DesignSurfaceMenuIds.GetLatestExternalNotes,
-                        //    ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
-                        //    IconKind = PackIconPicolIconsKind.Edit.ToString(),
-                        //    CorpusNodeViewModel = corpusNodeViewModel,
-                        //    Tokenizer = tokenizer.ToString(),
-                        //});
+                        corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
+                        {
+                            Header = LocalizationService.Get("Pds_GetLatestExternalNotes"),
+                            Id = DesignSurfaceMenuIds.GetLatestExternalNotes,
+                            ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
+                            IconKind = PackIconPicolIconsKind.Edit.ToString(),
+                            CorpusNodeViewModel = corpusNodeViewModel,
+                            Tokenizer = tokenizer.ToString(),
+                        });
+
+                        corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
+                        {
+                            Header = LocalizationService.Get("Pds_UpdateLabelsWithExternalLabels"),
+                            Id = DesignSurfaceMenuIds.UpdateLabelsWithExternalLabels,
+                            ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
+                            IconKind = PackIconPicolIconsKind.Edit.ToString(),
+                            CorpusNodeViewModel = corpusNodeViewModel,
+                            Tokenizer = tokenizer.ToString(),
+                        });
                     }
 
 

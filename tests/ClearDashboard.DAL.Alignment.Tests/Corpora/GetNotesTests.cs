@@ -171,5 +171,35 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                 await DeleteDatabaseContext();
             }
         }
+        [Fact]
+        [Trait("Requires", "Paratext ZZ_SUR on test machine, paratextprojectid 2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f")]
+        public async void GetParatextLabels()
+        {
+            try
+            {
+                CancellationTokenSource cancellationSource = new CancellationTokenSource();
+                CancellationToken cancellationToken = cancellationSource.Token;
+
+                var getExternalLabelsQueryParam = new GetExternalLabelsQueryParam()
+                {
+                    ExternalProjectId = "2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f",
+                };
+
+                var resultGetLabels = await Mediator!.Send(new GetExternalLabelsQuery(getExternalLabelsQueryParam), cancellationToken);
+                if (!resultGetLabels.Success)
+                {
+                    Assert.Fail("get external labels failed.");
+                }
+
+                if ((resultGetLabels.Data?.Count() ?? 0) < 1)
+                {
+                    Assert.Fail("null or zero external labels returned.");
+                }
+            }
+            finally
+            {
+                await DeleteDatabaseContext();
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -40,6 +41,17 @@ namespace ClearDashboard.Wpf.Application.Helpers
         public static void SaveEnabledLexiconImport(bool value)
         {
             Settings.Default.IsLexiconImportEnabled = value;
+            Settings.Default.Save();
+        }
+
+        public static bool GetShowExternalNotes()
+        {
+            return Settings.Default.ShowExternalNotes;
+        }
+
+        public static void SaveShowExternalNotes(bool value)
+        {
+            Settings.Default.ShowExternalNotes = value;
             Settings.Default.Save();
         }
     }
