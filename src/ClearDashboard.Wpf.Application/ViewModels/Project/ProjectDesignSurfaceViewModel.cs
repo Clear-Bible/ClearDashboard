@@ -59,9 +59,15 @@ using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
 
-    public class ProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IProjectDesignSurfaceViewModel,
-        IHandle<UiLanguageChangedMessage>, IDisposable, IHandle<RedrawParallelCorpusMenus>,
-        IHandle<RedrawCorpusNodeMenus>, IHandle<ProjectLoadedMessage>, IHandle<GetExternalNotesMessage>
+    public class ProjectDesignSurfaceViewModel : 
+        DashboardConductorOneActive<Screen>, 
+        IProjectDesignSurfaceViewModel,
+        IHandle<UiLanguageChangedMessage>, 
+        IHandle<RedrawParallelCorpusMenus>,
+        IHandle<RedrawCorpusNodeMenus>, 
+        IHandle<ProjectLoadedMessage>, 
+        IHandle<GetExternalNotesMessage>,
+        IDisposable
     {
         #region Member Variables
 

@@ -59,7 +59,12 @@ using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
 
-    public class ReadonlyProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IProjectDesignSurfaceViewModel, IHandle<UiLanguageChangedMessage>, IDisposable
+    public class ReadonlyProjectDesignSurfaceViewModel : 
+        DashboardConductorOneActive<Screen>, 
+        IProjectDesignSurfaceViewModel, 
+        IHandle<UiLanguageChangedMessage>,
+        IHandle<GetExternalNotesMessage>, 
+        IDisposable
     {
         public IEnhancedViewManager EnhancedViewManager { get; }
 
@@ -1956,7 +1961,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
         }
+        public Task HandleAsync(GetExternalNotesMessage message, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(message.ParatextProjectId) == false)
+            {
+                GetLatestExternalNotes(message.ParatextProjectId);
+            }
 
+            return Task.CompletedTask;
+        }
         #endregion
 
         #endregion // Methods
