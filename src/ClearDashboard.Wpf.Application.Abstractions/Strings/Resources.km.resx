@@ -112,6 +112,42 @@
   <data name="AboutView_Version" xml:space="preserve">
     <value>កមបុរក្នា</value>
   </data>
+  <data name="AccountInfo_ClearDashboardUserIdLabel" xml:space="preserve">
+    <value>Bectdashboard userid:</value>
+  </data>
+  <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
+    <value>ឈ្មោះអ្នកប្រើ CleafDashboard:</value>
+  </data>
+  <data name="AccountInfo_CollaborationEmailLabel" xml:space="preserve">
+    <value>អ៊ីមែលសហការ:</value>
+  </data>
+  <data name="AccountInfo_CollaborationUserIdLabel" xml:space="preserve">
+    <value>អ្នកប្រើសហការ:</value>
+  </data>
+  <data name="AccountInfo_CollaborationUsernameLabel" xml:space="preserve">
+    <value>ឈ្មោះអ្នកប្រើសហការ:</value>
+  </data>
+  <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AccountInfo_DeactivateButton" xml:space="preserve">
+    <value>ធ្វើឱ្យអសកម្មអាជ្ញាប័ណ្ណបច្ចុប្បន្ន</value>
+  </data>
+  <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
+    <value>- គណនី</value>
+  </data>
+  <data name="AccountInfo_ParatextEmailLabel" xml:space="preserve">
+    <value>អ៊ីម៉ែល Partatett អ៊ីម៉ែល:</value>
+  </data>
+  <data name="AccountInfo_ParatextUsernameLabel" xml:space="preserve">
+    <value>ឈ្មោះអ្នកប្រើ ParateXT:</value>
+  </data>
+  <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
+    <value>ចាប់ផ្តើមកម្មវិធីឡើងវិញ</value>
+  </data>
+  <data name="AccountInfo_SelectAccountLabel" xml:space="preserve">
+    <value>ជ្រើសរើសគណនីដើម្បីប្តូរទៅ:</value>
+  </data>
   <data name="ACT" xml:space="preserve">
     <value>ACT</value>
   </data>

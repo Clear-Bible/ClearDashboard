@@ -8,57 +8,181 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Title="AboutView"
-    Width="400"
-    FontFamily="{StaticResource ClearDashboardFont}"
-    Height="300"
+    Width="600"
+    MaxHeight="450"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     mc:Ignorable="d">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <Border BorderBrush="Black" BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Vertical">
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Run FontWeight="Bold" Text="Paratext Username:" />
-                <Run Text="{Binding ParatextUsername}" />
-            </TextBlock>
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Run FontWeight="Bold" Text="Paratext Email:" />
-                <Run Text="{Binding ParatextEmail}" />
-            </TextBlock>
-        </StackPanel>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Label
+                Grid.Row="0"
+                Margin="0,10,0,0"
+                HorizontalAlignment="Left"
+                Content="{helpers:Localization AccountInfo_CurrentAccountDetailsLabel}"
+                FontWeight="Bold" />
+
+            <StackPanel
+                Grid.Row="1"
+                Margin="10"
+                HorizontalAlignment="Left"
+                Orientation="Vertical"
+                Visibility="{Binding CurrentAccountDetailsVisibility}">
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Run FontWeight="Bold" Text="{helpers:Localization AccountInfo_ClearDashboardUsernameLabel}" />
+                    <Run Text="{Binding ClearDashboardUsername}" />
+                </TextBlock>
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Run FontWeight="Bold" Text="{helpers:Localization AccountInfo_ClearDashboardUserIdLabel}" />
+                    <Run Text="{Binding ClearDashboardId}" />
+                </TextBlock>
+
+                <TextBlock
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center">
+                    <Run FontWeight="Bold" Text="{helpers:Localization AccountInfo_CollaborationUsernameLabel}" />
+                    <Run Text="{Binding CollaborationUsername}" />
+                </TextBlock>
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Run FontWeight="Bold" Text="{helpers:Localization AccountInfo_CollaborationEmailLabel}" />
+                    <Run Text="{Binding CollaborationEmail}" />
+                </TextBlock>
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Run FontWeight="Bold" Text="{helpers:Localization AccountInfo_CollaborationUserIdLabel}" />
+                    <Run Text="{Binding CollaborationId}" />
+                </TextBlock>
+            </StackPanel>
+            <StackPanel
+                Grid.Row="2"
+                Margin="10"
+                HorizontalAlignment="Left"
+                Orientation="Vertical">
+
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Run FontWeight="Bold" Text="{helpers:Localization AccountInfo_ParatextUsernameLabel}" />
+                    <Run Text="{Binding ParatextUsername}" />
+                </TextBlock>
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Run FontWeight="Bold" Text="{helpers:Localization AccountInfo_ParatextEmailLabel}" />
+                    <Run Text="{Binding ParatextEmail}" />
+                </TextBlock>
+            </StackPanel>
+
+            <Button
+                x:Name="DeactivateCurrentLicense"
+                Grid.Row="0"
+                Grid.RowSpan="3"
+                Grid.Column="1"
+                Width="170"
+                Height="40"
+                Margin="3,10,3,5"
+                Content="{helpers:Localization AccountInfo_DeactivateButton}"
+                IsEnabled="{Binding IsEnabled}"
+                Style="{StaticResource TransparentStyle}"
+                Visibility="{Binding CurrentAccountDetailsVisibility}" />
+
+            <StackPanel
+                Grid.Row="3"
+                Grid.ColumnSpan="1"
+                Margin="10"
+                HorizontalAlignment="Left"
+                Orientation="Vertical"
+                Visibility="{Binding UserAndPathListVisibility}">
+                <Label
+                    HorizontalAlignment="Left"
+                    Content="{helpers:Localization AccountInfo_OtherAccountsLabel}"
+                    FontWeight="Bold" />
+
+                <Label HorizontalAlignment="Left" Content="{helpers:Localization AccountInfo_SelectAccountLabel}" />
+
+                <ListBox
+                    IsEnabled="{Binding IsEnabled}"
+                    ItemsSource="{Binding UserAndPathList}"
+                    SelectedItem="{Binding SelectedUserAndPath}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock
+                                    Grid.Row="0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center">
+                                    <Run FontWeight="Bold" Text="{helpers:Localization AccountInfo_ClearDashboardUsernameLabel}" />
+                                    <Run Text="{Binding Item1.FullName, Mode=OneWay}" />
+                                </TextBlock>
+                                <TextBlock
+                                    Grid.Row="1"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center">
+                                    <Run FontWeight="Bold" Text="{helpers:Localization AccountInfo_ClearDashboardUserIdLabel}" />
+                                    <Run Text="{Binding Item1.Id}" />
+                                </TextBlock>
+                                <TextBlock
+                                    Grid.Row="2"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center">
+                                    <Run FontWeight="Bold" Text="{helpers:Localization AccountInfo_CollaborationEmailLabel}" />
+                                    <Run Text="{Binding Item3.RemoteEmail}" />
+                                </TextBlock>
+                            </Grid>
+
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+            </StackPanel>
 
 
-        <StackPanel Grid.Row="1" Orientation="Vertical">
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Run FontWeight="Bold" Text="ClearDashboard Username:" />
-                <Run Text="{Binding ClearDashboardUsername}" />
-            </TextBlock>
-        </StackPanel>
 
+            <Button
+                x:Name="Close"
+                Grid.Row="4"
+                Grid.Column="1"
+                Width="170"
+                Height="40"
+                Margin="10"
+                HorizontalAlignment="Right"
+                Content="{helpers:Localization Close}"
+                IsEnabled="{Binding IsEnabled}"
+                Style="{StaticResource AlternativeStyle}"
+                Visibility="{Binding CloseWindowVisibility}" />
 
-        <StackPanel Grid.Row="2" Orientation="Vertical">
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Run FontWeight="Bold" Text="Collaboration Username:" />
-                <Run Text="{Binding CollaborationUsername}" />
-            </TextBlock>
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Run FontWeight="Bold" Text="Collaboration Email:" />
-                <Run Text="{Binding CollaborationEmail}" />
-            </TextBlock>
-        </StackPanel>
-
-        <Button
-            x:Name="Close"
-            Grid.Row="3"
-            Width="150"
-            Height="40"
-            Margin="3,0,3,5"
-            Content="{helpers:Localization Close}"
-            Style="{StaticResource AlternativeStyle}" />
-    </Grid>
+            <Button
+                x:Name="RestartApplication"
+                Grid.Row="4"
+                Grid.Column="1"
+                Width="170"
+                Height="40"
+                Margin="10"
+                HorizontalAlignment="Right"
+                Content="{helpers:Localization AccountInfo_RestartApplicationButton}"
+                IsEnabled="{Binding IsEnabled}"
+                Style="{StaticResource AlternativeStyle}"
+                Visibility="{Binding CloseApplicationVisibility}" />
+        </Grid>
+    </Border>
 </Window>
