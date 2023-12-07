@@ -70,6 +70,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
+        private Visibility _currentAccountDetailsVisibility = Visibility.Collapsed;
+        public Visibility CurrentAccountDetailsVisibility
+        {
+            get => _currentAccountDetailsVisibility;
+            set
+            {
+                _currentAccountDetailsVisibility = value;
+                NotifyOfPropertyChange(() => CurrentAccountDetailsVisibility);
+            }
+        }
+
         private Visibility _closeWindowVisibility = Visibility.Visible;
         public Visibility CloseWindowVisibility
         {
@@ -276,6 +287,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             CollaborationEmail= config.RemoteEmail;
             CollaborationId = config.UserId.ToString();
 
+            if (license.Id == Guid.Empty)
+            {
+                CurrentAccountDetailsVisibility = Visibility.Collapsed;
+            }
+            else
+            {
+                CurrentAccountDetailsVisibility = Visibility.Visible;
+            }
+
             return base.OnInitializeAsync(cancellationToken);
         }
 
@@ -354,6 +374,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             await OnInitializeAsync(CancellationToken.None);
             await GetUserAndPathList();
+
+            CurrentAccountDetailsVisibility = Visibility.Collapsed;
         }
 
         private async void ActivateSelectedLicense(Tuple<User, string, CollaborationConfiguration> selectedUserAndPath)
@@ -385,6 +407,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             await OnInitializeAsync(CancellationToken.None);
             await GetUserAndPathList();
+
+            CurrentAccountDetailsVisibility = Visibility.Visible;
         }
 
         public async void SwitchToSelectedLicense(Tuple<User, string, CollaborationConfiguration> selectedUserAndPath)

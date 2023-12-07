@@ -18,6 +18,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -38,7 +39,8 @@
                 Grid.Row="1"
                 Margin="10"
                 HorizontalAlignment="Left"
-                Orientation="Vertical">
+                Orientation="Vertical"
+                Visibility="{Binding CurrentAccountDetailsVisibility}">
                 <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center">
                     <Run FontWeight="Bold" Text="ClearDashboard Username:" />
                     <Run Text="{Binding ClearDashboardUsername}" />
@@ -63,11 +65,14 @@
                     <Run FontWeight="Bold" Text="Collaboration UserId:" />
                     <Run Text="{Binding CollaborationId}" />
                 </TextBlock>
+            </StackPanel>
+            <StackPanel
+                Grid.Row="2"
+                Margin="10"
+                HorizontalAlignment="Left"
+                Orientation="Vertical">
 
-                <TextBlock
-                    Margin="0,10,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center">
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center">
                     <Run FontWeight="Bold" Text="Paratext Username:" />
                     <Run Text="{Binding ParatextUsername}" />
                 </TextBlock>
@@ -80,18 +85,19 @@
             <Button
                 x:Name="DeactivateCurrentLicense"
                 Grid.Row="0"
-                Grid.RowSpan="2"
+                Grid.RowSpan="3"
                 Grid.Column="1"
                 Width="170"
                 Height="40"
                 Margin="3,10,3,5"
                 Content="Deactivate Current License"
                 IsEnabled="{Binding IsEnabled}"
-                Style="{StaticResource TransparentStyle}" />
+                Style="{StaticResource TransparentStyle}"
+                Visibility="{Binding CurrentAccountDetailsVisibility}" />
 
             <StackPanel
-                Grid.Row="2"
-                Grid.ColumnSpan="2"
+                Grid.Row="3"
+                Grid.ColumnSpan="1"
                 Margin="10"
                 HorizontalAlignment="Left"
                 Orientation="Vertical"
@@ -154,11 +160,12 @@
 
             <Button
                 x:Name="Close"
-                Grid.Row="3"
+                Grid.Row="4"
                 Grid.Column="1"
                 Width="170"
                 Height="40"
                 Margin="10"
+                HorizontalAlignment="Right"
                 Content="{helpers:Localization Close}"
                 IsEnabled="{Binding IsEnabled}"
                 Style="{StaticResource AlternativeStyle}"
@@ -166,11 +173,12 @@
 
             <Button
                 x:Name="RestartApplication"
-                Grid.Row="3"
+                Grid.Row="4"
                 Grid.Column="1"
                 Width="170"
                 Height="40"
                 Margin="10"
+                HorizontalAlignment="Right"
                 Content="Restart Application"
                 IsEnabled="{Binding IsEnabled}"
                 Style="{StaticResource AlternativeStyle}"
