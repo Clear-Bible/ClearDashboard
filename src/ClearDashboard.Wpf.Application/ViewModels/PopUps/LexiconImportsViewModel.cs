@@ -118,7 +118,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             Task.Run(async () =>
             {
                 // TODO:  change to true when feature is ready.
-                ShowDialog = false;
+                ShowDialog = true;
                 ProgressBarVisibility = Visibility.Visible;
                 var stopWatch = Stopwatch.StartNew();
                 try
@@ -223,7 +223,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 return;
             }
 
-            var dialogViewModel = LifetimeScope?.Resolve<LexiconEditDialogViewModel>();
+            var parameters = new List<Autofac.Core.Parameter>
+            {
+                new NamedParameter("lexiconManager", LexiconManager),
+
+            };
+
+            var dialogViewModel = LifetimeScope?.Resolve<LexiconEditDialogViewModel>(parameters);
             if (dialogViewModel != null)
             {
                 dialogViewModel.SourceLanguage = lexiconImport.SourceLanguage;
@@ -246,7 +252,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 return;
             }
-            var dialogViewModel = LifetimeScope?.Resolve<LexiconEditDialogViewModel>();
+            var parameters = new List<Autofac.Core.Parameter>
+            {
+                new NamedParameter("lexiconManager", LexiconManager),
+
+            };
+
+            var dialogViewModel = LifetimeScope?.Resolve<LexiconEditDialogViewModel>(parameters);
             if (dialogViewModel != null)
             {
                 dialogViewModel.SourceLanguage = lexiconImport.SourceLanguage;

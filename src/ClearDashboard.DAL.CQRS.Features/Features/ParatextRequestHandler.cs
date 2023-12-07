@@ -22,7 +22,8 @@ namespace ClearDashboard.DAL.CQRS.Features
 
             HttpClient = new HttpClient
             {
-                BaseAddress = new Uri("http://localhost:9000/api/")
+                BaseAddress = new Uri("http://localhost:9000/api/"),
+                Timeout = TimeSpan.FromSeconds(120)
             };
         }
 

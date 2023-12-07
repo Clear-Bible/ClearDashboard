@@ -16,6 +16,7 @@ public class TokenBuilder : GeneralModelBuilder<Models.Token>
     public override IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes =>
         new Dictionary<string, Type>()
         {
+            { BuildPropertyRefName(), typeof(string) },
             { VERSE_ROW_LOCATION, typeof(string) }
         };
 
@@ -95,7 +96,7 @@ public class TokenBuilder : GeneralModelBuilder<Models.Token>
         );
 
         var tokenModelSnapshot = new GeneralModel<Models.Token>(BuildPropertyRefName(), refValue);
-        GeneralModelBuilder<Models.Alignment>.AddPropertyValuesToGeneralModel(tokenModelSnapshot, modelProperties);
+        AddPropertyValuesToGeneralModel(tokenModelSnapshot, modelProperties);
 
         return tokenModelSnapshot;
     }

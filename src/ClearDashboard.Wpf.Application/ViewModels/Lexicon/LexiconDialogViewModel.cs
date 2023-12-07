@@ -116,6 +116,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         public bool ApplyToAll { get; set; } = true;
 
+        private bool RefreshTranslations { get; set; } = false;
+
         private Visibility _progressBarVisibility = Visibility.Visible;
         public Visibility ProgressBarVisibility
         {
@@ -178,8 +180,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         public async void CancelTranslation()
         {
-            await InterlinearDisplay.UpdateTokens(true);
-            await TryCloseAsync(false);
+            try
+            {
+                if (RefreshTranslations)
+                {
+                    OnUIThread(() =>
+                    {
+                        ProgressBarVisibility = Visibility.Visible;
+                        ApplyEnabled = false;
+                        CancelEnabled = false;
+                    });
+
+                    await InterlinearDisplay.UpdateTokens(RefreshTranslations);
+                }
+            }
+            finally
+            {
+                OnUIThread(() => ProgressBarVisibility = Visibility.Collapsed);
+                await TryCloseAsync(false);
+            }
         }
 
         public async void OnLexemeAdded(object sender, LexemeEventArgs e)
@@ -189,6 +208,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                 if (!string.IsNullOrWhiteSpace(e.Lexeme.Lemma))
                 {
                     CurrentLexeme = await LexiconManager.CreateLexemeAsync(e.Lexeme.Lemma, e.Lexeme.Language, e.Lexeme.Type);
+                    RefreshTranslations = true;
                 }
             }
             else
@@ -201,6 +221,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             if (e.Lexeme.LexemeId.IsInDatabase)
             {
                 await LexiconManager.DeleteLexemeAsync(e.Lexeme);
+                RefreshTranslations = true;
             }
             else
             {
@@ -211,26 +232,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         public async void OnLexemeFormAdded(object sender, LexemeFormEventArgs e)
         {
             await LexiconManager.AddLexemeFormAsync(e.Lexeme, e.Form);
+            RefreshTranslations = true;
         }
 
         public async void OnLexemeFormRemoved(object sender, LexemeFormEventArgs e)
         {
             await LexiconManager.DeleteLexemeFormAsync(e.Lexeme, e.Form);
+            RefreshTranslations = true;
         }
 
         public async void OnMeaningAdded(object sender, MeaningEventArgs e)
         {
             await LexiconManager.AddMeaningAsync(e.Lexeme, e.Meaning);
+            RefreshTranslations = true;
         }
 
         public async void OnMeaningDeleted(object sender, MeaningEventArgs e)
         {
             await LexiconManager.DeleteMeaningAsync(e.Lexeme, e.Meaning);
+            RefreshTranslations = true;
         }
 
         public async void OnMeaningUpdated(object sender, MeaningEventArgs e)
         {
             await LexiconManager.UpdateMeaningAsync(e.Lexeme, e.Meaning);
+            RefreshTranslations = true;
         }
 
         public async void OnSemanticDomainAdded(object sender, SemanticDomainEventArgs e)
@@ -242,27 +268,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                 {
                     SemanticDomainSuggestions.Add(e.SemanticDomain);
                 }
+                RefreshTranslations = true;
             }
         }
 
         public async void OnSemanticDomainSelected(object sender, SemanticDomainEventArgs e)
         {
             await LexiconManager.AddExistingSemanticDomainAsync(e.Meaning, e.SemanticDomain);
+            RefreshTranslations = true;
         }
 
         public async void OnSemanticDomainRemoved(object sender, SemanticDomainEventArgs e)
         {
             await LexiconManager.RemoveSemanticDomainAsync(e.Meaning, e.SemanticDomain);
+            RefreshTranslations = true;
         }
 
         public async void OnTranslationDeleted(object sender, LexiconTranslationEventArgs e)
         {
             await LexiconManager.DeleteTranslationAsync(e.Meaning, e.Translation);
+            RefreshTranslations = true;
         }
 
         public async void OnTranslationDropped(object sender, LexiconTranslationEventArgs e)
         {
             await LexiconManager.MoveTranslationAsync(e.Meaning, e.Translation);
+            RefreshTranslations = true;
         }
 
         private LexiconTranslationViewModel? SelectedTranslation { get; set; }
@@ -278,8 +309,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             await LexiconManager.AddTranslationAsync(e.Translation, e.Meaning);
             SelectedTranslation = e.Translation;
             ApplyEnabled = !string.IsNullOrWhiteSpace(SelectedTranslation.Text);
-        }        
-        
+            RefreshTranslations = true;
+        }
+
         public void OnTranslationAdded(object sender, LexiconTranslationEventArgs e)
         {
             SelectedTranslation = e.Translation;

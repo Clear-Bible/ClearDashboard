@@ -3,6 +3,7 @@ using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
@@ -210,7 +211,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                 return;
             }
 
-            var dialogViewModel = LifetimeScope?.Resolve<LexiconEditDialogViewModel>();
+            var parameters = new List<Autofac.Core.Parameter>
+            {
+                new NamedParameter("lexiconManager", LexiconManager),
+               
+            };
+
+            var dialogViewModel = LifetimeScope?.Resolve<LexiconEditDialogViewModel>(parameters);
             if (dialogViewModel != null)
             {
                 dialogViewModel.SourceLanguage = lexiconImport.SourceLanguage;
@@ -233,7 +240,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             {
                 return;
             }
-            var dialogViewModel = LifetimeScope?.Resolve<LexiconEditDialogViewModel>();
+            var parameters = new List<Autofac.Core.Parameter>
+            {
+                new NamedParameter("lexiconManager", LexiconManager),
+
+            };
+            var dialogViewModel = LifetimeScope?.Resolve<LexiconEditDialogViewModel>(parameters);
             if (dialogViewModel != null)
             {
                 dialogViewModel.SourceLanguage = lexiconImport.SourceLanguage;
