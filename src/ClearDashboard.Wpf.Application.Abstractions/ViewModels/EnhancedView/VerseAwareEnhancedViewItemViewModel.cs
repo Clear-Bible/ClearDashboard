@@ -271,7 +271,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         switch (EnhancedViewItemMetadatum)
                         {
                             case AlignmentEnhancedViewItemMetadatum alignmentEnhancedViewItemMetadatum:
-                                await GetAlignmentData(alignmentEnhancedViewItemMetadatum, cancellationToken);
+                                await GetAlignmentData(alignmentEnhancedViewItemMetadatum, cancellationToken, reloadType);
                                 await Execute.OnUIThreadAsync(async () =>
                                 {
                                     AlignmentSetId = Guid.Parse(alignmentEnhancedViewItemMetadatum.AlignmentSetId!);
@@ -288,7 +288,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                             
                                 break;
                             case InterlinearEnhancedViewItemMetadatum interlinearEnhancedViewItemMetadatum:
-                                await GetInterlinearData(interlinearEnhancedViewItemMetadatum, cancellationToken);
+                                await GetInterlinearData(interlinearEnhancedViewItemMetadatum, cancellationToken, reloadType);
                                 await Execute.OnUIThreadAsync(async () =>
                                 {
                                     TranslationSetId = Guid.Parse(interlinearEnhancedViewItemMetadatum.TranslationSetId!);
@@ -512,7 +512,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private async Task GetInterlinearData(InterlinearEnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
+        private async Task GetInterlinearData(InterlinearEnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken, ReloadType reloadType = ReloadType.Refresh)
         {
             try
             {
@@ -521,8 +521,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     return;
                 }
 
-                var rows = await GetParallelCorpusVerseTextRows(ParentViewModel.CurrentBcv.GetBBBCCCVVV(), metadatum);
-                if (rows == null || rows.Count == 0)
+                var rows = await GetParallelCorpusVerseTextRows(ParentViewModel.CurrentBcv.GetBBBCCCVVV(), metadatum, reloadType);
+                if (rows == null || rows.Count == 0 && reloadType!= ReloadType.Force)
                 {
                     Title = CreateNoVerseDataTitle(metadatum);
                     return;
@@ -561,12 +561,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         }
 
-        protected async Task GetAlignmentData(AlignmentEnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
+        protected async Task GetAlignmentData(AlignmentEnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken, ReloadType reloadType = ReloadType.Refresh)
         {
             try
             {
-                var rows = await GetParallelCorpusVerseTextRows(ParentViewModel.CurrentBcv.GetBBBCCCVVV(), metadatum);
-                if (rows == null || rows.Count == 0)
+                var rows = await GetParallelCorpusVerseTextRows(ParentViewModel.CurrentBcv.GetBBBCCCVVV(), metadatum, reloadType);
+                if (rows == null || rows.Count == 0 && reloadType == ReloadType.Refresh)
                 {
                     Title = CreateNoVerseDataTitle(metadatum);
                     return;
@@ -671,12 +671,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return verseRange;
         }
 
-        private async Task<List<EngineParallelTextRow>> GetParallelCorpusVerseTextRows(int bbbcccvvv, ParallelCorpusEnhancedViewItemMetadatum metadatum)
+        private async Task<List<EngineParallelTextRow>> GetParallelCorpusVerseTextRows(int bbbcccvvv, ParallelCorpusEnhancedViewItemMetadatum metadatum, ReloadType reloadType)
         {
             try
             {
 
-                if (metadatum.ParallelCorpus == null)
+                if (metadatum.ParallelCorpus == null || reloadType == ReloadType.Force)
                 {
                     var stopwatch = Stopwatch.StartNew();
                     try
@@ -694,7 +694,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                 var offset = (ushort)ParentViewModel.VerseOffsetRange;
                 var verses = metadatum.ParallelCorpus.GetByVerseRange(new VerseRef(bbbcccvvv), offset, offset);
-                var rows = verses.parallelTextRows.Select(v => (EngineParallelTextRow)v).ToList();
+                var rows = verses.parallelTextRows.Cast<EngineParallelTextRow>().ToList();
                 return rows;
             }
             catch (Exception ex)

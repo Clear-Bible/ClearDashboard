@@ -112,6 +112,42 @@
   <data name="AboutView_Version" xml:space="preserve">
     <value>កមបុរក្នា</value>
   </data>
+  <data name="AccountInfo_ClearDashboardUserIdLabel" xml:space="preserve">
+    <value>Bectdashboard userid:</value>
+  </data>
+  <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
+    <value>ឈ្មោះអ្នកប្រើ CleafDashboard:</value>
+  </data>
+  <data name="AccountInfo_CollaborationEmailLabel" xml:space="preserve">
+    <value>អ៊ីមែលសហការ:</value>
+  </data>
+  <data name="AccountInfo_CollaborationUserIdLabel" xml:space="preserve">
+    <value>អ្នកប្រើសហការ:</value>
+  </data>
+  <data name="AccountInfo_CollaborationUsernameLabel" xml:space="preserve">
+    <value>ឈ្មោះអ្នកប្រើសហការ:</value>
+  </data>
+  <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AccountInfo_DeactivateButton" xml:space="preserve">
+    <value>ធ្វើឱ្យអសកម្មអាជ្ញាប័ណ្ណបច្ចុប្បន្ន</value>
+  </data>
+  <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
+    <value>- គណនី</value>
+  </data>
+  <data name="AccountInfo_ParatextEmailLabel" xml:space="preserve">
+    <value>អ៊ីម៉ែល Partatett អ៊ីម៉ែល:</value>
+  </data>
+  <data name="AccountInfo_ParatextUsernameLabel" xml:space="preserve">
+    <value>ឈ្មោះអ្នកប្រើ ParateXT:</value>
+  </data>
+  <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
+    <value>ចាប់ផ្តើមកម្មវិធីឡើងវិញ</value>
+  </data>
+  <data name="AccountInfo_SelectAccountLabel" xml:space="preserve">
+    <value>ជ្រើសរើសគណនីដើម្បីប្តូរទៅ:</value>
+  </data>
   <data name="ACT" xml:space="preserve">
     <value>ACT</value>
   </data>
@@ -153,6 +189,9 @@
   </data>
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>សៀវភៅដែលបានជ្រើសរើស</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>ជ្រើសរើសសៀវភៅ USFM ដើម្បីផ្ញើ</value>
   </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>ជ្រើសគម្រោង Partatetx</value>
@@ -904,6 +943,9 @@
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>និង</value>
   </data>
+  <data name="LexiconEdit_ApplyFilter" xml:space="preserve">
+    <value>អនុវត្តតម្រង</value>
+  </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
     <value>លប់ចោល</value>
   </data>
@@ -915,6 +957,9 @@
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>បន្ថែម '{0}' ជាការបកប្រែទៅជាអត្ថន័យដំបូង</value>
+  </data>
+  <data name="LexiconEdit_EditingDone" xml:space="preserve">
+    <value>រ្យេឱដេនោ</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>រកទាំងអស់</value>
@@ -930,6 +975,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>lexme</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>ផ្ទុកទិន្នន័យ ...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>កំហុសដែលមិនបានរំពឹងទុកបានកើតឡើងខណៈពេលផ្ទុកទិន្នន័យ។ {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>ដេលសីក្នា</value>
@@ -953,7 +1004,7 @@
     <value>ភាសាគោលដៅ</value>
   </data>
   <data name="LexiconEdit_Title" xml:space="preserve">
-    <value>lexicon កែប្រែ</value>
+    <value>lexicon កែសម្រួល</value>
   </data>
   <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>ការបករេប</value>
@@ -1823,7 +1874,7 @@
     <value>ការបកប្រែត្រលប់មកវិញ</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>ព្រះគម្ពីរអន្តរភាសា (LWC)</value>
+    <value>អត្ថបទគំរូ (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
     <value>ParateXT កំពុងដំណើរការប៉ុន្តែមិនបានភ្ជាប់ទេ។</value>
@@ -2122,6 +2173,9 @@
   <data name="Save" xml:space="preserve">
     <value>សរេង្គាហ</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>ផ្ញើរ</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>បើកដំណើរការកម្មវិធីជំនួយពិសោធន៍ Aqua</value>
   </data>
@@ -2274,6 +2328,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>ផ្ញើរ</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>ផ្ញើឯកសារ USFM</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>ការផ្ដល់យោបល់</value>

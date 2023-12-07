@@ -112,6 +112,42 @@
   <data name="AboutView_Version" xml:space="preserve">
     <value>Version</value>
   </data>
+  <data name="AccountInfo_ClearDashboardUserIdLabel" xml:space="preserve">
+    <value>ClearDashboard Userid:</value>
+  </data>
+  <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
+    <value>Nom d'utilisateur Cleardashboard:</value>
+  </data>
+  <data name="AccountInfo_CollaborationEmailLabel" xml:space="preserve">
+    <value>Courriel de collaboration:</value>
+  </data>
+  <data name="AccountInfo_CollaborationUserIdLabel" xml:space="preserve">
+    <value>Collaboration utilisateur:</value>
+  </data>
+  <data name="AccountInfo_CollaborationUsernameLabel" xml:space="preserve">
+    <value>Nom d'utilisateur de collaboration:</value>
+  </data>
+  <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AccountInfo_DeactivateButton" xml:space="preserve">
+    <value>Désactiver la licence actuelle</value>
+  </data>
+  <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
+    <value>-Autres comptes-</value>
+  </data>
+  <data name="AccountInfo_ParatextEmailLabel" xml:space="preserve">
+    <value>Email de paratext:</value>
+  </data>
+  <data name="AccountInfo_ParatextUsernameLabel" xml:space="preserve">
+    <value>Nom d'utilisateur PARATEXT:</value>
+  </data>
+  <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
+    <value>Redémarrage de l'application</value>
+  </data>
+  <data name="AccountInfo_SelectAccountLabel" xml:space="preserve">
+    <value>Sélectionnez un compte pour passer à:</value>
+  </data>
   <data name="ACT" xml:space="preserve">
     <value>ACT</value>
   </data>
@@ -153,6 +189,9 @@
   </data>
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>Livres sélectionnés</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>Sélectionnez des livres USFM à envoyer</value>
   </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>Sélectionner le projet PARATEXT</value>
@@ -662,7 +701,7 @@
     <value>Afficher les commandes de la vue</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>Jeton fendu</value>
+    <value>Jeton divisé</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>Appliquer la fente à d'autres cas de jeton</value>
@@ -904,6 +943,9 @@
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Et</value>
   </data>
+  <data name="LexiconEdit_ApplyFilter" xml:space="preserve">
+    <value>Appliquer le filtre</value>
+  </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
     <value>Annuler</value>
   </data>
@@ -915,6 +957,9 @@
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>Ajouter '{0}' comme traduction en premier sens</value>
+  </data>
+  <data name="LexiconEdit_EditingDone" xml:space="preserve">
+    <value>Fait</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>Trouver tout</value>
@@ -930,6 +975,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexème</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>Chargement des données...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>Une erreur inattendue s'est produite lors du chargement des données. {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>Correspondant à</value>
@@ -1823,7 +1874,7 @@
     <value>Traduction de dos paratext</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>Bible interlinéaire (LWC)</value>
+    <value>Texte du modèle (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
     <value>PARATEXT est en cours d'exécution mais n'est pas connecté.</value>
@@ -2069,7 +2120,7 @@
     <value>Tirus</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>Zécharie</value>
+    <value>Zécharia</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
     <value>Zéphanie</value>
@@ -2121,6 +2172,9 @@
   </data>
   <data name="Save" xml:space="preserve">
     <value>Sauvegarder</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Envoyer</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>Activer le plugin aqua expérimental</value>
@@ -2183,7 +2237,7 @@
     <value>Réservé à l'expansion future</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaurer l'utilisateur de la collaboration</value>
+    <value>Restaurer l'utilisateur de collaboration</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Enregistré sur le serveur distant</value>
@@ -2274,6 +2328,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Envoyer</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>Envoyer des fichiers USFM</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>Suggestion</value>

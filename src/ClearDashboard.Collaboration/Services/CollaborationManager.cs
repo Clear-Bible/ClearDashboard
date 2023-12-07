@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
 using System.IO;
 using System.Text.Json;
+using ClearDashboard.DataAccessLayer;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Services;
@@ -26,9 +27,9 @@ public class CollaborationManager
     private readonly IMediator _mediator;
     private readonly IUserProvider _userProvider;
     private readonly IProjectProvider _projectProvider;
-
+    
     private readonly string _repositoryBasePath =
-        FilePathTemplates.CollabBaseDirectory + Path.DirectorySeparatorChar + "Collaboration";
+        FilePathTemplates.CollabBaseDirectory + Path.DirectorySeparatorChar + LicenseManager.CollaborationDirectoryName;
 
     private readonly string _backupsPath =
         FilePathTemplates.CollabBaseDirectory + Path.DirectorySeparatorChar + "Backups";
@@ -48,11 +49,16 @@ public class CollaborationManager
     public const string RemoteOrigin = "origin";
     public string RepositoryPath => _repositoryPath;
 
+    public static string MicrosoftFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft");
 
-    private const string UserSecretsId = "b02febcf-d7fc-48e1-abb1-f03647ca553c";
-    private static readonly string _secretsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft", "UserSecrets", UserSecretsId);
-    private const string SecretsFileName = "secrets.json";
-    private static readonly string _secretsFilePath = Path.Combine(_secretsFolderPath, SecretsFileName);
+    public static string UserSecretsDirectoryName = "UserSecrets";
+    public static string UserSecretsFolderPath = Path.Combine(MicrosoftFolderPath, UserSecretsDirectoryName);
+
+    public const string UserSecretsId = "b02febcf-d7fc-48e1-abb1-f03647ca553c";
+    public static readonly string _secretsFolderPath = Path.Combine(UserSecretsFolderPath, UserSecretsId);
+
+    public const string SecretsFileName = "secrets.json";
+    public static readonly string _secretsFilePath = Path.Combine(_secretsFolderPath, SecretsFileName);
 
 
 

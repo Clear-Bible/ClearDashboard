@@ -112,6 +112,42 @@
   <data name="AboutView_Version" xml:space="preserve">
     <value>版本</value>
   </data>
+  <data name="AccountInfo_ClearDashboardUserIdLabel" xml:space="preserve">
+    <value>ClearDashboard用戶ID：</value>
+  </data>
+  <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
+    <value>Cleardashboard用戶名：</value>
+  </data>
+  <data name="AccountInfo_CollaborationEmailLabel" xml:space="preserve">
+    <value>協作電子郵件：</value>
+  </data>
+  <data name="AccountInfo_CollaborationUserIdLabel" xml:space="preserve">
+    <value>協作用戶ID：</value>
+  </data>
+  <data name="AccountInfo_CollaborationUsernameLabel" xml:space="preserve">
+    <value>協作用戶名：</value>
+  </data>
+  <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AccountInfo_DeactivateButton" xml:space="preserve">
+    <value>停用當前許可證</value>
+  </data>
+  <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
+    <value> - 其他帳戶 - </value>
+  </data>
+  <data name="AccountInfo_ParatextEmailLabel" xml:space="preserve">
+    <value>PARATEXT電子郵件：</value>
+  </data>
+  <data name="AccountInfo_ParatextUsernameLabel" xml:space="preserve">
+    <value>PARATEXT用戶名：</value>
+  </data>
+  <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
+    <value>重新啟動申請</value>
+  </data>
+  <data name="AccountInfo_SelectAccountLabel" xml:space="preserve">
+    <value>選擇一個要切換到的帳戶：</value>
+  </data>
   <data name="ACT" xml:space="preserve">
     <value>ACT</value>
   </data>
@@ -125,7 +161,7 @@
     <value>結盟</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
-    <value>選擇您正在合作的書籍，您稍後可以隨時添加更多書籍。</value>
+    <value>選擇與您合作的書籍，您稍後可以隨時添加更多書籍。</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>檢查USFM</value>
@@ -153,6 +189,9 @@
   </data>
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>選定的書</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>選擇USFM書籍發送</value>
   </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>選擇Para​​text項目</value>
@@ -614,7 +653,7 @@
     <value>刪除對齊</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>刪除“ {0}”的對齊方式？</value>
+    <value>刪除“ {0}”的對齊？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
     <value>刪除所有對齊方式？</value>
@@ -662,7 +701,7 @@
     <value>顯示視圖控件</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>分開令牌</value>
+    <value>拆分令牌</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>將拆分應用於其他令牌</value>
@@ -848,7 +887,7 @@
     <value>更改所有不設置的事件</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>如果檢查了，這將改變此詞的所有不設置的情況</value>
+    <value>如果檢查了，這將改變此詞的所有不設置</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>一致性</value>
@@ -904,6 +943,9 @@
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>和</value>
   </data>
+  <data name="LexiconEdit_ApplyFilter" xml:space="preserve">
+    <value>應用過濾器</value>
+  </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
     <value>取消</value>
   </data>
@@ -915,6 +957,9 @@
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>將'{0}'添加為第一個含義</value>
+  </data>
+  <data name="LexiconEdit_EditingDone" xml:space="preserve">
+    <value>完畢</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>找到所有</value>
@@ -930,6 +975,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexeme</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>加載數據中...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>加載數據時發生了意外錯誤。 {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>匹配</value>
@@ -1328,7 +1379,7 @@
     <value>過濾器</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>由標籤</value>
+    <value>通過標籤</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
     <value>通過注意文本</value>
@@ -1370,7 +1421,7 @@
     <value>添加標籤組</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>一個標籤組已經存在</value>
+    <value>標籤組已經存在，名稱為</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>初始化標籤組</value>
@@ -1493,10 +1544,10 @@
     <value>並行化語料庫經文</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>機器字對準算法</value>
+    <value>機詞對齊算法</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>機器字對準算法</value>
+    <value>機詞對齊算法</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>火車對稱模型？</value>
@@ -1754,7 +1805,7 @@
     <value>協作項目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>創建您的項目以入門。</value>
+    <value>創建您的項目以開始。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>創建一個新項目</value>
@@ -1814,7 +1865,7 @@
     <value>paratext不運行</value>
   </data>
   <data name="ProjectPicker_OpenRecent" xml:space="preserve">
-    <value>公開最近</value>
+    <value>近期開放</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
     <value>PARATEXT</value>
@@ -1823,10 +1874,10 @@
     <value>PARATEXT背面翻譯</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>線性聖經（LWC）</value>
+    <value>模型文本（LWC）</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext正在運行但未連接。</value>
+    <value>paratext正在運行但未連接。</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>PARATEXT項目</value>
@@ -1922,7 +1973,7 @@
     <value>帖撒羅尼迦後書</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2提摩太</value>
+    <value>2蒂莫西</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3約翰</value>
@@ -2093,7 +2144,7 @@
     <value>解密許可證密鑰的內容與您提供的信息不符。</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
-    <value>您的許可證密鑰要么缺少或損壞。</value>
+    <value>您的許可密鑰丟失或損壞。</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
     <value>歡迎來到Cleardashboard！請輸入您的註冊信息。</value>
@@ -2121,6 +2172,9 @@
   </data>
   <data name="Save" xml:space="preserve">
     <value>節省</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>發送</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>啟用實驗水上插件</value>
@@ -2219,7 +2273,7 @@
     <value>驗證電子郵件代碼</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>啟用逐節的文本集合顯示</value>
+    <value>啟用逐一文字集合顯示</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>取消任務</value>
@@ -2274,6 +2328,9 @@
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>發送</value>
+  </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>發送USFM文件</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>建議</value>
@@ -2333,7 +2390,7 @@
     <value>更新並添加新書</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
-    <value>選擇書</value>
+    <value>選擇書籍</value>
   </data>
   <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
     <value>更新並添加新</value>

@@ -554,6 +554,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             await manager.ShowWindowAsync(viewmodel, null, settings);
         }
 
+        public void ShowAccountInfoWindow()
+        {
+            AccountWindow.ShowAccountInfoWindow(_localizationService, new NoExitWindowManager());
+        }
+
         public async Task StartParatext()
         {
             if (!_paratextProxy.IsParatextRunning())
@@ -820,7 +825,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 foreach (var file in files)
                 {
                     var dashboardProject = await FileToDashboardProject(file, directoryInfo);
-
                     DashboardProjects.Add(dashboardProject);
                 }
             }
@@ -929,6 +933,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 }
             }
 
+            string userId = string.Empty;
+            results = await ExecuteRequest(new GetProjectGitLabShaQuery(fileInfo.FullName), CancellationToken.None);
+            if (results.Success && results.HasData)
+            {
+                if (results.Data.ToString() != "")
+                {
+                    userId = results.Data.ToString();
+                }
+            }
+
             // add as ListItem
             var dashboardProject = new DashboardProject
             {
@@ -940,6 +954,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 IsCollabProject = shaPresent,
                 GitLabSha = gitLabSha,
                 Id = guid,
+                UserId=userId
             };
             return dashboardProject;
         }
@@ -1029,6 +1044,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             // get the list of those GitLab projects that haven't been sync'd locally
             var projects = await _gitLabHttpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
             projects = projects.OrderByDescending(e => e.CreatedAt).ToList();
+            var dashboardProjectsToRemove = new List<DashboardProject>();
             foreach (var dashboardProject in DashboardProjects)
             {
                 var results =
@@ -1043,6 +1059,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     {
                         dashboardProject.CollabOwner = gitLabProject.RemoteOwner.Name;
                         dashboardProject.PermissionLevel = gitLabProject.RemotePermissionLevel;
+
+                        if (dashboardProject.PermissionLevel == PermissionLevel.None &&
+                            Guid.Parse(dashboardProject.UserId) != ProjectManager.CurrentUser.Id)
+                        {
+                            dashboardProjectsToRemove.Add(dashboardProject);
+                        }
 
                         // remove from the available GitLab projects
                         projects.Remove(gitLabProject);

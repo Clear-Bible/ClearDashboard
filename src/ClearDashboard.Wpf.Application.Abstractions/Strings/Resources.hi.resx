@@ -112,6 +112,42 @@
   <data name="AboutView_Version" xml:space="preserve">
     <value>संस्करण</value>
   </data>
+  <data name="AccountInfo_ClearDashboardUserIdLabel" xml:space="preserve">
+    <value>ClearDashboard UserID:</value>
+  </data>
+  <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
+    <value>ClearDashboard उपयोगकर्ता नाम:</value>
+  </data>
+  <data name="AccountInfo_CollaborationEmailLabel" xml:space="preserve">
+    <value>सहयोग ईमेल:</value>
+  </data>
+  <data name="AccountInfo_CollaborationUserIdLabel" xml:space="preserve">
+    <value>सहयोग उपयोगकर्ता:</value>
+  </data>
+  <data name="AccountInfo_CollaborationUsernameLabel" xml:space="preserve">
+    <value>सहयोग उपयोगकर्ता नाम:</value>
+  </data>
+  <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="AccountInfo_DeactivateButton" xml:space="preserve">
+    <value>वर्तमान लाइसेंस को निष्क्रिय करें</value>
+  </data>
+  <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
+    <value>-आपका खाते-</value>
+  </data>
+  <data name="AccountInfo_ParatextEmailLabel" xml:space="preserve">
+    <value>Paratext ईमेल:</value>
+  </data>
+  <data name="AccountInfo_ParatextUsernameLabel" xml:space="preserve">
+    <value>Paratext उपयोगकर्ता नाम:</value>
+  </data>
+  <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
+    <value>आवेदन को पुनरारंभ करें</value>
+  </data>
+  <data name="AccountInfo_SelectAccountLabel" xml:space="preserve">
+    <value>स्विच करने के लिए एक खाता चुनें:</value>
+  </data>
   <data name="ACT" xml:space="preserve">
     <value>ACT</value>
   </data>
@@ -131,7 +167,7 @@
     <value>USFM की जाँच करना</value>
   </data>
   <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
-    <value>क्लिपबोर्ड के लिए USFM त्रुटियों की प्रतिलिपि बनाएँ</value>
+    <value>क्लिपबोर्ड पर USFM त्रुटियों की प्रतिलिपि बनाएँ</value>
   </data>
   <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
     <value>त्रुटियों की संख्या:</value>
@@ -153,6 +189,9 @@
   </data>
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
     <value>चयनित पुस्तकें</value>
+  </data>
+  <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
+    <value>भेजने के लिए USFM पुस्तकों का चयन करें</value>
   </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
     <value>Paratext प्रोजेक्ट का चयन करें</value>
@@ -668,7 +707,7 @@
     <value>टोकन के अन्य उदाहरणों पर विभाजन लागू करें</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>टोकन को विभाजित करने के लिए कहां चुनें:</value>
+    <value>टोकन को विभाजित करने के लिए कहां से चुनें:</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>तीन-तरफ़ा विभाजन</value>
@@ -904,6 +943,9 @@
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>और</value>
   </data>
+  <data name="LexiconEdit_ApplyFilter" xml:space="preserve">
+    <value>फिल्टर लागू करें</value>
+  </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
     <value>रद्द करना</value>
   </data>
@@ -915,6 +957,9 @@
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>पहले अर्थ में अनुवाद के रूप में '{0}' जोड़ें</value>
+  </data>
+  <data name="LexiconEdit_EditingDone" xml:space="preserve">
+    <value>हो गया</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
     <value>सब ढूँढ़ो</value>
@@ -930,6 +975,12 @@
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>शब्दिम</value>
+  </data>
+  <data name="LexiconEdit_LoadingData" xml:space="preserve">
+    <value>डेटा लोड हो रहा है...</value>
+  </data>
+  <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
+    <value>डेटा लोड करते समय एक अप्रत्याशित त्रुटि हुई। {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>मेल मिलाना</value>
@@ -1070,7 +1121,7 @@
     <value>त्वरित नया</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Collab परिवर्तन उपलब्ध हैं</value>
+    <value>Collab परिवर्तन उपलब्ध है</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
     <value>समायोजन</value>
@@ -1205,7 +1256,7 @@
     <value>मर्ज पूर्ण ... पुनः लोडिंग इंटरफ़ेस</value>
   </data>
   <data name="MergeDialog_OperationCancelled" xml:space="preserve">
-    <value>अभियान रद्द किया गया</value>
+    <value>रद्द किया गया ऑपरेशन</value>
   </data>
   <data name="MergeDialog_OperationComplete" xml:space="preserve">
     <value>ऑपरेशन पूरा!</value>
@@ -1484,7 +1535,7 @@
     <value>कॉर्पोरा छंदों के समानांतरकरण करें</value>
   </data>
   <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
-    <value>Interlinear बनाएँ</value>
+    <value>Internear बनाएँ</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
     <value>ज्सन मेटाडेटा</value>
@@ -1787,7 +1838,7 @@
     <value>शुरू हो जाओ</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>आयात सर्वर परियोजना</value>
+    <value>आयात सर्वर प्रोजेक्ट</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>अपनी परियोजना बनाते समय ग्रीक और हिब्रू बाइबिल ग्रंथों को शामिल करने के लिए इस बॉक्स को देखें।</value>
@@ -1823,7 +1874,7 @@
     <value>Paratext वापस अनुवाद</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>अंतर -बाइबिल (LWC)</value>
+    <value>मॉडल पाठ (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
     <value>Paratext चल रहा है लेकिन जुड़ा नहीं है।</value>
@@ -2122,6 +2173,9 @@
   <data name="Save" xml:space="preserve">
     <value>बचाना</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>भेजना</value>
+  </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
     <value>प्रयोगात्मक एक्वा प्लगइन सक्षम करें</value>
   </data>
@@ -2275,6 +2329,9 @@
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>भेजना</value>
   </data>
+  <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
+    <value>USFM फ़ाइलें भेजें</value>
+  </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>सुझाव</value>
   </data>
@@ -2372,7 +2429,7 @@
     <value>समझ:</value>
   </data>
   <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>सबडोमेन:</value>
+    <value>उपडोमेन:</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>हाँ</value>
