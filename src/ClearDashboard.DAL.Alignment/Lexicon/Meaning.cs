@@ -44,8 +44,15 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             }
         }
 
+        public bool HasAnythingToSave =>
+            IsDirty ||
+            TranslationIdsToAdd.Any() ||
+            TranslationIdsToDelete.Any() ||
+            translations_.IntersectBy(translationIdsInDatabase_.Select(e => e.Id), e => e.TranslationId.Id).Any(e => e.HasAnythingToSave);
+
         private readonly List<TranslationId> translationIdsInDatabase_;
         internal IEnumerable<TranslationId> TranslationIdsToDelete => translationIdsInDatabase_.ExceptBy(translations_.Select(e => e.TranslationId.Id), e => e.Id);
+        internal IEnumerable<TranslationId> TranslationIdsToAdd => translations_.Where(e => !e.ExcludeFromSave).Select(e => e.TranslationId).ExceptBy(translationIdsInDatabase_.Select(e => e.Id), e => e.Id);
 
 #if DEBUG
         private ObservableCollection<Translation> translations_;

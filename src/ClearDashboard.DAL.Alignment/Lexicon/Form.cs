@@ -36,6 +36,8 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             }
         }
 
+        public bool HasAnythingToSave => IsDirty && !ExcludeFromSave;
+
         public bool IsDirty { get; internal set; } = false;
         public bool IsInDatabase { get => FormId.Created is not null; }
 

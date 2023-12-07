@@ -33,6 +33,8 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             }
         }
 
+        public bool HasAnythingToSave => IsDirty && !ExcludeFromSave;
+
         public string? OriginatedFrom { get; init; }
 
         public bool IsDirty { get; internal set; } = false;
