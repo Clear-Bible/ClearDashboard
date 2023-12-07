@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="ClearDashboard.DataAccessLayer.Models.Lexicon_Form">
+    <Position X="4.5" Y="1.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAIAAAAAAACAAAAAA=</HashCode>
+      <FileName>ProjectDbContext\Lexicon\Lexicon_Form.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClearDashboard.DataAccessLayer.Models.Lexicon_Lexeme">
+    <Position X="1" Y="5.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AACgAAAACAAAAAAAAAAAAAgAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>ProjectDbContext\Lexicon\Lexicon_Lexeme.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClearDashboard.DataAccessLayer.Models.Lexicon_Lexicon">
+    <Position X="9" Y="9.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>ProjectDbContext\Lexicon\Lexicon_Lexicon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClearDashboard.DataAccessLayer.Models.Lexicon_Meaning">
+    <Position X="7.75" Y="5.5" Width="6.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABACAAAAAACAAgAAAAAAAAAIAAAAAAACAQAAAA=</HashCode>
+      <FileName>ProjectDbContext\Lexicon\Lexicon_Meaning.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClearDashboard.DataAccessLayer.Models.Lexicon_SemanticDomain">
+    <Position X="16" Y="5" Width="6.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAgAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>ProjectDbContext\Lexicon\Lexicon_SemanticDomain.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClearDashboard.DataAccessLayer.Models.Lexicon_SemanticDomainMeaningAssociation">
+    <Position X="3.5" Y="9" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAACAAAABAAAAAQAAAA=</HashCode>
+      <FileName>ProjectDbContext\Lexicon\Lexicon_SemanticDomainMeaningAssociation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClearDashboard.DataAccessLayer.Models.Lexicon_Translation">
+    <Position X="16.5" Y="1.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAABAAAAAAAAAAAAAAAAAACAAAAAAAACAAAAAA=</HashCode>
+      <FileName>ProjectDbContext\Lexicon\Lexicon_Translation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClearDashboard.DataAccessLayer.Models.SynchronizableTimestampedEntity" Collapsed="true">
+    <Position X="10.5" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>ProjectDbContext\BaseClasses\SynchronizableTimestampedEntity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

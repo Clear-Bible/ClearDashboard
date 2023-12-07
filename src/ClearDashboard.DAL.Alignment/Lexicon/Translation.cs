@@ -38,6 +38,11 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
         public bool IsDirty { get; internal set; } = false;
         public bool IsInDatabase { get => TranslationId.Created is not null; }
 
+        /// <summary>
+        /// When set to true, only affects a single Save operation
+        /// </summary>
+        public bool ExcludeFromSave { get; set; } = false;
+
         public Translation()
         {
             TranslationId = TranslationId.Create(Guid.NewGuid());
@@ -51,9 +56,15 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
 
         internal void PostSave(TranslationId? translationId)
         {
-            TranslationId = translationId ?? TranslationId;
-            IsDirty = false;
-        }
+            if (!ExcludeFromSave)
+            {
+                TranslationId = translationId ?? TranslationId;
+                IsDirty = false;
+			}
+
+            // When set to true, it only affects a single Save
+            ExcludeFromSave = false;
+		}
 
         internal void PostSaveAll(IDictionary<Guid, IId> createdIIdsByGuid)
         {
