@@ -1,0 +1,19 @@
+{
+  "LexiconEdit_And": "And",
+  "LexiconEdit_Edit": "Edit",
+  "LexiconEdit_FindAll": "Find All",
+  "LexiconEdit_Forms": "Forms",
+  "LexiconEdit_Fully": "Fully",
+  "LexiconEdit_FullyMatching": "Fully Matching",
+  "LexiconEdit_Lexeme": "Lexeme",
+  "LexiconEdit_Matching": "Matching",
+  "LexiconEdit_Meanings": "Meanings",
+  "LexiconEdit_Or": "Or",
+  "LexiconEdit_Partially": "Partially",
+  "LexiconEdit_Translation": "Translation",
+  "LexiconEdit_Translations": "Translations",
+  "LexiconEdit_Type": "Type",
+  "LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate": "Edit - adding {0} as translation to first meaning",
+  "LexiconEdit_Edit_MatchOnTranslationTemplate": "Edit - adding {0} as form"
+
+}

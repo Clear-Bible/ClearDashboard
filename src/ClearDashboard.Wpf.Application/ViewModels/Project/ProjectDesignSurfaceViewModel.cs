@@ -1112,7 +1112,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             settings.MinHeight = 500;
             settings.Title = $"{localizedString}";
 
-            var viewModel = IoC.Get<MigrateDatabaseViewModel>();
+            var viewModel = LifetimeScope!.Resolve<MigrateDatabaseViewModel>();
+            // var viewModel = IoC.Get<MigrateDatabaseViewModel>();
             viewModel.Project = null;
             viewModel.ProjectPickerViewModel = null;
             viewModel.ParallelId = connectionMenuItem.ConnectionId;
@@ -1831,7 +1832,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             settings.MinHeight = 500;
             settings.Title = $"{localizedString}";
 
-            var viewModel = IoC.Get<LexiconImportsViewModel>();
+            var viewModel  = LifetimeScope!.Resolve<LexiconImportsViewModel>();
+           // var viewModel = IoC.Get<LexiconImportsViewModel>();
             viewModel.SelectedProjectId = corpusId;
 
             IWindowManager manager = new WindowManager();
@@ -1869,7 +1871,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 settings.MinHeight = 600;
                 settings.Title = "Delete Alignments/Interlinears";
 
-                var viewModel = IoC.Get<DeleteParallelizationLineViewModel>();
+                var viewModel = LifetimeScope!.Resolve<DeleteParallelizationLineViewModel>();
+                //var viewModel = IoC.Get<DeleteParallelizationLineViewModel>();
                 viewModel.AlignmentSetIds = alignmentSetIds;
                 viewModel.TranslationSetIds = translationSetIds;
                 viewModel.DesignSurfaceViewModel = DesignSurfaceViewModel!;

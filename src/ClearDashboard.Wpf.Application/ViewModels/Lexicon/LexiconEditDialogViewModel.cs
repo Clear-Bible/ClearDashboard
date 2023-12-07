@@ -1,31 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Controls.Primitives;
-using System.Windows;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.Threading;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Dynamic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using ClearDashboard.Wpf.Application.Helpers;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 {
-
-    public enum LexiconEditMode
-    {
-        PartialMatchOnLexemeOrForm,
-        MatchOnTranslation,
-        Edit
-    }
     public class LexiconEditDialogViewModel : DashboardApplicationScreen
     {
+        private readonly TranslationSource _translationSource;
         private readonly LexiconManager? _lexiconManager;
+
+        private readonly DebounceDispatcher _debounceTimer = new();
+
         private LexiconManager LexiconManager
         {
             get
@@ -34,6 +35,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                 return _lexiconManager!;
             }
             init => Set(ref _lexiconManager, value);
+        }
+
+        public LexiconEditDialogState State
+        {
+            get => _state;
+            set => Set(ref _state, value);
         }
 
         public LexiconEditMode EditMode
@@ -112,6 +119,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         private string? _other;
         private BindableCollection<string> _sourceLanguages;
         private BindableCollection<string> _targetLanguages;
+        private LexiconEditDialogState _state;
 
         public BindableCollection<string> SourceLanguages
         {
@@ -168,23 +176,162 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
             TargetLanguages = new BindableCollection<string>();
             SourceLanguages = new BindableCollection<string>();
+
+            State = new LexiconEditDialogState();
+
+           
+        }
+
+        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+        {
+            IsBusy = false;
+            return base.OnInitializeAsync(cancellationToken);
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            if (!string.IsNullOrEmpty(SourceLanguage))
+            IsBusy = true;
+            try
             {
-                SelectedSourceLanguage = SourceLanguage;
-                SourceLanguages.Add(SourceLanguage);
+                if (!string.IsNullOrEmpty(SourceLanguage))
+                {
+                    SelectedSourceLanguage = SourceLanguage;
+                    SourceLanguages.Add(SourceLanguage);
+                }
+
+                if (!string.IsNullOrEmpty(TargetLanguage))
+                {
+                    SelectedTargetLanguage = TargetLanguage;
+                    TargetLanguages.Add(TargetLanguage);
+                }
+
+
+                State.Configure(EditMode, ToMatch);
+
+                EditableLexemes = GetFilteredLexemes();
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+            return base.OnActivateAsync(cancellationToken);
+        }
+
+        private ObservableCollection<EditableLexemeViewModel>? _editableLexemes;
+        public ObservableCollection<EditableLexemeViewModel>? EditableLexemes
+        {
+            get => _editableLexemes;
+            set => Set(ref _editableLexemes, value);
+        }
+
+        public string EditButtonLabel => GetEditButtonLabel();
+
+        private string GetEditButtonLabel()
+        {
+            switch (EditMode)
+            {
+                case LexiconEditMode.MatchOnTranslation:
+                    return string.Format(LocalizationService.Get("LexiconEdit_Edit_MatchOnTranslationTemplate"), Other);
+
+
+                case LexiconEditMode.PartialMatchOnLexemeOrForm:
+                    return string.Format(LocalizationService.Get("LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate"), Other);
             }
 
-            if (!string.IsNullOrEmpty(TargetLanguage))
+            return "[UNKNOWN DIALOG MODE!]";
+        }
+
+        private ObservableCollection<EditableLexemeViewModel>? GetFilteredLexemes()
+        {
+            var filteredLexemes = new List<Lexeme>();
+            var managedLexemes = LexiconManager.ManagedLexemes;
+
+            switch (EditMode)
             {
-                SelectedTargetLanguage = TargetLanguage;
-                TargetLanguages.Add(TargetLanguage);
+                case LexiconEditMode.MatchOnTranslation:
+                   
+
+                    filteredLexemes = managedLexemes.FilterByTranslationText(SelectedSourceLanguage,
+                        SelectedTargetLanguage, Other).ToList();
+
+                    return new ObservableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l=> new EditableLexemeViewModel(l)));
+
+                case LexiconEditMode.PartialMatchOnLexemeOrForm:
+
+                    //filteredLexemes = managedLexemes.FilterByLexemeText(ToMatch, State.FormsOption == MatchOption.Partially, SourceLanguage, null).ToList();
+
+                    filteredLexemes = managedLexemes.FilterByLexemeText(Other, State.FormsOption == MatchOption.Partially, SourceLanguage, null).ToList();
+                    
+                    return new ObservableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l => new EditableLexemeViewModel(l)));
+
+                default:
+                    return null;
+
             }
-            
-            return base.OnActivateAsync(cancellationToken);
+          
+        }
+
+        public void OnLexemeOptionChanged(SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0 && e.AddedItems[0] is ListBoxItem item)
+            {
+
+                State.LexemeOption =
+                    (MatchOption)Enum.Parse(typeof(MatchOption), (item.Tag as string));
+                ////_debounceTimer.DebounceAsync(10, async () => await UpdateAlignmentStatuses(approvalType));
+
+            }
+        }
+
+        public void OnFormsOptionChanged(SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0 && e.AddedItems[0] is ListBoxItem item)
+            {
+
+                State.FormsOption =
+                    (MatchOption)Enum.Parse(typeof(MatchOption), (item.Tag as string));
+                ////_debounceTimer.DebounceAsync(10, async () => await UpdateAlignmentStatuses(approvalType));
+
+            }
+        }
+
+        public void OnPredicateOptionChanged(SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0 && e.AddedItems[0] is ListBoxItem item)
+            {
+
+                State.PredicateOption =
+                    (PredicateOption)Enum.Parse(typeof(PredicateOption), (item.Tag as string));
+                ////_debounceTimer.DebounceAsync(10, async () => await UpdateAlignmentStatuses(approvalType));
+
+            }
+        }
+
+        public void OnFormsMatchChanged(object sender, TextChangedEventArgs e)
+        {
+            var textBox = (TextBox)sender;
+            State.FormsMatch = textBox.Text;
+        }
+
+        public void OnTranslationMatchChanged(object sender, TextChangedEventArgs e)
+        {
+            var textBox = (TextBox)sender;
+            State.TranslationMatch = textBox.Text;
+        }
+
+        public void OnTranslationChecked(CheckBox? checkBox)
+        {
+            //State.TranslationChecked = checkBox?.IsChecked;
+        }
+
+        public void OnFormsChecked(CheckBox? checkBox)
+        {
+            //State.FormsChecked = checkBox?.IsChecked;
+        }
+
+        public void OnLexemeChecked(CheckBox? checkBox)
+        {
+            //State.LexemeChecked = checkBox?.IsChecked;
         }
     }
 }

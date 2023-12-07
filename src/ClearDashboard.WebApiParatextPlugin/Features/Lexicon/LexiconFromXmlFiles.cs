@@ -147,13 +147,25 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
 
             foreach (var item in lexiconFileModel.Entries.Item)
             {
-                var lexemeModel = new Lexicon_Lexeme
+                var lexemeModel = lexiconModel.Lexemes
+                    .Where(e => e.Language == lexiconLanguageInfo.LanguageTag)
+                    .Where(e => e.Type == item.Lexeme.Type)
+                    .Where(e => e.Lemma == item.Lexeme.Form || e.Forms.Select(f => f.Text).Contains(item.Lexeme.Form))
+                    .FirstOrDefault();
+
+                var lexemeModelCreated = false;
+                if (lexemeModel is null)
                 {
-                    Id = Guid.NewGuid(),
-                    Lemma = item.Lexeme.Form,
-                    Type = item.Lexeme.Type,
-                    Language = lexiconLanguageInfo.LanguageTag,
-                };
+                    lexemeModel = new Lexicon_Lexeme
+                    {
+                        Id = Guid.NewGuid(),
+                        Lemma = item.Lexeme.Form,
+                        Type = item.Lexeme.Type,
+                        Language = lexiconLanguageInfo.LanguageTag,
+                    };
+
+                    lexemeModelCreated = true;
+                }
 
                 foreach (var sense in item.Entry.Sense)
                 {
@@ -164,30 +176,48 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
                         continue;
                     }
 
-                    var meaningModel = new Lexicon_Meaning
-                    {
-                        Id = Guid.NewGuid(),
-                        Text = string.Empty, // FIXME?
-                        Language = senseLanguageInfo.LanguageTag,
-                        LexemeId = lexemeModel.Id
-                    };
+                    var meaningModel = lexemeModel.Meanings
+                        .Where(e => e.Language == senseLanguageInfo.LanguageTag)
+                        .Where(e => e.Text == string.Empty)
+                        .FirstOrDefault();
 
-                    var translationModel = new Lexicon_Translation
+                    if (meaningModel is null)
                     {
-                        Id = Guid.NewGuid(),
-                        Text = sense.Gloss.Text,
-                        MeaningId = meaningModel.Id,
-                        OriginatedFrom = JsonSerializer.Serialize(
+                        meaningModel = new Lexicon_Meaning
+                        {
+                            Id = Guid.NewGuid(),
+                            Text = string.Empty, // FIXME?
+                            Language = senseLanguageInfo.LanguageTag,
+                            LexemeId = lexemeModel.Id
+                        };
+
+                        lexemeModel.Meanings.Add(meaningModel);
+                    }
+
+                    var translationOriginatedFrom = JsonSerializer.Serialize(
                             OriginatedFromLexiconItem.FromLexiconItemFileModel(item.Lexeme, sense),
                             _jsonSerializerOptions
-                        )
-                    };
+                        );
 
-                    meaningModel.Translations.Add(translationModel);
-                    lexemeModel.Meanings.Add(meaningModel);
+                    var translationModel = meaningModel.Translations
+                        .Where(e => e.Text == sense.Gloss.Text)
+                        //.Where(e => e.OriginatedFrom == translationOriginatedFrom)
+                        .FirstOrDefault();
+
+                    if (translationModel is null)
+                    {
+                        meaningModel.Translations.Add(new Lexicon_Translation
+                        {
+                            Id = Guid.NewGuid(),
+                            Text = sense.Gloss.Text,
+                            MeaningId = meaningModel.Id,
+                            OriginatedFrom = translationOriginatedFrom
+                        });
+                    }
                 }
 
-                if (lexemeModel.Meanings.Any())
+                if (lexemeModelCreated && 
+                    lexemeModel.Meanings.Any(e => e.Translations.Any()))
                 {
                     lexiconModel.Lexemes.Add(lexemeModel);
                 }
@@ -209,22 +239,44 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
                     _logger.LogInformation($"Unable to load Biblical Term into Lexicon model due to SuggestLanguages returning null for language: '{term.Language}'");
                     continue;
                 }
+				
+                var lexemeModel = lexiconModel.Lexemes
+                    .Where(e => e.Language == termLanguageInfo.LanguageTag)
+                    .Where(e => e.Type == null)
+                    .Where(e => e.Lemma == term.Id || e.Forms.Select(f => f.Text).Contains(term.Id))
+                    .FirstOrDefault();
 
-                var lexemeModel = new Lexicon_Lexeme
+                var lexemeModelCreated = false;
+                if (lexemeModel is null)
                 {
-                    Id = Guid.NewGuid(),
-                    Lemma = term.Id,
-                    Type = null,  // FIXME:  does this have a type?
-                    Language = termLanguageInfo.LanguageTag,
-                };
+                    lexemeModel = new Lexicon_Lexeme
+                    {
+                        Id = Guid.NewGuid(),
+                        Lemma = term.Id,
+                        Type = null,  // FIXME:  does this have a type?
+                        Language = termLanguageInfo.LanguageTag,
+                    };
 
-                var meaningModel = new Lexicon_Meaning
+                    lexemeModelCreated = true;
+                }
+
+                var meaningModel = lexemeModel.Meanings
+                    .Where(e => e.Language == "en")
+                    .Where(e => e.Text == string.Empty)
+                    .FirstOrDefault();
+
+                if (meaningModel is null)
                 {
-                    Id = Guid.NewGuid(),
-                    Text = string.Empty, // FIXME?
-                    Language = "en",  // Per spec:  the Gloss element is always English
-                    LexemeId = lexemeModel.Id
-                };
+                    meaningModel = new Lexicon_Meaning
+                    {
+                        Id = Guid.NewGuid(),
+                        Text = string.Empty, // FIXME?
+                        Language = "en",  // Per spec:  the Gloss element is always English
+                        LexemeId = lexemeModel.Id
+                    };
+
+                    lexemeModel.Meanings.Add(meaningModel);
+                }
 
                 term.Gloss.Split(';')
                     .Select(e => e.Trim())
@@ -232,22 +284,30 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
                     .ToList()
                     .ForEach(e =>
                 {
-                    var translationModel = new Lexicon_Translation
-                    {
-                        Id = Guid.NewGuid(),
-                        Text = e,
-                        MeaningId = meaningModel.Id,
-                        OriginatedFrom = JsonSerializer.Serialize(
+                    var translationOriginatedFrom = JsonSerializer.Serialize(
                             OriginatedFromBiblicalTerm.FromBiblicalTermFileModel(term),
                             _jsonSerializerOptions
-                        )
-                    };
+                        );
 
-                    meaningModel.Translations.Add(translationModel);
-                    lexemeModel.Meanings.Add(meaningModel);
+                    var translationModel = meaningModel.Translations
+                        .Where(t => t.Text == e)
+                        //.Where(t => t.OriginatedFrom == translationOriginatedFrom)
+                        .FirstOrDefault();
+
+                    if (translationModel is null)
+                    {
+                        meaningModel.Translations.Add(new Lexicon_Translation
+                        {
+                            Id = Guid.NewGuid(),
+                            Text = e,
+                            MeaningId = meaningModel.Id,
+                            OriginatedFrom = translationOriginatedFrom
+                        });
+                    }
                 });
 
-                if (lexemeModel.Meanings.Any())
+                if (lexemeModelCreated && 
+                    lexemeModel.Meanings.Any(e => e.Translations.Any()))
                 {
                     lexiconModel.Lexemes.Add(lexemeModel);
                     biblicalTermsById.Add(term.Id, term);
@@ -275,22 +335,44 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
                     _logger.LogInformation($"Unable to load Term Rendering into Lexicon model due to SuggestLanguages returning null for language: '{biblicalTerm.Language}'");
                     continue;
                 }
+				
+                var lexemeModel = lexiconModel.Lexemes
+                    .Where(e => e.Language == termLanguageInfo.LanguageTag)
+                    .Where(e => e.Type == null)
+                    .Where(e => e.Lemma == termRendering.Id || e.Forms.Select(f => f.Text).Contains(termRendering.Id))
+                    .FirstOrDefault();
 
-                var lexemeModel = new Lexicon_Lexeme
+                var lexemeModelCreated = false;
+                if (lexemeModel is null)
                 {
-                    Id = Guid.NewGuid(),
-                    Lemma = termRendering.Id,
-                    Type = null,   // FIXME:  does this have a type?
-                    Language = termLanguageInfo.LanguageTag,
-                };
+                    lexemeModel = new Lexicon_Lexeme
+                    {
+                        Id = Guid.NewGuid(),
+                        Lemma = termRendering.Id,
+                        Type = null,   // FIXME:  does this have a type?
+                        Language = termLanguageInfo.LanguageTag,
+                    };
 
-                var meaningModel = new Lexicon_Meaning
+                    lexemeModelCreated = true;
+                }
+
+                var meaningModel = lexemeModel.Meanings
+                    .Where(e => e.Language == meaningLanguage)
+                    .Where(e => e.Text == string.Empty)
+                    .FirstOrDefault();
+
+                if (meaningModel is null)
                 {
-                    Id = Guid.NewGuid(),
-                    Text = string.Empty, // FIXME?
-                    Language = meaningLanguage,  // Per spec:  term renderings are in the project language
-                    LexemeId = lexemeModel.Id
-                };
+                    meaningModel = new Lexicon_Meaning
+                    {
+                        Id = Guid.NewGuid(),
+                        Text = string.Empty, // FIXME?
+                        Language = meaningLanguage,  // Per spec:  term renderings are in the project language
+                        LexemeId = lexemeModel.Id
+                    };
+
+                    lexemeModel.Meanings.Add(meaningModel);
+                }
 
                 termRendering.Renderings.Split(new string[] { "||" }, StringSplitOptions.None)
                     .Select(e => e.Trim())
@@ -298,22 +380,30 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Lexicon
                     .ToList()
                     .ForEach(e =>
                 {
-                    var translationModel = new Lexicon_Translation
-                    {
-                        Id = Guid.NewGuid(),
-                        Text = e,
-                        MeaningId = meaningModel.Id,
-                        OriginatedFrom = JsonSerializer.Serialize(
+                    var translationOriginatedFrom = JsonSerializer.Serialize(
                             OriginatedFromTermRendering.FromTermRenderingFileModel(termRendering),
                             _jsonSerializerOptions
-                        )
-                    };
+                        );
 
-                    meaningModel.Translations.Add(translationModel);
-                    lexemeModel.Meanings.Add(meaningModel);
+                    var translationModel = meaningModel.Translations
+                        .Where(t => t.Text == e)
+                        //.Where(t => t.OriginatedFrom == translationOriginatedFrom)
+                        .FirstOrDefault();
+
+                    if (translationModel is null)
+                    {
+                        meaningModel.Translations.Add(new Lexicon_Translation
+                        {
+                            Id = Guid.NewGuid(),
+                            Text = e,
+                            MeaningId = meaningModel.Id,
+                            OriginatedFrom = translationOriginatedFrom
+                        });
+                    }
                 });
 
-                if (lexemeModel.Meanings.Any())
+                if (lexemeModelCreated && 
+                    lexemeModel.Meanings.Any(e => e.Translations.Any()))
                 {
                     lexiconModel.Lexemes.Add(lexemeModel);
                 }

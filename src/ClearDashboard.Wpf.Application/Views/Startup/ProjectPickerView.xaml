@@ -713,6 +713,22 @@
                     Foreground="{StaticResource PrimaryHueLightBrush}"
                     Kind="Cog" />
             </Button>
+            <Button
+                Padding="-5"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                cal:Message.Attach="[Event Click]=[Action ShowAccountInfoWindow()]"
+                Background="Transparent"
+                BorderBrush="Transparent">
+                <iconPacks:PackIconMaterial
+                    Width="30"
+                    Height="30"
+                    Margin="5,5,20,5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                    Kind="AccountCircle" />
+            </Button>
         </StackPanel>
         <!--<StackPanel
             Grid.Row="2"

@@ -34,10 +34,25 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 
             try
             {
-                // ---------------------------------------------------------------------------------
-                // Create / Update Lexemes and children:
-                // ---------------------------------------------------------------------------------
-                foreach (var lexeme in request.Lexicon.Lexemes)
+                var duplicateLexemes = request.Lexicon.Lexemes
+                    .GroupBy(e => new { e.Lemma, e.Language, e.Type })
+                    .Where(g => g.Count() > 1)
+                    .Select(g => $"Lemma: '{g.Key.Lemma}' Type: '{g.Key.Type}' Language: '{g.Key.Language}'")
+                    .ToList();
+
+                if (duplicateLexemes.Any())
+                {
+					return new RequestResult<IEnumerable<IId>>
+					(
+						success: false,
+						message: $"Duplicate lexemes in data passed to SaveLexiconCommandHandler:  {string.Join(", ", duplicateLexemes)}"
+					);
+				}
+
+				// ---------------------------------------------------------------------------------
+				// Create / Update Lexemes and children:
+				// ---------------------------------------------------------------------------------
+				foreach (var lexeme in request.Lexicon.Lexemes)
                 {
                     // ---------------------------------------------------------------------------------
                     // Create / Update Lexeme:
@@ -56,7 +71,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                     // ---------------------------------------------------------------------------------
                     // Create and Update Lexeme Forms:
                     // ---------------------------------------------------------------------------------
-                    foreach (var form in lexeme.Forms)
+                    foreach (var form in lexeme.Forms.Where(e => !e.ExcludeFromSave))
                     {
                         if (!form.IsInDatabase)
                         {
@@ -88,10 +103,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                         // ---------------------------------------------------------------------------------
                         if (!meaning.IsInDatabase)
                         {
-                            createdIIds.Add(
-                                LexiconDataBuilder.CreateMeaningModel(ProjectDbContext, meaning, lexeme.LexemeId, currentDateTime, currentUserId)
-                            );
-                        }
+							createdIIds.Add(
+								LexiconDataBuilder.CreateMeaningModel(ProjectDbContext, meaning, lexeme.LexemeId, currentDateTime, currentUserId)
+							);
+						}
                         else if (meaning.IsDirty)
                         {
                             LexiconDataBuilder.UpdateMeaningModel(ProjectDbContext, meaning, lexeme.LexemeId);
@@ -100,7 +115,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                         // ---------------------------------------------------------------------------------
                         // Create / Update Lexeme Meaning Translations:
                         // ---------------------------------------------------------------------------------
-                        foreach (var translation in meaning.Translations)
+                        foreach (var translation in meaning.Translations.Where(e => !e.ExcludeFromSave))
                         {
                             if (!translation.IsInDatabase)
                             {

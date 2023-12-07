@@ -1,14 +1,17 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Resources;
+using System.Text.Json;
+//using System.Text.Json.Serialization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
 using System.Xaml;
-using Caliburn.Micro;
 
 namespace ClearDashboard.Wpf.Application.Helpers
 {
@@ -20,34 +23,91 @@ namespace ClearDashboard.Wpf.Application.Helpers
     //
     public class TranslationSource : INotifyPropertyChanged
     {
-        private readonly Dictionary<string, ResourceManager> resourceManagerDictionary = new Dictionary<string, ResourceManager>();
+        private readonly Dictionary<string, ResourceManager> _resourceManagerDictionary = new();
+
+       
+        public TranslationSource()
+        {
+            _tempStrings = LoadJsonFromFilePath("./helpers/temp-localization.json");
+        }
+
+        private readonly Dictionary<string, string> _tempStrings;
+        //private Dictionary<string, string> TempStrings = new()
+        //{
+        //    { "LexiconEdit_And", "And" },
+        //    { "LexiconEdit_FindAll", "Find All" },
+        //    { "LexiconEdit_Forms", "Forms" },
+        //    { "LexiconEdit_Fully", "Fully" },
+        //    { "LexiconEdit_FullyMatching", "Fully Matching" },
+        //    { "LexiconEdit_Lexeme", "Lexeme" },
+        //    { "LexiconEdit_Matching", "Matching" },
+        //    { "LexiconEdit_Or", "Or" },
+        //    { "LexiconEdit_Partially", "Partially" },
+        //    { "LexiconEdit_Translation", "Translation" },
+        //};
+
+        //Generate a method which loads a json file into a Dictionary<string, string> using System.Text.Json
+
+        private Dictionary<string, string> LoadJsonFromFilePath(string filePath)
+        { 
+            var dictionary = new Dictionary<string, string>();
+#if DEBUG
+            if (File.Exists(filePath))
+            {
+
+                var jsonString = File.ReadAllText(filePath);
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                };
+                dictionary = string.IsNullOrEmpty(jsonString) ?  new Dictionary<string, string>()
+                    : JsonSerializer.Deserialize<Dictionary<string, string>>(jsonString, options);
+
+                return dictionary ?? new Dictionary<string, string>();
+            }
+#endif
+
+            return dictionary;
+            
+        }
+
 
         public string this[string key]
         {
             get
             {
-                if (Thread.CurrentThread.CurrentUICulture.Name != language)
+                if (Thread.CurrentThread.CurrentUICulture.Name != _language)
                 {
-                    Language = language;
+                    Language = _language;
                 }
 
                 var tuple = SplitName(key);
-                string translation = null;
-                if (resourceManagerDictionary.ContainsKey(tuple.Item1))
-                    translation = resourceManagerDictionary[tuple.Item1].GetString(tuple.Item2, Thread.CurrentThread.CurrentUICulture);
+                string? translation = null;
+                if (_resourceManagerDictionary.TryGetValue(tuple.Item1, out var value))
+                {
+                    translation = value
+                        .GetString(tuple.Item2, Thread.CurrentThread.CurrentUICulture);
+                }
+
+                if (translation == null && _tempStrings.TryGetValue(tuple.Item1, out var tempTranslation))
+                {
+                    translation = tempTranslation;
+                }
+
                 return translation ?? key;
             }
         }
 
-        private string language = Thread.CurrentThread.CurrentUICulture.Name;
+        private string _language = Thread.CurrentThread.CurrentUICulture.Name;
+
         public string Language
         {
-            get => language;
+            get => _language;
             set
             {
-                if (language != null)
+                if (_language != null)
                 {
-                    language = value;
+                    _language = value;
 
                     var cultureInfo = new CultureInfo(value);
                     Thread.CurrentThread.CurrentUICulture = cultureInfo;
@@ -58,23 +118,22 @@ namespace ClearDashboard.Wpf.Application.Helpers
         }
 
         // WPF bindings register PropertyChanged event if the object supports it and update themselves when it is raised
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public void AddResourceManager(ResourceManager resourceManager)
         {
-            if (!resourceManagerDictionary.ContainsKey(resourceManager.BaseName))
-            {
-                resourceManagerDictionary.Add(resourceManager.BaseName, resourceManager);
-            }
+            _resourceManagerDictionary.TryAdd(resourceManager.BaseName, resourceManager);
         }
 
         public static Tuple<string, string> SplitName(string local)
         {
             var indexOfLastPeriod = local.LastIndexOf(".", StringComparison.Ordinal);
-            var tuple = new Tuple<string, string>(local.Substring(0, indexOfLastPeriod), local.Substring(indexOfLastPeriod + 1));
+            var tuple = new Tuple<string, string>(local.Substring(0, indexOfLastPeriod),
+                local.Substring(indexOfLastPeriod + 1));
             return tuple;
         }
     }
+
 
     public class Translation : DependencyObject
     {
@@ -94,7 +153,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
 
     public class LocalizationExtension : MarkupExtension
     {
-        private TranslationSource TranslationSource { get; set; }
+        private TranslationSource? TranslationSource { get; set; }
         public string StringName { get; }
 
         public LocalizationExtension(string stringName)
@@ -102,7 +161,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
             StringName = stringName;
         }
 
-        private ResourceManager GetResourceManager(object control)
+        private ResourceManager? GetResourceManager(object? control)
         {
             if (control is DependencyObject dependencyObject)
             {
@@ -113,7 +172,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 {
                     if (localValue is ResourceManager resourceManager)
                     {
-                        TranslationSource.AddResourceManager(resourceManager);
+                        TranslationSource?.AddResourceManager(resourceManager);
                         return resourceManager;
                     }
                 }
@@ -137,7 +196,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
             if (string.IsNullOrEmpty(baseName))
             {
                 // rootObject is the root control of the visual tree (the top parent of targetObject)
-                var rootObject = (serviceProvider as IRootObjectProvider)?.RootObject;
+                var rootObject = ((IRootObjectProvider)serviceProvider)?.RootObject;
                 baseName = GetResourceManager(rootObject)?.BaseName ?? string.Empty;
             }
 

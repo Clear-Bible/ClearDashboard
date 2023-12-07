@@ -1031,7 +1031,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public void Copy(object sender, NoteEventArgs e)
         {
-            TokenDisplayViewModelCollection sortedTokens = new TokenDisplayViewModelCollection(e.SelectedTokens.OrderBy(x => x.AlignmentToken.Position));
+            TokenDisplayViewModelCollection sortedTokens = new TokenDisplayViewModelCollection(e.SelectedTokens.OrderBy(x => x.Token.Position));
             sortedTokens.Refresh();
             var surfaceText = sortedTokens.CombinedSurfaceText.Replace(",", "");
             Clipboard.SetText(surfaceText);
