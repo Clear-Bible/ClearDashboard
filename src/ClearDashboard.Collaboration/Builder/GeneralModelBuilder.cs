@@ -2,6 +2,8 @@
 using System.Data.Entity.Core;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
+using ClearDashboard.Collaboration.DifferenceModel;
 using ClearDashboard.Collaboration.Exceptions;
 using ClearDashboard.Collaboration.Model;
 using ClearDashboard.DataAccessLayer.Data;
@@ -9,6 +11,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Builder;
@@ -20,11 +23,11 @@ namespace ClearDashboard.Collaboration.Builder;
 ///     - Serialize/deserialize transferable form
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> where T: Models.IdentifiableEntity
+public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> where T : Models.IdentifiableEntity
 {
-    public override string IdentityKey => typeof(T).GetIdentityProperty()!.Name;
-    public override IEnumerable<PropertyInfo> PropertyInfos => typeof(T).GetProperties();
-    public override IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes => new Dictionary<string, Type>();
+    public override string IdentityKey { get; init; } = typeof(T).GetIdentityProperty()!.Name;
+    public override IEnumerable<PropertyInfo> PropertyInfos { get; init; } = typeof(T).GetProperties();
+    public override IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes { get; init; } = new Dictionary<string, Type>();
 
     public virtual IEnumerable<GeneralModel<T>> BuildModelSnapshots(BuilderContext builderContext) =>
         throw new NotImplementedException($"{nameof(BuildModelSnapshots)} for model type {typeof(T).ShortDisplayName()}");
@@ -163,7 +166,7 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
         return modelProperties;
     }
 
-    internal static void AddPropertyValuesToGeneralModel<E>(GeneralModel<E> generalModel, IReadOnlyDictionary<string, (Type type, object? value)> modelPropertiesTypes)
+    internal static void AddPropertyValuesToGeneralModel<E>(GeneralModel<E> generalModel, IDictionary<string, (Type type, object? value)> modelPropertiesTypes)
         where E : Models.IdentifiableEntity
     {
         foreach (var kvp in modelPropertiesTypes)
@@ -200,8 +203,59 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
         }
     }
 
-    internal static string BuildPropertyRefName(string propertyName = "") => $"{propertyName}Ref";
-    internal static string BuildPropertyRefValue(string modelName, int index) => $"{modelName}_{index}";
+    internal static string HashPartsToRef(string refPrefixNoUnderscore, params string?[] parts)
+    {
+        var joinedParts = string.Join('_', parts.Select(e => string.IsNullOrEmpty(e) ? string.Empty : e));
+        return $"{refPrefixNoUnderscore}_{joinedParts.ToMD5String()}";
+    }
+
+    internal static string EncodePartsToRef(string refPrefixNoUnderscore, params string?[] parts)
+    {
+        var joinedParts = string.Join('_', parts.Select(e => string.IsNullOrEmpty(e) ? string.Empty : e));
+        var bytes = Encoding.UTF8.GetBytes(joinedParts);
+        return $"{refPrefixNoUnderscore}_{Convert.ToBase64String(bytes)}";
+    }
+
+    internal static string[] DecodeRefToParts(string refPrefixNoUnderscore, string refValue, int expectedNumberOfParts)
+    {
+        var base64String = Regex.Replace(refValue, $@"^{refPrefixNoUnderscore}_", string.Empty);
+        var decodedString = Encoding.UTF8.GetString(Convert.FromBase64String(base64String));
+
+        var parts = decodedString.Split('_');
+
+        if (parts.Length != expectedNumberOfParts)
+        {
+            throw new PropertyResolutionException($"Unable to decode {refPrefixNoUnderscore} Ref {refValue}");
+        }
+
+        return parts;
+    }
+
+    internal static GeneralModel<E> BuildRefModelSnapshot<E>(E dbModel, string refValue, string? idForFilesystem, IEnumerable<(string refPrefix, string? refValue, bool removeId)>? additionalRefValues, BuilderContext builderContext)
+        where E : IdentifiableEntity
+    {
+        var modelSnapshotProperties = ExtractUsingModelRefs(
+            dbModel,
+            builderContext,
+            builderContext.CommonIgnoreProperties.Union(new List<string>() { "Id" }));
+
+        if (additionalRefValues is not null && additionalRefValues.Any())
+        {
+            foreach (var rv in additionalRefValues)
+            {
+                if (rv.removeId)
+                    modelSnapshotProperties.Remove(rv.refPrefix + "Id");
+
+                if (rv.refValue is not null)
+                    modelSnapshotProperties.Add(BuildPropertyRefName(rv.refPrefix), (typeof(string), rv.refValue));
+            }
+        }
+
+        var snapshot = new GeneralModel<E>(BuildPropertyRefName(), refValue, idForFilesystem);
+        AddPropertyValuesToGeneralModel(snapshot, modelSnapshotProperties);
+
+        return snapshot;
+    }
 
     public static IModelBuilder<T> GetModelBuilder()
     {
@@ -234,38 +288,107 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
 
         throw new ArgumentException($"Unable to build GeneralModel<{typeof(T).ShortDisplayName()}> due to missing value for IdentityKey '{IdentityKey}'");
     }
+
+    public virtual void UpdateModelSnapshotFormat(ProjectSnapshot projectSnapshot, Dictionary<Type, Dictionary<Guid, Dictionary<string, string>>> updateMappings)
+    {
+        // NOOP
+    }
 }
 
 public abstract class GeneralModelBuilder : IModelBuilder
 {
-    public abstract string IdentityKey { get; }
-    public abstract IEnumerable<PropertyInfo> PropertyInfos { get; }
-    public abstract IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes { get; }
-    public virtual IEnumerable<string> NoSerializePropertyNames => Enumerable.Empty<string>();
+    public const string REF = "Ref";
+
+    public abstract string IdentityKey { get; init; }
+    public abstract IEnumerable<PropertyInfo> PropertyInfos { get; init; }
+    public abstract IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes { get; init; }
+    public virtual IEnumerable<string> NoSerializePropertyNames { get; init; } = Enumerable.Empty<string>();
 
     public abstract GeneralModel BuildGeneralModel(Dictionary<string, (Type type, object? value)> modelPropertiesTypes);
+
+    public static string BuildPropertyRefName(string propertyName = "") => $"{propertyName}{REF}";
+    //internal static string BuildPropertyRefValue(string modelName, int index) => $"{modelName}_{index}";
 
     public static IModelBuilder<T> GetModelBuilder<T>() where T : Models.IdentifiableEntity
     {
         return (IModelBuilder<T>)GetGeneralModelBuilder(typeof(GeneralModel<T>));
     }
 
+    protected static IReadOnlyDictionary<string, Type> ToPropertyRefNamesTypes(params string[] refPrefixes) =>
+        refPrefixes.ToDictionary(e => BuildPropertyRefName(e), e => typeof(string));
+
     public static IModelBuilder GetGeneralModelBuilder(Type generalModelType)
     {
         return generalModelType switch
         {
-            //Type modelType when modelType == typeof(GeneralModel<Models.Project>) => new ProjectBuilder(),
-            //Type modelType when modelType == typeof(GeneralModel<Models.AlignmentSet>) => new AlignmentSetBuilder(),
-            //Type modelType when modelType == typeof(GeneralModel<Models.Alignment>) => new AlignmentBuilder(),
-            //Type modelType when modelType == typeof(GeneralModel<Models.Corpus>) => new CorpusBuilder(),
-            //Type modelType when modelType == typeof(GeneralModel<Models.Label>) => new LabelBuilder(),
-            //Type modelType when modelType == typeof(GeneralModel<Models.ParallelCorpus>) => new ParallelCorpusBuilder(),
-            //Type modelType when modelType == typeof(GeneralModel<Models.TokenizedCorpus>) => new TokenizedCorpusBuilder(),
-            //Type modelType when modelType == typeof(GeneralModel<Models.TranslationSet>) => new TranslationSetBuilder(),
+            Type modelType when modelType == typeof(GeneralModel<Models.LabelGroupAssociation>) => 
+                new GeneralModelBuilder<Models.LabelGroupAssociation>
+                {
+                    IdentityKey = REF,
+                    AddedPropertyNamesTypes = ToPropertyRefNamesTypes(
+                        string.Empty,  // Plain "Ref"
+                        LabelGroupBuilder.LABELGROUP_REF_PREFIX,
+                        LabelBuilder.LABEL_REF_PREFIX
+                    )
+                },
+            Type modelType when modelType == typeof(GeneralModel<Models.LabelNoteAssociation>) => 
+                new GeneralModelBuilder<Models.LabelNoteAssociation>
+                {
+                    IdentityKey = REF,
+                    AddedPropertyNamesTypes = ToPropertyRefNamesTypes(
+                        string.Empty,  // Plain "Ref"
+                        LabelBuilder.LABEL_REF_PREFIX
+                    )
+                },
+            Type modelType when modelType == typeof(GeneralModel<Models.NoteUserSeenAssociation>) => 
+                new GeneralModelBuilder<Models.NoteUserSeenAssociation>
+                {
+                    IdentityKey = REF,
+                    AddedPropertyNamesTypes = ToPropertyRefNamesTypes(
+                        string.Empty   // Plain "Ref"
+                    )
+                },
             Type modelType when modelType == typeof(GeneralModel<Models.Lexicon_Lexeme>) => new LexiconBuilder(),
+            Type modelType when modelType == typeof(GeneralModel<Models.Lexicon_Meaning>) => 
+                new GeneralModelBuilder<Models.Lexicon_Meaning>
+                {
+                    IdentityKey = REF,
+                    AddedPropertyNamesTypes = ToPropertyRefNamesTypes(
+                        string.Empty,  // Plain "Ref"
+                        LexiconBuilder.LEXEME_REF_PREFIX
+                    )
+                },
+            Type modelType when modelType == typeof(GeneralModel<Models.Lexicon_Form>) => 
+                new GeneralModelBuilder<Models.Lexicon_Form>
+                {
+                    IdentityKey = REF,
+                    AddedPropertyNamesTypes = ToPropertyRefNamesTypes(
+                        string.Empty,  // Plain "Ref"
+                        LexiconBuilder.LEXEME_REF_PREFIX
+                    )
+                },
+            Type modelType when modelType == typeof(GeneralModel<Models.Lexicon_Translation>) => 
+                new GeneralModelBuilder<Models.Lexicon_Translation>
+                {
+                    IdentityKey = REF,
+                    AddedPropertyNamesTypes = ToPropertyRefNamesTypes(
+                        string.Empty,  // Plain "Ref"
+                        LexiconBuilder.LEXEME_REF_PREFIX,
+                        LexiconBuilder.MEANING_REF_PREFIX
+                    )
+                },
             Type modelType when modelType == typeof(GeneralModel<Models.Lexicon_SemanticDomain>) => new SemanticDomainBuilder(),
-            Type modelType when modelType == typeof(GeneralModel<Models.TokenComposite>) => new TokenCompositeBuilder(),
-            Type modelType when modelType == typeof(GeneralModel<Models.Token>) => new TokenBuilder(),
+            Type modelType when modelType == typeof(GeneralModel<Models.Lexicon_SemanticDomainMeaningAssociation>) =>
+                new GeneralModelBuilder<Models.Lexicon_SemanticDomainMeaningAssociation>
+                {
+                    IdentityKey = REF,
+                    AddedPropertyNamesTypes = ToPropertyRefNamesTypes(
+                        string.Empty,  // Plain "Ref"
+                        SemanticDomainBuilder.SEMANTIC_DOMAIN_REF_PREFIX,
+                        LexiconBuilder.MEANING_REF_PREFIX,
+                        LexiconBuilder.LEXEME_REF_PREFIX
+                    )
+                },
             _ => BuildDefaultModelBuilder(generalModelType)
 //            _ => throw new ArgumentOutOfRangeException(generalModelType.ShortDisplayName(), $"No IModelBuilder found for type argument")
 

@@ -46,7 +46,7 @@ public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
                         .FirstOrDefaultAsync();
 
                     logger.LogDebug($"Converted Token TokenizedCorpusId ('{tokenizedCorpusId}') / VerseRowLocation ('{verseRowLocation}') to VerseRowId ('{verseRowId}')");
-                    return (verseRowId != Guid.Empty) ? verseRowId : null;
+                    return (verseRowId != default) ? verseRowId : null;
                 }
                 else
                 {
@@ -64,7 +64,8 @@ public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
                     throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.Token>");
                 }
 
-                return await ResolveTokenId((IModelSnapshot<Models.Token>)modelSnapshot, dbConnection, cache, logger);
+                var tokenId = await ResolveTokenId((IModelSnapshot<Models.Token>)modelSnapshot, dbConnection, cache, logger);
+                return (tokenId != default) ? tokenId : null;
             });
 
         mergeContext.MergeBehavior.AddIdPropertyNameMapping(
@@ -122,8 +123,8 @@ public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
 
                 if (tokenResult == default)
                 {
-                    tokenId = Guid.NewGuid();
-                    logger.LogDebug($"No Token Id match found for TokenizedCorpusId ('{tokenizedCorpusId}') / OriginTokenLocation ('{originTokenLocation}') / Index ({index}).  Using: '{tokenId}'");
+                    tokenId = tokenResult.Id;
+                    logger.LogDebug($"No Token Id match found for TokenizedCorpusId ('{tokenizedCorpusId}') / OriginTokenLocation ('{originTokenLocation}') / Index ({index}).  ");
                 }
                 else
                 {
@@ -154,8 +155,8 @@ public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
 
                 if (tokenResult == default)
                 {
-                    tokenId = Guid.NewGuid();
-                    logger.LogDebug($"No Token Id match found for TokenizedCorpusId ('{tokenizedCorpusId}') / EngineTokenId ('{engineTokenId}').  Using: '{tokenId}'");
+                    tokenId = tokenResult.Id;
+                    logger.LogDebug($"No Token Id match found for TokenizedCorpusId ('{tokenizedCorpusId}') / EngineTokenId ('{engineTokenId}').");
                 }
                 else
                 {
@@ -187,6 +188,8 @@ public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
             async (DbConnection dbConnection, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
             {
                 tokenId = await ResolveTokenId(itemToDelete, dbConnection, cache, logger);
+                if (tokenId == default)
+                    return;
 
                 var alignmentSetDenormalizationTasks = await BuildDenormalizationTasksForTokenAlignments(
                     dbConnection, 

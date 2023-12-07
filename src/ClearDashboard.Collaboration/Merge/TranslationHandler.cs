@@ -93,6 +93,42 @@ public class TranslationHandler : DefaultMergeHandler<IModelSnapshot<Models.Tran
                 }
             });
 
+        mergeContext.MergeBehavior.AddEntityValueResolver(
+            (typeof(Models.Translation), nameof(Models.Translation.LexiconTranslationId)),
+            entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
+
+                if (modelSnapshot is not IModelSnapshot<Models.Translation>)
+                {
+                    throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.Translation>");
+                }
+
+                var refName = TranslationBuilder.BuildPropertyRefName(TranslationBuilder.LEXICONTRANSLATION_REF_PREFIX);
+                if (modelSnapshot.TryGetStringPropertyValue(refName, out var lexiconTranslationRef))
+                {
+                    var (lexemeLemma, lexemeLanguage, lexemeType, meaningText, meaningLanguage, translationText) =
+                        TranslationBuilder.DecodeLexiconTranslationRef(lexiconTranslationRef);
+
+                    var lexemeId = await LexiconHandler.ValuesToLexemeId(lexemeLemma, lexemeLanguage, lexemeType, projectDbContext, cache, logger);
+                    if (lexemeId == default)
+                        throw new PropertyResolutionException($"{lexiconTranslationRef} cannot be resolved to a Lexicon_Lexeme");
+
+                    var meaningId = await LexiconHandler.ValuesToMeaningId(meaningText, meaningLanguage, lexemeId, projectDbContext, cache, logger);
+                    if (meaningId == default)
+                        throw new PropertyResolutionException($"{lexiconTranslationRef} cannot be resolved to a Lexicon_Meaning");
+
+                    var translationId = await LexiconHandler.ValuesToTranslationId(translationText, meaningId, projectDbContext, logger);
+                    if (translationId == default)
+                        throw new PropertyResolutionException($"{lexiconTranslationRef} cannot be resolved to a Lexicon_Translation");
+
+                    logger.LogDebug($"Resolved {lexiconTranslationRef} to Id ('{translationId}')");
+                    return translationId;
+                }
+                else
+                {
+                    return null;
+                }
+            });
+
         mergeContext.MergeBehavior.AddIdPropertyNameMapping(
             (typeof(Models.Translation), "Ref"),
             new[] { nameof(Models.Translation.Id) });
@@ -104,6 +140,10 @@ public class TranslationHandler : DefaultMergeHandler<IModelSnapshot<Models.Tran
         mergeContext.MergeBehavior.AddPropertyNameMapping(
             (typeof(Models.Translation), "SourceTokenLocation"),
             new[] { nameof(Models.Translation.SourceTokenComponentId) });
+
+        mergeContext.MergeBehavior.AddPropertyNameMapping(
+            (typeof(Models.Translation), TranslationBuilder.BuildPropertyRefName(TranslationBuilder.LEXICONTRANSLATION_REF_PREFIX)),
+            new[] { nameof(Models.Translation.LexiconTranslationId) });
     }
 }
 

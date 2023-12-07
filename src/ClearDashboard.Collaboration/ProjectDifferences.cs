@@ -31,6 +31,7 @@ public class ProjectDifferences
     public IListDifference<IModelSnapshot<Models.TranslationSet>> TranslationSets { get; private set; }
     public IListDifference<IModelSnapshot<Models.Note>> Notes { get; private set; }
     public IListDifference<IModelSnapshot<Models.Label>> Labels { get; private set; }
+    public IListDifference<IModelSnapshot<Models.LabelGroup>> LabelGroups { get; private set; }
 
     public bool HasDifferences { get; init; }
 
@@ -69,6 +70,9 @@ public class ProjectDifferences
         Labels = snapshot1.Labels.GetListDifference(snapshot2.Labels);
         cancellationToken.ThrowIfCancellationRequested();
 
+        LabelGroups = snapshot1.LabelGroups.GetListDifference(snapshot2.LabelGroups);
+        cancellationToken.ThrowIfCancellationRequested();
+
         HasDifferences =
             Project.HasDifferences ||
             Users.HasDifferences ||
@@ -80,7 +84,8 @@ public class ProjectDifferences
             AlignmentSets.HasDifferences ||
             TranslationSets.HasDifferences ||
             Notes.HasDifferences ||
-            Labels.HasDifferences;
+            Labels.HasDifferences ||
+            LabelGroups.HasDifferences;
     }
 
     // For diagnostics:
@@ -136,5 +141,8 @@ public class ProjectDifferences
 
         var serializedLabelDifferences = JsonSerializer.Serialize(Labels, jsonSerializerOptions);
         File.WriteAllText(Path.Combine(path, "_LabelDiffs"), serializedLabelDifferences);
+
+        var serializedLabelGroupDifferences = JsonSerializer.Serialize(LabelGroups, jsonSerializerOptions);
+        File.WriteAllText(Path.Combine(path, "_LabelGroupDiffs"), serializedLabelGroupDifferences);
     }
 }

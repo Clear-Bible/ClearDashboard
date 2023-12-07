@@ -5,6 +5,8 @@ using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using ClearDashboard.Collaboration.Exceptions;
+using ClearDashboard.Collaboration.Builder;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Factory;
 
@@ -107,6 +109,16 @@ public class ProjectSnapshotFromFilesFactory
             {
                 projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.Corpus>(topLevelEntry, null, cancellationToken));
             }
+            else if (topLevelEntryName == topLevelEntityFolderNameMappings[typeof(Models.LabelGroup)])
+            {
+                projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.LabelGroup>(topLevelEntry,
+                    (IEnumerable<string> entityItems,
+                    GeneralModel<Models.LabelGroup> modelSnapshot) =>
+                    {
+                        AddGeneralModelChild<Models.LabelGroup, Models.LabelGroupAssociation>(entityItems, modelSnapshot, null, cancellationToken);
+                    },
+                    cancellationToken));
+            }
             else if (topLevelEntryName == topLevelEntityFolderNameMappings[typeof(Models.Label)])
             {
                 projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.Label>(topLevelEntry,
@@ -125,6 +137,7 @@ public class ProjectSnapshotFromFilesFactory
                     {
                         AddGeneralModelChild<Models.Note, Models.Note>(entityItems, modelSnapshot, null, cancellationToken);
                         AddGeneralModelChild<Models.Note, NoteModelRef>(entityItems, modelSnapshot, null, cancellationToken);
+                        AddGeneralModelChild<Models.Note, Models.NoteUserSeenAssociation>(entityItems, modelSnapshot, null, cancellationToken);
                     },
                     cancellationToken));
             }
@@ -200,6 +213,14 @@ public class ProjectSnapshotFromFilesFactory
             }
         }
 
+        // Any top level entity types for which there may be existing
+        // serializations in older formats that need to be updated:
+        var updateMappings = new Dictionary<Type, Dictionary<Guid, Dictionary<string, string>>>();
+
+        GeneralModelBuilder.GetModelBuilder<Models.Label>().UpdateModelSnapshotFormat(projectSnapshot, updateMappings);
+        GeneralModelBuilder.GetModelBuilder<Models.Lexicon_Lexeme>().UpdateModelSnapshotFormat(projectSnapshot, updateMappings);
+        GeneralModelBuilder.GetModelBuilder<Models.Lexicon_SemanticDomain>().UpdateModelSnapshotFormat(projectSnapshot, updateMappings);
+
         return projectSnapshot;
     }
 
@@ -225,7 +246,7 @@ public class ProjectSnapshotFromFilesFactory
         string topLevelEntry,
         AddGeneralModelChildDelegate<T>? addGeneralModelChildDelegate,
         CancellationToken cancellationToken)
-        where T : notnull
+        where T : IdentifiableEntity
     {
         var modelSnapshots = new List<GeneralModel<T>>();
 

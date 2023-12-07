@@ -14,13 +14,16 @@ public class TranslationBuilder : GeneralModelBuilder<Models.Translation>
     public const string SOURCE_TOKEN_LOCATION = "SourceTokenLocation";
     public const string BOOK_CHAPTER_LOCATION = "Location";
 
+    public const string LEXICONTRANSLATION_REF_PREFIX = "LexiconTr";
+
     public override string IdentityKey => BuildPropertyRefName();
     public override IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes =>
         new Dictionary<string, Type>()
         {
             { BuildPropertyRefName(), typeof(string) },
             { SOURCE_TOKEN_LOCATION, typeof(string) },
-            { BOOK_CHAPTER_LOCATION, typeof(string) }
+            { BOOK_CHAPTER_LOCATION, typeof(string) },
+            { BuildPropertyRefName(LEXICONTRANSLATION_REF_PREFIX), typeof(string) }
         };
 
     // We serialize this in groups where the AlignmentSetId is in the heading, so don't include it here:
@@ -31,6 +34,9 @@ public class TranslationBuilder : GeneralModelBuilder<Models.Translation>
         var translations = projectDbContext.Translations
             .Include(e => e.SourceTokenComponent!)
                 .ThenInclude(e => ((Models.TokenComposite)e).Tokens)
+            .Include(e => e.LexiconTranslation)
+                .ThenInclude(e => e!.Meaning)
+                    .ThenInclude(e => e!.Lexeme)
             .Where(e => e.TranslationSetId == translationSetId)
             .Where(e => e.Deleted == null)
             .ToList()
@@ -64,6 +70,26 @@ public class TranslationBuilder : GeneralModelBuilder<Models.Translation>
     {
         var modelProperties = GeneralModelBuilder<Models.Translation>.ExtractUsingModelRefs(translation.translation, builderContext, new List<string>() { "Id" });
 
+        var lexiconTranslationRefName = BuildPropertyRefName(LEXICONTRANSLATION_REF_PREFIX);
+        if (translation.translation.LexiconTranslation is not null)
+        {
+            var lexiconTranslationRef = CalculateLexiconTranslationRef(
+                translation.translation.LexiconTranslation!.Meaning!.Lexeme!.Lemma!,
+                translation.translation.LexiconTranslation!.Meaning!.Lexeme!.Language!,
+                translation.translation.LexiconTranslation!.Meaning!.Lexeme!.Type,
+                translation.translation.LexiconTranslation!.Meaning!.Text!,
+                translation.translation.LexiconTranslation!.Meaning!.Language!,
+                translation.translation.LexiconTranslation!.Text!);
+
+            modelProperties.Add(lexiconTranslationRefName,
+                (typeof(string), lexiconTranslationRef));
+        }
+        else
+        {
+            modelProperties.Add(lexiconTranslationRefName,
+                (typeof(string), null));
+        }
+
         // FIXME:  enhance GeneralModelBuilder to use propertyConverter delegates
         // so that it produce "SourceTokenLocation" itself
         // (it has no way of knowing that TranslationSet already specifies (via
@@ -71,6 +97,7 @@ public class TranslationBuilder : GeneralModelBuilder<Models.Translation>
         var sourceTokenComponentRef = modelProperties["SourceTokenComponentRef"];
 
         modelProperties.Remove("SourceTokenComponentRef");
+        modelProperties.Remove(nameof(Models.Translation.LexiconTranslationId));
 
         modelProperties.Add(SOURCE_TOKEN_LOCATION,
             (typeof(string), ((TokenRef)sourceTokenComponentRef.value!).TokenLocation));
@@ -84,9 +111,27 @@ public class TranslationBuilder : GeneralModelBuilder<Models.Translation>
         ).ToMD5String();
 
         var translationModelSnapshot = new GeneralModel<Models.Translation>(BuildPropertyRefName(), $"Translation_{identityPropertyValue}");
-        GeneralModelBuilder<Models.Translation>.AddPropertyValuesToGeneralModel(translationModelSnapshot, modelProperties);
+        AddPropertyValuesToGeneralModel(translationModelSnapshot, modelProperties);
 
         return translationModelSnapshot;
+    }
+
+    private static string CalculateLexiconTranslationRef(string lexemeLemma, string lexemeLanguage, string? lexemeType, string meaningText, string meaningLanguage, string translationText)
+    {
+        return EncodePartsToRef(LEXICONTRANSLATION_REF_PREFIX, lexemeLemma, lexemeLanguage, lexemeType, meaningText, meaningLanguage, translationText);
+    }
+
+    public static (string lexemeLemma, string lexemeLanguage, string? lexemeType, string meaningText, string meaningLanguage, string translationText) DecodeLexiconTranslationRef(string refValue)
+    {
+        var parts = DecodeRefToParts(LEXICONTRANSLATION_REF_PREFIX, refValue, 6);
+        return (
+            lexemeLemma: parts[0], 
+            lexemeLanguage: parts[1], 
+            lexemeType: string.IsNullOrEmpty(parts[2]) ? null : parts[2], 
+            meaningText: parts[3], 
+            meaningLanguage: parts[4], 
+            translationText: parts[5]
+        );
     }
 
     public static void SaveTranslations(

@@ -154,5 +154,26 @@ internal static class GeneralModelExtensions
         return tokenizer;
     }
 
+    internal static IEnumerable<string> ExtractAllTokenLocations(this IEnumerable<IModelSnapshot<DataAccessLayer.Models.Token>> tokenSnapshots)
+    {
+        var combined = new List<string>();
+        if (tokenSnapshots.Any())
+        {
+            foreach (var tokenSnapshot in tokenSnapshots)
+            {
+                if (tokenSnapshot.TryGetStringPropertyValue(nameof(DataAccessLayer.Models.Token.EngineTokenId), out var engineTokenId))
+                {
+                    combined.Add(engineTokenId);
+                }
+
+                if (tokenSnapshot.TryGetStringPropertyValue(nameof(DataAccessLayer.Models.Token.OriginTokenLocation), out var originTokenLocation))
+                {
+                    combined.Add(originTokenLocation!);
+                }
+            }
+        }
+
+        return combined;
+    }
 }
 

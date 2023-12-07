@@ -69,8 +69,29 @@ public class TokenizedCorpusBuilder : GeneralModelBuilder<Models.TokenizedCorpus
                 .AsModelSnapshotChildrenList());
         }
 
-        var tokenCompositeBuilder = TokenCompositeBuilder ?? new TokenCompositeBuilder();
-        var tokenCompositeTokens = tokenCompositeBuilder.GetTokenizedCorpusCompositeTokens(builderContext.ProjectDbContext, tokenizedCorpus.Id);
+        TokenCompositeBuilder ??= (TokenCompositeBuilder)GetModelBuilder<Models.TokenComposite>();
+        var tokenCompositeModelSnapshots = BuildTokenCompositeModelSnapshots(TokenCompositeBuilder, builderContext, tokenizedCorpus.Id);
+        if (tokenCompositeModelSnapshots is not null)
+        {
+            var compositeChildName = ProjectSnapshotFactoryCommon.childFolderNameMappings[typeof(Models.TokenComposite)].childName;
+            modelSnapshot.AddChild(compositeChildName, tokenCompositeModelSnapshots.AsModelSnapshotChildrenList());
+        }
+
+        TokenBuilder ??= (TokenBuilder)GetModelBuilder<Models.Token>();
+        var tokenModelSnapshots = BuildTokenModelSnapshots(TokenBuilder, builderContext, tokenizedCorpus.Id);
+        if (tokenModelSnapshots is not null)
+        {
+            var tokenChildName = ProjectSnapshotFactoryCommon.childFolderNameMappings[typeof(Models.Token)].childName;
+            modelSnapshot.AddChild(tokenChildName, tokenModelSnapshots.AsModelSnapshotChildrenList());
+        }
+
+        return modelSnapshot;
+    }
+
+    public static GeneralListModel<GeneralModel<Models.TokenComposite>>? BuildTokenCompositeModelSnapshots(TokenCompositeBuilder tokenCompositeBuilder, BuilderContext builderContext, Guid tokenizedCorpusId)
+    {
+        var tokenCompositeTokens = tokenCompositeBuilder.GetTokenizedCorpusCompositeTokens(builderContext.ProjectDbContext, tokenizedCorpusId);
+
         if (tokenCompositeTokens.Any())
         {
             var compositeModelSnapshots = new GeneralListModel<GeneralModel<Models.TokenComposite>>();
@@ -80,12 +101,19 @@ public class TokenizedCorpusBuilder : GeneralModelBuilder<Models.TokenizedCorpus
                 compositeModelSnapshots.Add(TokenCompositeBuilder.BuildModelSnapshot(TokenComposite, Tokens, builderContext));
             }
 
-            var compositeChildName = ProjectSnapshotFactoryCommon.childFolderNameMappings[typeof(Models.TokenComposite)].childName;
-            modelSnapshot.AddChild(compositeChildName, compositeModelSnapshots.AsModelSnapshotChildrenList());
+            return compositeModelSnapshots;
         }
 
-        var tokenBuilder = TokenBuilder ?? new TokenBuilder();
-        var tokens = tokenBuilder.GetTokenizedCorpusTokens(builderContext.ProjectDbContext, tokenizedCorpus.Id);
+        return null;
+    }
+
+    public static GeneralListModel<GeneralModel<Models.Token>>? BuildTokenModelSnapshots(TokenBuilder tokenBuilder, BuilderContext builderContext, Guid tokenizedCorpusId, IEnumerable<string>? engineTokenIdAdditions = null)
+    {
+        var tokens = tokenBuilder.GetTokenizedCorpusTokens(
+            builderContext.ProjectDbContext, 
+            tokenizedCorpusId, 
+            engineTokenIdAdditions);
+
         if (tokens.Any())
         {
             var tokenModelSnapshots = new GeneralListModel<GeneralModel<Models.Token>>();
@@ -95,10 +123,9 @@ public class TokenizedCorpusBuilder : GeneralModelBuilder<Models.TokenizedCorpus
                 tokenModelSnapshots.Add(TokenBuilder.BuildModelSnapshot(token, builderContext));
             }
 
-            var tokenChildName = ProjectSnapshotFactoryCommon.childFolderNameMappings[typeof(Models.Token)].childName;
-            modelSnapshot.AddChild(tokenChildName, tokenModelSnapshots.AsModelSnapshotChildrenList());
+            return tokenModelSnapshots;
         }
 
-        return modelSnapshot;
+        return null;
     }
 }

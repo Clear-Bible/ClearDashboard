@@ -31,13 +31,13 @@ namespace ClearDashboard.Collaboration.Model;
 public class GeneralModel<T> : GeneralModel, IModelSnapshot<T>
     where T : notnull
 {
-    public GeneralModel(string identityKey, string identityValue) :
-        base(identityKey, identityValue)
+    public GeneralModel(string identityKey, string identityValue, string? idForFilesystem = null) :
+        base(identityKey, identityValue, idForFilesystem)
     {
     }
 
-    public GeneralModel(string identityKey, ValueType identityValue) :
-        base(identityKey, identityValue)
+    public GeneralModel(string identityKey, ValueType identityValue, string? idForFilesystem = null) :
+        base(identityKey, identityValue, idForFilesystem)
     {
     }
 
@@ -120,11 +120,11 @@ public class GeneralModel<T> : GeneralModel, IModelSnapshot<T>
 
 public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IModelSnapshot>
 {
-    public GeneralModel(string identityKey, string identityValue) : this(identityKey, (object)identityValue)
+    public GeneralModel(string identityKey, string identityValue, string? idForFilesystem) : this(identityKey, (object)identityValue, idForFilesystem)
     {
     }
 
-    public GeneralModel(string identityKey, ValueType identityValue) : this(identityKey, (object)identityValue)
+    public GeneralModel(string identityKey, ValueType identityValue, string? idForFilesystem) : this(identityKey, (object)identityValue, idForFilesystem)
     {
     }
 
@@ -170,16 +170,18 @@ public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IMode
         }
     }
 
-    private GeneralModel(string identityKey, object identityValue)
+    private GeneralModel(string identityKey, object identityValue, string? idForFilesystem)
     {
+        _idForFilesystem = idForFilesystem;
         _properties = new();
         _children = new();
 
         IdentityKey = identityKey;
         AddProperty(identityKey, identityValue);
     }
-
     public string IdentityKey { get; }
+
+    protected string? _idForFilesystem { get; }
     protected Dictionary<string, object?> _properties { get; set; }
     protected Dictionary<string, string>? _addedPropertyTypeNames { get; set; }
     protected Dictionary<string, IEnumerable<IModelDistinguishable>> _children { get; set; } // Not part of equality check, not serialized/deserialized in same container
@@ -198,11 +200,23 @@ public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IMode
             .ToDictionary(pt => pt.p, pt => pt.t)
             .AsReadOnly();
 
+    public IDictionary<string, (Type type, object? value)> ModelPropertiesTypes =>
+        _properties
+            .ToDictionary(
+                p => p.Key,
+                p =>
+                {
+                    if (!TryGetPropertyType(p.Key, out var type))
+                        throw new Exception($"Invalid state - no type information for property {p.Key} of model type {EntityType.ShortDisplayName()}");
+                    return (type!, p.Value);
+                });
+
     public IReadOnlyDictionary<string, IEnumerable<IModelDistinguishable>> Children => _children.AsReadOnly();
     public IReadOnlyDictionary<string, string>? AddedPropertyTypeNames => _addedPropertyTypeNames?.AsReadOnly();
 
     // IModelIdentifiable
     public object GetId() => _properties[IdentityKey] ?? throw new Exception($"Unable to determine identity!");
+    public string GetIdForFilesystem() => _idForFilesystem ?? GetId().ToString() ?? throw new Exception($"Unable to determine identity for filesystem!");
 
     // Limit what property types are accepted:
     public void Add(string key, string? value, Type? nullValueValueType = null) { AddProperty(key, value, nullValueValueType); }
@@ -213,10 +227,52 @@ public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IMode
     public void Add(string key, IDictionary<string, object> value) { AddProperty(key, value); }
 
     public bool TryGetPropertyValue(string key, out object? value) => _properties.TryGetValue(key, out value);
+    public bool TryGetNullableStringPropertyValue(string key, out string? valueAsString)
+    {
+        if (TryGetPropertyValue(key, out var value) &&
+            TryGetPropertyType(key, out var type) &&
+            type == typeof(string))
+        {
+            valueAsString = (string?)value;
+            return true;
+        }
+
+        valueAsString = null;
+        return false;
+    }
+
+    public bool TryGetStringPropertyValue(string key, out string valueAsString) 
+    {
+        if (_properties.TryGetValue(key, out var value) &&
+            value is string str)
+        {
+            valueAsString = str;
+            return true;
+        }
+
+        valueAsString = string.Empty;
+        return false;
+    }
+
+    public bool TryGetGuidPropertyValue(string key, out Guid valueAsGuid)
+    {
+        if (_properties.TryGetValue(key, out var value) &&
+            value is Guid guid)
+        {
+            valueAsGuid = guid;
+            return true;
+        }
+
+        valueAsGuid = Guid.Empty;
+        return false;
+    }
+
     public object? this[string key] => _properties[key];
 
     public void AddChild<C>(string key, IEnumerable<IModelDistinguishable<C>> value) where C : notnull => _children.Add(key, value);
     public bool TryGetChildValue(string key, out IEnumerable<IModelDistinguishable>? value) => _children.TryGetValue(key, out value);
+    internal void ReplaceChildrenForKey<C>(string key, IEnumerable<IModelDistinguishable<C>> childrenForKey) where C : notnull => _children[key] = childrenForKey;
+    internal void CloneAllChildren(GeneralModel childrenSource) => _children = childrenSource._children;
 
     protected abstract void AddProperty(string key, object? value, Type? nullValueValueType = null);
     protected abstract bool TryGetPropertyType(string propertyName, out Type? type);
