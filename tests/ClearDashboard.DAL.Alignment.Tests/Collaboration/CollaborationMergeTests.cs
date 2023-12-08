@@ -17,6 +17,12 @@ using System.Threading;
 using ClearDashboard.DAL.Alignment.Features.Notes;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using System.IO;
+using ClearDashboard.DAL.Alignment.Features.Common;
+using ClearDashboard.DAL.Alignment.Lexicon;
+using ClearDashboard.DAL.Alignment.Features;
+using ClearDashboard.DataAccessLayer.Models;
+using Microsoft.SqlServer.Server;
+using ClearDashboard.Collaboration;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 {
@@ -38,37 +44,15 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         [Trait("Category", "Collaboration")]
         public async Task Test00()
         {
-            //var c = new UpdateLabelsWithExternalLabelsCommand(new UpdateLabelsWithExternalLabelsCommandParam()
-            //{
-            //    ExternalLabels = new List<ExternalLabel>
-            //    {
-            //        new ExternalLabel { ExternalProjectName = "proj1", ExternalText = "text1" },
-            //        new ExternalLabel { ExternalProjectName = "proj2", ExternalText = "text2" },
-            //        new ExternalLabel { ExternalProjectName = "proj3", ExternalText = "text3" },
-            //    }
-            //});
-            //var r = await _fixture.Mediator.Send(c);
-
-            //var c2 = new UpdateLabelsWithExternalLabelsCommand(new UpdateLabelsWithExternalLabelsCommandParam()
-            //{
-            //    ExternalLabels = new List<ExternalLabel>
-            //    {
-            //        new ExternalLabel { ExternalProjectName = "proj1", ExternalText = "text4" },
-            //        new ExternalLabel { ExternalProjectName = "proj2", ExternalText = "text5" },
-            //        new ExternalLabel { ExternalProjectName = "proj7", ExternalText = "text7" },
-            //    }
-            //});
-            //var r2 = await _fixture.Mediator.Send(c2);
-
-            //return;
-
             //try
             //{
             //    var backupsPath =
             //        FilePathTemplates.CollabBaseDirectory + Path.DirectorySeparatorChar + "Backups";
 
-            //    var factory = new ProjectSnapshotFromFilesFactory(Path.Combine(backupsPath, "merge_test_final_snapshot"), _fixture.Logger);
+            //    var factory = new ProjectSnapshotFromFilesFactory(Path.Combine(backupsPath, "Roman6"), _fixture.Logger);
             //    var snapshotFromFile = factory.LoadSnapshot();
+
+            //    await DoMerge(false, snapshotFromFile);
             //}
             //catch (Exception ex)
             //{
@@ -98,6 +82,185 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             //await note.CreateOrUpdate(_fixture.Mediator);
             //await note.AssociateDomainEntity(_fixture.Mediator, compositeToken.TokenId);
 
+            //var externalLexicon = await Lexicon.Lexicon.GetExternalLexicon(_fixture.Mediator, "2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f");
+            //await externalLexicon.SaveAsync(_fixture.Mediator);
+
+            //var lexemeCount = _fixture.ProjectDbContext.Lexicon_Lexemes.Count();
+            //var meaningCount = _fixture.ProjectDbContext.Lexicon_Meanings.Count();
+            //var formCount = _fixture.ProjectDbContext.Lexicon_Forms.Count();
+            //var translationCount = _fixture.ProjectDbContext.Lexicon_Translations.Count();
+
+            //var defaultCreatedDate = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
+
+            //var extraLexeme = new Models.Lexicon_Lexeme
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Lemma = "booboo",
+            //    Language = "sur",
+            //    Type = "Stem",
+            //    Created = defaultCreatedDate,
+            //    UserId = _fixture.Users.First().Id
+            //};
+
+            //var extraForm1 = new Models.Lexicon_Form
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Text = "forrrrrm1",
+            //    Lexeme = extraLexeme,
+            //    LexemeId = extraLexeme.Id,
+            //    Created = defaultCreatedDate,
+            //    UserId = _fixture.Users.First().Id
+            //};
+
+            //var extraForm2 = new Models.Lexicon_Form
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Text = "forrrrrm2",
+            //    Lexeme = extraLexeme,
+            //    LexemeId = extraLexeme.Id,
+            //    Created = defaultCreatedDate,
+            //    UserId = _fixture.Users.First().Id
+            //};
+
+            //var extraMeaning = new Models.Lexicon_Meaning
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Text = "mean1",
+            //    Language = "en",
+            //    Lexeme = extraLexeme,
+            //    LexemeId = extraLexeme.Id,
+            //    Created = defaultCreatedDate,
+            //    UserId = _fixture.Users.First().Id
+            //};
+
+            //var extraTranslation1 = new Models.Lexicon_Translation
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Text = "trrrrr1",
+            //    Meaning = extraMeaning,
+            //    MeaningId = extraMeaning.Id,
+            //    Created = defaultCreatedDate,
+            //    UserId = _fixture.Users.First().Id
+            //};
+
+            //var extraTranslation2 = new Models.Lexicon_Translation
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Text = "trrrrr2",
+            //    Meaning = extraMeaning,
+            //    MeaningId = extraMeaning.Id,
+            //    Created = defaultCreatedDate,
+            //    UserId = _fixture.Users.First().Id
+            //};
+
+            //extraMeaning.Translations.Add(extraTranslation1);
+            //extraMeaning.Translations.Add(extraTranslation1);
+            //extraLexeme.Meanings.Add(extraMeaning);
+            //extraLexeme.Forms.Add(extraForm1);
+            //extraLexeme.Forms.Add(extraForm2);
+
+            //_fixture.LexiconLexemes.Add(extraLexeme);
+
+            //await DoMerge();
+
+            //var lexemeCount2 = _fixture.ProjectDbContext.Lexicon_Lexemes.Count();
+            //var meaningCount2 = _fixture.ProjectDbContext.Lexicon_Meanings.Count();
+            //var formCount2 = _fixture.ProjectDbContext.Lexicon_Forms.Count();
+            //var translationCount2 = _fixture.ProjectDbContext.Lexicon_Translations.Count();
+
+            //var lexemeForTest = _fixture.ProjectDbContext.Lexicon_Lexemes.Where(e => e.Lemma == "booboo").FirstOrDefault();
+
+            //var exernalLexemesForDb = LexiconToModel(externalLexicon, _fixture.Users.First().Id);
+            //_fixture.LexiconLexemes.AddRange(exernalLexemesForDb);
+
+            //await DoMerge();
+
+            //_fixture.ProjectDbContext.ChangeTracker.Clear();
+
+            //var lexemeCount3 = _fixture.ProjectDbContext.Lexicon_Lexemes.Count();
+            //var meaningCount3 = _fixture.ProjectDbContext.Lexicon_Meanings.Count();
+            //var formCount3 = _fixture.ProjectDbContext.Lexicon_Forms.Count();
+            //var translationCount3 = _fixture.ProjectDbContext.Lexicon_Translations.Count();
+
+            //var lexemeForTest2 = _fixture.ProjectDbContext.Lexicon_Lexemes.Where(e => e.Lemma == "booboo").FirstOrDefault();
+        }
+
+        private IEnumerable<Models.Lexicon_Lexeme> LexiconToModel(Lexicon.Lexicon lexicon, Guid defaultUserId)
+        {
+            var defaultCreatedDate = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
+            var lexemesDb = new List<Models.Lexicon_Lexeme>();
+
+            foreach (var lexeme in lexicon.Lexemes)
+            {
+                var lexemeDb = new Models.Lexicon_Lexeme
+                {
+                    Id = lexeme.LexemeId.Id,
+                    Lemma = lexeme.Lemma,
+                    Type = lexeme.Type,
+                    Language = lexeme.Language,
+                    Created = lexeme.LexemeId.Created ?? defaultCreatedDate,
+                    UserId = lexeme.LexemeId.UserId?.Id ?? defaultUserId
+                };
+
+                // ---------------------------------------------------------------------------------
+                // Create and Update Lexeme Forms:
+                // ---------------------------------------------------------------------------------
+                foreach (var form in lexeme.Forms)
+                {
+                    var formDb = new Models.Lexicon_Form
+                    {
+                        Id = form.FormId.Id,
+                        Text = form.Text,
+                        Lexeme = lexemeDb,
+                        LexemeId = lexemeDb.Id,
+                        Created = form.FormId.Created ?? defaultCreatedDate,
+                        UserId = form.FormId.UserId?.Id ?? defaultUserId
+                    };
+
+                    lexemeDb.Forms.Add(formDb);
+                }
+
+                // ---------------------------------------------------------------------------------
+                // Create / Update Lexeme Meanings and children:
+                // ---------------------------------------------------------------------------------
+                foreach (var meaning in lexeme.Meanings)
+                {
+                    var meaningDb = new Models.Lexicon_Meaning
+                    {
+                        Id = meaning.MeaningId.Id,
+                        Text = meaning.Text,
+                        Language = meaning.Language,
+                        Lexeme = lexemeDb,
+                        LexemeId = lexemeDb.Id,
+                        Created = meaning.MeaningId.Created ?? defaultCreatedDate,
+                        UserId = meaning.MeaningId.UserId?.Id ?? defaultUserId
+                    };
+
+                    lexemeDb.Meanings.Add(meaningDb);
+
+                    // ---------------------------------------------------------------------------------
+                    // Create / Update Lexeme Meaning Translations:
+                    // ---------------------------------------------------------------------------------
+                    foreach (var translation in meaning.Translations.Where(e => !e.ExcludeFromSave))
+                    {
+                        var translationDb = new Models.Lexicon_Translation
+                        {
+                            Id = translation.TranslationId.Id,
+                            Text = translation.Text,
+                            Meaning = meaningDb,
+                            MeaningId = meaningDb.Id,
+                            Created = translation.TranslationId.Created ?? defaultCreatedDate,
+                            UserId = translation.TranslationId.UserId?.Id ?? defaultUserId
+                        };
+
+                        meaningDb.Translations.Add(translationDb);
+                    }
+                }
+
+                lexemesDb.Add(lexemeDb);
+            }
+
+            return lexemesDb;
         }
 
         [Fact]
@@ -718,7 +881,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             Assert.Equal("001001020004001", extraCompositeTokensDb[2].EngineTokenId);
         }
 
-        protected async Task DoMerge(bool isIt = false)
+        protected async Task DoMerge(bool isIt = false, ProjectSnapshot? sourceSnapshot = null)
         {
             var testProject = _fixture.ProjectDbContext.Projects.First();
 
@@ -735,7 +898,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             var commitShaToMerge = $"{CollaborationProjectFixture.ShaBase}_{shaIndex}";
 
             var snapshotLastMerged = _fixture.ProjectSnapshotLastMerged ?? ProjectSnapshotFactoryCommon.BuildEmptySnapshot(testProject.Id);
-            var snapshotToMerge = _fixture.ToProjectSnapshot();
+            var snapshotToMerge = sourceSnapshot ?? _fixture.ToProjectSnapshot();
             var progress = new Progress<ProgressStatus>(Report);
 
             if (isIt)
