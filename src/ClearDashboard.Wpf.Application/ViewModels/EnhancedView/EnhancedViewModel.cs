@@ -414,6 +414,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
             TokenDisplay.EventAggregator = eventAggregator;
             VerseDisplay.EventAggregator = eventAggregator;
+            VerseDisplay.SelectionManager = selectionManager;
             LabelsEditor.EventAggregator = eventAggregator;
             LabelsDisplay.EventAggregator = eventAggregator;
 
@@ -885,7 +886,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async void TokenClicked(object sender, TokenEventArgs e)
         {
-
         }
 
         public async void TokenLeftButtonDown(object sender, TokenEventArgs e)
@@ -907,9 +907,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             else
             {
+                if (e.TokenDisplay.IsTokenSelected)
+                {
+                    SelectionManager.StartDragSelection(e.TokenDisplay);
+                }
+                else
+                {
+                    SelectionManager.EndDragSelection(e.TokenDisplay);
+                }
                 SelectionManager.UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
                 NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
             }
+        }
+
+        public async void TokenLeftButtonUp(object sender, TokenEventArgs e)
+        {
+            SelectionManager.UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
+            SelectionManager.EndDragSelection(e.TokenDisplay);
+            NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public async void TokenCreateAlignment(object sender, TokenEventArgs e)
@@ -944,6 +959,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public void TokenMouseEnter(object sender, TokenEventArgs e)
         {
+            if (SelectionManager.IsDragInProcess)
+            {
+                SelectionManager.UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
+            }
+
             Message = $"'{e.TokenDisplay.SurfaceText}' token ({e.TokenDisplay.Token.TokenId}) hovered";
         }
 

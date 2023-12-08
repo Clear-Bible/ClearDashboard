@@ -1818,6 +1818,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                             {
                                 //then append verseText onto versetext of last element in verses
                                 verses.LastOrDefault().Text = verses.LastOrDefault().Text.TrimEnd() + " " + verseText;
+                                verses.LastOrDefault().Verse = previousVerseNumber;
                             }
                             else
                             {
@@ -1933,8 +1934,9 @@ namespace ClearDashboard.WebApiParatextPlugin
             //}
 
             return verses;
-
         }
+
+
         public bool CheckUsfmBookForVerseData(string paratextProjectId, string bookCode)
         {
             // get all the projects & resources

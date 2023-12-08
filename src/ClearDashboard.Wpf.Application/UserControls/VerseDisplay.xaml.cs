@@ -14,6 +14,7 @@ using ClearApplicationFoundation.Framework.Input;
 using System.Threading;
 using System.Windows.Input;
 using ClearDashboard.Wpf.Application.Events.Notes;
+using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using System.Dynamic;
 
@@ -579,6 +580,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 TokenDisplay = args.TokenDisplay,
                 SelectedTokens = VerseSelectedTokens,
                 ModifierKeys = args.ModifierKeys,
+                MouseLeftButton = args.MouseLeftButton,
+                MouseMiddleButton = args.MouseMiddleButton,
+                MouseRightButton = args.MouseRightButton
             });
         }
 
@@ -693,6 +697,39 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     VerseSelectedTokens.Remove(token);
                 }
             }
+        }
+
+        private void AddTokensToSelection(TokenDisplayViewModelCollection tokens, bool checkForCompositeTokens = true)
+        {
+            tokens.SelectAllTokens();
+            if (checkForCompositeTokens)
+            {
+                foreach (var token in tokens)
+                {
+                    if (token.IsCompositeTokenMember)
+                    {
+                        VerseDisplayViewModel.MatchingTokenAction(token.CompositeTokenMembers.TokenIds, t => { t.IsTokenSelected = true; });
+                        VerseSelectedTokens.AddRangeDistinct(VerseDisplayViewModel.SourceTokenDisplayViewModels.MatchingTokens(token.CompositeTokenMembers.TokenIds));
+                    }
+                    else
+                    {
+                        VerseSelectedTokens.AddDistinct(token);
+                    }
+                }
+            }
+            else
+            {
+                VerseSelectedTokens.AddRangeDistinct(tokens);
+            }
+        }
+
+        private void UpdateDragSelection(TokenDisplayViewModel token)
+        {
+            VerseSelectedTokens.DeselectAllTokens();
+            VerseSelectedTokens.Clear();
+
+            AddTokensToSelection(SelectionManager!.SelectedTokensBeforeDrag, false);
+            AddTokensToSelection(SelectionManager!.GetDragSelection(token), true);
         }
 
         private void OnAlignedTokenClicked(object sender, RoutedEventArgs e)
@@ -818,9 +855,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     EnhancedFocusScope.SetFocusOnActiveElementInScope(element);
                 }
 
-                if (!args.IsShiftPressed && !args.IsAltPressed && Mouse.LeftButton == MouseButtonState.Pressed)
+                if (args is { IsShiftPressed: false, IsAltPressed: false, IsMouseLeftButtonDown: true })
                 {
-                    UpdateVerseSelection(args.TokenDisplay, true);
+                    if (SelectionManager!.IsDragInProcess)
+                    {
+                        UpdateDragSelection(args.TokenDisplay);
+                    }
                 }
             }
 
