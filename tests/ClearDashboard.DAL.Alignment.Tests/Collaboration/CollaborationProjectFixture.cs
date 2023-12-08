@@ -742,10 +742,11 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 },
                 TokenBuilder = new TokenBuilder()
                 {
-                    GetTokenizedCorpusTokens = (projectDbContext, tokenizedCorpusId) =>
+                    GetTokenizedCorpusTokens = (projectDbContext, tokenizedCorpusId, engineTokenIds) =>
                     {
                         return TokenBuilder.OrganizeTokensByOriginTokenLocation(tokens
-                            .Where(e => e.TokenizedCorpusId == tokenizedCorpusId)
+                            .Where(e => e.TokenizedCorpusId == tokenizedCorpusId),
+                            engineTokenIds
                         );
                     }
                 }

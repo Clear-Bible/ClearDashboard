@@ -36,7 +36,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
         protected IContainer? Container { get; private set; }
         protected string ProjectName { get; set; }
         protected bool DeleteDatabase { get; set; } = true;
-        protected ILogger Logger { get; set; }
+        public ILogger Logger { get; set; }
 
         private static Mutex mutex = new Mutex();
 
