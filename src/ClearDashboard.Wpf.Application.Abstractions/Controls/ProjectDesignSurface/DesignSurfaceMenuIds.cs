@@ -25,6 +25,7 @@ public partial class DesignSurfaceViewModel
         public const string ShowTokenizationProperties = "ShowTokenizationProperties"; // was TokenizerPropertiesId
         public const string UpdateParatextCorpus = "UpdateParatextCorpus";
         public const string GetLatestExternalNotes = "GetLatestExternalNotes";
+        public const string UpdateLabelsWithExternalLabels = "UpdateLabelsWithExternalLabels";
         public const string ShowLexiconDialog = "ShowLexiconDialog";
     }
 }

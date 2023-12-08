@@ -80,6 +80,7 @@ public class ProjectSnapshot
     public IEnumerable<IModelSnapshot<Models.TranslationSet>> TranslationSets => GetGeneralModelList<Models.TranslationSet>();
     public IEnumerable<IModelSnapshot<Models.Note>> Notes => GetGeneralModelList<Models.Note>();
     public IEnumerable<IModelSnapshot<Models.Label>> Labels => GetGeneralModelList<Models.Label>();
+    public IEnumerable<IModelSnapshot<Models.LabelGroup>> LabelGroups => GetGeneralModelList<Models.LabelGroup>();
 
     public void AddGeneralModelList<T>(IEnumerable<GeneralModel<T>> snapshotList) where T: notnull
     {

@@ -146,7 +146,7 @@ public class VerseRowHandler : DefaultMergeHandler<IModelSnapshot<Models.VerseRo
 
             if (modelDifference.PropertyDifferences.Where(pd => pd.PropertyName == nameof(Models.VerseRow.OriginalText)).Any())
             {
-                var verseRowId = (Guid)resolvedWhereClause[nameof(Models.VerseRow.Id)];
+                var verseRowId = (Guid)resolvedWhereClause[nameof(Models.VerseRow.Id)]!;
 
                 await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
                     $"Deleting any TokenComposites related by Token to VerseRow '{modelSnapshotToModify.GetId()}'",

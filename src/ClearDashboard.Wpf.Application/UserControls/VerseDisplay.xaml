@@ -6,6 +6,7 @@
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     d:DesignHeight="450"
@@ -224,13 +225,24 @@
         </ItemsPanelTemplate>
     </UserControl.Resources>
 
-    <StackPanel Orientation="Vertical">
-        <Button
-            Width="20px"
-            Height="20px"
-            Content="i"
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <!--  External Notes  -->
+        <Border
+            MaxWidth="18"
+            MaxHeight="22"
+            Margin="2"
+            Background="WhiteSmoke"
+            BorderBrush="Black"
+            BorderThickness="1"
+            CornerRadius="3"
+            Cursor="Hand"
+            MouseDown="Border_MouseDown"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.HasExternalNotes), Converter={StaticResource BoolToVisibilityConverter}}">
-            <Button.ToolTip>
+            <Border.ToolTip>
                 <ToolTip
                     Background="LightYellow"
                     HasDropShadow="false"
@@ -239,56 +251,87 @@
                     PlacementRectangle="50,0,0,0"
                     VerticalOffset="20">
                     <StackPanel Orientation="Vertical">
-                        <ListView ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.ExternalNotes)}">
+                        <ListView ItemsSource="{Binding ExternalNotes}">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Vertical">
-                                        <Label Content="{Binding Message}" />
-                                        <controls:ExtendedPropertiesTreeView
-                                            x:Name="ExternalNoteBodyVerseTreeViewName"
-                                            ExtendedPropertiesXml="{Binding Body}"
-                                            IsExpanded="False" />
+                                        <Separator />
+                                        <Label Content="{Binding ExternalLabelsString}" Foreground="{StaticResource BlueMidBrush}" />
+                                        <Label Content="{Binding ExternalNoteMessagesString}" />
+                                        <Label Content="{Binding ExternalLabel[0]}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
                     </StackPanel>
                 </ToolTip>
-            </Button.ToolTip>
-        </Button>
-        <TextBlock
-            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleMargin}"
-            Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitlePadding}"
-            HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleHorizontalAlignment}"
-            FlowDirection="LeftToRight"
-            FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleFontSize}"
-            Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Title}"
-            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleVisibility}" />
-        <Border
-            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseMargin}"
-            Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VersePadding}"
-            Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBackground}"
-            BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderBrush}"
-            BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderThickness}">
-            <ItemsControl
-                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
-                ItemTemplate="{StaticResource SourceTokenDisplay}"
-                ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceItemsPanelTemplate}"
-                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceTokens}" />
+            </Border.ToolTip>
+            <Grid>
+                <iconPacks:PackIconModern
+                    x:Name="MultipleNotesIcon"
+                    Margin="3,0,0,0"
+                    Foreground="DarkGray"
+                    IsHitTestVisible="False"
+                    Kind="Flag"
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.HasExternalNotes), Converter={StaticResource BoolToVisibilityConverter}}" />
+
+                <iconPacks:PackIconModern
+                    x:Name="ExternalNotesIcon"
+                    Margin="0,2,0,0"
+                    Foreground="Red"
+                    IsHitTestVisible="False"
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.HasExternalNotes), Converter={StaticResource BoolToVisibilityConverter}}">
+                    <iconPacks:PackIconModern.Style>
+                        <Style TargetType="{x:Type iconPacks:PackIconModern}">
+                            <Setter Property="Kind" Value="Flag" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding MultipleExternalNotes}" Value="True">
+                                    <Setter Property="Kind" Value="Flag" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </iconPacks:PackIconModern.Style>
+                </iconPacks:PackIconModern>
+            </Grid>
+
         </Border>
-        <Border
-            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseMargin}"
-            Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VersePadding}"
-            Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBackground}"
-            BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderBrush}"
-            BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderThickness}"
-            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetVisibility}">
-            <ItemsControl
-                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsTargetRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
-                ItemTemplate="{StaticResource TargetTokenDisplay}"
-                ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetItemsPanelTemplate}"
-                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetTokens}"
-                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetVisibility}" />
-        </Border>
-    </StackPanel>
+
+
+        <StackPanel Grid.Column="1" Orientation="Vertical">
+            <TextBlock
+                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleMargin}"
+                Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitlePadding}"
+                HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleHorizontalAlignment}"
+                FlowDirection="LeftToRight"
+                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleFontSize}"
+                Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Title}"
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleVisibility}" />
+            <Border
+                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseMargin}"
+                Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VersePadding}"
+                Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBackground}"
+                BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderBrush}"
+                BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderThickness}">
+                <ItemsControl
+                    FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
+                    ItemTemplate="{StaticResource SourceTokenDisplay}"
+                    ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceItemsPanelTemplate}"
+                    ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceTokens}" />
+            </Border>
+            <Border
+                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseMargin}"
+                Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VersePadding}"
+                Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBackground}"
+                BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderBrush}"
+                BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderThickness}"
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetVisibility}">
+                <ItemsControl
+                    FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsTargetRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
+                    ItemTemplate="{StaticResource TargetTokenDisplay}"
+                    ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetItemsPanelTemplate}"
+                    ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetTokens}"
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetVisibility}" />
+            </Border>
+        </StackPanel>
+    </Grid>
 </userControls:VerseDisplayBase>

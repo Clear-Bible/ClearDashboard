@@ -14,8 +14,11 @@ namespace ClearDashboard.Collaboration.Builder;
 
 public class NoteBuilder : GeneralModelBuilder<Models.Note>
 {
+    public const string NOTEUSERSEENASSOCIATION_REF_PREFIX = "UserSeen";
+
     private Dictionary<Guid, Dictionary<string, IEnumerable<Models.NoteDomainEntityAssociation>>>? _ndaByNoteId = null;
     private Dictionary<Guid, IEnumerable<Models.Note>>? _repliesByThreadId = null;
+    private Dictionary<Guid, IEnumerable<Models.NoteUserSeenAssociation>>? _nusaDbModelsByNoteId = null;
 
     public Func<ProjectDbContext, IEnumerable<Models.Note>> GetNotes = (projectDbContext) =>
     {
@@ -45,6 +48,14 @@ public class NoteBuilder : GeneralModelBuilder<Models.Note>
             .ToDictionary(g => g.NoteId, g => g.DomainEntityTypes);
     };
 
+    public Func<ProjectDbContext, Dictionary<Guid, IEnumerable<Models.NoteUserSeenAssociation>>> GetNoteUserSeenAssociationsByNoteId = (projectDbContext) =>
+    {
+        return projectDbContext.NoteUserSeenAssociations
+            .ToList()
+            .GroupBy(e => e.NoteId)
+            .ToDictionary(g => g.Key, g => g.Select(e => e));
+    };
+
     public override IEnumerable<GeneralModel<Models.Note>> BuildModelSnapshots(BuilderContext builderContext)
     {
         var modelSnapshot = new GeneralListModel<GeneralModel<Models.Note>>();
@@ -52,10 +63,11 @@ public class NoteBuilder : GeneralModelBuilder<Models.Note>
         var notes = GetNotes(builderContext.ProjectDbContext);
         var ndaByNoteId = GetNoteDomainEntityAssociationsByNoteId(builderContext.ProjectDbContext);
         var repliesByThreadId = GetRepliesByThreadId(builderContext.ProjectDbContext);
+        var nusaDbModelsByNoteId = GetNoteUserSeenAssociationsByNoteId(builderContext.ProjectDbContext);
 
         GetNotes(builderContext.ProjectDbContext).ToList().ForEach(n =>
         {
-            modelSnapshot.Add(BuildModelSnapshotInternal(n, builderContext, ndaByNoteId, repliesByThreadId));
+            modelSnapshot.Add(BuildModelSnapshotInternal(n, builderContext, ndaByNoteId, repliesByThreadId, nusaDbModelsByNoteId));
         });
 
         return modelSnapshot;
@@ -65,15 +77,17 @@ public class NoteBuilder : GeneralModelBuilder<Models.Note>
     {
         if (_ndaByNoteId is null) _ndaByNoteId = GetNoteDomainEntityAssociationsByNoteId(builderContext.ProjectDbContext);
         if (_repliesByThreadId is null) _repliesByThreadId = GetRepliesByThreadId(builderContext.ProjectDbContext);
+        if (_nusaDbModelsByNoteId is null) _nusaDbModelsByNoteId = GetNoteUserSeenAssociationsByNoteId(builderContext.ProjectDbContext);
 
-        return BuildModelSnapshotInternal(note, builderContext, _ndaByNoteId, _repliesByThreadId);
+        return BuildModelSnapshotInternal(note, builderContext, _ndaByNoteId, _repliesByThreadId, _nusaDbModelsByNoteId);
     }
 
     private GeneralModel<Models.Note> BuildModelSnapshotInternal(
         Models.Note note,
         BuilderContext builderContext,
         Dictionary<Guid, Dictionary<string, IEnumerable<Models.NoteDomainEntityAssociation>>> ndaByNoteId,
-        Dictionary<Guid, IEnumerable<Models.Note>> repliesByThreadId)
+        Dictionary<Guid, IEnumerable<Models.Note>> repliesByThreadId,
+        Dictionary<Guid, IEnumerable<Models.NoteUserSeenAssociation>> nusaDbModelsByNoteId)
     {
         var modelSnapshot = ExtractUsingModelIds(note);
 
@@ -93,10 +107,20 @@ public class NoteBuilder : GeneralModelBuilder<Models.Note>
                     replyModelSnapshot.AddChild<NoteModelRef>("NoteModelRefs", ExtractNoteModelRefs(rdas, builderContext));
                 }
 
+                if (nusaDbModelsByNoteId.TryGetValue(reply.Id, out var rusas))
+                {
+                    modelSnapshot.AddChild<IModelSnapshot<Models.NoteUserSeenAssociation>>("NoteUserSeenAssociations", ExtractNoteUserSeenAssociations(rusas, builderContext));
+                }
+
                 replyModelSnapshots.Add(replyModelSnapshot);
             }
 
             modelSnapshot.AddChild("Replies", replyModelSnapshots.AsModelSnapshotChildrenList());
+        }
+
+        if (nusaDbModelsByNoteId.TryGetValue(note.Id, out var nusas))
+        {
+            modelSnapshot.AddChild<IModelSnapshot<Models.NoteUserSeenAssociation>>("NoteUserSeenAssociations", ExtractNoteUserSeenAssociations(nusas, builderContext));
         }
 
         return modelSnapshot;
@@ -196,5 +220,27 @@ public class NoteBuilder : GeneralModelBuilder<Models.Note>
         }
 
         return noteModelRefs;
+    };
+
+    public static string GetNoteSeenAssociationRef(Guid noteId, Guid userId) => HashPartsToRef(NOTEUSERSEENASSOCIATION_REF_PREFIX, noteId.ToString(), userId.ToString());
+
+    public Func<IEnumerable<Models.NoteUserSeenAssociation>, BuilderContext, IEnumerable<GeneralModel<Models.NoteUserSeenAssociation>>> ExtractNoteUserSeenAssociations = (nusas, builderContext) =>
+    {
+        var noteUserSeenAssociationModelSnapshots =
+            new GeneralListModel<GeneralModel<Models.NoteUserSeenAssociation>>();
+
+        foreach (var nusa in nusas)
+        {
+            var nusaSnapshot = BuildRefModelSnapshot(
+                nusa,
+                GetNoteSeenAssociationRef(nusa.NoteId, nusa.UserId),
+                null,
+                null,
+                builderContext);
+
+            noteUserSeenAssociationModelSnapshots.Add(nusaSnapshot);
+        }
+
+        return noteUserSeenAssociationModelSnapshots;
     };
 }

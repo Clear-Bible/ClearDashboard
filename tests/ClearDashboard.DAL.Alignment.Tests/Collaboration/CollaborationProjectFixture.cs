@@ -45,8 +45,11 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         public List<Models.Note> Notes { get; private set; } = new();
         public Dictionary<Guid, IEnumerable<Models.Note>> RepliesByThread { get; private set; } = new();
         public List<(Models.NoteDomainEntityAssociation, NoteModelRef)> NoteAssociations { get; private set; } = new();
+        public List<Models.NoteUserSeenAssociation> NoteUserSeenAssociations { get; private set; } = new();
         public List<Models.Label> Labels { get; private set; } = new();
         public List<Models.LabelNoteAssociation> LabelNoteAssociations { get; private set; } = new();
+        public List<Models.LabelGroup> LabelGroups { get; private set; } = new();
+        public List<Models.LabelGroupAssociation> LabelGroupAssociations { get; private set; } = new();
 
         public ProjectSnapshot? ProjectSnapshotLastMerged { get; private set; } = null;
 
@@ -103,8 +106,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             projectSnapshot.AddGeneralModelList(ToParallelCorpusBuilder(ParallelCorpora, TokenComposites).BuildModelSnapshots(builderContext));
             projectSnapshot.AddGeneralModelList(ToAlignmentSetBuilder(AlignmentSets, Alignments).BuildModelSnapshots(builderContext));
             projectSnapshot.AddGeneralModelList(ToTranslationSetBuilder(TranslationSets, Translations).BuildModelSnapshots(builderContext));
-            projectSnapshot.AddGeneralModelList(ToNoteBuilder(Notes, RepliesByThread, NoteAssociations).BuildModelSnapshots(builderContext));
+            projectSnapshot.AddGeneralModelList(ToNoteBuilder(Notes, RepliesByThread, NoteAssociations, NoteUserSeenAssociations).BuildModelSnapshots(builderContext));
             projectSnapshot.AddGeneralModelList(ToLabelBuilder(Labels, LabelNoteAssociations).BuildModelSnapshots(builderContext));
+            projectSnapshot.AddGeneralModelList(ToLabelGroupBuilder(LabelGroups, LabelGroupAssociations).BuildModelSnapshots(builderContext));
             projectSnapshot.AddGeneralModelList(ToLexiconBuilder(LexiconLexemes).BuildModelSnapshots(builderContext));
             projectSnapshot.AddGeneralModelList(ToSemanticDomainBuilder(LexiconSemanticDomains).BuildModelSnapshots(builderContext));
 
@@ -660,6 +664,16 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             return (nd, noteModelRef);
         }
 
+        public static Models.NoteUserSeenAssociation BuildTestNoteUserSeenAssociation(Guid noteId, Guid userId, BuilderContext builderContext)
+        {
+            return new Models.NoteUserSeenAssociation
+            {
+                Id = Guid.NewGuid(),
+                NoteId = noteId,
+                UserId = userId
+            };
+        }
+
         public static UserBuilder ToUserBuilder(IEnumerable<Models.User> users)
         {
             return new UserBuilder { GetUsers = (projectDbContext) => users };
@@ -826,7 +840,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         public static NoteBuilder ToNoteBuilder(
             IEnumerable<Models.Note> notes,
             Dictionary<Guid, IEnumerable<Models.Note>> repliesByThread,
-            IEnumerable<(Models.NoteDomainEntityAssociation nd, NoteModelRef noteModelRef)> noteAssociations)
+            IEnumerable<(Models.NoteDomainEntityAssociation nd, NoteModelRef noteModelRef)> noteAssociations,
+            IEnumerable<Models.NoteUserSeenAssociation> noteUserSeenAssociations)
         {
             var noteBuilder = new NoteBuilder
             {
@@ -846,6 +861,12 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                         })
                         .ToDictionary(g => g.NoteId, g => g.DomainEntityTypes);
                 },
+                GetNoteUserSeenAssociationsByNoteId = (projectDbContext) =>
+                { 
+                    return noteUserSeenAssociations
+                        .GroupBy(e => e.NoteId)
+                        .ToDictionary(g => g.Key, g => g.Select(e => e));
+                },
                 ExtractNoteModelRefs = (nda, builderContext) =>
                 {
                     var ndaIds = nda.Values.SelectMany(nds => nds.Select(nd => nd.Id));
@@ -856,9 +877,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             return noteBuilder;
         }
 
-        public static LabelBuilder ToLabelBuilder(
-            IEnumerable<Models.Label> labels,
-            IEnumerable<Models.LabelNoteAssociation> labelNoteAssociations)
+        public static LabelBuilder ToLabelBuilder(IEnumerable<Models.Label> labels, IEnumerable<Models.LabelNoteAssociation> labelNoteAssociations)
         {
             return new LabelBuilder
             {
@@ -867,6 +886,20 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 {
                     return labelNoteAssociations
                         .GroupBy(e => e.LabelId)
+                        .ToDictionary(g => g.Key, g => g.Select(e => e));
+                }
+            };
+        }
+
+        public static LabelGroupBuilder ToLabelGroupBuilder(IEnumerable<Models.LabelGroup> labelGroups, IEnumerable<Models.LabelGroupAssociation> labelGroupAssociations)
+        {
+            return new LabelGroupBuilder
+            {
+                GetLabelGroups = (projectDbContext) => labelGroups,
+                GetLabelGroupAssociationsByLabelGroupId = (projectDbContext) =>
+                {
+                    return labelGroupAssociations
+                        .GroupBy(e => e.LabelGroupId)
                         .ToDictionary(g => g.Key, g => g.Select(e => e));
                 }
             };

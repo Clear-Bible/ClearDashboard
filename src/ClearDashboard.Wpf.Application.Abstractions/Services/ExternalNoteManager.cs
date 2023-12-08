@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Features.Notes;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
@@ -18,6 +13,12 @@ using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Scripture;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using static ClearBible.Engine.Persistence.FileGetBookIds;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
@@ -118,6 +119,7 @@ namespace ClearDashboard.Wpf.Application.Services
                     associatedTokens,
                     note.ParatextSendNoteInformation.TokenizedTextCorpusId.Detokenizer,
                     note.Text,
+                    note.Labels,
                     verseFirstTokenId.BookNumber,
                     verseFirstTokenId.ChapterNumber,
                     verseFirstTokenId.VerseNumber
@@ -349,9 +351,11 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public static async Task AddNewCommentToExternalNote(
+        public static async Task<bool> AddNewCommentToExternalNote(
             IMediator mediator, 
+            string externalProjectId,
             string externalNoteId, 
+            string verseRefString,
             string comment, 
             string assignToUserName, 
             ILogger? logger = null, 
@@ -364,7 +368,9 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 var result = await mediator.Send(new AddNewCommentToExternalNoteCommand(new AddNewCommentToExternalNoteCommandParam()
                 {
+                    ExternalProjectId = externalProjectId,
                     ExternalNoteId = externalNoteId,
+                    VerseRefString = verseRefString,
                     Comment = comment,
                     AssignToUserName = assignToUserName
                 }), cancellationToken);
@@ -373,6 +379,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 if (result.Success)
                 {
                     logger?.LogInformation($"Sent new comment for external note id {externalNoteId} to external drafting tool in {stopwatch.ElapsedMilliseconds} ms");
+                    return true;
                 }
                 else
                 {
@@ -387,9 +394,11 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public static async Task ResolveExternalNote(
+        public static async Task<bool> ResolveExternalNote(
             IMediator mediator,
+            string externalProjectId,
             string externalNoteId,
+            string verseRefString,
             ILogger? logger = null,
             CancellationToken cancellationToken = default)
         {
@@ -400,17 +409,89 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 var result = await mediator.Send(new ResolveExternalNoteCommand(new ResolveExternalNoteCommandParam()
                 {
-                    ExternalNoteId = externalNoteId
+                    ExternalProjectId = externalProjectId,
+                    ExternalNoteId = externalNoteId,
+                    VerseRefString = verseRefString
                 }), cancellationToken);
 
                 stopwatch.Stop();
                 if (result.Success)
                 {
                     logger?.LogInformation($"Marked external note id {externalNoteId} resolved in external drafting tool in {stopwatch.ElapsedMilliseconds} ms");
+
+                    return true;
                 }
                 else
                 {
                     logger?.LogCritical($"Error marking external note id {externalNoteId} resolved in external drafting tool: {result.Message}");
+                    throw new MediatorErrorEngineException(result.Message);
+                }
+            }
+            catch (Exception e)
+            {
+                logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdateLabelsWithExternalLabels(string externalProjectId, IMediator mediator, ILogger logger, CancellationToken cancellationToken = default)
+        {
+            List<ExternalLabel>? externalLabels;
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                var result = await mediator.Send(new GetExternalLabelsQuery(new GetExternalLabelsQueryParam()
+                {
+                    ExternalProjectId = externalProjectId,
+                }), cancellationToken);
+
+                stopwatch.Stop();
+                if (result.Success)
+                {
+                    logger?.LogInformation($"Retrieved external labels for {externalProjectId} in {stopwatch.ElapsedMilliseconds} ms");
+
+                    externalLabels = result.Data?.ToList() ?? null;
+                }
+                else
+                {
+                    logger?.LogCritical($"Error retrieving external labels for {externalProjectId}: {result.Message}");
+                    throw new MediatorErrorEngineException(result.Message);
+                }
+            }
+            catch (Exception e)
+            {
+                logger?.LogCritical(e.ToString());
+                throw;
+            }
+
+            if (externalLabels == null)
+            {
+                var message = $"External project {externalProjectId} doesn't have external labels available";
+                logger?.LogCritical(message);
+                throw new Exception(message);
+            }
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                var result = await mediator.Send(new UpdateLabelsWithExternalLabelsCommand(new UpdateLabelsWithExternalLabelsCommandParam()
+                {
+                    ExternalLabels = externalLabels
+                }), cancellationToken);
+
+                stopwatch.Stop();
+                if (result.Success)
+                {
+                    logger?.LogInformation($"Retrieved external labels for {externalProjectId} and updated internal labels and associated with project label group in {stopwatch.ElapsedMilliseconds} ms");
+                    await _eventAggregator.PublishOnUIThreadAsync(new LabelsUpdatedMessage(), cancellationToken);
+                    return true;
+                }
+                else
+                {
+                    logger?.LogCritical($"Error retrieving external labels for {externalProjectId} and updating internal labels and associating with project label group: {result.Message}");
                     throw new MediatorErrorEngineException(result.Message);
                 }
             }

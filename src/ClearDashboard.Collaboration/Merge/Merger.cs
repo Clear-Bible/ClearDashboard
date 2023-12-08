@@ -37,6 +37,7 @@ public class Merger
         using (PhaseProgress phaseProgress = reporter.StartNextPhase())
         {
             // We do deletes in reverse order for obvious reasons:
+            await DeleteListDifferencesAsync(differencesToApply.LabelGroups, currentSnapshot.LabelGroups, cancellationToken);
             await DeleteListDifferencesAsync(differencesToApply.Labels, currentSnapshot.Labels, cancellationToken);
             await DeleteListDifferencesAsync(differencesToApply.Notes, currentSnapshot.Notes, cancellationToken);
             await DeleteListDifferencesAsync(differencesToApply.TranslationSets, currentSnapshot.TranslationSets, cancellationToken);
@@ -87,6 +88,8 @@ public class Merger
             await ModifyListDifferencesAsync(differencesToApply.Notes, currentSnapshot.Notes, targetCommitSnapshot.Notes, cancellationToken);
             await CreateListDifferencesAsync(differencesToApply.Labels, currentSnapshot.Labels, cancellationToken);
             await ModifyListDifferencesAsync(differencesToApply.Labels, currentSnapshot.Labels, targetCommitSnapshot.Labels, cancellationToken);
+            await CreateListDifferencesAsync(differencesToApply.LabelGroups, currentSnapshot.LabelGroups, cancellationToken);
+            await ModifyListDifferencesAsync(differencesToApply.LabelGroups, currentSnapshot.LabelGroups, targetCommitSnapshot.LabelGroups, cancellationToken);
         }
     }
 

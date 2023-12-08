@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 
@@ -6,7 +7,6 @@ public class ExternalNote
 {
     public string ExternalNoteId { get; set; }
     public string ExternalProjectId { get; set; }
-    public IEnumerable<int> LabelIds { get; set; }
     public string VersePlainText { get; set; }
     public string SelectedPlainText { get; set; }
     /// <summary>
@@ -14,7 +14,37 @@ public class ExternalNote
     /// </summary>
     public int? IndexOfSelectedPlainTextInVersePainText { get; set; }
     public string VerseRefString { get; set; }
-    public string Message { get; set; }
-    public string Body { get; set; }
+    public HashSet<int> ExternalLabelIds { get; set; }
+    public HashSet<ExternalLabel> ExternalLabels { get; set; }
+
+    public string ExternalLabelsString
+    {
+        get
+        {
+            var label = ExternalLabels.FirstOrDefault()?.ExternalText ?? "";
+            if (label == "<external label id -3 does not have label text>")
+            {
+                return "";
+            }
+            return label;
+        }
+    }
+
+
+    /// <summary>
+    /// includes external note's inner details, the contents of which is not compatible between different external notes systems.
+    /// PLEASE DO NOT use in Dashboard UI implementation. If more fields are needed by ui -- AND are likely applicable to external systems
+    /// other than Paratext 9 - revise ExternalNote instead.
+    /// </summary>
+    public string BodyXml { get; set; }
+
+    public string ExternalUserNameAssignedTo { get; set; }
+
+    public bool IsResolved { get; set; }
+
+    public List<ExternalNoteMessage> ExternalNoteMessages { get; set; }
+
+    public string ExternalNoteMessagesString => ExternalNoteMessages
+            .Aggregate("", (str, next) => $"{str}Author {next.ExternalUserNameAuthoredBy} {next.Created}:\n{next.Text}\n\n");
 }
 

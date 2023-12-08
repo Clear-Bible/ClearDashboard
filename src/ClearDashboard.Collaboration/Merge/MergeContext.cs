@@ -40,6 +40,11 @@ public sealed class MergeContext
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.TranslationSet>), new TranslationSetHandler(this));
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.Translation>), new TranslationHandler(this));
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.ParallelCorpus>), new ParallelCorpusHandler(this));
+        _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.Lexicon_Lexeme>), new LexiconHandler(this));
+        _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.Lexicon_SemanticDomain>), new SemanticDomainHandler(this));
+        _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.Label>), new LabelHandler(this));
+        _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.LabelGroup>), new LabelGroupHandler(this));
+        _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.Note>), new NoteHandler(this));
         _mergeHandlerRegistry.Add(typeof(NoteModelRef), new NoteModelRefHandler(this));
     }
 
