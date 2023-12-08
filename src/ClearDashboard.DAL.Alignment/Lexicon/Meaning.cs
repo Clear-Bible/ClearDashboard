@@ -152,9 +152,7 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             foreach (var translation in translations)
             {
                translations_.Remove(translation);
-               translationIdsInDatabase_.RemoveAll(e => e.Id == translation.TranslationId.Id);
             }
-            IsDirty = true;
         }
 
         public async Task DeleteTranslation(IMediator mediator, Translation translation, CancellationToken token = default)
