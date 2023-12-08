@@ -82,7 +82,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
                 _ = await DAL.Alignment.Lexicon.Lexicon.MergeAndSaveAsync(EditedLexemes, LexiconManager.ManagedLexicon.Lexicon, Mediator!);
 
-                await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage());
+                _ = Task.Run(async () =>
+                {
+                    await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage());
+                });
+              
 
                 await TryCloseAsync(true);
             }
