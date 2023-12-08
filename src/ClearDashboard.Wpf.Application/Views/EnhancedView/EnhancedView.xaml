@@ -91,22 +91,10 @@
                         <RowDefinition Height="30" />
                         <RowDefinition Height="40" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <!--  ROW 6  -->
-                    <Button
-                        Grid.Row="6"
-                        Grid.RowSpan="2"
-                        Grid.Column="0"
-                        Margin="10"
-                        Padding="0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
-                        CommandParameter="{x:Static Dock.Top}"
-                        Content="{helpers:Localization Close}"
-                        FontSize="10"
-                        Style="{StaticResource AlternativeStyle}" />
+
 
                     <!--  ROW 0  -->
                     <Label
@@ -413,6 +401,36 @@
                             IsChecked="True" />
                         <Label VerticalAlignment="Center">Wrap Lines</Label>
                     </StackPanel>
+
+                    <!--  ROW 6  -->
+                    <Label
+                        Grid.Row="6"
+                        Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Content="{helpers:Localization FontSettings_ShowExternalNotes}"
+                        FontWeight="Bold" />
+                    <CheckBox
+                        Grid.Row="6"
+                        Grid.Column="1"
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        IsChecked="{Binding ShowExternalNotes}" />
+
+
+                    <!--  ROW 7  -->
+                    <Button
+                        Grid.Row="7"
+                        Grid.RowSpan="2"
+                        Grid.Column="0"
+                        Margin="10"
+                        Padding="0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
+                        CommandParameter="{x:Static Dock.Top}"
+                        Content="{helpers:Localization Close}"
+                        FontSize="10"
+                        Style="{StaticResource AlternativeStyle}" />
                 </Grid>
             </materialDesign:DrawerHost.TopDrawerContent>
 

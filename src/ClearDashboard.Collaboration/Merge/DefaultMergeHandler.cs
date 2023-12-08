@@ -550,7 +550,8 @@ public class DefaultMergeHandler
                 .Select(e => e.Id)
                 .FirstOrDefault();
 
-            if (tokenComponentId == default(Guid)) throw new InvalidModelStateException($"Invalid EngineTokenId '{engineTokenId}' + TokenizedCorpusId '{tokenizedCorpusId}' - TokenComponentId not found");
+            if (tokenComponentId == default(Guid)) 
+                throw new InvalidModelStateException($"Invalid EngineTokenId '{engineTokenId}' + TokenizedCorpusId '{tokenizedCorpusId}' - TokenComponentId not found");
             return tokenComponentId;
         }
 
@@ -561,7 +562,7 @@ public class DefaultMergeHandler
     {
         if (!cache.ContainsCacheKey(TokenizedCorpusEngineTokenIdCacheKey(tokenizedCorpusId)))
         {
-            var tokenComponentsByLocationId = projectDbContext.TokenComponents
+             var tokenComponentsByLocationId = projectDbContext.TokenComponents
                 .Where(e => e.TokenizedCorpusId == tokenizedCorpusId)
                 .Where(e => e.EngineTokenId != null)
                 .Where(e => e.Deleted == null)

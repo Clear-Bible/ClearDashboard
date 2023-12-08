@@ -59,7 +59,12 @@ using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
 
-    public class ReadonlyProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IProjectDesignSurfaceViewModel, IHandle<UiLanguageChangedMessage>, IDisposable
+    public class ReadonlyProjectDesignSurfaceViewModel : 
+        DashboardConductorOneActive<Screen>, 
+        IProjectDesignSurfaceViewModel, 
+        IHandle<UiLanguageChangedMessage>,
+        IHandle<GetExternalNotesMessage>, 
+        IDisposable
     {
         public IEnhancedViewManager EnhancedViewManager { get; }
 
@@ -1164,6 +1169,104 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
+        public void UpdateLabelsWithExternalLabels(string externalProjectId)
+        {
+            try
+            {
+                Logger!.LogInformation("UpdateLabelsWithExternalLabels called.");
+
+                var taskName = $"UpdateLabelsWithExternalLabels{externalProjectId}";
+                var task = _longRunningTaskManager!.Create(taskName, LongRunningTaskStatus.Running);
+                var cancellationToken = task.CancellationTokenSource!.Token;
+
+                _ = Task.Run(async () =>
+                {
+                    _busyState.Add(taskName, true);
+
+
+                    try
+                    {
+                        await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
+                            description: $"Retrieving external labels for externalProjectId '{externalProjectId}'...", cancellationToken: cancellationToken);
+
+                        await _noteManager.ExternalNoteManager.UpdateLabelsWithExternalLabels(externalProjectId, Mediator!, Logger!, cancellationToken);
+
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            await SendBackgroundStatus(taskName,
+                                LongRunningTaskStatus.Cancelled,
+                                cancellationToken,
+                                $"{taskName} canceled.");
+                            Logger!.LogDebug($"{taskName} cancelled.");
+                        }
+                        else
+                        {
+                            await SendBackgroundStatus(
+                                taskName,
+                                LongRunningTaskStatus.Completed,
+                                cancellationToken,
+                                $"{taskName} complete");
+                            Logger!.LogDebug($"{taskName} complete.");
+                        }
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        await SendBackgroundStatus(
+                            taskName,
+                            LongRunningTaskStatus.Cancelled,
+                            cancellationToken,
+                            $"{taskName} cancelled.");
+                        Logger!.LogDebug($"{taskName}: cancelled.");
+                    }
+                    catch (MediatorErrorEngineException ex)
+                    {
+                        if (ex.Message.Contains("The operation was canceled."))
+                        {
+                            await SendBackgroundStatus(
+                                taskName,
+                                LongRunningTaskStatus.Cancelled,
+                                cancellationToken,
+                                $"{taskName} cancelled.");
+                            Logger!.LogDebug($"{taskName}: cancelled.");
+
+                        }
+                        else
+                        {
+                            await SendBackgroundStatus(
+                               taskName,
+                               LongRunningTaskStatus.Failed,
+                               cancellationToken,
+                               $"{taskName} failed: {ex.Message}.",
+                               ex);
+                            Logger!.LogError(ex, $"{taskName}: failed: {ex}.");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!cancellationToken.IsCancellationRequested)
+                        {
+                            await SendBackgroundStatus(
+                                taskName,
+                                LongRunningTaskStatus.Failed,
+                                cancellationToken,
+                                $"{taskName} failed: {ex.Message}.",
+                                ex);
+                            Logger!.LogError(ex, $"{taskName}: failed: {ex}.");
+                        }
+                    }
+                    finally
+                    {
+                        _longRunningTaskManager.TaskComplete(taskName);
+                        _busyState.Remove(taskName);
+                    }
+                }, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                Logger!.LogInformation($"UpdateLabelsWithExternalLabels() - Exception was thrown {e}");
+            }
+        }
+
         public void GetLatestExternalNotes(string externalProjectId)
         {
             try
@@ -1186,33 +1289,67 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                         await _noteManager.ExternalNoteManager.InvalidateExternalNotesCache(externalProjectId);
 
-                        await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
-                            description: $"Retrieving external notes for externalProjectId '{externalProjectId}'...Completed", cancellationToken: cancellationToken);
-
-                        _longRunningTaskManager.TaskComplete(taskName);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        Logger!.LogInformation("GetLatestExternalNotes() - OperationCanceledException was thrown -> cancellation was requested.");
-                    }
-                    catch (MediatorErrorEngineException ex)
-                    {
-                        if (ex.Message.Contains("The operation was canceled"))
+                        if (cancellationToken.IsCancellationRequested)
                         {
-                            Logger!.LogInformation($"GetLatestExternalNotes() - OperationCanceledException was thrown -> cancellation was requested.");
+                            await SendBackgroundStatus(taskName,
+                                LongRunningTaskStatus.Cancelled,
+                                cancellationToken,
+                                $"{taskName} canceled.");
+                            Logger!.LogDebug($"{taskName} cancelled.");
                         }
                         else
                         {
-                            Logger!.LogError(ex, "an unexpected Engine exception was thrown.");
+                            await SendBackgroundStatus(
+                                taskName,
+                                LongRunningTaskStatus.Completed,
+                                cancellationToken,
+                                $"{taskName} complete");
+                            Logger!.LogDebug($"{taskName} complete.");
                         }
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        await SendBackgroundStatus(
+                            taskName,
+                            LongRunningTaskStatus.Cancelled,
+                            cancellationToken,
+                            $"{taskName} cancelled.");
+                        Logger!.LogDebug($"{taskName}: cancelled.");
+                    }
+                    catch (MediatorErrorEngineException ex)
+                    {
+                        if (ex.Message.Contains("The operation was canceled."))
+                        {
+                            await SendBackgroundStatus(
+                                taskName,
+                                LongRunningTaskStatus.Cancelled,
+                                cancellationToken,
+                                $"{taskName} cancelled.");
+                            Logger!.LogDebug($"{taskName}: cancelled.");
 
+                        }
+                        else
+                        {
+                            await SendBackgroundStatus(
+                               taskName,
+                               LongRunningTaskStatus.Failed,
+                               cancellationToken,
+                               $"{taskName} failed: {ex.Message}.",
+                               ex);
+                            Logger!.LogError(ex, $"{taskName}: failed: {ex}.");
+                        }
                     }
                     catch (Exception ex)
                     {
-                        Logger!.LogError(ex, $"An unexpected error occurred while retrieving external notes for '{externalProjectId}' ");
                         if (!cancellationToken.IsCancellationRequested)
                         {
-                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,exception: ex, cancellationToken: cancellationToken);
+                            await SendBackgroundStatus(
+                                taskName,
+                                LongRunningTaskStatus.Failed,
+                                cancellationToken,
+                                $"{taskName} failed: {ex.Message}.",
+                                ex);
+                            Logger!.LogError(ex, $"{taskName}: failed: {ex}.");
                         }
                     }
                     finally
@@ -1641,6 +1778,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.GetLatestExternalNotes:
                     GetLatestExternalNotes(corpusNodeViewModel.ParatextProjectId);
                     break;
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.UpdateLabelsWithExternalLabels:
+                    UpdateLabelsWithExternalLabels(corpusNodeViewModel.ParatextProjectId);
+                    break;
             }
         }
 
@@ -1821,7 +1961,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
         }
+        public Task HandleAsync(GetExternalNotesMessage message, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(message.ParatextProjectId) == false)
+            {
+                GetLatestExternalNotes(message.ParatextProjectId);
+            }
 
+            return Task.CompletedTask;
+        }
         #endregion
 
         #endregion // Methods

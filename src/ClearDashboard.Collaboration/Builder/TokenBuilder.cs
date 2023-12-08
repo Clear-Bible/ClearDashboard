@@ -20,7 +20,7 @@ public class TokenBuilder : GeneralModelBuilder<Models.Token>
             { VERSE_ROW_LOCATION, typeof(string) }
         };
 
-    public static IEnumerable<(Models.Token Token, int? OriginTokenLocationIndex)> OrganizeTokensByOriginTokenLocation(IEnumerable<Models.Token> tokens)
+    public static IEnumerable<(Models.Token Token, int? OriginTokenLocationIndex)> OrganizeTokensByOriginTokenLocation(IEnumerable<Models.Token> tokens, IEnumerable<string>? engineTokenIdAdditions = null)
     {
         // Tokens manually changed (e.g. Token Splitting/subword renumbering):
         var originTokenLocationGroups = tokens
@@ -63,19 +63,31 @@ public class TokenBuilder : GeneralModelBuilder<Models.Token>
             .Select(e => (Token: e, Index: null as int?))
         );
 
+        if (engineTokenIdAdditions is not null)
+        {
+            // Tokens not yet included in tokenIndexes that were soft deleted:
+            tokenIndexes.AddRange(tokens
+                .Where(e => engineTokenIdAdditions.Contains(e.EngineTokenId))
+                .Where(e => !tokenIndexes.Select(e => e.Token.Id).Contains(e.Id))
+                .ToList()
+                .Select(e => (Token: e, Index: null as int?))
+            );
+        }
+
         return tokenIndexes
             .OrderBy(e => e.Token.OriginTokenLocation)
             .OrderBy(e => e.Index)
             .OrderBy(e => e.Token.EngineTokenId);
     }
 
-    public Func<ProjectDbContext, Guid, IEnumerable<(Models.Token Token, int? OriginTokenLocationIndex)>> GetTokenizedCorpusTokens = 
-        (projectDbContext, tokenizedCorpusId) =>
+    public Func<ProjectDbContext, Guid, IEnumerable<string>?, IEnumerable<(Models.Token Token, int? OriginTokenLocationIndex)>> GetTokenizedCorpusTokens = 
+        (projectDbContext, tokenizedCorpusId, engineTokenIdAdditions) =>
             {
                 return OrganizeTokensByOriginTokenLocation(projectDbContext.Tokens
                     .AsNoTrackingWithIdentityResolution()
                     .Include(e => e.VerseRow)
-                    .Where(e => e.TokenizedCorpusId == tokenizedCorpusId)
+                    .Where(e => e.TokenizedCorpusId == tokenizedCorpusId),
+                    engineTokenIdAdditions
                 );
             };
 

@@ -167,6 +167,8 @@ public class ParallelCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.P
             },
             cancellationToken
         );
+
+        await base.HandleCreateChildrenAsync(parentSnapshot, cancellationToken);
     }
 }
 

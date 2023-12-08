@@ -15,13 +15,16 @@ namespace ClearDashboard.DAL.Alignment.Notes
         /// <param name="addNoteCommandParam"></param>
         /// <param name="externalProjectId"></param>
         /// <param name="verseTokens">All tokens must be from the same book, chapter, and verse. Applies note to the first token's book, chapter, verse. </param>
-        /// <param name="verseContiguousSelectedTokens">If empty, apply note to entire verse. When non-empty, all tokens must be also included in the prior parameter.</param>        /// <param name="engineStringDetokenizer"></param>
+        /// <param name="verseContiguousSelectedTokens"></param>
+        /// <param name="engineStringDetokenizer"></param>
         /// <param name="noteText"></param>
-        /// <param name="assignedUser"></param>
-        /// <param name="book">if book, chapter, or verse not set the current external setting for the current project will be used.</param>
-        /// <param name="chapter">if book, chapter, or verse not set the current external setting for the current project will be used.</param>
-        /// <param name="verse">if book, chapter, or verse not set the current external setting for the current project will be used.</param>
-        /// <exception cref="Exception"></exception>
+        /// <param name="labels"></param>
+        /// <param name="book"></param>
+        /// <param name="chapter"></param>
+        /// <param name="verse"></param>
+        /// <param name="userName"></param>
+        /// <exception cref="Exception"></exception>        
+        /// 
         public static void SetProperties(
             this AddNoteCommandParam addNoteCommandParam,
             string externalProjectId,
@@ -29,9 +32,10 @@ namespace ClearDashboard.DAL.Alignment.Notes
             IEnumerable<Token> verseContiguousSelectedTokens,
             EngineStringDetokenizer engineStringDetokenizer,
             string noteText,
-            int book = -1,
-            int chapter = -1,
-            int verse = -1,
+            IEnumerable<Label> labels,
+            int book,
+            int chapter,
+            int verse,
             string? userName = null)
         {
             if (verseTokens.Count() == 0)
@@ -44,10 +48,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             addNoteCommandParam.Chapter = chapter;
             addNoteCommandParam.Verse = verse;
 
-            var token = verseTokens.First();
-            addNoteCommandParam.Book = token.TokenId.BookNumber;
-            addNoteCommandParam.Chapter = token.TokenId.ChapterNumber;
-            addNoteCommandParam.Verse = token.TokenId.VerseNumber;
+            addNoteCommandParam.LabelTexts = labels.Select(x => x.Text).ToList();
 
             //addNoteCommandParam.Verse = new VerseRef(int.Parse(verseTokens.First().TokenId.ToString().Substring(0, 9)));
             var verseText = $"{engineStringDetokenizer.Detokenize(verseTokens).Aggregate(string.Empty, (constructedString, tokenWithPadding) => $"{constructedString}{tokenWithPadding.paddingBefore}{tokenWithPadding.token}{tokenWithPadding.paddingAfter}")}";
@@ -77,16 +78,9 @@ namespace ClearDashboard.DAL.Alignment.Notes
             }
             addNoteCommandParam.SelectedText = selectedText;
 
-            //Contents
-            var span = new Span();
-            span.Text = noteText;
-
-            var content = new Content();
-            content.Spans.Add(span);
-
             addNoteCommandParam.NoteParagraphs = noteText.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-             addNoteCommandParam.UserName = userName;
+            addNoteCommandParam.UserName = userName;
         }
 
         /// <summary>

@@ -16,6 +16,8 @@ using SIL.Machine.Corpora;
 using SIL.Machine.Utils;
 using SIL.Scripture;
 using Models = ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.Collaboration.Builder;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -101,27 +103,60 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
             _mergeContext.Logger.LogInformation($"Completed inserting {insertCount} verse row children for tokenized corpus '{parentSnapshot.GetId()}'");
 
             _mergeContext.Logger.LogInformation($"Inserting tokens for imported verse row children for tokenized corpus '{parentSnapshot.GetId()}'");
-            await InsertTokens((IModelSnapshot<Models.TokenizedCorpus>)parentSnapshot, verseRowHandler, cancellationToken);
+            await InsertTokens(parentSnapshot, verseRowHandler, cancellationToken);
             _mergeContext.Logger.LogInformation($"Completed inserting tokens for imported verse row children for tokenized corpus '{parentSnapshot.GetId()}'");
         }
 
         if (TokenizedTextCorpus.FixedTokenizedCorpusIdsByCorpusType.ContainsValue((Guid)parentSnapshot.GetId()))
         {
             _mergeContext.Logger.LogInformation($"Inserting tokens for manuscript tokenized corpus '{parentSnapshot.GetId()}'");
-            await ImportManuscriptVerseRowsTokens((IModelSnapshot<Models.TokenizedCorpus>)parentSnapshot!, cancellationToken);
+            await ImportManuscriptVerseRowsTokens(parentSnapshot!, cancellationToken);
             _mergeContext.Logger.LogInformation($"Completed inserting tokens for manuscript tokenized corpus '{parentSnapshot.GetId()}'");
         }
 
         var tokenChildName = ProjectSnapshotFactoryCommon.childFolderNameMappings[typeof(Models.Token)].childName;
-        if (parentSnapshot.Children.ContainsKey(tokenChildName))
+        if (parentSnapshot.Children.ContainsKey(tokenChildName) && parentSnapshot.Children[tokenChildName].Any())
         {
+            // We think we need to create these Token children (that no matching tokens exist in current database/snapshot),
+            // but since we just tokenized that may no longer be true.  Build a new set of token snapshot snapshot children
+            // that result from tokenization and look for matches.
+
+            var tokenSnapshots = (IEnumerable<IModelSnapshot<Models.Token>>)parentSnapshot.Children[tokenChildName];
+            var tokenBuilder = (TokenBuilder)GeneralModelBuilder.GetModelBuilder<Models.Token>();
             var tokenHandler = _mergeContext.FindMergeHandler<IModelSnapshot<Models.Token>>();
 
+            IEnumerable<IModelSnapshot<Models.Token>>? currentTokenSnapshots = null;
+
+            await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
+                $"Retrieve a list of token snapshots from the current database that includes EngineTokenIds from tokenSnapshots",
+                async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
+
+                    // Load possible 'current database' matches (just created using InsertTokens) to manually
+                    // created/changed token by matching database EngineTokenIds to incoming EngineTokenIds or OriginTokenLocations:
+                    currentTokenSnapshots = TokenizedCorpusBuilder.BuildTokenModelSnapshots(
+                        tokenBuilder,
+                        new BuilderContext(projectDbContext),
+                        (Guid)parentSnapshot.GetId(),
+                        tokenSnapshots.ExtractAllTokenLocations());
+
+                    await Task.CompletedTask;
+                },
+                cancellationToken
+            );
+
+            // the 'list difference' passed to CreateListDifferencesAsync below is supposed to be the
+            // difference between the commit we are merging and the one previously merged.  Since we 
+            // are in TokenizedCorpus create, we can assume that all the tokenSnapshots are 'OnlyIn2' 
+
             _mergeContext.Logger.LogInformation($"Inserting token children for tokenized corpus '{parentSnapshot.GetId()}'");
-            var insertCount = await tokenHandler.CreateListItemsAsync(
-                (IEnumerable<IModelSnapshot<Models.Token>>)parentSnapshot.Children[tokenChildName],
-                cancellationToken);
-            _mergeContext.Logger.LogInformation($"Completed inserting {insertCount} token children for tokenized corpus '{parentSnapshot.GetId()}'");
+
+            var tokenListDifference = new ListDifference<IModelSnapshot<Models.Token>>(
+                Enumerable.Empty<IModelSnapshot<Models.Token>>().GetListMembershipDifference(tokenSnapshots),
+                Enumerable.Empty<IModelDifference<IModelSnapshot<Models.Token>>>());
+
+            await tokenHandler.CreateListDifferencesAsync(tokenListDifference, currentTokenSnapshots, cancellationToken);
+
+            _mergeContext.Logger.LogInformation($"Completed inserting or updating {parentSnapshot.Children[tokenChildName].Count()} token children for tokenized corpus '{parentSnapshot.GetId()}'");
         }
 
         var compositeChildName = ProjectSnapshotFactoryCommon.childFolderNameMappings[typeof(Models.TokenComposite)].childName;
@@ -144,6 +179,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
         CancellationToken cancellationToken)
     {
         var verseRowChildName = ProjectSnapshotFactoryCommon.childFolderNameMappings[typeof(Models.VerseRow)].childName;
+        var insertedTokens = false;
         if (childListDifferences.ContainsKey(verseRowChildName))
         {
             var verseRowHandler = (VerseRowHandler)_mergeContext.FindMergeHandler<IModelSnapshot<Models.VerseRow>>();
@@ -163,17 +199,47 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
             if (parentItemInCurrentSnapshot is not null)
             {
                 _mergeContext.Logger.LogInformation($"Inserting tokens for list difference verse row children for tokenized corpus '{parentItemInCurrentSnapshot.GetId()}'");
-                await InsertTokens((IModelSnapshot<Models.TokenizedCorpus>)parentItemInCurrentSnapshot, verseRowHandler, cancellationToken);
+                await InsertTokens(parentItemInCurrentSnapshot, verseRowHandler, cancellationToken);
                 _mergeContext.Logger.LogInformation($"Compelted inserting tokens for list difference verse row children for tokenized corpus '{parentItemInCurrentSnapshot.GetId()}'");
+
+                insertedTokens = true;
             }
         }
 
         var tokenChildName = ProjectSnapshotFactoryCommon.childFolderNameMappings[typeof(Models.Token)].childName;
         if (childListDifferences.ContainsKey(tokenChildName))
         {
+            // Token snapshots from source system (manually created + altered)
+            // Token snapshots from last commit
+            // Token snapshots from current system database
+
+            var currentTokenSnapshots = (IEnumerable<IModelSnapshot<Models.Token>>?)parentItemInCurrentSnapshot?.Children.GetValueOrDefault(tokenChildName);
+            var toMergeTokenSnapshots = (IEnumerable<IModelSnapshot<Models.Token>>?)parentItemInTargetCommitSnapshot?.Children.GetValueOrDefault(tokenChildName);
+
             if (parentItemInCurrentSnapshot is not null)
             {
                 var tokenizedCorpusId = (Guid)parentItemInCurrentSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.Id)]!;
+
+                if (insertedTokens)
+                {
+                    await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
+                        $"",
+                        async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
+
+                            // Load possible 'current database' matches (just created using InsertTokens) to manually
+                            // created/changed token by matching database EngineTokenIds to incoming EngineTokenIds or OriginTokenLocations.
+                            // We are replacing the currentTokenSnapshots loaded earlier (before tokenizing):
+                            currentTokenSnapshots = TokenizedCorpusBuilder.BuildTokenModelSnapshots(
+                                (TokenBuilder)GeneralModelBuilder.GetModelBuilder<Models.Token>(),
+                                new BuilderContext(projectDbContext),
+                                tokenizedCorpusId,
+                                toMergeTokenSnapshots?.ExtractAllTokenLocations());
+
+                            await Task.CompletedTask;
+                        },
+                        cancellationToken
+                    );
+                }
 
                 await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
                     $"Loading manual token 'ref' cache for TokenizedCorpusId '{tokenizedCorpusId}'",
@@ -190,12 +256,12 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
             _mergeContext.Logger.LogInformation($"Starting handle token child list differences for tokenized corpus");
             await tokenHandler.MergeListDifferenceGroup(
                 childListDifferences[tokenChildName],
-                parentItemInCurrentSnapshot?.Children.GetValueOrDefault(tokenChildName),
+                currentTokenSnapshots,
                 parentItemInTargetCommitSnapshot?.Children.GetValueOrDefault(tokenChildName),
                 cancellationToken);
             await tokenHandler.DeleteOriginTokenLocationLeftovers(
                 childListDifferences[tokenChildName],
-                parentItemInCurrentSnapshot?.Children.GetValueOrDefault(tokenChildName),
+                currentTokenSnapshots,
                 parentItemInTargetCommitSnapshot?.Children.GetValueOrDefault(tokenChildName),
                 cancellationToken);
             _mergeContext.Logger.LogInformation($"Completed handle token child list differences for tokenized corpus");

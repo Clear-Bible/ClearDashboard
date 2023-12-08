@@ -1340,7 +1340,7 @@
     <value>Nutzername:</value>
   </data>
   <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
-    <value>Der Benutzer ist bereits auf dem System!</value>
+    <value>Der Benutzer ist bereits im System!</value>
   </data>
   <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
     <value>Validieren Sie den E -Mail -Code</value>
@@ -1592,7 +1592,7 @@
     <value>Fügen Sie Text zur Anzeige hinzu</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie der neuen Ansicht Text hinzu</value>
+    <value>Fügen Sie Text zur neuen Ansicht hinzu</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Zur Anzeige hinzufügen</value>
@@ -1841,7 +1841,7 @@
     <value>Serverprojekt importieren</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Überprüfen Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
+    <value>Aktivieren Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>NT Griechische biblische Texte einschließen?</value>
@@ -1949,7 +1949,7 @@
     <value>1 Thessalonicher</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 Timothy</value>
+    <value>1 Timotheus</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 Chroniken</value>
@@ -2036,7 +2036,7 @@
     <value>James</value>
   </data>
   <data name="ProperCase_Jeremiah" xml:space="preserve">
-    <value>Jeremiah</value>
+    <value>Jeremia</value>
   </data>
   <data name="ProperCase_Job" xml:space="preserve">
     <value>Arbeit</value>

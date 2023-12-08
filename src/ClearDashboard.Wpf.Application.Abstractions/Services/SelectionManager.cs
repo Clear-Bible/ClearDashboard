@@ -29,6 +29,32 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
+        private TokenDisplayViewModel? DragStartToken { get; set; }
+        public bool IsDragInProcess => DragStartToken != null;
+        private bool DragIsSource => DragStartToken?.IsSource ?? true;
+        private VerseDisplayViewModel? DragStartVerse => DragStartToken?.VerseDisplay;
+        private TokenDisplayViewModelCollection DragVerseSourceTokens => DragStartVerse?.SourceTokenDisplayViewModels ?? new TokenDisplayViewModelCollection();
+        private TokenDisplayViewModelCollection DragVerseTargetTokens => DragStartVerse?.TargetTokenDisplayViewModels ?? new TokenDisplayViewModelCollection();
+        private TokenDisplayViewModelCollection DragVerseTokens => DragIsSource ? DragVerseSourceTokens : DragVerseTargetTokens;
+        public TokenDisplayViewModelCollection SelectedTokensBeforeDrag { get; private set; } = new();
+
+        public void StartDragSelection(TokenDisplayViewModel tokenDisplay)
+        {
+            DragStartToken = tokenDisplay;
+            SelectedTokensBeforeDrag = SelectedTokens.Copy();
+        }
+
+        public TokenDisplayViewModelCollection GetDragSelection(TokenDisplayViewModel tokenDisplay)
+        {
+            return IsDragInProcess ? DragVerseTokens.GetRange(DragStartToken!, tokenDisplay) : new TokenDisplayViewModelCollection();
+        }
+
+        public void EndDragSelection(TokenDisplayViewModel tokenDisplay)
+        {
+            DragStartToken = null;
+            SelectedTokensBeforeDrag.Clear();
+        }
+
         public bool AnySourceTokens => SelectedTokens.Any(t => t.IsSource && (t.IsTokenSelected || t.IsTranslationSelected));
         public bool AnyTargetTokens => SelectedTokens.Any(t => t.IsTarget && (t.IsTokenSelected || t.IsTranslationSelected));
 

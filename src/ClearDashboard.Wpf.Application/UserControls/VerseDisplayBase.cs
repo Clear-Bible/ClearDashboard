@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using SIL.Extensions;
@@ -120,6 +121,11 @@ public class VerseDisplayBase : UserControl, INotifyPropertyChanged, IHandle<Tok
     /// Gets or sets the <see cref="IEventAggregator"/> that this control instance can use to listen for events.
     /// </summary>
     public static IEventAggregator? EventAggregator { get; set; }
+
+    /// <summary>
+    /// Gets or sets the <see cref="SelectionManager"/> that this control instance can use to manage selection.
+    /// </summary>
+    public static SelectionManager? SelectionManager { get; set; }
 
     /// <summary>
     /// Gets the <see cref="FlowDirection"/> for the source tokens.

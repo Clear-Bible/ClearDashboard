@@ -349,21 +349,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                     status.Description = backgroundTaskStatus.Description;
                     if (backgroundTaskStatus.TaskLongRunningProcessStatus == LongRunningTaskStatus.Failed)
                     {
-                        if (backgroundTaskStatus.ErrorMessage.Contains("InvalidParameterEngineException"))
+                        if (status.Description == null || status.Description.Trim().Length == 0)
                         {
-                            status.Description = backgroundTaskStatus.Name + " Failed to Tokenize:\n\n " + "An unfitting tokenizer was used for the selected corpus.  For example, the ZWSP tokenizer for the NIV84 corpus.  Please remove the corpus, pick a different tokenizer, and try again";
-                        }
-                        else if (backgroundTaskStatus.ErrorMessage.Contains("InvalidDataEngineException"))
-                        {
-                            status.Description = backgroundTaskStatus.Name + " Failed to Tokenize:\n\n " + "There were problems with the data being tokenized, such as USFM errors.  Please remove the corpus, resolve the data issue, and try again.";
-                        }
-                        else if (message.Status.BackgroundTaskSource == typeof(ProjectDesignSurfaceViewModel))
-                        {
-                            status.Description = backgroundTaskStatus.Name + " Failed to Tokenize:\n\n " + "Please remove it and try again.";
-                        }
-                        else
-                        {
-                            status.Description = backgroundTaskStatus.Name + " Failed:\n\n " + backgroundTaskStatus.ErrorMessage;
+                            if (backgroundTaskStatus.ErrorMessage.Contains("InvalidParameterEngineException"))
+                            {
+                                status.Description = backgroundTaskStatus.Name + " Failed to Tokenize:\n\n " + "An unfitting tokenizer was used for the selected corpus.  For example, the ZWSP tokenizer for the NIV84 corpus.  Please remove the corpus, pick a different tokenizer, and try again";
+                            }
+                            else if (backgroundTaskStatus.ErrorMessage.Contains("InvalidDataEngineException"))
+                            {
+                                status.Description = backgroundTaskStatus.Name + " Failed to Tokenize:\n\n " + "There were problems with the data being tokenized, such as USFM errors.  Please remove the corpus, resolve the data issue, and try again.";
+                            }
+                            else if (message.Status.BackgroundTaskSource == typeof(ProjectDesignSurfaceViewModel))
+                            {
+                                status.Description = backgroundTaskStatus.Name + " Failed to Tokenize:\n\n " + "Please remove it and try again.";
+                            }
+                            else
+                            {
+                                status.Description = backgroundTaskStatus.Name + " Failed:\n\n " + backgroundTaskStatus.ErrorMessage;
+                            }
                         }
                         ShowPopup = true;
                     }

@@ -59,7 +59,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
             var paratextChapterNotes = project.GetNotes(verse.BookNum, verse.ChapterNum, true);
 
             var paratextNotesWithExternalNoteId = paratextChapterNotes
-                .Where(n => n.GetIdAndLabels().id.Equals(request.Data.ExternalNoteId));
+                .Where(n => n.GetExternalNoteIdAndLabelIds().externalNoteId.Equals(request.Data.ExternalNoteId));
 
             if (paratextNotesWithExternalNoteId.Count() != 1)
             {

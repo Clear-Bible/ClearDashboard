@@ -26,6 +26,7 @@ public class ProjectSnapshotFactoryCommon
     public static readonly Dictionary<Type, string> topLevelEntityFolderNameMappings = new() {
         { typeof(Models.AlignmentSet), "AlignmentSets" },
         { typeof(Models.Corpus), "Corpora" },
+        { typeof(Models.LabelGroup), "LabelGroups" },
         { typeof(Models.Label), "Labels" },
         { typeof(Models.Note), "Notes" },
         { typeof(Models.TokenizedCorpus), "TokenizedCorpora" },
@@ -41,10 +42,12 @@ public class ProjectSnapshotFactoryCommon
         { typeof(Models.TokenComposite), ("CompositeTokens", "CompositeTokens") },
         { typeof(Models.Token), ("Tokens", "Tokens") },
         { typeof(Models.Translation), ("Translations", "Translations") },
+        { typeof(Models.LabelGroupAssociation), ("LabelGroupAssociations", "LabelGroupAssociations") },
         { typeof(Models.LabelNoteAssociation), ("LabelNoteAssociations", "LabelNoteAssociations") },
         { typeof(Models.Note), ("Replies", "Replies") },
         { typeof(Models.VerseRow), ("VerseRowsByBook", "VerseRows") },
         { typeof(NoteModelRef), ("NoteModelRefs", "NoteModelRefs") },
+        { typeof(Models.NoteUserSeenAssociation), ("UserSeenAssociations", "NoteUserSeenAssociations") },
         { typeof(Models.Lexicon_Meaning), ("Meanings", "Meanings") },
         { typeof(Models.Lexicon_Translation), ("Translations", "Translations") },
         { typeof(Models.Lexicon_Form), ("Forms", "Forms") },
@@ -98,6 +101,7 @@ public class ProjectSnapshotFactoryCommon
         modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.TranslationSet>>());
         modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.Note>>());
         modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.Label>>());
+        modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.LabelGroup>>());
 
         return modelSnapshot;
     }

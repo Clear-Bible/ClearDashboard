@@ -6,6 +6,8 @@ using LibGit2Sharp;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using ClearDashboard.Collaboration.Exceptions;
+using ClearDashboard.Collaboration.Builder;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Factory;
 
@@ -127,6 +129,18 @@ public class ProjectSnapshotFromGitFactory
                 {
                     projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.Corpus>(topLevelEntry, repo, commitSha, null, cancellationToken));
                 }
+                else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.LabelGroup)])
+                {
+                    projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.LabelGroup>(topLevelEntry, repo, commitSha,
+                        (IEnumerable<TreeEntry> entityItems,
+                        GeneralModel<Models.LabelGroup> modelSnapshot,
+                        Repository repo,
+                        string commitSha) =>
+                        {
+                            AddGeneralModelChild<Models.LabelGroup, Models.LabelGroupAssociation>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
+                        },
+                        cancellationToken));
+                }
                 else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.Label)])
                 {
                     projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.Label>(topLevelEntry, repo, commitSha,
@@ -149,6 +163,7 @@ public class ProjectSnapshotFromGitFactory
                         {
                             AddGeneralModelChild<Models.Note, Models.Note>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
                             AddGeneralModelChild<Models.Note, NoteModelRef>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
+                            AddGeneralModelChild<Models.Note, Models.NoteUserSeenAssociation>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
                         },
                         cancellationToken));
                 }
@@ -240,6 +255,14 @@ public class ProjectSnapshotFromGitFactory
                 }
             }
 
+            // Any top level entity types for which there may be existing
+            // serializations in older formats that need to be updated:
+            var updateMappings = new Dictionary<Type, Dictionary<Guid, Dictionary<string, string>>>();
+
+            GeneralModelBuilder.GetModelBuilder<Models.Label>().UpdateModelSnapshotFormat(projectSnapshot, updateMappings);
+            GeneralModelBuilder.GetModelBuilder<Models.Lexicon_Lexeme>().UpdateModelSnapshotFormat(projectSnapshot, updateMappings);
+            GeneralModelBuilder.GetModelBuilder<Models.Lexicon_SemanticDomain>().UpdateModelSnapshotFormat(projectSnapshot, updateMappings);
+
             return projectSnapshot;
         }
     }
@@ -287,7 +310,7 @@ public class ProjectSnapshotFromGitFactory
         string commitSha,
         AddGeneralModelChildDelegate<T>? addGeneralModelChildDelegate,
         CancellationToken cancellationToken)
-        where T : notnull
+        where T : IdentifiableEntity
     {
         var modelSnapshots = new List<GeneralModel<T>>();
 

@@ -161,7 +161,7 @@
     <value>Выравнивание</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
-    <value>Выберите книги, с которыми вы работаете, вы всегда можете добавить больше книг позже.</value>
+    <value>Выберите книги (ы), с которыми вы работаете, вы всегда можете добавить больше книг позже.</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Проверка USFM</value>
@@ -665,7 +665,7 @@
     <value>Поиск фильтра</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>Поиск членов фильтра</value>
+    <value>Поиск члена фильтра</value>
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
     <value>Межлинейно</value>
@@ -701,7 +701,7 @@
     <value>Показать элементы управления представлением</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>Разделенный токен</value>
+    <value>Расколотый токен</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>Применить разделение на другие экземпляры токена</value>
@@ -1268,7 +1268,7 @@
     <value>Мих.</value>
   </data>
   <data name="Migrate_Header" xml:space="preserve">
-    <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
+    <value>Сбросить сопоставления стихов в стихование по умолчанию</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>Мк.</value>
@@ -1418,7 +1418,7 @@
     <value>Добавить группу метки</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Добавить группу этикетки</value>
+    <value>Добавить группу ярлыков</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Группа лейблов уже существует с именем</value>
@@ -1586,7 +1586,7 @@
     <value>Создать новую токенизацию корпуса</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>Добавить новый интерлинеар</value>
+    <value>Добавить новый интернетальный</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>Добавьте текст в просмотр</value>
@@ -1640,7 +1640,7 @@
     <value>Установите всю область контента в просмотр</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>Подключить все узлы к видовому доку</value>
+    <value>Установите все узлы в Viewport</value>
   </data>
   <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
     <value>Получите последние внешние заметки</value>
@@ -1673,7 +1673,7 @@
     <value>Характеристики</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
+    <value>Сбросить сопоставления стихов в стихование по умолчанию</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Ресурс</value>
@@ -1718,7 +1718,7 @@
     <value>XML</value>
   </data>
   <data name="Pds_ZoomIn" xml:space="preserve">
-    <value>Увеличить контент</value>
+    <value>Увеличить содержание</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
     <value>Увеличить контент</value>
@@ -1847,7 +1847,7 @@
     <value>Установите этот флажок, чтобы включить греческие и еврейские библейские тексты при создании вашего проекта.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Включите NT Грико -библейские тексты?</value>
+    <value>Включите NT Греко -библейские тексты?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>Включите ивритские библейские тексты?</value>
@@ -2261,7 +2261,7 @@
     <value>Показать расширенные виды на другом мониторе, чем панель панели</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Для систем с тремя или более мониторами показать расширенный просмотр на третьем мониторе</value>
+    <value>Для систем с тремя или более мониторами показать расширенное представление о третьем мониторе</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Текстовая коллекция</value>

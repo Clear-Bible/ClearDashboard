@@ -129,6 +129,8 @@ public abstract class NoteModelRef : IModelSnapshot<Models.NoteDomainEntityAssoc
     }
 
     public object GetId() => NoteDomainEntityAssociationId;
+    public string GetIdForFilesystem() => NoteDomainEntityAssociationId.ToString();
+    public string GetComparableId() => NoteDomainEntityAssociationId.ToString();
 
     [JsonIgnore]
     public IReadOnlyDictionary<string, object?> PropertyValues => new Dictionary<string, object?>() {
@@ -169,6 +171,46 @@ public abstract class NoteModelRef : IModelSnapshot<Models.NoteDomainEntityAssoc
         }
 
         return found;
+    }
+
+    public bool TryGetNullableStringPropertyValue(string key, out string? valueAsString)
+    {
+        if (TryGetPropertyValue(key, out var value) &&
+            PropertyTypes.TryGetValue(key, out var type) &&
+            type == typeof(string))
+        {
+            valueAsString = (string?)value;
+            return true;
+        }
+
+        valueAsString = null;
+        return false;
+    }
+
+    public bool TryGetStringPropertyValue(string key, out string valueAsString)
+    {
+        if (TryGetPropertyValue(key, out var value) &&
+            value is string str)
+        {
+            valueAsString = str;
+            return true;
+        }
+
+        valueAsString = string.Empty;
+        return false;
+    }
+
+    public bool TryGetGuidPropertyValue(string key, out Guid valueAsGuid)
+    {
+        if (TryGetPropertyValue(key, out var value) &&
+            value is Guid guid)
+        {
+            valueAsGuid = guid;
+            return true;
+        }
+
+        valueAsGuid = Guid.Empty;
+        return false;
     }
 
     public abstract IModelDifference<NoteModelRef> GetModelDifference(NoteModelRef other);

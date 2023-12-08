@@ -115,6 +115,9 @@ query handler, which forwards the result to the calling process.
   }
  ```
 
+NOTE for DIRK: the "biblicalterms" in the line `return await ExecuteRequest("biblicalterms", request, cancellationToken);` is NOT the folder or namespace names.  But rather, the controller's prefix minus the word "Controller".  So if your controller is `BiblicalTermsController`, then your route is "biblicalterms".  Note that it is case insensitive. 
+
+
  #### The Paratext query handler
  ``` csharp
  public class BiblicalTermsController : FeatureSliceController

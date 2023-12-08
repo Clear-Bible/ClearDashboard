@@ -155,7 +155,7 @@
     <value>Thêm vào</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Chọn cách để mã hóa xác chết</value>
+    <value>Chọn cách để mã hóa Quả văn</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Liên kết</value>
@@ -953,7 +953,7 @@
     <value>Biên tập</value>
   </data>
   <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
-    <value>Thêm '{0}' dưới dạng hình thức</value>
+    <value>Thêm '{0}' dưới dạng biểu mẫu</value>
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>Thêm '{0}' như bản dịch sang ý nghĩa đầu tiên</value>
@@ -1550,7 +1550,7 @@
     <value>Thuật toán căn chỉnh từ máy</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Mô hình đối xứng xe lửa?</value>
+    <value>Mô hình Symmetrized Train?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>Xe lửa</value>
@@ -1607,7 +1607,7 @@
     <value>Tính toán mô hình dịch mới</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Thay đổi mức độ zoom của nội dung</value>
+    <value>Thay đổi mức thu phóng của nội dung</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
     <value>Chuyên gia tư vấn</value>
@@ -1685,7 +1685,7 @@
     <value>Nguồn</value>
   </data>
   <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>Language chua</value>
+    <value>Language Sourcel</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
     <value>Tiêu chuẩn</value>

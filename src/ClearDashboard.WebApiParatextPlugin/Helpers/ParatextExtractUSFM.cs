@@ -2,6 +2,7 @@
 using Icu;
 using Microsoft.Win32;
 using Paratext.PluginInterfaces;
+using SIL.Machine.FiniteState;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -172,7 +173,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                         bool lastTokenText = false;
                         bool lastVerseZero = false;
                         string lastVerseRef = "";
-                       
+
                         foreach (var token in tokens)
                         {
                             if (token is IUSFMMarkerToken marker)
@@ -190,7 +191,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                     if (marker.Data != null)
                                     {
                                         string verseMarker = marker.Data.Trim();
-                                        
+
                                         try
                                         {
                                             bool foundMatch = false;
@@ -206,7 +207,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                                 if (marker.Data.Trim().EndsWith("-"))
                                                 {
                                                     mainWindow.AppendText(Color.Red, $"Verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)} ends in '-'");
-                                                    usfmError.Add( new UsfmError
+                                                    usfmError.Add(new UsfmError
                                                     {
                                                         Reference = UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key),
                                                         Error = $"Verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)} ends in '-'",
@@ -258,7 +259,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                         mainWindow.AppendText(Color.Red, $"Error with empty verse tag in {project.AvailableBooks[bookNum].Code} {lastChapter}");
                                         usfmError.Add(new UsfmError
                                         {
-                                            Reference = $"{project.AvailableBooks[bookNum].Code} {lastChapter }",
+                                            Reference = $"{project.AvailableBooks[bookNum].Code} {lastChapter}",
                                             Error = $"Error with empty verse tag in {project.AvailableBooks[bookNum].Code} {lastChapter}",
                                         });
                                     }
@@ -330,6 +331,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                         try
                         {
                             File.WriteAllText(Path.Combine(exportPath, fileName), sb.ToString());
+
+
+                            FixSplitVerses(Path.Combine(exportPath, fileName));
                         }
                         catch (Exception e)
                         {
@@ -346,11 +350,95 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
 
             return new UsfmHelper
             {
-                Path = exportPath, 
-                UsfmErrors = usfmError, 
+                Path = exportPath,
+                UsfmErrors = usfmError,
                 NumberOfErrors = usfmError.Count
             };
         }
+
+        /// <summary>
+        /// This method iterates over the verses looking for verses that are split over multiple lines
+        /// e.g. \v 2a, \v 2b, \v 2c, etc. and combines them into a single line
+        /// </summary>
+        /// <param name="usfmFile"></param>
+        private void FixSplitVerses(string usfmFile)
+        {
+            List<string> output = new();
+            // read in the file
+            string[] lines = File.ReadAllLines(usfmFile);
+
+            Dictionary<string, string> verseKey = new();
+            string chapter = "";
+            bool firstHalfVerse = false;
+
+            foreach (string line in lines)
+            {
+                if (line.StartsWith(@"\c "))
+                {
+                    // chapter
+                    string[] parts = line.Split(' ');
+                    chapter = parts[1].Trim().PadLeft(3, ' ');
+                    firstHalfVerse = false;
+                    output.Add(line);
+                }
+                else if (line.StartsWith(@"\v "))
+                {
+                    // verse
+                    string[] parts = line.Split(' ');
+                    string verse = parts[1].Trim();
+
+                    // check if verse is a number
+                    bool isNumber = double.TryParse(verse, out _);
+                    string key = "";
+                    if (isNumber)
+                    {
+                        key = $"{chapter}.{verse}";
+                        output.Add(line);
+                    }
+                    else
+                    {
+                        if (verse.Contains("-"))
+                        {
+                            // let this pass normally
+                            key = $"{chapter}.{verse}";
+                            output.Add(line);
+                        }
+                        else
+                        {
+                            if (firstHalfVerse)
+                            {
+                                // append onto the previous verse since we are now the second verse
+                                if (output[output.Count - 1].EndsWith(" "))
+                                {
+                                    output[output.Count - 1] += line.Substring((parts[0] + " " + parts[1]).Length);
+                                }
+                                else
+                                {
+                                    output[output.Count - 1] += " " + line.Substring((parts[0] + " " + parts[1]).Length);
+                                }
+                            }
+                            else
+                            {
+                                // first half of the verse
+                                firstHalfVerse = true;
+                                var newVerse = @"\v " + StringHelpers.RemoveNonNumeric(verse) + line.Substring((parts[0] + " " + parts[1]).Length);
+                                output.Add(newVerse);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // not a chapter or verse line
+                    output.Add(line);
+                }
+            }
+
+            File.WriteAllLines(usfmFile, output);
+        }
+
+
+
 
         // update the settings file to use "normal" file extensions
         private void FixParatextSettingsFile(string path)
@@ -398,6 +486,5 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
 
             doc.Save(path);
         }
-
     }
 }

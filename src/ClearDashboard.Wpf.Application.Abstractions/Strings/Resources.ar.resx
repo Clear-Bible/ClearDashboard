@@ -179,7 +179,7 @@
     <value>لا اخطاء</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
-    <value>حفظ أخطاء USFM للملف</value>
+    <value>احفظ أخطاء USFM للملف</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
     <value>اختر الكل</value>
@@ -914,7 +914,7 @@
     <value>ليما</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
-    <value>ليما/النماذج:</value>
+    <value>ليما/الأشكال:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
     <value>Lemma من أجل lexeme الجديد:</value>
@@ -923,7 +923,7 @@
     <value>لكلية</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
-    <value>يوجد معجم ل lemma بالفعل</value>
+    <value>يوجد معكم بالفعل لـ Lemma</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>المعاني:</value>
@@ -1004,7 +1004,7 @@
     <value>اللغة المستهدفة</value>
   </data>
   <data name="LexiconEdit_Title" xml:space="preserve">
-    <value>معجم تحرير</value>
+    <value>تحرير معجم</value>
   </data>
   <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>ترجمة</value>
@@ -1013,7 +1013,7 @@
     <value>يكتب</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>أضف كشكل ل ...</value>
+    <value>أضف كشكل لـ ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
     <value>ابحث عن lexeme الكامل أو الجزئي أو مباريات النموذج للمصدر</value>
@@ -1268,7 +1268,7 @@
     <value>MIC</value>
   </data>
   <data name="Migrate_Header" xml:space="preserve">
-    <value>إعادة تعيين تعيينات الآية إلى الافتراض الافتراضي</value>
+    <value>إعادة تعيين تعيينات الآية إلى الافتراضي</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>MRK</value>
@@ -1670,10 +1670,10 @@
     <value>ملكيات</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>إعادة تعيين تعيينات الآية إلى الافتراض الافتراضي</value>
+    <value>إعادة تعيين تعيينات الآية إلى الافتراضي</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
-    <value>مورد</value>
+    <value>الموارد</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
     <value>قم بتوسيع المحتوى إلى 100 ٪</value>
@@ -2255,7 +2255,7 @@
     <value>ClearDashboard إعدادات</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>عرض طرق عرض موسعة على شاشة مختلفة عن لوحة القيادة</value>
+    <value>عرض طرق العرض الموسعة على شاشة مختلفة عن لوحة القيادة</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
     <value>للأنظمة التي لديها ثلاثة شاشات أو أكثر ، عرض عرض موسع على الشاشة الثالثة</value>

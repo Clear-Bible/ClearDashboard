@@ -14,7 +14,7 @@ namespace ClearDashboard.Collaboration.Model
     internal static class IModelSnapshotDifferenceExtensions
     {
         internal static IModelDifference<IModelSnapshot<T>> FindModelDifference<T>(this IModelSnapshot<T> modelSnapshot, IModelSnapshot<T> other)
-    where T : notnull
+            where T : notnull
         {
             if (!modelSnapshot.GetId().Equals(other.GetId()))
             {
