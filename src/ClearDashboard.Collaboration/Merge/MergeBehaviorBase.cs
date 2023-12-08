@@ -215,7 +215,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
             else if (_entityValueResolvers.TryGetValue((entityType, key), out var resolver))
             {
                 var resolvedValue = await RunEntityValueResolverAsync(modelSnapshot, key, resolver);
-                resolvedValues[key] = resolvedValue;
+                resolvedValues[key] = resolvedValue.ToDatabaseCommandParameterValue(_dateTimeOffsetToBinary);
             }
             else
             {
@@ -455,6 +455,10 @@ public static class DbCommandExtensions
             if (property.PropertyType.IsValueType)
             {
                 return Activator.CreateInstance(property.PropertyType);
+            }
+            else if (property.PropertyType == typeof(string))
+            {
+                return string.Empty;
             }
             else
             {

@@ -16,6 +16,13 @@ public interface IModelSnapshot : IModelDistinguishable<IModelSnapshot> // IMode
     object GetId();
 
     /// <summary>
+    /// Representation of entity that can be used as a file or directory name, 
+    /// even on a case insensitive filesystem such as Windows.  
+    /// </summary>
+    /// <returns></returns>
+    string GetIdForFilesystem();
+
+    /// <summary>
     /// Type of Entity Framework entity this IModelSnapshot represents
     /// </summary>
     Type EntityType { get; }
@@ -48,7 +55,9 @@ public interface IModelSnapshot : IModelDistinguishable<IModelSnapshot> // IMode
     IReadOnlyDictionary<string, string>? AddedPropertyTypeNames { get; }
 
     bool TryGetPropertyValue(string key, out object? value);
-
+    bool TryGetNullableStringPropertyValue(string key, out string? valueAsString);
+    bool TryGetStringPropertyValue(string key, out string valueAsString);
+    bool TryGetGuidPropertyValue(string key, out Guid valueAsGuid);
 }
 
 //public interface IModelIdentifiable : IModelDistinguishable<IModelIdentifiable>

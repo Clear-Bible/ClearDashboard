@@ -82,5 +82,17 @@ namespace ClearDashboard.Wpf.Application {
                 this["IsLexiconImportEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowExternalNotes {
+            get {
+                return ((bool)(this["ShowExternalNotes"]));
+            }
+            set {
+                this["ShowExternalNotes"] = value;
+            }
+        }
     }
 }

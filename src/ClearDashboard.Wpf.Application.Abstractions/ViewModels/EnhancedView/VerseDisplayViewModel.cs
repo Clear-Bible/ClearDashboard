@@ -23,6 +23,10 @@ using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using SIL.Scripture;
 using System.Diagnostics.CodeAnalysis;
+using System.Collections.ObjectModel;
+using SIL.Extensions;
+using System.Diagnostics;
+using ClearDashboard.Wpf.Application.Helpers;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -33,7 +37,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
     /// Instantiate a concrete <see cref="CorpusDisplayViewModel"/>, <see cref="InterlinearDisplayViewModel"/>,
     /// or <see cref="AlignmentDisplayViewModel"/> depending on the functionality desired.
     /// </remarks>
-    public abstract class VerseDisplayViewModel : PropertyChangedBase, 
+    public abstract class VerseDisplayViewModel : PropertyChangedBase,
         IHandle<SelectionUpdatedMessage>,
         IHandle<NoteAddedMessage>,
         IHandle<NoteDeletedMessage>,
@@ -43,11 +47,51 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<TokenUnjoinedMessage>,
         IHandle<TokenSplitMessage>
     {
+
+        #region Member Variables   
+
         protected NoteManager NoteManager { get; }
         protected IMediator Mediator { get; }
         protected IEventAggregator EventAggregator { get; }
         protected ILifetimeScope LifetimeScope { get; }
         protected ILogger Logger { get; }
+
+        #endregion //Member Variables
+
+
+        #region Public Properties
+
+        public bool HasExternalNotes => ExternalNotes.Count() > 0 && AbstractionsSettingsHelper.GetShowExternalNotes();
+        public TokenizedTextCorpus? SourceCorpus => SourceTokenMap?.Corpus;
+        public TokenizedTextCorpus? TargetCorpus => TargetTokenMap?.Corpus;
+
+        /// <summary>
+        /// Gets the <see cref="ParallelCorpusId"/> for the verse.
+        /// </summary>
+        public ParallelCorpusId? ParallelCorpusId { get; protected set; }
+
+
+        /// <summary>
+        /// Gets a collection of source <see cref="TokenDisplayViewModel"/>s to be rendered.
+        /// </summary>
+        public TokenDisplayViewModelCollection SourceTokenDisplayViewModels { get; private set; } = new();
+
+        /// <summary>
+        /// Gets a collection of target <see cref="TokenDisplayViewModel"/>s to be rendered.
+        /// </summary>
+        public TokenDisplayViewModelCollection TargetTokenDisplayViewModels { get; private set; } = new();
+
+       
+        public AlignmentManager? AlignmentManager { get; set; } = null;
+        public bool IsSourceRtl => SourceTokenMap?.IsRtl ?? false;
+        public bool IsTargetRtl => TargetTokenMap?.IsRtl ?? false;
+
+        public Guid Id { get; set; } = Guid.NewGuid();
+
+        #endregion //Public Properties
+
+
+        #region Observable Properties
 
         private TokenMap? _sourceTokenMap;
         protected TokenMap? SourceTokenMap
@@ -78,39 +122,96 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set
             {
                 Set(ref _externalNotes, value);
-                NotifyOfPropertyChange(nameof(ExternalNotes));
                 NotifyOfPropertyChange(nameof(HasExternalNotes));
             }
         }
 
-        public bool HasExternalNotes => ExternalNotes.Count() > 0;
+        private string _notesCount = string.Empty;
+        public string NotesCount
+        {
+            get => _notesCount;
+            set 
+            { 
+                Set(ref _notesCount, value);
+            }
+        }
+
+
+        #endregion //Observable Properties
+
+
+        #region Constructor
+
+        protected VerseDisplayViewModel(NoteManager noteManager, IMediator mediator, IEventAggregator eventAggregator, ILifetimeScope lifetimeScope, ILogger logger)
+        {
+            NotifyExternalNotesItemsChanged();
+
+            NoteManager = noteManager;
+            Mediator = mediator;
+            EventAggregator = eventAggregator;
+            LifetimeScope = lifetimeScope;
+            Logger = logger;
+
+            EventAggregator.SubscribeOnUIThread(this);
+        }
+
+        #endregion //Constructor
+
+
+        #region Methods
+
+        protected virtual async Task InitializeAsync()
+        {
+            await BuildTokenDisplayViewModelsAsync();
+        }
+
+        protected async Task BuildTokenDisplayViewModelsAsync()
+        {
+            if (SourceTokenMap != null)
+            {
+                SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokenMap, true);
+                NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
+            }
+
+            if (TargetTokenMap != null)
+            {
+                TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokenMap, false);
+                NotifyOfPropertyChange(nameof(TargetTokenDisplayViewModels));
+            }
+        }
+        
+        private async Task<TokenDisplayViewModelCollection> BuildTokenDisplayViewModelsAsync(TokenMap tokenMap, bool isSource)
+        {
+            var result = new TokenDisplayViewModelCollection();
+            
+            foreach (var (token, paddingBefore, paddingAfter) in tokenMap.PaddedTokens)
+            {
+                var compositeToken = tokenMap.GetCompositeToken(token);
+                var tokenDisplayViewModel = new TokenDisplayViewModel(token)
+                {
+                    VerseDisplay = this,
+                    CompositeToken = compositeToken,
+                    PaddingBefore = paddingBefore,
+                    PaddingAfter = paddingAfter,
+                    Translation = GetTranslationForToken(token, compositeToken),
+                    AlignedToken = GetAlignedToken(token, compositeToken),
+                    TokenNoteIds = await NoteManager.GetNoteIdsAsync(token.TokenId),
+                    IsSource = isSource,
+                };
+                if (tokenDisplayViewModel.Translation?.TranslationId != null)
+                {
+                    tokenDisplayViewModel.TranslationNoteIds = await NoteManager.GetNoteIdsAsync(tokenDisplayViewModel.Translation.TranslationId);
+                }
+                result.Add(tokenDisplayViewModel);
+            }
+            return result;
+        }
 
         public void NotifyExternalNotesItemsChanged()
         {
             NotifyOfPropertyChange(nameof(ExternalNotes));
             NotifyOfPropertyChange(nameof(HasExternalNotes));
         }
-        public TokenizedTextCorpus? SourceCorpus => SourceTokenMap?.Corpus;
-        public TokenizedTextCorpus? TargetCorpus => TargetTokenMap?.Corpus;
-
-        /// <summary>
-        /// Gets the <see cref="ParallelCorpusId"/> for the verse.
-        /// </summary>
-        public ParallelCorpusId? ParallelCorpusId { get; protected set; }
-
-
-        /// <summary>
-        /// Gets a collection of source <see cref="TokenDisplayViewModel"/>s to be rendered.
-        /// </summary>
-        public TokenDisplayViewModelCollection SourceTokenDisplayViewModels { get; private set; } = new();
-
-        /// <summary>
-        /// Gets a collection of target <see cref="TokenDisplayViewModel"/>s to be rendered.
-        /// </summary>
-        public TokenDisplayViewModelCollection TargetTokenDisplayViewModels { get; private set; } = new();
-
-       
-        public AlignmentManager? AlignmentManager { get; set; } = null;
 
         /// <summary>
         /// Gets a enumerable of source tokens.
@@ -133,33 +234,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return null;
         }
 
-        private class VerseRefVerseNoVersificationEqualityComparer : IEqualityComparer<VerseRef>
-        {
-            public bool Equals(VerseRef x, VerseRef y)
-            {
-                return x.BookNum == y.BookNum
-                    && x.ChapterNum == y.ChapterNum
-                    && x.VerseNum == y.VerseNum;
-            }
-            public int GetHashCode([DisallowNull] VerseRef obj) => obj.BookNum ^ obj.ChapterNum ^ obj.VerseNum;
-        }
-        private class TokenIdVerseEqualityComparer : IEqualityComparer<TokenId>
-        {
-            public bool Equals(TokenId? x, TokenId? y)
-            {
-                if (ReferenceEquals(x, y))
-                    return true;
-
-                if (y is null || x is null)
-                    return false;
-
-                return x.BookNumber == y.BookNumber
-                    && x.ChapterNumber == y.ChapterNumber
-                    && x.VerseNumber == y.VerseNumber;
-            }
-
-            public int GetHashCode([DisallowNull] TokenId obj) => obj.BookNumber ^ obj.ChapterNumber ^ obj.VerseNumber;
-        }
         public virtual void SetExternalNotes(List<List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)>> tokenizedCorpusNotes)
         {
             //update tokens explicitly associated with external notes
@@ -199,6 +273,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             if (externalNotes != null && externalNotes.Count() > 0)
             {
                 ExternalNotes.AddRange(externalNotes);
+                NotesCount = $"Count: {externalNotes.Count()}";
                 notifyVerseDisplayViewModelExternalNotesItemsChanged = true;
             }
 
@@ -208,9 +283,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
         protected void SetExternalNotesOnTokenDisplayViewModels(TokenDisplayViewModelCollection tokenDisplayViewModels, List<(VerseRef verseRef, List<TokenId>? tokenIds, ExternalNote externalNote)> noteInfos)
         {
-            foreach( var tokenDisplayViewModel in tokenDisplayViewModels)
+            foreach ( var tokenDisplayViewModel in tokenDisplayViewModels)
             {
-                var externalNotes = noteInfos
+                tokenDisplayViewModel.MultipleExternalNotes = false;
+                tokenDisplayViewModel.IsFirstExternalNoteToken = false;
+
+                 var externalNotes = noteInfos
                     .Where(noteInfo => noteInfo.tokenIds?.Contains(tokenDisplayViewModel.Token.TokenId) ?? false)
                     .Select(noteInfo => noteInfo.externalNote)
                     .ToList();
@@ -230,6 +308,36 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                 if (notifyTokenViewModelExternalNotesItemsChanged)
                     tokenDisplayViewModel.NotifyExternalNotesItemsChanged();
+
+                // separate out the first tokenId of the note series
+                foreach (var note in noteInfos)
+                {
+                    var firstTokenId = note.tokenIds?.FirstOrDefault();
+
+                    if (firstTokenId != null && firstTokenId.IdEquals(tokenDisplayViewModel.Token.TokenId))
+                    {
+                        // look for multiple external notes on the same token
+                        List<string> tokenIdList = new();
+                        foreach (var noteInfo in noteInfos)
+                        {
+                            foreach (var tokenId in noteInfo.tokenIds)
+                            {
+                                tokenIdList.Add(tokenId.ToString());
+                            }
+                        }
+
+                        var count = tokenIdList.Where(x => x == tokenDisplayViewModel.Token.TokenId.ToString()).Count();
+                        if (count > 1)
+                        {
+                            tokenDisplayViewModel.MultipleExternalNotes = true;
+                        }
+
+                        // set the first external note token
+                        tokenDisplayViewModel.IsFirstExternalNoteToken = true;
+                    }
+                }
+                
+
             }
         }
         protected virtual void HighlightSourceTokens(bool isSource, TokenId tokenId)
@@ -253,12 +361,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         protected virtual void HighlightTargetTokens(bool isSource, TokenId tokenId)
         {
-             var targetTokens = GetTargetTokens(isSource, tokenId);
-             if (targetTokens == null)
-             {
-                 return;
-             }
-             _ =  TargetTokenDisplayViewModels
+            var targetTokens = GetTargetTokens(isSource, tokenId);
+            if (targetTokens == null)
+            {
+                return;
+            }
+
+            _ =  TargetTokenDisplayViewModels
                 .Select(tdm =>
                 {
                     tdm.IsHighlighted = targetTokens
@@ -315,11 +424,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await InternalUnhighlightTokens();
         }
 
-        public bool IsSourceRtl => SourceTokenMap?.IsRtl ?? false;
-        public bool IsTargetRtl => TargetTokenMap?.IsRtl ?? false;
-
-        public Guid Id { get; set; } = Guid.NewGuid();
-
         /// <summary>
         /// Get the <see cref="Translation"/> for a specified token.
         /// </summary>
@@ -348,48 +452,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return null;
         }
 
-        protected async Task BuildTokenDisplayViewModelsAsync()
-        {
-            if (SourceTokenMap != null)
-            {
-                SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokenMap, true);
-                NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
-            }
-
-            if (TargetTokenMap != null)
-            {
-                TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokenMap, false);
-                NotifyOfPropertyChange(nameof(TargetTokenDisplayViewModels));
-            }
-        }
-        
-        private async Task<TokenDisplayViewModelCollection> BuildTokenDisplayViewModelsAsync(TokenMap tokenMap, bool isSource)
-        {
-            var result = new TokenDisplayViewModelCollection();
-            
-            foreach (var (token, paddingBefore, paddingAfter) in tokenMap.PaddedTokens)
-            {
-                var compositeToken = tokenMap.GetCompositeToken(token);
-                var tokenDisplayViewModel = new TokenDisplayViewModel(token)
-                {
-                    VerseDisplay = this,
-                    CompositeToken = compositeToken,
-                    PaddingBefore = paddingBefore,
-                    PaddingAfter = paddingAfter,
-                    Translation = GetTranslationForToken(token, compositeToken),
-                    AlignedToken = GetAlignedToken(token, compositeToken),
-                    TokenNoteIds = await NoteManager.GetNoteIdsAsync(token.TokenId),
-                    IsSource = isSource,
-                };
-                if (tokenDisplayViewModel.Translation?.TranslationId != null)
-                {
-                    tokenDisplayViewModel.TranslationNoteIds = await NoteManager.GetNoteIdsAsync(tokenDisplayViewModel.Translation.TranslationId);
-                }
-                result.Add(tokenDisplayViewModel);
-            }
-            return result;
-        }
-
         protected virtual async Task<NoteIdCollection> GetNoteIdsForToken(TokenId tokenId)
         {
             return await NoteManager.GetNoteIdsAsync(tokenId);
@@ -414,6 +476,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             SourceTokenDisplayViewModels.NonMatchingTokenAction(entityIdList, action);
             TargetTokenDisplayViewModels.NonMatchingTokenAction(entityIdList, action);
         }
+
+        protected virtual async Task RefreshTranslationsAsync(TokenCollection tokens, CompositeToken? compositeToken = null)
+        {
+            await Task.CompletedTask;
+        }
+
+        #endregion // Methods
+
+        #region IHandle
 
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
         {
@@ -493,24 +564,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await RefreshTranslationsAsync(message.Tokens);
         }
 
-        protected virtual async Task RefreshTranslationsAsync(TokenCollection tokens, CompositeToken? compositeToken = null)
-        {
-            await Task.CompletedTask;
-        }
-        protected virtual async Task InitializeAsync()
-        {
-            await BuildTokenDisplayViewModelsAsync();
-        }
+        #endregion // IHandle
 
-        protected VerseDisplayViewModel(NoteManager noteManager, IMediator mediator, IEventAggregator eventAggregator, ILifetimeScope lifetimeScope, ILogger logger)
-        {
-            NoteManager = noteManager;
-            Mediator = mediator;
-            EventAggregator = eventAggregator;
-            LifetimeScope = lifetimeScope;
-            Logger = logger;
 
-            EventAggregator.SubscribeOnUIThread(this);
+        private class VerseRefVerseNoVersificationEqualityComparer : IEqualityComparer<VerseRef>
+        {
+            public bool Equals(VerseRef x, VerseRef y)
+            {
+                return x.BookNum == y.BookNum
+                    && x.ChapterNum == y.ChapterNum
+                    && x.VerseNum == y.VerseNum;
+            }
+            public int GetHashCode([DisallowNull] VerseRef obj) => obj.BookNum ^ obj.ChapterNum ^ obj.VerseNum;
+        }
+        private class TokenIdVerseEqualityComparer : IEqualityComparer<TokenId>
+        {
+            public bool Equals(TokenId? x, TokenId? y)
+            {
+                if (ReferenceEquals(x, y))
+                    return true;
+
+                if (y is null || x is null)
+                    return false;
+
+                return x.BookNumber == y.BookNumber
+                    && x.ChapterNumber == y.ChapterNumber
+                    && x.VerseNumber == y.VerseNumber;
+            }
+
+            public int GetHashCode([DisallowNull] TokenId obj) => obj.BookNumber ^ obj.ChapterNumber ^ obj.VerseNumber;
         }
     }
 }

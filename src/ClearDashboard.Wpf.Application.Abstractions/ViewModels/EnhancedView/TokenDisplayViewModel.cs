@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +13,12 @@ using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+using System.Windows.Input;
+using System.Dynamic;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using System.Threading;
+using ClearDashboard.Wpf.Application.Helpers;
+using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -24,6 +31,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// The token itself.
         /// </summary>
         public Token Token { get; }
+
 
         public Token TokenForTranslation => IsCompositeTokenMember ? CompositeToken! : Token;
 
@@ -184,6 +192,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 }
             }
         }
+
 
         private BindableCollection<ExternalNote> _externalNotes = new();
         public BindableCollection<ExternalNote> ExternalNotes
@@ -349,17 +358,40 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             NotifyOfPropertyChange(nameof(TokenHasNote));
         }
         public bool HasExtendedProperties => !string.IsNullOrEmpty(ExtendedProperties);
-        public bool HasExternalNotes => 
-            ExternalNotes.Count() > 0;
+        public bool HasExternalNotes => ExternalNotes.Count() > 0 && AbstractionsSettingsHelper.GetShowExternalNotes();
+
+
+        private bool _isFirstExternalNoteToken = false;
+        public bool IsFirstExternalNoteToken
+        {
+            get => _isFirstExternalNoteToken && AbstractionsSettingsHelper.GetShowExternalNotes();
+            set 
+            { 
+                _isFirstExternalNoteToken = value;
+                NotifyOfPropertyChange(nameof(IsFirstExternalNoteToken));
+            }
+        }
+
+        private bool _multipleExternalNotes = false;
+        public bool MultipleExternalNotes
+        {
+            get => _multipleExternalNotes && AbstractionsSettingsHelper.GetShowExternalNotes();
+            set 
+            { 
+                _multipleExternalNotes = value;
+                NotifyOfPropertyChange(nameof(MultipleExternalNotes));
+            }
+        }
+
+
         public void OnToolTipOpening(ToolTipEventArgs e)
         {
             if (!IsHighlighted && string.IsNullOrWhiteSpace(ExtendedProperties))
             {
                 e.Handled = true;
             }
-
-
         }
+
 
         public void TranslationNoteAdded(NoteViewModel note)
         {

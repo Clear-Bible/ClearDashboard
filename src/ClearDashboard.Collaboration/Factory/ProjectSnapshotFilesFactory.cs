@@ -95,6 +95,7 @@ public class ProjectSnapshotFilesFactory
             {
                 SaveGeneralModelChild<Models.Note, Models.Note>(parentPath, modelSnapshot, null, cancellationToken);
                 SaveGeneralModelChild<Models.Note, NoteModelRef>(parentPath, modelSnapshot, null, cancellationToken);
+                SaveGeneralModelChild<Models.Note, Models.NoteUserSeenAssociation>(parentPath, modelSnapshot, null, cancellationToken);
             },
             cancellationToken);
 
@@ -103,6 +104,14 @@ public class ProjectSnapshotFilesFactory
             GeneralModel<Models.Label> modelSnapshot) =>
             {
                 SaveGeneralModelChild<Models.Label, Models.LabelNoteAssociation>(parentPath, modelSnapshot, null, cancellationToken);
+            },
+            cancellationToken);
+
+        SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.LabelGroup>(),
+            (string parentPath,
+            GeneralModel<Models.LabelGroup> modelSnapshot) =>
+            {
+                SaveGeneralModelChild<Models.LabelGroup, Models.LabelGroupAssociation>(parentPath, modelSnapshot, null, cancellationToken);
             },
             cancellationToken);
 
@@ -151,7 +160,7 @@ public class ProjectSnapshotFilesFactory
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var topLevelEntityPath = Path.Combine(topLevelEntityTypePath, topLevelEntity.GetId()!.ToString()!);
+            var topLevelEntityPath = Path.Combine(topLevelEntityTypePath, topLevelEntity.GetIdForFilesystem());
             Directory.CreateDirectory(topLevelEntityPath);
 
             var serializedTopLevelEntity = JsonSerializer.Serialize(topLevelEntity, _jsonSerializerOptions);
@@ -233,7 +242,7 @@ public class ProjectSnapshotFilesFactory
             cancellationToken.ThrowIfCancellationRequested();
 
             var serializedModelSnapshot = JsonSerializer.Serialize(childModelSnapshot, _jsonSerializerOptions);
-            File.WriteAllText(Path.Combine(childPath, childModelSnapshot.GetId()!.ToString()!), serializedModelSnapshot);
+            File.WriteAllText(Path.Combine(childPath, childModelSnapshot.GetIdForFilesystem()), serializedModelSnapshot);
         }
     }
 
@@ -250,7 +259,7 @@ public class ProjectSnapshotFilesFactory
 
             if (saveGeneralModelChildDelegate is not null)
             {
-                var childEntityPath = Path.Combine(childPath, childModelSnapshot.GetId()!.ToString()!);
+                var childEntityPath = Path.Combine(childPath, childModelSnapshot.GetIdForFilesystem());
                 Directory.CreateDirectory(childEntityPath);
 
                 var serializedModelSnapshot = JsonSerializer.Serialize(childModelSnapshot, _jsonSerializerOptions);
@@ -261,7 +270,7 @@ public class ProjectSnapshotFilesFactory
             else
             {
                 var serializedModelSnapshot = JsonSerializer.Serialize(childModelSnapshot, _jsonSerializerOptions);
-                File.WriteAllText(Path.Combine(childPath, childModelSnapshot.GetId()!.ToString()!), serializedModelSnapshot);
+                File.WriteAllText(Path.Combine(childPath, childModelSnapshot.GetIdForFilesystem()), serializedModelSnapshot);
             }
         }
     }

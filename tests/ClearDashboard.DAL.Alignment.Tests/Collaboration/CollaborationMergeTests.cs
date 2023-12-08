@@ -14,6 +14,15 @@ using ClearDashboard.Collaboration.Factory;
 using SIL.Scripture;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
+using ClearDashboard.DAL.Alignment.Features.Notes;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+using System.IO;
+using ClearDashboard.DAL.Alignment.Features.Common;
+using ClearDashboard.DAL.Alignment.Lexicon;
+using ClearDashboard.DAL.Alignment.Features;
+using ClearDashboard.DataAccessLayer.Models;
+using Microsoft.SqlServer.Server;
+using ClearDashboard.Collaboration;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 {
@@ -35,6 +44,22 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         [Trait("Category", "Collaboration")]
         public async Task Test00()
         {
+            //try
+            //{
+            //    var backupsPath =
+            //        FilePathTemplates.CollabBaseDirectory + Path.DirectorySeparatorChar + "Backups";
+
+            //    var factory = new ProjectSnapshotFromFilesFactory(Path.Combine(backupsPath, "Roman6"), _fixture.Logger);
+            //    var snapshotFromFile = factory.LoadSnapshot();
+
+            //    await DoMerge(false, snapshotFromFile);
+            //}
+            //catch (Exception ex)
+            //{
+            //}
+
+            //return;
+
             await DoMerge();
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
@@ -57,6 +82,185 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             //await note.CreateOrUpdate(_fixture.Mediator);
             //await note.AssociateDomainEntity(_fixture.Mediator, compositeToken.TokenId);
 
+            //var externalLexicon = await Lexicon.Lexicon.GetExternalLexicon(_fixture.Mediator, "2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f");
+            //await externalLexicon.SaveAsync(_fixture.Mediator);
+
+            //var lexemeCount = _fixture.ProjectDbContext.Lexicon_Lexemes.Count();
+            //var meaningCount = _fixture.ProjectDbContext.Lexicon_Meanings.Count();
+            //var formCount = _fixture.ProjectDbContext.Lexicon_Forms.Count();
+            //var translationCount = _fixture.ProjectDbContext.Lexicon_Translations.Count();
+
+            //var defaultCreatedDate = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
+
+            //var extraLexeme = new Models.Lexicon_Lexeme
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Lemma = "booboo",
+            //    Language = "sur",
+            //    Type = "Stem",
+            //    Created = defaultCreatedDate,
+            //    UserId = _fixture.Users.First().Id
+            //};
+
+            //var extraForm1 = new Models.Lexicon_Form
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Text = "forrrrrm1",
+            //    Lexeme = extraLexeme,
+            //    LexemeId = extraLexeme.Id,
+            //    Created = defaultCreatedDate,
+            //    UserId = _fixture.Users.First().Id
+            //};
+
+            //var extraForm2 = new Models.Lexicon_Form
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Text = "forrrrrm2",
+            //    Lexeme = extraLexeme,
+            //    LexemeId = extraLexeme.Id,
+            //    Created = defaultCreatedDate,
+            //    UserId = _fixture.Users.First().Id
+            //};
+
+            //var extraMeaning = new Models.Lexicon_Meaning
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Text = "mean1",
+            //    Language = "en",
+            //    Lexeme = extraLexeme,
+            //    LexemeId = extraLexeme.Id,
+            //    Created = defaultCreatedDate,
+            //    UserId = _fixture.Users.First().Id
+            //};
+
+            //var extraTranslation1 = new Models.Lexicon_Translation
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Text = "trrrrr1",
+            //    Meaning = extraMeaning,
+            //    MeaningId = extraMeaning.Id,
+            //    Created = defaultCreatedDate,
+            //    UserId = _fixture.Users.First().Id
+            //};
+
+            //var extraTranslation2 = new Models.Lexicon_Translation
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Text = "trrrrr2",
+            //    Meaning = extraMeaning,
+            //    MeaningId = extraMeaning.Id,
+            //    Created = defaultCreatedDate,
+            //    UserId = _fixture.Users.First().Id
+            //};
+
+            //extraMeaning.Translations.Add(extraTranslation1);
+            //extraMeaning.Translations.Add(extraTranslation1);
+            //extraLexeme.Meanings.Add(extraMeaning);
+            //extraLexeme.Forms.Add(extraForm1);
+            //extraLexeme.Forms.Add(extraForm2);
+
+            //_fixture.LexiconLexemes.Add(extraLexeme);
+
+            //await DoMerge();
+
+            //var lexemeCount2 = _fixture.ProjectDbContext.Lexicon_Lexemes.Count();
+            //var meaningCount2 = _fixture.ProjectDbContext.Lexicon_Meanings.Count();
+            //var formCount2 = _fixture.ProjectDbContext.Lexicon_Forms.Count();
+            //var translationCount2 = _fixture.ProjectDbContext.Lexicon_Translations.Count();
+
+            //var lexemeForTest = _fixture.ProjectDbContext.Lexicon_Lexemes.Where(e => e.Lemma == "booboo").FirstOrDefault();
+
+            //var exernalLexemesForDb = LexiconToModel(externalLexicon, _fixture.Users.First().Id);
+            //_fixture.LexiconLexemes.AddRange(exernalLexemesForDb);
+
+            //await DoMerge();
+
+            //_fixture.ProjectDbContext.ChangeTracker.Clear();
+
+            //var lexemeCount3 = _fixture.ProjectDbContext.Lexicon_Lexemes.Count();
+            //var meaningCount3 = _fixture.ProjectDbContext.Lexicon_Meanings.Count();
+            //var formCount3 = _fixture.ProjectDbContext.Lexicon_Forms.Count();
+            //var translationCount3 = _fixture.ProjectDbContext.Lexicon_Translations.Count();
+
+            //var lexemeForTest2 = _fixture.ProjectDbContext.Lexicon_Lexemes.Where(e => e.Lemma == "booboo").FirstOrDefault();
+        }
+
+        private IEnumerable<Models.Lexicon_Lexeme> LexiconToModel(Lexicon.Lexicon lexicon, Guid defaultUserId)
+        {
+            var defaultCreatedDate = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
+            var lexemesDb = new List<Models.Lexicon_Lexeme>();
+
+            foreach (var lexeme in lexicon.Lexemes)
+            {
+                var lexemeDb = new Models.Lexicon_Lexeme
+                {
+                    Id = lexeme.LexemeId.Id,
+                    Lemma = lexeme.Lemma,
+                    Type = lexeme.Type,
+                    Language = lexeme.Language,
+                    Created = lexeme.LexemeId.Created ?? defaultCreatedDate,
+                    UserId = lexeme.LexemeId.UserId?.Id ?? defaultUserId
+                };
+
+                // ---------------------------------------------------------------------------------
+                // Create and Update Lexeme Forms:
+                // ---------------------------------------------------------------------------------
+                foreach (var form in lexeme.Forms)
+                {
+                    var formDb = new Models.Lexicon_Form
+                    {
+                        Id = form.FormId.Id,
+                        Text = form.Text,
+                        Lexeme = lexemeDb,
+                        LexemeId = lexemeDb.Id,
+                        Created = form.FormId.Created ?? defaultCreatedDate,
+                        UserId = form.FormId.UserId?.Id ?? defaultUserId
+                    };
+
+                    lexemeDb.Forms.Add(formDb);
+                }
+
+                // ---------------------------------------------------------------------------------
+                // Create / Update Lexeme Meanings and children:
+                // ---------------------------------------------------------------------------------
+                foreach (var meaning in lexeme.Meanings)
+                {
+                    var meaningDb = new Models.Lexicon_Meaning
+                    {
+                        Id = meaning.MeaningId.Id,
+                        Text = meaning.Text,
+                        Language = meaning.Language,
+                        Lexeme = lexemeDb,
+                        LexemeId = lexemeDb.Id,
+                        Created = meaning.MeaningId.Created ?? defaultCreatedDate,
+                        UserId = meaning.MeaningId.UserId?.Id ?? defaultUserId
+                    };
+
+                    lexemeDb.Meanings.Add(meaningDb);
+
+                    // ---------------------------------------------------------------------------------
+                    // Create / Update Lexeme Meaning Translations:
+                    // ---------------------------------------------------------------------------------
+                    foreach (var translation in meaning.Translations.Where(e => !e.ExcludeFromSave))
+                    {
+                        var translationDb = new Models.Lexicon_Translation
+                        {
+                            Id = translation.TranslationId.Id,
+                            Text = translation.Text,
+                            Meaning = meaningDb,
+                            MeaningId = meaningDb.Id,
+                            Created = translation.TranslationId.Created ?? defaultCreatedDate,
+                            UserId = translation.TranslationId.UserId?.Id ?? defaultUserId
+                        };
+
+                        meaningDb.Translations.Add(translationDb);
+                    }
+                }
+
+                lexemesDb.Add(lexemeDb);
+            }
+
+            return lexemesDb;
         }
 
         [Fact]
@@ -255,9 +459,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 .Include(e => e.SemanticDomains)
                 .ToDictionary(e => e.Id, e => e);
 
-            Assert.Empty(lexiconLexemeMeaningsDb[lexiconLexeme1Meaning1.Id].SemanticDomains);
-            Assert.Single(lexiconLexemeMeaningsDb[lexiconLexeme1Meaning2.Id].SemanticDomains);
-            Assert.Equal(2, lexiconLexemeMeaningsDb[lexiconLexeme2Meaning1.Id].SemanticDomains.Count);
+            Assert.Empty(lexiconLexemeMeaningsDb.Where(e => e.Value.Text == lexiconLexeme1Meaning1.Text).First().Value.SemanticDomains);
+            Assert.Single(lexiconLexemeMeaningsDb.Where(e => e.Value.Text == lexiconLexeme1Meaning2.Text).First().Value.SemanticDomains);
+            Assert.Equal(2, lexiconLexemeMeaningsDb.Where(e => e.Value.Text == lexiconLexeme2Meaning1.Text).First().Value.SemanticDomains.Count);
         }
 
         [Fact]
@@ -274,10 +478,14 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             var testNoteId1 = Guid.NewGuid();
             var testNoteId2 = Guid.NewGuid();
             var testNoteId3 = Guid.NewGuid();
+            var testNoteId4 = Guid.NewGuid();
+            var testNoteId5 = Guid.NewGuid();
 
             _fixture.Notes.Add(CollaborationProjectFixture.BuildTestNote(testNoteId1, "boo boo", Models.NoteStatus.Open, testUser.Id));
             _fixture.Notes.Add(CollaborationProjectFixture.BuildTestNote(testNoteId2, "boo boo two", Models.NoteStatus.Resolved, testUser.Id));
             _fixture.Notes.Add(CollaborationProjectFixture.BuildTestNote(testNoteId3, "boo boo three", Models.NoteStatus.Open, testUser.Id));
+            _fixture.Notes.Add(CollaborationProjectFixture.BuildTestNote(testNoteId4, "boo boo four", Models.NoteStatus.Open, testUser.Id));
+            _fixture.Notes.Add(CollaborationProjectFixture.BuildTestNote(testNoteId5, "boo boo five", Models.NoteStatus.Open, testUser.Id));
 
             _fixture.NoteAssociations.Add(CollaborationProjectFixture.BuildTestNoteTokenAssociation(testNoteId1, testTokenizedCorpus.Id, "001001001001001", builderContext));
             _fixture.NoteAssociations.Add(CollaborationProjectFixture.BuildTestNoteTokenAssociation(testNoteId1, testTokenizedCorpus.Id, "001001001002001", builderContext));
@@ -285,12 +493,19 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             _fixture.NoteAssociations.Add(CollaborationProjectFixture.BuildTestNoteTokenAssociation(testNoteId3, testTokenizedCorpus.Id, "001001001003001", builderContext));
             _fixture.NoteAssociations.Add(CollaborationProjectFixture.BuildTestNoteTokenAssociation(testNoteId3, testTokenizedCorpus.Id, "001001001004001", builderContext));
 
+            _fixture.NoteUserSeenAssociations.Add(CollaborationProjectFixture.BuildTestNoteUserSeenAssociation(testNoteId4, _fixture.Users.First().Id, builderContext));
+            foreach (var user in _fixture.Users)
+            {
+                _fixture.NoteUserSeenAssociations.Add(CollaborationProjectFixture.BuildTestNoteUserSeenAssociation(testNoteId5, user.Id, builderContext));
+            }
+
             await DoMerge();
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(3, _fixture.ProjectDbContext.Notes.Count());
+            Assert.Equal(5, _fixture.ProjectDbContext.Notes.Count());
             Assert.Equal(5, _fixture.ProjectDbContext.NoteDomainEntityAssociations.Count());
+            Assert.Equal(1 + _fixture.Users.Count(), _fixture.ProjectDbContext.NoteUserSeenAssociations.Count());
 
             var testNote1TokenIds = _fixture.ProjectDbContext.NoteDomainEntityAssociations
                 .Where(e => e.NoteId == testNoteId1)
@@ -348,29 +563,62 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         {
             // Add a label 
 
-            var testNotes = _fixture.Notes.Take(2).ToArray();
-            Assert.Equal(2, testNotes.Length);
+            var testNotes = _fixture.Notes.Take(3).ToArray();
+            Assert.Equal(3, testNotes.Length);
 
             var testLabelId1 = Guid.NewGuid();
+            var testLabel1 = new Models.Label { Id = testLabelId1, Text = "test label 1" };
 
-            _fixture.Labels.Add(new Models.Label { Id = testLabelId1, Text = "test label 1" });
+            var testLabelId2 = Guid.NewGuid();
+            var testLabel2 = new Models.Label { Id = testLabelId2, Text = "test label 2" };
 
-            _fixture.LabelNoteAssociations.Add(new Models.LabelNoteAssociation { Id = Guid.NewGuid(), LabelId = testLabelId1, NoteId = testNotes[0].Id });
-            _fixture.LabelNoteAssociations.Add(new Models.LabelNoteAssociation { Id = Guid.NewGuid(), LabelId = testLabelId1, NoteId = testNotes[1].Id });
+            var testLabelId3 = Guid.NewGuid();
+            var testLabel3 = new Models.Label { Id = testLabelId3, Text = "test label 3" };
+
+            _fixture.Labels.Add(testLabel1);
+            _fixture.Labels.Add(testLabel2);
+            _fixture.Labels.Add(testLabel3);
+
+            _fixture.LabelNoteAssociations.Add(new Models.LabelNoteAssociation { Id = Guid.NewGuid(), Label = testLabel1, LabelId = testLabelId1, NoteId = testNotes[0].Id });
+            _fixture.LabelNoteAssociations.Add(new Models.LabelNoteAssociation { Id = Guid.NewGuid(), Label = testLabel1, LabelId = testLabelId1, NoteId = testNotes[1].Id });
+            _fixture.LabelNoteAssociations.Add(new Models.LabelNoteAssociation { Id = Guid.NewGuid(), Label = testLabel2, LabelId = testLabelId2, NoteId = testNotes[1].Id });
+            _fixture.LabelNoteAssociations.Add(new Models.LabelNoteAssociation { Id = Guid.NewGuid(), Label = testLabel3, LabelId = testLabelId3, NoteId = testNotes[1].Id });
+            _fixture.LabelNoteAssociations.Add(new Models.LabelNoteAssociation { Id = Guid.NewGuid(), Label = testLabel3, LabelId = testLabelId3, NoteId = testNotes[2].Id });
+
+            var testLabelGroupId1 = Guid.NewGuid();
+            var testLabelGroup1 = new Models.LabelGroup { Id = testLabelGroupId1, Name = "test label group 1" };
+
+            var testLabelGroupId2 = Guid.NewGuid();
+            var testLabelGroup2 = new Models.LabelGroup { Id = testLabelGroupId2, Name = "test label group 2" };
+
+            _fixture.LabelGroups.Add(testLabelGroup1);
+            _fixture.LabelGroups.Add(testLabelGroup2);
+
+            _fixture.LabelGroupAssociations.Add(new Models.LabelGroupAssociation { Id = Guid.NewGuid(), Label = testLabel1, LabelId = testLabelId1, LabelGroup = testLabelGroup1, LabelGroupId = testLabelGroupId1 });
+            _fixture.LabelGroupAssociations.Add(new Models.LabelGroupAssociation { Id = Guid.NewGuid(), Label = testLabel1, LabelId = testLabelId1, LabelGroup = testLabelGroup2, LabelGroupId = testLabelGroupId2 });
+            _fixture.LabelGroupAssociations.Add(new Models.LabelGroupAssociation { Id = Guid.NewGuid(), Label = testLabel2, LabelId = testLabelId2, LabelGroup = testLabelGroup2, LabelGroupId = testLabelGroupId2 });
 
             await DoMerge();
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(1, _fixture.ProjectDbContext.Labels.Count());
-            Assert.Equal(2, _fixture.ProjectDbContext.LabelNoteAssociations.Count());
+            Assert.Equal(3, _fixture.ProjectDbContext.Labels.Count());
+            Assert.Equal(5, _fixture.ProjectDbContext.LabelNoteAssociations.Count());
 
             Assert.Single(_fixture.ProjectDbContext.LabelNoteAssociations
                 .Where(e => e.NoteId == testNotes[0].Id));
 
-            Assert.Single(_fixture.ProjectDbContext.LabelNoteAssociations
-                .Where(e => e.NoteId == testNotes[1].Id));
+            Assert.Equal(3, _fixture.ProjectDbContext.LabelNoteAssociations
+                .Where(e => e.NoteId == testNotes[1].Id).Count());
 
+            Assert.Equal(2, _fixture.ProjectDbContext.LabelGroups.Count());
+            Assert.Equal(3, _fixture.ProjectDbContext.LabelGroupAssociations.Count());
+
+            Assert.Equal(2, _fixture.ProjectDbContext.LabelGroupAssociations.Include(e => e.Label)
+                .Where(e => e.Label!.Text == testLabel1.Text).Count());
+
+            Assert.Single(_fixture.ProjectDbContext.LabelGroupAssociations.Include(e => e.Label)
+                .Where(e => e.Label!.Text == testLabel2.Text));
         }
 
         [Fact]
@@ -388,7 +636,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(3, _fixture.ProjectDbContext.Notes.Count());
+            Assert.Equal(5, _fixture.ProjectDbContext.Notes.Count());
             Assert.Equal(4, _fixture.ProjectDbContext.NoteDomainEntityAssociations.Count());
             Assert.Null(_fixture.ProjectDbContext.NoteDomainEntityAssociations.Where(e => e.Id == testNote3AssociationToRemove.Item1.Id).FirstOrDefault());
 
@@ -400,7 +648,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(2, _fixture.ProjectDbContext.Notes.Count());
+            Assert.Equal(4, _fixture.ProjectDbContext.Notes.Count());
             Assert.Equal(3, _fixture.ProjectDbContext.NoteDomainEntityAssociations.Count());
             Assert.Null(_fixture.ProjectDbContext.Notes.Where(e => e.Id == testNote3.Id).FirstOrDefault());
 
@@ -423,7 +671,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(1, _fixture.ProjectDbContext.Notes.Count());
+            Assert.Equal(3, _fixture.ProjectDbContext.Notes.Count());
             Assert.Equal(2, _fixture.ProjectDbContext.NoteDomainEntityAssociations.Count());
             Assert.Null(_fixture.ProjectDbContext.Notes.Where(e => e.Id == testNote2.Id).FirstOrDefault());
 
@@ -444,7 +692,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Single(_fixture.ProjectDbContext.Notes);
+            Assert.Equal(3, _fixture.ProjectDbContext.Notes.Count());
             Assert.Equal(newNoteText, _fixture.ProjectDbContext.Notes.First().Text);
         }
 
@@ -471,7 +719,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            var trDb = _fixture.ProjectDbContext.Lexicon_Translations.Where(e => e.Id == testTranslation1.Id).FirstOrDefault();
+            var trDb = _fixture.ProjectDbContext.Lexicon_Translations.Where(e => e.Text == testTranslation1.Text).FirstOrDefault();
             Assert.NotNull(trDb);
             Assert.Equal(newTranslationText, trDb.Text);
             Assert.Single(_fixture.ProjectDbContext.Lexicon_Meanings
@@ -581,7 +829,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             _fixture.TokenComposites.Add(splitComposite2);
             _fixture.TokenComposites.Add(extraComposite2);
 
-            await DoMerge();
+            await DoMerge(true);
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
@@ -633,7 +881,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             Assert.Equal("001001020004001", extraCompositeTokensDb[2].EngineTokenId);
         }
 
-        protected async Task DoMerge()
+        protected async Task DoMerge(bool isIt = false, ProjectSnapshot? sourceSnapshot = null)
         {
             var testProject = _fixture.ProjectDbContext.Projects.First();
 
@@ -650,8 +898,19 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             var commitShaToMerge = $"{CollaborationProjectFixture.ShaBase}_{shaIndex}";
 
             var snapshotLastMerged = _fixture.ProjectSnapshotLastMerged ?? ProjectSnapshotFactoryCommon.BuildEmptySnapshot(testProject.Id);
-            var snapshotToMerge = _fixture.ToProjectSnapshot();
+            var snapshotToMerge = sourceSnapshot ?? _fixture.ToProjectSnapshot();
             var progress = new Progress<ProgressStatus>(Report);
+
+            if (isIt)
+            {
+                var backupsPath =
+                    FilePathTemplates.CollabBaseDirectory + Path.DirectorySeparatorChar + "Backups";
+
+                Directory.CreateDirectory(backupsPath);
+
+                var factory = new ProjectSnapshotFilesFactory(Path.Combine(backupsPath, "merge_test_final_snapshot"), _fixture.Logger);
+                factory.SaveSnapshot(snapshotToMerge);
+            }
 
             await _fixture.MergeIntoDatabase(commitShaToMerge, snapshotLastMerged, snapshotToMerge, progress);
         }
