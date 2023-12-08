@@ -18,23 +18,23 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
         private readonly List<LexemeId> lexemeIdsInDatabase_;
         public IEnumerable<LexemeId> LexemeIdsToDelete => lexemeIdsInDatabase_.ExceptBy(lexemes_.Select(e => e.LexemeId.Id), e => e.Id);
 
-        public static async Task<Lexicon> MergeAndSaveAsync(IEnumerable<Lexeme> lexemes, Lexicon sourceLexicon, IMediator mediator)
-        {
-            //var sourceLexicon = new Lexicon(new ObservableCollection<Lexeme>(sourceLexemes));
-            var lexemeCollection = new ObservableCollection<Lexeme>(lexemes.DistinctBy(e => e.LexemeId));
-            var lexicon = new Lexicon(lexemeCollection);
-            lexicon.SetLexemeIdsInDatabase(lexemeCollection.Select(e => e.LexemeId)
-                            .IntersectBy(sourceLexicon.lexemeIdsInDatabase_.Select(e => e.Id),
-                                                         e => e.Id).ToList());
-            await lexicon.SaveAsync(mediator);
-            return lexicon;
-        }
+        // public static async Task<Lexicon> MergeAndSaveAsync(IEnumerable<Lexeme> lexemes, Lexicon sourceLexicon, IMediator mediator)
+        // {
+        //     //var sourceLexicon = new Lexicon(new ObservableCollection<Lexeme>(sourceLexemes));
+        //     var lexemeCollection = new ObservableCollection<Lexeme>(lexemes.DistinctBy(e => e.LexemeId));
+        //     var lexicon = new Lexicon(lexemeCollection);
+        //     lexicon.SetLexemeIdsInDatabase(lexemeCollection.Select(e => e.LexemeId)
+        //                     .IntersectBy(sourceLexicon.lexemeIdsInDatabase_.Select(e => e.Id),
+        //                                                  e => e.Id).ToList());
+        //     await lexicon.SaveAsync(mediator);
+        //     return lexicon;
+        // }
 
-        internal void SetLexemeIdsInDatabase(IEnumerable<LexemeId> lexemeIds)
-        {
-            lexemeIdsInDatabase_.Clear();
-            lexemeIdsInDatabase_.AddRange(lexemeIds);
-        }
+        // internal void SetLexemeIdsInDatabase(IEnumerable<LexemeId> lexemeIds)
+        // {
+        //     lexemeIdsInDatabase_.Clear();
+        //     lexemeIdsInDatabase_.AddRange(lexemeIds);
+        // }
 
         public ObservableCollection<Lexeme> Lexemes
         {
@@ -82,7 +82,7 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             return new Lexicon(combinedLexemes, combinedLexemeIdsInDatabase);
         }
 
-        public static async Task<Lexicon> MergeAndSaveAsync(Collection<Lexeme> lexemes, Lexicon sourceLexicon, IMediator mediator)
+        public static async Task<Lexicon> MergeAndSaveAsync(IEnumerable<Lexeme> lexemes, Lexicon sourceLexicon, IMediator mediator)
         {
             var lexicon = new Lexicon(lexemes, lexemes.Select(e => e.LexemeId).IntersectBy(
                 sourceLexicon.lexemeIdsInDatabase_.Select(e => e.Id),
