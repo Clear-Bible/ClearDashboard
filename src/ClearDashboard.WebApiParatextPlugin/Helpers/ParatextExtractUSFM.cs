@@ -2,6 +2,7 @@
 using Icu;
 using Microsoft.Win32;
 using Paratext.PluginInterfaces;
+using SIL.Machine.FiniteState;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -330,6 +331,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                         try
                         {
                             File.WriteAllText(Path.Combine(exportPath, fileName), sb.ToString());
+
+                            
+                            FixSplitVerses(Path.Combine(exportPath, fileName));
                         }
                         catch (Exception e)
                         {
@@ -351,6 +355,93 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                 NumberOfErrors = usfmError.Count
             };
         }
+
+        /// <summary>
+        /// This method iterates over the verses looking for verses that are split over multiple lines
+        /// e.g. \v 2a, \v 2b, \v 2c, etc. and combines them into a single line
+        /// </summary>
+        /// <param name="usfmFile"></param>
+        private void FixSplitVerses(string usfmFile)
+        {
+            List<string> output = new();
+            // read in the file
+            string[] lines = File.ReadAllLines(usfmFile);
+
+            Dictionary<string, string> verseKey = new();
+            string chapter = "";
+            bool firstHalfVerse = false;
+
+            foreach (string line in lines)
+            {
+                if (line.StartsWith(@"\c "))
+                {
+                    // chapter
+                    string[] parts = line.Split(' ');
+                    chapter = parts[1].Trim().PadLeft(3, ' ');
+                    firstHalfVerse = false;
+                    output.Add(line);
+                }
+                else if (line.StartsWith(@"\v "))
+                {
+                    // verse
+                    string[] parts = line.Split(' ');
+                    string verse = parts[1].Trim();
+
+                    // check if verse is a number
+                    bool isNumber = double.TryParse(verse, out _);
+                    string key = "";
+                    if (isNumber)
+                    {
+                        key = $"{chapter}.{verse}";
+                        output.Add(line);
+                    }
+                    else
+                    {
+                        if (verse.Contains("-"))
+                        {
+                            // let this pass normally
+                            key = $"{chapter}.{verse}";
+                            output.Add(line);
+                        }
+                        else
+                        {
+                            if (firstHalfVerse)
+                            {
+                                // append onto the previous verse since we are now the second verse
+                                if (output[output.Count - 1].EndsWith(" "))
+                                {
+                                    output[output.Count - 1] += line.Substring((parts[0] + " " + parts[1]).Length);
+                                }
+                                else
+                                {
+                                    output[output.Count - 1] += " " + line.Substring((parts[0] + " " + parts[1]).Length);
+                                }
+                            }
+                            else
+                            {
+                                // first half of the verse
+                                firstHalfVerse = true;
+                                var newVerse = @"\v " + RemoveNonNumeric(verse) + line.Substring((parts[0] + " " + parts[1]).Length);
+                                output.Add(newVerse);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // not a chapter or verse line
+                    output.Add(line);
+                }
+            }
+
+            File.WriteAllLines(usfmFile, output);
+        }
+
+        public static string RemoveNonNumeric(string input)
+        {
+            return new string(input.Where(char.IsDigit).ToArray());
+        }
+
 
         // update the settings file to use "normal" file extensions
         private void FixParatextSettingsFile(string path)
