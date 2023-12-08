@@ -1969,16 +1969,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             settings.ResizeMode = ResizeMode.NoResize;
-            settings.MinWidth = 500;
-            settings.MinHeight = 500;
+            settings.MinWidth = 1342;
+            settings.MinHeight = 938;
             settings.Title = $"{localizedString}";
 
             var viewModel  = LifetimeScope!.Resolve<LexiconImportsViewModel>();
-           // var viewModel = IoC.Get<LexiconImportsViewModel>();
-            viewModel.SelectedProjectId = corpusId;
+            if (viewModel != null)
+            {
+                try
+                {
+                    viewModel.SelectedProjectId = corpusId;
 
-            IWindowManager manager = new WindowManager();
-            await manager.ShowDialogAsync(viewModel, null, settings);
+                    IWindowManager manager = new WindowManager();
+                    var result = await manager.ShowDialogAsync(viewModel, null, settings);
+                    if (result == true)
+                    {
+                        await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage());
+                    }
+                }
+                finally
+                {
+                   await  viewModel.DeactivateAsync(false);
+                }
+             
+            }
         }
 
 
