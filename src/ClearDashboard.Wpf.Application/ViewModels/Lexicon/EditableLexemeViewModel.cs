@@ -112,6 +112,7 @@ public class EditableLexemeViewModel : PropertyChangedBase
     private string _editButtonLabel;
     private string _editLabel;
     private string _doneLabel;
+    private bool _isDirty;
 
     public string EditButtonLabel
     {
@@ -145,9 +146,9 @@ public class EditableLexemeViewModel : PropertyChangedBase
             if (index > -1)
             {
                 defaultMeaning.Translations.RemoveAt(index);
-                if (defaultMeaning.IsDirty == false)
+                if (IsDirty == false)
                 {
-                    defaultMeaning.SetInternalProperty(nameof(Meaning.IsDirty), true);
+                    IsDirty = true;
                 }
             }
         }
@@ -157,8 +158,17 @@ public class EditableLexemeViewModel : PropertyChangedBase
         foreach (var translation in translationsToAdd)
         {
             defaultMeaning.Translations.Add(new Translation { Text = translation });
-            defaultMeaning.SetInternalProperty(nameof(Meaning.IsDirty), true);
+            if (IsDirty == false)
+            {
+                IsDirty = true;
+            }
         }
+    }
+
+    public bool IsDirty
+    {
+        get => _isDirty;
+        set => Set(ref _isDirty, value);
     }
 
     public string? Forms
@@ -179,9 +189,10 @@ public class EditableLexemeViewModel : PropertyChangedBase
             {
                 var index = _lexeme.Forms.IndexOf(form);
                 _lexeme.Forms.RemoveAt(index);
-                if (_lexeme.IsDirty == false)
+
+                if (IsDirty == false)
                 {
-                    _lexeme.SetInternalProperty(nameof(Lexeme.IsDirty), true);
+                    IsDirty = true;
                 }
             }
 
@@ -189,11 +200,11 @@ public class EditableLexemeViewModel : PropertyChangedBase
             foreach (var form in formsToAdd)
             {
                 _lexeme.Forms.Add(new Form { Text = form });
-                if (_lexeme.IsDirty == false)
+                if (IsDirty == false)
                 {
-                    _lexeme.SetInternalProperty(nameof(Lexeme.IsDirty), true);
+                    IsDirty = true;
                 }
-               
+
             }
 
             NotifyOfPropertyChange(nameof(Forms));
@@ -217,6 +228,10 @@ public class EditableLexemeViewModel : PropertyChangedBase
         {
             _lexeme.Forms.Add(new Form { Text = form });
             var startIndex = Forms?.IndexOf(form) ?? -1;
+            if (IsDirty == false)
+            {
+                IsDirty = true;
+            }
             NotifyOfPropertyChange(nameof(Forms));
             return (startIndex, form?.Length ?? -1);
         }
@@ -242,6 +257,10 @@ public class EditableLexemeViewModel : PropertyChangedBase
         {
             defaultMeaning.Translations.Add(new Translation { Text = translation });
             var startIndex = Meanings?.IndexOf(translation) ?? -1;
+            if (IsDirty == false)
+            {
+                IsDirty = true;
+            }
             NotifyOfPropertyChange(nameof(Meanings));
             return (startIndex, translation?.Length ?? -1);
         }

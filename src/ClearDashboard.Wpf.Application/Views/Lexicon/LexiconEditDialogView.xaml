@@ -28,7 +28,9 @@
             <Setter Property="Margin" Value="5 0 10 0"></Setter>
         </Style>
         <Style x:Key="HintTextBox" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}" TargetType="{x:Type TextBox}">
-            <Setter Property="materialDesign:TextFieldAssist.TextBoxViewMargin" Value="1 -6 1 0"/>
+            <Setter Property="materialDesign:TextFieldAssist.TextBoxViewMargin" Value="1 -4 1 0"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Width" Value="100"></Setter>
             <Setter Property="Margin" Value="5 0 10 0"></Setter>
         </Style>
         <Style x:Key="RowButtonStyle" TargetType="{x:Type Button}">
@@ -176,8 +178,6 @@
                          materialDesign:HintAssist.Hint="{helpers:Localization LexiconEdit_Matching}"
                          Style="{StaticResource HintTextBox}"
                          Text="{Binding State.FormsMatch}"
-                         Width="100" 
-                         Height="30"
                          Visibility="{Binding State.LexemeOrFormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBox>
 
                     <ListBox x:Name="PredicateOptions"
@@ -197,8 +197,6 @@
                          materialDesign:HintAssist.Hint="{helpers:Localization LexiconEdit_FullyMatching}"
                         Text ="{Binding State.TranslationMatch}"
                          Style="{StaticResource HintTextBox}"
-                         Width="100" 
-                         Height="30"
                          Visibility="{Binding State.TranslationChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBox>
                     <Button x:Name="ApplyFilterButton" Style="{StaticResource RowButtonStyle}" 
                          cm:Message.Attach="[Event Click] = [Action OnApplyFilterButtonClicked()]">
@@ -242,8 +240,6 @@
                           materialDesign:HintAssist.Hint="{helpers:Localization LexiconEdit_Matching}"
                           Style="{StaticResource HintTextBox}"
                           Text="{Binding State.FormsMatch}"
-                          Width="100" 
-                          Height="30"
                           Visibility="{Binding State.LexemeOrFormsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBox>
 
                     <ListBox x:Name="PredicateOptions"
@@ -263,8 +259,6 @@
                       materialDesign:HintAssist.Hint="{helpers:Localization LexiconEdit_FullyMatching}"
                      Text ="{Binding State.TranslationMatch}"
                       Style="{StaticResource HintTextBox}"
-                      Width="100" 
-                      Height="30"
                       Visibility="{Binding State.TranslationChecked, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBox>
                     <Button x:Name="ApplyFilterButton" Style="{StaticResource RowButtonStyle}" 
                         cm:Message.Attach="[Event Click] = [Action OnApplyFilterButtonClicked()]">

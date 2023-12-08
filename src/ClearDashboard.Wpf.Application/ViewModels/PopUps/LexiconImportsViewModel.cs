@@ -6,6 +6,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -39,7 +40,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public BindableCollection<LexiconImportViewModel> LexiconToImport { get; private set; } = new BindableCollection<LexiconImportViewModel>();
 
-        public bool HasLexiconToImport => Enumerable.Any<LexiconImportViewModel>(LexiconToImport);
+        public bool HasLexiconToImport => LexiconToImport.Any();
 
         //public BindableCollection<LexiconImportViewModel> ImportedLexicon { get; private set; } = new BindableCollection<LexiconImportViewModel>();
 
@@ -47,7 +48,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public bool HasSelectedProjectCorpus => SelectedProjectCorpus != null;
 
-        public bool ShowNoRecordsToManageMessage => HasSelectedProjectCorpus && !Enumerable.Any<LexiconImportViewModel>(LexiconToImport);
+        public bool ShowNoRecordsToManageMessage => HasSelectedProjectCorpus && !LexiconToImport.Any();
 
         //public string? NoRecordsToManageMessage => LocalizationService.Get("NoRecordsToManageMessage");
 
@@ -94,7 +95,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         }
 
         public LexiconImportsViewModel(INavigationService navigationService,
-            ILogger<LexiconViewModel> logger,
+            ILogger<LexiconImportsViewModel> logger,
             DashboardProjectManager dashboardProjectManager,
             IEventAggregator eventAggregator,
             IMediator mediator,
@@ -108,6 +109,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             WindowManager = windowManager;
             Message = LocalizationService.Get("LexiconEdit_LoadingData");
         }
+
+        #endregion //Constructor
 
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -153,8 +156,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             await base.OnActivateAsync(cancellationToken);
         }
 
-        #endregion //Constructor
-
+        protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            await LexiconManager.DeleteTemporaryExternalLexiconFile();
+            await base.OnDeactivateAsync(close, cancellationToken);
+        }
 
         #region Methods
 
@@ -254,6 +260,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 await dialogViewModel.ActivateAsync();
 
                 var result = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
+
+                if (result == true && dialogViewModel.EditedLexemes.Any())
+                {
+                    Task.Run(async () =>
+                    {
+                        await LexiconManager.ProcessLexiconToImport();
+                        await GetToImportLexiconImportViewModels(CancellationToken.None);
+                    });
+                }
             }
         }
 
@@ -284,6 +299,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
 
                 var result = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
+
+                if (result == true && dialogViewModel.EditedLexemes.Any())
+                {
+                    Task.Run(async ()=>
+                    {
+                        await LexiconManager.ProcessLexiconToImport();
+                        await GetToImportLexiconImportViewModels(CancellationToken.None);
+                    });
+                   
+                }
             }
         }
 
@@ -302,7 +327,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public async void Close()
         {
-            await TryCloseAsync();
+            await TryCloseAsync(false);
         }
 
         public async Task ProcessLexiconToImport()
@@ -313,10 +338,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 {
                     Execute.OnUIThread(() => { ProgressBarVisibility = Visibility.Visible; });
 
-                    await LexiconManager.ProcessLexiconToImport();
+                    _ = Task.Run(async () =>
+                    {
+                        await LexiconManager.ProcessLexiconToImport();
 
-                    //await GetImportedLexiconViewModels(CancellationToken.None);
-                    await GetToImportLexiconImportViewModels(CancellationToken.None);
+                        //await GetImportedLexiconViewModels(CancellationToken.None);
+                        await GetToImportLexiconImportViewModels(CancellationToken.None);
+                        await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage());
+                    });
                 }
                 catch (Exception ex)
                 {

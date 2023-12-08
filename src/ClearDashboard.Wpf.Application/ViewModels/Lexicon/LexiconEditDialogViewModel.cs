@@ -17,12 +17,13 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using AvalonDock.Controls;
 using ClearDashboard.Wpf.Application.Extensions;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 {
     public class LexiconEditDialogViewModel : DashboardApplicationScreen
     {
-      
+
         private readonly LexiconManager? _lexiconManager;
 
         private LexiconManager LexiconManager
@@ -62,21 +63,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         }
         public async void Cancel()
         {
+            foreach (var editableLexeme in EditableLexemes!)
+            {
+                editableLexeme.IsEditing= false;
+                editableLexeme.IsDirty = false;
+            }
             await TryCloseAsync(false);
         }
+
+        public List<Lexeme> EditedLexemes => EditableLexemes!.Where(l => l.IsDirty).Select(l => l.Lexeme).ToList();
 
         public async Task Save()
         {
             try
             {
-                var editedLexemes = EditableLexemes!
-                    .Where(l => l.Lexeme.IsDirty || l.Lexeme.Meanings.Any(m => m.IsDirty || m.Translations.Any(t=>t.IsDirty)) || l.Lexeme.Forms.Any(f => f.IsDirty))
-                    .Select(l => l.Lexeme).ToList();
+              
+                if (EditedLexemes.Count == 0) return;
 
+                _ = await DAL.Alignment.Lexicon.Lexicon.MergeAndSaveAsync(EditedLexemes, LexiconManager.ManagedLexicon.Lexicon, Mediator!);
 
-                if (editedLexemes.Count == 0) return;
-
-                _ = await DAL.Alignment.Lexicon.Lexicon.MergeAndSaveAsync(editedLexemes, LexiconManager.ManagedLexicon.Lexicon, Mediator!);
+                await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage());
 
                 await TryCloseAsync(true);
             }
@@ -85,7 +91,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                 Logger!.LogError(ex, "Error saving lexicon");
                 await TryCloseAsync(false);
             }
-            
+
         }
 
         public string? SourceLanguage
@@ -163,7 +169,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             settings.ResizeMode = ResizeMode.CanResizeWithGrip;
             settings.PopupAnimation = PopupAnimation.Fade;
             settings.WindowStartupLocation = WindowStartupLocation.Manual;
-            settings.Top = App.Current.MainWindow.ActualHeight / 2 -200;
+            settings.Top = App.Current.MainWindow.ActualHeight / 2 - 200;
             settings.Left = App.Current.MainWindow.ActualWidth / 2 - 258;
             settings.Width = 1000;
             settings.Height = 800;
@@ -196,7 +202,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
             State = new LexiconEditDialogState();
 
-           
+
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -248,25 +254,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                     CanSave = !viewModel.IsEditing;
                     break;
                 case nameof(EditableLexemeViewModel.Forms):
-                    CanSave = !viewModel.IsEditing; 
+                    CanSave = !viewModel.IsEditing;
                     break;
                 case nameof(EditableLexemeViewModel.IsEditing):
 
-                    CanSave = !viewModel.IsEditing && 
-                              EditableLexemes!
-                                    .Any(l => l.Lexeme.IsDirty ||
-                                                l.Lexeme.Meanings.Any(m => m.IsDirty || m.Translations.Any(t => t.IsDirty)) ||
-                                                l.Lexeme.Forms.Any(f => f.IsDirty));
-                        
+                    CanSave = !viewModel.IsEditing && EditableLexemes!.Any(l => l.IsDirty);
                     break;
             }
-           
+
         }
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-          
-           
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
@@ -305,38 +304,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             switch (EditMode)
             {
                 case LexiconEditMode.PartialMatchOnLexemeOrForm:
-                {
-                    //editableLexeme.AddNewMeaning(Other);
-                    var position = editableLexeme.AddTranslationToFirstMeaning(Other);
-                    if (position.StartIndex != -1)
                     {
-                        var meaningsTextBox = textBoxes.FirstOrDefault(t => t.Name == "MeaningsTextBox");
-                        if (meaningsTextBox != null)
+                        var position = editableLexeme.AddTranslationToFirstMeaning(Other);
+                        if (position.StartIndex != -1)
                         {
-                            meaningsTextBox.Focus();
-                            meaningsTextBox.Select(position.StartIndex, position.Length);
+                            var meaningsTextBox = textBoxes.FirstOrDefault(t => t.Name == "MeaningsTextBox");
+                            if (meaningsTextBox != null)
+                            {
+                                meaningsTextBox.Focus();
+                                meaningsTextBox.Select(position.StartIndex, position.Length);
+                            }
                         }
+                        await Task.CompletedTask;
+                        break;
                     }
-                    await Task.CompletedTask;
-                    break;
-                }
 
                 case LexiconEditMode.MatchOnTranslation:
-                {
-                    var position = editableLexeme.AddNewForm(Other);
-                    if (position.StartIndex != -1)
                     {
+                        var position = editableLexeme.AddNewForm(Other);
+                        if (position.StartIndex != -1)
+                        {
                             var formsTextBox = textBoxes.FirstOrDefault(t => t.Name == "FormsTextBox");
                             if (formsTextBox != null)
                             {
                                 formsTextBox.Focus();
                                 formsTextBox.Select(position.StartIndex, position.Length);
                             }
+                        }
+                        await Task.CompletedTask;
+                        break;
                     }
-                    await Task.CompletedTask;
-                    break;
-                    }
-                  
+
 
             }
         }
@@ -377,12 +375,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
                 case LexiconEditMode.PartialMatchOnLexemeOrForm:
                     return editableLexeme.Forms != null && !editableLexeme.Meanings.Contains(Other);
-                default:                    
+                default:
                     return false;
             }
         }
 
-       
+
 
         private BindableCollection<EditableLexemeViewModel>? GetFilteredLexemes()
         {
@@ -408,8 +406,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                             .FilterByTranslationText(SelectedSourceLanguage, SelectedTargetLanguage, ToMatch).ToList();
                     }
 
-                    return new BindableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l=> new EditableLexemeViewModel(l) {SourceLanguage = SourceLanguage, TargetLanguage = TargetLanguage, EditButtonLabel = LocalizationService.Get("LexiconEdit_Edit"), DoneLabel = doneLabel, EditLabel = editLabel}));
-       
+                    return new BindableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l => new EditableLexemeViewModel(l) { SourceLanguage = SourceLanguage, TargetLanguage = TargetLanguage, EditButtonLabel = LocalizationService.Get("LexiconEdit_Edit"), DoneLabel = doneLabel, EditLabel = editLabel }));
+
                 case LexiconEditMode.PartialMatchOnLexemeOrForm:
 
                     if (State.FormsOrLexemeAndTranslationChecked)
@@ -425,12 +423,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                     }
 
                     return new BindableCollection<EditableLexemeViewModel>(filteredLexemes.Select(l => new EditableLexemeViewModel(l) { SourceLanguage = SourceLanguage, TargetLanguage = TargetLanguage, EditButtonLabel = LocalizationService.Get("LexiconEdit_Edit"), DoneLabel = doneLabel, EditLabel = editLabel }));
-   
+
                 default:
                     return null;
 
             }
-          
+
         }
 
         public void OnLexemeOptionChanged(SelectionChangedEventArgs e)

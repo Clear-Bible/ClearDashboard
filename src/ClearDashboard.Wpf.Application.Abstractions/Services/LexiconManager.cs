@@ -451,22 +451,22 @@ namespace ClearDashboard.Wpf.Application.Services
                 throw;
             }
         }
-
+        
         private async Task<Lexicon?> GetLexiconForProject(string? projectId)
         {
-#if DEBUG
-            var data = await ReadFromTempFile<Lexicon?>("externalLexicon.json");
+
+            var data = await TryLoadExternalLexiconFromTempFile<Lexicon?>();
             if (data != null)
             {
                 return data;
             }
-#endif
+
             var result = await Mediator.Send(new GetExternalLexiconQuery(projectId));
             if (result is { Success: true, HasData: true })
             {
-#if DEBUG
-                await SaveToTempFile(result.Data, "externalLexicon.json");
-#endif
+
+                await SaveExternalLexiconToTempFile(result.Data);
+
                 return result.Data;
             }
             else
@@ -477,25 +477,39 @@ namespace ClearDashboard.Wpf.Application.Services
 
         }
 
-        private async Task SaveToTempFile(Lexicon resultData, string fileName)
+        private async Task SaveExternalLexiconToTempFile(Lexicon resultData, string fileName = "externalLexicon.json")
         {
             var path = Path.Combine(Path.GetTempPath(), fileName);
             if (File.Exists(path))
             {
                 return;
             }
+
+            Logger.LogInformation($"Saving temporary external lexicon data file: '{path}'.");
             var json = JsonSerializer.Serialize(resultData);
 
             await System.IO.File.WriteAllTextAsync(path, json);
         }
 
-        private async Task<T?> ReadFromTempFile<T>(string fileName)
+        public async Task DeleteTemporaryExternalLexiconFile(string fileName = "externalLexicon.json")
+        {
+            var path = Path.Combine(Path.GetTempPath(), fileName);
+            if (File.Exists(path))
+            { Logger.LogInformation($"Deleting temporary external lexicon data file '{path}'.");
+               File.Delete(path);
+            }
+
+            await Task.CompletedTask;
+        }
+
+        private async Task<T?> TryLoadExternalLexiconFromTempFile<T>(string fileName = "externalLexicon.json")
         {
             var path = Path.Combine(Path.GetTempPath(), fileName);
             if (!File.Exists(path))
             {
                 return default;
             }
+            Logger.LogInformation($"Loading temporary external lexicon data file: '{path}'.");
             var json = await File.ReadAllTextAsync(path);
             return JsonSerializer.Deserialize<T>(json);
         }
@@ -706,6 +720,7 @@ namespace ClearDashboard.Wpf.Application.Services
             EventAggregator = eventAggregator;
             Logger = logger;
             Mediator = mediator;
+
         }
     }
 }
