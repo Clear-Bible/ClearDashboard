@@ -554,7 +554,7 @@
     <value>Pengguna kolaborasi yang tersedia:</value>
   </data>
   <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
-    <value>Kelola proyek kolaborasi</value>
+    <value>Mengelola proyek kolaborasi</value>
   </data>
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Pengguna proyek saat ini:</value>
@@ -1403,7 +1403,7 @@
     <value>Apakah Anda ingin membuat label:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
-    <value>dan kaitkan dengan grup label:</value>
+    <value>dan asosiasikan dengan grup label:</value>
   </data>
   <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
     <value>Apakah Anda ingin menghapus label:</value>
@@ -1418,7 +1418,7 @@
     <value>Tambahkan grup label</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Tambahkan Grup Label</value>
+    <value>Tambahkan grup label</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Grup label sudah ada dengan nama</value>
@@ -1556,7 +1556,7 @@
     <value>Kereta</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Pelatih mesin pelurus mesin</value>
+    <value>Pelatihan mesin pelurus mesin</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Atur pemetaan ayat antara korpora yang disejajarkan</value>
@@ -1850,7 +1850,7 @@
     <value>Sertakan teks -teks Alkitab Ibrani?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
-    <value>Kelola proyek kolaborasi</value>
+    <value>Mengelola proyek kolaborasi</value>
   </data>
   <data name="ProjectPicker_NoMatches" xml:space="preserve">
     <value>Tidak ada yang cocok.</value>

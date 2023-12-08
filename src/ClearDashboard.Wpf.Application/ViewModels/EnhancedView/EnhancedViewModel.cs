@@ -734,8 +734,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await Task.CompletedTask;
         }
 
-       
-
         public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
         {
             if (ProjectManager?.CurrentParatextProject is not null)

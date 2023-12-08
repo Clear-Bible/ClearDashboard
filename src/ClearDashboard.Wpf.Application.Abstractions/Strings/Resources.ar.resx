@@ -917,7 +917,7 @@
     <value>ليما/الأشكال:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Lemma من أجل lexeme الجديد:</value>
+    <value>Lemma من أجل Lexeme الجديد:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>لكلية</value>
@@ -1259,7 +1259,7 @@
     <value>تم إلغاء العملية</value>
   </data>
   <data name="MergeDialog_OperationComplete" xml:space="preserve">
-    <value>عملية كاملة!</value>
+    <value>العملية كاملة!</value>
   </data>
   <data name="MergeDialog_OperationErrored" xml:space="preserve">
     <value>خطأ واجه</value>

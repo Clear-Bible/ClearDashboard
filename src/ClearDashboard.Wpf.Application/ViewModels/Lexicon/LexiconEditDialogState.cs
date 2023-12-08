@@ -12,6 +12,7 @@ public class LexiconEditDialogState : PropertyChangedBase
     private PredicateOption _predicateOption;
     private string? _formsMatch;
     private string? _translationMatch;
+    private MatchOption _formsOrLexemeOption;
 
     public bool LexemeChecked
     {
@@ -33,11 +34,13 @@ public class LexiconEditDialogState : PropertyChangedBase
         }
     }
 
+    public bool FormsOrLexemeAndTranslationChecked => ( FormsChecked || LexemeChecked ) && TranslationChecked;
+
     public bool LexemeAndFormsChecked => LexemeChecked & FormsChecked;
 
     public bool LexemeOrFormsChecked => LexemeChecked | FormsChecked;
 
-    public bool TransitionAndLexemeOrFormsChecked => TranslationChecked & LexemeAndFormsChecked;
+    public bool TransitionAndLexemeOrFormsChecked => TranslationChecked && LexemeAndFormsChecked;
 
     private void NotifyBooleansChanged()
     {
@@ -66,6 +69,12 @@ public class LexiconEditDialogState : PropertyChangedBase
     {
         get => _formsOption;
         set => Set(ref _formsOption, value);
+    }
+
+    public MatchOption FormsOrLexemeOption
+    {
+        get => _formsOrLexemeOption;
+        set => Set(ref _formsOrLexemeOption, value);
     }
 
     public PredicateOption PredicateOption
@@ -127,7 +136,17 @@ public class LexiconEditDialogState : PropertyChangedBase
                 FormsMatch = toMatch;
                 TranslationMatch = string.Empty;
                 break;
-
+            case LexiconEditMode.Edit:
+            default:
+                LexemeChecked = true;
+                FormsChecked = true;
+                TranslationChecked = false;
+                LexemeOption = MatchOption.Partially;
+                FormsOption = MatchOption.Partially;
+                PredicateOption = PredicateOption.And;
+                FormsMatch = string.Empty;
+                TranslationMatch = string.Empty;
+                break;
         }
     }
 

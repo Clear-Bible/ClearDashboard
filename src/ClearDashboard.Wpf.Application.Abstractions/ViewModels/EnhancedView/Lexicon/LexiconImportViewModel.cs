@@ -7,6 +7,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
     public class LexiconImportViewModel : PropertyChangedBase
     {
         private Guid _lexemeId;
+        private Guid _meaningId;
+        private Guid _translationId;
         private bool _isSelected;
         private bool _showAddAsFormButton;
         private bool _showAddTargetAsTranslationButton;
@@ -29,6 +31,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
         {
             get => _lexemeId;
             set => Set(ref _lexemeId, value);
+        }
+
+        public Guid MeaningId
+        {
+            get => _meaningId;
+            set => Set(ref _meaningId, value);
+        }
+
+        public Guid TranslationId
+        {
+            get => _translationId;
+            set => Set(ref _translationId, value);
         }
 
         public bool ShowAddAsFormButton

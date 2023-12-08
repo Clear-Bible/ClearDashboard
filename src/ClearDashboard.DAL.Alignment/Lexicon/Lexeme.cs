@@ -55,8 +55,18 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             }
         }
 
+        public bool HasAnythingToSave =>
+            IsDirty ||
+            MeaningIdsToAdd.Any() ||
+            MeaningIdsToDelete.Any() ||
+            meanings_.IntersectBy(meaningIdsInDatabase_.Select(e => e.Id), e => e.MeaningId.Id).Any(e => e.HasAnythingToSave) ||
+            FormIdsToAdd.Any() ||
+            FormIdsToDelete.Any() ||
+            forms_.IntersectBy(formIdsInDatabase_.Select(e => e.Id), e => e.FormId.Id).Any(e => e.HasAnythingToSave);
+
         private readonly List<MeaningId> meaningIdsInDatabase_;
         internal IEnumerable<MeaningId> MeaningIdsToDelete => meaningIdsInDatabase_.ExceptBy(meanings_.Select(e => e.MeaningId.Id), e => e.Id);
+        internal IEnumerable<MeaningId> MeaningIdsToAdd => meanings_.Select(e => e.MeaningId).ExceptBy(meaningIdsInDatabase_.Select(e => e.Id), e => e.Id);
 
 #if DEBUG
         private ObservableCollection<Meaning> meanings_;
@@ -80,6 +90,7 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
 
         private readonly List<FormId> formIdsInDatabase_;
         internal IEnumerable<FormId> FormIdsToDelete => formIdsInDatabase_.ExceptBy(forms_.Select(e => e.FormId.Id), e => e.Id);
+        internal IEnumerable<FormId> FormIdsToAdd => forms_.Where(e => !e.ExcludeFromSave).Select(e => e.FormId).ExceptBy(formIdsInDatabase_.Select(e => e.Id), e => e.Id);
 
 #if DEBUG
         private ObservableCollection<Form> forms_;
@@ -224,6 +235,14 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             if (!formIdsInDatabase_.Contains(form.FormId, new IIdEqualityComparer()))
             {
                 formIdsInDatabase_.Add(form.FormId);
+            }
+        }
+
+        public void DeleteForms(IEnumerable<Form> forms)
+        {
+            foreach (var form in forms)
+            {
+                forms_.Remove(form);
             }
         }
 

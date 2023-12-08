@@ -3,9 +3,9 @@ using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -16,7 +16,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
+using CheckBox = System.Windows.Controls.CheckBox;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 {
@@ -220,16 +220,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             var dialogViewModel = LifetimeScope?.Resolve<LexiconEditDialogViewModel>(parameters);
             if (dialogViewModel != null)
             {
-                dialogViewModel.SourceLanguage = lexiconImport.SourceLanguage;
-                dialogViewModel.TargetLanguage = lexiconImport.TargetLanguage;
-                dialogViewModel.EditMode = LexiconEditMode.PartialMatchOnLexemeOrForm;
-                dialogViewModel.ToMatch = lexiconImport.TargetWord;
-                dialogViewModel.Other = lexiconImport.SourceWord;
+                try
+                {
 
-                await dialogViewModel.ActivateAsync();
+                    dialogViewModel.SourceLanguage = lexiconImport.SourceLanguage;
+                    dialogViewModel.TargetLanguage = lexiconImport.TargetLanguage;
+                    dialogViewModel.EditMode = LexiconEditMode.MatchOnTranslation;
+                    dialogViewModel.ToMatch = lexiconImport.TargetWord;
+                    dialogViewModel.Other = lexiconImport.SourceWord;
 
-                var result = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
+                    await dialogViewModel.ActivateAsync();
+
+                    var result = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
+                    if (result == true && dialogViewModel.EditedLexemes.Any())
+                    {
+                        _ = Task.Run(async () =>
+                        {
+                            await GetToImportLexiconImportViewModels(CancellationToken.None);
+                        });
+                    }
+                }
+                finally
+                {
+                    await dialogViewModel.DeactivateAsync(false);
+                }
             }
+          
         }
 
 
@@ -248,21 +264,42 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             var dialogViewModel = LifetimeScope?.Resolve<LexiconEditDialogViewModel>(parameters);
             if (dialogViewModel != null)
             {
-                dialogViewModel.SourceLanguage = lexiconImport.SourceLanguage;
-                dialogViewModel.TargetLanguage = lexiconImport.TargetLanguage;
-                dialogViewModel.EditMode = LexiconEditMode.MatchOnTranslation;
-                dialogViewModel.ToMatch = lexiconImport.SourceWord;
-                dialogViewModel.Other = lexiconImport.TargetWord;
+                try
+                {
+                    dialogViewModel.SourceLanguage = lexiconImport.SourceLanguage;
+                    dialogViewModel.TargetLanguage = lexiconImport.TargetLanguage;
+                    dialogViewModel.EditMode = LexiconEditMode.PartialMatchOnLexemeOrForm;
+                    dialogViewModel.ToMatch = lexiconImport.SourceWord;
+                    dialogViewModel.Other = lexiconImport.TargetWord;
 
-                await dialogViewModel.ActivateAsync();
+                    await dialogViewModel.ActivateAsync();
 
-                var result = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
+                    var dialogSettings = dialogViewModel.DialogSettings();
+                    dialogSettings.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
+                    var result = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogSettings());
+
+                    if (result == true && dialogViewModel.EditedLexemes.Any())
+                    {
+                        _ = Task.Run(async () => 
+                        { 
+                            await GetToImportLexiconImportViewModels(CancellationToken.None);
+                        });
+                    }
+                }
+                finally
+                {
+                    await dialogViewModel.DeactivateAsync(false);
+                }
+               
             }
+
         }
 
-        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-            return base.OnDeactivateAsync(close, cancellationToken);
+            await LexiconManager.DeleteTemporaryExternalLexiconFile();
+            await base.OnDeactivateAsync(close, cancellationToken);
         }
 
 
@@ -285,14 +322,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                 {
                     Execute.OnUIThread(() => { ProgressBarVisibility = Visibility.Visible; });
 
-                    await LexiconManager.ProcessLexiconToImport();
-
-                    await GetImportedLexiconViewModels(CancellationToken.None);
-                    await GetToImportLexiconImportViewModels(CancellationToken.None);
+                    _ = Task.Run(async () =>
+                    {
+                        await LexiconManager.ProcessLexiconToImport();
+                        await GetImportedLexiconViewModels(CancellationToken.None);
+                        await GetToImportLexiconImportViewModels(CancellationToken.None);
+                        await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage());
+                    });
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError(ex, "An unexpected error occurred while importing the Lexicon.");
+                    Logger!.LogError(ex, "An unexpected error occurred while importing the Lexicon.");
                 }
                 finally
                 {
