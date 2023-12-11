@@ -24,7 +24,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         /// <param name="corpusId"></param>
         /// <param name="displayName"></param>
         /// <param name="tokenizationFunction"></param>
-        /// <param name="token"></param>
+        /// <param name="token"></param>U
         /// <returns></returns>
         /// <exception cref="InvalidTypeEngineException"></exception>
         /// <exception cref="MediatorErrorEngineException"></exception>

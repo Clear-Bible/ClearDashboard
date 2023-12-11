@@ -72,6 +72,11 @@ echo CompressXMLs in Resources folder
 rem ..\tools\CompressXML\CompressXML\bin\Release\net5.0\CompressTreeXML.exe
 
 pause
+
+:: Remove the thot.dll from the Paratext plugins folder
+echo Deleting the thot.dll file from the plugins runtime folder as it throws an exception in Paratext and isn't needed
+del %CURRENTPATH%\..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\thot.dll
+
 ::===================INNO Dashboard=====================
 echo run the Inno Setup Compliler on Dashboard
 "%driveInno%:\Program Files (x86)\Inno Setup 6\ISCC.exe" "%CURRENTPATH%\DashboardInstaller_ARM64.iss"

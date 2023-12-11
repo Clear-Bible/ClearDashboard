@@ -36,6 +36,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 
             if (dups.Any())
             {
+                var list = dups.ToList();
+                foreach (var item in list)
+                {
+                    Debug.WriteLine(item);
+                }
+
                 throw new InvalidDataEngineException(name: "Token.Ids", value: $"{string.Join(",", dups)}", message: $"Engine token Id duplicates found in corpus '{corpusName}' book '{bookId}'");
             }
 

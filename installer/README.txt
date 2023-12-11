@@ -17,6 +17,10 @@ Steps 10-12 are necessary to rebuild the Paratext Plugin (since codesign_exe.bat
 
 
 10. Clean bin and obj files
+	> Alternative way:
+		Open up PowerShell
+		cd to the \ClearDashboard\src\ directory
+		run: gci -inc bin,obj -rec | rm -rec -force
 11. Restore Nuget packages
 12. Rebuild the Solution
 
