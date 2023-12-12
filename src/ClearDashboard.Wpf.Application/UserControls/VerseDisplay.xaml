@@ -267,14 +267,15 @@
                 </ToolTip>
             </Border.ToolTip>
             <Grid>
-                <iconPacks:PackIconModern
-                    x:Name="MultipleNotesIcon"
-                    Margin="3,0,0,0"
-                    Foreground="DarkGray"
-                    IsHitTestVisible="False"
-                    Kind="Flag"
-                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.HasExternalNotes), Converter={StaticResource BoolToVisibilityConverter}}" />
-
+                <StackPanel Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.MultipleExternalNotes), Converter={StaticResource BoolToVisibilityConverter}}">
+                    <iconPacks:PackIconModern
+                        x:Name="MultipleNotesIcon"
+                        Margin="3,0,0,0"
+                        Foreground="DarkGray"
+                        IsHitTestVisible="False"
+                        Kind="Flag"
+                        Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.HasExternalNotes), Converter={StaticResource BoolToVisibilityConverter}}" />
+                </StackPanel>
                 <iconPacks:PackIconModern
                     x:Name="ExternalNotesIcon"
                     Margin="0,2,0,0"

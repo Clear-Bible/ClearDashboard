@@ -136,6 +136,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        private bool _multipleExternalNotes = false;
+        public bool MultipleExternalNotes
+        {
+            get => _multipleExternalNotes && AbstractionsSettingsHelper.GetShowExternalNotes();
+            set
+            {
+                _multipleExternalNotes = value;
+                NotifyOfPropertyChange(nameof(MultipleExternalNotes));
+            }
+        }
 
         #endregion //Observable Properties
 
@@ -275,6 +285,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 ExternalNotes.AddRange(externalNotes);
                 NotesCount = $"Count: {externalNotes.Count()}";
                 notifyVerseDisplayViewModelExternalNotesItemsChanged = true;
+
+                if (externalNotes.Count > 1)
+                {
+                    MultipleExternalNotes = true;
+                }
             }
 
             if (notifyVerseDisplayViewModelExternalNotesItemsChanged)
