@@ -60,6 +60,38 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Width="auto" Height="auto">
+                        <iconPacks:PackIconVaadinIcons
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center"
+                            Kind="CogOutline" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="12"
+                            Text="{helpers:Localization Settings_General}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </TabItem.Header>
+                <StackPanel Orientation="Vertical">
+                    <GroupBox Margin="16" Header="{helpers:Localization Settings_GeneralSettings}">
+                        <StackPanel MinWidth="400" Orientation="Horizontal">
+                            <CheckBox
+                                Margin="5,0,0,0"
+                                VerticalAlignment="Center"
+                                IsChecked="{Binding ShowExternalNotes}" />
+                            <Label
+                                Margin="15,0,0,0"
+                                VerticalAlignment="Center"
+                                Content="{helpers:Localization FontSettings_ShowExternalNotes}" />
+                        </StackPanel>
+
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
                         <iconPacks:PackIconModern
                             Width="24"
                             Height="24"

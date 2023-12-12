@@ -1711,6 +1711,9 @@
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Unknown</value>
   </data>
+  <data name="Pds_UpdateLabelsWithExternalLabels" xml:space="preserve">
+    <value>Update Labels with External Notes</value>
+  </data>
   <data name="Pds_Xml" xml:space="preserve">
     <value>Xml</value>
   </data>
@@ -2211,6 +2214,12 @@
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Experimental</value>
+  </data>
+  <data name="Settings_General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="Settings_GeneralSettings" xml:space="preserve">
+    <value>General Settings</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Group</value>

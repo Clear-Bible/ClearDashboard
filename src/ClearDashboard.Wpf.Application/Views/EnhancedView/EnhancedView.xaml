@@ -91,7 +91,6 @@
                         <RowDefinition Height="30" />
                         <RowDefinition Height="40" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
 
@@ -403,7 +402,7 @@
                     </StackPanel>
 
                     <!--  ROW 6  -->
-                    <Label
+                    <!--<Label
                         Grid.Row="6"
                         Grid.Column="0"
                         VerticalAlignment="Center"
@@ -414,12 +413,12 @@
                         Grid.Column="1"
                         Margin="5,0,0,0"
                         VerticalAlignment="Center"
-                        IsChecked="{Binding ShowExternalNotes}" />
+                        IsChecked="{Binding ShowExternalNotes}" />-->
 
 
-                    <!--  ROW 7  -->
+                    <!--  ROW 6  -->
                     <Button
-                        Grid.Row="7"
+                        Grid.Row="6"
                         Grid.RowSpan="2"
                         Grid.Column="0"
                         Margin="10"
