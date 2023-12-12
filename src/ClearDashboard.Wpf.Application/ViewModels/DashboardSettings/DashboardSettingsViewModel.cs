@@ -19,6 +19,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 {
@@ -333,6 +334,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         { 
             get => _thirdMonitor; 
             set => Set(ref _thirdMonitor, value); 
+        }
+
+
+        private bool _showExternalNotes = AbstractionsSettingsHelper.GetShowExternalNotes();
+        public bool ShowExternalNotes
+        {
+            get => _showExternalNotes;
+            set
+            {
+                if (_showExternalNotes != value)
+                {
+                    _showExternalNotes = value;
+                    AbstractionsSettingsHelper.SaveShowExternalNotes(value);
+                    NotifyOfPropertyChange(() => ShowExternalNotes);
+
+                    EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage()).GetAwaiter();
+                }
+            }
         }
 
         #endregion //Observable Properties
