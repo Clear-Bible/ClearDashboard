@@ -48,12 +48,15 @@ public class TokenBuilder : GeneralModelBuilder<Models.Token>
         // Tokens that were 'replaced' by manually created tokens:
         // (Tokens with an EngineTokenId that matches any of the 
         // OriginTokenLocation values from above)
-        tokenIndexes.AddRange(tokens
-            .Where(e => e.OriginTokenLocation == null)
-            .Where(e => manuallyChangedOriginTokenLocations.Contains(e.EngineTokenId))
-            .ToList()
-            .Select(e => (Token: e, Index: null as int?))
-        );
+        if (manuallyChangedOriginTokenLocations.Any())
+        {
+            tokenIndexes.AddRange(tokens
+                .Where(e => e.OriginTokenLocation == null)
+                .Where(e => manuallyChangedOriginTokenLocations.Contains(e.EngineTokenId))
+                .ToList()
+                .Select(e => (Token: e, Index: null as int?))
+            );
+        }
 
         // Tokens not yet included in tokenIndexes that were soft deleted:
         tokenIndexes.AddRange(tokens
