@@ -104,7 +104,7 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
         }
     }
 
-    public virtual async Task ModifyListDifferencesAsync(IListDifference<T> listDifference, IEnumerable<T>? currentSnapshotList, IEnumerable<T>? targetCommitSnapshotList, CancellationToken cancellationToken = default)
+    public virtual async Task ModifyListDifferencesAsync(IListDifference<T> listDifference, IEnumerable<T>? currentSnapshotList, IEnumerable<T>? targetCommitSnapshotList, IEnumerable<T>? previousCommitSnapshotList, CancellationToken cancellationToken = default)
     {
         if (listDifference.HasListMemberModelDifferences)
         {
@@ -116,6 +116,7 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
                 // never be null:
                 var itemInCurrentSnapshot = currentSnapshotList.FindById<T>(modelDifference.Id!);
                 var itemInTargetCommitSnapshot = targetCommitSnapshotList.FindById<T>(modelDifference.Id!);
+                var itemInPreviousCommitSnapshot = previousCommitSnapshotList.FindById<T>(modelDifference.Id!);
 
                 if (itemInCurrentSnapshot is not null)
                 {
@@ -144,7 +145,7 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
 
                 if (modelDifference.ChildListDifferences.Any())
                 {
-                    await HandleChildListDifferenceAsync(modelDifference.ChildListDifferences, itemInCurrentSnapshot, itemInTargetCommitSnapshot, cancellationToken);
+                    await HandleChildListDifferenceAsync(modelDifference.ChildListDifferences, itemInCurrentSnapshot, itemInTargetCommitSnapshot, itemInPreviousCommitSnapshot, cancellationToken);
                 }
             }
         }
@@ -238,12 +239,14 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
         IReadOnlyDictionary<string, IListDifference> childListDifferences,
         T? parentItemInCurrentSnapshot,
         T? parentItemInTargetCommitSnapshot,
+        T? parentItemInPreviousCommitSnapshot,
         CancellationToken cancellationToken)
     {
         foreach (var (childName, listDifference) in childListDifferences)
         {
             IEnumerable<IModelDistinguishable>? childrenInCurrentSnapshot = null;
             IEnumerable<IModelDistinguishable>? childrenInTargetCommitSnapshot = null;
+            IEnumerable<IModelDistinguishable>? childrenInPreviousCommitSnapshot = null;
 
             if (parentItemInCurrentSnapshot is not null && ((IModelSnapshot)parentItemInCurrentSnapshot).Children.ContainsKey(childName))
             {
@@ -255,6 +258,11 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
                 childrenInTargetCommitSnapshot = ((IModelSnapshot)parentItemInTargetCommitSnapshot).Children[childName];
             }
 
+            if (parentItemInPreviousCommitSnapshot is not null && ((IModelSnapshot)parentItemInPreviousCommitSnapshot).Children.ContainsKey(childName))
+            {
+                childrenInPreviousCommitSnapshot = ((IModelSnapshot)parentItemInPreviousCommitSnapshot).Children[childName];
+            }
+
             if (listDifference.GetType().IsAssignableToGenericType(typeof(IListDifference<>)))
             {
                 var handler = _mergeContext.FindMergeHandler(listDifference.GetType().GetGenericArguments()[0]);
@@ -264,7 +272,7 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
                 await createAwaitable;
 
                 MethodInfo modifyMethod = handler.GetType().GetMethod(nameof(DefaultMergeHandler<T>.ModifyListDifferencesAsync))!;
-                dynamic modifyAwaitable = modifyMethod.Invoke(handler, new object?[] { listDifference, childrenInCurrentSnapshot, childrenInTargetCommitSnapshot, cancellationToken })!;
+                dynamic modifyAwaitable = modifyMethod.Invoke(handler, new object?[] { listDifference, childrenInCurrentSnapshot, childrenInTargetCommitSnapshot, childrenInPreviousCommitSnapshot, cancellationToken })!;
                 await modifyAwaitable;
             }
             else
@@ -364,6 +372,7 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
         IListDifference listDifference,
         IEnumerable<IModelDistinguishable>? childrenInCurrentSnapshot,
         IEnumerable<IModelDistinguishable>? childrenInTargetCommitSnapshot,
+        IEnumerable<IModelDistinguishable>? childrenInPreviousCommitSnapshot,
         CancellationToken cancellationToken
         )
     {
@@ -382,13 +391,19 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
             throw new InvalidDifferenceStateException($"Encountered non-IModelSnapshot children in target commit snapshot list!");
         }
 
+        if (childrenInPreviousCommitSnapshot is not null && !childrenInPreviousCommitSnapshot.GetType().IsAssignableTo(typeof(IEnumerable<T>)))
+        {
+            throw new InvalidDifferenceStateException($"Encountered non-IModelSnapshot children in previous commit snapshot list!");
+        }
+
         var difference = (IListDifference<T>)listDifference;
         var currentChildren = (IEnumerable<T>?)childrenInCurrentSnapshot;
         var targetCommitChildren = (IEnumerable<T>?)childrenInTargetCommitSnapshot;
+        var previousCommitChildren = (IEnumerable<T>?)childrenInPreviousCommitSnapshot;
 
         await DeleteListDifferencesAsync(difference, currentChildren, cancellationToken);
         await CreateListDifferencesAsync(difference, currentChildren, cancellationToken);
-        await ModifyListDifferencesAsync(difference, currentChildren, targetCommitChildren, cancellationToken);
+        await ModifyListDifferencesAsync(difference, currentChildren, targetCommitChildren, previousCommitChildren, cancellationToken);
     }
 }
 

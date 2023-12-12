@@ -49,10 +49,13 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             //    var backupsPath =
             //        FilePathTemplates.CollabBaseDirectory + Path.DirectorySeparatorChar + "Backups";
 
-            //    var factory = new ProjectSnapshotFromFilesFactory(Path.Combine(backupsPath, "Roman6"), _fixture.Logger);
-            //    var snapshotFromFile = factory.LoadSnapshot();
+            //    var factoryPrevious = new ProjectSnapshotFromFilesFactory(Path.Combine(backupsPath, "Roman7"), _fixture.Logger);
+            //    var previousSnapshotFromFile = factoryPrevious.LoadSnapshot();
 
-            //    await DoMerge(false, snapshotFromFile);
+            //    var factoryNew = new ProjectSnapshotFromFilesFactory(Path.Combine(backupsPath, "Roman7_Split"), _fixture.Logger);
+            //    var newSnapshotFromFile = factoryNew.LoadSnapshot();
+
+            //    await DoMerge(false, newSnapshotFromFile, previousSnapshotFromFile);
             //}
             //catch (Exception ex)
             //{
@@ -881,7 +884,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             Assert.Equal("001001020004001", extraCompositeTokensDb[2].EngineTokenId);
         }
 
-        protected async Task DoMerge(bool isIt = false, ProjectSnapshot? sourceSnapshot = null)
+        protected async Task DoMerge(bool isIt = false, ProjectSnapshot? sourceSnapshot = null, ProjectSnapshot? previousSnapshot = null)
         {
             var testProject = _fixture.ProjectDbContext.Projects.First();
 
@@ -897,7 +900,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 
             var commitShaToMerge = $"{CollaborationProjectFixture.ShaBase}_{shaIndex}";
 
-            var snapshotLastMerged = _fixture.ProjectSnapshotLastMerged ?? ProjectSnapshotFactoryCommon.BuildEmptySnapshot(testProject.Id);
+            var snapshotLastMerged = previousSnapshot ?? _fixture.ProjectSnapshotLastMerged ?? ProjectSnapshotFactoryCommon.BuildEmptySnapshot(testProject.Id);
             var snapshotToMerge = sourceSnapshot ?? _fixture.ToProjectSnapshot();
             var progress = new Progress<ProgressStatus>(Report);
 
