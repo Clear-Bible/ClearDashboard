@@ -173,7 +173,7 @@
     <value>Количество ошибок:</value>
   </data>
   <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
-    <value>Межлинейный</value>
+    <value>Межлинейно</value>
   </data>
   <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
     <value>Нет ошибок</value>
@@ -668,7 +668,7 @@
     <value>Поиск членов фильтра</value>
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
-    <value>Межлинейный</value>
+    <value>Межлинейно</value>
   </data>
   <data name="EnhancedView_JoinTokens" xml:space="preserve">
     <value>Присоединяйтесь к токенам</value>
@@ -701,7 +701,7 @@
     <value>Показать элементы управления представлением</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>Разделенный токен</value>
+    <value>Расколотый токен</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>Применить разделение на другие экземпляры токена</value>
@@ -1232,7 +1232,7 @@
     <value>Сильные коды</value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
-    <value>Субсины:</value>
+    <value>Подпагнические домены:</value>
   </data>
   <data name="Marble_Verse" xml:space="preserve">
     <value>Стих</value>
@@ -1268,7 +1268,7 @@
     <value>Мих.</value>
   </data>
   <data name="Migrate_Header" xml:space="preserve">
-    <value>Сбросить сопоставления стихов в стихование по умолчанию</value>
+    <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>Мк.</value>
@@ -1624,6 +1624,9 @@
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
     <value>Удалить выравнивание</value>
   </data>
+  <data name="Pds_DeleteParallelLine" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить это выравнивание? Все примечания, выравнивания и межлинеры, связанные с этим выравниванием, будут удалены и не могут быть восстановлены.</value>
+  </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Удалить Interlineear</value>
   </data>
@@ -1632,6 +1635,9 @@
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Словарь</value>
+  </data>
+  <data name="Pds_DisabledNotice" xml:space="preserve">
+    <value>Отключено, пока работают фоновые задачи</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>Редактор внешних заметок</value>
@@ -1670,7 +1676,7 @@
     <value>Характеристики</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Сбросить сопоставления стихов в стихование по умолчанию</value>
+    <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Ресурс</value>
@@ -1718,7 +1724,7 @@
     <value>XML</value>
   </data>
   <data name="Pds_ZoomIn" xml:space="preserve">
-    <value>Увеличить контент</value>
+    <value>Увеличить содержание</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
     <value>Увеличить контент</value>
@@ -2285,7 +2291,7 @@
     <value>Включить стихотворенные текстовые коллекции.</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
-    <value>Отмена задания</value>
+    <value>Отменить задание</value>
   </data>
   <data name="ShellView_Loading" xml:space="preserve">
     <value>Загрузка ...</value>
