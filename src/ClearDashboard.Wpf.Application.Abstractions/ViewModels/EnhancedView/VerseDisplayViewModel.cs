@@ -136,6 +136,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        private bool _multipleExternalNotes = false;
+        public bool MultipleExternalNotes
+        {
+            get => _multipleExternalNotes && AbstractionsSettingsHelper.GetShowExternalNotes();
+            set
+            {
+                _multipleExternalNotes = value;
+                NotifyOfPropertyChange(nameof(MultipleExternalNotes));
+            }
+        }
 
         #endregion //Observable Properties
 
@@ -184,9 +194,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             var result = new TokenDisplayViewModelCollection();
             
+            bool firstToken = true;
+
             foreach (var (token, paddingBefore, paddingAfter) in tokenMap.PaddedTokens)
             {
                 var compositeToken = tokenMap.GetCompositeToken(token);
+
                 var tokenDisplayViewModel = new TokenDisplayViewModel(token)
                 {
                     VerseDisplay = this,
@@ -202,6 +215,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 {
                     tokenDisplayViewModel.TranslationNoteIds = await NoteManager.GetNoteIdsAsync(tokenDisplayViewModel.Translation.TranslationId);
                 }
+
+                // pad out extra space on the first token depending on the direction of the text
+                if (firstToken && tokenDisplayViewModel.PaddingBefore == "" && IsSourceRtl == false && isSource)
+                {
+                    // source is LTR
+                    firstToken = false;
+                    tokenDisplayViewModel.PaddingBefore = "6";
+                }
+                else if (firstToken && tokenDisplayViewModel.PaddingAfter == "" && IsSourceRtl == true && isSource)
+                {
+                    // source is RTL
+                    firstToken = false;
+                    tokenDisplayViewModel.PaddingAfter = "6";
+                }
+                else if (firstToken && tokenDisplayViewModel.PaddingAfter == "" && IsTargetRtl == true && isSource == false)
+                {
+                    // target is RTL
+                    firstToken = false;
+                    tokenDisplayViewModel.PaddingAfter = "6";
+                }
+                else if (firstToken && tokenDisplayViewModel.PaddingBefore == "" && IsTargetRtl == false && isSource == false)
+                {
+                    // target is LTR
+                    firstToken = false;
+                    tokenDisplayViewModel.PaddingBefore = "6";
+                }
+
+
                 result.Add(tokenDisplayViewModel);
             }
             return result;
@@ -275,6 +316,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 ExternalNotes.AddRange(externalNotes);
                 NotesCount = $"Count: {externalNotes.Count()}";
                 notifyVerseDisplayViewModelExternalNotesItemsChanged = true;
+
+                if (externalNotes.Count > 1)
+                {
+                    MultipleExternalNotes = true;
+                }
             }
 
             if (notifyVerseDisplayViewModelExternalNotesItemsChanged)

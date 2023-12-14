@@ -412,8 +412,7 @@
                 materialDesign:HintAssist.Hint="{helpers:Localization ProjectPicker_SearchRecent}"
                 materialDesign:TextFieldAssist.HasClearButton="True"
                 BorderBrush="DarkGray"
-                BorderThickness="1"
-                IsEnabled="{Binding Connected}">
+                BorderThickness="1">
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
@@ -451,7 +450,6 @@
                 Background="#EEEBEB"
                 BorderThickness="0"
                 FontSize="21"
-                IsEnabled="{Binding Connected}"
                 Style="{StaticResource TransparentStyle}"
                 Visibility="{Binding SearchBlankVisibility}">
                 <TextBlock HorizontalAlignment="Left" TextAlignment="Left">
@@ -466,7 +464,6 @@
                 x:Name="ProjectListView"
                 Grid.Row="4"
                 Margin="5"
-                IsEnabled="{Binding Connected}"
                 ItemsSource="{Binding DashboardProjectsDisplay}"
                 ScrollViewer.CanContentScroll="False"
                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
@@ -694,7 +691,6 @@
                 HorizontalAlignment="Right"
                 VerticalContentAlignment="Top"
                 FontSize="12"
-                IsEnabled="{Binding Connected}"
                 ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type model:LanguageTypeValue}}}"
                 SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
             <Button
@@ -863,7 +859,7 @@
                 <!--  Visibility="{Binding CollabProjectVisibility}"  -->
                 <ListView.IsEnabled>
                     <MultiBinding Converter="{StaticResource BooleanAndConverter}">
-                        <Binding Path="Connected" />
+                        <!--<Binding Path="Connected" />-->
                         <Binding Path="CollabButtonsEnabled" />
                     </MultiBinding>
                 </ListView.IsEnabled>

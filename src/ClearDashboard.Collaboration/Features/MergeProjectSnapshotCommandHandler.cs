@@ -73,7 +73,7 @@ public class MergeProjectSnapshotCommandHandler : ProjectDbContextCommandHandler
 
                 var mergeContext = new MergeContext(ProjectDbContext!.UserProvider, Logger, mergeBehavior, request.MergeMode);
                 var merger = new Merger(mergeContext);
-                await merger.MergeAsync(projectDifferences, currentProjectSnapshot, request.ProjectSnapshotToMerge, cancellationToken);
+                await merger.MergeAsync(projectDifferences, currentProjectSnapshot, request.ProjectSnapshotToMerge, request.ProjectSnapshotLastMerged, cancellationToken);
 
                 await mergeBehavior.MergeEndAsync(cancellationToken);
                 // FIXME:  temporary, for testing:

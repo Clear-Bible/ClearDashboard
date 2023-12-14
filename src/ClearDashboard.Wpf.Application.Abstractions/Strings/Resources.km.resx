@@ -128,7 +128,7 @@
     <value>ឈ្មោះអ្នកប្រើសហការ:</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
-    <value>Loading...</value>
+    <value>លំអិតគណនី -</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
     <value>ធ្វើឱ្យអសកម្មអាជ្ញាប័ណ្ណបច្ចុប្បន្ន</value>
@@ -1004,7 +1004,7 @@
     <value>ភាសាគោលដៅ</value>
   </data>
   <data name="LexiconEdit_Title" xml:space="preserve">
-    <value>lexicon កែសម្រួល</value>
+    <value>lexicon កែប្រែ</value>
   </data>
   <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>ការបករេប</value>
@@ -1624,6 +1624,9 @@
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
     <value>លុបការតែងតាំង</value>
   </data>
+  <data name="Pds_DeleteParallelLine" xml:space="preserve">
+    <value>តើអ្នកពិតជាចង់លុបការតម្រឹមនេះឬ? រាល់កំណត់ចំណាំការតម្រឹមនិងការភ្ជាប់ទំនាក់ទំនងជាមួយការតម្រឹមនេះនឹងត្រូវបានលុបចោលហើយមិនអាចរកឃើញវិញបានទេ។</value>
+  </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>លុប interlinear</value>
   </data>
@@ -1632,6 +1635,9 @@
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>វចនានុរកម</value>
+  </data>
+  <data name="Pds_DisabledNotice" xml:space="preserve">
+    <value>ពិការខណៈពេលដែលកិច្ចការផ្ទៃខាងក្រោយកំពុងដំណើរការ</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>កម្មវិធីនិពន្ធកំណត់ត្រាខាងក្រៅ</value>
@@ -1710,6 +1716,9 @@
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>ដេលមិនស្គាល់</value>
+  </data>
+  <data name="Pds_UpdateLabelsWithExternalLabels" xml:space="preserve">
+    <value>ធ្វើឱ្យទាន់សម័យស្លាកដែលមានកំណត់ចំណាំខាងក្រៅ</value>
   </data>
   <data name="Pds_Xml" xml:space="preserve">
     <value>XML</value>
@@ -2211,6 +2220,12 @@
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>ដេលល្បាប់</value>
+  </data>
+  <data name="Settings_General" xml:space="preserve">
+    <value>ដេលតុតោ</value>
+  </data>
+  <data name="Settings_GeneralSettings" xml:space="preserve">
+    <value>ការកំណត់​ទូទៅ</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>រកុម</value>

@@ -128,7 +128,7 @@
     <value>Nom d'utilisateur de collaboration:</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
-    <value>Loading...</value>
+    <value>- Détails du compte courant-</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
     <value>Désactiver la licence actuelle</value>
@@ -155,7 +155,7 @@
     <value>Ajouter</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Sélectionnez comment tokenize le corpus</value>
+    <value>Sélectionnez comment tokensize le corpus</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Alignement</value>
@@ -482,7 +482,7 @@
     <value>Mark sélectionné comme «Revue des besoins»</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
-    <value>Marque sélectionnée comme «valide»</value>
+    <value>Mark sélectionné comme «valide»</value>
   </data>
   <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
     <value>Besoin d'examen</value>
@@ -539,7 +539,7 @@
     <value>nouveau groupe</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
-    <value>nouveau individu</value>
+    <value>Nouveau individu</value>
   </data>
   <data name="ClockUserControl_Select" xml:space="preserve">
     <value>Sélectionnez le fuseau horaire</value>
@@ -641,7 +641,7 @@
     <value>Supprimer cette vue?</value>
   </data>
   <data name="EnhancedView_CreateAlignment" xml:space="preserve">
-    <value>Créer un alignement</value>
+    <value>Créer l'alignement</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
     <value>Afficher / créer des notes</value>
@@ -1058,7 +1058,7 @@
     <value>Importation du lexique</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
-    <value>Matchs de traduction</value>
+    <value>Correspondance de traduction</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Tout déselectionner</value>
@@ -1556,7 +1556,7 @@
     <value>Former</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Aligneur de mot de machine de train</value>
+    <value>Aligneur de la machine à train</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Définissez la cartographie du verset entre les corpus parallélisés</value>
@@ -1624,6 +1624,9 @@
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
     <value>Supprimer l'alignement</value>
   </data>
+  <data name="Pds_DeleteParallelLine" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer cet alignement? Toutes les notes, alignements et interlinéaires associés à cet alignement seront supprimés et ne peuvent pas être récupérés.</value>
+  </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Supprimer l'interlinéaire</value>
   </data>
@@ -1632,6 +1635,9 @@
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Dictionnaire</value>
+  </data>
+  <data name="Pds_DisabledNotice" xml:space="preserve">
+    <value>Handicapés pendant que les tâches d'arrière-plan fonctionnent</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>Éditeur de notes externes</value>
@@ -1710,6 +1716,9 @@
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Inconnu</value>
+  </data>
+  <data name="Pds_UpdateLabelsWithExternalLabels" xml:space="preserve">
+    <value>Mettre à jour les étiquettes avec des notes externes</value>
   </data>
   <data name="Pds_Xml" xml:space="preserve">
     <value>Xml</value>
@@ -1868,7 +1877,7 @@
     <value>Ouverte récente</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>Paratex</value>
+    <value>Paratext</value>
   </data>
   <data name="ProjectPicker_ParatextBackTranslation" xml:space="preserve">
     <value>Traduction de dos paratext</value>
@@ -1880,7 +1889,7 @@
     <value>PARATEXT est en cours d'exécution mais n'est pas connecté.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
-    <value>Projet de parattex</value>
+    <value>Projet PARATEXT</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
     <value>Projet:</value>
@@ -1901,7 +1910,7 @@
     <value>Assistant de modèle de projet: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Refreindre la liste des projets de collaboration</value>
+    <value>Rafraîchir la liste des projets de collaboration</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>Recherche récente</value>
@@ -2048,7 +2057,7 @@
     <value>John</value>
   </data>
   <data name="ProperCase_Jonah" xml:space="preserve">
-    <value>Jona</value>
+    <value>Jonie</value>
   </data>
   <data name="ProperCase_Joshua" xml:space="preserve">
     <value>Joshua</value>
@@ -2060,7 +2069,7 @@
     <value>Juges</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentations</value>
+    <value>Lamentation</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
     <value>Lévitique</value>
@@ -2212,6 +2221,12 @@
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Expérimental</value>
   </data>
+  <data name="Settings_General" xml:space="preserve">
+    <value>Général</value>
+  </data>
+  <data name="Settings_GeneralSettings" xml:space="preserve">
+    <value>réglages généraux</value>
+  </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Groupe</value>
   </data>
@@ -2237,7 +2252,7 @@
     <value>Réservé à l'expansion future</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaurer l'utilisateur de collaboration</value>
+    <value>Restaurer l'utilisateur de la collaboration</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Enregistré sur le serveur distant</value>

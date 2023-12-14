@@ -12,6 +12,5 @@ namespace ClearDashboard.Wpf.Application.Infrastructure.EnhancedView
         BookChapterVerseViewModel CurrentBcv { get; set; }
         int VerseOffsetRange { get; set; }
         bool ParagraphMode { get; set; }
-        bool ShowExternalNotes { get; set; }
     }
 }
