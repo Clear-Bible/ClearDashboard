@@ -1456,6 +1456,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                                 //Checking if common books are present
                                 var commonBookPresent = false;
+                                if (connection == null ||
+                                    connection.SourceConnector == null ||
+                                    connection.SourceConnector.ParentNode == null ||
+                                    connection.SourceConnector.ParentNode.Id == null)
+                                {
+                                    continue;
+                                }
                                 var updatedNodeIsSource = connection.SourceConnector.ParentNode.Id == corpusNodeViewModel.Id;
                                 if (updatedNodeIsSource)
                                 {
@@ -1561,7 +1568,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             await EventAggregator.PublishOnUIThreadAsync(new TokenizedCorpusUpdatedMessage(tokenizedTextCorpusId), cancellationToken);
 
                             await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage(ReloadType.Force), cancellationToken);
-
+                            
                             _longRunningTaskManager.TaskComplete(taskName);
 
                             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
