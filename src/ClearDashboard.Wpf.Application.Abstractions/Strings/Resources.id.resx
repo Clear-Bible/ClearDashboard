@@ -497,7 +497,7 @@
     <value>Sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Bagian Sumber</value>
+    <value>Bagian sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Sumber Ref</value>
@@ -1623,6 +1623,9 @@
   </data>
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
     <value>Hapus penyelarasan</value>
+  </data>
+  <data name="Pds_DeleteParallelLine" xml:space="preserve">
+    <value>Apakah Anda yakin ingin menghapus penyelarasan ini? Semua catatan, keberpihakan, dan antar -garis yang terkait dengan penyelarasan ini akan dihapus dan tidak dapat dipulihkan.</value>
   </data>
   <data name="Pds_DeleteParallelLine" xml:space="preserve">
     <value>Apakah Anda yakin ingin menghapus penyelarasan ini? Semua catatan, keberpihakan, dan antar -garis yang terkait dengan penyelarasan ini akan dihapus dan tidak dapat dipulihkan.</value>
