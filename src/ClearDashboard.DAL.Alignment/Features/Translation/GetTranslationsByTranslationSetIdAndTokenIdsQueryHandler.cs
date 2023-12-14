@@ -231,7 +231,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                             .ThenInclude(m => m.Translations)
                         .Where(li => li.Lemma != null)
                         .Where(li => string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(li.Language) || li.Language == sourceLanguage)
-                        .Where(li => li.Meanings.Any(m => m.Translations.Any()))
+                        .Where(li => li.Meanings
+                            .Where(m => string.IsNullOrEmpty(targetLanguage) || string.IsNullOrEmpty(m.Language) || m.Language == targetLanguage)
+                            .Any(m => m.Translations.Any()))
                         .Where(li => sourceTokenComponentsByTrainingText.Keys.Contains(li.Lemma!))
                         .ToListAsync(cancellationToken))
                         .Select(li => (TrainingTextMatch: li.Lemma!, LexemeType: li.Type, FirstTranslation: li.Meanings
@@ -255,7 +257,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                                 .ThenInclude(m => m.Translations)
                         .Where(lf => lf.Text != null)
                         .Where(lf => string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(lf.Lexeme!.Language) || lf.Lexeme!.Language == sourceLanguage)
-                        .Where(lf => lf.Lexeme!.Meanings.Any(m => m.Translations.Any()))
+                        .Where(lf => lf.Lexeme!.Meanings
+                            .Where(m => string.IsNullOrEmpty(targetLanguage) || string.IsNullOrEmpty(m.Language) || m.Language == targetLanguage)
+                            .Any(m => m.Translations.Any()))
                         .Where(lf => sourceTokenComponentsByTrainingText.Keys.Contains(lf.Text!))
                         .ToListAsync(cancellationToken))
                         .Select(lf => (TrainingTextMatch: lf.Text!, LexemeType: lf.Lexeme!.Type, FirstTranslation: lf.Lexeme!.Meanings
