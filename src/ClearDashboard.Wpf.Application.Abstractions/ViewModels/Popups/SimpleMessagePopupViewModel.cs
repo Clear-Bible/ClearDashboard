@@ -22,7 +22,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Popups
         DeleteCollabProjectSimple,
         DeleteCollabProjectExtended,
         CloseEnhancedViewConfirmation,
-        SwitchParatextProjectMessage
+        SwitchParatextProjectMessage,
+        DeleteParallelLineConfirmation,
     }
 
     public abstract class SimpleMessagePopupViewModel : DashboardApplicationScreen

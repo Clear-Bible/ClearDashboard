@@ -5,6 +5,7 @@
     xmlns:cm="http://caliburnmicro.com"
     xmlns:controls="clr-namespace:ClearApplicationFoundation.Controls;assembly=ClearApplicationFoundation"
     xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
+    xmlns:converters1="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
@@ -55,7 +56,6 @@
         <system:Boolean x:Key="True">True</system:Boolean>
         <system:Boolean x:Key="False">False</system:Boolean>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -129,12 +129,30 @@
                         </TextBlock.LayoutTransform>
                     </TextBlock>
                 </controls:SidebarExpander.Header>
-
-                <local:ProjectDesignSurfaceView
-                    x:Name="ProjectDesignSurfaceControl"
-                    Grid.Column="0"
-                    DataContext="{Binding ProjectDesignSurfaceViewModel}" />
-
+                <Grid>
+                    <local:ProjectDesignSurfaceView
+                        x:Name="ProjectDesignSurfaceControl"
+                        Grid.Column="0"
+                        DataContext="{Binding ProjectDesignSurfaceViewModel}" />
+                    <Border
+                        Background="Gray"
+                        BorderBrush="Black"
+                        DataContext="{Binding ProjectDesignSurfaceViewModel}"
+                        Opacity="0.2"
+                        Visibility="{Binding PdsVisibility}">
+                        <TextBlock
+                            Margin="40"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="30"
+                            FontWeight="Bold"
+                            Foreground="White"
+                            Text="{helpers:Localization Pds_DisabledNotice}"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap"
+                            Visibility="{Binding PdsVisibility}" />
+                    </Border>
+                </Grid>
             </controls:SidebarExpander>
 
             <GridSplitter

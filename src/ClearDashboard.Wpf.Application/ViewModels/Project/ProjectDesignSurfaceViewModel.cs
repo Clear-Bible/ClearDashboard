@@ -165,6 +165,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _addParatextButtonEnabled, value);
         }
 
+        private Visibility _pdsVisibility = Visibility.Collapsed;
+        public Visibility PdsVisibility
+        {
+            get => _pdsVisibility;
+            set 
+            { 
+                _pdsVisibility = value;
+                NotifyOfPropertyChange(() => PdsVisibility);
+            }
+        }
+
         #endregion //Observable Properties
 
         #region Constructor
@@ -2040,8 +2051,33 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // cancelled by user
                     return;
                 }
+            } 
+            else
+            {
+                var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
+
+                if (confirmationViewPopupViewModel == null)
+                {
+                    throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+                }
+                
+                confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.DeleteParallelLineConfirmation;
+
+                bool result = false;
+                OnUIThread(async () =>
+                {
+                    result = await _windowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                        SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
+                });
+
+                if (!result)
+                {
+                    return;
+                }
             }
 
+            // disable the PDS
+            PdsVisibility = Visibility.Visible;
 
             // Removes the connector between corpus nodes:
             DesignSurfaceViewModel!.DeleteParallelCorpusConnection(connection);
@@ -2080,6 +2116,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
                     }), cancellationToken);
                 }
+
+                // reenable the PDS
+                OnUIThread(() =>
+                {
+                    PdsVisibility = Visibility.Collapsed;
+                });
             });
         }
 
@@ -2139,6 +2181,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
 
 
+            // disable the PDS
+            PdsVisibility = Visibility.Visible;
+
             // Removes the CorpusNode form the project design surface:
             DesignSurfaceViewModel!.DeleteCorpusNode(node);
 
@@ -2176,6 +2221,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 StartTime = DateTime.Now,
                 TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
             }));
+
+            // reenable the PDS
+            PdsVisibility = Visibility.Collapsed;
         }
 
 #endregion // Methods
