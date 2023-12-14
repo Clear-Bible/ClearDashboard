@@ -155,7 +155,7 @@
     <value>Thêm vào</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Chọn cách để mã hóa Quả văn</value>
+    <value>Chọn cách để mã hóa xác chết</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Liên kết</value>
@@ -554,7 +554,7 @@
     <value>Người dùng cộng tác có sẵn:</value>
   </data>
   <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
-    <value>Quản lý các dự án cộng tác</value>
+    <value>Quản lý các dự án hợp tác</value>
   </data>
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Người dùng dự án hiện tại:</value>
@@ -914,7 +914,7 @@
     <value>Bổ đề</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
-    <value>Bổ đề/hình thức:</value>
+    <value>Bổ đề/các hình thức:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
     <value>Bổ đề cho Lexeme mới:</value>
@@ -977,7 +977,7 @@
     <value>Từ vựng</value>
   </data>
   <data name="LexiconEdit_LoadingData" xml:space="preserve">
-    <value>Tải dữ liệu ...</value>
+    <value>Đang tải dữ liệu ...</value>
   </data>
   <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
     <value>Một lỗi bất ngờ xảy ra trong khi tải dữ liệu. {0}</value>
@@ -1022,7 +1022,7 @@
     <value>Thêm mục tiêu làm dịch cho ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Tìm từ vựng có một hoặc nhiều bản dịch phù hợp với mục tiêu</value>
+    <value>Tìm các từ bỏ có một hoặc nhiều bản dịch phù hợp với mục tiêu</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Nhập khẩu đã kiểm tra</value>
@@ -1448,7 +1448,7 @@
     <value>Xóa nhãn</value>
   </data>
   <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
-    <value>Disassociate Label</value>
+    <value>Disleciate Nhãn</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Tạo</value>
@@ -1550,7 +1550,7 @@
     <value>Thuật toán căn chỉnh từ máy</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Mô hình đối xứng xe lửa?</value>
+    <value>Mô hình Symmetrized Train?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>Xe lửa</value>
@@ -1607,7 +1607,7 @@
     <value>Tính toán mô hình dịch mới</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Thay đổi mức thu phóng của nội dung</value>
+    <value>Thay đổi mức độ zoom của nội dung</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
     <value>Chuyên gia tư vấn</value>
@@ -1624,6 +1624,9 @@
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
     <value>Xóa căn chỉnh</value>
   </data>
+  <data name="Pds_DeleteParallelLine" xml:space="preserve">
+    <value>Bạn có chắc là bạn muốn xóa căn chỉnh này không? Tất cả các ghi chú, sắp xếp và xen kẽ liên quan đến sự liên kết này sẽ bị xóa và không thể được phục hồi.</value>
+  </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Xóa Interlinear</value>
   </data>
@@ -1632,6 +1635,9 @@
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Từ điển</value>
+  </data>
+  <data name="Pds_DisabledNotice" xml:space="preserve">
+    <value>Bị vô hiệu hóa trong khi các tác vụ nền đang hoạt động</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>Biên tập viên ghi chú bên ngoài</value>
@@ -1685,7 +1691,7 @@
     <value>Nguồn</value>
   </data>
   <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>Language chua</value>
+    <value>Language Sourcel</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
     <value>Tiêu chuẩn</value>
@@ -1853,7 +1859,7 @@
     <value>Bao gồm các văn bản Kinh thánh tiếng Do Thái OT?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
-    <value>Quản lý các dự án cộng tác</value>
+    <value>Quản lý các dự án hợp tác</value>
   </data>
   <data name="ProjectPicker_NoMatches" xml:space="preserve">
     <value>Không có trận đấu.</value>
@@ -1940,7 +1946,7 @@
     <value>1 John</value>
   </data>
   <data name="ProperCase_1_Kings" xml:space="preserve">
-    <value>1 vị vua</value>
+    <value>1 Kings</value>
   </data>
   <data name="ProperCase_1_Peter" xml:space="preserve">
     <value>1 Peter</value>
@@ -2205,6 +2211,12 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Bật chỉnh sửa căn chỉnh</value>
+  </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>Bật các ghi chú paratext bên ngoài trong nhóm thử nghiệm</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>Bật ghi chú paratext bên ngoài</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Bật nhập từ Lexicon</value>

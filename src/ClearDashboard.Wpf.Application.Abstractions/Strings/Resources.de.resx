@@ -122,7 +122,7 @@
     <value>Zusammenarbeit E -Mail:</value>
   </data>
   <data name="AccountInfo_CollaborationUserIdLabel" xml:space="preserve">
-    <value>Collaboration UserId:</value>
+    <value>Kollaboration BenutzerID:</value>
   </data>
   <data name="AccountInfo_CollaborationUsernameLabel" xml:space="preserve">
     <value>Kollaboration Benutzername:</value>
@@ -497,7 +497,7 @@
     <value>Quelle</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Quellteil</value>
+    <value>Quellenteil</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Quelle Ref</value>
@@ -1016,7 +1016,7 @@
     <value>Fügen Sie als Form für ... hinzu</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Finden Sie vollständige oder partielle Lexeme- oder Formularübereinstimmungen für die Quelle</value>
+    <value>Finden Sie vollständige oder teilweise Lexem- oder Formularübereinstimmungen für Quelle</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Fügen Sie Ziel als Übersetzung für ...</value>
@@ -1292,7 +1292,7 @@
     <value>Überprüfen Sie die Verfügbarkeit der Benutzer</value>
   </data>
   <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
-    <value>Erstellen Sie einen Kollaborationsbenutzer</value>
+    <value>Erstellen Sie einen Benutzer der Zusammenarbeit</value>
   </data>
   <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
     <value>Kollaborationsbenutzer erstellen</value>
@@ -1409,7 +1409,7 @@
     <value>Möchten Sie das Etikett löschen:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>Möchten Sie das Etikett zerlegen:</value>
+    <value>Möchten Sie das Etikett disassoziieren:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>aus der Labelgruppe:</value>
@@ -1421,7 +1421,7 @@
     <value>Fügen Sie eine Etikettengruppe hinzu</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>Eine Etikettengruppe existiert bereits mit Namen</value>
+    <value>Eine Labelgruppe existiert bereits mit Namen</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>Labelgruppe initialisieren</value>
@@ -1544,10 +1544,10 @@
     <value>Korpora -Verse parallelisieren</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Algorithmus für maschinelles Wortausrichtungen</value>
+    <value>Algorithmus für maschinelle Wortausrichtungen</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Algorithmus für maschinelles Wortausrichtungen</value>
+    <value>Algorithmus für maschinelle Wortausrichtungen</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Zuges symmetisiertes Modell?</value>
@@ -1586,7 +1586,7 @@
     <value>Erstellen Sie eine neue Corpus -Tokenisierung</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>Fügen Sie neue Interlineare hinzu</value>
+    <value>Neue Interlineare hinzufügen</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>Fügen Sie Text zur Anzeige hinzu</value>
@@ -1624,6 +1624,9 @@
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
     <value>Ausrichtung löschen</value>
   </data>
+  <data name="Pds_DeleteParallelLine" xml:space="preserve">
+    <value>Sind Sie sicher, dass Sie diese Ausrichtung löschen möchten? Alle Notizen, Ausrichtungen und mit dieser Ausrichtung verbundene Interlinears werden gelöscht und können nicht wiederhergestellt werden.</value>
+  </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Interlinear löschen</value>
   </data>
@@ -1632,6 +1635,9 @@
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Wörterbuch</value>
+  </data>
+  <data name="Pds_DisabledNotice" xml:space="preserve">
+    <value>Deaktiviert, während Hintergrundaufgaben funktionieren</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>Externe Notes Editor</value>
@@ -1832,7 +1838,7 @@
     <value>Projekt löschen</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Aktivieren Sie die Buchauswahl</value>
+    <value>Buchauswahl aktivieren</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
     <value>Wenn Sie überprüft werden, können Sie auswählen, welche Bücher zu verarbeiten sind.</value>
@@ -1844,10 +1850,10 @@
     <value>Serverprojekt importieren</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Überprüfen Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
+    <value>Aktivieren Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>NT -griechische biblische Texte einschließen?</value>
+    <value>NT Griechische biblische Texte einschließen?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>OT hebräische biblische Texte einschließen?</value>
@@ -2206,6 +2212,12 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Aktivieren Sie die Bearbeitung der Ausrichtung</value>
   </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>Aktivieren Sie externe Paratext -Notizen in der experimentellen Gruppe</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>Aktivieren Sie externe Paratext -Notizen</value>
+  </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Aktivieren Sie Lexikonimport</value>
   </data>
@@ -2282,7 +2294,7 @@
     <value>Validieren Sie den E -Mail -Code</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Aktivieren Sie die Anzeige von Versen durch Versuchssammlungen</value>
+    <value>Aktivieren Sie die Anzeige von Verse-by-Vers-Textsammlungen</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>Aufgabe abbrechen</value>
@@ -2396,7 +2408,7 @@
     <value>Neue hinzufügen</value>
   </data>
   <data name="UpdateParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>Neue Bücher aktualisieren und hinzufügen</value>
+    <value>Aktualisieren Sie und fügen Sie neue Bücher hinzu</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
     <value>Bücher auswählen</value>

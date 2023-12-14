@@ -128,7 +128,7 @@
     <value>Nom d'utilisateur de collaboration:</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
-    <value>- Détails du compte courant-</value>
+    <value>-Daison du compte courant-</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
     <value>Désactiver la licence actuelle</value>
@@ -425,7 +425,7 @@
     <value>Tous</value>
   </data>
   <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
-    <value>Rendages manquants</value>
+    <value>Rendements manquants</value>
   </data>
   <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
     <value>Mots alignés</value>
@@ -641,7 +641,7 @@
     <value>Supprimer cette vue?</value>
   </data>
   <data name="EnhancedView_CreateAlignment" xml:space="preserve">
-    <value>Créer l'alignement</value>
+    <value>Créer un alignement</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
     <value>Afficher / créer des notes</value>
@@ -671,7 +671,7 @@
     <value>Interlinéaire</value>
   </data>
   <data name="EnhancedView_JoinTokens" xml:space="preserve">
-    <value>Rejoignez des jetons</value>
+    <value>Rejoignez les jetons</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
     <value>Rejoignez des jetons pour la paire de langues</value>
@@ -1556,7 +1556,7 @@
     <value>Former</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Aligneur de la machine à train</value>
+    <value>Aligneur de mot de machine de train</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Définissez la cartographie du verset entre les corpus parallélisés</value>
@@ -1607,7 +1607,7 @@
     <value>Calculer le nouveau modèle de traduction</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Modifier le niveau de zoom du contenu</value>
+    <value>Changer le niveau de zoom du contenu</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
     <value>Consultant Notes</value>
@@ -1624,6 +1624,9 @@
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
     <value>Supprimer l'alignement</value>
   </data>
+  <data name="Pds_DeleteParallelLine" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer cet alignement? Toutes les notes, alignements et interlinéaires associés à cet alignement seront supprimés et ne peuvent pas être récupérés.</value>
+  </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Supprimer l'interlinéaire</value>
   </data>
@@ -1632,6 +1635,9 @@
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Dictionnaire</value>
+  </data>
+  <data name="Pds_DisabledNotice" xml:space="preserve">
+    <value>Handicapés pendant que les tâches d'arrière-plan fonctionnent</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>Éditeur de notes externes</value>
@@ -1904,7 +1910,7 @@
     <value>Assistant de modèle de projet: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Rafraîchir la liste des projets de collaboration</value>
+    <value>Refreindre la liste des projets de collaboration</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>Recherche récente</value>
@@ -1997,7 +2003,7 @@
     <value>Deutéronomie</value>
   </data>
   <data name="ProperCase_Ecclesiastes" xml:space="preserve">
-    <value>Ecclésiaste</value>
+    <value>Ecclésiastes</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
     <value>Éphésiens</value>
@@ -2063,13 +2069,13 @@
     <value>Juges</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentation</value>
+    <value>Lamentations</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
     <value>Lévitique</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
-    <value>Luck</value>
+    <value>Las</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
     <value>Malachi</value>
@@ -2123,7 +2129,7 @@
     <value>Tirus</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>Zécharia</value>
+    <value>Zécharie</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
     <value>Zéphanie</value>
@@ -2205,6 +2211,12 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Activer l'édition d'alignement</value>
+  </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>Activer les notes de paratext externe dans le groupe expérimental</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>Activer les notes externes de paratext</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Activer l'importation du lexique</value>
@@ -2405,7 +2417,7 @@
     <value>Mettre à jour et ajouter nouveau</value>
   </data>
   <data name="UseDefaults" xml:space="preserve">
-    <value>Créer en utilisant les valeurs par défaut</value>
+    <value>Créer à l'aide de valeurs par défaut</value>
   </data>
   <data name="Windows_AlignmentTool" xml:space="preserve">
     <value>Outil d'alignement</value>

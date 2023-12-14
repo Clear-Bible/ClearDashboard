@@ -650,7 +650,7 @@
     <value>Hapus Penyelarasan?</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>Hapus Penyelarasan</value>
+    <value>Hapus penyelarasan</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
     <value>Hapus Alignment untuk '{0}'?</value>
@@ -761,7 +761,7 @@
     <value>Sumber Font Ukuran:</value>
   </data>
   <data name="FontSettings_Target" xml:space="preserve">
-    <value>Teks target:</value>
+    <value>Teks Target:</value>
   </data>
   <data name="FontSettings_TargetFontSize" xml:space="preserve">
     <value>Ukuran font target:</value>
@@ -1250,7 +1250,7 @@
     <value>MAT</value>
   </data>
   <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>Membuat basis data ...</value>
+    <value>Membuat database ...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
     <value>Gabungkan ... Antarmuka Muat Ulang</value>
@@ -1568,7 +1568,7 @@
     <value>Pilih algoritma SMT untuk berlatih</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Tambahkan persetujuan curah untuk dilihat</value>
+    <value>Tambahkan persetujuan massal untuk dilihat</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>Tambahkan ke tampilan</value>
@@ -1622,7 +1622,10 @@
     <value>Anak perempuan</value>
   </data>
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>Hapus Penyelarasan</value>
+    <value>Hapus penyelarasan</value>
+  </data>
+  <data name="Pds_DeleteParallelLine" xml:space="preserve">
+    <value>Apakah Anda yakin ingin menghapus penyelarasan ini? Semua catatan, keberpihakan, dan antar -garis yang terkait dengan penyelarasan ini akan dihapus dan tidak dapat dipulihkan.</value>
   </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Hapus Interlinear</value>
@@ -1632,6 +1635,9 @@
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Kamus</value>
+  </data>
+  <data name="Pds_DisabledNotice" xml:space="preserve">
+    <value>Dinonaktifkan saat tugas latar belakang sedang berfungsi</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>Editor Catatan Eksternal</value>
@@ -1691,7 +1697,7 @@
     <value>Standar</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Studibible</value>
+    <value>Studybible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBibleadditions</value>
@@ -1907,7 +1913,7 @@
     <value>Daftar Proyek Kolaborasi Refresh</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>Cari Terbaru</value>
+    <value>Cari Terkini</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
     <value>Klik di sini untuk memulai Paratext</value>
@@ -2144,7 +2150,7 @@
     <value>Kunci yang disediakan salah. Ketika didekripsi, elemen -elemen JSON tertentu tidak dapat ditemukan.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>Isi kunci lisensi yang didekripsi tidak sesuai dengan informasi yang Anda berikan.</value>
+    <value>Isi kunci lisensi yang didekripsi tidak cocok dengan informasi yang Anda berikan.</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
     <value>Kunci lisensi Anda hilang atau rusak.</value>
@@ -2205,6 +2211,12 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Aktifkan pengeditan penyelarasan</value>
+  </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>Aktifkan catatan paratext eksternal dalam grup eksperimen</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>Aktifkan catatan paratext eksternal</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Aktifkan impor leksikon</value>

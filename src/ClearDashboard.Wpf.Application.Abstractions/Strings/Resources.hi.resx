@@ -143,7 +143,7 @@
     <value>Paratext उपयोगकर्ता नाम:</value>
   </data>
   <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
-    <value>अनुप्रयोग को पुनरारंभ करें</value>
+    <value>आवेदन को पुनरारंभ करें</value>
   </data>
   <data name="AccountInfo_SelectAccountLabel" xml:space="preserve">
     <value>स्विच करने के लिए एक खाता चुनें:</value>
@@ -1121,7 +1121,7 @@
     <value>त्वरित नया</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Collab परिवर्तन उपलब्ध है</value>
+    <value>Collab परिवर्तन उपलब्ध हैं</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
     <value>समायोजन</value>
@@ -1256,7 +1256,7 @@
     <value>मर्ज पूर्ण ... पुनः लोडिंग इंटरफ़ेस</value>
   </data>
   <data name="MergeDialog_OperationCancelled" xml:space="preserve">
-    <value>रद्द किया गया ऑपरेशन</value>
+    <value>अभियान रद्द किया गया</value>
   </data>
   <data name="MergeDialog_OperationComplete" xml:space="preserve">
     <value>ऑपरेशन पूरा!</value>
@@ -1535,7 +1535,7 @@
     <value>कॉर्पोरा छंदों के समानांतरकरण करें</value>
   </data>
   <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
-    <value>Interlinear बनाएँ</value>
+    <value>Internear बनाएँ</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
     <value>ज्सन मेटाडेटा</value>
@@ -1624,6 +1624,9 @@
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
     <value>संरेखण हटाएं</value>
   </data>
+  <data name="Pds_DeleteParallelLine" xml:space="preserve">
+    <value>क्या आप सुनिश्चित हैं कि आप इस संरेखण को हटाना चाहते हैं? सभी नोट, संरेखण, और इस संरेखण से जुड़े इंटरलाइनियर को हटा दिया जाएगा और इसे पुनर्प्राप्त नहीं किया जा सकता है।</value>
+  </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>इंटरलाइन को हटाएं</value>
   </data>
@@ -1632,6 +1635,9 @@
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>शब्दकोष</value>
+  </data>
+  <data name="Pds_DisabledNotice" xml:space="preserve">
+    <value>जबकि पृष्ठभूमि कार्य काम कर रहे हैं</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>बाह्य नोट संपादक</value>
@@ -1775,7 +1781,7 @@
     <value>उपसर्ग</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>दिखावा दिखाना</value>
+    <value>दिखावा दिखाओ</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>तना</value>
@@ -1808,7 +1814,7 @@
     <value>सहयोग परियोजनाएं</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>आरंभ करने के लिए अपना प्रोजेक्ट बनाएं।</value>
+    <value>आरंभ करने के लिए अपनी परियोजना बनाएं।</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>एक नया प्रोजेक्ट बनाएं</value>
@@ -1835,7 +1841,7 @@
     <value>पुस्तक चयन सक्षम करें</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
-    <value>यदि जाँच की जाती है, तो आप किन पुस्तकों को संसाधित करने के लिए चयन कर पाएंगे।</value>
+    <value>यदि जाँच की जाती है, तो आप कौन सी पुस्तकों को संसाधित करने में सक्षम होंगे।</value>
   </data>
   <data name="ProjectPicker_GetStarted" xml:space="preserve">
     <value>शुरू हो जाओ</value>
@@ -2096,7 +2102,7 @@
     <value>ओबद्याह</value>
   </data>
   <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>दाई</value>
+    <value>दामाद</value>
   </data>
   <data name="ProperCase_Philippians" xml:space="preserve">
     <value>फिलिप्पियों</value>
@@ -2205,6 +2211,12 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>संरेखण संपादन सक्षम करें</value>
+  </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>प्रयोगात्मक समूह में बाहरी paratext नोट्स सक्षम करें</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>बाहरी paratext नोट्स सक्षम करें</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>लेक्सिकॉन आयात सक्षम करें</value>
@@ -2438,7 +2450,7 @@
     <value>समझ:</value>
   </data>
   <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>सबडोमेन:</value>
+    <value>उपडोमेन:</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>हाँ</value>

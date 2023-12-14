@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cm="http://caliburnmicro.com"
     xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
+    xmlns:converters1="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dashboardSettings="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.DashboardSettings"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
@@ -33,6 +34,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <converters1:BoolToVisibilityCollapsedConverter x:Key="BoolToVisibilityCollapsedConverter" />
         </ResourceDictionary>
     </Window.Resources>
 
@@ -74,15 +76,25 @@
                 </TabItem.Header>
                 <StackPanel Orientation="Vertical">
                     <GroupBox Margin="16" Header="{helpers:Localization Settings_GeneralSettings}">
-                        <StackPanel MinWidth="400" Orientation="Horizontal">
-                            <CheckBox
-                                Margin="5,0,0,0"
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel MinWidth="400" Orientation="Horizontal">
+                                <CheckBox
+                                    Margin="5,0,0,0"
+                                    VerticalAlignment="Center"
+                                    IsChecked="{Binding ShowExternalNotes}"
+                                    IsEnabled="{Binding ShowExternalNotes}" />
+                                <Label
+                                    Margin="15,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Content="{helpers:Localization FontSettings_ShowExternalNotes}"
+                                    IsEnabled="{Binding ShowExternalNotes}" />
+                            </StackPanel>
+                            <!--<TextBlock
+                                Margin="45,0,0,0"
                                 VerticalAlignment="Center"
-                                IsChecked="{Binding ShowExternalNotes}" />
-                            <Label
-                                Margin="15,0,0,0"
-                                VerticalAlignment="Center"
-                                Content="{helpers:Localization FontSettings_ShowExternalNotes}" />
+                                Foreground="{StaticResource OrangeDarkBrush}"
+                                Text="{helpers:Localization Settings_EnableEnhancedNotes}"
+                                Visibility="{Binding ShowExternalNotes, Converter={StaticResource BoolToVisibilityCollapsedConverter}, ConverterParameter=true}" />-->
                         </StackPanel>
 
                     </GroupBox>
@@ -149,7 +161,7 @@
                         FontWeight="Medium"
                         Foreground="{StaticResource ErrorHueBrush}"
                         Text="Please restart ClearDashboard for AQUA to be be enabled/disabled."
-                        Visibility="{Binding RunAquaInstall, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        Visibility="{Binding RunAquaInstall, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=true}" />
                 </StackPanel>
             </TabItem>
             <TabItem>
@@ -470,10 +482,19 @@
                                 IsChecked="{Binding IsTokenSplittingEnabled}" />
                             <CheckBox
                                 Margin="5"
-                                cm:Message.Attach="EnableLexifonImport($datacontext)"
+                                cm:Message.Attach="EnableLexiconImport($datacontext)"
                                 Content="{helpers:Localization Settings_EnableLexiconImport}"
                                 Foreground="{StaticResource AccentHueBrush}"
                                 IsChecked="{Binding IsLexiconImportEnabled}" />
+                            <CheckBox
+                                x:Name="ExternalNotesEnabled"
+                                Margin="5"
+                                cm:Message.Attach="EnableEtxernalNotes($datacontext)"
+                                Content="{helpers:Localization Settings_EnableExternalNotes}"
+                                Foreground="{StaticResource AccentHueBrush}"
+                                IsChecked="{Binding IsExternalNotesEnabled}" />
+
+
                         </StackPanel>
                     </GroupBox>
                     <TextBlock

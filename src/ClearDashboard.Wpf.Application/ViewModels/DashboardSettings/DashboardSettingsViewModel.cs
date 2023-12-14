@@ -102,7 +102,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
                 NotifyOfPropertyChange(() => IsLexiconImportEnabled);
             }
         }
-        
+
+        private bool _isExternalNotesEnabled;
+        public bool IsExternalNotesEnabled
+        {
+            get => _isExternalNotesEnabled;
+            set
+            {
+                _isExternalNotesEnabled = value;
+                NotifyOfPropertyChange(() => IsExternalNotesEnabled);
+            }
+        }
+
 
         private bool _isAlignmentEditingEnabled;
         public bool IsAlignmentEditingEnabled
@@ -437,6 +448,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
             IsTokenSplittingEnabled = Settings.Default.IsTokenSplittingEnabled;
             IsLexiconImportEnabled = AbstractionsSettingsHelper.GetEnabledLexiconImport();
+            IsExternalNotesEnabled = AbstractionsSettingsHelper.GetExternalNotesEnabled();
 
             base.OnViewReady(view);
         }
@@ -578,9 +590,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             Settings.Default.Save();
         }
 
-        public async void EnableLexifonImport(bool value)
+        public async void EnableLexiconImport(bool value)
         {
             AbstractionsSettingsHelper.SaveEnabledLexiconImport(IsLexiconImportEnabled);
+            await _eventAggregator.PublishOnUIThreadAsync(new RedrawCorpusNodeMenus());
+        }
+
+        public async void EnableExternalNotes(bool value)
+        {
+            AbstractionsSettingsHelper.SaveExternalNotesEnabled(IsExternalNotesEnabled);
             await _eventAggregator.PublishOnUIThreadAsync(new RedrawCorpusNodeMenus());
         }
 

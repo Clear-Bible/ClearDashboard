@@ -161,7 +161,7 @@
     <value>结盟</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
-    <value>选择与您合作的书籍，您稍后可以随时添加更多书籍。</value>
+    <value>选择您正在合作的书籍，您稍后可以随时添加更多书籍。</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>检查USFM</value>
@@ -449,13 +449,13 @@
     <value>散装对齐编辑</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>批量对齐审查</value>
+    <value>批量对准评论</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>数数</value>
   </data>
   <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>按地面文本计数</value>
+    <value>按表面文本计数</value>
   </data>
   <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
     <value>通过培训文本计数</value>
@@ -956,7 +956,7 @@
     <value>添加'{0}'作为表单</value>
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
-    <value>将'{0}'添加为第一个含义</value>
+    <value>添加'{0}'作为第一个含义</value>
   </data>
   <data name="LexiconEdit_EditingDone" xml:space="preserve">
     <value>完毕</value>
@@ -1070,7 +1070,7 @@
     <value>需要姓氏</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>需要许可密钥</value>
+    <value>需要许可证密钥</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
@@ -1379,7 +1379,7 @@
     <value>过滤器</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>通过标签</value>
+    <value>由标签</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
     <value>通过注意文本</value>
@@ -1544,10 +1544,10 @@
     <value>并行化语料库经文</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>机词对齐算法</value>
+    <value>机器字对准算法</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>机词对齐算法</value>
+    <value>机器字对准算法</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>火车对称模型？</value>
@@ -1610,7 +1610,7 @@
     <value>更改内容的缩放级别</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>顾问Notes</value>
+    <value>顾问说明</value>
   </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>创建新单词对齐</value>
@@ -1624,6 +1624,9 @@
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
     <value>删除对齐</value>
   </data>
+  <data name="Pds_DeleteParallelLine" xml:space="preserve">
+    <value>您确定要删除此对齐方式吗？与此对齐相关的所有注释，对齐和中间性将被删除，无法恢复。</value>
+  </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>删除Interlinear</value>
   </data>
@@ -1632,6 +1635,9 @@
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>字典</value>
+  </data>
+  <data name="Pds_DisabledNotice" xml:space="preserve">
+    <value>在背景任务工作时禁用</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>外部音符编辑器</value>
@@ -1775,7 +1781,7 @@
     <value>字首</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>展示反向翻译</value>
+    <value>展示退缩</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>干</value>
@@ -1844,7 +1850,7 @@
     <value>导入服务器项目</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>在创建项目时，请选中此框，以包括希腊语和希伯来语圣经的文本。</value>
+    <value>选中此框，以在创建项目时包括希腊语和希伯来语圣经文本。</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>包括NT希腊圣经文本？</value>
@@ -2205,6 +2211,12 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>启用对齐编辑</value>
+  </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>在实验组中启用外部Paratext注释</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>启用外部paratext注释</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>启用词典进口</value>

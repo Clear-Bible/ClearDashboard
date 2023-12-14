@@ -128,7 +128,7 @@
     <value>Сотрудничество имя пользователя:</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
-    <value>-Кориент сведения о счете-</value>
+    <value>-Кориент сведения об учетной записи-</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
     <value>Деактивировать текущую лицензию</value>
@@ -161,7 +161,7 @@
     <value>Выравнивание</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
-    <value>Выберите книги, с которыми вы работаете, вы всегда можете добавить больше книг позже.</value>
+    <value>Выберите книги (ы), с которыми вы работаете, вы всегда можете добавить больше книг позже.</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Проверка USFM</value>
@@ -173,7 +173,7 @@
     <value>Количество ошибок:</value>
   </data>
   <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
-    <value>Межлинейный</value>
+    <value>Межлинейно</value>
   </data>
   <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
     <value>Нет ошибок</value>
@@ -461,7 +461,7 @@
     <value>Считать учебным текстом</value>
   </data>
   <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
-    <value>Не одобряют</value>
+    <value>Не одобрять</value>
   </data>
   <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
     <value>Не одобрен</value>
@@ -665,10 +665,10 @@
     <value>Поиск фильтра</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>Поиск членов фильтра</value>
+    <value>Поиск члена фильтра</value>
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
-    <value>Межлинейный</value>
+    <value>Межлинейно</value>
   </data>
   <data name="EnhancedView_JoinTokens" xml:space="preserve">
     <value>Присоединяйтесь к токенам</value>
@@ -1022,7 +1022,7 @@
     <value>Добавьте цель в качестве перевода для ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Найдите Lexemes, которые имеют один или несколько переводов, которые соответствуют цели</value>
+    <value>Найдите лексы, которые имеют один или несколько переводов, которые соответствуют цели</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Импорт проверен</value>
@@ -1121,7 +1121,7 @@
     <value>Быстрый новый</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Коллабные изменения доступны</value>
+    <value>Изменения в сотрудничестве доступны</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
     <value>Настройки</value>
@@ -1286,7 +1286,7 @@
     <value>Токен доступа:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Проверьте свою электронную почту и введите код проверки:</value>
+    <value>Проверьте свою электронную почту и введите в код проверки:</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Проверьте доступность пользователя</value>
@@ -1544,10 +1544,10 @@
     <value>Параллелизировать стихи корпораций</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Алгоритм выравнивания слова</value>
+    <value>Алгоритм выравнивания машинного слова</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Алгоритм выравнивания слова</value>
+    <value>Алгоритм выравнивания машинного слова</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Симметризированная модель поезда?</value>
@@ -1624,6 +1624,9 @@
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
     <value>Удалить выравнивание</value>
   </data>
+  <data name="Pds_DeleteParallelLine" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить это выравнивание? Все примечания, выравнивания и межлинеры, связанные с этим выравниванием, будут удалены и не могут быть восстановлены.</value>
+  </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Удалить Interlineear</value>
   </data>
@@ -1632,6 +1635,9 @@
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Словарь</value>
+  </data>
+  <data name="Pds_DisabledNotice" xml:space="preserve">
+    <value>Отключено, пока работают фоновые задачи</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>Редактор внешних заметок</value>
@@ -1712,13 +1718,13 @@
     <value>Неизвестный</value>
   </data>
   <data name="Pds_UpdateLabelsWithExternalLabels" xml:space="preserve">
-    <value>Обновить этикетки с внешними примечаниями</value>
+    <value>Обновить этикетки с помощью внешних заметок</value>
   </data>
   <data name="Pds_Xml" xml:space="preserve">
     <value>XML</value>
   </data>
   <data name="Pds_ZoomIn" xml:space="preserve">
-    <value>Увеличить контент</value>
+    <value>Увеличить содержание</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
     <value>Увеличить контент</value>
@@ -1775,7 +1781,7 @@
     <value>Префикс</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Покажите Backtranslation</value>
+    <value>Показать переходное время</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>Корень</value>
@@ -1850,7 +1856,7 @@
     <value>Включите NT Греко -библейские тексты?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
-    <value>Включите OT ивритские библейские тексты?</value>
+    <value>Включите ивритские библейские тексты?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Управление совместными проектами</value>
@@ -2183,7 +2189,7 @@
     <value>Включить экспериментальный плагин Aqua</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Проверьте свою электронную почту и введите код проверки:</value>
+    <value>Проверьте свою электронную почту и введите в код проверки:</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Настройки сотрудничества</value>
@@ -2205,6 +2211,12 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Включить редактирование выравнивания</value>
+  </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>Включить внешние заметки Paratext в экспериментальной группе</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>Включить внешние заметки Paratext</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Включить импорт лексикона</value>
@@ -2264,7 +2276,7 @@
     <value>Настройки ClearDashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Показать расширенные представления на другом мониторе, чем панель инструментов</value>
+    <value>Показать расширенные виды на другом мониторе, чем панель панели</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
     <value>Для систем с тремя или более мониторами показать расширенный просмотр на третьем мониторе</value>
