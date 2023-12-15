@@ -293,7 +293,7 @@
     <value>pietre prețioase</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
-    <value>Iarbă</value>
+    <value>ierburi</value>
   </data>
   <data name="BiblicalTermsDomains_Group" xml:space="preserve">
     <value>grup</value>
@@ -377,7 +377,7 @@
     <value>copaci; Parfumuri și condimente</value>
   </data>
   <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>înțelepciune, înțelegere</value>
+    <value>Înțelepciune, înțelegere</value>
   </data>
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>Toate</value>
@@ -692,10 +692,10 @@
     <value>Note</value>
   </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
-    <value>Nu există date de versuri în acest game de versuri.</value>
+    <value>Nu există date de versuri în acest interval de versuri.</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
-    <value>Eliminați corpusul</value>
+    <value>Îndepărtați corpusul</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
     <value>Afișați controalele de vizualizare</value>
@@ -911,7 +911,7 @@
     <value>Introduceți un nou luciu</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
-    <value>LEMMA</value>
+    <value>Lemma</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
     <value>Lemma/forme:</value>
@@ -932,7 +932,7 @@
     <value>Nou luciu</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>Scoateți acest domeniu semantic din acest sens</value>
+    <value>Îndepărtați acest domeniu semantic din acest sens</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
     <value>Scoateți această formă lexicală din această lemmă</value>
@@ -1052,7 +1052,7 @@
     <value>Limbă țintă</value>
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
-    <value>Cuvânt țintă</value>
+    <value>Cuvântul țintă</value>
   </data>
   <data name="LexiconImport_Title" xml:space="preserve">
     <value>Import de lexic</value>
@@ -1241,7 +1241,7 @@
     <value>Versuri</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Sense verset</value>
+    <value>Simțul versetului</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Total verset</value>
@@ -1412,7 +1412,7 @@
     <value>Doriți să dezasociați eticheta:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
-    <value>din grupul de etichete:</value>
+    <value>din Grupul de etichete:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Adăugați grupul de etichete</value>
@@ -1538,7 +1538,7 @@
     <value>Creați interlinear</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
-    <value>JSON Metadate</value>
+    <value>Metadate JSON</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
     <value>Paralelizează versetele corporale</value>
@@ -1550,7 +1550,7 @@
     <value>Algoritm de aliniere a cuvântului mașinii</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Antrenează modelul simetrizat?</value>
+    <value>Modelul simetrizat de antrenament?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>Tren</value>
@@ -1571,7 +1571,7 @@
     <value>Adăugați aprobarea în vrac pentru a vizualiza</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați la vizualizare</value>
+    <value>Adăugați la vedere</value>
   </data>
   <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
     <value>Adăugați la New View</value>
@@ -1595,7 +1595,7 @@
     <value>Adăugați text la New View</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați la vizualizare</value>
+    <value>Adăugați la vedere</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>Auxiliar</value>
@@ -1624,6 +1624,9 @@
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
     <value>Ștergeți alinierea</value>
   </data>
+  <data name="Pds_DeleteParallelLine" xml:space="preserve">
+    <value>Ești sigur că vrei să ștergi această aliniere? Toate notele, alinierile și interlinarile asociate cu această aliniere vor fi șterse și nu pot fi recuperate.</value>
+  </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Ștergeți interlinear</value>
   </data>
@@ -1632,6 +1635,9 @@
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Dicţionar</value>
+  </data>
+  <data name="Pds_DisabledNotice" xml:space="preserve">
+    <value>Dezactivat în timp ce sarcinile de fundal funcționează</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>Editor de note externe</value>
@@ -1775,7 +1781,7 @@
     <value>Prefix</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Arată backtranslație</value>
+    <value>Afișați backtranslația</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>Tulpină</value>
@@ -1826,7 +1832,7 @@
     <value>Bază de date:</value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
-    <value>Nu puteți șterge acel proiect, o altă aplicație îl folosește în continuare.</value>
+    <value>Nu puteți șterge acest proiect, o altă aplicație îl folosește în continuare.</value>
   </data>
   <data name="ProjectPicker_DeleteProject" xml:space="preserve">
     <value>Ștergeți proiectul</value>
@@ -1880,7 +1886,7 @@
     <value>Text model (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext rulează, dar nu este conectat.</value>
+    <value>Paratext funcționează, dar nu este conectat.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>Proiect paratext</value>
@@ -1898,7 +1904,7 @@
     <value>După ce faceți clic pe butonul „Creați” de mai jos, vom fi tokenizarea, alinierea și pregătirea proiectului dvs. Toți pașii vor apărea aici pe măsură ce sunt procesate. În timp ce așteptați, nu ezitați să faceți clic pe linkul de mai jos și să vizionați câteva videoclipuri utile pentru a începe utilizarea ClearDashboard!</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
-    <value>Expert de șablon de proiect</value>
+    <value>Vrăjitor de șablon de proiect</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizardTemplate" xml:space="preserve">
     <value>Proiect de șablon vrăjitor: {0}</value>
@@ -2063,7 +2069,7 @@
     <value>Judecători</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentații</value>
+    <value>Lamentări</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
     <value>Levitic</value>
@@ -2205,6 +2211,12 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Activați editarea alinierii</value>
+  </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>Activați note de paratext extern în grupul experimental</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>Activați note de paratext extern</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Activați importul de lexic</value>

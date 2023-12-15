@@ -476,7 +476,7 @@
     <value>Maschine</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsInvalid" xml:space="preserve">
-    <value>Markieren Sie als "ungültig" ausgewählt</value>
+    <value>Markieren Sie als "ungültig" ausgewählt.</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
     <value>Markieren Sie als "Bedarfsüberprüfung" ausgewählt.</value>
@@ -1016,10 +1016,10 @@
     <value>Fügen Sie als Form für ... hinzu</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Finden Sie vollständige oder partielle Lexeme- oder Formularübereinstimmungen für die Quelle</value>
+    <value>Finden Sie vollständige oder teilweise Lexem- oder Formularübereinstimmungen für Quelle</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Fügen Sie Ziel als Übersetzung für ...</value>
+    <value>Ziel als Übersetzung für ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Finden Sie Lexeme mit einer oder mehreren Übersetzung, die dem Ziel entspricht</value>
@@ -1292,7 +1292,7 @@
     <value>Überprüfen Sie die Verfügbarkeit der Benutzer</value>
   </data>
   <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
-    <value>Erstellen Sie einen Kollaborationsbenutzer</value>
+    <value>Erstellen Sie einen Benutzer der Zusammenarbeit</value>
   </data>
   <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
     <value>Kollaborationsbenutzer erstellen</value>
@@ -1373,7 +1373,7 @@
     <value>Diese Notiz löschen?</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Durch Assoziationen</value>
+    <value>Durch Verbände</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filter</value>
@@ -1421,7 +1421,7 @@
     <value>Fügen Sie eine Etikettengruppe hinzu</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>Eine Etikettengruppe existiert bereits mit Namen</value>
+    <value>Eine Labelgruppe existiert bereits mit Namen</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>Labelgruppe initialisieren</value>
@@ -1544,10 +1544,10 @@
     <value>Korpora -Verse parallelisieren</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Algorithmus für maschinelles Wortausrichtungen</value>
+    <value>Algorithmus für maschinelle Wortausrichtungen</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Algorithmus für maschinelles Wortausrichtungen</value>
+    <value>Algorithmus für maschinelle Wortausrichtungen</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Zuges symmetisiertes Modell?</value>
@@ -1568,7 +1568,7 @@
     <value>Wählen Sie einen SMT -Algorithmus zum Training aus</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie die Zulassung der Masse hinzu, um sie anzeigen</value>
+    <value>Fügen Sie die Massengenehmigung hinzu, um sie anzeigen</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>Zur Anzeige hinzufügen</value>
@@ -1624,6 +1624,9 @@
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
     <value>Ausrichtung löschen</value>
   </data>
+  <data name="Pds_DeleteParallelLine" xml:space="preserve">
+    <value>Sind Sie sicher, dass Sie diese Ausrichtung löschen möchten? Alle Notizen, Ausrichtungen und mit dieser Ausrichtung verbundene Interlinears werden gelöscht und können nicht wiederhergestellt werden.</value>
+  </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Interlinear löschen</value>
   </data>
@@ -1632,6 +1635,9 @@
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Wörterbuch</value>
+  </data>
+  <data name="Pds_DisabledNotice" xml:space="preserve">
+    <value>Deaktiviert, während Hintergrundaufgaben funktionieren</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>Externe Notes Editor</value>
@@ -1832,7 +1838,7 @@
     <value>Projekt löschen</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Aktivieren Sie die Buchauswahl</value>
+    <value>Buchauswahl aktivieren</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
     <value>Wenn Sie überprüft werden, können Sie auswählen, welche Bücher zu verarbeiten sind.</value>
@@ -1844,7 +1850,7 @@
     <value>Serverprojekt importieren</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Überprüfen Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
+    <value>Aktivieren Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>NT -griechische biblische Texte einschließen?</value>
@@ -1904,7 +1910,7 @@
     <value>Projektvorlage Assistent: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Aktualisierung der Kollaborationsprojekte Liste</value>
+    <value>Aktualisierungsprojekte Liste aktualisieren</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>Suchen Sie neu</value>
@@ -1952,7 +1958,7 @@
     <value>1 Thessalonicher</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 Timothy</value>
+    <value>1 Timotheus</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 Chroniken</value>
@@ -2205,6 +2211,12 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Aktivieren Sie die Bearbeitung der Ausrichtung</value>
+  </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>Aktivieren Sie externe Paratext -Notizen in der experimentellen Gruppe</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>Aktivieren Sie externe Paratext -Notizen</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Aktivieren Sie Lexikonimport</value>

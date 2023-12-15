@@ -1624,6 +1624,9 @@
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
     <value>አሰላለፍ ሰርዝ</value>
   </data>
+  <data name="Pds_DeleteParallelLine" xml:space="preserve">
+    <value>እርግጠኛ ነዎት ይህንን አሰላለፍ መሰረዝ ይፈልጋሉ? ከዚህ ምደባ ጋር የተዛመዱ ሁሉም ማስታወሻዎች, ቅጂዎች, እና ፓነሎች ሊሰረዙ አይችሉም እና መመለስ አይቻልም.</value>
+  </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>ኢንተርሊንሰር ሰርዝ</value>
   </data>
@@ -1632,6 +1635,9 @@
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>መዝገበ ቃላት</value>
+  </data>
+  <data name="Pds_DisabledNotice" xml:space="preserve">
+    <value>የጀርባ ሥራዎች ሲሰሩ የአካል ጉዳተኞች</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>ውጫዊ ማስታወሻዎች አርታኢ</value>
@@ -2205,6 +2211,12 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>የምደባ አርት editing ትን አንቃ</value>
+  </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>በሙከራ ቡድኑ ውስጥ ውጫዊ የጥላቻ ማስታወሻዎችን አንቃ</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>ውጫዊ ትግበራ ማስታወሻዎችን ያንቁ</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Lexicon ማስመጣትን አንቃ</value>

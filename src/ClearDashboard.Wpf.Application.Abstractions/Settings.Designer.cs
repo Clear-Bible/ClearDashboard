@@ -94,5 +94,17 @@ namespace ClearDashboard.Wpf.Application {
                 this["ShowExternalNotes"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsExternalNotesEnabled {
+            get {
+                return ((bool)(this["IsExternalNotesEnabled"]));
+            }
+            set {
+                this["IsExternalNotesEnabled"] = value;
+            }
+        }
     }
 }

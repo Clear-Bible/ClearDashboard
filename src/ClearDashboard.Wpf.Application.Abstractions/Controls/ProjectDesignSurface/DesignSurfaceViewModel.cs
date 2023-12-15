@@ -227,7 +227,6 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         public Guid CorrectGuid { get; set; }
 
-
         #region ctor
 
         public DesignSurfaceViewModel(

@@ -122,7 +122,7 @@
     <value>E -mail de colaboração:</value>
   </data>
   <data name="AccountInfo_CollaborationUserIdLabel" xml:space="preserve">
-    <value>UserID de colaboração:</value>
+    <value>Colaboração UserID:</value>
   </data>
   <data name="AccountInfo_CollaborationUsernameLabel" xml:space="preserve">
     <value>Nome de usuário da colaboração:</value>
@@ -179,7 +179,7 @@
     <value>Sem erros</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
-    <value>Salve erros USFM no arquivo</value>
+    <value>Salvar erros USFM no arquivo</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
     <value>Selecionar tudo</value>
@@ -674,7 +674,7 @@
     <value>Junte -se a tokens</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Junte -se a tokens para par de idiomas</value>
+    <value>Junte -se a tokens para o par de idiomas</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>Marcar o alinhamento como 'inválido'</value>
@@ -713,7 +713,7 @@
     <value>Divisão de três vias</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Token de compósito un -joain</value>
+    <value>Token composto de unidade</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -1286,7 +1286,7 @@
     <value>Token de acesso:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Verifique seu e -mail e insira o código de validação:</value>
+    <value>Verifique seu e -mail e digite o código de validação:</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Verifique a disponibilidade do usuário</value>
@@ -1400,7 +1400,7 @@
     <value>Adicione um rótulo</value>
   </data>
   <data name="Notes_LabelAddConfirm" xml:space="preserve">
-    <value>Você quer criar o rótulo:</value>
+    <value>Você quer criar rótulo:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>e associe -o ao grupo de etiquetas:</value>
@@ -1624,6 +1624,9 @@
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
     <value>Excluir alinhamento</value>
   </data>
+  <data name="Pds_DeleteParallelLine" xml:space="preserve">
+    <value>Tem certeza de que deseja excluir esse alinhamento? Todas as notas, alinhamentos e interlineares associados a esse alinhamento serão excluídos e não poderão ser recuperados.</value>
+  </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Exclua interlinear</value>
   </data>
@@ -1632,6 +1635,9 @@
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Dicionário</value>
+  </data>
+  <data name="Pds_DisabledNotice" xml:space="preserve">
+    <value>Desativado enquanto as tarefas de segundo plano estão funcionando</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>Editor de notas externas</value>
@@ -1706,7 +1712,7 @@
     <value>Transliteração manual</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Transliteração comncoder</value>
+    <value>TransliteraçãoWithEncoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Desconhecido</value>
@@ -1751,7 +1757,7 @@
     <value>Lexeme</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
-    <value>Lexeme tipo</value>
+    <value>Lexeme Type</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
     <value>Referências de carga</value>
@@ -1802,7 +1808,7 @@
     <value>Paratext beta não está funcionando</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
-    <value>Cancelando ...</value>
+    <value>Cancelamento ...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Projetos de colaboração</value>
@@ -1847,7 +1853,7 @@
     <value>Verifique esta caixa para incluir os textos bíblicos gregos e hebraicos ao criar seu projeto.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Incluir textos bíblicos gregos do NT?</value>
+    <value>Incluir textos bíblicos gregos no NT?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>Incluir textos bíblicos hebraicos?</value>
@@ -2183,7 +2189,7 @@
     <value>Ativar plug -in experimental aqua</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Verifique seu e -mail e insira o código de validação:</value>
+    <value>Verifique seu e -mail e digite o código de validação:</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Configurações de colaboração</value>
@@ -2205,6 +2211,12 @@
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Ativar edição de alinhamento</value>
+  </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>Ativar Notas Paratext externas no grupo experimental</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>Ativar notas de paratext externas</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Ativar importação do léxico</value>

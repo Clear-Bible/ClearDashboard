@@ -7,11 +7,13 @@ using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.Converters;
 using ClearDashboard.Wpf.Application.Dialogs;
 using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure.EnhancedView;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Services;
@@ -30,6 +32,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Autofac.Core.Lifetime;
+using ClearDashboard.Wpf.Application.Messages;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using Token = ClearBible.Engine.Corpora.Token;
@@ -44,7 +48,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             IHandle<TokenSplitMessage>,
             IHandle<TokenUnjoinedMessage>,
             IHandle<AlignmentAddedMessage>,
-            IHandle<AlignmentDeletedMessage>
+            IHandle<AlignmentDeletedMessage>,
+            IHandle<RefreshVerse>
     {
         public IWindowManager WindowManager { get; }
         public NoteManager? NoteManager { get; }
@@ -222,6 +227,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             IEnumerable<TokenizedTextCorpusId> tokenizedTextCorpusIds,
             CancellationToken cancellationToken)
         {
+            if (AbstractionsSettingsHelper.GetExternalNotesEnabled() == false)
+            {
+                return;
+            }
+
             if (NoteManager != null && Rows != null && Verses.Count() > 0 && tokenizedTextCorpusIds.Count() > 0)
             {
                 await Task.Run(() => //put this in a task.run so that it can be called in a UI main thread as well.
@@ -858,6 +868,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 await verseDisplayViewModel.UnhighlightTokensAsync(message, cancellationToken);
             }
+        }
+
+        public async Task HandleAsync(RefreshVerse message, CancellationToken cancellationToken)
+        {
+            await RefreshData();
         }
     }
 }
