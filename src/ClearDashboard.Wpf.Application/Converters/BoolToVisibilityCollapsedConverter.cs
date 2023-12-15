@@ -29,9 +29,11 @@ namespace ClearDashboard.Wpf.Application.Converters
 
             if (parameter == null)
                 IsInverted = false;
-            else if (parameter == "true")
-                IsInverted = true;
-            
+            else if (parameter is string str)
+            {
+                if (str == "true")
+                    IsInverted = true;
+            }
             if (parameter == "true" )
                 return Visibility.Collapsed;
 

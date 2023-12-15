@@ -103,7 +103,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
         }
 
-        private bool _isExternalNotesEnabled;
+        private bool _isExternalNotesEnabled = false;
         public bool IsExternalNotesEnabled
         {
             get => _isExternalNotesEnabled;
@@ -599,6 +599,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         public async void EnableExternalNotes(bool value)
         {
             AbstractionsSettingsHelper.SaveExternalNotesEnabled(IsExternalNotesEnabled);
+            await _eventAggregator.PublishOnUIThreadAsync(new RefreshVerse());
             await _eventAggregator.PublishOnUIThreadAsync(new RedrawCorpusNodeMenus());
         }
 

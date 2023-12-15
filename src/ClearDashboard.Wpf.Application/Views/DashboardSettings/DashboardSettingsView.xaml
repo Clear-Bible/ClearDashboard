@@ -82,21 +82,21 @@
                                     Margin="5,0,0,0"
                                     VerticalAlignment="Center"
                                     IsChecked="{Binding ShowExternalNotes}"
-                                    IsEnabled="{Binding ShowExternalNotes}" />
+                                    IsEnabled="{Binding IsExternalNotesEnabled}" />
                                 <Label
                                     Margin="15,0,0,0"
                                     VerticalAlignment="Center"
                                     Content="{helpers:Localization FontSettings_ShowExternalNotes}"
-                                    IsEnabled="{Binding ShowExternalNotes}" />
+                                    IsEnabled="{Binding IsExternalNotesEnabled}" />
                             </StackPanel>
-                            <!--<TextBlock
+                            <TextBlock
                                 Margin="45,0,0,0"
                                 VerticalAlignment="Center"
                                 Foreground="{StaticResource OrangeDarkBrush}"
                                 Text="{helpers:Localization Settings_EnableEnhancedNotes}"
-                                Visibility="{Binding ShowExternalNotes, Converter={StaticResource BoolToVisibilityCollapsedConverter}, ConverterParameter=true}" />-->
-                        </StackPanel>
+                                Visibility="{Binding IsExternalNotesEnabled, Converter={StaticResource BoolToVisibilityCollapsedConverter}, ConverterParameter=true}" />
 
+                        </StackPanel>
                     </GroupBox>
                 </StackPanel>
             </TabItem>
@@ -161,7 +161,7 @@
                         FontWeight="Medium"
                         Foreground="{StaticResource ErrorHueBrush}"
                         Text="Please restart ClearDashboard for AQUA to be be enabled/disabled."
-                        Visibility="{Binding RunAquaInstall, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=true}" />
+                        Visibility="{Binding RunAquaInstall, Converter={StaticResource BoolToVisibilityConverter}}" />
                 </StackPanel>
             </TabItem>
             <TabItem>
@@ -482,19 +482,18 @@
                                 IsChecked="{Binding IsTokenSplittingEnabled}" />
                             <CheckBox
                                 Margin="5"
-                                cm:Message.Attach="EnableLexiconImport($datacontext)"
+                                cm:Message.Attach="EnableLexifonImport($datacontext)"
                                 Content="{helpers:Localization Settings_EnableLexiconImport}"
                                 Foreground="{StaticResource AccentHueBrush}"
                                 IsChecked="{Binding IsLexiconImportEnabled}" />
+
                             <CheckBox
                                 x:Name="ExternalNotesEnabled"
                                 Margin="5"
-                                cm:Message.Attach="EnableEtxernalNotes($datacontext)"
+                                cm:Message.Attach="EnableExternalNotes($datacontext)"
                                 Content="{helpers:Localization Settings_EnableExternalNotes}"
                                 Foreground="{StaticResource AccentHueBrush}"
                                 IsChecked="{Binding IsExternalNotesEnabled}" />
-
-
                         </StackPanel>
                     </GroupBox>
                     <TextBlock
