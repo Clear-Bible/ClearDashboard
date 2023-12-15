@@ -482,7 +482,7 @@
                                 IsChecked="{Binding IsTokenSplittingEnabled}" />
                             <CheckBox
                                 Margin="5"
-                                cm:Message.Attach="EnableLexifonImport($datacontext)"
+                                cm:Message.Attach="EnableLexiconImport($datacontext)"
                                 Content="{helpers:Localization Settings_EnableLexiconImport}"
                                 Foreground="{StaticResource AccentHueBrush}"
                                 IsChecked="{Binding IsLexiconImportEnabled}" />
