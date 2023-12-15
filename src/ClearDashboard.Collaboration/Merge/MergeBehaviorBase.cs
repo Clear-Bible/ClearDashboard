@@ -276,6 +276,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
     private async Task ApplyPropertyValueDifferencesToCommand(DbCommand command, IModelDifference modelDifference, IModelSnapshot modelSnapshot)
     {
         var entityType = modelSnapshot.EntityType;
+        var entityPropertyValuesSet = new List<string>();
 
         // Each property difference here refers to a simple value difference.
         foreach (var (propertyName, propertyValueDifference) in modelDifference.PropertyValueDifferences)
@@ -291,7 +292,10 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
                 entityPropertyValues = new List<string>() { propertyName };
             }
 
-            entityPropertyValues = entityPropertyValues.Where(e => !string.IsNullOrEmpty(e)).ToList();
+            entityPropertyValues = entityPropertyValues
+                .Where(e => !string.IsNullOrEmpty(e))
+                .Where(e => !entityPropertyValuesSet.Contains(e))
+                .ToList();
             if (!entityPropertyValues.Any())
             {
                 continue;
@@ -304,12 +308,15 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
                     propertyValue = await RunEntityValueResolverAsync(modelSnapshot, ep, resolver);
                     command.Parameters[$"@{ep}"].Value = propertyValue ?? DBNull.Value;
 
+                    entityPropertyValuesSet.Add(ep);
                     continue;
                 }
                 else
                 {
                     propertyValue = propertyValue.ToDatabaseCommandParameterValue(_dateTimeOffsetToBinary);
                     command.Parameters[$"@{ep}"].Value = propertyValue;
+
+                    entityPropertyValuesSet.Add(ep);
                 }
             }
         }
@@ -318,6 +325,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
     private async Task ApplyPropertyModelDifferencesToCommand(DbCommand command, IModelDifference modelDifference, IModelSnapshot modelSnapshot)
     {
         var entityType = modelSnapshot.EntityType;
+        var entityPropertyValuesSet = new List<string>();
 
         // Each property difference here refers to difference within a more complex
         // property (e.g. NoteModelRef.ModelRef), which has to have converter(s) in
@@ -338,7 +346,10 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
                 entityPropertyValues = new List<string>() { propertyModelDifference.PropertyName };
             }
 
-            entityPropertyValues = entityPropertyValues.Where(e => !string.IsNullOrEmpty(e)).ToList();
+            entityPropertyValues = entityPropertyValues
+                .Where(e => !string.IsNullOrEmpty(e))
+                .Where(e => !entityPropertyValuesSet.Contains(e))
+                .ToList();
             if (!entityPropertyValues.Any())
             {
                 continue;
@@ -350,11 +361,15 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
                 {
                     var propertyValue = await RunEntityValueResolverAsync(modelSnapshot, ep, resolver);
                     command.Parameters[$"@{ep}"].Value = propertyValue ?? DBNull.Value;
+
+                    entityPropertyValuesSet.Add(ep);
                 }
                 else if (modelValueDifference.ModelType.IsAssignableTo(typeof(IDictionary<string, object>)))
                 {
                     command.Parameters[$"@{ep}"].Value = modelSnapshot.PropertyValues[propertyModelDifference.PropertyName]
                         .ToDatabaseCommandParameterValue(_dateTimeOffsetToBinary);
+
+                    entityPropertyValuesSet.Add(ep);
                 }
                 else
                 {
@@ -416,6 +431,38 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
     protected virtual async ValueTask DisposeAsyncCore()
     {
         await ValueTask.CompletedTask;
+    }
+
+    protected void CheckForDenormalization(Guid databaseId, IModelSnapshot snapshot, DbParameterCollection? modifyParameters)
+    {
+        var parameterNames = new List<string>();
+        if (modifyParameters is not null)
+        {
+            foreach (DbParameter p in modifyParameters)
+            {
+                parameterNames.Add(p.ParameterName.Substring(1));  // Skip the @ at the start of each ParameterName
+            }
+        }
+
+        var info = snapshot.GetType() switch
+        {
+            Type modelType when modelType.IsAssignableTo(typeof(IModelSnapshot<Models.Token>)) =>
+                (typeof(IModelSnapshot<Models.TokenizedCorpus>), (Guid)snapshot.PropertyValues[nameof(Models.Token.TokenizedCorpusId)]!),
+            Type modelType when modelType.IsAssignableTo(typeof(IModelSnapshot<Models.TokenComposite>)) =>
+                (typeof(IModelSnapshot<Models.TokenizedCorpus>), (Guid)snapshot.PropertyValues[nameof(Models.Token.TokenizedCorpusId)]!),
+            Type modelType when modelType.IsAssignableTo(typeof(IModelSnapshot<Models.TokenizedCorpus>)) => 
+                (modelType, databaseId),
+            Type modelType when modelType.IsAssignableTo(typeof(IModelSnapshot<Models.Alignment>)) =>
+                (typeof(IModelSnapshot<Models.AlignmentSet>), (Guid)snapshot.PropertyValues[nameof(Models.Alignment.AlignmentSetId)]!),
+            Type modelType when modelType.IsAssignableTo(typeof(IModelSnapshot<Models.AlignmentSet>)) => 
+                (modelType, databaseId),
+            _ => (null, default)
+        };
+
+        if (info != default)
+        {
+            MergeCache.IdsToDenormalize.Add((info.Item1!, info.Item2));
+        }
     }
 }
 

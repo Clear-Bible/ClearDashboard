@@ -15,6 +15,8 @@ public class AlignmentSetBuilder : GeneralModelBuilder<Models.AlignmentSet>
     public const string SOURCE_TOKENIZED_CORPUS = "SourceTokenizedCorpus";
     public const string TARGET_TOKENIZED_CORPUS = "TargetTokenizedCorpus";
 
+    public const string ALIGNMENTS_CHILD_NAME = "Alignments";
+
     public override IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes =>
         new Dictionary<string, Type>()
         {
@@ -79,7 +81,7 @@ public class AlignmentSetBuilder : GeneralModelBuilder<Models.AlignmentSet>
         modelSnapshot.Add(TARGET_TOKENIZED_CORPUS, targetTokenizedCorpusExtra);
 
         var alignmentBuilder = AlignmentBuilder ?? new AlignmentBuilder();
-        modelSnapshot.AddChild("Alignments", alignmentBuilder.BuildModelSnapshots(alignmentSet.Id, builderContext).AsModelSnapshotChildrenList());
+        modelSnapshot.AddChild(ALIGNMENTS_CHILD_NAME, alignmentBuilder.BuildModelSnapshots(alignmentSet.Id, builderContext).AsModelSnapshotChildrenList());
 
         return modelSnapshot;
     }
@@ -96,5 +98,34 @@ public class AlignmentSetBuilder : GeneralModelBuilder<Models.AlignmentSet>
             SourceTokenRef = TokenBuilder.BuildTokenRef(alignment.SourceTokenComponent!, builderContext),
             TargetTokenRef = TokenBuilder.BuildTokenRef(alignment.TargetTokenComponent!, builderContext)
         };
+    }
+
+    public override void UpdateModelSnapshotFormat(ProjectSnapshot projectSnapshot, Dictionary<Type, Dictionary<Guid, Dictionary<string, string>>> updateMappings)
+    {
+        foreach (var parentSnapshot in projectSnapshot.GetGeneralModelList<Models.AlignmentSet>())
+        {
+            if (parentSnapshot.TryGetGuidPropertyValue(nameof(Models.AlignmentSet.ParallelCorpusId), out var parallelCorpusId) &&  
+                parentSnapshot.TryGetChildValue(ALIGNMENTS_CHILD_NAME, out var children) &&
+                children!.Any() &&
+                children!.GetType().IsAssignableTo(typeof(IEnumerable<GeneralModel<Models.Alignment>>)))
+            {
+                var alignmentSnapshots = (IEnumerable<GeneralModel<Models.Alignment>>)children!;
+                foreach (var alignmentSnapshot in alignmentSnapshots)
+                {
+                    if (!alignmentSnapshot.TryGetPropertyValue(AlignmentBuilder.SOURCE_TOKEN_DELETED, out var sourceTokenDeleted))
+                    {
+                        // TODO:  find token in snapshot and look at DELETED property to see if null or not
+                        alignmentSnapshot.Add(AlignmentBuilder.SOURCE_TOKEN_DELETED, false, typeof(bool));
+                    }
+
+                    if (!alignmentSnapshot.TryGetPropertyValue(AlignmentBuilder.TARGET_TOKEN_DELETED, out var targetTokenDeleted))
+                    {
+                        // TODO:  find token in snapshot and look at DELETED property to see if null or not
+                        alignmentSnapshot.Add(AlignmentBuilder.TARGET_TOKEN_DELETED, false, typeof(bool));
+                    }
+
+                }
+            }
+        }
     }
 }

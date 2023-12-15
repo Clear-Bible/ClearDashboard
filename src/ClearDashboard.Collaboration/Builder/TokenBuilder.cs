@@ -4,6 +4,7 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Data;
 using SIL.Extensions;
 using System.Linq;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Builder;
 
@@ -140,7 +141,8 @@ public class TokenBuilder : GeneralModelBuilder<Models.Token>
         {
             IsComposite = (tokenComponent is Models.TokenComposite),
             TokenizedCorpusId = tokenComponent.TokenizedCorpusId,
-            TokenLocation = tokenComponent.EngineTokenId!
+            TokenLocation = tokenComponent.EngineTokenId!,
+            TokenDeleted = tokenComponent.Deleted is not null
         };
     }
 

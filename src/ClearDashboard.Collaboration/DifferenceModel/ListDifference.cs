@@ -8,14 +8,19 @@ namespace ClearDashboard.Collaboration.DifferenceModel;
 public class ListDifference<T> : ListDifference, IListDifference<T>
     where T : notnull
 {
+    private readonly ListMembershipDifference<T> _listMembershipDifference;
+    private readonly List<IModelDifference<T>> _listMemberModelDifferences;
+
     public ListDifference(ListMembershipDifference<T> listMembershipDifference, IEnumerable<IModelDifference<T>> listMemberModelDifferences)
     {
-        ListMembershipDifference = listMembershipDifference;
-        ListMemberModelDifferences = listMemberModelDifferences;
+        _listMembershipDifference = listMembershipDifference;
+        _listMemberModelDifferences = new List<IModelDifference<T>>(listMemberModelDifferences);
     }
 
-    public ListMembershipDifference<T> ListMembershipDifference { get; private set; }
-    public IEnumerable<IModelDifference<T>> ListMemberModelDifferences { get; private set; }
+    public ListMembershipDifference<T> ListMembershipDifference { get => _listMembershipDifference; }
+    public IEnumerable<IModelDifference<T>> ListMemberModelDifferences { get => _listMemberModelDifferences; }
+
+    public void AddListMemberModelDifference(IModelDifference<T> listMemberModelDifference) { _listMemberModelDifferences.Add(listMemberModelDifference); }
 
     public IEnumerable<T> OnlyIn1 => ListMembershipDifference.OnlyIn1;
     public IEnumerable<T> OnlyIn2 => ListMembershipDifference.OnlyIn2;

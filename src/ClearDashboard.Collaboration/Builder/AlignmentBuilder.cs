@@ -4,13 +4,16 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Data;
 using System.Text.Json;
 using ClearDashboard.Collaboration.Factory;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Builder;
 
 public class AlignmentBuilder : GeneralModelBuilder<Models.Alignment>
 {
     public const string SOURCE_TOKEN_LOCATION = "SourceTokenLocation";
+    public const string SOURCE_TOKEN_DELETED = "SourceTokenDeleted";
     public const string TARGET_TOKEN_LOCATION = "TargetTokenLocation";
+    public const string TARGET_TOKEN_DELETED = "TargetTokenDeleted";
     public const string BOOK_CHAPTER_LOCATION = "Location";
 
     public override string IdentityKey => BuildPropertyRefName();
@@ -19,7 +22,9 @@ public class AlignmentBuilder : GeneralModelBuilder<Models.Alignment>
         {
             { BuildPropertyRefName(), typeof(string) },
             { SOURCE_TOKEN_LOCATION, typeof(string) },
+            { SOURCE_TOKEN_DELETED, typeof(bool) },
             { TARGET_TOKEN_LOCATION, typeof(string) },
+            { TARGET_TOKEN_DELETED, typeof(bool) },
             { BOOK_CHAPTER_LOCATION, typeof(string) }
         };
 
@@ -30,7 +35,6 @@ public class AlignmentBuilder : GeneralModelBuilder<Models.Alignment>
                 .ThenInclude(e => ((Models.TokenComposite)e).Tokens)
             .Include(e => e.TargetTokenComponent!)
             .Where(e => e.AlignmentSetId == alignmentSetId)
-            .Where(e => e.Deleted == null)
             .ToList()
             .Select(e => (
                 alignment: e,
@@ -63,7 +67,7 @@ public class AlignmentBuilder : GeneralModelBuilder<Models.Alignment>
 
     public static GeneralModel<Models.Alignment> BuildModelSnapshot((Models.Alignment alignment, Models.Token leadingToken) alignment, BuilderContext builderContext)
     {
-        var modelProperties = GeneralModelBuilder<Models.Alignment>.ExtractUsingModelRefs(alignment.alignment, builderContext, new List<string>() { "Id" });
+        var modelProperties = ExtractUsingModelRefs(alignment.alignment, builderContext, new List<string>() { "Id" });
 
         // FIXME:  enhance GeneralModelBuilder to use propertyConverter delegates
         // so that it produces "SourceTokenLocation", "TargetTokenLocation" itself
@@ -78,8 +82,12 @@ public class AlignmentBuilder : GeneralModelBuilder<Models.Alignment>
 
         modelProperties.Add(SOURCE_TOKEN_LOCATION,
             (typeof(string), ((TokenRef)sourceTokenComponentRef.value!).TokenLocation));
+        modelProperties.Add(SOURCE_TOKEN_DELETED,
+            (typeof(bool), ((TokenRef)sourceTokenComponentRef.value!).TokenDeleted));
         modelProperties.Add(TARGET_TOKEN_LOCATION,
             (typeof(string), ((TokenRef)targetTokenComponentRef.value!).TokenLocation));
+        modelProperties.Add(TARGET_TOKEN_DELETED,
+            (typeof(bool), ((TokenRef)targetTokenComponentRef.value!).TokenDeleted));
         modelProperties.Add(BOOK_CHAPTER_LOCATION,
             (typeof(string), $"{alignment.leadingToken.BookNumber:000}{alignment.leadingToken.ChapterNumber:000}"));
 
