@@ -91,6 +91,8 @@ public class MergeBehaviorApply : MergeBehaviorBase
 
         _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 
+        CheckForDenormalization((Guid)resolvedWhereClause["Id"]!, itemToDelete, command.Parameters);
+
         return resolvedWhereClause;
     }
 
@@ -110,6 +112,8 @@ public class MergeBehaviorApply : MergeBehaviorBase
         // FIXME:  what type of exception is thrown if the where clause doesn't match any
         // record in the database?  Propbably log the details but continue?
         _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+
+        CheckForDenormalization((Guid)resolvedWhereClause["Id"]!, itemToModify, command.Parameters);
 
         return resolvedWhereClause;
     }
@@ -142,6 +146,8 @@ public class MergeBehaviorApply : MergeBehaviorBase
 
         await Task.CompletedTask;
         _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+
+        CheckForDenormalization(id, itemToCreate, command.Parameters);
 
         return id;
     }

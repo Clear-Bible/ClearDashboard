@@ -132,7 +132,7 @@ public class VerseRowHandler : DefaultMergeHandler<IModelSnapshot<Models.VerseRo
         return id;
     }
 
-    public override async Task<bool> HandleModifyPropertiesAsync(IModelDifference<IModelSnapshot<Models.VerseRow>> modelDifference, IModelSnapshot<Models.VerseRow> itemToModify, CancellationToken cancellationToken = default)
+    public override async Task<(bool, Dictionary<string, object?>?)> HandleModifyPropertiesAsync(IModelDifference<IModelSnapshot<Models.VerseRow>> modelDifference, IModelSnapshot<Models.VerseRow> itemToModify, CancellationToken cancellationToken = default)
     {
         var modelSnapshotToModify = (IModelSnapshot<Models.VerseRow>)itemToModify;
         var modelSnapshotDifference = (IModelDifference<IModelSnapshot<Models.VerseRow>>)modelDifference;
@@ -161,10 +161,10 @@ public class VerseRowHandler : DefaultMergeHandler<IModelSnapshot<Models.VerseRo
                 AddVerseRowForTokenization(verseRowId, modelSnapshotToModify, modelSnapshotDifference);
             }
 
-            return true;
+            return (true, where);
         }
 
-        return false;
+        return (false, null);
     }
 
     public Expression<Func<Models.VerseRow, bool>> BuildVerseRowLookupWhereExpression(IModelSnapshot<Models.VerseRow> snapshot)

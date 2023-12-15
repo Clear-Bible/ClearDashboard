@@ -12,6 +12,8 @@ public class TranslationSetBuilder : GeneralModelBuilder<Models.TranslationSet>
 {
     public const string SOURCE_TOKENIZED_CORPUS = "SourceTokenizedCorpus";
 
+    public const string TRANSLATIONS_CHILD_NAME = "Translations";
+
     public override IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes =>
         new Dictionary<string, Type>()
         {
@@ -59,7 +61,7 @@ public class TranslationSetBuilder : GeneralModelBuilder<Models.TranslationSet>
         modelSnapshot.Add(SOURCE_TOKENIZED_CORPUS, sourceTokenizedCorpusExtra);
 
         var translationBuilder = TranslationBuilder ?? new TranslationBuilder();
-        modelSnapshot.AddChild("Translations", translationBuilder.BuildModelSnapshots(translationSet.Id, builderContext).AsModelSnapshotChildrenList());
+        modelSnapshot.AddChild(TRANSLATIONS_CHILD_NAME, translationBuilder.BuildModelSnapshots(translationSet.Id, builderContext).AsModelSnapshotChildrenList());
 
         return modelSnapshot;
     }
@@ -73,5 +75,27 @@ public class TranslationSetBuilder : GeneralModelBuilder<Models.TranslationSet>
             TranslationSetId = translation.TranslationSetId,
             SourceTokenRef = TokenBuilder.BuildTokenRef(translation.SourceTokenComponent!, builderContext),
         };
+    }
+
+    public override void UpdateModelSnapshotFormat(ProjectSnapshot projectSnapshot, Dictionary<Type, Dictionary<Guid, Dictionary<string, string>>> updateMappings)
+    {
+        foreach (var parentSnapshot in projectSnapshot.GetGeneralModelList<Models.TranslationSet>())
+        {
+            if (parentSnapshot.TryGetGuidPropertyValue(nameof(Models.TranslationSet.ParallelCorpusId), out var parallelCorpusId) &&
+                parentSnapshot.TryGetChildValue(TRANSLATIONS_CHILD_NAME, out var children) &&
+                children!.Any() &&
+                children!.GetType().IsAssignableTo(typeof(IEnumerable<GeneralModel<Models.Translation>>)))
+            {
+                var translationSnapshots = (IEnumerable<GeneralModel<Models.Translation>>)children!;
+                foreach (var translationSnapshot in translationSnapshots)
+                {
+                    if (!translationSnapshot.TryGetPropertyValue(TranslationBuilder.SOURCE_TOKEN_DELETED, out var sourceTokenDeleted))
+                    {
+                        // TODO:  find token in snapshot and look at DELETED property to see if null or not
+                        translationSnapshot.Add(TranslationBuilder.SOURCE_TOKEN_DELETED, false, typeof(bool));
+                    }
+                }
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ using ClearDashboard.DataAccessLayer.Data;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.Collaboration.DifferenceModel;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.Collaboration.Merge;
 
 namespace ClearDashboard.Collaboration.Model;
 
@@ -14,12 +15,14 @@ public class TokenRef : ModelRef<TokenRef>
     public bool IsComposite { get; set; } = false;
     public Guid TokenizedCorpusId { get; set; } = Guid.Empty;
     public string TokenLocation { get; set; } = string.Empty;
+    public bool TokenDeleted { get; set; } = false;
 
     [JsonIgnore]
     public override IReadOnlyDictionary<string, object?> PropertyValues => new Dictionary<string, object?>() {
         { nameof(TokenRef.IsComposite), IsComposite },
         { nameof(TokenRef.TokenizedCorpusId), TokenizedCorpusId },
-        { nameof(TokenRef.TokenLocation), TokenLocation }
+        { nameof(TokenRef.TokenLocation), TokenLocation },
+        { nameof(TokenRef.TokenDeleted), TokenDeleted }
     }.AsReadOnly();
 
     public override IModelDifference<TokenRef> GetModelDifference(TokenRef other)
@@ -29,6 +32,7 @@ public class TokenRef : ModelRef<TokenRef>
         if (IsComposite != other.IsComposite) { differences.AddPropertyDifference(new PropertyDifference(nameof(IsComposite), new ValueDifference<bool>(IsComposite, other.IsComposite))); }
         if (TokenizedCorpusId != other.TokenizedCorpusId) { differences.AddPropertyDifference(new PropertyDifference(nameof(TokenizedCorpusId), new ValueDifference<Guid>(TokenizedCorpusId, other.TokenizedCorpusId))); }
         if (TokenLocation != other.TokenLocation) { differences.AddPropertyDifference(new PropertyDifference(nameof(TokenLocation), new ValueDifference<string>(TokenLocation, other.TokenLocation))); }
+        if (TokenDeleted != other.TokenDeleted) { differences.AddPropertyDifference(new PropertyDifference(nameof(TokenDeleted), new ValueDifference<bool>(TokenDeleted, other.TokenDeleted))); }
 
         return differences;
     }
@@ -41,6 +45,7 @@ public class TokenRef : ModelRef<TokenRef>
         if (nameof(IsComposite) == propertyName) { IsComposite = (bool)valueToApply; }
         if (nameof(TokenizedCorpusId) == propertyName) { TokenizedCorpusId = (Guid)valueToApply; }
         if (nameof(TokenLocation) == propertyName) { TokenLocation = (string)valueToApply; }
+        if (nameof(TokenDeleted) == propertyName) { TokenDeleted = (bool)valueToApply; }
     }
 
     public override string ToString()
@@ -52,11 +57,11 @@ public class TokenRef : ModelRef<TokenRef>
     public override bool Equals(TokenRef? other)
     {
         if (other == null) return false;
-        return this.TokenizedCorpusId == other.TokenizedCorpusId && this.TokenLocation == other.TokenLocation;
+        return this.TokenizedCorpusId == other.TokenizedCorpusId && this.TokenLocation == other.TokenLocation && this.TokenDeleted == other.TokenDeleted;
     }
     public override int GetHashCode()
     {
-        return HashCode.Combine(TokenizedCorpusId, TokenLocation);
+        return HashCode.Combine(TokenizedCorpusId, TokenLocation, TokenDeleted);
     }
 
     public static bool operator ==(TokenRef? e1, TokenRef? e2) => object.Equals(e1, e2);

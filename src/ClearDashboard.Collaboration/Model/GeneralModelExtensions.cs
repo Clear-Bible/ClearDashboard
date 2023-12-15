@@ -173,7 +173,7 @@ internal static class GeneralModelExtensions
             }
         }
 
-        return combined;
+        return combined.Distinct();
     }
 }
 

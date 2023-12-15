@@ -294,9 +294,9 @@ DELETE FROM TokenComponent WHERE Id IN
         return id;
     }
 
-    public override async Task<bool> HandleModifyPropertiesAsync(IModelDifference<IModelSnapshot<Models.TokenComposite>> modelDifference, IModelSnapshot<Models.TokenComposite> itemToModify, CancellationToken cancellationToken = default)
+    public override async Task<(bool, Dictionary<string, object?>?)> HandleModifyPropertiesAsync(IModelDifference<IModelSnapshot<Models.TokenComposite>> modelDifference, IModelSnapshot<Models.TokenComposite> itemToModify, CancellationToken cancellationToken = default)
     {
-        var modified = await base.HandleModifyPropertiesAsync(modelDifference, itemToModify, cancellationToken);
+        var (modified, where) = await base.HandleModifyPropertiesAsync(modelDifference, itemToModify, cancellationToken);
 
         var tokenLocationDifference = modelDifference.PropertyDifferences
             .Where(pd => pd.PropertyName == TokenCompositeBuilder.TOKEN_LOCATIONS)
@@ -304,7 +304,7 @@ DELETE FROM TokenComponent WHERE Id IN
             .FirstOrDefault();
         if (tokenLocationDifference is null)
         {
-            return modified;
+            return (modified, where);
         }
 
         var valueListDifference = (ListDifference<string>)tokenLocationDifference.PropertyValueDifference;
@@ -389,7 +389,15 @@ DELETE FROM TokenComponent WHERE Id IN
             },
             cancellationToken);
 
-        return modified;
+        // Since we did a DbConnection-style modify, detach any matching entities in 
+        // ProjectDbContext (since they could otherwise be out-of-sync):
+        await DetachTokenComponents(Enumerable.Empty<Guid>(), new Guid[] { tokenCompositeId }, cancellationToken);
+
+        // I can't think of a scenario where there are multiple composites having the same token locations
+        // (say one deleted and one not, or two completely overlapping composites).  So leaving this commented:
+//        AddTokenDeleteChangeToCache(modelDifference, itemToModify, _mergeContext.MergeBehavior.MergeCache);
+
+        return (modified, where);
     }
 
     public Expression<Func<Models.TokenComposite, bool>> BuildTokenChildWhereExpression(IModelSnapshot<Models.TokenComposite> snapshot, Guid tokenizedCorpusId, IEnumerable<string> tokenLocations)

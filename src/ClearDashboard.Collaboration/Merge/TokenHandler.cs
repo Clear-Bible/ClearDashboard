@@ -191,13 +191,6 @@ public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
                 if (tokenId == default)
                     return;
 
-                var alignmentSetDenormalizationTasks = await BuildDenormalizationTasksForTokenAlignments(
-                    dbConnection, 
-                    new Guid[] { tokenId }, 
-                    cancellationToken);
-
-                await InsertDenormalizationTasks(alignmentSetDenormalizationTasks, cancellationToken);
-
                 var tokenCompositeIds = await FindTokenCompositeIds(dbConnection, new Guid[] { tokenId }, cancellationToken);
                 await DeleteComposites(dbConnection, tokenCompositeIds, cancellationToken);
 
@@ -214,6 +207,19 @@ public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
 
         // Deletes the actual Token entity.  
         return await base.HandleDeleteAsync(itemToDelete, cancellationToken);
+    }
+
+    public override async Task<(bool, Dictionary<string, object?>?)> HandleModifyPropertiesAsync(IModelDifference<IModelSnapshot<Token>> modelDifference, IModelSnapshot<Token> itemToModify, CancellationToken cancellationToken = default)
+    {
+        var (modified, where) = await base.HandleModifyPropertiesAsync(modelDifference, itemToModify, cancellationToken);
+
+        if (modified)
+        {
+            AddTokenDeleteChangeToCache(modelDifference, itemToModify, _mergeContext.MergeBehavior.MergeCache);
+            await DetachTokenComponents(new Guid[] { (Guid)where![nameof(Models.Token.Id)]! }, Enumerable.Empty<Guid>(), cancellationToken);
+        }
+
+        return (modified, where);
     }
 
     /// <summary>
