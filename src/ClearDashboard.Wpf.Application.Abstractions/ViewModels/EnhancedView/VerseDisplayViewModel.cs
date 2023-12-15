@@ -61,7 +61,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #region Public Properties
 
-        public bool HasExternalNotes => ExternalNotes.Count() > 0 && AbstractionsSettingsHelper.GetShowExternalNotes();
+        public bool HasExternalNotes => ExternalNotes.Count() > 0 && AbstractionsSettingsHelper.GetShowExternalNotes() && AbstractionsSettingsHelper.GetExternalNotesEnabled();
         public TokenizedTextCorpus? SourceCorpus => SourceTokenMap?.Corpus;
         public TokenizedTextCorpus? TargetCorpus => TargetTokenMap?.Corpus;
 
@@ -139,7 +139,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private bool _multipleExternalNotes = false;
         public bool MultipleExternalNotes
         {
-            get => _multipleExternalNotes && AbstractionsSettingsHelper.GetShowExternalNotes();
+            get => _multipleExternalNotes && AbstractionsSettingsHelper.GetShowExternalNotes() && AbstractionsSettingsHelper.GetExternalNotesEnabled();
             set
             {
                 _multipleExternalNotes = value;

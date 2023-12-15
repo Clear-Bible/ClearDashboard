@@ -2212,6 +2212,12 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Aktifkan pengeditan penyelarasan</value>
   </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>Aktifkan catatan paratext eksternal dalam grup eksperimen</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>Aktifkan catatan paratext eksternal</value>
+  </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Aktifkan impor leksikon</value>
   </data>

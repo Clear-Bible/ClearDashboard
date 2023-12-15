@@ -2212,6 +2212,12 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>تمكين تحرير المحاذاة</value>
   </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>تمكين ملاحظات paratext الخارجية في المجموعة التجريبية</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>تمكين ملاحظات paratext الخارجية</value>
+  </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>تمكين استيراد المعجم</value>
   </data>

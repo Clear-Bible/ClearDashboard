@@ -2212,6 +2212,12 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>បើកដំណើរការការកែសំរួលការតម្រឹម</value>
   </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>អនុញ្ញាតឱ្យកំណត់ចំណាំអព្ភូតហេតុខាងក្រៅកំណត់ចំណាំនៅក្នុងក្រុមពិសោធន៍</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>អនុញ្ញាតឱ្យកំណត់ចំណាំ partatext ខាងក្រៅ</value>
+  </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>បើកដំណើរការការនាំចូល lexicon</value>
   </data>

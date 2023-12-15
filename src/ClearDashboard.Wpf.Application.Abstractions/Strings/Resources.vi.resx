@@ -2212,6 +2212,12 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Bật chỉnh sửa căn chỉnh</value>
   </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>Bật các ghi chú paratext bên ngoài trong nhóm thử nghiệm</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>Bật ghi chú paratext bên ngoài</value>
+  </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Bật nhập từ Lexicon</value>
   </data>

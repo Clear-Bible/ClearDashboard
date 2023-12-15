@@ -2212,6 +2212,12 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Включить редактирование выравнивания</value>
   </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>Включить внешние заметки Paratext в экспериментальной группе</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>Включить внешние заметки Paratext</value>
+  </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Включить импорт лексикона</value>
   </data>
