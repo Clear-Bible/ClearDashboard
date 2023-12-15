@@ -10,7 +10,7 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     Width="1010"
-    MaxHeight="700"
+    MaxHeight="640"
     d:DataContext="{d:DesignInstance Type=addParatextCorpusDialog:SelectBooksStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
