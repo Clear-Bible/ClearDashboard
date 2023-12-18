@@ -243,8 +243,51 @@
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenNoteIndicatorVisibility}" />
 
         <!--  External Notes  -->
-        <Grid>
-            <!--  Rectangle for hit test on mouse over  -->
+        <Border
+            Width="{Binding Path=ActualWidth, ElementName=TokenButton}"
+            Height="5"
+            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorMargin}"
+            Background="{StaticResource HatchBrush}">
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="Opacity" Value="0.0" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasExternalNotes}" Value="True">
+                            <Setter Property="Opacity" Value="1.0" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+
+            <Border.ToolTip>
+                <ToolTip
+                    Background="LightYellow"
+                    HasDropShadow="false"
+                    HorizontalOffset="10"
+                    Placement="Left"
+                    PlacementRectangle="50,0,0,0"
+                    VerticalOffset="20">
+                    <StackPanel Orientation="Vertical">
+                        <ListView ItemsSource="{Binding ExternalNotes}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical">
+                                        <Separator />
+                                        <Label Content="{Binding ExternalLabelsString}" Foreground="{StaticResource BlueMidBrush}" />
+                                        <Label Content="{Binding ExternalNoteMessagesString}" />
+
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </ToolTip>
+            </Border.ToolTip>
+        </Border>
+
+
+        <!--<Grid>
+            --><!--  Rectangle for hit test on mouse over  --><!--
             <Rectangle
                 Grid.Row="0"
                 Width="{Binding Path=ActualWidth, ElementName=TokenButton}"
@@ -291,7 +334,7 @@
                 </Rectangle.ToolTip>
             </Rectangle>
 
-            <!--  Dashed Line for Paratext note indicator  -->
+            --><!--  Dashed Line for Paratext note indicator  --><!--
             <Line
                 x:Name="ExternalNoteLine"
                 Grid.Row="0"
@@ -320,7 +363,7 @@
                     </MultiBinding>
                 </Line.X2>
             </Line>
-        </Grid>
+        </Grid>-->
         <Button
             x:Name="TranslationButton"
             Height="Auto"
