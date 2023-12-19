@@ -45,13 +45,18 @@ public class TranslationHandler : DefaultMergeHandler<IModelSnapshot<Models.Tran
                     throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.Translation>");
                 }
 
-                if (modelSnapshot.PropertyValues.TryGetValue("SourceTokenLocation", out var SourceTokenLocation) &&
+                if (modelSnapshot.PropertyValues.TryGetValue(TranslationBuilder.SOURCE_TOKEN_LOCATION, out var SourceTokenLocation) &&
                     modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Translation.TranslationSetId), out var translationSetId))
                 {
+                    var sourceTokenDeleted = false;
+                    if (modelSnapshot.TryGetPropertyValue(AlignmentBuilder.SOURCE_TOKEN_DELETED, out var std))
+                    {
+                        sourceTokenDeleted = (bool)std!;
+                    }
                     var sourceTokenizedCorpusId = LookupSourceTokenizedCorpusId(projectDbContext, (Guid)translationSetId!, cache);
-                    var sourceTokenComponentId = LookupTokenComponent(projectDbContext, sourceTokenizedCorpusId, (string)SourceTokenLocation!, cache);
+                    var sourceTokenComponentId = LookupTokenComponent(projectDbContext, sourceTokenizedCorpusId, (string)SourceTokenLocation!, sourceTokenDeleted, true, cache);
 
-                    logger.LogDebug($"Converted Translation having SourceTokenLocation ('{SourceTokenLocation}') / TranslationSetId ('{translationSetId}') to SourceTokenComponentId ('{sourceTokenComponentId}')");
+                    logger.LogDebug($"Converted Translation having SourceTokenLocation ('{SourceTokenLocation}') / SourceTokenDeleted ({sourceTokenDeleted}) / TranslationSetId ('{translationSetId}') to SourceTokenComponentId ('{sourceTokenComponentId}')");
                     return sourceTokenComponentId;
                 }
                 else
@@ -69,11 +74,16 @@ public class TranslationHandler : DefaultMergeHandler<IModelSnapshot<Models.Tran
                     throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.Translation>");
                 }
 
-                if (modelSnapshot.PropertyValues.TryGetValue("TranslationSetId", out var translationSetId) &&
-                    modelSnapshot.PropertyValues.TryGetValue("SourceTokenLocation", out var SourceTokenLocation))
+                if (modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Translation.TranslationSetId), out var translationSetId) &&
+                    modelSnapshot.PropertyValues.TryGetValue(TranslationBuilder.SOURCE_TOKEN_LOCATION, out var SourceTokenLocation))
                 {
+                    var sourceTokenDeleted = false;
+                    if (modelSnapshot.TryGetPropertyValue(AlignmentBuilder.SOURCE_TOKEN_DELETED, out var std))
+                    {
+                        sourceTokenDeleted = (bool)std!;
+                    }
                     var sourceTokenizedCorpusId = LookupSourceTokenizedCorpusId(projectDbContext, (Guid)translationSetId!, cache);
-                    var sourceTokenComponentId = LookupTokenComponent(projectDbContext, sourceTokenizedCorpusId, (string)SourceTokenLocation!, cache);
+                    var sourceTokenComponentId = LookupTokenComponent(projectDbContext, sourceTokenizedCorpusId, (string)SourceTokenLocation!, sourceTokenDeleted, false, cache);
 
                     var translationId = await projectDbContext.Translations
                         .Where(e => e.TranslationSetId == (Guid)translationSetId!)
@@ -81,11 +91,13 @@ public class TranslationHandler : DefaultMergeHandler<IModelSnapshot<Models.Tran
                         .Select(e => e.Id)
                         .FirstOrDefaultAsync();
 
-                    if (translationId == default)
-                        throw new PropertyResolutionException($"TranslationSetId '{translationSetId}' and SourceTokenComponentId '{sourceTokenComponentId}' cannot be resolved to a Translation");
+                    if (translationId != default)
+                    {
+                        logger.LogDebug($"Resolved TranslationSetId ('{translationSetId}') / SourceTokenComponentId ('{sourceTokenComponentId}') / SourceTokenDeleted ({sourceTokenDeleted}) to Id ('{translationId}')");
+                        return translationId;
+                    }
 
-                    logger.LogDebug($"Resolved TranslationSetId ('{translationSetId}') / SourceTokenComponentId ('{sourceTokenComponentId}') to Id ('{translationId}')");
-                    return translationId;
+                    return null;
                 }
                 else
                 {
@@ -130,20 +142,36 @@ public class TranslationHandler : DefaultMergeHandler<IModelSnapshot<Models.Tran
             });
 
         mergeContext.MergeBehavior.AddIdPropertyNameMapping(
-            (typeof(Models.Translation), "Ref"),
+            (typeof(Models.Translation), TranslationBuilder.REF),
             new[] { nameof(Models.Translation.Id) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.Translation), "Ref"),
+            (typeof(Models.Translation), TranslationBuilder.REF),
             new[] { nameof(Models.Translation.Id) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.Translation), "SourceTokenLocation"),
+            (typeof(Models.Translation), TranslationBuilder.SOURCE_TOKEN_LOCATION),
             new[] { nameof(Models.Translation.SourceTokenComponentId) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
             (typeof(Models.Translation), TranslationBuilder.BuildPropertyRefName(TranslationBuilder.LEXICONTRANSLATION_REF_PREFIX)),
             new[] { nameof(Models.Translation.LexiconTranslationId) });
+
+        // MergeBehaviorBase.CreateModelSnapshotUpdateCommand,
+        // MergeBehaviorBase.ApplyPropertyValueDifferencesToCommand and
+        // MergeBehaviorBase.ApplyPropertyModelDifferencesToCommand are now
+        // coded to allow multiple property names to be mapped to a single
+        // entity property name (see MergeBehaviorBase._propertyNameMap) and
+        // only update that entity property value a single time.  These 
+        // property name mappings are only used when modifying an entity.
+        // So per the two new 'add' statements below, now changes to either
+        // SOURCE_TOKEN_LOCATION (above) or
+        // SOURCE_TOKEN_DELETED (below) will trigger
+        // an update to SourceTokenComponentId.  
+
+        mergeContext.MergeBehavior.AddPropertyNameMapping(
+            (typeof(Models.Translation), TranslationBuilder.SOURCE_TOKEN_DELETED),
+            new[] { nameof(Models.Translation.SourceTokenComponentId) });
     }
 }
 

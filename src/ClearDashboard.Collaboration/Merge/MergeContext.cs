@@ -20,7 +20,6 @@ public sealed class MergeContext
     public ILogger Logger { get; private set; }
     public DefaultMergeHandler DefaultMergeHandler { get; private set; }
     private readonly Dictionary<Type, DefaultMergeHandler> _mergeHandlerRegistry = new();
-
     public bool FireAlignmentDenormalizationEvent = false;
 
     public MergeContext(IUserProvider userProvider, ILogger logger, MergeBehaviorBase mergeBehavior, MergeMode mergeMode)

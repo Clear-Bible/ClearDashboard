@@ -975,6 +975,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                             {
                                 project.GitLabUpdateNeeded = true;
                             }
+                            else
+                            {
+                                project.GitLabUpdateNeeded = false;
+                            }
                         }
                     }
                 }
@@ -1489,6 +1493,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     }
                 }
             }
+
+            await GetProjectsVersion();
         }
 
         #endregion  Methods
@@ -1502,8 +1508,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             Connected = message.Connected;
-
-            Connected = true;
 
             await Task.CompletedTask;
         }

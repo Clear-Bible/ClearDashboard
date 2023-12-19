@@ -29,9 +29,9 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
     {
     }
 
-    public override async Task<bool> HandleModifyPropertiesAsync(IModelDifference<IModelSnapshot<Models.TokenizedCorpus>> modelDifference, IModelSnapshot<Models.TokenizedCorpus> itemToModify, CancellationToken cancellationToken = default)
+    public override async Task<(bool, Dictionary<string, object?>?)> HandleModifyPropertiesAsync(IModelDifference<IModelSnapshot<Models.TokenizedCorpus>> modelDifference, IModelSnapshot<Models.TokenizedCorpus> itemToModify, CancellationToken cancellationToken = default)
     {
-        var modified = await base.HandleModifyPropertiesAsync(modelDifference, itemToModify, cancellationToken);
+        var (modified, where) = await base.HandleModifyPropertiesAsync(modelDifference, itemToModify, cancellationToken);
 
         if (modified)
         {
@@ -79,7 +79,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
             }
         }
 
-        return modified;
+        return (modified, where);
     }
 
     protected override async Task HandleCreateChildrenAsync(IModelSnapshot<Models.TokenizedCorpus> parentSnapshot, CancellationToken cancellationToken)
@@ -104,6 +104,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
 
             _mergeContext.Logger.LogInformation($"Inserting tokens for imported verse row children for tokenized corpus '{parentSnapshot.GetId()}'");
             await InsertTokens(parentSnapshot, verseRowHandler, cancellationToken);
+            _mergeContext.MergeBehavior.MergeCache.IdsToDenormalize.Add((typeof(IModelSnapshot<Models.TokenizedCorpus>), (Guid)parentSnapshot.GetId()));
             _mergeContext.Logger.LogInformation($"Completed inserting tokens for imported verse row children for tokenized corpus '{parentSnapshot.GetId()}'");
         }
 
@@ -111,6 +112,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
         {
             _mergeContext.Logger.LogInformation($"Inserting tokens for manuscript tokenized corpus '{parentSnapshot.GetId()}'");
             await ImportManuscriptVerseRowsTokens(parentSnapshot!, cancellationToken);
+            _mergeContext.MergeBehavior.MergeCache.IdsToDenormalize.Add((typeof(IModelSnapshot<Models.TokenizedCorpus>), (Guid)parentSnapshot.GetId()));
             _mergeContext.Logger.LogInformation($"Completed inserting tokens for manuscript tokenized corpus '{parentSnapshot.GetId()}'");
         }
 
@@ -176,10 +178,11 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
         IReadOnlyDictionary<string, IListDifference> childListDifferences,
         IModelSnapshot<Models.TokenizedCorpus>? parentItemInCurrentSnapshot,
         IModelSnapshot<Models.TokenizedCorpus>? parentItemInTargetCommitSnapshot,
+        IModelSnapshot<Models.TokenizedCorpus>? parentItemInPreviousCommitSnapshot,
         CancellationToken cancellationToken)
     {
         var verseRowChildName = ProjectSnapshotFactoryCommon.childFolderNameMappings[typeof(Models.VerseRow)].childName;
-        var insertedTokens = false;
+
         if (childListDifferences.ContainsKey(verseRowChildName))
         {
             var verseRowHandler = (VerseRowHandler)_mergeContext.FindMergeHandler<IModelSnapshot<Models.VerseRow>>();
@@ -193,6 +196,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
                 childListDifferences[verseRowChildName],
                 parentItemInCurrentSnapshot?.Children.GetValueOrDefault(verseRowChildName),
                 parentItemInTargetCommitSnapshot?.Children.GetValueOrDefault(verseRowChildName),
+                parentItemInPreviousCommitSnapshot?.Children.GetValueOrDefault(verseRowChildName),
                 cancellationToken);
             _mergeContext.Logger.LogInformation($"Completed handle verse row child list differences for tokenized corpus");
 
@@ -200,9 +204,8 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
             {
                 _mergeContext.Logger.LogInformation($"Inserting tokens for list difference verse row children for tokenized corpus '{parentItemInCurrentSnapshot.GetId()}'");
                 await InsertTokens(parentItemInCurrentSnapshot, verseRowHandler, cancellationToken);
+                _mergeContext.MergeBehavior.MergeCache.IdsToDenormalize.Add((typeof(IModelSnapshot<Models.TokenizedCorpus>), (Guid)parentItemInCurrentSnapshot.GetId()));
                 _mergeContext.Logger.LogInformation($"Compelted inserting tokens for list difference verse row children for tokenized corpus '{parentItemInCurrentSnapshot.GetId()}'");
-
-                insertedTokens = true;
             }
         }
 
@@ -214,18 +217,21 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
             // Token snapshots from current system database
 
             var currentTokenSnapshots = (IEnumerable<IModelSnapshot<Models.Token>>?)parentItemInCurrentSnapshot?.Children.GetValueOrDefault(tokenChildName);
-            var toMergeTokenSnapshots = (IEnumerable<IModelSnapshot<Models.Token>>?)parentItemInTargetCommitSnapshot?.Children.GetValueOrDefault(tokenChildName);
 
             if (parentItemInCurrentSnapshot is not null)
             {
                 var tokenizedCorpusId = (Guid)parentItemInCurrentSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.Id)]!;
 
-                if (insertedTokens)
+                var targetTokenLocations = ((IEnumerable<IModelSnapshot<Models.Token>>?)parentItemInTargetCommitSnapshot?.Children.GetValueOrDefault(tokenChildName))?.ExtractAllTokenLocations() ?? Enumerable.Empty<string>();
+                var previousTokenLocations = ((IEnumerable<IModelSnapshot<Models.Token>>?)parentItemInPreviousCommitSnapshot?.Children.GetValueOrDefault(tokenChildName))?.ExtractAllTokenLocations() ?? Enumerable.Empty<string>();
+
+                var engineTokenIdAdditions = Enumerable.Union(targetTokenLocations, previousTokenLocations);
+                if (engineTokenIdAdditions.Any())
                 {
                     await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
                         $"",
-                        async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
-
+                        async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
+                        {
                             // Load possible 'current database' matches (just created using InsertTokens) to manually
                             // created/changed token by matching database EngineTokenIds to incoming EngineTokenIds or OriginTokenLocations.
                             // We are replacing the currentTokenSnapshots loaded earlier (before tokenizing):
@@ -233,7 +239,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
                                 (TokenBuilder)GeneralModelBuilder.GetModelBuilder<Models.Token>(),
                                 new BuilderContext(projectDbContext),
                                 tokenizedCorpusId,
-                                toMergeTokenSnapshots?.ExtractAllTokenLocations());
+                                engineTokenIdAdditions);
 
                             await Task.CompletedTask;
                         },
@@ -245,7 +251,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
                     $"Loading manual token 'ref' cache for TokenizedCorpusId '{tokenizedCorpusId}'",
                     async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
                     {
-                        LoadManualTokenRefsIntoCache(projectDbContext, tokenizedCorpusId, cache);
+                        LoadManualTokenRefsIntoCache(projectDbContext, tokenizedCorpusId, cache, true);
                         await Task.CompletedTask;
                     },
                     cancellationToken);
@@ -258,6 +264,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
                 childListDifferences[tokenChildName],
                 currentTokenSnapshots,
                 parentItemInTargetCommitSnapshot?.Children.GetValueOrDefault(tokenChildName),
+                parentItemInPreviousCommitSnapshot?.Children.GetValueOrDefault(tokenChildName),
                 cancellationToken);
             await tokenHandler.DeleteOriginTokenLocationLeftovers(
                 childListDifferences[tokenChildName],
@@ -277,6 +284,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
                 childListDifferences[compositeChildName],
                 parentItemInCurrentSnapshot?.Children.GetValueOrDefault(compositeChildName),
                 parentItemInTargetCommitSnapshot?.Children.GetValueOrDefault(compositeChildName),
+                parentItemInPreviousCommitSnapshot?.Children.GetValueOrDefault(compositeChildName),
                 cancellationToken);
             _mergeContext.Logger.LogInformation($"Completed handle composite token child list differences for tokenized corpus");
         }

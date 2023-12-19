@@ -19,6 +19,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 {
@@ -101,7 +102,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
                 NotifyOfPropertyChange(() => IsLexiconImportEnabled);
             }
         }
-        
+
+        private bool _isExternalNotesEnabled = false;
+        public bool IsExternalNotesEnabled
+        {
+            get => _isExternalNotesEnabled;
+            set
+            {
+                _isExternalNotesEnabled = value;
+                NotifyOfPropertyChange(() => IsExternalNotesEnabled);
+            }
+        }
+
 
         private bool _isAlignmentEditingEnabled;
         public bool IsAlignmentEditingEnabled
@@ -335,6 +347,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             set => Set(ref _thirdMonitor, value); 
         }
 
+
+        private bool _showExternalNotes = AbstractionsSettingsHelper.GetShowExternalNotes();
+        public bool ShowExternalNotes
+        {
+            get => _showExternalNotes;
+            set
+            {
+                if (_showExternalNotes != value)
+                {
+                    _showExternalNotes = value;
+                    AbstractionsSettingsHelper.SaveShowExternalNotes(value);
+                    NotifyOfPropertyChange(() => ShowExternalNotes);
+
+                    EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage()).GetAwaiter();
+                }
+            }
+        }
+
         #endregion //Observable Properties
 
 
@@ -418,6 +448,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
             IsTokenSplittingEnabled = Settings.Default.IsTokenSplittingEnabled;
             IsLexiconImportEnabled = AbstractionsSettingsHelper.GetEnabledLexiconImport();
+            IsExternalNotesEnabled = AbstractionsSettingsHelper.GetExternalNotesEnabled();
 
             base.OnViewReady(view);
         }
@@ -559,9 +590,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             Settings.Default.Save();
         }
 
-        public async void EnableLexifonImport(bool value)
+        public async void EnableLexiconImport(bool value)
         {
             AbstractionsSettingsHelper.SaveEnabledLexiconImport(IsLexiconImportEnabled);
+            await _eventAggregator.PublishOnUIThreadAsync(new RedrawCorpusNodeMenus());
+        }
+
+        public async void EnableExternalNotes(bool value)
+        {
+            AbstractionsSettingsHelper.SaveExternalNotesEnabled(IsExternalNotesEnabled);
+            await _eventAggregator.PublishOnUIThreadAsync(new RefreshVerse());
             await _eventAggregator.PublishOnUIThreadAsync(new RedrawCorpusNodeMenus());
         }
 

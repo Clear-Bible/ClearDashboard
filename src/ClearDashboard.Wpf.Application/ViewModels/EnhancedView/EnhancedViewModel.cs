@@ -301,22 +301,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
 
-        private bool _showExternalNotes = AbstractionsSettingsHelper.GetShowExternalNotes();
-        public bool ShowExternalNotes
-        {
-            get => _showExternalNotes;
-            set
-            {
-                if (_showExternalNotes != value)
-                {
-                    _showExternalNotes = value;
-                    AbstractionsSettingsHelper.SaveShowExternalNotes(value);
-                    NotifyOfPropertyChange(() => ShowExternalNotes);
+        //private bool _showExternalNotes = AbstractionsSettingsHelper.GetShowExternalNotes();
+        //public bool ShowExternalNotes
+        //{
+        //    get => _showExternalNotes;
+        //    set
+        //    {
+        //        if (_showExternalNotes != value)
+        //        {
+        //            _showExternalNotes = value;
+        //            AbstractionsSettingsHelper.SaveShowExternalNotes(value);
+        //            NotifyOfPropertyChange(() => ShowExternalNotes);
 
-                    EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage()).GetAwaiter();
-                }
-            }
-        }
+        //            EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage()).GetAwaiter();
+        //        }
+        //    }
+        //}
 
 
         #endregion

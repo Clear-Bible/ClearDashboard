@@ -25,12 +25,24 @@ namespace ClearDashboard.Wpf.Application.Converters
         /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool IsInverted = parameter == null ? false : (bool)parameter;
+            bool IsInverted = false;
+
+            if (parameter == null)
+                IsInverted = false;
+            else if (parameter is string str)
+            {
+                if (str == "true")
+                    IsInverted = true;
+            }
+            if (parameter == "true" )
+                return Visibility.Collapsed;
+
+            //bool IsInverted = parameter == null ? false : (bool)parameter;
             bool IsVisible = value == null ? false : (bool)value;
             if (IsVisible)
                 return IsInverted ? Visibility.Collapsed : Visibility.Visible;
-            else
-                return IsInverted ? Visibility.Visible : Visibility.Collapsed;
+                
+            return IsInverted ? Visibility.Visible : Visibility.Collapsed;
         }
 
         /// <summary>

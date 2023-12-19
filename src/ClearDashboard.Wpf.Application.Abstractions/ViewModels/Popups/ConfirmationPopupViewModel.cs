@@ -57,6 +57,8 @@ public class ConfirmationPopupViewModel : SimpleMessagePopupViewModel
                     return LocalizationService!["Delete_Project"];
                 case SimpleMessagePopupMode.SwitchParatextProjectMessage:
                     return "Switch Paratext Project";
+                case SimpleMessagePopupMode.DeleteParallelLineConfirmation:
+                    return "Confirmation";
                 default:
                     return string.Empty;
             }
@@ -110,7 +112,9 @@ public class ConfirmationPopupViewModel : SimpleMessagePopupViewModel
             case SimpleMessagePopupMode.DeleteProjectConfirmation:
                 return LocalizationService!["Delete_Project_Confirmation"]; 
             case SimpleMessagePopupMode.SwitchParatextProjectMessage:
-                return LocalizationService!["Pds_SwitchParatextProject"]; 
+                return LocalizationService!["Pds_SwitchParatextProject"];
+            case SimpleMessagePopupMode.DeleteParallelLineConfirmation:
+                return LocalizationService!["Pds_DeleteParallelLine"];
             default:
                 return string.Empty;
         }

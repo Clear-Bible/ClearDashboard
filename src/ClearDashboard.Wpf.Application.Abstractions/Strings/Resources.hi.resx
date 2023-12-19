@@ -128,7 +128,7 @@
     <value>सहयोग उपयोगकर्ता नाम:</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
-    <value>Loading...</value>
+    <value>-कुरेंट अकाउंट विवरण-</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
     <value>वर्तमान लाइसेंस को निष्क्रिय करें</value>
@@ -143,7 +143,7 @@
     <value>Paratext उपयोगकर्ता नाम:</value>
   </data>
   <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
-    <value>आवेदन को पुनरारंभ करें</value>
+    <value>अनुप्रयोग को पुनरारंभ करें</value>
   </data>
   <data name="AccountInfo_SelectAccountLabel" xml:space="preserve">
     <value>स्विच करने के लिए एक खाता चुनें:</value>
@@ -167,7 +167,7 @@
     <value>USFM की जाँच करना</value>
   </data>
   <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
-    <value>क्लिपबोर्ड पर USFM त्रुटियों की प्रतिलिपि बनाएँ</value>
+    <value>क्लिपबोर्ड के लिए USFM त्रुटियों की प्रतिलिपि बनाएँ</value>
   </data>
   <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
     <value>त्रुटियों की संख्या:</value>
@@ -674,13 +674,13 @@
     <value>टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>भाषा की जोड़ी के लिए टोकन में शामिल हों</value>
+    <value>भाषा जोड़ी के लिए टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>'अमान्य' के रूप में चिह्न संरेखण</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
-    <value>मार्क संरेखण को 'समीक्षा की आवश्यकता' के रूप में संरेखित करें</value>
+    <value>मार्क संरेखण 'समीक्षा की आवश्यकता' के रूप में</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
     <value>'मान्य' के रूप में चिह्न संरेखण</value>
@@ -707,7 +707,7 @@
     <value>टोकन के अन्य उदाहरणों पर विभाजन लागू करें</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>टोकन को विभाजित करने के लिए कहां से चुनें:</value>
+    <value>टोकन को विभाजित करने के लिए कहां चुनें:</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>तीन-तरफ़ा विभाजन</value>
@@ -917,7 +917,7 @@
     <value>Lemma/रूप:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>नए लेक्सेम के लिए लेम्मा:</value>
+    <value>न्यू लेक्सेम के लिए लेम्मा:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>शब्दिम</value>
@@ -1624,6 +1624,9 @@
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
     <value>संरेखण हटाएं</value>
   </data>
+  <data name="Pds_DeleteParallelLine" xml:space="preserve">
+    <value>क्या आप सुनिश्चित हैं कि आप इस संरेखण को हटाना चाहते हैं? सभी नोट, संरेखण, और इस संरेखण से जुड़े इंटरलाइनियर को हटा दिया जाएगा और इसे पुनर्प्राप्त नहीं किया जा सकता है।</value>
+  </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>इंटरलाइन को हटाएं</value>
   </data>
@@ -1632,6 +1635,9 @@
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>शब्दकोष</value>
+  </data>
+  <data name="Pds_DisabledNotice" xml:space="preserve">
+    <value>जबकि पृष्ठभूमि कार्य काम कर रहे हैं</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>बाह्य नोट संपादक</value>
@@ -1710,6 +1716,9 @@
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>अज्ञात</value>
+  </data>
+  <data name="Pds_UpdateLabelsWithExternalLabels" xml:space="preserve">
+    <value>बाहरी नोटों के साथ लेबल अपडेट करें</value>
   </data>
   <data name="Pds_Xml" xml:space="preserve">
     <value>एक्सएमएल</value>
@@ -1805,10 +1814,10 @@
     <value>सहयोग परियोजनाएं</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>आरंभ करने के लिए अपना प्रोजेक्ट बनाएं।</value>
+    <value>आरंभ करने के लिए अपनी परियोजना बनाएं।</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
-    <value>एक नया प्रोजेक्ट बनाएं</value>
+    <value>एक नई परियोजना बनाएं</value>
   </data>
   <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
     <value>त्वरित शुरुआत नई परियोजना</value>
@@ -1832,7 +1841,7 @@
     <value>पुस्तक चयन सक्षम करें</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
-    <value>यदि जाँच की जाती है, तो आप कौन सी पुस्तकों को संसाधित करने में सक्षम होंगे।</value>
+    <value>यदि जाँच की जाती है, तो आप किन पुस्तकों को संसाधित करने के लिए चयन कर पाएंगे।</value>
   </data>
   <data name="ProjectPicker_GetStarted" xml:space="preserve">
     <value>शुरू हो जाओ</value>
@@ -2203,6 +2212,12 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>संरेखण संपादन सक्षम करें</value>
   </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>प्रयोगात्मक समूह में बाहरी paratext नोट्स सक्षम करें</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>बाहरी paratext नोट्स सक्षम करें</value>
+  </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>लेक्सिकॉन आयात सक्षम करें</value>
   </data>
@@ -2211,6 +2226,12 @@
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>प्रयोगात्मक</value>
+  </data>
+  <data name="Settings_General" xml:space="preserve">
+    <value>सामान्य</value>
+  </data>
+  <data name="Settings_GeneralSettings" xml:space="preserve">
+    <value>सामान्य सेटिंग्स</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>समूह</value>
@@ -2429,7 +2450,7 @@
     <value>समझ:</value>
   </data>
   <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>उपडोमेन:</value>
+    <value>सबडोमेन:</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>हाँ</value>

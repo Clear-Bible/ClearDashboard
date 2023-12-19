@@ -12,6 +12,7 @@ namespace ClearDashboard.Collaboration.Builder;
 public class TranslationBuilder : GeneralModelBuilder<Models.Translation>
 {
     public const string SOURCE_TOKEN_LOCATION = "SourceTokenLocation";
+    public const string SOURCE_TOKEN_DELETED = "SourceTokenDeleted";
     public const string BOOK_CHAPTER_LOCATION = "Location";
 
     public const string LEXICONTRANSLATION_REF_PREFIX = "LexiconTr";
@@ -22,6 +23,7 @@ public class TranslationBuilder : GeneralModelBuilder<Models.Translation>
         {
             { BuildPropertyRefName(), typeof(string) },
             { SOURCE_TOKEN_LOCATION, typeof(string) },
+            { SOURCE_TOKEN_DELETED, typeof(bool) },
             { BOOK_CHAPTER_LOCATION, typeof(string) },
             { BuildPropertyRefName(LEXICONTRANSLATION_REF_PREFIX), typeof(string) }
         };
@@ -38,7 +40,6 @@ public class TranslationBuilder : GeneralModelBuilder<Models.Translation>
                 .ThenInclude(e => e!.Meaning)
                     .ThenInclude(e => e!.Lexeme)
             .Where(e => e.TranslationSetId == translationSetId)
-            .Where(e => e.Deleted == null)
             .ToList()
             .Select(e => (
                 translation: e,
@@ -68,7 +69,7 @@ public class TranslationBuilder : GeneralModelBuilder<Models.Translation>
 
     public static GeneralModel<Models.Translation> BuildModelSnapshot((Models.Translation translation, Models.Token leadingToken) translation, BuilderContext builderContext)
     {
-        var modelProperties = GeneralModelBuilder<Models.Translation>.ExtractUsingModelRefs(translation.translation, builderContext, new List<string>() { "Id" });
+        var modelProperties = ExtractUsingModelRefs(translation.translation, builderContext, new List<string>() { "Id" });
 
         var lexiconTranslationRefName = BuildPropertyRefName(LEXICONTRANSLATION_REF_PREFIX);
         if (translation.translation.LexiconTranslation is not null)
@@ -101,6 +102,9 @@ public class TranslationBuilder : GeneralModelBuilder<Models.Translation>
 
         modelProperties.Add(SOURCE_TOKEN_LOCATION,
             (typeof(string), ((TokenRef)sourceTokenComponentRef.value!).TokenLocation));
+
+        modelProperties.Add(SOURCE_TOKEN_DELETED,
+            (typeof(bool), ((TokenRef)sourceTokenComponentRef.value!).TokenDeleted));
 
         modelProperties.Add(BOOK_CHAPTER_LOCATION,
             (typeof(string), $"{translation.leadingToken.BookNumber:000}{translation.leadingToken.ChapterNumber:000}"));

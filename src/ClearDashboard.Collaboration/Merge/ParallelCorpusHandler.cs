@@ -33,9 +33,9 @@ public class ParallelCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.P
     {
     }
 
-    public override async Task ModifyListDifferencesAsync(IListDifference<IModelSnapshot<Models.ParallelCorpus>> listDifference, IEnumerable<IModelSnapshot<Models.ParallelCorpus>>? currentSnapshotList, IEnumerable<IModelSnapshot<Models.ParallelCorpus>>? targetCommitSnapshotList, CancellationToken cancellationToken = default)
+    public override async Task ModifyListDifferencesAsync(IListDifference<IModelSnapshot<Models.ParallelCorpus>> listDifference, IEnumerable<IModelSnapshot<Models.ParallelCorpus>>? currentSnapshotList, IEnumerable<IModelSnapshot<Models.ParallelCorpus>>? targetCommitSnapshotList, IEnumerable<IModelSnapshot<Models.ParallelCorpus>>? previousCommitSnapshotList, CancellationToken cancellationToken = default)
     {
-        await base.ModifyListDifferencesAsync(listDifference, currentSnapshotList, targetCommitSnapshotList, cancellationToken);
+        await base.ModifyListDifferencesAsync(listDifference, currentSnapshotList, targetCommitSnapshotList, previousCommitSnapshotList, cancellationToken);
 
         var tokenizedCorpusHandler = (TokenizedCorpusHandler)_mergeContext.FindMergeHandler<IModelSnapshot<Models.TokenizedCorpus>>();
 

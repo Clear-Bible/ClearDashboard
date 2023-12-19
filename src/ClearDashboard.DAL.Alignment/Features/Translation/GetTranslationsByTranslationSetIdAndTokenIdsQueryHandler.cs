@@ -227,11 +227,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     // Query the database for Lexemes that match language AND lemma (to any of the TokenComponents' TrainingText):
                     var lexemeMatches = (await ProjectDbContext.Lexicon_Lexemes
                         .Include(li => li.Meanings
-                            .Where(m => string.IsNullOrEmpty(targetLanguage) || string.IsNullOrEmpty(m.Language) || m.Language == targetLanguage))
+                            .Where(m => string.IsNullOrEmpty(targetLanguage) || string.IsNullOrEmpty(m.Language) || m.Language.StartsWith(targetLanguage)))
                             .ThenInclude(m => m.Translations)
                         .Where(li => li.Lemma != null)
-                        .Where(li => string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(li.Language) || li.Language == sourceLanguage)
-                        .Where(li => li.Meanings.Any(m => m.Translations.Any()))
+                        .Where(li => string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(li.Language) || li.Language.StartsWith(sourceLanguage))
+                        .Where(li => li.Meanings
+                            .Where(m => string.IsNullOrEmpty(targetLanguage) || string.IsNullOrEmpty(m.Language) || m.Language.StartsWith(targetLanguage))
+                            .Any(m => m.Translations.Any()))
                         .Where(li => sourceTokenComponentsByTrainingText.Keys.Contains(li.Lemma!))
                         .ToListAsync(cancellationToken))
                         .Select(li => (TrainingTextMatch: li.Lemma!, LexemeType: li.Type, FirstTranslation: li.Meanings
@@ -251,11 +253,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     var formMatches = (await ProjectDbContext.Lexicon_Forms
                         .Include(lf => lf.Lexeme)
                             .ThenInclude(li => li!.Meanings
-                                .Where(m => string.IsNullOrEmpty(targetLanguage) || string.IsNullOrEmpty(m.Language) || m.Language == targetLanguage))
+                                .Where(m => string.IsNullOrEmpty(targetLanguage) || string.IsNullOrEmpty(m.Language) || m.Language.StartsWith(targetLanguage)))
                                 .ThenInclude(m => m.Translations)
                         .Where(lf => lf.Text != null)
-                        .Where(lf => string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(lf.Lexeme!.Language) || lf.Lexeme!.Language == sourceLanguage)
-                        .Where(lf => lf.Lexeme!.Meanings.Any(m => m.Translations.Any()))
+                        .Where(lf => string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(lf.Lexeme!.Language) || lf.Lexeme!.Language.StartsWith(sourceLanguage))
+                        .Where(lf => lf.Lexeme!.Meanings
+                            .Where(m => string.IsNullOrEmpty(targetLanguage) || string.IsNullOrEmpty(m.Language) || m.Language.StartsWith(targetLanguage))
+                            .Any(m => m.Translations.Any()))
                         .Where(lf => sourceTokenComponentsByTrainingText.Keys.Contains(lf.Text!))
                         .ToListAsync(cancellationToken))
                         .Select(lf => (TrainingTextMatch: lf.Text!, LexemeType: lf.Lexeme!.Type, FirstTranslation: lf.Lexeme!.Meanings

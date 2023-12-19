@@ -12,6 +12,8 @@ using ClearDashboard.Collaboration.Exceptions;
 using ClearDashboard.DataAccessLayer.Data;
 using System.Threading;
 using SIL.Machine.Utils;
+using Microsoft.EntityFrameworkCore;
+using ClearDashboard.Collaboration.Builder;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -104,7 +106,7 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
         }
     }
 
-    public virtual async Task ModifyListDifferencesAsync(IListDifference<T> listDifference, IEnumerable<T>? currentSnapshotList, IEnumerable<T>? targetCommitSnapshotList, CancellationToken cancellationToken = default)
+    public virtual async Task ModifyListDifferencesAsync(IListDifference<T> listDifference, IEnumerable<T>? currentSnapshotList, IEnumerable<T>? targetCommitSnapshotList, IEnumerable<T>? previousCommitSnapshotList, CancellationToken cancellationToken = default)
     {
         if (listDifference.HasListMemberModelDifferences)
         {
@@ -116,6 +118,7 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
                 // never be null:
                 var itemInCurrentSnapshot = currentSnapshotList.FindById<T>(modelDifference.Id!);
                 var itemInTargetCommitSnapshot = targetCommitSnapshotList.FindById<T>(modelDifference.Id!);
+                var itemInPreviousCommitSnapshot = previousCommitSnapshotList.FindById<T>(modelDifference.Id!);
 
                 if (itemInCurrentSnapshot is not null)
                 {
@@ -144,7 +147,7 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
 
                 if (modelDifference.ChildListDifferences.Any())
                 {
-                    await HandleChildListDifferenceAsync(modelDifference.ChildListDifferences, itemInCurrentSnapshot, itemInTargetCommitSnapshot, cancellationToken);
+                    await HandleChildListDifferenceAsync(modelDifference.ChildListDifferences, itemInCurrentSnapshot, itemInTargetCommitSnapshot, itemInPreviousCommitSnapshot, cancellationToken);
                 }
             }
         }
@@ -206,7 +209,7 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
         await Task.CompletedTask;
     }
 
-    public virtual async Task<bool> HandleModifyPropertiesAsync(IModelDifference<T> modelDifference, T itemToModify, CancellationToken cancellationToken = default)
+    public virtual async Task<(bool, Dictionary<string, object?>?)> HandleModifyPropertiesAsync(IModelDifference<T> modelDifference, T itemToModify, CancellationToken cancellationToken = default)
     {
         if (typeof(T).IsAssignableTo(typeof(IModelSnapshot)))
         {
@@ -221,9 +224,9 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
                 //}
 
                 var where = new Dictionary<string, object?>() { { modelSnapshotToModify.IdentityKey, modelSnapshotToModify.GetId() } };
-                await _mergeContext.MergeBehavior.ModifyModelAsync(modelDifference, modelSnapshotToModify, where, cancellationToken);
+                var resolvedWhereClause = await _mergeContext.MergeBehavior.ModifyModelAsync(modelDifference, modelSnapshotToModify, where, cancellationToken);
 
-                return true;
+                return (true, resolvedWhereClause);
             }
         }
         else
@@ -231,19 +234,21 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
             throw new NotImplementedException($"Derived merge handler with '{typeof(T).ShortDisplayName()}' model-specific HandleModifyProperties functionality");
         }
 
-        return false;
+        return (false, null);
     }
 
     protected virtual async Task HandleChildListDifferenceAsync(
         IReadOnlyDictionary<string, IListDifference> childListDifferences,
         T? parentItemInCurrentSnapshot,
         T? parentItemInTargetCommitSnapshot,
+        T? parentItemInPreviousCommitSnapshot,
         CancellationToken cancellationToken)
     {
         foreach (var (childName, listDifference) in childListDifferences)
         {
             IEnumerable<IModelDistinguishable>? childrenInCurrentSnapshot = null;
             IEnumerable<IModelDistinguishable>? childrenInTargetCommitSnapshot = null;
+            IEnumerable<IModelDistinguishable>? childrenInPreviousCommitSnapshot = null;
 
             if (parentItemInCurrentSnapshot is not null && ((IModelSnapshot)parentItemInCurrentSnapshot).Children.ContainsKey(childName))
             {
@@ -255,6 +260,11 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
                 childrenInTargetCommitSnapshot = ((IModelSnapshot)parentItemInTargetCommitSnapshot).Children[childName];
             }
 
+            if (parentItemInPreviousCommitSnapshot is not null && ((IModelSnapshot)parentItemInPreviousCommitSnapshot).Children.ContainsKey(childName))
+            {
+                childrenInPreviousCommitSnapshot = ((IModelSnapshot)parentItemInPreviousCommitSnapshot).Children[childName];
+            }
+
             if (listDifference.GetType().IsAssignableToGenericType(typeof(IListDifference<>)))
             {
                 var handler = _mergeContext.FindMergeHandler(listDifference.GetType().GetGenericArguments()[0]);
@@ -264,7 +274,7 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
                 await createAwaitable;
 
                 MethodInfo modifyMethod = handler.GetType().GetMethod(nameof(DefaultMergeHandler<T>.ModifyListDifferencesAsync))!;
-                dynamic modifyAwaitable = modifyMethod.Invoke(handler, new object?[] { listDifference, childrenInCurrentSnapshot, childrenInTargetCommitSnapshot, cancellationToken })!;
+                dynamic modifyAwaitable = modifyMethod.Invoke(handler, new object?[] { listDifference, childrenInCurrentSnapshot, childrenInTargetCommitSnapshot, childrenInPreviousCommitSnapshot, cancellationToken })!;
                 await modifyAwaitable;
             }
             else
@@ -364,6 +374,7 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
         IListDifference listDifference,
         IEnumerable<IModelDistinguishable>? childrenInCurrentSnapshot,
         IEnumerable<IModelDistinguishable>? childrenInTargetCommitSnapshot,
+        IEnumerable<IModelDistinguishable>? childrenInPreviousCommitSnapshot,
         CancellationToken cancellationToken
         )
     {
@@ -382,13 +393,19 @@ public class DefaultMergeHandler<T> : DefaultMergeHandler where T : IModelSnapsh
             throw new InvalidDifferenceStateException($"Encountered non-IModelSnapshot children in target commit snapshot list!");
         }
 
+        if (childrenInPreviousCommitSnapshot is not null && !childrenInPreviousCommitSnapshot.GetType().IsAssignableTo(typeof(IEnumerable<T>)))
+        {
+            throw new InvalidDifferenceStateException($"Encountered non-IModelSnapshot children in previous commit snapshot list!");
+        }
+
         var difference = (IListDifference<T>)listDifference;
         var currentChildren = (IEnumerable<T>?)childrenInCurrentSnapshot;
         var targetCommitChildren = (IEnumerable<T>?)childrenInTargetCommitSnapshot;
+        var previousCommitChildren = (IEnumerable<T>?)childrenInPreviousCommitSnapshot;
 
         await DeleteListDifferencesAsync(difference, currentChildren, cancellationToken);
         await CreateListDifferencesAsync(difference, currentChildren, cancellationToken);
-        await ModifyListDifferencesAsync(difference, currentChildren, targetCommitChildren, cancellationToken);
+        await ModifyListDifferencesAsync(difference, currentChildren, targetCommitChildren, previousCommitChildren, cancellationToken);
     }
 }
 
@@ -534,24 +551,43 @@ public class DefaultMergeHandler
     }
 
     public static (Type EntityType, string EntityId, string ItemName) TokenizedCorpusEngineTokenIdCacheKey(Guid tokenizedCorpusId) =>
-        (typeof(Models.TokenizedCorpus), tokenizedCorpusId.ToString(), nameof(Models.TokenComponent.EngineTokenId));
+        (typeof(Models.TokenizedCorpus), tokenizedCorpusId.ToString(), nameof(Models.TokenComponent.EngineTokenId) + "_" + nameof(Models.TokenComponent.Deleted));
     public static (Type EntityType, string EntityId, string ItemName) TokenizedCorpusTokenRefCacheKey(Guid tokenizedCorpusId) =>
-        (typeof(Models.TokenizedCorpus), tokenizedCorpusId.ToString(), "Ref");
+        (typeof(Models.TokenizedCorpus), tokenizedCorpusId.ToString(), GeneralModelBuilder.REF);
+    public static (Type EntityType, string EntityId, string ItemName) TokenDeleteChangesCacheKey(string tokenizedCorpusId) =>
+        (typeof(Models.TokenizedCorpus), tokenizedCorpusId.ToString()!, TOKEN_DELETE_CHANGES_CACHE_SET_NAME);
 
-    public static Guid LookupTokenComponent(ProjectDbContext projectDbContext, Guid tokenizedCorpusId, string engineTokenId, MergeCache cache)
+    public const string TOKEN_DELETE_CHANGES_CACHE_SET_NAME = "TokenDeleteChanges";
+
+    public static Guid LookupTokenComponent(ProjectDbContext projectDbContext, Guid tokenizedCorpusId, string engineTokenId, bool deleted, bool ignoreTokenDeleteChanges, MergeCache cache)
     {
-        if (!cache.TryLookupCacheEntry(TokenizedCorpusEngineTokenIdCacheKey(tokenizedCorpusId),
-            engineTokenId, out var id))
+        // IgnoreTokenDeleteChanges
+        //    true:   when looking up a token directly (e.g. AlignmentHandler SourceTokenComponentId resolution)
+        //    false:  when looking up an entity by token reference (e.g. AlignmentHandler Id resolution)
+        //            since the token deleted status may have changed during TokenizedCorpus merge
+        if (!ignoreTokenDeleteChanges && cache.TryLookupCacheEntry(TokenDeleteChangesCacheKey(tokenizedCorpusId.ToString()), engineTokenId, out var deletedDuringTokenMerge))
         {
-            var tokenComponentId = projectDbContext.TokenComponents
+            deleted = (bool)deletedDuringTokenMerge!;
+        }
+
+        if (!cache.TryLookupCacheEntry(TokenizedCorpusEngineTokenIdCacheKey(tokenizedCorpusId),
+            engineTokenId + "_" + deleted.ToString(), out var id))
+        {
+            var queryable = projectDbContext.TokenComponents
                 .Where(e => e.EngineTokenId == engineTokenId!)
-                .Where(e => e.TokenizedCorpusId == tokenizedCorpusId!)
-                .Where(e => e.Deleted == null)
+                .Where(e => e.TokenizedCorpusId == tokenizedCorpusId!);
+
+            if (deleted)
+                queryable = queryable.Where(e => e.Deleted != null);
+            else
+                queryable = queryable.Where(e => e.Deleted == null);
+
+            var tokenComponentId = queryable
                 .Select(e => e.Id)
                 .FirstOrDefault();
 
             if (tokenComponentId == default(Guid)) 
-                throw new InvalidModelStateException($"Invalid EngineTokenId '{engineTokenId}' + TokenizedCorpusId '{tokenizedCorpusId}' - TokenComponentId not found");
+                throw new InvalidModelStateException($"Invalid EngineTokenId '{engineTokenId}' + Deleted {deleted} + TokenizedCorpusId '{tokenizedCorpusId}' - TokenComponentId not found");
             return tokenComponentId;
         }
 
@@ -565,8 +601,7 @@ public class DefaultMergeHandler
              var tokenComponentsByLocationId = projectDbContext.TokenComponents
                 .Where(e => e.TokenizedCorpusId == tokenizedCorpusId)
                 .Where(e => e.EngineTokenId != null)
-                .Where(e => e.Deleted == null)
-                .ToDictionary(e => e.EngineTokenId!, e => e);
+                .ToDictionary(e => e.EngineTokenId! + "_" + (e.Deleted is not null).ToString(), e => e);
 
             var tokenLocationIds = tokenComponentsByLocationId.ToDictionary(e => e.Key, e => (object?)e.Value.Id);
             var tokenLocationTrainingTexts = tokenComponentsByLocationId.ToDictionary(e => e.Key, e => (object?)e.Value.TrainingText);
@@ -576,9 +611,9 @@ public class DefaultMergeHandler
         }
     }
 
-    public static void LoadManualTokenRefsIntoCache(ProjectDbContext projectDbContext, Guid tokenizedCorpusId, MergeCache cache)
+    public static void LoadManualTokenRefsIntoCache(ProjectDbContext projectDbContext, Guid tokenizedCorpusId, MergeCache cache, bool reload = false)
     {
-        if (!cache.ContainsCacheKey(TokenizedCorpusTokenRefCacheKey(tokenizedCorpusId)))
+        if (!cache.ContainsCacheKey(TokenizedCorpusTokenRefCacheKey(tokenizedCorpusId)) || reload)
         {
             var manualTokenIndexes = Builder.TokenBuilder.OrganizeTokensByOriginTokenLocation(
                 projectDbContext.Tokens.Where(e => e.TokenizedCorpusId == tokenizedCorpusId));
@@ -599,7 +634,34 @@ public class DefaultMergeHandler
                 e => (object?)e.Token.Id
                 );
 
-            cache.AddCacheEntrySet(TokenizedCorpusTokenRefCacheKey(tokenizedCorpusId), manualTokenIdsByRef);
+            if (manualTokenIdsByRef.Any())
+                cache.AddCacheEntrySet(TokenizedCorpusTokenRefCacheKey(tokenizedCorpusId), manualTokenIdsByRef);
+        }
+    }
+
+    public static void AddTokenDeleteChangeToCache<E>(IModelDifference<IModelSnapshot<E>> modelDifference, IModelSnapshot<E> itemToModify, MergeCache cache)
+        where E: notnull
+    {
+        if (!typeof(E).IsAssignableTo(typeof(Models.TokenComponent)))
+        {
+            throw new ArgumentException($"Generic argument for '{nameof(AddTokenDeleteChangeToCache)}' only valid if a derivative of '{typeof(Models.TokenComponent).ShortDisplayName()}'");
+        }
+
+        var deletedValueDifference = modelDifference.PropertyValueDifferences
+            .Where(e => e.propertyName == nameof(Models.TokenComponent.Deleted))
+            .FirstOrDefault();
+
+        if (deletedValueDifference != default)
+        {
+            var d1 = deletedValueDifference.propertyValueDifference.Value1AsObject;
+            var d2 = deletedValueDifference.propertyValueDifference.Value2AsObject;
+            if ((d1 is null && d2 is not null) || (d2 is null && d1 is not null))
+            {
+                itemToModify.TryGetGuidPropertyValue(nameof(Models.TokenComponent.TokenizedCorpusId), out var tokenizedCorpusId);
+                itemToModify.TryGetStringPropertyValue(nameof(Models.TokenComponent.EngineTokenId), out var engineTokenId);
+
+                cache.AddCacheEntry(TokenDeleteChangesCacheKey(tokenizedCorpusId.ToString()), engineTokenId, d2 is not null);
+            }
         }
     }
 }

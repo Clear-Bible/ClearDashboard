@@ -128,7 +128,7 @@
     <value>Tên người dùng hợp tác:</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
-    <value>Loading...</value>
+    <value>-Các chi tiết tài khoản hiện tại-</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
     <value>Vô hiệu hóa giấy phép hiện tại</value>
@@ -140,7 +140,7 @@
     <value>Email Paratext:</value>
   </data>
   <data name="AccountInfo_ParatextUsernameLabel" xml:space="preserve">
-    <value>Tên người dùng Paratext:</value>
+    <value>Tên người dùng paratext:</value>
   </data>
   <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
     <value>Khỏi động lại ưng dụng</value>
@@ -467,7 +467,7 @@
     <value>Không chấp thuận</value>
   </data>
   <data name="BulkAlignmentReview_DisapproveSelected" xml:space="preserve">
-    <value>Đã chọn không từ chối</value>
+    <value>Không chấp thuận được chọn</value>
   </data>
   <data name="BulkAlignmentReview_Invalid" xml:space="preserve">
     <value>Không hợp lệ</value>
@@ -923,7 +923,7 @@
     <value>Từ vựng</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
-    <value>Một từ vựng đã tồn tại cho Bổ đề</value>
+    <value>Một từ vựng đã tồn tại cho bổ đề</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Ý nghĩa:</value>
@@ -977,7 +977,7 @@
     <value>Từ vựng</value>
   </data>
   <data name="LexiconEdit_LoadingData" xml:space="preserve">
-    <value>Tải dữ liệu ...</value>
+    <value>Đang tải dữ liệu ...</value>
   </data>
   <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
     <value>Một lỗi bất ngờ xảy ra trong khi tải dữ liệu. {0}</value>
@@ -1448,7 +1448,7 @@
     <value>Xóa nhãn</value>
   </data>
   <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
-    <value>Disleciate Nhãn</value>
+    <value>Disassociate Label</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Tạo</value>
@@ -1607,7 +1607,7 @@
     <value>Tính toán mô hình dịch mới</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Thay đổi mức thu phóng của nội dung</value>
+    <value>Thay đổi mức độ zoom của nội dung</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
     <value>Chuyên gia tư vấn</value>
@@ -1624,6 +1624,9 @@
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
     <value>Xóa căn chỉnh</value>
   </data>
+  <data name="Pds_DeleteParallelLine" xml:space="preserve">
+    <value>Bạn có chắc là bạn muốn xóa căn chỉnh này không? Tất cả các ghi chú, sắp xếp và xen kẽ liên quan đến sự liên kết này sẽ bị xóa và không thể được phục hồi.</value>
+  </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Xóa Interlinear</value>
   </data>
@@ -1632,6 +1635,9 @@
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Từ điển</value>
+  </data>
+  <data name="Pds_DisabledNotice" xml:space="preserve">
+    <value>Bị vô hiệu hóa trong khi các tác vụ nền đang hoạt động</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>Biên tập viên ghi chú bên ngoài</value>
@@ -1685,7 +1691,7 @@
     <value>Nguồn</value>
   </data>
   <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>Language Sourcel</value>
+    <value>Language chua</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
     <value>Tiêu chuẩn</value>
@@ -1706,10 +1712,13 @@
     <value>Phiên âm</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Transitationwithencoder</value>
+    <value>Phiên dịchWithEncoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>không xác định</value>
+  </data>
+  <data name="Pds_UpdateLabelsWithExternalLabels" xml:space="preserve">
+    <value>Cập nhật nhãn có ghi chú bên ngoài</value>
   </data>
   <data name="Pds_Xml" xml:space="preserve">
     <value>XML</value>
@@ -1874,7 +1883,7 @@
     <value>Paratext bản dịch trở lại</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>Kinh thánh Interlinear (LWC)</value>
+    <value>Văn bản mô hình (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
     <value>Paratext đang chạy nhưng không được kết nối.</value>
@@ -2203,6 +2212,12 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Bật chỉnh sửa căn chỉnh</value>
   </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>Bật các ghi chú paratext bên ngoài trong nhóm thử nghiệm</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>Bật ghi chú paratext bên ngoài</value>
+  </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Bật nhập từ Lexicon</value>
   </data>
@@ -2211,6 +2226,12 @@
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Thực nghiệm</value>
+  </data>
+  <data name="Settings_General" xml:space="preserve">
+    <value>Tổng quan</value>
+  </data>
+  <data name="Settings_GeneralSettings" xml:space="preserve">
+    <value>Cài đặt chung</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Nhóm</value>

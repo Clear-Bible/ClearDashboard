@@ -44,7 +44,9 @@ public class TranslationSetHandler : DefaultMergeHandler<IModelSnapshot<Models.T
             },
             cancellationToken);
 
-        _mergeContext.Logger.LogInformation("Starting create Translations");
+//        await base.HandleCreateChildrenAsync(parentSnapshot, cancellationToken);
+// OR:
+
 
         var count = 0;
         var translationsChildName = ProjectSnapshotFactoryCommon.childFolderNameMappings[typeof(Models.Translation)].childName;

@@ -128,7 +128,7 @@
     <value>Nombre de usuario de colaboración:</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
-    <value>Loading...</value>
+    <value>-Talts de la cuenta corriente-</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
     <value>Desactivar la licencia actual</value>
@@ -656,7 +656,7 @@
     <value>Eliminar la alineación de '{0}'?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>Eliminar todas las alineaciones?</value>
+    <value>¿Eliminar todas las alineaciones?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>El token '{0}' tiene múltiples alineaciones definidas. Haga clic en '{1}' eliminará todas las alineaciones.</value>
@@ -872,7 +872,7 @@
     <value>Agregar significado</value>
   </data>
   <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
-    <value>Agregue un significado para este lema</value>
+    <value>Agregar un significado para este lema</value>
   </data>
   <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
     <value>Agregar un dominio semántico</value>
@@ -1624,6 +1624,9 @@
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
     <value>Eliminar la alineación</value>
   </data>
+  <data name="Pds_DeleteParallelLine" xml:space="preserve">
+    <value>¿Estás seguro de que quieres eliminar esta alineación? Todas las notas, alineaciones e interlineal asociados con esta alineación se eliminarán y no se pueden recuperar.</value>
+  </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Eliminar interlineal</value>
   </data>
@@ -1632,6 +1635,9 @@
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Diccionario</value>
+  </data>
+  <data name="Pds_DisabledNotice" xml:space="preserve">
+    <value>Desactivado mientras las tareas de fondo funcionan</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>Editor de notas externos</value>
@@ -1710,6 +1716,9 @@
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Desconocido</value>
+  </data>
+  <data name="Pds_UpdateLabelsWithExternalLabels" xml:space="preserve">
+    <value>Actualizar etiquetas con notas externas</value>
   </data>
   <data name="Pds_Xml" xml:space="preserve">
     <value>Xml</value>
@@ -2054,7 +2063,7 @@
     <value>Joshua</value>
   </data>
   <data name="ProperCase_Jude" xml:space="preserve">
-    <value>Judío</value>
+    <value>Yacuana</value>
   </data>
   <data name="ProperCase_Judges" xml:space="preserve">
     <value>Jueces</value>
@@ -2203,6 +2212,12 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Habilitar la edición de alineación</value>
   </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>Habilitar notas de paratext externas en el grupo experimental</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>Habilitar notas de paratext externas</value>
+  </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Habilitar la importación de léxico</value>
   </data>
@@ -2211,6 +2226,12 @@
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Experimental</value>
+  </data>
+  <data name="Settings_General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="Settings_GeneralSettings" xml:space="preserve">
+    <value>Configuración general</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Grupo</value>
@@ -2273,7 +2294,7 @@
     <value>Validar el código de correo electrónico</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Habilitar visualización de colecciones de texto verso por verso</value>
+    <value>Habilitar visualización de colecciones de texto verso a versiones</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>Cancelar tarea</value>
