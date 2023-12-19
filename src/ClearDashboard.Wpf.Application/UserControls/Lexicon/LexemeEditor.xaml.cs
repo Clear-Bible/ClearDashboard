@@ -510,7 +510,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         {
             RaiseLexemeEvent(LexemeAddedEvent, new LexemeViewModel
             {
-                Lemma = TokenDisplay.TrainingText,
+                Lemma = TokenDisplay.TokenForTranslation.TrainingText,
                 Language = GetSourceLanguage()
             });
             
