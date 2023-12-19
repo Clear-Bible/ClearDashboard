@@ -42,6 +42,6 @@ public enum Tokenizers
     [Description("Zwsp Word")]
     ZwspWordTokenizer,
 
-    [Description("Chinese Word Parser")]
+    [Description("Chinese Word Parser (Beta)")]
     ChineseBibleWordTokenizer,
 }
