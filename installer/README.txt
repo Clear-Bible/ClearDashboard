@@ -22,6 +22,9 @@ Steps 10-12 are necessary to rebuild the Paratext Plugin (since codesign_exe.bat
 		Open up PowerShell
 		cd to the \ClearDashboard\src\ directory
 		run: gci -inc bin,obj -rec | rm -rec -force
+
+ARM64 BUILD - ENSURE THAT THE SIL.Machine and Clear.Engine are set to the Alpha builds
+
 11. Restore Nuget packages
 12. Rebuild the Solution
 
