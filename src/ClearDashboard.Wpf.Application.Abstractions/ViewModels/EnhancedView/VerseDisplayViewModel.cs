@@ -216,32 +216,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     tokenDisplayViewModel.TranslationNoteIds = await NoteManager.GetNoteIdsAsync(tokenDisplayViewModel.Translation.TranslationId);
                 }
 
-                // pad out extra space on the first token depending on the direction of the text
-                if (firstToken && tokenDisplayViewModel.PaddingBefore == "" && IsSourceRtl == false && isSource)
+                // pad out extra space on the first token for the external notes flag
+                if (firstToken && tokenDisplayViewModel.PaddingBefore == "")
                 {
-                    // source is LTR
                     firstToken = false;
                     tokenDisplayViewModel.PaddingBefore = "6";
                 }
-                else if (firstToken && tokenDisplayViewModel.PaddingAfter == "" && IsSourceRtl == true && isSource)
-                {
-                    // source is RTL
-                    firstToken = false;
-                    tokenDisplayViewModel.PaddingAfter = "6";
-                }
-                else if (firstToken && tokenDisplayViewModel.PaddingAfter == "" && IsTargetRtl == true && isSource == false)
-                {
-                    // target is RTL
-                    firstToken = false;
-                    tokenDisplayViewModel.PaddingAfter = "6";
-                }
-                else if (firstToken && tokenDisplayViewModel.PaddingBefore == "" && IsTargetRtl == false && isSource == false)
-                {
-                    // target is LTR
-                    firstToken = false;
-                    tokenDisplayViewModel.PaddingBefore = "6";
-                }
-
 
                 result.Add(tokenDisplayViewModel);
             }
