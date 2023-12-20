@@ -17,6 +17,7 @@ Steps 10-12 are necessary to rebuild the Paratext Plugin (since codesign_exe.bat
 
 
 10. Clean bin and obj files
+	> Powershell batch file CleanBinAndObj.bat in installer directory.
 	> Alternative way:
 		Open up PowerShell
 		cd to the \ClearDashboard\src\ directory

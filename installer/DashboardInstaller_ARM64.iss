@@ -146,7 +146,7 @@ Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\publis
 Source: "..\help_docs\{#MyAppHelpDocsName}"; DestDir: "{app}"; Flags: noencryption
 
 ; Install ResetCurrentUser
-Source: "..\tools\ResetCurrentUser\bin\Release\net7.0-windows\publish\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+;Source: "..\tools\ResetCurrentUser\bin\Release\net7.0-windows\publish\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
@@ -192,7 +192,7 @@ Name: "{autoprograms}\{#MyAppHelpDocsName}"; Filename: "{app}\{#MyAppHelpDocsNam
 Name: "{autodesktop}\{#MyAppHelpDocsName}"; Filename: "{app}\{#MyAppHelpDocsName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\ResetCurrentUser.exe";
+;Filename: "{app}\ResetCurrentUser.exe";
 Filename: "{app}\..\Paratext 9\Paratext.exe"; Description: "{cm:LaunchProgram,{#StringChange("Paratext", '&', '&&')}}"; Flags: runascurrentuser nowait postinstall skipifsilent
 
 [InstallDelete]
