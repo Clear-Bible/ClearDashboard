@@ -42,7 +42,10 @@
                             Width="10"
                             Height="10"
                             Fill="Azure" />
-                        <Path Data="M 0 0 l 5 0" Width="5" Stroke="Red" />
+                        <Path
+                            Width="5"
+                            Data="M 0 0 l 5 0"
+                            Stroke="Red" />
                     </Canvas>
                 </VisualBrush.Visual>
             </VisualBrush>
