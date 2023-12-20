@@ -1634,13 +1634,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private static ITokenizer<string, int, string> InstantiateTokenizer(Tokenizers tokenizerEnum)
         {
+            // look within the SIL.Machine.Tokenization namespace for the tokenizer
             var assemblyTokenizerType = typeof(LatinWordTokenizer);
             var assembly = assemblyTokenizerType.Assembly;
             var tokenizerType = assembly.GetType($"{assemblyTokenizerType.Namespace}.{tokenizerEnum}");
 
             if (tokenizerType is null)
             {
-                throw new ArgumentException($"Tokenizer '{tokenizerEnum}' not a valid class in the '{assemblyTokenizerType.Namespace}' namespace");
+                // look within the Clear.Engine.Tokenization namespace for the tokenizer
+                assemblyTokenizerType = typeof(ChineseBibleWordTokenizer);
+                assembly = assemblyTokenizerType.Assembly;
+                tokenizerType = assembly.GetType($"{assemblyTokenizerType.Namespace}.{tokenizerEnum}");
+
+                if (tokenizerType is null)
+                {
+                    throw new ArgumentException($"Tokenizer '{tokenizerEnum}' not a valid class in the '{assemblyTokenizerType.Namespace}' namespace");
+                }
             }
 
             var tokenizer = (ITokenizer<string, int, string>)Activator.CreateInstance(tokenizerType)!;
