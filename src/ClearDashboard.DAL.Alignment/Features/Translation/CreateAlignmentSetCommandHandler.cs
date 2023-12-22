@@ -38,10 +38,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             CancellationToken cancellationToken)
         {
 #if DEBUG
-            //Stopwatch sw = new Stopwatch();
-            //sw.Start();
-            //Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (start)");
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (start)");
 #endif
+
+            var aligmentList = request.Alignments.ToList();
 
             var sourceTokenIds = request.Alignments.Select(al => al.AlignedTokenPair.SourceToken.TokenId.Id);
             var targetTokenIds = request.Alignments.Select(al => al.AlignedTokenPair.TargetToken.TokenId.Id);
@@ -61,7 +63,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 .FirstOrDefault(c => c.Id == request.ParallelCorpusId.Id);
 
 #if DEBUG
-            //sw.Stop();
+            sw.Stop();
 #endif
 
             if (parallelCorpus == null)
@@ -100,27 +102,27 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             //}
 
 #if DEBUG
-            //Logger.LogInformation($"Elapsed={sw.Elapsed} - Insert AlignmentSet '{request.DisplayName}' and alignments (start) [token counts - source: {sourceTokenIds.Count()}, target: {targetTokenIds.Count()}]");
-            //sw.Restart();
-            //Process proc = Process.GetCurrentProcess();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Insert AlignmentSet '{request.DisplayName}' and alignments (start) [token counts - source: {sourceTokenIds.Count()}, target: {targetTokenIds.Count()}]");
+            sw.Restart();
+            Process proc = Process.GetCurrentProcess();
 
-            //proc.Refresh();
-            //Logger.LogInformation($"Private memory usage (BEFORE BULK INSERT): {proc.PrivateMemorySize64}");
+            proc.Refresh();
+            Logger.LogInformation($"Private memory usage (BEFORE BULK INSERT): {proc.PrivateMemorySize64}");
 #endif
 
             var verificationTypes = new Dictionary<string, ModelVerificationType>();
             var originatedTypes = new Dictionary<string, ModelOriginatedType>();
 
-            //var result = await AlignmentUtil.FillInVerificationAndOriginatedEnums(request.Alignments, verificationTypes, originatedTypes);
+            var result = await AlignmentUtil.FillInVerificationAndOriginatedEnums(request.Alignments, verificationTypes, originatedTypes);
 
-            //if (!result.Success)
-            //{
-            //    return new RequestResult<AlignmentSet>
-            //    (
-            //        success: result.Success,
-            //        message: result.Message
-            //    );
-            //}
+            if (!result.Success)
+            {
+                return new RequestResult<AlignmentSet>
+                (
+                    success: result.Success,
+                    message: result.Message
+                );
+            }
 
             var alignmentSetId = Guid.NewGuid();
             var alignmentSet = new Models.AlignmentSet

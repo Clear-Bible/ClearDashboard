@@ -515,7 +515,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="Clear.SIL.Machine" Version="2.5.19-alpha" />
+    <PackageReference Include="Clear.SIL.Machine" Version="2.5.20-alpha" />
     <PackageReference Include="Dapper" Version="2.0.143" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.3" />

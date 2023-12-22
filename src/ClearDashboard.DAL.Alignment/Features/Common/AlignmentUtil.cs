@@ -198,7 +198,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 
                     if (Enum.TryParse(al.Verification, out AlignmentVerification verificationType))
                     {
-                        //verificationTypes[al.Verification] = verificationType;
+                        verificationTypes[al.Verification] = verificationType;
                     }
                     else
                     {
@@ -211,7 +211,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 
                     if (Enum.TryParse(al.OriginatedFrom, out AlignmentOriginatedFrom originatedType))
                     {
-                        //originatedTypes[al.OriginatedFrom] = originatedType;
+                        originatedTypes[al.OriginatedFrom] = originatedType;
                     }
                     else
                     {
