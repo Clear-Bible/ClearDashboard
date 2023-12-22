@@ -135,7 +135,16 @@ public class ProjectSnapshotFromFilesFactory
                     (IEnumerable<string> entityItems,
                     GeneralModel<Models.Note> modelSnapshot) =>
                     {
-                        AddGeneralModelChild<Models.Note, Models.Note>(entityItems, modelSnapshot, null, cancellationToken);
+                        AddGeneralModelChild<Models.Note, Models.Note>(
+                            entityItems, 
+                            modelSnapshot,
+                            (IEnumerable<string> childEntityItems,
+                             GeneralModel<Models.Note> childModelSnapshot) =>
+                            {
+                                AddGeneralModelChild<Models.Note, NoteModelRef>(childEntityItems, childModelSnapshot, null, cancellationToken);
+                                AddGeneralModelChild<Models.Note, Models.NoteUserSeenAssociation>(childEntityItems, childModelSnapshot, null, cancellationToken);
+                            }, 
+                            cancellationToken);
                         AddGeneralModelChild<Models.Note, NoteModelRef>(entityItems, modelSnapshot, null, cancellationToken);
                         AddGeneralModelChild<Models.Note, Models.NoteUserSeenAssociation>(entityItems, modelSnapshot, null, cancellationToken);
                     },

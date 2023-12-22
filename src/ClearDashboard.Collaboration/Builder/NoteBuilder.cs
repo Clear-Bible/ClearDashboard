@@ -109,8 +109,7 @@ public class NoteBuilder : GeneralModelBuilder<Models.Note>
 
                 if (nusaDbModelsByNoteId.TryGetValue(reply.Id, out var rusas))
                 {
-                    //TODO Chris, fix this, NoteUserSeenAssociations is being added to the snapshot multiple times and causing exceptions
-                    //modelSnapshot.AddChild<IModelSnapshot<Models.NoteUserSeenAssociation>>("NoteUserSeenAssociations", ExtractNoteUserSeenAssociations(rusas, builderContext));
+                    replyModelSnapshot.AddChild<IModelSnapshot<Models.NoteUserSeenAssociation>>("NoteUserSeenAssociations", ExtractNoteUserSeenAssociations(rusas, builderContext));
                 }
 
                 replyModelSnapshots.Add(replyModelSnapshot);
@@ -121,8 +120,7 @@ public class NoteBuilder : GeneralModelBuilder<Models.Note>
 
         if (nusaDbModelsByNoteId.TryGetValue(note.Id, out var nusas))
         {
-            //TODO Chris, fix this, NoteUserSeenAssociations is being added to the snapshot multiple times and causing exceptions
-            //modelSnapshot.AddChild<IModelSnapshot<Models.NoteUserSeenAssociation>>("NoteUserSeenAssociations", ExtractNoteUserSeenAssociations(nusas, builderContext));
+            modelSnapshot.AddChild<IModelSnapshot<Models.NoteUserSeenAssociation>>("NoteUserSeenAssociations", ExtractNoteUserSeenAssociations(nusas, builderContext));
         }
 
         return modelSnapshot;
