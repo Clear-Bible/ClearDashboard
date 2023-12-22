@@ -259,6 +259,8 @@ public class ProjectSnapshotFromGitFactory
             // serializations in older formats that need to be updated:
             var updateMappings = new Dictionary<Type, Dictionary<Guid, Dictionary<string, string>>>();
 
+            GeneralModelBuilder.GetModelBuilder<Models.AlignmentSet>().UpdateModelSnapshotFormat(projectSnapshot, updateMappings);
+            GeneralModelBuilder.GetModelBuilder<Models.TranslationSet>().UpdateModelSnapshotFormat(projectSnapshot, updateMappings);
             GeneralModelBuilder.GetModelBuilder<Models.Label>().UpdateModelSnapshotFormat(projectSnapshot, updateMappings);
             GeneralModelBuilder.GetModelBuilder<Models.Lexicon_Lexeme>().UpdateModelSnapshotFormat(projectSnapshot, updateMappings);
             GeneralModelBuilder.GetModelBuilder<Models.Lexicon_SemanticDomain>().UpdateModelSnapshotFormat(projectSnapshot, updateMappings);

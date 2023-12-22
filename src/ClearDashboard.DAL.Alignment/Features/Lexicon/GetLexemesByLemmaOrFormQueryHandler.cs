@@ -31,12 +31,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 #endif
 
             var lexemesByLemmaOrForms = await ProjectDbContext.Lexicon_Lexemes
-                .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || m.Language!.StartsWith(request.MeaningLanguage)))
+                .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || string.IsNullOrEmpty(m.Language) || m.Language!.StartsWith(request.MeaningLanguage)))
                     .ThenInclude(m => m.User)
-                .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || m.Language!.StartsWith(request.MeaningLanguage)))
+                .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || string.IsNullOrEmpty(m.Language) || m.Language!.StartsWith(request.MeaningLanguage)))
                     .ThenInclude(m => m.Translations)
                         .ThenInclude(t => t.User)
-                .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || m.Language!.StartsWith(request.MeaningLanguage)))
+                .Include(e => e.Meanings.Where(m => string.IsNullOrEmpty(request.MeaningLanguage) || string.IsNullOrEmpty(m.Language) || m.Language!.StartsWith(request.MeaningLanguage)))
                     .ThenInclude(m => m.SemanticDomainMeaningAssociations)
                         .ThenInclude(sda => sda.SemanticDomain)
                             .ThenInclude(sd => sd!.User)
@@ -61,7 +61,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                     l.Language,
                     l.Type,
                     l.Meanings
-                        .Where(s => string.IsNullOrEmpty(request.MeaningLanguage) || s.Language == request.MeaningLanguage)
+                        .Where(s => string.IsNullOrEmpty(request.MeaningLanguage) || string.IsNullOrEmpty(s.Language) || s.Language.StartsWith(request.MeaningLanguage))
                         .Select(s => new Meaning(
                             ModelHelper.BuildMeaningId(s),
                             s.Text!,

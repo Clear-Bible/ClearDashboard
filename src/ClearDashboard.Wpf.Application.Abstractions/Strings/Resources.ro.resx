@@ -2212,6 +2212,12 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Activați editarea alinierii</value>
   </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>Activați note de paratext extern în grupul experimental</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>Activați note de paratext extern</value>
+  </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Activați importul de lexic</value>
   </data>

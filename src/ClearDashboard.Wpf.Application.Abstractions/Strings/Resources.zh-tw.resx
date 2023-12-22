@@ -2212,6 +2212,12 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>啟用對齊編輯</value>
   </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>在實驗組中啟用外部Paratext註釋</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>啟用外部Paratext註釋</value>
+  </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>啟用詞典進口</value>
   </data>

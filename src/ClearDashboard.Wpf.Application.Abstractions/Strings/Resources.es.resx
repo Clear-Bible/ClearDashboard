@@ -2212,6 +2212,12 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Habilitar la edición de alineación</value>
   </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>Habilitar notas de paratext externas en el grupo experimental</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>Habilitar notas de paratext externas</value>
+  </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Habilitar la importación de léxico</value>
   </data>

@@ -54,6 +54,9 @@ public class AlignmentSetHandler : DefaultMergeHandler<IModelSnapshot<Models.Ali
         _mergeContext.Progress.Report(new ProgressStatus(0, "Creating Alignments"));
         _mergeContext.Logger.LogInformation("Starting create Alignments");
 
+//       await base.HandleCreateChildrenAsync(parentSnapshot, cancellationToken);
+// OR:
+
         var count = 0;
         var alignmentsChildName = ProjectSnapshotFactoryCommon.childFolderNameMappings[typeof(Models.Alignment)].childName;
         if (parentSnapshot.Children.ContainsKey(alignmentsChildName))
@@ -64,60 +67,15 @@ public class AlignmentSetHandler : DefaultMergeHandler<IModelSnapshot<Models.Ali
                 var firstAlignment = (IModelSnapshot)firstChild;
                 var handler = _mergeContext.FindMergeHandler<IModelSnapshot<Models.Alignment>>();
 
-                var denormalizationTexts = new HashSet<string>();
-
                 _mergeContext.MergeBehavior.StartInsertModelCommand(firstAlignment);
                 foreach (var child in parentSnapshot.Children[alignmentsChildName])
                 {
                     var id = await _mergeContext.MergeBehavior.RunInsertModelCommand((IModelSnapshot)child, cancellationToken);
 
                     var sourceTokenLocation = (string)child.PropertyValues[AlignmentBuilder.SOURCE_TOKEN_LOCATION]!;
-                    _mergeContext.MergeBehavior.MergeCache.TryLookupCacheEntry(
-                        AlignmentSetCacheKey(alignmentSetId),
-                        nameof(Models.ParallelCorpus.SourceTokenizedCorpusId), 
-                        out var sourceTokenizedCorpusId);
-                    _mergeContext.MergeBehavior.MergeCache.TryLookupCacheEntry(
-                        DenormalizationTrainingTextCacheKey((Guid)sourceTokenizedCorpusId!),
-                        sourceTokenLocation, 
-                        out var trainingText);
-
-                    denormalizationTexts.Add((string)trainingText!);
                     count++;
                 }
                 _mergeContext.MergeBehavior.CompleteInsertModelCommand(firstAlignment.EntityType);
-
-                _mergeContext.Progress.Report(new ProgressStatus(0, "Creating Alignment Denormalization Tasks"));
-
-                // Add denormalization data here so it is part of the surrounding transaction:
-                List<GeneralModel<Models.AlignmentSetDenormalizationTask>> alignmentSetDenormalizationTasks = new();
-                if (denormalizationTexts.Count() <= 10000)
-                {
-                    denormalizationTexts.ToList().ForEach(e =>
-                    {
-                        var t = new GeneralModel<Models.AlignmentSetDenormalizationTask>(nameof(Models.AlignmentSetDenormalizationTask.Id), Guid.NewGuid());
-                        t.Add(nameof(Models.AlignmentSetDenormalizationTask.AlignmentSetId), alignmentSetId);
-                        t.Add(nameof(Models.AlignmentSetDenormalizationTask.SourceText), e);
-
-                        alignmentSetDenormalizationTasks.Add(t);
-                    });
-                }
-                else
-                {
-                    var t = new GeneralModel<Models.AlignmentSetDenormalizationTask>(nameof(Models.AlignmentSetDenormalizationTask.Id), Guid.NewGuid());
-                    t.Add(nameof(Models.AlignmentSetDenormalizationTask.AlignmentSetId), alignmentSetId);
-                    t.Add(nameof(Models.AlignmentSetDenormalizationTask.SourceText), (string?)null);
-
-                    alignmentSetDenormalizationTasks.Add(t);
-                }
-
-                _mergeContext.MergeBehavior.StartInsertModelCommand(alignmentSetDenormalizationTasks.First());
-                foreach (var child in alignmentSetDenormalizationTasks)
-                {
-                    _ = await _mergeContext.MergeBehavior.RunInsertModelCommand((IModelSnapshot)child, cancellationToken);
-                }
-                _mergeContext.MergeBehavior.CompleteInsertModelCommand(typeof(Models.AlignmentSetDenormalizationTask));
-
-                _mergeContext.FireAlignmentDenormalizationEvent = true;
             }
         }
 

@@ -4,6 +4,9 @@ namespace ClearDashboard.Collaboration.Merge;
 
 public class MergeCache
 {
+
+    public List<(Type EntityType, Guid DatabaseId)> IdsToDenormalize = new();
+
     private readonly Dictionary<(Type EntityType, string EntityId, string ItemName), Dictionary<string, object?>> _cache = new();
     //private readonly Dictionary<(Type EntityType, (string key1, string key2)), Dictionary<string, object?>> _cache = new();
 
@@ -38,6 +41,17 @@ public class MergeCache
         }
     }
 
+    public bool TryLookupCacheEntrySet((Type EntityType, string EntityId, string ItemName) key, out Dictionary<string, object?>? value)
+    {
+        if (_cache.TryGetValue(key, out value))
+        {
+            return true;
+        }
+
+        value = null;
+        return false;
+    }
+
     public bool TryLookupCacheEntry((Type EntityType, string EntityId, string ItemName) key, string name, out object? value)
     {
         value = null;
@@ -49,6 +63,14 @@ public class MergeCache
         return false;
     }
 
+    public IEnumerable<string> GetCacheEntrySetEntityIds(Type entityType, string itemName)
+    {
+        return _cache.Keys
+            .Where(e => e.EntityType == entityType)
+            .Where(e => e.ItemName == itemName)
+            .Select(e => e.EntityId);
+    }
+    
     public bool ContainsCacheKey((Type EntityType, string EntityId, string ItemName) key)
     {
         return _cache.ContainsKey(key);

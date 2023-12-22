@@ -65,13 +65,19 @@ public class AlignmentHandler : DefaultMergeHandler<IModelSnapshot<Models.Alignm
                     throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.Alignment>");
                 }
 
-                if (modelSnapshot.PropertyValues.TryGetValue("SourceTokenLocation", out var SourceTokenLocation) &&
+                if (modelSnapshot.PropertyValues.TryGetValue(AlignmentBuilder.SOURCE_TOKEN_LOCATION, out var SourceTokenLocation) &&
                     modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Alignment.AlignmentSetId), out var alignmentSetId))
                 {
-                    var sourceTokenizedCorpusId = LookupSourceTokenizedCorpusId(projectDbContext, (Guid)alignmentSetId!, cache);
-                    var sourceTokenComponentId = LookupTokenComponent(projectDbContext, sourceTokenizedCorpusId, (string)SourceTokenLocation!, cache);
+                    var sourceTokenDeleted = false;
+                    if (modelSnapshot.TryGetPropertyValue(AlignmentBuilder.SOURCE_TOKEN_DELETED, out var std))
+                    {
+                        sourceTokenDeleted = (bool)std!;
+                    }
 
-                    logger.LogDebug($"Converted Alignment having SourceTokenLocation ('{SourceTokenLocation}') / AlignmentSetId ('{alignmentSetId}') to SourceTokenComponentId ('{sourceTokenComponentId}')");
+                    var sourceTokenizedCorpusId = LookupSourceTokenizedCorpusId(projectDbContext, (Guid)alignmentSetId!, cache);
+                    var sourceTokenComponentId = LookupTokenComponent(projectDbContext, sourceTokenizedCorpusId, (string)SourceTokenLocation!, sourceTokenDeleted, true, cache);
+
+                    logger.LogDebug($"Converted Alignment having SourceTokenLocation ('{SourceTokenLocation}') / SourceTokenDeleted ({sourceTokenDeleted}) / AlignmentSetId ('{alignmentSetId}') to SourceTokenComponentId ('{sourceTokenComponentId}')");
 
                     await Task.CompletedTask;
                     return sourceTokenComponentId;
@@ -91,13 +97,19 @@ public class AlignmentHandler : DefaultMergeHandler<IModelSnapshot<Models.Alignm
                     throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.Alignment>");
                 }
 
-                if (modelSnapshot.PropertyValues.TryGetValue("TargetTokenLocation", out var TargetTokenLocation) &&
+                if (modelSnapshot.PropertyValues.TryGetValue(AlignmentBuilder.TARGET_TOKEN_LOCATION, out var TargetTokenLocation) &&
                     modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Alignment.AlignmentSetId), out var alignmentSetId))
                 {
-                    var targetTokenizedCorpusId = LookupTargetTokenizedCorpusId(projectDbContext, (Guid)alignmentSetId!, cache);
-                    var targetTokenComponentId = LookupTokenComponent(projectDbContext, targetTokenizedCorpusId, (string)TargetTokenLocation!, cache);
+                    var targetTokenDeleted = false;
+                    if (modelSnapshot.TryGetPropertyValue(AlignmentBuilder.TARGET_TOKEN_DELETED, out var ttd))
+                    {
+                        targetTokenDeleted = (bool)ttd!;
+                    }
 
-                    logger.LogDebug($"Converted Alignment having TargetTokenLocation ('{TargetTokenLocation}') / AlignmentSetId ('{alignmentSetId}') to TargetTokenComponentId ('{targetTokenComponentId}')");
+                    var targetTokenizedCorpusId = LookupTargetTokenizedCorpusId(projectDbContext, (Guid)alignmentSetId!, cache);
+                    var targetTokenComponentId = LookupTokenComponent(projectDbContext, targetTokenizedCorpusId, (string)TargetTokenLocation!, targetTokenDeleted, true, cache);
+
+                    logger.LogDebug($"Converted Alignment having TargetTokenLocation ('{TargetTokenLocation}') / TargetTokenDeleted ({targetTokenDeleted}) / AlignmentSetId ('{alignmentSetId}') to TargetTokenComponentId ('{targetTokenComponentId}')");
 
                     await Task.CompletedTask;
                     return targetTokenComponentId;
@@ -117,14 +129,25 @@ public class AlignmentHandler : DefaultMergeHandler<IModelSnapshot<Models.Alignm
                     throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.Alignment>");
                 }
 
-                if (modelSnapshot.PropertyValues.TryGetValue("AlignmentSetId", out var alignmentSetId) &&
-                    modelSnapshot.PropertyValues.TryGetValue("SourceTokenLocation", out var SourceTokenLocation) &&
-                    modelSnapshot.PropertyValues.TryGetValue("TargetTokenLocation", out var TargetTokenLocation))
+                if (modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Alignment.AlignmentSetId), out var alignmentSetId) &&
+                    modelSnapshot.PropertyValues.TryGetValue(AlignmentBuilder.SOURCE_TOKEN_LOCATION, out var SourceTokenLocation) &&
+                    modelSnapshot.PropertyValues.TryGetValue(AlignmentBuilder.TARGET_TOKEN_LOCATION, out var TargetTokenLocation))
                 {
+                    var sourceTokenDeleted = false;
+                    if (modelSnapshot.TryGetPropertyValue(AlignmentBuilder.SOURCE_TOKEN_DELETED, out var std))
+                    {
+                        sourceTokenDeleted = (bool)std!;
+                    }
+                    var targetTokenDeleted = false;
+                    if (modelSnapshot.TryGetPropertyValue(AlignmentBuilder.TARGET_TOKEN_DELETED, out var ttd))
+                    {
+                        targetTokenDeleted = (bool)ttd!;
+                    }
+
                     var sourceTokenizedCorpusId = LookupSourceTokenizedCorpusId(projectDbContext, (Guid)alignmentSetId!, cache);
-                    var sourceTokenComponentId = LookupTokenComponent(projectDbContext, sourceTokenizedCorpusId, (string)SourceTokenLocation!, cache);
+                    var sourceTokenComponentId = LookupTokenComponent(projectDbContext, sourceTokenizedCorpusId, (string)SourceTokenLocation!, sourceTokenDeleted, false, cache);
                     var targetTokenizedCorpusId = LookupTargetTokenizedCorpusId(projectDbContext, (Guid)alignmentSetId!, cache);
-                    var targetTokenComponentId = LookupTokenComponent(projectDbContext, targetTokenizedCorpusId, (string)TargetTokenLocation!, cache);
+                    var targetTokenComponentId = LookupTokenComponent(projectDbContext, targetTokenizedCorpusId, (string)TargetTokenLocation!, targetTokenDeleted, false, cache);
 
                     var alignmentId = await projectDbContext.Alignments
                         .Where(e => e.AlignmentSetId == (Guid)alignmentSetId!)
@@ -134,9 +157,9 @@ public class AlignmentHandler : DefaultMergeHandler<IModelSnapshot<Models.Alignm
                         .FirstOrDefaultAsync();
 
                     if (alignmentId == default)
-                        throw new PropertyResolutionException($"AlignmentSetId '{alignmentSetId}' and SourceTokenComponentId '{sourceTokenComponentId}' cannot be resolved to a Alignment");
+                        throw new PropertyResolutionException($"AlignmentSetId '{alignmentSetId}', SourceTokenComponentId '{sourceTokenComponentId}' and TargetTokenComponentId '{targetTokenComponentId}' cannot be resolved to a Alignment");
 
-                    logger.LogDebug($"Resolved AlignmentSetId ('{alignmentSetId}') / SourceTokenComponentId ('{sourceTokenComponentId}') to Id ('{alignmentId}')");
+                    logger.LogDebug($"Resolved AlignmentSetId ('{alignmentSetId}') / SourceTokenComponentId ('{sourceTokenComponentId}') / SourceTokenDeleted ({sourceTokenDeleted}) / TargetTokenLocation ('{TargetTokenLocation}') / TargetTokenDeleted ({targetTokenDeleted}) to Id ('{alignmentId}')");
                     return alignmentId;
                 }
                 else
@@ -146,11 +169,11 @@ public class AlignmentHandler : DefaultMergeHandler<IModelSnapshot<Models.Alignm
             });
 
         mergeContext.MergeBehavior.AddIdPropertyNameMapping(
-            (typeof(Models.Alignment), "Ref"),
+            (typeof(Models.Alignment), AlignmentBuilder.REF),
             new[] { nameof(Models.Alignment.Id) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.Alignment), "Ref"),
+            (typeof(Models.Alignment), AlignmentBuilder.REF),
             new[] { nameof(Models.Alignment.Id) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
@@ -166,6 +189,27 @@ public class AlignmentHandler : DefaultMergeHandler<IModelSnapshot<Models.Alignm
         mergeContext.MergeBehavior.AddPropertyNameMapping(
             (typeof(Models.Alignment), AlignmentBuilder.BOOK_CHAPTER_LOCATION),
             Enumerable.Empty<string>());
+
+        // MergeBehaviorBase.CreateModelSnapshotUpdateCommand,
+        // MergeBehaviorBase.ApplyPropertyValueDifferencesToCommand and
+        // MergeBehaviorBase.ApplyPropertyModelDifferencesToCommand are now
+        // coded to allow multiple property names to be mapped to a single
+        // entity property name (see MergeBehaviorBase._propertyNameMap) and
+        // only update that entity property value a single time.  These 
+        // property name mappings are only used when modifying an entity.
+        // So per the two new 'add' statements below, now changes to either
+        // SOURCE_TOKEN_LOCATION/TARGET_TOKEN_LOCATION (above) or
+        // SOURCE_TOKEN_DELETED/TARGET_TOKEN_DELETED (below) will trigger
+        // an update to SourceTokenComponentId/TargetTokenComponentId, 
+        // respectively.  
+
+        mergeContext.MergeBehavior.AddPropertyNameMapping(
+            (typeof(Models.Alignment), AlignmentBuilder.SOURCE_TOKEN_DELETED),
+            new[] { nameof(Models.Alignment.SourceTokenComponentId) });
+
+        mergeContext.MergeBehavior.AddPropertyNameMapping(
+            (typeof(Models.Alignment), AlignmentBuilder.TARGET_TOKEN_DELETED),
+            new[] { nameof(Models.Alignment.TargetTokenComponentId) });
     }
 }
 

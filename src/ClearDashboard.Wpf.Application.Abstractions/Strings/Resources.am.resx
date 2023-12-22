@@ -2212,6 +2212,12 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>የምደባ አርት editing ትን አንቃ</value>
   </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>በሙከራ ቡድኑ ውስጥ ውጫዊ የጥላቻ ማስታወሻዎችን አንቃ</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>ውጫዊ ትግበራ ማስታወሻዎችን ያንቁ</value>
+  </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Lexicon ማስመጣትን አንቃ</value>
   </data>

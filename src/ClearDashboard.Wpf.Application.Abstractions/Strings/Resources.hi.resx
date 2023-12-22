@@ -1142,7 +1142,7 @@
     <value>कॉरपस टोकन</value>
   </data>
   <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>चापलूसी</value>
+    <value>चकरानेवाला</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>देखना</value>
@@ -2212,6 +2212,12 @@
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>संरेखण संपादन सक्षम करें</value>
   </data>
+  <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
+    <value>प्रयोगात्मक समूह में बाहरी paratext नोट्स सक्षम करें</value>
+  </data>
+  <data name="Settings_EnableExternalNotes" xml:space="preserve">
+    <value>बाहरी paratext नोट्स सक्षम करें</value>
+  </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>लेक्सिकॉन आयात सक्षम करें</value>
   </data>
@@ -2423,7 +2429,7 @@
     <value>कॉरपस टोकन</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
-    <value>चापलूसी</value>
+    <value>चकरानेवाला</value>
   </data>
   <data name="Windows_EnhancedView" xml:space="preserve">
     <value>देखना</value>
