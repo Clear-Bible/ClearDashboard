@@ -4,7 +4,7 @@
     <RootNamespace>ClearDashboard.DataAccessLayer</RootNamespace>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Nullable>enable</Nullable>
-    <Platforms>AnyCPU</Platforms>
+    <Platforms>AnyCPU;ARM64</Platforms>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Version>1.3.0.7</Version>
     <PackageProjectUrl>https://github.com/Clear-Bible/ClearDashboard</PackageProjectUrl>
@@ -528,6 +528,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.9" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
     <PackageReference Include="TinyMapper" Version="3.0.3" />
     <PackageReference Include="Unidecode.NET" Version="2.1.0" />

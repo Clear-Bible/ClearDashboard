@@ -4,7 +4,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <RootNamespace>ClearDashboard.Wpf.Application</RootNamespace>
-    <Platforms>AnyCPU</Platforms>
+    <Platforms>AnyCPU;ARM64</Platforms>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Clear Dashboard Application Abstractions</Title>
     <PackageProjectUrl>https://github.com/Clear-Bible/ClearDashboard</PackageProjectUrl>

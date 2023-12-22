@@ -4,7 +4,7 @@
     <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>AnyCPU;x64;ARM64</Platforms>
     <ApplicationIcon>Assets\ClearDashboard_Icon.ico</ApplicationIcon>
     <Copyright>Clear Bible, 2023</Copyright>
     <AssemblyVersion>1.3.0.7</AssemblyVersion>
@@ -15,6 +15,8 @@
     <Configurations>Debug;Release;Collab_Release;Collab_Debug</Configurations>
 
 	  <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+
+	  <PlatformTarget>ARM64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Interfaces\**" />
@@ -527,7 +529,15 @@
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
     <DebugType>embedded</DebugType>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Debug|ARM64'">
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
     <DebugType>embedded</DebugType>
   </PropertyGroup>
@@ -535,7 +545,15 @@
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
     <DebugType>embedded</DebugType>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Release|ARM64'">
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
     <DebugType>embedded</DebugType>
   </PropertyGroup>

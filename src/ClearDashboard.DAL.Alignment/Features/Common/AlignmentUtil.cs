@@ -12,6 +12,7 @@ using static ClearDashboard.DAL.Alignment.Features.Corpora.UpdateOrAddVersesInTo
 using Models = ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models;
 using SIL.Machine.SequenceAlignment;
+using System.Diagnostics;
 
 namespace ClearDashboard.DAL.Alignment.Features.Common
 {
@@ -182,33 +183,53 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
         {
             //var verificationTypes = new Dictionary<string, AlignmentVerification>();
             //var originatedTypes = new Dictionary<string, AlignmentOriginatedFrom>();
-            foreach (var al in request)
+            try
             {
-                if (Enum.TryParse(al.Verification, out AlignmentVerification verificationType))
+                int i = 0;
+                foreach (var al in request)
                 {
-                    verificationTypes[al.Verification] = verificationType;
-                }
-                else
-                {
-                    return new RequestResult<IEnumerable<Alignment.Translation.Alignment>>
-                    (
-                        success: false,
-                        message: $"Invalid alignment verification type '{al.Verification}' found in request"
-                    );
-                }
+                    Debug.WriteLine(i++ + ": " + al.AlignedTokenPair.SourceToken + " --> " +al.AlignedTokenPair.TargetToken);
 
-                if (Enum.TryParse(al.OriginatedFrom, out AlignmentOriginatedFrom originatedType))
-                {
-                    originatedTypes[al.OriginatedFrom] = originatedType;
+
+                    if (i == 9523)
+                    {
+                        Debug.WriteLine(al.AlignedTokenPair.SourceToken + " --> " + al.AlignedTokenPair.TargetToken);
+                    }
+
+                    if (Enum.TryParse(al.Verification, out AlignmentVerification verificationType))
+                    {
+                        //verificationTypes[al.Verification] = verificationType;
+                    }
+                    else
+                    {
+                        return new RequestResult<IEnumerable<Alignment.Translation.Alignment>>
+                        (
+                            success: false,
+                            message: $"Invalid alignment verification type '{al.Verification}' found in request"
+                        );
+                    }
+
+                    if (Enum.TryParse(al.OriginatedFrom, out AlignmentOriginatedFrom originatedType))
+                    {
+                        //originatedTypes[al.OriginatedFrom] = originatedType;
+                    }
+                    else
+                    {
+                        return new RequestResult<IEnumerable<Alignment.Translation.Alignment>>
+                        (
+                            success: false,
+                            message: $"Invalid alignment originated from type '{al.OriginatedFrom}' found in request"
+                        );
+                    }
                 }
-                else
-                {
-                    return new RequestResult<IEnumerable<Alignment.Translation.Alignment>>
-                    (
-                        success: false,
-                        message: $"Invalid alignment originated from type '{al.OriginatedFrom}' found in request"
-                    );
-                }
+            }
+            catch(AggregateException e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
             }
 
             return new RequestResult<IEnumerable<Alignment.Translation.Alignment>>

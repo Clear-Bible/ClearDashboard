@@ -5,6 +5,7 @@ using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Translation;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
+using SIL.Reporting;
 
 namespace ClearDashboard.DAL.Alignment.Translation
 {
@@ -30,7 +31,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 ParallelCorpusId parallelCorpusId, 
                 IMediator mediator,
                 CancellationToken token = default)
-        {
+        {            
             return await AlignmentSet.Create(alignTokenPairs, displayName, smtModel, isSyntaxTreeAlignerRefined, isSymmetrized, metadata, parallelCorpusId, mediator, token);
         }
 

@@ -527,6 +527,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
                 if (ProjectType == ParallelProjectType.WholeProcess)
                 {
+                    Logger.LogInformation("Entering in AlignedTokenPairs.Create");
                     AlignmentSet = await AlignedTokenPairs.Create(displayName: alignmentSetDisplayName, 
                         smtModel: SelectedSmtAlgorithm.SmtName,
                         isSyntaxTreeAlignerRefined: false, 
@@ -535,11 +536,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                         parallelCorpusId:  ParallelTokenizedCorpus.ParallelCorpusId, 
                         Mediator, 
                         cancellationToken);
+                    Logger.LogInformation("Completed in AlignedTokenPairs.Create");
 
                 }
                 else
                 {
                     // alignment only
+                    Logger.LogInformation("Entering in AlignedTokenPairs.Create");
                     var parallelCorpus = ParallelTextCorpus as ParallelCorpus;
                     AlignmentSet = await AlignedTokenPairs.Create(displayName: alignmentSetDisplayName,
                         smtModel: SelectedSmtAlgorithm.SmtName,
@@ -549,6 +552,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                         parallelCorpusId: parallelCorpus!.ParallelCorpusId, 
                         Mediator, 
                         cancellationToken);
+                    Logger.LogInformation("Completed in AlignedTokenPairs.Create");
                 }
 
                 await SendBackgroundStatus(taskName,
