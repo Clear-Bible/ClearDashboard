@@ -93,7 +93,15 @@ public class ProjectSnapshotFilesFactory
             (string parentPath,
             GeneralModel<Models.Note> modelSnapshot) =>
             {
-                SaveGeneralModelChild<Models.Note, Models.Note>(parentPath, modelSnapshot, null, cancellationToken);
+                SaveGeneralModelChild<Models.Note, Models.Note>(
+                    parentPath, 
+                    modelSnapshot,
+                    (string parentPath, GeneralModel<Models.Note> childModelSnapshot) =>
+                    {
+                        SaveGeneralModelChild<Models.Note, NoteModelRef>(parentPath, childModelSnapshot, null, cancellationToken);
+                        SaveGeneralModelChild<Models.Note, Models.NoteUserSeenAssociation>(parentPath, childModelSnapshot, null, cancellationToken);
+                    },
+                    cancellationToken);
                 SaveGeneralModelChild<Models.Note, NoteModelRef>(parentPath, modelSnapshot, null, cancellationToken);
                 SaveGeneralModelChild<Models.Note, Models.NoteUserSeenAssociation>(parentPath, modelSnapshot, null, cancellationToken);
             },

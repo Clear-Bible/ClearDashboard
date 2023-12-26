@@ -161,7 +161,20 @@ public class ProjectSnapshotFromGitFactory
                         Repository repo,
                         string commitSha) =>
                         {
-                            AddGeneralModelChild<Models.Note, Models.Note>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
+                            AddGeneralModelChild<Models.Note, Models.Note>(
+                                entityItems, 
+                                modelSnapshot, 
+                                repo, 
+                                commitSha,
+                                (IEnumerable<TreeEntry> childEntityItems,
+                                GeneralModel<Models.Note> childModelSnapshot,
+                                Repository repo,
+                                string commitSha) =>
+                                {
+                                    AddGeneralModelChild<Models.Note, NoteModelRef>(childEntityItems, childModelSnapshot, repo, commitSha, null, cancellationToken);
+                                    AddGeneralModelChild<Models.Note, Models.NoteUserSeenAssociation>(childEntityItems, childModelSnapshot, repo, commitSha, null, cancellationToken);
+                                },
+                                cancellationToken);
                             AddGeneralModelChild<Models.Note, NoteModelRef>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
                             AddGeneralModelChild<Models.Note, Models.NoteUserSeenAssociation>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
                         },

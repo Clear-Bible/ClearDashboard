@@ -484,12 +484,22 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             var testNoteId4 = Guid.NewGuid();
             var testNoteId5 = Guid.NewGuid();
 
+            var testNoteId4Reply1 = Guid.NewGuid();
+
             _fixture.Notes.Add(CollaborationProjectFixture.BuildTestNote(testNoteId1, "boo boo", Models.NoteStatus.Open, testUser.Id));
             _fixture.Notes.Add(CollaborationProjectFixture.BuildTestNote(testNoteId2, "boo boo two", Models.NoteStatus.Resolved, testUser.Id));
             _fixture.Notes.Add(CollaborationProjectFixture.BuildTestNote(testNoteId3, "boo boo three", Models.NoteStatus.Open, testUser.Id));
-            _fixture.Notes.Add(CollaborationProjectFixture.BuildTestNote(testNoteId4, "boo boo four", Models.NoteStatus.Open, testUser.Id));
+
+            var testNote4 = CollaborationProjectFixture.BuildTestNote(testNoteId4, "boo boo four", Models.NoteStatus.Open, testUser.Id);
+            var testNote4Reply1 = CollaborationProjectFixture.BuildTestNote(testNoteId4Reply1, "boo boo four reply 1", Models.NoteStatus.Open, testUser.Id);
+            testNote4.ThreadId = testNoteId4;
+            testNote4Reply1.ThreadId = testNoteId4;
+            _fixture.Notes.Add(testNote4);
+            _fixture.Notes.Add(testNote4Reply1);
+
             _fixture.Notes.Add(CollaborationProjectFixture.BuildTestNote(testNoteId5, "boo boo five", Models.NoteStatus.Open, testUser.Id));
 
+            
             _fixture.NoteAssociations.Add(CollaborationProjectFixture.BuildTestNoteTokenAssociation(testNoteId1, testTokenizedCorpus.Id, "001001001001001", builderContext));
             _fixture.NoteAssociations.Add(CollaborationProjectFixture.BuildTestNoteTokenAssociation(testNoteId1, testTokenizedCorpus.Id, "001001001002001", builderContext));
             _fixture.NoteAssociations.Add(CollaborationProjectFixture.BuildTestNoteTokenAssociation(testNoteId2, testTokenizedCorpus.Id, "001001001005001-001001001006001-001001001008001", builderContext));
@@ -497,6 +507,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             _fixture.NoteAssociations.Add(CollaborationProjectFixture.BuildTestNoteTokenAssociation(testNoteId3, testTokenizedCorpus.Id, "001001001004001", builderContext));
 
             _fixture.NoteUserSeenAssociations.Add(CollaborationProjectFixture.BuildTestNoteUserSeenAssociation(testNoteId4, _fixture.Users.First().Id, builderContext));
+            _fixture.NoteUserSeenAssociations.Add(CollaborationProjectFixture.BuildTestNoteUserSeenAssociation(testNoteId4Reply1, _fixture.Users.First().Id, builderContext));
             foreach (var user in _fixture.Users)
             {
                 _fixture.NoteUserSeenAssociations.Add(CollaborationProjectFixture.BuildTestNoteUserSeenAssociation(testNoteId5, user.Id, builderContext));
@@ -506,9 +517,14 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(5, _fixture.ProjectDbContext.Notes.Count());
+            Assert.Equal(6, _fixture.ProjectDbContext.Notes.Count());
             Assert.Equal(5, _fixture.ProjectDbContext.NoteDomainEntityAssociations.Count());
-            Assert.Equal(1 + _fixture.Users.Count(), _fixture.ProjectDbContext.NoteUserSeenAssociations.Count());
+            Assert.Equal(1 + 1 + _fixture.Users.Count, _fixture.ProjectDbContext.NoteUserSeenAssociations.Count());
+
+            var testNote4Thread = _fixture.ProjectDbContext.Notes.Include(e => e.NoteUserSeenAssociations).Where(e => e.ThreadId == testNoteId4).ToList();
+            Assert.Equal(2, testNote4Thread.Count);
+            Assert.True(testNote4Thread.All(e => e.NoteUserSeenAssociations.Count() == 1));
+            Assert.True(testNote4Thread.All(e => e.NoteUserSeenAssociations.First().UserId == _fixture.Users.First().Id));
 
             var testNote1TokenIds = _fixture.ProjectDbContext.NoteDomainEntityAssociations
                 .Where(e => e.NoteId == testNoteId1)
@@ -639,7 +655,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(5, _fixture.ProjectDbContext.Notes.Count());
+            Assert.Equal(6, _fixture.ProjectDbContext.Notes.Count());
             Assert.Equal(4, _fixture.ProjectDbContext.NoteDomainEntityAssociations.Count());
             Assert.Null(_fixture.ProjectDbContext.NoteDomainEntityAssociations.Where(e => e.Id == testNote3AssociationToRemove.Item1.Id).FirstOrDefault());
 
@@ -651,7 +667,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(4, _fixture.ProjectDbContext.Notes.Count());
+            Assert.Equal(5, _fixture.ProjectDbContext.Notes.Count());
             Assert.Equal(3, _fixture.ProjectDbContext.NoteDomainEntityAssociations.Count());
             Assert.Null(_fixture.ProjectDbContext.Notes.Where(e => e.Id == testNote3.Id).FirstOrDefault());
 
@@ -674,7 +690,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(3, _fixture.ProjectDbContext.Notes.Count());
+            Assert.Equal(4, _fixture.ProjectDbContext.Notes.Count());
             Assert.Equal(2, _fixture.ProjectDbContext.NoteDomainEntityAssociations.Count());
             Assert.Null(_fixture.ProjectDbContext.Notes.Where(e => e.Id == testNote2.Id).FirstOrDefault());
 
@@ -695,7 +711,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(3, _fixture.ProjectDbContext.Notes.Count());
+            Assert.Equal(4, _fixture.ProjectDbContext.Notes.Count());
             Assert.Equal(newNoteText, _fixture.ProjectDbContext.Notes.First().Text);
         }
 
