@@ -61,6 +61,7 @@ public class ProjectSnapshotFilesFactory
             {
                 SaveGeneralModelChild<Models.TokenizedCorpus, Models.Token>(parentPath, modelSnapshot, null, cancellationToken);
                 SaveGeneralModelChild<Models.TokenizedCorpus, Models.TokenComposite>(parentPath, modelSnapshot, null, cancellationToken);
+                SaveGeneralModelChild<Models.TokenizedCorpus, TokenizedTokenGroup>(parentPath, modelSnapshot, null, cancellationToken);
                 SaveGeneralModelChild<Models.TokenizedCorpus, Models.VerseRow>(parentPath, modelSnapshot, null, cancellationToken);
             },
             cancellationToken);
@@ -225,6 +226,14 @@ public class ProjectSnapshotFilesFactory
                 if (childModelShapshots is not null && childModelShapshots.Any())
                 {
                     TranslationBuilder.SaveTranslations(modelSnapshot, childModelShapshots, childPath, _jsonSerializerOptions, cancellationToken);
+                }
+            }
+            else if (typeof(C).IsAssignableTo(typeof(TokenizedTokenGroup)))
+            {
+                var childModelShapshots = (GeneralListModel<GeneralModel<Models.Token>>?)children;
+                if (childModelShapshots is not null && childModelShapshots.Any())
+                {
+                    TokenBuilder.SaveTokenizedTokens(modelSnapshot, childModelShapshots, childPath, _jsonSerializerOptions, cancellationToken);
                 }
             }
             else if (children!.GetType().IsAssignableTo(typeof(IEnumerable<GeneralModel<C>>)))

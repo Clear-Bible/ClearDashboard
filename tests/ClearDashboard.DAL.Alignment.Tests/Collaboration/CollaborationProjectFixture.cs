@@ -94,10 +94,12 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             null));
         }
 
-        public ProjectSnapshot ToProjectSnapshot()
+        public ProjectSnapshot ToProjectSnapshot(bool includeTokenizedTokens = false)
         {
             var testProject = ProjectDbContext.Projects.First();
+
             var builderContext = new BuilderContext(ProjectDbContext);
+            builderContext.IncludeTokenizedTokens = includeTokenizedTokens;
 
             var projectSnapshot = new ProjectSnapshot(ProjectBuilder.BuildModelSnapshot(testProject));
             projectSnapshot.AddGeneralModelList(ToUserBuilder(Users).BuildModelSnapshots(builderContext));
@@ -748,6 +750,12 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                             .Where(e => e.TokenizedCorpusId == tokenizedCorpusId),
                             engineTokenIds
                         );
+                    },
+                    GetTokenizedCorpusTokenizedTokens = (projectDbContext, tokenizedCorpusId) =>
+                    {
+                        return tokens
+                            .Where(e => e.TokenizedCorpusId == tokenizedCorpusId)
+                            .Where(e => e.Deleted == null);
                     }
                 }
             };

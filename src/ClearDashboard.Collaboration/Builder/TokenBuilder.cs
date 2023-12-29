@@ -5,12 +5,15 @@ using ClearDashboard.DataAccessLayer.Data;
 using SIL.Extensions;
 using System.Linq;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Collaboration.Factory;
+using System.Text.Json;
 
 namespace ClearDashboard.Collaboration.Builder;
 
 public class TokenBuilder : GeneralModelBuilder<Models.Token>
 {
     public const string VERSE_ROW_LOCATION = "VerseRowLocation";
+    public const string BOOK_LOCATION = "BookLocation";
 
     public override string IdentityKey => BuildPropertyRefName();
 
@@ -95,6 +98,16 @@ public class TokenBuilder : GeneralModelBuilder<Models.Token>
                 );
             };
 
+    public Func<ProjectDbContext, Guid, IEnumerable<Models.Token>> GetTokenizedCorpusTokenizedTokens =
+        (projectDbContext, tokenizedCorpusId) =>
+        {
+            return projectDbContext.Tokens
+                .AsNoTrackingWithIdentityResolution()
+                .Include(e => e.VerseRow)
+                .Where(e => e.TokenizedCorpusId == tokenizedCorpusId)
+                .Where(e => e.Deleted == null);
+        };
+
     public static GeneralModel<Models.Token> BuildModelSnapshot((Models.Token Token, int? Index) tokenOriginTokenLocationIndex, BuilderContext builderContext)
     {
         var modelProperties = ExtractUsingModelRefs(
@@ -149,5 +162,43 @@ public class TokenBuilder : GeneralModelBuilder<Models.Token>
     public static string BuildTokenLocation(Models.Token token)
     {
         return $"{token.BookNumber:000}{token.ChapterNumber:000}{token.VerseNumber:000}{token.WordNumber:000}{token.SubwordNumber:000}";
+    }
+
+    public static void SaveTokenizedTokens(
+        GeneralModel tokenizedCorpus,
+        GeneralListModel<GeneralModel<Models.Token>> tokenSnapshots, 
+        string childPath, 
+        JsonSerializerOptions options, 
+        CancellationToken cancellationToken)
+    {
+        var tokensByBook = tokenSnapshots
+            .GroupBy(e => ((int)e[nameof(Models.Token.BookNumber)]!))
+            .ToDictionary(g => g.Key, g => g
+                .Select(e => e)
+                .OrderBy(e => (string)e[nameof(Models.Token.EngineTokenId)]!)
+                .ToGeneralListModel())
+            .OrderBy(kvp => kvp.Key);
+
+        foreach (var tokensForBook in tokensByBook)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            // Instead of the more general GeneralModelJsonConverter, this will use the
+            // more specific TokenizedTokenGroupJsonConverter:
+            var tokenizedTokenGroup = new TokenizedTokenGroup()
+            {
+                TokenizedCorpusId = (Guid)tokenizedCorpus.GetId(),
+                BookLocation = $"{tokensForBook.Key:000}",
+                Items = tokensForBook.Value
+            };
+            var serializedChildModelSnapshot = JsonSerializer.Serialize(
+                tokenizedTokenGroup,
+                options);
+            File.WriteAllText(
+                Path.Combine(
+                    childPath,
+                    string.Format(ProjectSnapshotFactoryCommon.TokenizedTokensByBookFileNameTemplate, tokenizedTokenGroup.BookLocation)),
+                serializedChildModelSnapshot);
+        }
     }
 }

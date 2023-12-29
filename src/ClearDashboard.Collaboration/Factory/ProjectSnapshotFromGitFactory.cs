@@ -190,6 +190,7 @@ public class ProjectSnapshotFromGitFactory
                         {
                             AddGeneralModelChild<Models.TokenizedCorpus, Models.Token>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
                             AddGeneralModelChild<Models.TokenizedCorpus, Models.TokenComposite>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
+                            AddGeneralModelChild<Models.TokenizedCorpus, TokenizedTokenGroup>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
                             AddGeneralModelChild<Models.TokenizedCorpus, Models.VerseRow>(entityItems, modelSnapshot, repo, commitSha, null, cancellationToken);
                         },
                         cancellationToken));
@@ -442,6 +443,12 @@ public class ProjectSnapshotFromGitFactory
             {
                 var childName = childFolderNameMappings[typeof(C)].childName;
                 var childModelShapshots = LoadChildrenByGroup<Models.Translation, TranslationGroup>(childEntityEntry, repo, commitSha, cancellationToken);
+                modelSnapshot.AddChild(childName, childModelShapshots.AsModelSnapshotChildrenList());
+            }
+            else if (typeof(C).IsAssignableTo(typeof(TokenizedTokenGroup)))
+            {
+                var childName = childFolderNameMappings[typeof(C)].childName;
+                var childModelShapshots = LoadChildrenByGroup<Models.Token, TokenizedTokenGroup>(childEntityEntry, repo, commitSha, cancellationToken);
                 modelSnapshot.AddChild(childName, childModelShapshots.AsModelSnapshotChildrenList());
             }
             else

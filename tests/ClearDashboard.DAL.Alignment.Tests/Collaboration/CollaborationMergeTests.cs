@@ -917,7 +917,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             var commitShaToMerge = $"{CollaborationProjectFixture.ShaBase}_{shaIndex}";
 
             var snapshotLastMerged = previousSnapshot ?? _fixture.ProjectSnapshotLastMerged ?? ProjectSnapshotFactoryCommon.BuildEmptySnapshot(testProject.Id);
-            var snapshotToMerge = sourceSnapshot ?? _fixture.ToProjectSnapshot();
+            var snapshotToMerge = sourceSnapshot ?? _fixture.ToProjectSnapshot(isIt);
             var progress = new Progress<ProgressStatus>(Report);
 
             if (isIt)

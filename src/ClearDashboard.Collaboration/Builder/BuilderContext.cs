@@ -10,6 +10,7 @@ public class BuilderContext
     public readonly List<string> CommonIgnoreProperties = new List<string>() { /* "Metadata" */ };
 
     public ProjectDbContext ProjectDbContext { get; }
+    public bool IncludeTokenizedTokens { get; set; }
 
     private readonly Dictionary<string, Dictionary<Guid, int>> idIndexMappings = new();
     private readonly Dictionary<string, int> modelNameIndexValues = new();

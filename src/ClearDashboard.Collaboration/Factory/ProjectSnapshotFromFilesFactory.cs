@@ -158,6 +158,7 @@ public class ProjectSnapshotFromFilesFactory
                     {
                         AddGeneralModelChild<Models.TokenizedCorpus, Models.Token>(entityItems, modelSnapshot, null, cancellationToken);
                         AddGeneralModelChild<Models.TokenizedCorpus, Models.TokenComposite>(entityItems, modelSnapshot, null, cancellationToken);
+                        AddGeneralModelChild<Models.TokenizedCorpus, TokenizedTokenGroup>(entityItems, modelSnapshot, null, cancellationToken);
                         AddGeneralModelChild<Models.TokenizedCorpus, Models.VerseRow>(entityItems, modelSnapshot, null, cancellationToken);
                     },
                     cancellationToken));
@@ -355,6 +356,12 @@ public class ProjectSnapshotFromFilesFactory
             {
                 var childName = childFolderNameMappings[typeof(C)].childName;
                 var childModelShapshots = LoadChildrenByGroup<Models.Translation, TranslationGroup>(childEntityEntry, cancellationToken);
+                modelSnapshot.AddChild(childName, childModelShapshots.AsModelSnapshotChildrenList());
+            }
+            else if (typeof(C).IsAssignableTo(typeof(TokenizedTokenGroup)))
+            {
+                var childName = childFolderNameMappings[typeof(C)].childName;
+                var childModelShapshots = LoadChildrenByGroup<Models.Token, TokenizedTokenGroup>(childEntityEntry, cancellationToken);
                 modelSnapshot.AddChild(childName, childModelShapshots.AsModelSnapshotChildrenList());
             }
             else

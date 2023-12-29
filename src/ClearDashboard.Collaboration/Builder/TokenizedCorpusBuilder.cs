@@ -85,6 +85,18 @@ public class TokenizedCorpusBuilder : GeneralModelBuilder<Models.TokenizedCorpus
             modelSnapshot.AddChild(tokenChildName, tokenModelSnapshots.AsModelSnapshotChildrenList());
         }
 
+        if (builderContext.IncludeTokenizedTokens &&
+            tokenizedCorpus.Corpus!.CorpusType != Models.CorpusType.ManuscriptHebrew &&
+            tokenizedCorpus.Corpus!.CorpusType != Models.CorpusType.ManuscriptGreek)
+        {
+            var tokenizedTokenModelSnapshots = BuildTokenizedTokenModelSnapshots(TokenBuilder, builderContext, tokenizedCorpus.Id);
+            if (tokenizedTokenModelSnapshots is not null)
+            {
+                var tokenChildName = ProjectSnapshotFactoryCommon.childFolderNameMappings[typeof(TokenizedTokenGroup)].childName;
+                modelSnapshot.AddChild(tokenChildName, tokenizedTokenModelSnapshots.AsModelSnapshotChildrenList());
+            }
+        }
+
         return modelSnapshot;
     }
 
@@ -121,6 +133,27 @@ public class TokenizedCorpusBuilder : GeneralModelBuilder<Models.TokenizedCorpus
             foreach (var token in tokens)
             {
                 tokenModelSnapshots.Add(TokenBuilder.BuildModelSnapshot(token, builderContext));
+            }
+
+            return tokenModelSnapshots;
+        }
+
+        return null;
+    }
+
+    public static GeneralListModel<GeneralModel<Models.Token>>? BuildTokenizedTokenModelSnapshots(TokenBuilder tokenBuilder, BuilderContext builderContext, Guid tokenizedCorpusId)
+    {
+        var tokens = tokenBuilder.GetTokenizedCorpusTokenizedTokens(
+            builderContext.ProjectDbContext,
+            tokenizedCorpusId);
+
+        if (tokens.Any())
+        {
+            var tokenModelSnapshots = new GeneralListModel<GeneralModel<Models.Token>>();
+
+            foreach (var token in tokens)
+            {
+                tokenModelSnapshots.Add(TokenBuilder.BuildModelSnapshot((token, null), builderContext));
             }
 
             return tokenModelSnapshots;

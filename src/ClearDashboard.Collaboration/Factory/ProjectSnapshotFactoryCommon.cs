@@ -15,6 +15,7 @@ public class ProjectSnapshotFactoryCommon
     public const string PROPERTIES_FILE = "_Properties";
     public static readonly string ProjectFolderNameTemplate = $"Project_{{0}}";
     public static readonly string VerseRowByBookFileNameTemplate = $"VerseRow_{{0}}";
+    public static readonly string TokenizedTokensByBookFileNameTemplate = $"TokenizedTokens_{{0}}";
     public static readonly string AlignmentsByLocationFileNameTemplate = $"Alignments_{{0}}_{{1}}";
     public static readonly string TranslationsByLocationFileNameTemplate = $"Translations_{{0}}_{{1}}";
 
@@ -41,6 +42,7 @@ public class ProjectSnapshotFactoryCommon
         { typeof(Models.Alignment), ("Alignments", "Alignments") },
         { typeof(Models.TokenComposite), ("CompositeTokens", "CompositeTokens") },
         { typeof(Models.Token), ("Tokens", "Tokens") },
+        { typeof(TokenizedTokenGroup), ("TokenizedTokens", "TokenizedTokens") },
         { typeof(Models.Translation), ("Translations", "Translations") },
         { typeof(Models.LabelGroupAssociation), ("LabelGroupAssociations", "LabelGroupAssociations") },
         { typeof(Models.LabelNoteAssociation), ("LabelNoteAssociations", "LabelNoteAssociations") },
@@ -66,6 +68,7 @@ public class ProjectSnapshotFactoryCommon
                     new GeneralModelJsonConverter(),
                     new VerseRowModelListJsonConverter(),
                     new AlignmentGroupJsonConverter(),
+                    new TokenizedTokenGroupJsonConverter(),
                     new TranslationGroupJsonConverter()
                 }
     };
@@ -83,6 +86,7 @@ public class ProjectSnapshotFactoryCommon
                     new VerseRowModelListJsonConverter(),
                     new NoteModelRefJsonConverter(),
                     new AlignmentGroupJsonConverter(),
+                    new TokenizedTokenGroupJsonConverter(),
                     new TranslationGroupJsonConverter()
                 }
     };
