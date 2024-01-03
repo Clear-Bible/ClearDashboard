@@ -158,7 +158,12 @@ public class TokenizedTokenGroupJsonConverter : JsonConverter<TokenizedTokenGrou
 
             //writer.WriteString(trainingText, $"{surfaceText} | {bookNumber} | {chapterNumber} | {verseNumber} | {wordNumber} | {subwordNumber} | {verseRowLocation} | {originTokenLocation} | {index} | {type} | {extendedProperties} | {deletedSerialized}");
 
-            JsonSerializer.Serialize(writer, token, options);
+            JsonSerializer.Serialize(
+                writer,
+                token.PropertyValues
+                    .Where(e => e.Key != nameof(Models.Token.TokenizedCorpusId))
+                    .ToDictionary(e => e.Key, e => e.Value),
+                options);
         }
 
         writer.WriteEndArray();
