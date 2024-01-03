@@ -122,7 +122,7 @@
     <value>E -mail de colaboração:</value>
   </data>
   <data name="AccountInfo_CollaborationUserIdLabel" xml:space="preserve">
-    <value>Colaboração UserID:</value>
+    <value>UserID de colaboração:</value>
   </data>
   <data name="AccountInfo_CollaborationUsernameLabel" xml:space="preserve">
     <value>Nome de usuário da colaboração:</value>
@@ -1577,7 +1577,7 @@
     <value>Adicionar à nova visão</value>
   </data>
   <data name="Pds_AddCorpora" xml:space="preserve">
-    <value>Adicione corporal</value>
+    <value>Adicione corpora</value>
   </data>
   <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
     <value>Crie novo alinhamento de palavras</value>
@@ -1700,7 +1700,7 @@
     <value>Estudobible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
-    <value>Estudobibleadditions</value>
+    <value>Estudarbibleaddditions</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
     <value>Vá para projetos Paratext e troca. O projeto Paratext atualmente conectado ao plug -in ClearDashboard não é o mesmo que o corpus neste projeto ClearDashboard.</value>
@@ -1808,7 +1808,7 @@
     <value>Paratext beta não está funcionando</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
-    <value>Cancelamento ...</value>
+    <value>Cancelando ...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Projetos de colaboração</value>
@@ -1898,7 +1898,7 @@
     <value>Estamos quase lá!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>Clique aqui para visualizar vídeos 'Painel de início'</value>
+    <value>Clique aqui para ver os vídeos 'Painel de início'</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
     <value>Depois de clicar no botão 'Criar' abaixo, estaremos tokenizando, alinhando e preparando seu projeto. Todas as etapas aparecerão aqui à medida que são processadas. Enquanto você espera, fique à vontade para clicar no link abaixo e assistir a alguns vídeos úteis para começar a usar o ClearDashboard!</value>
@@ -2227,6 +2227,9 @@
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Experimental</value>
   </data>
+  <data name="Settings_ExportLabelGroups" xml:space="preserve">
+    <value>Grupos de etiquetas de exportação</value>
+  </data>
   <data name="Settings_General" xml:space="preserve">
     <value>Em geral</value>
   </data>
@@ -2235,6 +2238,15 @@
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Grupo</value>
+  </data>
+  <data name="Settings_ImportLabelGroups" xml:space="preserve">
+    <value>Grupos de etiquetas de importação</value>
+  </data>
+  <data name="Settings_LabelGroupsExported" xml:space="preserve">
+    <value>Grupos de etiquetas exportados para:</value>
+  </data>
+  <data name="Settings_LabelGroupsImported" xml:space="preserve">
+    <value>Grupos de etiquetas importados de:</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>Suporte a vários monitor</value>

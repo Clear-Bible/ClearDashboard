@@ -116,7 +116,7 @@
     <value>ClearDashboard用户ID：</value>
   </data>
   <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
-    <value>ClearDashboard用户名：</value>
+    <value>Cleardashboard用户名：</value>
   </data>
   <data name="AccountInfo_CollaborationEmailLabel" xml:space="preserve">
     <value>协作电子邮件：</value>
@@ -161,7 +161,7 @@
     <value>结盟</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
-    <value>选择您正在合作的书籍，您稍后可以随时添加更多书籍。</value>
+    <value>选择与您合作的书籍，您稍后可以随时添加更多书籍。</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>检查USFM</value>
@@ -632,7 +632,7 @@
     <value>添加对齐方式？</value>
   </data>
   <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>与'{1}'对齐'{0}'？</value>
+    <value>用'{1}'对齐'{0}'？</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
     <value>结盟</value>
@@ -653,10 +653,10 @@
     <value>删除对齐</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>删除“ {0}”的对齐？</value>
+    <value>删除“ {0}”的对齐方式？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>删除所有对齐方式？</value>
+    <value>删除所有路线？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>令牌'{0}'具有多个对齐定义。单击'{1}'将删除所有对齐。</value>
@@ -701,7 +701,7 @@
     <value>显示视图控件</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>拆分令牌</value>
+    <value>分开令牌</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>将拆分应用于其他令牌</value>
@@ -956,7 +956,7 @@
     <value>添加'{0}'作为表单</value>
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
-    <value>添加'{0}'作为第一个含义</value>
+    <value>将'{0}'添加为第一个含义</value>
   </data>
   <data name="LexiconEdit_EditingDone" xml:space="preserve">
     <value>完毕</value>
@@ -1322,7 +1322,7 @@
     <value>姓</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
-    <value>新的协作用户</value>
+    <value>新的合作用户</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
     <value>密码：</value>
@@ -1379,7 +1379,7 @@
     <value>过滤器</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>通过标签</value>
+    <value>由标签</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
     <value>通过注意文本</value>
@@ -1502,7 +1502,7 @@
     <value>将此注释发送到Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>象征化的语料库</value>
+    <value>令牌化语料库</value>
   </data>
   <data name="Notes_TranslationSet" xml:space="preserve">
     <value>翻译集</value>
@@ -1814,7 +1814,7 @@
     <value>协作项目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>创建您的项目以开始。</value>
+    <value>创建您的项目以入门。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>创建一个新项目</value>
@@ -1850,7 +1850,7 @@
     <value>导入服务器项目</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>在创建项目时，请选中此框，以包括希腊语和希伯来语圣经的文本。</value>
+    <value>选中此框，以在创建项目时包括希腊语和希伯来语圣经文本。</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>包括NT希腊圣经文本？</value>
@@ -2216,7 +2216,7 @@
     <value>在实验组中启用外部Paratext注释</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
-    <value>启用外部Paratext注释</value>
+    <value>启用外部paratext注释</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>启用词典进口</value>
@@ -2227,6 +2227,9 @@
   <data name="Settings_Experimental" xml:space="preserve">
     <value>实验</value>
   </data>
+  <data name="Settings_ExportLabelGroups" xml:space="preserve">
+    <value>导出标签组</value>
+  </data>
   <data name="Settings_General" xml:space="preserve">
     <value>一般的</value>
   </data>
@@ -2235,6 +2238,15 @@
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>团体</value>
+  </data>
+  <data name="Settings_ImportLabelGroups" xml:space="preserve">
+    <value>导入标签组</value>
+  </data>
+  <data name="Settings_LabelGroupsExported" xml:space="preserve">
+    <value>标签组导出到：</value>
+  </data>
+  <data name="Settings_LabelGroupsImported" xml:space="preserve">
+    <value>从以下导入的标签组：</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>多监视器支持</value>
@@ -2276,7 +2288,7 @@
     <value>ClearDashboard设置</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>显示出与仪表板不同的显示器上扩展的视图</value>
+    <value>显示与仪表板不同的显示器上展示的视图</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
     <value>对于具有三个或三个或以上监视器的系统，在第三监视器上显示扩展的视图</value>
@@ -2294,7 +2306,7 @@
     <value>验证电子邮件代码</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>启用逐一文字集合显示</value>
+    <value>启用逐节的文本集合显示</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>取消任务</value>
@@ -2315,7 +2327,7 @@
     <value>发行说明</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>显示预发行</value>
+    <value>显示预释放</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
     <value>更新到新版本的ClearDashboard</value>

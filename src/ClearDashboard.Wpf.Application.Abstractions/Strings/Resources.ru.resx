@@ -1418,7 +1418,7 @@
     <value>Добавить группу метки</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Добавить группу этикетки</value>
+    <value>Добавить группу ярлыков</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Группа лейблов уже существует с именем</value>
@@ -2227,6 +2227,9 @@
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Экспериментальный</value>
   </data>
+  <data name="Settings_ExportLabelGroups" xml:space="preserve">
+    <value>Экспортные этикетки группы</value>
+  </data>
   <data name="Settings_General" xml:space="preserve">
     <value>Общий</value>
   </data>
@@ -2235,6 +2238,15 @@
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Группа</value>
+  </data>
+  <data name="Settings_ImportLabelGroups" xml:space="preserve">
+    <value>Импортные группы лейбл</value>
+  </data>
+  <data name="Settings_LabelGroupsExported" xml:space="preserve">
+    <value>Группы этикетки экспортировались по адресу:</value>
+  </data>
+  <data name="Settings_LabelGroupsImported" xml:space="preserve">
+    <value>Группы метки, импортированные из:</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>Поддержка Multi Monitor</value>
@@ -2270,7 +2282,7 @@
     <value>Сохранить настройки</value>
   </data>
   <data name="Settings_SendValidationEmail" xml:space="preserve">
-    <value>Отправить валидацию по электронной почте</value>
+    <value>Отправить валидацию электронной почты</value>
   </data>
   <data name="Settings_Settings" xml:space="preserve">
     <value>Настройки ClearDashboard</value>

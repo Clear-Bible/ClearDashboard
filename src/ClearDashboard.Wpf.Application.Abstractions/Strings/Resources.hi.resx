@@ -143,7 +143,7 @@
     <value>Paratext उपयोगकर्ता नाम:</value>
   </data>
   <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
-    <value>अनुप्रयोग को पुनरारंभ करें</value>
+    <value>आवेदन को पुनरारंभ करें</value>
   </data>
   <data name="AccountInfo_SelectAccountLabel" xml:space="preserve">
     <value>स्विच करने के लिए एक खाता चुनें:</value>
@@ -707,7 +707,7 @@
     <value>टोकन के अन्य उदाहरणों पर विभाजन लागू करें</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>टोकन को विभाजित करने के लिए कहां चुनें:</value>
+    <value>टोकन को विभाजित करने के लिए कहां से चुनें:</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>तीन-तरफ़ा विभाजन</value>
@@ -1535,7 +1535,7 @@
     <value>कॉर्पोरा छंदों के समानांतरकरण करें</value>
   </data>
   <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
-    <value>Internear बनाएँ</value>
+    <value>Interlinear बनाएँ</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
     <value>ज्सन मेटाडेटा</value>
@@ -1781,7 +1781,7 @@
     <value>उपसर्ग</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>दिखावा दिखाओ</value>
+    <value>दिखावा दिखाना</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>तना</value>
@@ -1841,7 +1841,7 @@
     <value>पुस्तक चयन सक्षम करें</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
-    <value>यदि जाँच की जाती है, तो आप किन पुस्तकों को संसाधित करने के लिए चयन कर पाएंगे।</value>
+    <value>यदि जाँच की जाती है, तो आप कौन सी पुस्तकों को संसाधित करने में सक्षम होंगे।</value>
   </data>
   <data name="ProjectPicker_GetStarted" xml:space="preserve">
     <value>शुरू हो जाओ</value>
@@ -2227,6 +2227,9 @@
   <data name="Settings_Experimental" xml:space="preserve">
     <value>प्रयोगात्मक</value>
   </data>
+  <data name="Settings_ExportLabelGroups" xml:space="preserve">
+    <value>निर्यात लेबल समूह</value>
+  </data>
   <data name="Settings_General" xml:space="preserve">
     <value>सामान्य</value>
   </data>
@@ -2235,6 +2238,15 @@
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>समूह</value>
+  </data>
+  <data name="Settings_ImportLabelGroups" xml:space="preserve">
+    <value>आयात लेबल समूह</value>
+  </data>
+  <data name="Settings_LabelGroupsExported" xml:space="preserve">
+    <value>निर्यात किए गए लेबल समूह:</value>
+  </data>
+  <data name="Settings_LabelGroupsImported" xml:space="preserve">
+    <value>आयातित लेबल समूह:</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>बहुमाला समर्थन</value>

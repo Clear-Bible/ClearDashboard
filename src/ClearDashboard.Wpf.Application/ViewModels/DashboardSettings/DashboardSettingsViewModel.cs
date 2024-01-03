@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using MimeKit;
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -30,6 +31,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
         private readonly IEventAggregator _eventAggregator;
         private readonly CollaborationServerHttpClientServices _collaborationHttpClientServices;
+        private readonly NoteManager _noteManager;
         private readonly CollaborationManager _collaborationManager;
         private readonly ILogger<DashboardSettingsViewModel> _logger;
         private bool _isAquaEnabledOnStartup;
@@ -380,6 +382,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             IMediator mediator,
             ILifetimeScope? lifetimeScope,
             CollaborationServerHttpClientServices collaborationHttpClientServices,
+            NoteManager noteManager,
             ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
@@ -387,6 +390,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             //IoC.Get<ILogger<DashboardSettingsViewModel>>();
             _eventAggregator = eventAggregator;
             _collaborationHttpClientServices = collaborationHttpClientServices;
+            _noteManager = noteManager;
             _collaborationManager = collaborationManager;
             _logger = logger;
         }
@@ -505,8 +509,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             Settings.Default.Save();
         }
 
-
-
         public void Close()
         {
             TryCloseAsync();
@@ -543,6 +545,59 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
 
             GitlabUserSaveVisibility = Visibility.Collapsed;
+        }
+
+        public async Task ExportLabelGroups()
+        {
+            var dialog = new SaveFileDialog()
+            {
+                Filter = "JSON Files(*.json)|*.json|All(*.*)|*",
+                FileName = LocalizationService["Notes_NoteLabelGroups"]
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                try
+                {
+                    var data = await _noteManager.ExportLabelGroupsAsync();
+                    await File.WriteAllTextAsync(dialog.FileName, data);
+
+                    var message = $"{LocalizationService["Settings_LabelGroupsExported"]} {dialog.FileName}";
+                    MessageBox.Show(message, LocalizationService["Settings_ExportLabelGroups"], MessageBoxButton.OK, MessageBoxImage.Information);
+                    Logger?.LogInformation(message);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show($"{LocalizationService["Error"]}: {e}", LocalizationService["Settings_ExportLabelGroups"], MessageBoxButton.OK, MessageBoxImage.Error);
+                    Logger?.LogError(e.ToString());
+                }
+            }
+        }
+
+        public async Task ImportLabelGroups()
+        {
+            var dialog = new OpenFileDialog()
+            {
+                Filter = "JSON Files(*.json)|*.json|All(*.*)|*",
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                try
+                {
+                    var data = await File.ReadAllTextAsync(dialog.FileName);
+                    await _noteManager.ImportLabelGroupsAsync(data);
+
+                    var message = $"{LocalizationService["Settings_LabelGroupsImported"]} {dialog.FileName}";
+                    MessageBox.Show(message, LocalizationService["Settings_ImportLabelGroups"], MessageBoxButton.OK, MessageBoxImage.Information);
+                    Logger?.LogInformation(message);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show($"{LocalizationService["Error"]}: {e}", LocalizationService["Settings_ImportLabelGroups"], MessageBoxButton.OK, MessageBoxImage.Error);
+                    Logger?.LogError(e.ToString());
+                }
+            }
         }
 
         // ReSharper disable once UnusedMember.Global

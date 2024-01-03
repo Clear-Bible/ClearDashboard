@@ -173,6 +173,47 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
+        public async Task<string> ExportLabelGroupsAsync()
+        {
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                var result = await LabelGroup.Export(Mediator);
+
+                stopwatch.Stop();
+                Logger?.LogInformation($"Exported label groups in {stopwatch.ElapsedMilliseconds}ms");
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        public async Task ImportLabelGroupsAsync(string labelGroupJson)
+        {
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                var data = LabelGroup.Extract(labelGroupJson);
+                await LabelGroup.Import(Mediator, data);
+
+                stopwatch.Stop();
+                Logger?.LogInformation($"Imported label groups in {stopwatch.ElapsedMilliseconds}ms");
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
         /// <summary>
         /// Gets the default label group for the current user.
         /// </summary>

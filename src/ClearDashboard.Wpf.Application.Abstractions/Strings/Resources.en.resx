@@ -2227,6 +2227,9 @@
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Experimental</value>
   </data>
+  <data name="Settings_ExportLabelGroups" xml:space="preserve">
+    <value>Export Label Groups</value>
+  </data>
   <data name="Settings_General" xml:space="preserve">
     <value>General</value>
   </data>
@@ -2235,6 +2238,15 @@
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Group</value>
+  </data>
+  <data name="Settings_ImportLabelGroups" xml:space="preserve">
+    <value>Import Label Groups</value>
+  </data>
+  <data name="Settings_LabelGroupsExported" xml:space="preserve">
+    <value>Label Groups exported to:</value>
+  </data>
+  <data name="Settings_LabelGroupsImported" xml:space="preserve">
+    <value>Label Groups imported from:</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>Multi Monitor Support</value>

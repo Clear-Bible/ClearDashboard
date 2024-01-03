@@ -98,6 +98,12 @@
 
                         </StackPanel>
                     </GroupBox>
+                    <GroupBox Margin="16" Header="{helpers:Localization Notes_NoteLabelGroups}">
+                        <StackPanel MinWidth="400" Orientation="Horizontal">
+                            <Button x:Name="ExportLabelGroups" Content="{helpers:Localization Settings_ExportLabelGroups}" Margin="10" Background="Transparent" Width="200"/>
+                            <Button x:Name="ImportLabelGroups" Content="{helpers:Localization Settings_ImportLabelGroups}" Margin="10" Background="Transparent" Width="200"/>
+                        </StackPanel>
+                    </GroupBox>
                 </StackPanel>
             </TabItem>
 

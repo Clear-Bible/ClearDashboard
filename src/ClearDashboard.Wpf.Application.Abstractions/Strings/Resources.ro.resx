@@ -710,7 +710,7 @@
     <value>Selectați unde să împărțiți token:</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
-    <value>Split cu trei căi</value>
+    <value>Despărțire cu trei căi</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
     <value>Unjoin compus jeton</value>
@@ -911,7 +911,7 @@
     <value>Introduceți un nou luciu</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
-    <value>Lemma</value>
+    <value>LEMMA</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
     <value>Lemma/forme:</value>
@@ -932,7 +932,7 @@
     <value>Nou luciu</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>Îndepărtați acest domeniu semantic din acest sens</value>
+    <value>Scoateți acest domeniu semantic din acest sens</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
     <value>Scoateți această formă lexicală din această lemmă</value>
@@ -971,7 +971,7 @@
     <value>Complet</value>
   </data>
   <data name="LexiconEdit_FullyMatching" xml:space="preserve">
-    <value>Potrivire completă</value>
+    <value>Potrivirea completă</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexem</value>
@@ -1052,7 +1052,7 @@
     <value>Limbă țintă</value>
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
-    <value>Cuvântul țintă</value>
+    <value>Cuvânt țintă</value>
   </data>
   <data name="LexiconImport_Title" xml:space="preserve">
     <value>Import de lexic</value>
@@ -1208,7 +1208,7 @@
     <value>Fragmente din discurs</value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>Lematele înrudite</value>
+    <value>Lemnițe înrudite</value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>Domeniu de aplicare:</value>
@@ -1241,7 +1241,7 @@
     <value>Versuri</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Simțul versetului</value>
+    <value>Sense verset</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Total verset</value>
@@ -1556,7 +1556,7 @@
     <value>Tren</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>ALIGNER WORD MASINE DE TRAIN</value>
+    <value>ALIGNIER DE CUMPĂRĂ A CAMERULUI DE TRAIN</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Setați cartografierea versului între Corpora paralelizată</value>
@@ -1571,7 +1571,7 @@
     <value>Adăugați aprobarea în vrac pentru a vizualiza</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați la vedere</value>
+    <value>Adăugați la vizualizare</value>
   </data>
   <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
     <value>Adăugați la New View</value>
@@ -1595,7 +1595,7 @@
     <value>Adăugați text la New View</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați la vedere</value>
+    <value>Adăugați la vizualizare</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>Auxiliar</value>
@@ -1781,7 +1781,7 @@
     <value>Prefix</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Afișați backtranslația</value>
+    <value>Arată backtranslație</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>Tulpină</value>
@@ -1904,7 +1904,7 @@
     <value>După ce faceți clic pe butonul „Creați” de mai jos, vom fi tokenizarea, alinierea și pregătirea proiectului dvs. Toți pașii vor apărea aici pe măsură ce sunt procesate. În timp ce așteptați, nu ezitați să faceți clic pe linkul de mai jos și să vizionați câteva videoclipuri utile pentru a începe utilizarea ClearDashboard!</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
-    <value>Vrăjitor de șablon de proiect</value>
+    <value>Expert de șablon de proiect</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizardTemplate" xml:space="preserve">
     <value>Proiect de șablon vrăjitor: {0}</value>
@@ -2159,7 +2159,7 @@
     <value>Bine ați venit la ClearDashboard! Vă rugăm să introduceți informațiile de înregistrare.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
-    <value>Vă rugăm să introduceți numele dvs.</value>
+    <value>Vă rugăm să introduceți prenumele dvs.</value>
   </data>
   <data name="RegistrationView_LastName" xml:space="preserve">
     <value>Vă rugăm să introduceți numele dvs. de familie</value>
@@ -2222,10 +2222,13 @@
     <value>Activați importul de lexic</value>
   </data>
   <data name="Settings_EnableTokenSplitting" xml:space="preserve">
-    <value>Activați divizarea jetoanelor</value>
+    <value>Activați împărțirea jetoanelor</value>
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Experimental</value>
+  </data>
+  <data name="Settings_ExportLabelGroups" xml:space="preserve">
+    <value>Grupuri de etichete de export</value>
   </data>
   <data name="Settings_General" xml:space="preserve">
     <value>General</value>
@@ -2235,6 +2238,15 @@
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>grup</value>
+  </data>
+  <data name="Settings_ImportLabelGroups" xml:space="preserve">
+    <value>Import grupuri de etichete</value>
+  </data>
+  <data name="Settings_LabelGroupsExported" xml:space="preserve">
+    <value>Grupuri de etichete exportate la:</value>
+  </data>
+  <data name="Settings_LabelGroupsImported" xml:space="preserve">
+    <value>Grupuri de etichete importate de la:</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>Suport multi -monitor</value>

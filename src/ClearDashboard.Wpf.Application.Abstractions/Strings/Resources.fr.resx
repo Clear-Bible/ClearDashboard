@@ -128,7 +128,7 @@
     <value>Nom d'utilisateur de collaboration:</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
-    <value>- Détails du compte courant-</value>
+    <value>-Daison du compte courant-</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
     <value>Désactiver la licence actuelle</value>
@@ -425,7 +425,7 @@
     <value>Tous</value>
   </data>
   <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
-    <value>Rendements manquants</value>
+    <value>Rendages manquants</value>
   </data>
   <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
     <value>Mots alignés</value>
@@ -539,7 +539,7 @@
     <value>nouveau groupe</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
-    <value>Nouveau individu</value>
+    <value>nouveau individu</value>
   </data>
   <data name="ClockUserControl_Select" xml:space="preserve">
     <value>Sélectionnez le fuseau horaire</value>
@@ -641,7 +641,7 @@
     <value>Supprimer cette vue?</value>
   </data>
   <data name="EnhancedView_CreateAlignment" xml:space="preserve">
-    <value>Créer l'alignement</value>
+    <value>Créer un alignement</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
     <value>Afficher / créer des notes</value>
@@ -701,7 +701,7 @@
     <value>Afficher les commandes de la vue</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>Jeton divisé</value>
+    <value>Jeton fendu</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>Appliquer la fente à d'autres cas de jeton</value>
@@ -1556,7 +1556,7 @@
     <value>Former</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Aligneur de la machine à train</value>
+    <value>Aligneur de mot de machine de train</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Définissez la cartographie du verset entre les corpus parallélisés</value>
@@ -1607,7 +1607,7 @@
     <value>Calculer le nouveau modèle de traduction</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Modifier le niveau de zoom du contenu</value>
+    <value>Changer le niveau de zoom du contenu</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
     <value>Consultant Notes</value>
@@ -1838,7 +1838,7 @@
     <value>Supprimer le projet</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Activer la sélection du livre</value>
+    <value>Activer la sélection des livres</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
     <value>En cas de vérification, vous pourrez sélectionner les livres à traiter.</value>
@@ -1877,7 +1877,7 @@
     <value>Ouverte récente</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>Paratext</value>
+    <value>Paratex</value>
   </data>
   <data name="ProjectPicker_ParatextBackTranslation" xml:space="preserve">
     <value>Traduction de dos paratext</value>
@@ -1889,7 +1889,7 @@
     <value>PARATEXT est en cours d'exécution mais n'est pas connecté.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
-    <value>Projet PARATEXT</value>
+    <value>Projet de parattex</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
     <value>Projet:</value>
@@ -1910,7 +1910,7 @@
     <value>Assistant de modèle de projet: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Rafraîchir la liste des projets de collaboration</value>
+    <value>Refreindre la liste des projets de collaboration</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>Recherche récente</value>
@@ -2003,7 +2003,7 @@
     <value>Deutéronomie</value>
   </data>
   <data name="ProperCase_Ecclesiastes" xml:space="preserve">
-    <value>Ecclésiaste</value>
+    <value>Ecclésiastes</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
     <value>Éphésiens</value>
@@ -2075,7 +2075,7 @@
     <value>Lévitique</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
-    <value>Luck</value>
+    <value>Las</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
     <value>Malachi</value>
@@ -2216,7 +2216,7 @@
     <value>Activer les notes de paratext externe dans le groupe expérimental</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
-    <value>Activer les notes externes de paratext</value>
+    <value>Activer les notes de paratext externes</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Activer l'importation du lexique</value>
@@ -2227,6 +2227,9 @@
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Expérimental</value>
   </data>
+  <data name="Settings_ExportLabelGroups" xml:space="preserve">
+    <value>Groupes d'étiquettes d'exportation</value>
+  </data>
   <data name="Settings_General" xml:space="preserve">
     <value>Général</value>
   </data>
@@ -2235,6 +2238,15 @@
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Groupe</value>
+  </data>
+  <data name="Settings_ImportLabelGroups" xml:space="preserve">
+    <value>Groupes d'étiquettes d'importation</value>
+  </data>
+  <data name="Settings_LabelGroupsExported" xml:space="preserve">
+    <value>Groupes d'étiquettes exportés vers:</value>
+  </data>
+  <data name="Settings_LabelGroupsImported" xml:space="preserve">
+    <value>Les groupes d'étiquette importés de:</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>Support multi-moniteurs</value>
@@ -2417,7 +2429,7 @@
     <value>Mettre à jour et ajouter nouveau</value>
   </data>
   <data name="UseDefaults" xml:space="preserve">
-    <value>Créer à l'aide de valeurs par défaut</value>
+    <value>Créer en utilisant les valeurs par défaut</value>
   </data>
   <data name="Windows_AlignmentTool" xml:space="preserve">
     <value>Outil d'alignement</value>
