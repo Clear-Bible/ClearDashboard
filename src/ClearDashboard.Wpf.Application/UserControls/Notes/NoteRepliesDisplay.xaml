@@ -21,7 +21,7 @@
                 <Separator Foreground="Blue" />
                 <notes:NoteReplyDisplay
                     x:Name="NoteDisplay"
-                    CurrentUser="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CurrentUser}"
+                    CurrentUserId="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CurrentUserId}"
                     NoteSeen="OnNoteSeen"
                     ParentNote="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext}"
                     ReplyColor="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyColor}"
@@ -44,6 +44,7 @@
                     TimestampFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontStyle}"
                     TimestampFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontWeight}"
                     TimestampMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampMargin}"
+                    TimestampOrientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampOrientation}"
                     TimestampPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampPadding}" />
             </StackPanel>
         </DataTemplate>
@@ -70,6 +71,7 @@
                 materialDesign:TextFieldAssist.HasClearButton="True"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 Foreground="{DynamicResource MaterialDesignBody}"
+                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontSize}"
                 KeyDown="AddReplyText_KeyDown"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                 TextWrapping="Wrap" />
