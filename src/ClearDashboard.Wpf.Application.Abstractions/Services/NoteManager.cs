@@ -204,6 +204,8 @@ namespace ClearDashboard.Wpf.Application.Services
                 var data = LabelGroup.Extract(labelGroupJson);
                 await LabelGroup.Import(Mediator, data);
 
+                await PopulateLabelsAsync();
+
                 stopwatch.Stop();
                 Logger?.LogInformation($"Imported label groups in {stopwatch.ElapsedMilliseconds}ms");
             }
