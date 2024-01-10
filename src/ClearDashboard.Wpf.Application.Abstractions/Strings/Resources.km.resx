@@ -1639,6 +1639,12 @@
   <data name="Pds_DisabledNotice" xml:space="preserve">
     <value>ពិការខណៈពេលដែលកិច្ចការផ្ទៃខាងក្រោយកំពុងដំណើរការ</value>
   </data>
+  <data name="Pds_ExistingProject" xml:space="preserve">
+    <value>ឈ្មោះគម្រោងមានរួចហើយ - មិនអាចនាំចូលបានទេ</value>
+  </data>
+  <data name="Pds_ExistingProjectName" xml:space="preserve">
+    <value>ឈ្មោះគម្រោងមាន</value>
+  </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>កម្មវិធីនិពន្ធកំណត់ត្រាខាងក្រៅ</value>
   </data>
@@ -2227,6 +2233,9 @@
   <data name="Settings_Experimental" xml:space="preserve">
     <value>ដេលល្បាប់</value>
   </data>
+  <data name="Settings_ExportLabelGroups" xml:space="preserve">
+    <value>ក្រុមហ៊ុននាំចេញមូលដ្ឋាន</value>
+  </data>
   <data name="Settings_General" xml:space="preserve">
     <value>ដេលតុតោ</value>
   </data>
@@ -2235,6 +2244,15 @@
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>រកុម</value>
+  </data>
+  <data name="Settings_ImportLabelGroups" xml:space="preserve">
+    <value>ក្រុមហ៊ុននាំចូលស្លាក</value>
+  </data>
+  <data name="Settings_LabelGroupsExported" xml:space="preserve">
+    <value>ក្រុមស្លាកនាំចេញទៅ:</value>
+  </data>
+  <data name="Settings_LabelGroupsImported" xml:space="preserve">
+    <value>ក្រុមហ៊ុនស្លាកដែលនាំចូលពី:</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>ការគាំទ្រពហុយានិក</value>

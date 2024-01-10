@@ -431,7 +431,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             GitLabClient gitLabClient,
             CollaborationManager collaborationManager,
             CollaborationServerHttpClientServices collaborationHttpClientServices,
-            LongRunningTaskManager longRunningTaskManager)
+        LongRunningTaskManager longRunningTaskManager)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             Logger?.LogInformation("Project Picker constructor called.");
@@ -1295,6 +1295,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     _collaborationManager.SetRemoteUrl(gitLabProject.HttpUrlToRepo, gitLabProject.Name);
                     break;
                 }
+            }
+
+            // check to see if there is an existing project with the same name
+            var p = DashboardProjects.FirstOrDefault(x => x.ProjectName == project.ProjectName);
+            if (p is not null)
+            {
+                var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
+
+                if (confirmationViewPopupViewModel == null)
+                {
+                    throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+                }
+
+                confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.ExistingProjectNameTheSame;
+
+                var result = await _windowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                    SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
+                return;
             }
 
             var importServerProjectViewModel = LifetimeScope?.Resolve<MergeServerProjectDialogViewModel>();

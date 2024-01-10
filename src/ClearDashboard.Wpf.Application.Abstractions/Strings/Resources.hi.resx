@@ -143,7 +143,7 @@
     <value>Paratext उपयोगकर्ता नाम:</value>
   </data>
   <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
-    <value>अनुप्रयोग को पुनरारंभ करें</value>
+    <value>आवेदन को पुनरारंभ करें</value>
   </data>
   <data name="AccountInfo_SelectAccountLabel" xml:space="preserve">
     <value>स्विच करने के लिए एक खाता चुनें:</value>
@@ -155,7 +155,7 @@
     <value>जोड़ना</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>कॉर्पस को टोकन करने के लिए चुनें</value>
+    <value>कॉर्पस को टोकन करने का चयन करें</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>संरेखण</value>
@@ -674,13 +674,13 @@
     <value>टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>भाषा जोड़ी के लिए टोकन में शामिल हों</value>
+    <value>भाषा की जोड़ी के लिए टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>'अमान्य' के रूप में चिह्न संरेखण</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
-    <value>मार्क संरेखण 'समीक्षा की आवश्यकता' के रूप में</value>
+    <value>मार्क संरेखण को 'समीक्षा की आवश्यकता' के रूप में संरेखित करें</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
     <value>'मान्य' के रूप में चिह्न संरेखण</value>
@@ -1142,7 +1142,7 @@
     <value>कॉरपस टोकन</value>
   </data>
   <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>चकरानेवाला</value>
+    <value>चापलूसी</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>देखना</value>
@@ -1256,7 +1256,7 @@
     <value>मर्ज पूर्ण ... पुनः लोडिंग इंटरफ़ेस</value>
   </data>
   <data name="MergeDialog_OperationCancelled" xml:space="preserve">
-    <value>रद्द किया गया ऑपरेशन</value>
+    <value>अभियान रद्द किया गया</value>
   </data>
   <data name="MergeDialog_OperationComplete" xml:space="preserve">
     <value>ऑपरेशन पूरा!</value>
@@ -1535,7 +1535,7 @@
     <value>कॉर्पोरा छंदों के समानांतरकरण करें</value>
   </data>
   <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
-    <value>Internear बनाएँ</value>
+    <value>Interlinear बनाएँ</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
     <value>ज्सन मेटाडेटा</value>
@@ -1638,6 +1638,12 @@
   </data>
   <data name="Pds_DisabledNotice" xml:space="preserve">
     <value>जबकि पृष्ठभूमि कार्य काम कर रहे हैं</value>
+  </data>
+  <data name="Pds_ExistingProject" xml:space="preserve">
+    <value>परियोजना का नाम पहले से मौजूद है - आयात नहीं कर सकता</value>
+  </data>
+  <data name="Pds_ExistingProjectName" xml:space="preserve">
+    <value>परियोजना का नाम मौजूद है</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>बाह्य नोट संपादक</value>
@@ -1814,10 +1820,10 @@
     <value>सहयोग परियोजनाएं</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>आरंभ करने के लिए अपनी परियोजना बनाएं।</value>
+    <value>आरंभ करने के लिए अपना प्रोजेक्ट बनाएं।</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
-    <value>एक नई परियोजना बनाएं</value>
+    <value>एक नया प्रोजेक्ट बनाएं</value>
   </data>
   <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
     <value>त्वरित शुरुआत नई परियोजना</value>
@@ -1841,13 +1847,13 @@
     <value>पुस्तक चयन सक्षम करें</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
-    <value>यदि जाँच की जाती है, तो आप किन पुस्तकों को संसाधित करने के लिए चयन कर पाएंगे।</value>
+    <value>यदि जाँच की जाती है, तो आप कौन सी पुस्तकों को संसाधित करने में सक्षम होंगे।</value>
   </data>
   <data name="ProjectPicker_GetStarted" xml:space="preserve">
     <value>शुरू हो जाओ</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>आयात सर्वर प्रोजेक्ट</value>
+    <value>आयात सर्वर परियोजना</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>अपनी परियोजना बनाते समय ग्रीक और हिब्रू बाइबिल ग्रंथों को शामिल करने के लिए इस बॉक्स को देखें।</value>
@@ -2227,6 +2233,9 @@
   <data name="Settings_Experimental" xml:space="preserve">
     <value>प्रयोगात्मक</value>
   </data>
+  <data name="Settings_ExportLabelGroups" xml:space="preserve">
+    <value>निर्यात लेबल समूह</value>
+  </data>
   <data name="Settings_General" xml:space="preserve">
     <value>सामान्य</value>
   </data>
@@ -2235,6 +2244,15 @@
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>समूह</value>
+  </data>
+  <data name="Settings_ImportLabelGroups" xml:space="preserve">
+    <value>आयात लेबल समूह</value>
+  </data>
+  <data name="Settings_LabelGroupsExported" xml:space="preserve">
+    <value>निर्यात किए गए लेबल समूह:</value>
+  </data>
+  <data name="Settings_LabelGroupsImported" xml:space="preserve">
+    <value>आयातित लेबल समूह:</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>बहुमाला समर्थन</value>
@@ -2429,7 +2447,7 @@
     <value>कॉरपस टोकन</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
-    <value>चकरानेवाला</value>
+    <value>चापलूसी</value>
   </data>
   <data name="Windows_EnhancedView" xml:space="preserve">
     <value>देखना</value>

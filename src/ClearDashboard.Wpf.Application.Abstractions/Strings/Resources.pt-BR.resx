@@ -179,7 +179,7 @@
     <value>Sem erros</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
-    <value>Salvar erros USFM no arquivo</value>
+    <value>Salve erros USFM no arquivo</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
     <value>Selecionar tudo</value>
@@ -674,7 +674,7 @@
     <value>Junte -se a tokens</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Junte -se a tokens para o par de idiomas</value>
+    <value>Junte -se a tokens para par de idiomas</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>Marcar o alinhamento como 'inválido'</value>
@@ -713,7 +713,7 @@
     <value>Divisão de três vias</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Token composto de unidade</value>
+    <value>Token de compósito un -joain</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -1016,7 +1016,7 @@
     <value>Adicione como forma para ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Encontre correspondências ou formulários completos ou parciais para a fonte</value>
+    <value>Encontre correspondências completas ou parciais de lexeme ou formulário para fonte</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Adicione o alvo como tradução para ...</value>
@@ -1220,7 +1220,7 @@
     <value>Pesquisar por brilho inglês</value>
   </data>
   <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>Pesquise por hebraico/grego</value>
+    <value>Pesquisar por hebraico/grego</value>
   </data>
   <data name="Marble_Sense" xml:space="preserve">
     <value>Senso</value>
@@ -1241,7 +1241,7 @@
     <value>Versos</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Verso senso</value>
+    <value>Sentido do verso</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Verso total</value>
@@ -1286,7 +1286,7 @@
     <value>Token de acesso:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Verifique seu e -mail e digite o código de validação:</value>
+    <value>Verifique seu e -mail e insira o código de validação:</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Verifique a disponibilidade do usuário</value>
@@ -1400,7 +1400,7 @@
     <value>Adicione um rótulo</value>
   </data>
   <data name="Notes_LabelAddConfirm" xml:space="preserve">
-    <value>Você quer criar rótulo:</value>
+    <value>Você quer criar o rótulo:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>e associe -o ao grupo de etiquetas:</value>
@@ -1478,7 +1478,7 @@
     <value>Grupos de etiquetas</value>
   </data>
   <data name="Notes_NoteLabels" xml:space="preserve">
-    <value>Rótulos</value>
+    <value>Etiquetas</value>
   </data>
   <data name="Notes_NoteReplies" xml:space="preserve">
     <value>Respostas</value>
@@ -1559,7 +1559,7 @@
     <value>Alinhador de palavras da máquina de trem</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
-    <value>Defina o mapeamento do verso entre corpora paralela</value>
+    <value>Defina o mapeamento de versos entre corpora paralela</value>
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Paratext Corpus</value>
@@ -1639,6 +1639,12 @@
   <data name="Pds_DisabledNotice" xml:space="preserve">
     <value>Desativado enquanto as tarefas de segundo plano estão funcionando</value>
   </data>
+  <data name="Pds_ExistingProject" xml:space="preserve">
+    <value>O nome do projeto já existe - não é possível importar</value>
+  </data>
+  <data name="Pds_ExistingProjectName" xml:space="preserve">
+    <value>O nome do projeto existe</value>
+  </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>Editor de notas externas</value>
   </data>
@@ -1712,7 +1718,7 @@
     <value>Transliteração manual</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>TransliteraçãoWithEncoder</value>
+    <value>Transliteração comncoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Desconhecido</value>
@@ -1757,7 +1763,7 @@
     <value>Lexeme</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
-    <value>Lexeme Type</value>
+    <value>Lexeme tipo</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
     <value>Referências de carga</value>
@@ -1853,7 +1859,7 @@
     <value>Verifique esta caixa para incluir os textos bíblicos gregos e hebraicos ao criar seu projeto.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Incluir textos bíblicos gregos no NT?</value>
+    <value>Incluir textos bíblicos gregos do NT?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>Incluir textos bíblicos hebraicos?</value>
@@ -1916,7 +1922,7 @@
     <value>Pesquise recente</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
-    <value>Clique aqui para começar o Paratext</value>
+    <value>Clique aqui para começar a Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
     <value>Versão:</value>
@@ -2189,7 +2195,7 @@
     <value>Ativar plug -in experimental aqua</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Verifique seu e -mail e digite o código de validação:</value>
+    <value>Verifique seu e -mail e insira o código de validação:</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Configurações de colaboração</value>
@@ -2213,7 +2219,7 @@
     <value>Ativar edição de alinhamento</value>
   </data>
   <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
-    <value>Ativar Notas Paratext externas no grupo experimental</value>
+    <value>Ativar notas de paratext externas no grupo experimental</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
     <value>Ativar notas de paratext externas</value>
@@ -2227,6 +2233,9 @@
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Experimental</value>
   </data>
+  <data name="Settings_ExportLabelGroups" xml:space="preserve">
+    <value>Grupos de etiquetas de exportação</value>
+  </data>
   <data name="Settings_General" xml:space="preserve">
     <value>Em geral</value>
   </data>
@@ -2235,6 +2244,15 @@
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Grupo</value>
+  </data>
+  <data name="Settings_ImportLabelGroups" xml:space="preserve">
+    <value>Importar grupos de etiquetas</value>
+  </data>
+  <data name="Settings_LabelGroupsExported" xml:space="preserve">
+    <value>Grupos de etiquetas exportados para:</value>
+  </data>
+  <data name="Settings_LabelGroupsImported" xml:space="preserve">
+    <value>Grupos de etiquetas importados de:</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>Suporte a vários monitor</value>
@@ -2258,13 +2276,13 @@
     <value>Reservado para expansão futura</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaurar o usuário de colaboração</value>
+    <value>Restaure o usuário da colaboração</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Salvo para servidor remoto</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Salve o usuário do GitLab no servidor</value>
+    <value>Salvar o usuário do GitLab no servidor</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
     <value>Salvar configurações</value>
@@ -2279,7 +2297,7 @@
     <value>Mostrar visualizações expandidas em um monitor diferente do painel</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Para sistemas com três ou mais monitores, mostre uma visualização expandida no terceiro monitor</value>
+    <value>Para sistemas com três ou mais monitores, mostre visualização expandida no terceiro monitor</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Coleção de texto</value>

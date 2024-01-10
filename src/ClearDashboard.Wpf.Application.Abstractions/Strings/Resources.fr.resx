@@ -425,7 +425,7 @@
     <value>Tous</value>
   </data>
   <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
-    <value>Rendements manquants</value>
+    <value>Rendages manquants</value>
   </data>
   <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
     <value>Mots alignés</value>
@@ -539,7 +539,7 @@
     <value>nouveau groupe</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
-    <value>Nouveau individu</value>
+    <value>nouveau individu</value>
   </data>
   <data name="ClockUserControl_Select" xml:space="preserve">
     <value>Sélectionnez le fuseau horaire</value>
@@ -701,7 +701,7 @@
     <value>Afficher les commandes de la vue</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>Jeton divisé</value>
+    <value>Jeton fendu</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>Appliquer la fente à d'autres cas de jeton</value>
@@ -1639,6 +1639,12 @@
   <data name="Pds_DisabledNotice" xml:space="preserve">
     <value>Handicapés pendant que les tâches d'arrière-plan fonctionnent</value>
   </data>
+  <data name="Pds_ExistingProject" xml:space="preserve">
+    <value>Le nom du projet existe déjà - ne peut pas importer</value>
+  </data>
+  <data name="Pds_ExistingProjectName" xml:space="preserve">
+    <value>Le nom du projet existe</value>
+  </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>Éditeur de notes externes</value>
   </data>
@@ -1889,7 +1895,7 @@
     <value>PARATEXT est en cours d'exécution mais n'est pas connecté.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
-    <value>Projet PARATEXT</value>
+    <value>Projet de parattex</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
     <value>Projet:</value>
@@ -2003,7 +2009,7 @@
     <value>Deutéronomie</value>
   </data>
   <data name="ProperCase_Ecclesiastes" xml:space="preserve">
-    <value>Ecclésiaste</value>
+    <value>Ecclésiastes</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
     <value>Éphésiens</value>
@@ -2057,7 +2063,7 @@
     <value>John</value>
   </data>
   <data name="ProperCase_Jonah" xml:space="preserve">
-    <value>Jonie</value>
+    <value>Jona</value>
   </data>
   <data name="ProperCase_Joshua" xml:space="preserve">
     <value>Joshua</value>
@@ -2075,7 +2081,7 @@
     <value>Lévitique</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
-    <value>Luck</value>
+    <value>Las</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
     <value>Malachi</value>
@@ -2129,7 +2135,7 @@
     <value>Tirus</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>Zécharia</value>
+    <value>Zécharie</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
     <value>Zéphanie</value>
@@ -2216,7 +2222,7 @@
     <value>Activer les notes de paratext externe dans le groupe expérimental</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
-    <value>Activer les notes externes de paratext</value>
+    <value>Activer les notes de paratext externes</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Activer l'importation du lexique</value>
@@ -2227,6 +2233,9 @@
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Expérimental</value>
   </data>
+  <data name="Settings_ExportLabelGroups" xml:space="preserve">
+    <value>Groupes d'étiquettes d'exportation</value>
+  </data>
   <data name="Settings_General" xml:space="preserve">
     <value>Général</value>
   </data>
@@ -2235,6 +2244,15 @@
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Groupe</value>
+  </data>
+  <data name="Settings_ImportLabelGroups" xml:space="preserve">
+    <value>Groupes d'étiquettes d'importation</value>
+  </data>
+  <data name="Settings_LabelGroupsExported" xml:space="preserve">
+    <value>Groupes d'étiquettes exportés vers:</value>
+  </data>
+  <data name="Settings_LabelGroupsImported" xml:space="preserve">
+    <value>Les groupes d'étiquette importés de:</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>Support multi-moniteurs</value>
@@ -2258,7 +2276,7 @@
     <value>Réservé à l'expansion future</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaurer l'utilisateur de la collaboration</value>
+    <value>Restaurer l'utilisateur de collaboration</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Enregistré sur le serveur distant</value>
@@ -2417,7 +2435,7 @@
     <value>Mettre à jour et ajouter nouveau</value>
   </data>
   <data name="UseDefaults" xml:space="preserve">
-    <value>Créer à l'aide de valeurs par défaut</value>
+    <value>Créer en utilisant les valeurs par défaut</value>
   </data>
   <data name="Windows_AlignmentTool" xml:space="preserve">
     <value>Outil d'alignement</value>

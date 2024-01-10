@@ -155,7 +155,7 @@
     <value>Thêm vào</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Chọn cách để mã hóa Quả văn</value>
+    <value>Chọn cách để mã hóa xác chết</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Liên kết</value>
@@ -554,7 +554,7 @@
     <value>Người dùng cộng tác có sẵn:</value>
   </data>
   <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
-    <value>Quản lý các dự án hợp tác</value>
+    <value>Quản lý các dự án cộng tác</value>
   </data>
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Người dùng dự án hiện tại:</value>
@@ -707,7 +707,7 @@
     <value>Áp dụng chia tách cho các phiên bản mã thông báo khác</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>Chọn nơi để chia mã thông báo:</value>
+    <value>Chọn WHERE để chia mã thông báo:</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>Chia ba chiều</value>
@@ -914,7 +914,7 @@
     <value>Bổ đề</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
-    <value>Bổ đề/các hình thức:</value>
+    <value>Bổ đề/hình thức:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
     <value>Bổ đề cho Lexeme mới:</value>
@@ -932,7 +932,7 @@
     <value>Bóng mới</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>Xóa miền ngữ nghĩa này khỏi ý nghĩa này</value>
+    <value>Loại bỏ miền ngữ nghĩa này khỏi ý nghĩa này</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
     <value>Loại bỏ hình thức từ vựng này khỏi bổ đề này</value>
@@ -953,7 +953,7 @@
     <value>Biên tập</value>
   </data>
   <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
-    <value>Thêm '{0}' dưới dạng biểu mẫu</value>
+    <value>Thêm '{0}' dưới dạng hình thức</value>
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>Thêm '{0}' như bản dịch sang ý nghĩa đầu tiên</value>
@@ -977,7 +977,7 @@
     <value>Từ vựng</value>
   </data>
   <data name="LexiconEdit_LoadingData" xml:space="preserve">
-    <value>Đang tải dữ liệu ...</value>
+    <value>Tải dữ liệu ...</value>
   </data>
   <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
     <value>Một lỗi bất ngờ xảy ra trong khi tải dữ liệu. {0}</value>
@@ -986,7 +986,7 @@
     <value>Phù hợp</value>
   </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
-    <value>Ý nghĩa [Dịch]</value>
+    <value>Ý nghĩa [dịch]</value>
   </data>
   <data name="LexiconEdit_Or" xml:space="preserve">
     <value>Hoặc</value>
@@ -1022,7 +1022,7 @@
     <value>Thêm mục tiêu làm dịch cho ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Tìm từ vựng có một hoặc nhiều bản dịch phù hợp với mục tiêu</value>
+    <value>Tìm các từ bỏ có một hoặc nhiều bản dịch phù hợp với mục tiêu</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Nhập khẩu đã kiểm tra</value>
@@ -1205,7 +1205,7 @@
     <value>Glosses:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Các phần của bài phát biểu</value>
+    <value>Các phần của lời nói</value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
     <value>Bổ số liên quan</value>
@@ -1412,7 +1412,7 @@
     <value>Bạn có muốn tháo rời nhãn:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
-    <value>từ nhóm nhãn:</value>
+    <value>Từ nhóm nhãn:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Thêm nhóm nhãn</value>
@@ -1639,6 +1639,12 @@
   <data name="Pds_DisabledNotice" xml:space="preserve">
     <value>Bị vô hiệu hóa trong khi các tác vụ nền đang hoạt động</value>
   </data>
+  <data name="Pds_ExistingProject" xml:space="preserve">
+    <value>Tên dự án đã tồn tại - không thể nhập</value>
+  </data>
+  <data name="Pds_ExistingProjectName" xml:space="preserve">
+    <value>Tên dự án tồn tại</value>
+  </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>Biên tập viên ghi chú bên ngoài</value>
   </data>
@@ -1718,7 +1724,7 @@
     <value>không xác định</value>
   </data>
   <data name="Pds_UpdateLabelsWithExternalLabels" xml:space="preserve">
-    <value>Cập nhật nhãn có ghi chú bên ngoài</value>
+    <value>Cập nhật nhãn với các ghi chú bên ngoài</value>
   </data>
   <data name="Pds_Xml" xml:space="preserve">
     <value>XML</value>
@@ -1847,19 +1853,19 @@
     <value>Bắt đầu</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>Nhập dự án máy chủ</value>
+    <value>Dự án máy chủ nhập khẩu</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>Kiểm tra hộp này để bao gồm các văn bản Kinh thánh Hy Lạp và tiếng Do Thái khi tạo dự án của bạn.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Bao gồm các văn bản Kinh thánh NT Hy Lạp?</value>
+    <value>Bao gồm các văn bản Kinh Thánh Hy Lạp NT?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>Bao gồm các văn bản Kinh thánh tiếng Do Thái OT?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
-    <value>Quản lý các dự án hợp tác</value>
+    <value>Quản lý các dự án cộng tác</value>
   </data>
   <data name="ProjectPicker_NoMatches" xml:space="preserve">
     <value>Không có trận đấu.</value>
@@ -1946,7 +1952,7 @@
     <value>1 John</value>
   </data>
   <data name="ProperCase_1_Kings" xml:space="preserve">
-    <value>1 Kings</value>
+    <value>1 vị vua</value>
   </data>
   <data name="ProperCase_1_Peter" xml:space="preserve">
     <value>1 Peter</value>
@@ -1994,7 +2000,7 @@
     <value>Amos</value>
   </data>
   <data name="ProperCase_Colossians" xml:space="preserve">
-    <value>COLOSSIANS</value>
+    <value>Cô -lô -se</value>
   </data>
   <data name="ProperCase_Daniel" xml:space="preserve">
     <value>Daniel</value>
@@ -2117,7 +2123,7 @@
     <value>Sự mặc khải</value>
   </data>
   <data name="ProperCase_Romans" xml:space="preserve">
-    <value>Rô -ma</value>
+    <value>Người La Mã</value>
   </data>
   <data name="ProperCase_Ruth" xml:space="preserve">
     <value>Ruth</value>
@@ -2227,6 +2233,9 @@
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Thực nghiệm</value>
   </data>
+  <data name="Settings_ExportLabelGroups" xml:space="preserve">
+    <value>Xuất khẩu các nhóm nhãn</value>
+  </data>
   <data name="Settings_General" xml:space="preserve">
     <value>Tổng quan</value>
   </data>
@@ -2235,6 +2244,15 @@
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Nhóm</value>
+  </data>
+  <data name="Settings_ImportLabelGroups" xml:space="preserve">
+    <value>Nhập các nhóm nhãn</value>
+  </data>
+  <data name="Settings_LabelGroupsExported" xml:space="preserve">
+    <value>Các nhóm nhãn được xuất sang:</value>
+  </data>
+  <data name="Settings_LabelGroupsImported" xml:space="preserve">
+    <value>Các nhóm nhãn được nhập từ:</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>Hỗ trợ đa màn hình</value>
@@ -2279,7 +2297,7 @@
     <value>Hiển thị chế độ xem mở rộng trên một màn hình khác với bảng điều khiển</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Đối với các hệ thống có ba hoặc nhiều màn hình, hãy hiển thị chế độ xem mở rộng trên màn hình thứ ba</value>
+    <value>Đối với các hệ thống có ba màn hình trở lên, hãy hiển thị chế độ xem mở rộng trên màn hình thứ ba</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Bộ sưu tập văn bản</value>

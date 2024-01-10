@@ -122,7 +122,7 @@
     <value>Zusammenarbeit E -Mail:</value>
   </data>
   <data name="AccountInfo_CollaborationUserIdLabel" xml:space="preserve">
-    <value>Collaboration UserId:</value>
+    <value>Kollaboration BenutzerID:</value>
   </data>
   <data name="AccountInfo_CollaborationUsernameLabel" xml:space="preserve">
     <value>Kollaboration Benutzername:</value>
@@ -1016,7 +1016,7 @@
     <value>Fügen Sie als Form für ... hinzu</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Finden Sie vollständige oder teilweise Lexem- oder Formularübereinstimmungen für Quelle</value>
+    <value>Finden Sie vollständige oder partielle Lexeme- oder Formularübereinstimmungen für die Quelle</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Ziel als Übersetzung für ...</value>
@@ -1253,7 +1253,7 @@
     <value>Datenbank erstellen ...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
-    <value>Führen Sie vollständig zusammen ... neu lädt die Schnittstelle neu</value>
+    <value>Vervollständigen Sie vollständig ... Nachladen der Schnittstelle neu</value>
   </data>
   <data name="MergeDialog_OperationCancelled" xml:space="preserve">
     <value>Operation storniert</value>
@@ -1340,7 +1340,7 @@
     <value>Nutzername:</value>
   </data>
   <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
-    <value>Der Benutzer ist bereits im System!</value>
+    <value>Der Benutzer ist bereits auf dem System!</value>
   </data>
   <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
     <value>Validieren Sie den E -Mail -Code</value>
@@ -1373,7 +1373,7 @@
     <value>Diese Notiz löschen?</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Durch Verbände</value>
+    <value>Durch Assoziationen</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filter</value>
@@ -1568,7 +1568,7 @@
     <value>Wählen Sie einen SMT -Algorithmus zum Training aus</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie die Massengenehmigung hinzu, um sie anzeigen</value>
+    <value>Fügen Sie die Zulassung der Masse hinzu, um sie anzeigen</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>Zur Anzeige hinzufügen</value>
@@ -1592,7 +1592,7 @@
     <value>Fügen Sie Text zur Anzeige hinzu</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie Text zur neuen Ansicht hinzu</value>
+    <value>Fügen Sie der neuen Ansicht Text hinzu</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Zur Anzeige hinzufügen</value>
@@ -1638,6 +1638,12 @@
   </data>
   <data name="Pds_DisabledNotice" xml:space="preserve">
     <value>Deaktiviert, während Hintergrundaufgaben funktionieren</value>
+  </data>
+  <data name="Pds_ExistingProject" xml:space="preserve">
+    <value>Der Projektname gibt es bereits - kann nicht importieren</value>
+  </data>
+  <data name="Pds_ExistingProjectName" xml:space="preserve">
+    <value>Projektname existiert</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>Externe Notes Editor</value>
@@ -1838,7 +1844,7 @@
     <value>Projekt löschen</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Buchauswahl aktivieren</value>
+    <value>Aktivieren Sie die Buchauswahl</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
     <value>Wenn Sie überprüft werden, können Sie auswählen, welche Bücher zu verarbeiten sind.</value>
@@ -1853,7 +1859,7 @@
     <value>Aktivieren Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>NT -griechische biblische Texte einschließen?</value>
+    <value>NT Griechische biblische Texte einschließen?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>OT hebräische biblische Texte einschließen?</value>
@@ -1958,7 +1964,7 @@
     <value>1 Thessalonicher</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 Timotheus</value>
+    <value>1 Timothy</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 Chroniken</value>
@@ -2045,7 +2051,7 @@
     <value>James</value>
   </data>
   <data name="ProperCase_Jeremiah" xml:space="preserve">
-    <value>Jeremia</value>
+    <value>Jeremiah</value>
   </data>
   <data name="ProperCase_Job" xml:space="preserve">
     <value>Arbeit</value>
@@ -2227,6 +2233,9 @@
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Experimental</value>
   </data>
+  <data name="Settings_ExportLabelGroups" xml:space="preserve">
+    <value>Export -Etikettengruppen</value>
+  </data>
   <data name="Settings_General" xml:space="preserve">
     <value>Allgemein</value>
   </data>
@@ -2235,6 +2244,15 @@
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Gruppe</value>
+  </data>
+  <data name="Settings_ImportLabelGroups" xml:space="preserve">
+    <value>Labelgruppen importieren</value>
+  </data>
+  <data name="Settings_LabelGroupsExported" xml:space="preserve">
+    <value>Etikettengruppen exportiert nach:</value>
+  </data>
+  <data name="Settings_LabelGroupsImported" xml:space="preserve">
+    <value>Etikettengruppen importiert von:</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>Multi -Monitor -Unterstützung</value>
@@ -2294,7 +2312,7 @@
     <value>Validieren Sie den E -Mail -Code</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Aktivieren Sie die Anzeige von Versen durch Versuchssammlungen</value>
+    <value>Aktivieren Sie die Anzeige von Verse-by-Vers-Textsammlungen</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>Aufgabe abbrechen</value>
@@ -2408,7 +2426,7 @@
     <value>Neue hinzufügen</value>
   </data>
   <data name="UpdateParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>Neue Bücher aktualisieren und hinzufügen</value>
+    <value>Aktualisieren Sie und fügen Sie neue Bücher hinzu</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
     <value>Bücher auswählen</value>

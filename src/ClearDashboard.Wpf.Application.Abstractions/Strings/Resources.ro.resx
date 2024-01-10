@@ -377,7 +377,7 @@
     <value>copaci; Parfumuri și condimente</value>
   </data>
   <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>Înțelepciune, înțelegere</value>
+    <value>înțelepciune, înțelegere</value>
   </data>
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>Toate</value>
@@ -692,7 +692,7 @@
     <value>Note</value>
   </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
-    <value>Nu există date de versuri în acest interval de versuri.</value>
+    <value>Nu există date de versuri în acest game de versuri.</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
     <value>Îndepărtați corpusul</value>
@@ -911,7 +911,7 @@
     <value>Introduceți un nou luciu</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
-    <value>Lemma</value>
+    <value>LEMMA</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
     <value>Lemma/forme:</value>
@@ -971,7 +971,7 @@
     <value>Complet</value>
   </data>
   <data name="LexiconEdit_FullyMatching" xml:space="preserve">
-    <value>Potrivire completă</value>
+    <value>Potrivirea completă</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexem</value>
@@ -1052,7 +1052,7 @@
     <value>Limbă țintă</value>
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
-    <value>Cuvântul țintă</value>
+    <value>Cuvânt țintă</value>
   </data>
   <data name="LexiconImport_Title" xml:space="preserve">
     <value>Import de lexic</value>
@@ -1106,7 +1106,7 @@
     <value>Ștergeți aspectul salvat</value>
   </data>
   <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
-    <value>Machete de proiect</value>
+    <value>Aspecte de proiect</value>
   </data>
   <data name="MainView_LayoutsSave" xml:space="preserve">
     <value>Salvați aspectul curent</value>
@@ -1556,7 +1556,7 @@
     <value>Tren</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>ALIGNER WORD MASINE DE TRAIN</value>
+    <value>ALIGNIER DE CUMPĂRĂ A CAMERULUI DE TRAIN</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Setați cartografierea versului între Corpora paralelizată</value>
@@ -1571,7 +1571,7 @@
     <value>Adăugați aprobarea în vrac pentru a vizualiza</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați la vedere</value>
+    <value>Adăugați la vizualizare</value>
   </data>
   <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
     <value>Adăugați la New View</value>
@@ -1592,10 +1592,10 @@
     <value>Adăugați text la vizualizare</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați text la New View</value>
+    <value>Adăugați text la vizualizare nouă</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați la vedere</value>
+    <value>Adăugați la vizualizare</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>Auxiliar</value>
@@ -1638,6 +1638,12 @@
   </data>
   <data name="Pds_DisabledNotice" xml:space="preserve">
     <value>Dezactivat în timp ce sarcinile de fundal funcționează</value>
+  </data>
+  <data name="Pds_ExistingProject" xml:space="preserve">
+    <value>Numele proiectului există deja - nu se poate importa</value>
+  </data>
+  <data name="Pds_ExistingProjectName" xml:space="preserve">
+    <value>Numele proiectului există</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>Editor de note externe</value>
@@ -1781,7 +1787,7 @@
     <value>Prefix</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Afișați backtranslația</value>
+    <value>Arată backtranslație</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>Tulpină</value>
@@ -1856,7 +1862,7 @@
     <value>Includeți textele biblice grecești NT?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
-    <value>Includeți textele biblice ebraice?</value>
+    <value>Includeți texte biblice ebraice?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Gestionați proiectele de colaborare</value>
@@ -2227,6 +2233,9 @@
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Experimental</value>
   </data>
+  <data name="Settings_ExportLabelGroups" xml:space="preserve">
+    <value>Grupuri de etichete de export</value>
+  </data>
   <data name="Settings_General" xml:space="preserve">
     <value>General</value>
   </data>
@@ -2235,6 +2244,15 @@
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>grup</value>
+  </data>
+  <data name="Settings_ImportLabelGroups" xml:space="preserve">
+    <value>Import grupuri de etichete</value>
+  </data>
+  <data name="Settings_LabelGroupsExported" xml:space="preserve">
+    <value>Grupuri de etichete exportate la:</value>
+  </data>
+  <data name="Settings_LabelGroupsImported" xml:space="preserve">
+    <value>Grupuri de etichete importate de la:</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>Suport multi -monitor</value>

@@ -497,7 +497,7 @@
     <value>Sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Bagian sumber</value>
+    <value>Bagian Sumber</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Sumber Ref</value>
@@ -1639,6 +1639,12 @@
   <data name="Pds_DisabledNotice" xml:space="preserve">
     <value>Dinonaktifkan saat tugas latar belakang sedang berfungsi</value>
   </data>
+  <data name="Pds_ExistingProject" xml:space="preserve">
+    <value>Nama proyek sudah ada - tidak dapat mengimpor</value>
+  </data>
+  <data name="Pds_ExistingProjectName" xml:space="preserve">
+    <value>Nama proyek ada</value>
+  </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>Editor Catatan Eksternal</value>
   </data>
@@ -1697,7 +1703,7 @@
     <value>Standar</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Studibible</value>
+    <value>Studybible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBibleadditions</value>
@@ -2078,7 +2084,7 @@
     <value>Luke</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
-    <value>Malachi</value>
+    <value>Maleakhi</value>
   </data>
   <data name="ProperCase_Mark" xml:space="preserve">
     <value>Tanda</value>
@@ -2227,6 +2233,9 @@
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Eksperimental</value>
   </data>
+  <data name="Settings_ExportLabelGroups" xml:space="preserve">
+    <value>Grup Label Ekspor</value>
+  </data>
   <data name="Settings_General" xml:space="preserve">
     <value>Umum</value>
   </data>
@@ -2235,6 +2244,15 @@
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Kelompok</value>
+  </data>
+  <data name="Settings_ImportLabelGroups" xml:space="preserve">
+    <value>Impor Grup Label</value>
+  </data>
+  <data name="Settings_LabelGroupsExported" xml:space="preserve">
+    <value>Grup label diekspor ke:</value>
+  </data>
+  <data name="Settings_LabelGroupsImported" xml:space="preserve">
+    <value>Grup label diimpor dari:</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>Dukungan multi monitor</value>

@@ -1639,6 +1639,12 @@
   <data name="Pds_DisabledNotice" xml:space="preserve">
     <value>የጀርባ ሥራዎች ሲሰሩ የአካል ጉዳተኞች</value>
   </data>
+  <data name="Pds_ExistingProject" xml:space="preserve">
+    <value>የፕሮጀክት ስም ቀድሞውኑ አለ - ማስመጣት አይችልም</value>
+  </data>
+  <data name="Pds_ExistingProjectName" xml:space="preserve">
+    <value>የፕሮጀክት ስም አለ</value>
+  </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>ውጫዊ ማስታወሻዎች አርታኢ</value>
   </data>
@@ -2227,6 +2233,9 @@
   <data name="Settings_Experimental" xml:space="preserve">
     <value>ሙከራ</value>
   </data>
+  <data name="Settings_ExportLabelGroups" xml:space="preserve">
+    <value>ወደ ውጭ የመላክ መለያዎች</value>
+  </data>
   <data name="Settings_General" xml:space="preserve">
     <value>አጠቃላይ</value>
   </data>
@@ -2235,6 +2244,15 @@
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>ቡድን</value>
+  </data>
+  <data name="Settings_ImportLabelGroups" xml:space="preserve">
+    <value>የማስመሰል ቡድኖች ያስመጡ</value>
+  </data>
+  <data name="Settings_LabelGroupsExported" xml:space="preserve">
+    <value>ወደ ውጭ ወደ ውጭ ይላኩ:</value>
+  </data>
+  <data name="Settings_LabelGroupsImported" xml:space="preserve">
+    <value>የመለያዎች መለያዎች ከ:</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>ባለብዙ ቁጥጥር ድጋፍ</value>

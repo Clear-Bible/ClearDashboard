@@ -140,7 +140,7 @@
     <value>Correo electrónico de paratext:</value>
   </data>
   <data name="AccountInfo_ParatextUsernameLabel" xml:space="preserve">
-    <value>PARATEXT Nombre de usuario:</value>
+    <value>Nombre de usuario de Paratext:</value>
   </data>
   <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
     <value>Reiniciar aplicación</value>
@@ -500,7 +500,7 @@
     <value>Parte fuente</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Reflexión de origen</value>
+    <value>Fuente Ref.</value>
   </data>
   <data name="BulkAlignmentReview_Target" xml:space="preserve">
     <value>Objetivo</value>
@@ -581,7 +581,7 @@
     <value>Proyectos</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
-    <value>Seleccionar proyecto</value>
+    <value>Proyecto seleccionado</value>
   </data>
   <data name="Copy" xml:space="preserve">
     <value>Copiar</value>
@@ -656,7 +656,7 @@
     <value>Eliminar la alineación de '{0}'?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>¿Eliminar todas las alineaciones?</value>
+    <value>Eliminar todas las alineaciones?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>El token '{0}' tiene múltiples alineaciones definidas. Haga clic en '{1}' eliminará todas las alineaciones.</value>
@@ -698,7 +698,7 @@
     <value>Eliminar corpus</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>Mostrar los controles de vista</value>
+    <value>Mostrar los controles de la vista</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>Token dividido</value>
@@ -713,7 +713,7 @@
     <value>División de tres vías</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Un si unión a la token compuesta</value>
+    <value>Un si unir un token compuesto</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -1604,7 +1604,7 @@
     <value>Traducción inversa</value>
   </data>
   <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
-    <value>Calcule el nuevo modelo de traducción</value>
+    <value>Calcular el nuevo modelo de traducción</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
     <value>Cambiar el nivel de zoom del contenido</value>
@@ -1638,6 +1638,12 @@
   </data>
   <data name="Pds_DisabledNotice" xml:space="preserve">
     <value>Desactivado mientras las tareas de fondo funcionan</value>
+  </data>
+  <data name="Pds_ExistingProject" xml:space="preserve">
+    <value>El nombre del proyecto ya existe: no se puede importar</value>
+  </data>
+  <data name="Pds_ExistingProjectName" xml:space="preserve">
+    <value>El nombre del proyecto existe</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>Editor de notas externos</value>
@@ -2021,7 +2027,7 @@
     <value>Ezra</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Gálate</value>
+    <value>Gálatas</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>Génesis</value>
@@ -2227,6 +2233,9 @@
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Experimental</value>
   </data>
+  <data name="Settings_ExportLabelGroups" xml:space="preserve">
+    <value>Grupos de etiquetas de exportación</value>
+  </data>
   <data name="Settings_General" xml:space="preserve">
     <value>General</value>
   </data>
@@ -2235,6 +2244,15 @@
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Grupo</value>
+  </data>
+  <data name="Settings_ImportLabelGroups" xml:space="preserve">
+    <value>Importar grupos de etiquetas</value>
+  </data>
+  <data name="Settings_LabelGroupsExported" xml:space="preserve">
+    <value>Grupos de etiqueta exportados a:</value>
+  </data>
+  <data name="Settings_LabelGroupsImported" xml:space="preserve">
+    <value>Grupos de etiqueta importados de:</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>Soporte de múltiples monitor</value>
@@ -2264,7 +2282,7 @@
     <value>Guardado en servidor remoto</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Guardar el usuario de GitLab al servidor</value>
+    <value>Guardar el usuario de GitLab en el servidor</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
     <value>Guardar ajustes</value>
@@ -2294,7 +2312,7 @@
     <value>Validar el código de correo electrónico</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Habilitar visualización de colecciones de texto verso a versiones</value>
+    <value>Habilitar visualización de colecciones de texto verso por verso</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>Cancelar tarea</value>

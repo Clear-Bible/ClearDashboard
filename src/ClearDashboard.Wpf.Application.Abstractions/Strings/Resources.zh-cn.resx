@@ -116,7 +116,7 @@
     <value>ClearDashboard用户ID：</value>
   </data>
   <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
-    <value>ClearDashboard用户名：</value>
+    <value>Cleardashboard用户名：</value>
   </data>
   <data name="AccountInfo_CollaborationEmailLabel" xml:space="preserve">
     <value>协作电子邮件：</value>
@@ -449,7 +449,7 @@
     <value>散装对齐编辑</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>批量对齐审查</value>
+    <value>批量对准评论</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>数数</value>
@@ -491,7 +491,7 @@
     <value>部分</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>枢密性的单词</value>
+    <value>枢纽的单词</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>来源</value>
@@ -632,7 +632,7 @@
     <value>添加对齐方式？</value>
   </data>
   <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>与'{1}'对齐'{0}'？</value>
+    <value>用'{1}'对齐'{0}'？</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
     <value>结盟</value>
@@ -656,7 +656,7 @@
     <value>删除“ {0}”的对齐？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>删除所有对齐方式？</value>
+    <value>删除所有路线？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>令牌'{0}'具有多个对齐定义。单击'{1}'将删除所有对齐。</value>
@@ -701,7 +701,7 @@
     <value>显示视图控件</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>拆分令牌</value>
+    <value>分开令牌</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>将拆分应用于其他令牌</value>
@@ -887,7 +887,7 @@
     <value>更改所有不设置的事件</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>如果检查了，这将改变此词的所有不设置的情况</value>
+    <value>如果检查了，这将改变此词的所有不设置</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>一致性</value>
@@ -1322,7 +1322,7 @@
     <value>姓</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
-    <value>新的协作用户</value>
+    <value>新的合作用户</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
     <value>密码：</value>
@@ -1421,7 +1421,7 @@
     <value>添加标签组</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>一个标签组已经存在</value>
+    <value>标签组已经存在，名称为</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>初始化标签组</value>
@@ -1583,7 +1583,7 @@
     <value>创建新单词对齐</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>创建新的语料库令牌化</value>
+    <value>创建新的语料库</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
     <value>添加新的Interlinear</value>
@@ -1638,6 +1638,12 @@
   </data>
   <data name="Pds_DisabledNotice" xml:space="preserve">
     <value>在背景任务工作时禁用</value>
+  </data>
+  <data name="Pds_ExistingProject" xml:space="preserve">
+    <value>项目名称已经存在 - 无法导入</value>
+  </data>
+  <data name="Pds_ExistingProjectName" xml:space="preserve">
+    <value>存在项目名称</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>外部音符编辑器</value>
@@ -1727,7 +1733,7 @@
     <value>放大内容</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>从内容中缩小</value>
+    <value>缩小内容</value>
   </data>
   <data name="PHM" xml:space="preserve">
     <value>PHM</value>
@@ -1814,7 +1820,7 @@
     <value>协作项目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>创建您的项目以开始。</value>
+    <value>创建您的项目以入门。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>创建一个新项目</value>
@@ -1865,7 +1871,7 @@
     <value>无匹配。</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>这里很孤单。请创建一个新项目。</value>
+    <value>这里很孤独。请创建一个新项目。</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
     <value>未安装paratext。请安装Paratext并重新运行ClearDashboard应用程序。</value>
@@ -1886,7 +1892,7 @@
     <value>模型文本（LWC）</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>paratext正在运行但未连接。</value>
+    <value>Paratext正在运行但未连接。</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>PARATEXT项目</value>
@@ -2216,7 +2222,7 @@
     <value>在实验组中启用外部Paratext注释</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
-    <value>启用外部Paratext注释</value>
+    <value>启用外部paratext注释</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>启用词典进口</value>
@@ -2227,6 +2233,9 @@
   <data name="Settings_Experimental" xml:space="preserve">
     <value>实验</value>
   </data>
+  <data name="Settings_ExportLabelGroups" xml:space="preserve">
+    <value>导出标签组</value>
+  </data>
   <data name="Settings_General" xml:space="preserve">
     <value>一般的</value>
   </data>
@@ -2235,6 +2244,15 @@
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>团体</value>
+  </data>
+  <data name="Settings_ImportLabelGroups" xml:space="preserve">
+    <value>导入标签组</value>
+  </data>
+  <data name="Settings_LabelGroupsExported" xml:space="preserve">
+    <value>标签组导出到：</value>
+  </data>
+  <data name="Settings_LabelGroupsImported" xml:space="preserve">
+    <value>从：</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>多监视器支持</value>
@@ -2411,7 +2429,7 @@
     <value>更新并添加新书</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
-    <value>选择书籍</value>
+    <value>选择书</value>
   </data>
   <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
     <value>更新并添加新</value>
