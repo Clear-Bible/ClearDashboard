@@ -166,6 +166,18 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             (nameof(NoteEditorMouseLeave), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
+        /// Identifies the NoteSeen routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteSeenEvent = EventManager.RegisterRoutedEvent
+            (nameof(NoteSeen), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the NoteReplyAdded routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteReplyAddedEvent = EventManager.RegisterRoutedEvent
+            (nameof(NoteReplyAdded), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
         /// Identifies the NoteSendToParatext routed event.
         /// </summary>
         public static readonly RoutedEvent NoteSendToParatextEvent = EventManager.RegisterRoutedEvent
@@ -632,6 +644,36 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 EntityIds = EntityIds,
                 Note = Note
             });
+        }
+
+        private void RaiseNoteSeenEvent(NoteSeenEventArgs args)
+        {
+            RaiseEvent(new NoteSeenEventArgs
+            {
+                RoutedEvent = NoteSeenEvent,
+                Seen = args.Seen,
+                NoteViewModel = args.NoteViewModel
+            });
+        }
+
+        private void RaiseReplyAddedEvent(NoteReplyAddEventArgs args)
+        {
+            RaiseEvent(new NoteReplyAddEventArgs
+            {
+                RoutedEvent = NoteReplyAddedEvent,
+                Text = args.Text,
+                NoteViewModelWithReplies = args.NoteViewModelWithReplies
+            });
+        }
+
+        private void OnNoteSeen(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteSeenEvent(e as NoteSeenEventArgs);
+        }
+
+        private void OnNoteReplyAdded(object sender, RoutedEventArgs e)
+        {
+            RaiseReplyAddedEvent(e as NoteReplyAddEventArgs);
         }
 
         private void ConfirmNoteDeletion(object sender, RoutedEventArgs e)
@@ -1372,6 +1414,25 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             add => AddHandler(NoteEditorMouseLeaveEvent, value);
             remove => RemoveHandler(NoteEditorMouseLeaveEvent, value);
         }
+
+        /// <summary>
+        /// Occurs when the "seen by me" checkbox is checked or unchecked.
+        /// </summary>
+        public event RoutedEventHandler NoteSeen
+        {
+            add => AddHandler(NoteSeenEvent, value);
+            remove => RemoveHandler(NoteSeenEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when a new reply is added to a note.
+        /// </summary>
+        public event RoutedEventHandler NoteReplyAdded
+        {
+            add => AddHandler(NoteReplyAddedEvent, value);
+            remove => RemoveHandler(NoteReplyAddedEvent, value);
+        }
+
 
         /// <summary>
         /// Occurs when the user requests a note be sent to Paratext.

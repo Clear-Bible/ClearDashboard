@@ -35,8 +35,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     using System.Linq;  //  needed to move this into the namespace to allow the .Reverse() to use this over the SIL.Linq
     using ClearDashboard.DAL.Alignment;
+    using ClearDashboard.DAL.Alignment.Corpora;
     using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
     using ClearDashboard.Wpf.Application.Events.Notes;
+    using ClearDashboard.Wpf.Application.ViewModels.Notes;
     using Paratext.PluginInterfaces;
 
     public class EnhancedViewModel : VerseAwareConductorOneActive, IEnhancedViewModel, IPaneViewModel,
@@ -729,6 +731,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             if (message.Verse != "" && CurrentBcv.BBBCCCVVV != message.Verse.PadLeft(9, '0'))
             {
                 CurrentBcv.SetVerseFromId(message.Verse);
+                NoteControlVisibility = Visibility.Collapsed;
             }
 
             await Task.CompletedTask;
@@ -1331,6 +1334,48 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             else
             {
                 await NoteManager.ClearLabelGroupDefault();
+            }
+        }
+
+        public void NoteReplyAdded(object sender, NoteReplyAddEventArgs e)
+        {
+            Task.Run(() => NoteReplyAddedAsync(e).GetAwaiter());
+        }
+
+        public async Task NoteReplyAddedAsync(NoteReplyAddEventArgs args)
+        {
+            await NoteManager.AddReplyToNoteAsync(args.NoteViewModelWithReplies, args.Text);
+        }
+
+        public void NoteSeen(object sender, NoteSeenEventArgs e)
+        {
+            Task.Run(() => NoteSeenAsync(e).GetAwaiter());
+        }
+
+        public async Task NoteSeenAsync(NoteSeenEventArgs args)
+        {
+            var note = args.NoteViewModel;
+            var seen = args.Seen;
+            var userId = NoteManager.CurrentUserId;
+
+            if (note != null && seen != null && userId != null)
+            {
+                var seenByUserIdsChanged = false;
+                if (seen.Value && !note.SeenByUserIds.Contains(userId.Id))
+                {
+                    note.AddSeenByUserId(userId.Id);
+                    seenByUserIdsChanged = true;
+                }
+                else if (!seen.Value && note.SeenByUserIds.Contains(userId.Id))
+                {
+                    note.RemoveSeenByUserId(userId.Id);
+                    seenByUserIdsChanged = true;
+                }
+
+                if (seenByUserIdsChanged)
+                {
+                    await NoteManager.UpdateNoteAsync(note);
+                }
             }
         }
 

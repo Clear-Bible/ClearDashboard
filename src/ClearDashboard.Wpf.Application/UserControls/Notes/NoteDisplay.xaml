@@ -252,13 +252,26 @@
                 </userControls:TogglePanel>
 
                 <!--  Replies  -->
-                <!--<userControls:TogglePanel IsOpen="False">
+                <userControls:TogglePanel IsOpen="False">
                     <userControls:TogglePanel.Header>
                         <Label Content="{helpers:Localization Notes_NoteReplies}"
                                FontSize="13"
                                FontWeight="SemiBold" />
                     </userControls:TogglePanel.Header>
-                </userControls:TogglePanel>-->
+                    <notes:NoteRepliesDisplay
+                        Margin="20,0"
+                        CurrentUserId="{Binding ElementName=NotesDisplayControl, Path=CurrentUserId.Id}"
+                        NoteViewModelWithReplies="{Binding ElementName=NotesDisplayControl, Path=Note}"
+                        NoteReplyAdded="OnNoteReplyAdded"
+                        NoteSeen="OnNoteSeen"
+                        ReplyFontSize="12"
+                        TimestampColor="DarkGray"
+                        TimestampFontStyle="Normal"
+                        TimestampMargin="-2,0,10,0"
+                        TimestampOrientation="Vertical"
+                        />
+
+                </userControls:TogglePanel>
             </StackPanel>
 
             <!--  Paratext send  -->

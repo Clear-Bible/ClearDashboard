@@ -619,7 +619,7 @@
                         </StackPanel>
                         <notes1:NoteRepliesDisplay
                             Margin="20,0"
-                            CurrentUser="{Binding CurrentUser}"
+                            CurrentUserId="{Binding CurrentUser.Id}"
                             IsEnabled="{Binding IsNoteSelected}"
                             NoteReplyAdded="OnNoteReplyAdd"
                             NoteSeen="OnNoteSeen"
@@ -627,6 +627,7 @@
                             TimestampColor="DarkGray"
                             TimestampFontStyle="Normal"
                             TimestampMargin="-2,0,10,0"
+                            TimestampOrientation="Horizontal"
                             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=RepliesVisibility}" />
                     </StackPanel>
                 </GroupBox>
