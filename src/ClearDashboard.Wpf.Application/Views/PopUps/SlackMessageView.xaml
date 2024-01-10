@@ -16,6 +16,7 @@
     Title="SlackMessageView"
     Width="800"
     Height="950"
+    MaxHeight="1000"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     FontFamily="{StaticResource ClearDashboardFont}"
     Loaded="Window_Loaded"
