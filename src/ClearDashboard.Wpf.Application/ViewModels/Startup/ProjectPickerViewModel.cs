@@ -494,12 +494,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             EventAggregator.Subscribe(this);
 
             IsParatextInstalled = _paratextProxy.IsParatextInstalled();
-
-            if (Pinger.PingHost())
+            if (!IsParatextInstalled)
             {
-                await GetCollabProjects();
+                // await this.ShowMessageAsync("This is the title", "Some message");
             }
-                
 
             IsParatextRunning = _paratextProxy.IsParatextRunning();
             if (IsParatextRunning)
@@ -513,16 +511,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 ListenForParatextStart();
             }
-            if (!IsParatextInstalled)
-            {
-                // await this.ShowMessageAsync("This is the title", "Some message");
-            }
+
 
             if (Pinger.PingHost())
             {
                 await FinishAccountSetup();
+
+                await GetCollabProjects();
             }
-                
+
             await GetRemoteUser();
 
             await LicenseManager.DeleteOldLicense();
