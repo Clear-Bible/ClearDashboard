@@ -1282,21 +1282,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 return;
             }
 
-            _longRunningTaskManager.Create(_importTaskName, LongRunningTaskStatus.Running);
-
-            // get the user's projects
-            var projectList = await _gitLabHttpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
-
-            foreach (var gitLabProject in projectList)
-            {
-                var guid = gitLabProject.Name.Substring(2);
-                if (Guid.Parse(guid) == project.ProjectId)
-                {
-                    _collaborationManager.SetRemoteUrl(gitLabProject.HttpUrlToRepo, gitLabProject.Name);
-                    break;
-                }
-            }
-
             // check to see if there is an existing project with the same name
             var p = DashboardProjects.FirstOrDefault(x => x.ProjectName == project.ProjectName);
             if (p is not null)
@@ -1314,6 +1299,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
                 return;
             }
+
+
+
+            _longRunningTaskManager.Create(_importTaskName, LongRunningTaskStatus.Running);
+
+            // get the user's projects
+            var projectList = await _gitLabHttpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
+
+            foreach (var gitLabProject in projectList)
+            {
+                var guid = gitLabProject.Name.Substring(2);
+                if (Guid.Parse(guid) == project.ProjectId)
+                {
+                    _collaborationManager.SetRemoteUrl(gitLabProject.HttpUrlToRepo, gitLabProject.Name);
+                    break;
+                }
+            }
+
+
 
             var importServerProjectViewModel = LifetimeScope?.Resolve<MergeServerProjectDialogViewModel>();
             if (importServerProjectViewModel != null)
