@@ -367,6 +367,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
         }
 
+        private bool _isProjectLoaded;
+        public bool IsProjectLoaded
+        {
+            get => _isProjectLoaded;
+            set
+            {
+                _isProjectLoaded = value;
+                NotifyOfPropertyChange(() => IsProjectLoaded);
+            }
+        }
+
         #endregion //Observable Properties
 
 
@@ -453,6 +464,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             IsTokenSplittingEnabled = Settings.Default.IsTokenSplittingEnabled;
             IsLexiconImportEnabled = AbstractionsSettingsHelper.GetEnabledLexiconImport();
             IsExternalNotesEnabled = AbstractionsSettingsHelper.GetExternalNotesEnabled();
+
+            IsProjectLoaded = ProjectManager.HasCurrentProject;
 
             base.OnViewReady(view);
         }
