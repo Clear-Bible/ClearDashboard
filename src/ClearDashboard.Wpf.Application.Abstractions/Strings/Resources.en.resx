@@ -1639,6 +1639,12 @@
   <data name="Pds_DisabledNotice" xml:space="preserve">
     <value>Disabled while background tasks are working</value>
   </data>
+  <data name="Pds_ExistingProject" xml:space="preserve">
+    <value>Project Name Already Exists - Cannot Import</value>
+  </data>
+  <data name="Pds_ExistingProjectName" xml:space="preserve">
+    <value>Project Name Exists</value>
+  </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>External Notes Editor</value>
   </data>

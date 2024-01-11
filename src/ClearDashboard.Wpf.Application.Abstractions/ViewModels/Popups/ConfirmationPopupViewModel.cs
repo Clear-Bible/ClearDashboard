@@ -1,17 +1,11 @@
-﻿using System;
-using System.CodeDom;
-using System.Linq;
-using System.Text;
+﻿using Autofac;
+using Caliburn.Micro;
+using ClearDashboard.Wpf.Application.Services;
+using MediatR;
+using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using Autofac;
-using Caliburn.Micro;
-using ClearBible.Engine.Corpora;
-using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
-using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Popups;
 public class ConfirmationPopupViewModel : SimpleMessagePopupViewModel
@@ -59,6 +53,8 @@ public class ConfirmationPopupViewModel : SimpleMessagePopupViewModel
                     return "Switch Paratext Project";
                 case SimpleMessagePopupMode.DeleteParallelLineConfirmation:
                     return "Confirmation";
+                case SimpleMessagePopupMode.ExistingProjectNameTheSame:
+                    return LocalizationService!["Pds_ExistingProjectName"];
                 default:
                     return string.Empty;
             }
@@ -72,6 +68,8 @@ public class ConfirmationPopupViewModel : SimpleMessagePopupViewModel
             switch (SimpleMessagePopupMode)
             {
                 case SimpleMessagePopupMode.SwitchParatextProjectMessage:
+                    return LocalizationService!["Ok"];
+                case SimpleMessagePopupMode.ExistingProjectNameTheSame:
                     return LocalizationService!["Ok"];
                 default:
                     return LocalizationService!["Yes"];
@@ -88,6 +86,8 @@ public class ConfirmationPopupViewModel : SimpleMessagePopupViewModel
             switch (SimpleMessagePopupMode)
             {
                 case SimpleMessagePopupMode.SwitchParatextProjectMessage:
+                    return Visibility.Collapsed;
+                case SimpleMessagePopupMode.ExistingProjectNameTheSame:
                     return Visibility.Collapsed;
                 default:
                     return Visibility.Visible;
@@ -115,6 +115,8 @@ public class ConfirmationPopupViewModel : SimpleMessagePopupViewModel
                 return LocalizationService!["Pds_SwitchParatextProject"];
             case SimpleMessagePopupMode.DeleteParallelLineConfirmation:
                 return LocalizationService!["Pds_DeleteParallelLine"];
+            case SimpleMessagePopupMode.ExistingProjectNameTheSame:
+                return LocalizationService!["Pds_ExistingProject"];
             default:
                 return string.Empty;
         }

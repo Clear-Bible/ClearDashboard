@@ -24,12 +24,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Popups
         CloseEnhancedViewConfirmation,
         SwitchParatextProjectMessage,
         DeleteParallelLineConfirmation,
+        ExistingProjectNameTheSame,
     }
 
     public abstract class SimpleMessagePopupViewModel : DashboardApplicationScreen
     {
         private SimpleMessagePopupMode _simpleMessagePopupMode;
-
 
         public static dynamic CreateDialogSettings(string title)
         {
