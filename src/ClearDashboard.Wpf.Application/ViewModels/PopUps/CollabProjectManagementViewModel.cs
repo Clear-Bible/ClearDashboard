@@ -5,6 +5,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Popups;
 using MediatR;
@@ -357,6 +358,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public async void Close()
         {
+            await EventAggregator.PublishOnUIThreadAsync(new ReloadProjectPickerProjects());
+
             await TryCloseAsync();
         }
 
@@ -571,10 +574,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 ProjectOwners = new ObservableCollection<GitLabProjectUser>();
                 SelectedCurrentUser = null;
 
+
+                // update the project's SHA in the database
+                Guid guid = Guid.Parse(SelectedProject.Name.Substring(2)); // remove the leading "P_"
+                await EventAggregator.PublishOnUIThreadAsync(new DeletedGitProject(guid));
+
                 SelectedProject = null;
                 ShowDeleteProjectPanel = Visibility.Hidden;
-
-
             }
         }
 
