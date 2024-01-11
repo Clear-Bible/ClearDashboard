@@ -36,9 +36,9 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         #region Static Dependency Properties
 
         /// <summary>
-        /// Identifies the CurrentUser dependency property.
+        /// Identifies the CurrentUserId dependency property.
         /// </summary>
-        public static readonly DependencyProperty CurrentUserProperty = DependencyProperty.Register(nameof(CurrentUser), typeof(User), typeof(NoteRepliesDisplay));
+        public static readonly DependencyProperty CurrentUserIdProperty = DependencyProperty.Register(nameof(CurrentUserId), typeof(Guid), typeof(NoteRepliesDisplay));
         
         /// <summary>
         /// Identifies the ReplyColor dependency property.
@@ -161,6 +161,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
         /// <summary>
+        /// Identifies the TimestampOrientation dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TimestampOrientationProperty = DependencyProperty.Register(nameof(TimestampOrientation), typeof(Orientation), typeof(NoteRepliesDisplay),
+            new PropertyMetadata(Orientation.Horizontal));
+
+        /// <summary>
         /// Identifies the TimestampPadding dependency property.
         /// </summary>
         public static readonly DependencyProperty TimestampPaddingProperty = DependencyProperty.Register(nameof(TimestampPadding), typeof(Thickness), typeof(NoteRepliesDisplay),
@@ -214,12 +220,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets the current user for determining the value of the Seen flags.
+        /// Gets or sets the ID of the current user for determining the value of the Seen flags.
         /// </summary>
-        public User CurrentUser
+        public Guid CurrentUserId
         {
-            get => (User)GetValue(CurrentUserProperty);
-            set => SetValue(CurrentUserProperty, value);
+            get => (Guid)GetValue(CurrentUserIdProperty);
+            set => SetValue(CurrentUserIdProperty, value);
         }
 
         /// <summary>
@@ -400,6 +406,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             get => (Thickness)GetValue(TimestampMarginProperty);
             set => SetValue(TimestampMarginProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the orientation for the timestamp.
+        /// </summary>
+        public Orientation TimestampOrientation
+        {
+            get => (Orientation)GetValue(TimestampOrientationProperty);
+            set => SetValue(TimestampOrientationProperty, value);
         }
 
         /// <summary>

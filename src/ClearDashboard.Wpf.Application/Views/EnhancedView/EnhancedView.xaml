@@ -735,6 +735,12 @@
                             <i:EventTrigger EventName="NoteEditorMouseLeave">
                                 <i:CallMethodAction MethodName="NoteEditorMouseLeave" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
                             </i:EventTrigger>
+                            <i:EventTrigger EventName="NoteReplyAdded">
+                                <i:CallMethodAction MethodName="NoteReplyAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="NoteSeen">
+                                <i:CallMethodAction MethodName="NoteSeen" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
                             <i:EventTrigger EventName="NoteSendToParatext">
                                 <i:CallMethodAction MethodName="NoteSendToParatext" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
                             </i:EventTrigger>

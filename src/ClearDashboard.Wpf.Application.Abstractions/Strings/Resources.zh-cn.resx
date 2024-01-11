@@ -161,7 +161,7 @@
     <value>结盟</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
-    <value>选择您正在合作的书籍，您稍后可以随时添加更多书籍。</value>
+    <value>选择与您合作的书籍，您稍后可以随时添加更多书籍。</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>检查USFM</value>
@@ -449,7 +449,7 @@
     <value>散装对齐编辑</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>批量对准评论</value>
+    <value>批量对齐审查</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>数数</value>
@@ -491,7 +491,7 @@
     <value>部分</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>枢纽的单词</value>
+    <value>枢密性的单词</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>来源</value>
@@ -653,7 +653,7 @@
     <value>删除对齐</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>删除“ {0}”的对齐？</value>
+    <value>删除“ {0}”的对齐方式？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
     <value>删除所有路线？</value>
@@ -887,7 +887,7 @@
     <value>更改所有不设置的事件</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>如果检查了，这将改变此词的所有不设置</value>
+    <value>如果检查了，这将改变此词的所有不设置的情况</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>一致性</value>
@@ -956,7 +956,7 @@
     <value>添加'{0}'作为表单</value>
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
-    <value>添加'{0}'作为第一个含义</value>
+    <value>将'{0}'添加为第一个含义</value>
   </data>
   <data name="LexiconEdit_EditingDone" xml:space="preserve">
     <value>完毕</value>
@@ -1379,7 +1379,7 @@
     <value>过滤器</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>通过标签</value>
+    <value>由标签</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
     <value>通过注意文本</value>
@@ -1421,7 +1421,7 @@
     <value>添加标签组</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>标签组已经存在，名称为</value>
+    <value>一个标签组已经存在</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>初始化标签组</value>
@@ -1502,7 +1502,7 @@
     <value>将此注释发送到Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>象征化的语料库</value>
+    <value>令牌化语料库</value>
   </data>
   <data name="Notes_TranslationSet" xml:space="preserve">
     <value>翻译集</value>
@@ -1583,7 +1583,7 @@
     <value>创建新单词对齐</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>创建新的语料库</value>
+    <value>创建新的语料库令牌化</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
     <value>添加新的Interlinear</value>
@@ -1638,12 +1638,6 @@
   </data>
   <data name="Pds_DisabledNotice" xml:space="preserve">
     <value>在背景任务工作时禁用</value>
-  </data>
-  <data name="Pds_ExistingProject" xml:space="preserve">
-    <value>项目名称已经存在 - 无法导入</value>
-  </data>
-  <data name="Pds_ExistingProjectName" xml:space="preserve">
-    <value>存在项目名称</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
     <value>外部音符编辑器</value>
@@ -1733,7 +1727,7 @@
     <value>放大内容</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>缩小内容</value>
+    <value>从内容中缩小</value>
   </data>
   <data name="PHM" xml:space="preserve">
     <value>PHM</value>
@@ -1856,7 +1850,7 @@
     <value>导入服务器项目</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>在创建项目时，请选中此框，以包括希腊语和希伯来语圣经的文本。</value>
+    <value>选中此框，以在创建项目时包括希腊语和希伯来语圣经文本。</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>包括NT希腊圣经文本？</value>
@@ -1871,7 +1865,7 @@
     <value>无匹配。</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>这里很孤独。请创建一个新项目。</value>
+    <value>这里很孤单。请创建一个新项目。</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
     <value>未安装paratext。请安装Paratext并重新运行ClearDashboard应用程序。</value>
@@ -1892,7 +1886,7 @@
     <value>模型文本（LWC）</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext正在运行但未连接。</value>
+    <value>paratext正在运行但未连接。</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>PARATEXT项目</value>
@@ -2252,7 +2246,7 @@
     <value>标签组导出到：</value>
   </data>
   <data name="Settings_LabelGroupsImported" xml:space="preserve">
-    <value>从：</value>
+    <value>从以下导入的标签组：</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>多监视器支持</value>
@@ -2294,7 +2288,7 @@
     <value>ClearDashboard设置</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>显示出与仪表板不同的显示器上扩展的视图</value>
+    <value>显示与仪表板不同的显示器上展示的视图</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
     <value>对于具有三个或三个或以上监视器的系统，在第三监视器上显示扩展的视图</value>
@@ -2312,7 +2306,7 @@
     <value>验证电子邮件代码</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>启用逐一文字集合显示</value>
+    <value>启用逐节的文本集合显示</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>取消任务</value>
@@ -2333,7 +2327,7 @@
     <value>发行说明</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>显示预发行</value>
+    <value>显示预释放</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
     <value>更新到新版本的ClearDashboard</value>
@@ -2429,7 +2423,7 @@
     <value>更新并添加新书</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
-    <value>选择书</value>
+    <value>选择书籍</value>
   </data>
   <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
     <value>更新并添加新</value>

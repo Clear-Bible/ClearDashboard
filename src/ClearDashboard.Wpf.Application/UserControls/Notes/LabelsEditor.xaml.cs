@@ -435,7 +435,11 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         private void OnLabelGroupSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             RaiseLabelGroupEvent(LabelGroupSelectedEvent, CurrentLabelGroup);
-            LabelSuggestions = CurrentLabelGroup.Labels;
+            CurrentLabelGroup ??= LabelGroups.FirstOrDefault();
+            if (CurrentLabelGroup != null)
+            {
+                LabelSuggestions = CurrentLabelGroup.Labels;
+            }
 
             OnPropertyChanged(nameof(LabelGroupDeleteVisibility));
         }
