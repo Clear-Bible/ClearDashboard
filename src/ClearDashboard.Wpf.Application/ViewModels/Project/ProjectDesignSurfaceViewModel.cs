@@ -576,9 +576,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
             var syntaxTree = new SyntaxTrees();
-            var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree, ClearBible.Engine.Persistence.FileGetBookIds.LanguageCodeEnum.H)
-                .Transform<SetTrainingByTrainingLowercase>()
-                .Transform<AddPronominalReferencesToTokens>();
+
+            ITextCorpus sourceCorpus = null;
+
+            // run this in a separate thread as it is blocking the UI
+            await Task.Run(() =>
+            {
+                sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree, ClearBible.Engine.Persistence.FileGetBookIds.LanguageCodeEnum.H)
+                    .Transform<SetTrainingByTrainingLowercase>()
+                    .Transform<AddPronominalReferencesToTokens>();
+            }, cancellationToken);
 
             var books = BookInfo.GenerateScriptureBookList()
                 .Where(bi => sourceCorpus.Texts
@@ -724,9 +731,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
             var syntaxTree = new SyntaxTrees();
-            var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree, ClearBible.Engine.Persistence.FileGetBookIds.LanguageCodeEnum.G)
-                .Transform<SetTrainingByTrainingLowercase>()
-                .Transform<AddPronominalReferencesToTokens>();
+            ITextCorpus sourceCorpus = null;
+
+            // run this in a separate thread as it is blocking the UI
+            await Task.Run( () =>
+            {
+                sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree, ClearBible.Engine.Persistence.FileGetBookIds.LanguageCodeEnum.G)
+                    .Transform<SetTrainingByTrainingLowercase>()
+                    .Transform<AddPronominalReferencesToTokens>();
+            }, cancellationToken);
 
             var books = BookInfo.GenerateScriptureBookList()
                 .Where(bi => sourceCorpus.Texts
