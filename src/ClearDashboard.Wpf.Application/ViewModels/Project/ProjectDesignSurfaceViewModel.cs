@@ -2033,7 +2033,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             SelectedDesignSurfaceComponent = parallelCorpusConnection;
         }
 
-        public async void DeleteParallelCorpusConnection(ParallelCorpusConnectionViewModel connection)
+        public async Task<bool> DeleteParallelCorpusConnection(ParallelCorpusConnectionViewModel connection)
         {
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
 
@@ -2065,7 +2065,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 if ((bool)ret.GetType().GetProperty("Result").GetValue(ret, null) == false)
                 {
                     // cancelled by user
-                    return;
+                    return false;
                 }
             } 
             else
@@ -2078,6 +2078,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
                 
                 confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.DeleteParallelLineConfirmation;
+                confirmationViewPopupViewModel.SubHeader = connection.ParallelCorpusDisplayName;
 
                 bool result = false;
                 OnUIThread(async () =>
@@ -2088,7 +2089,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                 if (!result)
                 {
-                    return;
+                    return false;
                 }
             }
 
@@ -2098,8 +2099,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // Removes the connector between corpus nodes:
             DesignSurfaceViewModel!.DeleteParallelCorpusConnection(connection);
 
-            await Task.Factory.StartNew(async () =>
-            {
+            //await Task.Factory.StartNew(async () =>
+            //{
                 // ****************************************************************************
                 // MICHAEL: not sure what null checking (if any) needs to happen with 
                 // connection.ParallelCorpusId.  Also, this method will accept a third
@@ -2138,7 +2139,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     PdsVisibility = Visibility.Collapsed;
                 });
-            });
+            //});
+
+            return true;
         }
 
         public async void DeleteCorpusNode(CorpusNodeViewModel node, bool wasTokenizing)
@@ -2166,6 +2169,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
                 }
 
+                confirmationViewPopupViewModel.SubHeader = node.Name;
                 confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.DeleteCorpusNodeConfirmation;
 
                 bool result = false;
@@ -2189,21 +2193,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
             }));
 
+
+
             // Deletes the ParallelCorpora and removes the connector between nodes. 
             foreach (var connection in node.AttachedConnections)
             {
+                // disable the PDS
+                PdsVisibility = Visibility.Visible;
+
                 //connection.ParallelCorpusId
-                DeleteParallelCorpusConnection(connection);
+                var bRet = await DeleteParallelCorpusConnection(connection);
+
+                // user cancelled midway through
+                if (bRet == false)
+                {
+                    // reenable the PDS
+                    PdsVisibility = Visibility.Collapsed;
+
+                    return;
+                }
             }
-
-
-            // disable the PDS
-            PdsVisibility = Visibility.Visible;
 
             // Removes the CorpusNode form the project design surface:
             DesignSurfaceViewModel!.DeleteCorpusNode(node);
-
-
 
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
 
