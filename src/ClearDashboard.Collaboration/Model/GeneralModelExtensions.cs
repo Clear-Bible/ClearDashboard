@@ -8,6 +8,7 @@ using ClearDashboard.Collaboration.Exceptions;
 using SIL.Machine.Tokenization;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
+using ClearBible.Engine.Tokenization;
 
 namespace ClearDashboard.Collaboration.Model;
 
@@ -147,7 +148,15 @@ internal static class GeneralModelExtensions
 
         if (tokenizerType is null)
         {
-            throw new ArgumentException($"Tokenizer '{tokenizerString}' not a valid class in the '{assemblyTokenizerType.Namespace}' namespace");
+            // look within the Clear.Engine.Tokenization namespace for the tokenizer
+            assemblyTokenizerType = typeof(ChineseBibleWordTokenizer);
+            assembly = assemblyTokenizerType.Assembly;
+            tokenizerType = assembly.GetType($"{assemblyTokenizerType.Namespace}.{tokenizerString}");
+
+            if (tokenizerType is null)
+            {
+                throw new ArgumentException($"Tokenizer '{tokenizerString}' not a valid class in the '{assemblyTokenizerType.Namespace}' namespace");
+            }
         }
 
         var tokenizer = (ITokenizer<string, int, string>)Activator.CreateInstance(tokenizerType)!;
