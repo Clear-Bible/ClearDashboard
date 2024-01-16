@@ -1025,23 +1025,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             DashboardCollabProjects.Clear();
 
-            // get a listing of the local project's project.ids
-            List<CoupleOfStrings> projectIds = new();
-            foreach (var dashboardProject in DashboardProjects)
-            {
-                var results =
-                    await ExecuteRequest(new GetProjectIdSlice.GetProjectIdQuery(dashboardProject.FullFilePath), CancellationToken.None);
-
-                if (results.Success)
-                {
-                    projectIds.Add(new CoupleOfStrings
-                    {
-                        stringB = dashboardProject.FullFilePath,
-                        stringA = results.Data
-                    });
-                }
-            }
-
             // get the list of those GitLab projects that haven't been sync'd locally
             var projects = await _gitLabHttpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
             projects = projects.OrderByDescending(e => e.CreatedAt).ToList();
