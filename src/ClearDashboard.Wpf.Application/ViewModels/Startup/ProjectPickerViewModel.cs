@@ -656,6 +656,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         private async Task FinishAccountSetup()
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+
             Logger!.LogDebug("Entering FinishAccountSetup");
 
             var licenseUser = LicenseManager.GetUserFromLicense();
@@ -774,6 +778,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 };
                 _collaborationManager.SaveCollaborationLicense(gitLabUser);
             }
+
+            stopwatch.Stop();
+            Logger!.LogDebug($"FinishAccountSetup: elapsed time: {stopwatch.ElapsedMilliseconds} ms");
         }
 
         private async Task GetRemoteUser()
