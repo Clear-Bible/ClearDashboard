@@ -157,175 +157,22 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                         var fileName = bookFileNum.ToString().PadLeft(2, '0')
                                        + project.AvailableBooks[bookNum].Code + ".sfm";
 
-                        IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
-                        try
-                        {
-                            // get tokens by book number (from object) and chapter
-                            tokens = project.GetUSFMTokens(project.AvailableBooks[bookNum].Number);
-                        }
-                        catch (Exception)
-                        {
-                            mainWindow.AppendText(Color.Orange, $"No Scripture for {bookNum}");
-                        }
+                        // do the actual parsing of the USFM tokens
+                        var verses = ParseUsfmBook(project, mainWindow, bookNum + 1, sb, usfmError, verseKey);
 
-                        string lastChapter = "";
-                        bool lastTokenChapter = false;
-                        bool lastTokenText = false;
-                        bool lastVerseZero = false;
-                        string lastVerseRef = "";
-
-                        foreach (var token in tokens)
+                        string chapter = "";
+                        foreach (var verse in verses)
                         {
-                            if (token is IUSFMMarkerToken marker)
+                            if (verse.Chapter != chapter)
                             {
-                                // a verse token
-                                if (marker.Type == MarkerType.Verse)
-                                {
-                                    lastTokenText = false;
-                                    if (!lastTokenChapter || lastVerseZero)
-                                    {
-                                        sb.AppendLine();
-                                    }
-                                    // this includes single verses (\v 1) and multiline (\v 1-3)
-                                    // \v 2,3 and \v 2b-4d are OK so is \v 2ബി-4ഡി (Malayalam)
-                                    if (marker.Data != null)
-                                    {
-                                        string verseMarker = marker.Data.Trim();
-
-                                        try
-                                        {
-                                            bool foundMatch = false;
-                                            string key = $"{project.AvailableBooks[bookNum].Number}{lastChapter.PadLeft(3, '0')}{marker.Data.Trim().PadLeft(3, '0')}";
-                                            // look for numbers, space, and a dash as being valid
-                                            // also match thins like \v 43a
-                                            //foundMatch = Regex.IsMatch(verseMarker, "^[0-9* -abc]+$");  // original regex
-                                            foundMatch = Regex.IsMatch(verseMarker, @"[0-9]+[\p{L}\p{Mn}]*(\u200F?[\-,][0-9]+[\p{L}\p{Mn}]*)*");  // new regex from Kent Spielman that handles RTL characters
-
-                                            if (foundMatch)
-                                            {
-                                                // check to see if the verse ends in '-'
-                                                if (marker.Data.Trim().EndsWith("-"))
-                                                {
-                                                    mainWindow.AppendText(Color.Red, $"Verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)} ends in '-'");
-                                                    usfmError.Add(new UsfmError
-                                                    {
-                                                        Reference = UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key),
-                                                        Error = $"Verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)} ends in '-'",
-                                                    });
-                                                }
-                                                else
-                                                {
-                                                    sb.Append($@"\v {marker.Data.Trim()} ");
-
-                                                    // check if this has already been entered and is a duplicate
-                                                    if (verseKey.ContainsKey(key))
-                                                    {
-                                                        mainWindow.AppendText(Color.Red,
-                                                                $"Duplicate verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)}");
-                                                        usfmError.Add(new UsfmError
-                                                        {
-                                                            Reference = UsfmReferenceHelper
-                                                                .ConvertBbbcccvvvToReadable(key),
-                                                            Error =
-                                                                $"Duplicate verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)}",
-                                                        });
-                                                    }
-                                                    else
-                                                    {
-                                                        verseKey.Add(key, key);
-                                                        lastVerseRef = marker.VerseRef.ToString();
-                                                    }
-                                                }
-                                            }
-                                            else
-                                            {
-                                                mainWindow.AppendText(Color.Red, $"Error with verse numbering in {project.AvailableBooks[bookNum].Code} {lastChapter} [{verseMarker}]");
-                                                usfmError.Add(new UsfmError
-                                                {
-                                                    Reference = marker.VerseRef.ToString(),
-                                                    Error = $"Error with verse numbering in {project.AvailableBooks[bookNum].Code} {lastChapter} [{verseMarker}]",
-                                                });
-                                            }
-                                        }
-                                        catch (ArgumentException ex)
-                                        {
-                                            // Syntax error in the regular expression
-                                            mainWindow.AppendText(Color.Red, ex.Message);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        sb.Append($@"\v {marker.Data?.Trim()} ");
-                                        mainWindow.AppendText(Color.Red, $"Error with empty verse tag in {project.AvailableBooks[bookNum].Code} {lastChapter}");
-                                        usfmError.Add(new UsfmError
-                                        {
-                                            Reference = $"{project.AvailableBooks[bookNum].Code} {lastChapter}",
-                                            Error = $"Error with empty verse tag in {project.AvailableBooks[bookNum].Code} {lastChapter}",
-                                        });
-                                    }
-
-                                    lastTokenChapter = false;
-                                    lastVerseZero = false;
-                                }
-                                else if (marker.Type == MarkerType.Chapter)
-                                {
-                                    lastVerseZero = false;
-                                    lastTokenText = false;
-                                    // new chapter
-                                    sb.AppendLine();
-                                    sb.AppendLine();
-                                    sb.AppendLine(@"\c " + marker.Data);
-                                    lastChapter = marker.Data;
-
-                                    lastTokenChapter = true;
-                                }
+                                sb.AppendLine();
+                                sb.AppendLine(@"\c " + verse.Chapter);
+                                chapter = verse.Chapter;
                             }
-                            else if (token is IUSFMTextToken textToken)
-                            {
-                                if (token.IsScripture)
-                                {
-                                    // verse text
-
-                                    // check to see if this is a verse zero
-                                    if (textToken.VerseRef.VerseNum == 0)
-                                    {
-                                        if (lastVerseZero == false)
-                                        {
-                                            sb.Append(@"\v 0 " + textToken.Text);
-                                        }
-                                        else
-                                        {
-                                            sb.Append(textToken.Text);
-                                        }
-
-                                        lastVerseZero = true;
-                                        lastTokenText = true;
-                                    }
-                                    else
-                                    {
-                                        // check to see if the last character is a space
-                                        if (sb[sb.Length - 1] == ' ' && lastTokenText)
-                                        {
-                                            sb.Append(textToken.Text.TrimStart());
-                                        }
-                                        else
-                                        {
-                                            if (sb[sb.Length - 1] == ' ' && textToken.Text.StartsWith(" "))
-                                            {
-                                                sb.Append(textToken.Text.TrimStart());
-                                            }
-                                            else
-                                            {
-                                                sb.Append(textToken.Text);
-                                            }
-
-                                        }
-
-                                        lastTokenText = true;
-                                    }
-                                }
-                            }
+                            
+                            sb.AppendLine(@"\v " + verse.Verse + " " + verse.Text);
                         }
+
 
                         // write out to \Documents\ClearDashboard\DataFiles\(project guid)\usfm files
                         try
@@ -356,12 +203,275 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
             };
         }
 
+        public static List<UsfmVerse> ParseUsfmBook(IProject project, MainWindow mainWindow, int bookNum, StringBuilder sb,
+            List<UsfmError> usfmError, Dictionary<string, string> verseKey)
+        {
+
+            var verses = new List<UsfmVerse>();
+
+            IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
+            try
+            {
+                // get tokens by book number (from object) and chapter
+                var selectedProject = project.AvailableBooks.FirstOrDefault(b => b.Number == bookNum);
+                tokens = project.GetUSFMTokens(bookNum);
+            }
+            catch (Exception)
+            {
+                mainWindow.AppendText(Color.Orange, $"No Scripture for {bookNum}");
+            }
+
+
+            var chapter = "";
+            var verse = "";
+            var verseText = "";
+
+            string lastChapter = "";
+            bool lastTokenChapter = false;
+            bool lastTokenText = false;
+            bool lastVerseZero = false;
+            string lastVerseRef = "";
+            var previousTokenWasCp = false;
+
+            foreach (var token in tokens)
+            {
+                if (token is IUSFMMarkerToken marker)
+                {
+                    // a verse token
+                    if (marker.Type == MarkerType.Verse)
+                    {
+                        lastTokenText = false;
+                        if (!lastTokenChapter || lastVerseZero)
+                        {
+                            sb.AppendLine();
+                        }
+
+                        if (lastVerseZero)
+                        {
+                            var usfm = new UsfmVerse
+                            {
+                                Chapter = chapter,
+                                Verse = "0",
+                                Text = verseText,
+                            };
+                            verses.Add(usfm);
+                            verseText = "";
+                        }
+
+
+                        // this includes single verses (\v 1) and multiline (\v 1-3)
+                        // \v 2,3 and \v 2b-4d are OK so is \v 2ബി-4ഡി (Malayalam)
+                        if (marker.Data != null)
+                        {
+                            string verseMarker = marker.Data.Trim();
+
+                            try
+                            {
+                                bool foundMatch = false;
+                                string key = $"{project.AvailableBooks[bookNum].Number}{lastChapter.PadLeft(3, '0')}{marker.Data.Trim().PadLeft(3, '0')}";
+                                // look for numbers, space, and a dash as being valid
+                                // also match thins like \v 43a
+                                //foundMatch = Regex.IsMatch(verseMarker, "^[0-9* -abc]+$");  // original regex
+                                foundMatch = Regex.IsMatch(verseMarker, @"[0-9]+[\p{L}\p{Mn}]*(\u200F?[\-,][0-9]+[\p{L}\p{Mn}]*)*");  // new regex from Kent Spielman that handles RTL characters
+
+                                if (foundMatch)
+                                {
+                                    // check to see if the verse ends in '-'
+                                    if (marker.Data.Trim().EndsWith("-"))
+                                    {
+                                        mainWindow.AppendText(Color.Red, $"Verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)} ends in '-'");
+                                        usfmError.Add(new UsfmError
+                                        {
+                                            Reference = UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key),
+                                            Error = $"Verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)} ends in '-'",
+                                        });
+                                    }
+                                    else
+                                    {
+                                        sb.Append($@"\v {marker.Data.Trim()} ");
+
+                                        if (chapter != "" && verse != "" && verseText != "")
+                                        {
+                                            var usfm = new UsfmVerse
+                                            {
+                                                Chapter = chapter,
+                                                Verse = verse,
+                                                Text = verseText,
+                                            };
+
+                                            verses.Add(usfm);
+
+                                            verseText = "";
+                                        }
+
+
+                                        // check if this has already been entered and is a duplicate
+                                        if (verseKey.ContainsKey(key))
+                                        {
+                                            mainWindow.AppendText(Color.Red,
+                                                $"Duplicate verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)}");
+                                            usfmError.Add(new UsfmError
+                                            {
+                                                Reference = UsfmReferenceHelper
+                                                    .ConvertBbbcccvvvToReadable(key),
+                                                Error =
+                                                    $"Duplicate verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)}",
+                                            });
+                                        }
+                                        else
+                                        {
+                                            verseKey.Add(key, key);
+                                            lastVerseRef = marker.VerseRef.ToString();
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    mainWindow.AppendText(Color.Red, $"Error with verse numbering in {project.AvailableBooks[bookNum].Code} {lastChapter} [{verseMarker}]");
+                                    usfmError.Add(new UsfmError
+                                    {
+                                        Reference = marker.VerseRef.ToString(),
+                                        Error = $"Error with verse numbering in {project.AvailableBooks[bookNum].Code} {lastChapter} [{verseMarker}]",
+                                    });
+                                }
+
+                                verse = marker.Data.Trim();
+                                lastTokenChapter = false;
+                                lastVerseZero = false;
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                // Syntax error in the regular expression
+                                mainWindow.AppendText(Color.Red, ex.Message);
+                            }
+                        }
+                        else
+                        {
+                            sb.Append($@"\v {marker.Data?.Trim()} ");
+                            mainWindow.AppendText(Color.Red, $"Error with empty verse tag in {project.AvailableBooks[bookNum].Code} {lastChapter}");
+                            usfmError.Add(new UsfmError
+                            {
+                                Reference = $"{project.AvailableBooks[bookNum].Code} {lastChapter}",
+                                Error = $"Error with empty verse tag in {project.AvailableBooks[bookNum].Code} {lastChapter}",
+                            });
+                        }
+
+                        lastTokenChapter = false;
+                        lastVerseZero = false;
+                    }
+                    else if (marker.Type == MarkerType.Chapter)
+                    {
+                        lastVerseZero = false;
+                        lastTokenText = false;
+                        // new chapter
+                        sb.AppendLine();
+                        sb.AppendLine();
+                        sb.AppendLine(@"\c " + marker.Data);
+
+                        if (chapter != "" && verse != "" && verseText != "")
+                        {
+                            var usfm = new UsfmVerse
+                            {
+                                Chapter = chapter,
+                                Verse = verse,
+                                Text = verseText,
+                            };
+
+                            verses.Add(usfm);
+                        }
+
+                        chapter = marker.Data.Trim();  
+                        verse = "";
+                        lastChapter = marker.Data.Trim();
+                        verseText = "";
+
+                        lastTokenChapter = true;
+
+                        if (marker.Marker == "cp")
+                        {
+                            previousTokenWasCp = true;
+                        }
+                    }
+                }
+                else if (token is IUSFMTextToken textToken)
+                {
+                    if (token.IsScripture && token.IsSpecial == false)
+                    {
+                        // verse text
+
+                        // check to see if this is a verse zero
+                        if (textToken.VerseRef.VerseNum == 0)
+                        {
+                            if (lastVerseZero == false)
+                            {
+                                sb.Append(@"\v 0 " + textToken.Text);
+                                verseText = textToken.Text;
+                            }
+                            else
+                            {
+                                sb.Append(textToken.Text);
+                                verseText = textToken.Text;
+                            }
+
+                            lastVerseZero = true;
+                            lastTokenText = true;
+                        }
+                        else
+                        {
+                            // check to see if the last character is a space
+                            if (sb[sb.Length - 1] == ' ' && lastTokenText)
+                            {
+                                sb.Append(textToken.Text.TrimStart());
+                                verseText += textToken.Text.TrimStart();
+                            }
+                            else
+                            {
+                                if (sb[sb.Length - 1] == ' ' && textToken.Text.StartsWith(" "))
+                                {
+                                    sb.Append(textToken.Text.TrimStart());
+                                    verseText = textToken.Text.TrimStart();
+                                }
+                                else
+                                {
+                                    sb.Append(textToken.Text);
+                                    verseText += textToken.Text;
+                                }
+
+                            }
+
+                            lastTokenText = true;
+                        }
+                    }
+                }
+            }
+
+            // do the last verse
+            if (chapter != "" && verse != "" && verseText != "")
+            {
+                var usfm = new UsfmVerse
+                {
+                    Chapter = chapter,
+                    Verse = verse,
+                    Text = verseText,
+                };
+
+                verses.Add(usfm);
+            }
+
+            //foreach (var v in verses)
+            //{
+            //    Console.WriteLine($"{v.Chapter}:{v.Verse} {v.Text}");
+            //}
+
+            return verses;
+        }
+
         /// <summary>
         /// This method iterates over the verses looking for verses that are split over multiple lines
         /// e.g. \v 2a, \v 2b, \v 2c, etc. and combines them into a single line
         /// </summary>
         /// <param name="usfmFile"></param>
-        private void FixSplitVerses(string usfmFile)
+        private static void FixSplitVerses(string usfmFile)
         {
             List<string> output = new();
             // read in the file

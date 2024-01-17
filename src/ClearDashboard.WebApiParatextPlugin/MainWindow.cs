@@ -1734,204 +1734,226 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             AppendText(Color.Blue, $"Processing {book.Code}");
 
-            var sb = new StringBuilder();
-            IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
-            try
-            {
-                // get tokens by book number (from object) and chapter
-                tokens = project.GetUSFMTokens(book.Number);
-            }
-            catch (Exception)
-            {
-                AppendText(Color.Orange, $"No Scripture for {bookId}");
-                return null;
-            }
+            //var sb = new StringBuilder();
+            //IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
+            //try
+            //{
+            //    // get tokens by book number (from object) and chapter
+            //    tokens = project.GetUSFMTokens(book.Number);
+            //}
+            //catch (Exception)
+            //{
+            //    AppendText(Color.Orange, $"No Scripture for {bookId}");
+            //    return null;
+            //}
 
-            var chapter = "";
-            var verse = "";
-            var verseText = "";
+            //var chapter = "";
+            //var verse = "";
+            //var verseText = "";
 
-            var lastTokenChapter = false;
-            var lastTokenText = false;
-            var lastVerseZero = false;
+            //var lastTokenChapter = false;
+            //var lastTokenText = false;
+            //var lastVerseZero = false;
 
-            var previousTokenWasCp = false;
-            foreach (var token in tokens)
-            {
-                if (previousTokenWasCp)
-                {
-                    previousTokenWasCp= false;
-                    continue;
-                }
+            //var previousTokenWasCp = false;
+            //foreach (var token in tokens)
+            //{
+            //    if (previousTokenWasCp)
+            //    {
+            //        previousTokenWasCp= false;
+            //        continue;
+            //    }
 
-                if (token is IUSFMMarkerToken marker)
-                {
-                    // a verse token
-                    if (marker.Type == MarkerType.Verse)
-                    {
-                        lastTokenText = false;
-                        if (!lastTokenChapter || lastVerseZero)
-                        {
-                            sb.AppendLine();
-                        }
+            //    if (token is IUSFMMarkerToken marker)
+            //    {
+            //        // a verse token
+            //        if (marker.Type == MarkerType.Verse)
+            //        {
+            //            lastTokenText = false;
+            //            if (!lastTokenChapter || lastVerseZero)
+            //            {
+            //                sb.AppendLine();
+            //            }
 
-                        if (lastVerseZero)
-                        {
-                            var usfm = new UsfmVerse
-                            {
-                                Chapter = chapter,
-                                Verse = "0",
-                                Text = verseText
-                            };
-                            verses.Add(usfm);
-                            verseText = "";
-                        }
+            //            if (lastVerseZero)
+            //            {
+            //                var usfm = new UsfmVerse
+            //                {
+            //                    Chapter = chapter,
+            //                    Verse = "0",
+            //                    Text = verseText
+            //                };
+            //                verses.Add(usfm);
+            //                verseText = "";
+            //            }
 
-                        // this includes single verses (\v 1) and multiline (\v 1-3)
-                        sb.Append($@"\v {marker.Data.Trim()} ");
+            //            // this includes single verses (\v 1) and multiline (\v 1-3)
+            //            sb.Append($@"\v {marker.Data.Trim()} ");
 
-                        if (verse != "" && chapter != "" && verseText != "")
-                        {
-                            var usfm = new UsfmVerse
-                            {
-                                Chapter = chapter,
-                                Verse = verse,
-                                Text = verseText
-                            };
+            //            if (verse != "" && chapter != "" && verseText != "")
+            //            {
+            //                var usfm = new UsfmVerse
+            //                {
+            //                    Chapter = chapter,
+            //                    Verse = verse,
+            //                    Text = verseText
+            //                };
 
-                            //if verse is a partialVerse and the last item in verses is a partialVerse
-                            var isCurrentPartialVerse = Regex.IsMatch(verse, @"(\A[0-9]+[a-z]\Z)");
-                            var previousVerse = (verses.LastOrDefault()??new UsfmVerse()).Verse;
-                            var isPreviousPartialVerse = Regex.IsMatch(previousVerse, @"(\A[0-9]+[a-z]\Z)");
+            //                if (usfm.Chapter == "20" && usfm.Verse =="41")
+            //                {
+            //                    Console.WriteLine();
+            //                }
 
-                            //and the verse number is the same and the verse subparts are subsequent
-                            var currentVerseNumber = Regex.Replace(verse, "[A-Za-z]", "");
-                            var previousVerseNumber = Regex.Replace(previousVerse, "[A-Za-z]", "");
+            //                //if verse is a partialVerse and the last item in verses is a partialVerse
+            //                var isCurrentPartialVerse = Regex.IsMatch(verse, @"(\A[0-9]+[a-z]\Z)");
+            //                var previousVerse = (verses.LastOrDefault()??new UsfmVerse()).Verse;
+            //                var isPreviousPartialVerse = Regex.IsMatch(previousVerse, @"(\A[0-9]+[a-z]\Z)");
 
-                            var currentVersePart = Regex.Replace(verse, @"[\d]", "");
-                            var previousVersePart = Regex.Replace(previousVerse, @"[\d]", "");
+            //                //and the verse number is the same and the verse subparts are subsequent
+            //                var currentVerseNumber = Regex.Replace(verse, "[A-Za-z]", "");
+            //                var previousVerseNumber = Regex.Replace(previousVerse, "[A-Za-z]", "");
+
+            //                var currentVersePart = Regex.Replace(verse, @"[\d]", "");
+            //                var previousVersePart = Regex.Replace(previousVerse, @"[\d]", "");
                             
 
-                            if (isCurrentPartialVerse && isPreviousPartialVerse &&
-                                currentVerseNumber == previousVerseNumber &&
-                                String.CompareOrdinal(currentVersePart, previousVersePart) == 1)
-                            {
-                                //then append verseText onto versetext of last element in verses
-                                verses.LastOrDefault().Text = verses.LastOrDefault().Text.TrimEnd() + " " + verseText;
-                                verses.LastOrDefault().Verse = previousVerseNumber;
-                            }
-                            else
-                            {
-                                verses.Add(usfm);
-                            }
+            //                if (isCurrentPartialVerse && isPreviousPartialVerse &&
+            //                    currentVerseNumber == previousVerseNumber &&
+            //                    String.CompareOrdinal(currentVersePart, previousVersePart) == 1)
+            //                {
+            //                    //then append verseText onto versetext of last element in verses
+            //                    verses.LastOrDefault().Text = verses.LastOrDefault().Text.TrimEnd() + " " + verseText;
+            //                    verses.LastOrDefault().Verse = previousVerseNumber;
+            //                }
+            //                else
+            //                {
+            //                    verses.Add(usfm);
+            //                }
 
-                            verseText = "";
-                        }
+            //                verseText = "";
+            //            }
 
-                        verse = marker.Data.Trim();
+            //            verse = marker.Data.Trim();
 
-                        lastTokenChapter = false;
-                        lastVerseZero = false;
-                    }
-                    else if (marker.Type == MarkerType.Chapter)
-                    {
-                        lastVerseZero = false;
-                        lastTokenText = false;
-                        // new chapter
-                        sb.AppendLine();
-                        sb.AppendLine();
-                        sb.AppendLine(@"\c " + marker.Data);
+            //            lastTokenChapter = false;
+            //            lastVerseZero = false;
+            //        }
+            //        else if (marker.Type == MarkerType.Chapter)
+            //        {
+            //            lastVerseZero = false;
+            //            lastTokenText = false;
+            //            // new chapter
+            //            sb.AppendLine();
+            //            sb.AppendLine();
+            //            sb.AppendLine(@"\c " + marker.Data);
 
-                        if (verse != "" && chapter != "" && verseText != "")
-                        {
-                            var usfm = new UsfmVerse
-                            {
-                                Chapter = chapter,
-                                Verse = verse,
-                                Text = verseText
-                            };
-                            verses.Add(usfm);
-                            verseText = "";
-                        }
-                        chapter = marker.Data.Trim();
-                        verse = string.Empty;
+            //            if (verse != "" && chapter != "" && verseText != "")
+            //            {
+            //                var usfm = new UsfmVerse
+            //                {
+            //                    Chapter = chapter,
+            //                    Verse = verse,
+            //                    Text = verseText
+            //                };
 
-                        lastTokenChapter = true;
-                    }
+            //                verses.Add(usfm);
+            //                verseText = "";
+            //            }
+            //            chapter = marker.Data.Trim();
+            //            verse = string.Empty;
 
-                    if (marker.Marker == "cp")
-                    {
-                        previousTokenWasCp = true;
-                    }
-                }
-                else if (token is IUSFMTextToken textToken)
-                {
-                    if (token.IsScripture)
-                    {
-                        // verse text
+            //            lastTokenChapter = true;
+            //        }
 
-                        // check to see if this is a verse zero
-                        if (textToken.VerseRef.VerseNum == 0)
-                        {
-                            if (lastVerseZero == false)
-                            {
-                                sb.Append(@"\v 0 " + textToken.Text);
-                                verseText = textToken.Text;
-                            }
-                            else
-                            {
-                                sb.Append(textToken.Text);
-                                verseText = textToken.Text;
-                            }
+            //        if (marker.Marker == "cp")
+            //        {
+            //            previousTokenWasCp = true;
+            //        }
+            //    }
+            //    else if (token is IUSFMTextToken textToken)
+            //    {
+            //        if (token.IsScripture && token.IsSpecial == false)
+            //        {
+            //            // verse text
 
-                            lastVerseZero = true;
-                            lastTokenText = true;
-                        }
-                        else
-                        {
-                            // check to see if the last character is a space
-                            if (sb[sb.Length - 1] == ' ' && lastTokenText)
-                            {
-                                sb.Append(textToken.Text.TrimStart());
-                                verseText += textToken.Text.TrimStart();
-                            }
-                            else
-                            {
-                                if (sb[sb.Length - 1] == ' ' && textToken.Text.StartsWith(" "))
-                                {
-                                    sb.Append(textToken.Text.TrimStart());
-                                    verseText = textToken.Text.TrimStart();
-                                }
-                                else
-                                {
-                                    sb.Append(textToken.Text);
-                                    verseText += textToken.Text;
-                                }
+            //            // check to see if this is a verse zero
+            //            if (textToken.VerseRef.VerseNum == 0)
+            //            {
+            //                if (lastVerseZero == false)
+            //                {
+            //                    sb.Append(@"\v 0 " + textToken.Text);
+            //                    verseText = textToken.Text;
+            //                }
+            //                else
+            //                {
+            //                    sb.Append(textToken.Text);
+            //                    verseText = textToken.Text;
+            //                }
 
-                            }
+            //                lastVerseZero = true;
+            //                lastTokenText = true;
+            //            }
+            //            else
+            //            {
+            //                // check to see if the last character is a space
+            //                if (sb[sb.Length - 1] == ' ' && lastTokenText)
+            //                {
+            //                    sb.Append(textToken.Text.TrimStart());
+            //                    verseText += textToken.Text.TrimStart();
+            //                }
+            //                else
+            //                {
+            //                    if (sb[sb.Length - 1] == ' ' && textToken.Text.StartsWith(" "))
+            //                    {
+            //                        sb.Append(textToken.Text.TrimStart());
+            //                        verseText = textToken.Text.TrimStart();
+            //                    }
+            //                    else
+            //                    {
+            //                        sb.Append(textToken.Text);
+            //                        verseText += textToken.Text;
+            //                    }
 
-                            lastTokenText = true;
-                        }
-                    }
-                }
-            }
+            //                }
 
-            // do the last verse
-            if (verse != "" && chapter != "" && verseText != "")
-            {
-                var usfm = new UsfmVerse
-                {
-                    Chapter = chapter,
-                    Verse = verse,
-                    Text = verseText
-                };
-                verses.Add(usfm);
-            }
-
-            //foreach (var v in verses)
-            //{
-            //    Console.WriteLine($"{v.Chapter}:{v.Verse} {v.Text}");
+            //                lastTokenText = true;
+            //            }
+            //        }
+            //    }
             //}
+
+            //// do the last verse
+            //if (verse != "" && chapter != "" && verseText != "")
+            //{
+            //    var usfm = new UsfmVerse
+            //    {
+            //        Chapter = chapter,
+            //        Verse = verse,
+            //        Text = verseText
+            //    };
+            //    verses.Add(usfm);
+            //}
+
+            var sb = new StringBuilder();
+            List<UsfmError> usfmError = new();
+            Dictionary<string, string> verseKey = new();
+            verses = ParatextExtractUSFM.ParseUsfmBook(project, this, book.Number, sb, usfmError, verseKey);
+
+
+
+            Console.WriteLine(@"\id 1SA");
+            Console.WriteLine();
+            var chapter = "";
+            foreach (var v in verses)
+            {
+                if (chapter != v.Chapter)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($@"\c {v.Chapter}");
+                    chapter = v.Chapter;
+                }
+                Console.WriteLine($@"\v {v.Verse} {v.Text}");
+            }
 
             return verses;
         }
