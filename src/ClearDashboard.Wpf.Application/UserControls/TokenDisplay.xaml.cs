@@ -1179,7 +1179,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 {
                     CopyMenuItem.Visibility = Visibility.Visible;
                     JoinTokensMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
+
+                    // TODO808:
+                    // 2. in a parallel view, allow the creating of a Composite(parallel) on top of a Composite(null) (but not other Composite(parallel))
+                    //
+                    // Currently the JoinTokens and JoinTokensLanguagePair menu items use the same visibility logic.  TokenDisplayViewModelCollection should get a 
+                    // new CanJoinTokensLanguagePair property that is mostly similar to CanJoinTokens, but also incorporates the possibility of containing a Composite(null).
+                    // See notes in TokenDisplayViewModelCollection.
                     JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens.CanJoinTokens && !IsCorpusView ? Visibility.Visible : Visibility.Collapsed;
+
                     UnjoinTokenMenuItem.Visibility = AllSelectedTokens.CanUnjoinToken ? Visibility.Visible : Visibility.Collapsed;
                     SplitTokenMenuItem.Visibility = Properties.Settings.Default.IsTokenSplittingEnabled && AllSelectedTokens.Count == 1 ? Visibility.Visible : Visibility.Collapsed;
                     FilterPinsMenuItem.Visibility = AllSelectedTokens.Count == 1 ? Visibility.Visible : Visibility.Collapsed;

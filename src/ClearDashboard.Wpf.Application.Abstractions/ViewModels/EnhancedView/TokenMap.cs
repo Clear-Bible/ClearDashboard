@@ -98,6 +98,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <returns>The parent <see cref="CompositeToken"/>, if any; null otherwise.</returns>
         public CompositeToken? GetCompositeToken(Token token)
         {
+            // TODO808: 
+            // 1. a Composite(parallel) that overlaps with Composite(null) in parallel view will hide Composite(null) (but show its child tokens).
+            //
+            // The GetCompositeToken() call should prioritize Composite(parallel) over Composite(null).  Requires a property on CompositeToken to indicate whether
+            // it is parallel or not.
+
             return Tokens.Where(t => t is CompositeToken).Cast<CompositeToken>().FirstOrDefault(compositeToken => compositeToken.Tokens.Any(t => t.TokenId.IdEquals(token.TokenId)));
         }
 
