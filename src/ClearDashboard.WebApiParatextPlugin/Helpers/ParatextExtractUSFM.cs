@@ -158,7 +158,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                        + project.AvailableBooks[bookNum].Code + ".sfm";
 
                         // do the actual parsing of the USFM tokens
-                        var verses = ParseUsfmBook(project, mainWindow, bookNum + 1, sb, usfmError, verseKey);
+                        var verses = ParseUsfmBook(project, mainWindow, bookNum + 1, usfmError, verseKey);
 
                         string chapter = "";
                         foreach (var verse in verses)
@@ -203,10 +203,18 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
             };
         }
 
-        public static List<UsfmVerse> ParseUsfmBook(IProject project, MainWindow mainWindow, int bookNum, StringBuilder sb,
-            List<UsfmError> usfmError, Dictionary<string, string> verseKey)
+        /// <summary>
+        /// This method iterates over the tokenized USFM objects and pulls out only the chapter, verse, and verse text data
+        /// </summary>
+        /// <param name="project"></param>
+        /// <param name="mainWindow"></param>
+        /// <param name="bookNum"></param>
+        /// <param name="sb"></param>
+        /// <param name="usfmError"></param>
+        /// <param name="verseKey"></param>
+        /// <returns></returns>
+        public static List<UsfmVerse> ParseUsfmBook(IProject project, MainWindow mainWindow, int bookNum, List<UsfmError> usfmError, Dictionary<string, string> verseKey)
         {
-
             var verses = new List<UsfmVerse>();
 
             IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
@@ -230,21 +238,23 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
             bool lastTokenChapter = false;
             bool lastTokenText = false;
             bool lastVerseZero = false;
-            string lastVerseRef = "";
             var previousTokenWasCp = false;
 
             foreach (var token in tokens)
             {
+                if (previousTokenWasCp)
+                {
+                    previousTokenWasCp = false;
+                    continue;
+                }
+
+
                 if (token is IUSFMMarkerToken marker)
                 {
                     // a verse token
                     if (marker.Type == MarkerType.Verse)
                     {
                         lastTokenText = false;
-                        if (!lastTokenChapter || lastVerseZero)
-                        {
-                            sb.AppendLine();
-                        }
 
                         if (lastVerseZero)
                         {
@@ -288,8 +298,6 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                     }
                                     else
                                     {
-                                        sb.Append($@"\v {marker.Data.Trim()} ");
-
                                         if (chapter != "" && verse != "" && verseText != "")
                                         {
                                             var usfm = new UsfmVerse
@@ -321,7 +329,6 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                         else
                                         {
                                             verseKey.Add(key, key);
-                                            lastVerseRef = marker.VerseRef.ToString();
                                         }
                                     }
                                 }
@@ -347,7 +354,6 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                         }
                         else
                         {
-                            sb.Append($@"\v {marker.Data?.Trim()} ");
                             mainWindow.AppendText(Color.Red, $"Error with empty verse tag in {project.AvailableBooks[bookNum].Code} {lastChapter}");
                             usfmError.Add(new UsfmError
                             {
@@ -364,10 +370,6 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                         lastVerseZero = false;
                         lastTokenText = false;
                         // new chapter
-                        sb.AppendLine();
-                        sb.AppendLine();
-                        sb.AppendLine(@"\c " + marker.Data);
-
                         if (chapter != "" && verse != "" && verseText != "")
                         {
                             var usfm = new UsfmVerse
@@ -404,12 +406,10 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                         {
                             if (lastVerseZero == false)
                             {
-                                sb.Append(@"\v 0 " + textToken.Text);
                                 verseText = textToken.Text;
                             }
                             else
                             {
-                                sb.Append(textToken.Text);
                                 verseText = textToken.Text;
                             }
 
@@ -419,21 +419,18 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                         else
                         {
                             // check to see if the last character is a space
-                            if (sb[sb.Length - 1] == ' ' && lastTokenText)
+                            if (verses[verses.Count - 1].Text.EndsWith(" ") && lastTokenText)
                             {
-                                sb.Append(textToken.Text.TrimStart());
                                 verseText += textToken.Text.TrimStart();
                             }
                             else
                             {
-                                if (sb[sb.Length - 1] == ' ' && textToken.Text.StartsWith(" "))
+                                if (verses[verses.Count - 1].Text == " " && textToken.Text.StartsWith(" "))
                                 {
-                                    sb.Append(textToken.Text.TrimStart());
                                     verseText = textToken.Text.TrimStart();
                                 }
                                 else
                                 {
-                                    sb.Append(textToken.Text);
                                     verseText += textToken.Text;
                                 }
 
@@ -547,6 +544,98 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
             File.WriteAllLines(usfmFile, output);
         }
 
+
+        /// <summary>
+        /// This method iterates over the verses looking for verses that are split over multiple lines
+        /// e.g. \v 2a, \v 2b, \v 2c, etc. and combines them into a single line
+        /// </summary>
+        /// <param name="usfmFile"></param>
+        public static List<UsfmVerse> FixSplitVerses(List<UsfmVerse> verses)
+        {
+            List<UsfmVerse> usfmVerses = new();
+
+            Dictionary<string, string> verseKey = new();
+            string chapter = "";
+            bool firstHalfVerse = false;
+            foreach (var v in verses)
+            {
+                if (v.Verse == "1a")
+                {
+                    Console.WriteLine();
+                }
+
+
+
+                if (v.Chapter != chapter)
+                {
+                    // new chapter
+                    chapter = v.Chapter;
+                    firstHalfVerse = false;
+                    bool isNumber = double.TryParse(v.Verse, out _);
+                    if (isNumber == false)
+                    {
+                        // first half of the verse
+                        firstHalfVerse = true;
+
+                        v.Verse = StringHelpers.RemoveNonNumeric(v.Verse);
+                    }
+                    usfmVerses.Add(v);
+                }
+                else
+                {
+                    // verse
+
+                    // check if verse is a number
+                    bool isNumber = double.TryParse(v.Verse, out _);
+                    string key = "";
+                    if (isNumber)
+                    {
+                        key = $"{chapter}.{v.Verse}";
+                        usfmVerses.Add(v);
+                    }
+                    else
+                    {
+                        if (v.Verse.Contains("-"))
+                        {
+                            // let this pass normally
+                            key = $"{chapter}.{v.Verse}";
+                            usfmVerses.Add(v);
+                        }
+                        else
+                        {
+                            if (firstHalfVerse)
+                            {
+                                // append onto the previous verse since we are now the second verse
+                                if (usfmVerses[usfmVerses.Count - 1].Text.EndsWith(" "))
+                                {
+                                    usfmVerses[usfmVerses.Count - 1].Text += v.Text;
+                                }
+                                else
+                                {
+                                    usfmVerses[usfmVerses.Count - 1].Text += " " + v.Text;
+                                }
+                            }
+                            else
+                            {
+                                // first half of the verse
+                                firstHalfVerse = true;
+
+                                var usfm = new UsfmVerse
+                                {
+                                    Chapter = chapter,
+                                    Verse = StringHelpers.RemoveNonNumeric(v.Verse),
+                                    Text = v.Text,
+                                };
+
+                                usfmVerses.Add(usfm);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return usfmVerses;
+        }
 
 
 
