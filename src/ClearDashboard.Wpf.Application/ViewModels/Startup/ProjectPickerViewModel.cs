@@ -494,12 +494,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             EventAggregator.Subscribe(this);
 
             IsParatextInstalled = _paratextProxy.IsParatextInstalled();
-
-            if (Pinger.PingHost())
+            if (!IsParatextInstalled)
             {
-                await GetCollabProjects();
+                // await this.ShowMessageAsync("This is the title", "Some message");
             }
-                
 
             IsParatextRunning = _paratextProxy.IsParatextRunning();
             if (IsParatextRunning)
@@ -513,16 +511,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 ListenForParatextStart();
             }
-            if (!IsParatextInstalled)
-            {
-                // await this.ShowMessageAsync("This is the title", "Some message");
-            }
+
 
             if (Pinger.PingHost())
             {
                 await FinishAccountSetup();
+
+                await GetCollabProjects();
             }
-                
+
             await GetRemoteUser();
 
             await LicenseManager.DeleteOldLicense();
@@ -659,6 +656,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         private async Task FinishAccountSetup()
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+
             Logger!.LogDebug("Entering FinishAccountSetup");
 
             var licenseUser = LicenseManager.GetUserFromLicense();
@@ -777,6 +778,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 };
                 _collaborationManager.SaveCollaborationLicense(gitLabUser);
             }
+
+            stopwatch.Stop();
+            Logger!.LogDebug($"FinishAccountSetup: elapsed time: {stopwatch.ElapsedMilliseconds} ms");
         }
 
         private async Task GetRemoteUser()
@@ -1027,23 +1031,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private async Task GetCollabProjects()
         {
             DashboardCollabProjects.Clear();
-
-            // get a listing of the local project's project.ids
-            List<CoupleOfStrings> projectIds = new();
-            foreach (var dashboardProject in DashboardProjects)
-            {
-                var results =
-                    await ExecuteRequest(new GetProjectIdSlice.GetProjectIdQuery(dashboardProject.FullFilePath), CancellationToken.None);
-
-                if (results.Success)
-                {
-                    projectIds.Add(new CoupleOfStrings
-                    {
-                        stringB = dashboardProject.FullFilePath,
-                        stringA = results.Data
-                    });
-                }
-            }
 
             // get the list of those GitLab projects that haven't been sync'd locally
             var projects = await _gitLabHttpClientServices.GetProjectsForUser(_collaborationManager.GetConfig());
