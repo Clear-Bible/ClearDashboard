@@ -1738,22 +1738,20 @@ namespace ClearDashboard.WebApiParatextPlugin
             List<UsfmError> usfmError = new();
             Dictionary<string, string> verseKey = new();
             verses = ParatextExtractUSFM.ParseUsfmBook(project, this, book.Number, usfmError, verseKey);
-            verses = ParatextExtractUSFM.FixSplitVerses(verses);
 
-
-            Console.WriteLine($@"\id {book.Code}");
-            Console.WriteLine();
-            var chapter = "";
-            foreach (var v in verses)
-            {
-                if (chapter != v.Chapter)
-                {
-                    Console.WriteLine();
-                    Console.WriteLine($@"\c {v.Chapter}");
-                    chapter = v.Chapter;
-                }
-                Console.WriteLine($@"\v {v.Verse} {v.Text}");
-            }
+            //Console.WriteLine($@"\id {book.Code}");
+            //Console.WriteLine();
+            //var chapter = "";
+            //foreach (var v in verses)
+            //{
+            //    if (chapter != v.Chapter)
+            //    {
+            //        Console.WriteLine();
+            //        Console.WriteLine($@"\c {v.Chapter}");
+            //        chapter = v.Chapter;
+            //    }
+            //    Console.WriteLine($@"\v {v.Verse} {v.Text}");
+            //}
 
             return verses;
         }
