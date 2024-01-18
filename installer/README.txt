@@ -8,17 +8,13 @@
 
 5. Shut down Paratext
 8. SetVersionInfo tool
-7. Update the version number in manifest.app
-8. Update the version number in the DashboardInstaller.iss file
-9. Change Visual Studio to Release mode
+7. (optional) Update the version number in manifest.app
+8. (optional) Update the version number in the DashboardInstaller.iss file
+9. (optional) Change Visual Studio to Release mode
 
-
-Steps 10-12 are necessary to rebuild the Paratext Plugin (since codesign_exe.bat can’t) and rebuild ClearDashboard.Wpf.Application for publishing.
-
-
-10. Clean bin and obj files
-11. Restore Nuget packages
-12. Rebuild the Solution
+10. (optional) Clean bin and obj files
+11. (optional) Restore Nuget packages
+12. (optional) Rebuild the Solution
 
 
 13. (optional) Run the app to make sure it works.  Shut down Paratext if you open it.

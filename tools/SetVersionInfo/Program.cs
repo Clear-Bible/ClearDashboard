@@ -9,6 +9,7 @@ string? versionNumber = Console.ReadLine();
 #if DEBUG
 
 DirectoryInfo dir = new DirectoryInfo(@"..\..\..\..\..\src\");
+DirectoryInfo installerDir = new DirectoryInfo(@"..\..\..\..\..\installer\");
 
 #else
 
@@ -16,6 +17,49 @@ DirectoryInfo dir = new DirectoryInfo(@"..\src\");
 
 #endif
 
+foreach (FileInfo file in installerDir.GetFiles("DashboardInstaller.iss", SearchOption.AllDirectories))
+{
+    var installerScriptLinesArr = File.ReadAllLines(file.FullName);
+
+    var versionLineIndex = 0;
+    foreach (var line in installerScriptLinesArr)
+    {
+        if (line.StartsWith("#define MyAppVersion"))
+        {
+            break;
+        }
+        versionLineIndex++;
+    }
+
+    installerScriptLinesArr[versionLineIndex] = $"#define MyAppVersion \"{versionNumber}\"";
+
+    File.WriteAllLines(file.FullName,installerScriptLinesArr);
+}
+
+foreach (FileInfo file in dir.GetFiles("app.manifest", SearchOption.AllDirectories))
+{
+    Console.WriteLine(file.FullName);
+
+    XmlDocument doc = new XmlDocument();
+    doc.Load(file.FullName);
+
+    // Find the assemblyIdentity node using its namespace and local name
+    XmlNamespaceManager namespaceManager = new XmlNamespaceManager(doc.NameTable);
+    namespaceManager.AddNamespace("ns", "urn:schemas-microsoft-com:asm.v1");
+    XmlNode assemblyIdentityNode = doc.SelectSingleNode("//ns:assemblyIdentity", namespaceManager);
+
+    if (assemblyIdentityNode == null)
+    {
+        continue;
+    }
+
+    // Update the value of the version attribute
+    XmlAttribute versionAttribute = assemblyIdentityNode.Attributes["version"];
+    versionAttribute.Value = versionNumber;
+
+    // Save the modified XML document
+    doc.Save(file.FullName);
+}
 
 foreach (FileInfo file in dir.GetFiles("*.csproj", SearchOption.AllDirectories))
 {
