@@ -36,7 +36,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 
             if (dups.Any())
             {
-                throw new InvalidDataEngineException(name: "Token.Ids", value: $"{string.Join(",", dups)}", message: $"Engine token Id duplicates found in corpus '{corpusName}' book '{bookId}'");
+                throw new InvalidDataEngineException(name: "Token.Ids", value: $"{string.Join(",", dups)}", message: $"Engine token Id duplicates found in corpus '{corpusName}' book '{bookId}' Tokens Ids: {string.Join(", ", dups)}");
             }
 
             var multiVerseSpanningComposites = tokensTextRows

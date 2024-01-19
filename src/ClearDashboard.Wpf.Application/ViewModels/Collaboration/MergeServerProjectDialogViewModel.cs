@@ -343,9 +343,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                 return false;
             }
 
-            if (CheckIfConnectedToParatext() == false)
+            if (CollaborationDialogAction != CollaborationDialogAction.Merge)
             {
-                return false;
+                if (CheckIfConnectedToParatext() == false)
+                {
+                    return false;
+                }
             }
 
             CanOkAction = false;

@@ -469,7 +469,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     CurrentCorpusName = tokenizedCorpusEnhancedViewItemMetadatum.ProjectName!;
                 }
 
-                await AddItem(metadatum, cancellationToken);
+                _ = Task.Run(async () =>
+                {
+                    await AddItem(metadatum, cancellationToken);
+                });
+
+               
             }
 
             EventAggregator.SubscribeOnPublishedThread(this);
