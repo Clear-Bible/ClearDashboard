@@ -1875,7 +1875,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     if (parallelCorpusConnectionViewModel != null)
                     {
                         // kill off the whole parallel line
-                        DeleteParallelCorpusConnection(parallelCorpusConnectionViewModel);
+                        await DeleteParallelCorpusConnection(parallelCorpusConnectionViewModel, false);
                         return;
                     }
                 }
@@ -2033,7 +2033,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             SelectedDesignSurfaceComponent = parallelCorpusConnection;
         }
 
-        public async Task<bool> DeleteParallelCorpusConnection(ParallelCorpusConnectionViewModel connection)
+        public async Task<bool> DeleteParallelCorpusConnection(ParallelCorpusConnectionViewModel connection, bool skipConfirmationPrompt)
         {
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
 
@@ -2070,26 +2070,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             } 
             else
             {
-                var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
-
-                if (confirmationViewPopupViewModel == null)
+                if (skipConfirmationPrompt == false)
                 {
-                    throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
-                }
-                
-                confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.DeleteParallelLineConfirmation;
-                confirmationViewPopupViewModel.SubHeader = connection.ParallelCorpusDisplayName;
+                    var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
 
-                bool result = false;
-                OnUIThread(async () =>
-                {
-                    result = await _windowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
-                        SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
-                });
+                    if (confirmationViewPopupViewModel == null)
+                    {
+                        throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+                    }
 
-                if (!result)
-                {
-                    return false;
+                    confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.DeleteParallelLineConfirmation;
+                    confirmationViewPopupViewModel.SubHeader = connection.ParallelCorpusDisplayName;
+
+                    bool result = false;
+                    OnUIThread(async () =>
+                    {
+                        result = await _windowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                            SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
+                    });
+
+                    if (!result)
+                    {
+                        return false;
+                    }
                 }
             }
 
@@ -2144,7 +2147,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             return true;
         }
 
-        public async void DeleteCorpusNode(CorpusNodeViewModel node, bool wasTokenizing)
+        public async Task DeleteCorpusNode(CorpusNodeViewModel node, bool wasTokenizing)
         {
             // check to see if is in the middle of working or not by tokenizing
             var isCorpusProcessing = BackgroundTasksViewModel.CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(node.Name);
@@ -2202,7 +2205,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 PdsVisibility = Visibility.Visible;
 
                 //connection.ParallelCorpusId
-                var bRet = await DeleteParallelCorpusConnection(connection);
+                var bRet = await DeleteParallelCorpusConnection(connection, true);
 
                 // user cancelled midway through
                 if (bRet == false)
