@@ -2099,8 +2099,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // disable the PDS
             PdsVisibility = Visibility.Visible;
 
-            // Removes the connector between corpus nodes:
-            DesignSurfaceViewModel!.DeleteParallelCorpusConnection(connection);
+            await Task.Run(() =>
+            {
+                // Removes the connector between corpus nodes:
+                DesignSurfaceViewModel!.DeleteParallelCorpusConnection(connection);
+            });
 
             //await Task.Factory.StartNew(async () =>
             //{
@@ -2125,7 +2128,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
                     }), cancellationToken);
 
-                    await DAL.Alignment.Corpora.ParallelCorpus.Delete(Mediator!, connection.ParallelCorpusId);
+                    await Task.Run(async () =>
+                    {
+                        await ParallelCorpus.Delete(Mediator!, connection.ParallelCorpusId);
+                    });
 
                     _longRunningTaskManager.TaskComplete(TaskName);
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
@@ -2197,28 +2203,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }));
 
 
-
-            // Deletes the ParallelCorpora and removes the connector between nodes. 
-            foreach (var connection in node.AttachedConnections)
+            await Task.Run(async () =>
             {
-                // disable the PDS
-                PdsVisibility = Visibility.Visible;
-
-                //connection.ParallelCorpusId
-                var bRet = await DeleteParallelCorpusConnection(connection, true);
-
-                // user cancelled midway through
-                if (bRet == false)
+                // Deletes the ParallelCorpora and removes the connector between nodes. 
+                foreach (var connection in node.AttachedConnections)
                 {
-                    // reenable the PDS
-                    PdsVisibility = Visibility.Collapsed;
+                    // disable the PDS
+                    PdsVisibility = Visibility.Visible;
 
-                    return;
+                    //connection.ParallelCorpusId
+                    var bRet = await DeleteParallelCorpusConnection(connection, true);
+
+                    // user cancelled midway through
+                    if (bRet == false)
+                    {
+                        // reenable the PDS
+                        PdsVisibility = Visibility.Collapsed;
+
+                        return;
+                    }
                 }
-            }
 
-            // Removes the CorpusNode form the project design surface:
-            DesignSurfaceViewModel!.DeleteCorpusNode(node);
+                // Removes the CorpusNode form the project design surface:
+                DesignSurfaceViewModel!.DeleteCorpusNode(node);
+            });
 
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
 
@@ -2255,6 +2263,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             // reenable the PDS
             PdsVisibility = Visibility.Collapsed;
+
+
+            PlaySound.PlaySoundFromResource(SoundType.Success);                                      
         }
 
 #endregion // Methods
