@@ -804,7 +804,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private async Task GetProjectsVersion(bool afterMigration = false)
+        public async Task GetProjectsVersion(bool afterMigration = false)
         {
             DashboardProjects.Clear();
 
@@ -1019,7 +1019,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             await GetProjectsVersion(afterMigration: true);
         }
 
-        private async Task GetCollabProjects()
+        public async Task GetCollabProjects()
         {
             DashboardCollabProjects.Clear();
 
@@ -1039,6 +1039,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                     if (gitLabProject is not null)
                     {
+                        dashboardProject.IsCollabProject = true;
                         dashboardProject.CollabOwner = gitLabProject.RemoteOwner.Name;
                         dashboardProject.PermissionLevel = gitLabProject.RemotePermissionLevel;
 
