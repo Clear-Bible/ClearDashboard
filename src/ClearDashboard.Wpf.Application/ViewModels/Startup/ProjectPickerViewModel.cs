@@ -34,11 +34,13 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using static ClearDashboard.DataAccessLayer.Features.DashboardProjects.GetProjectIdSlice;
 using static ClearDashboard.DataAccessLayer.Features.DashboardProjects.GetProjectVersionSlice;
+using static ClearDashboard.Wpf.Application.Helpers.Telemetry;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
@@ -47,6 +49,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         IHandle<ParatextConnectedMessage>, IHandle<UserMessage>, IHandle<ReloadProjectPickerProjects>, IHandle<DeletedGitProject>
     {
         #region Member Variables
+        private System.Timers.Timer _timer;
+        private long _elapsedSeconds;
+        private double _timerInterval = 15000;
+
         private readonly ParatextProxy _paratextProxy;
         private readonly IMediator _mediator;
         private readonly GitLabHttpClientServices _gitLabHttpClientServices;
@@ -526,11 +532,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             base.OnViewLoaded(view);
 
             _initializationComplete = true;
+
+
+            StartTimer();
+        }
+
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            _timer.Stop();
+            _timer.Dispose();
+
+            return base.OnDeactivateAsync(close, cancellationToken);
         }
 
         #endregion Constructor
 
         #region Methods
+
+        private void StartTimer()
+        {
+            _timer = new System.Timers.Timer(15000);
+            _timer.Elapsed += OnTimedEvent;
+            _timer.Enabled = true;
+            _timer.AutoReset = true;
+        }
+
+        private async void OnTimedEvent(object? sender, ElapsedEventArgs e)
+        {
+            _ = Task.Run(async () =>
+            {
+                await SetGitLabUpdateNeeded(DashboardProjects);
+
+                _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, SearchText);
+                NotifyOfPropertyChange(() => DashboardProjectsDisplay);
+            });
+        }
 
         public async Task OpenSettings()
         {
@@ -956,24 +992,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         private async Task SetGitLabUpdateNeeded(List<DashboardProject> projects)
         {
-            if (!StartupDialogViewModel.ProjectAlreadyOpened)
+
+            // get the collab most recent Sha
+            foreach (var project in projects)
             {
-                // get the collab most recent Sha
-                foreach (var project in projects)
+                if (project.IsCollabProject)
                 {
-                    if (project.IsCollabProject)
+                    var results = await ExecuteRequest(new GetGitLabUpdatedNeededQuery(project), CancellationToken.None);
+                    if (results.Success && results.HasData)
                     {
-                        var results = await ExecuteRequest(new GetGitLabUpdatedNeededQuery(project), CancellationToken.None);
-                        if (results.Success && results.HasData)
+                        if (results.Data == true)
                         {
-                            if (results.Data == true)
-                            {
-                                project.GitLabUpdateNeeded = true;
-                            }
-                            else
-                            {
-                                project.GitLabUpdateNeeded = false;
-                            }
+                            project.GitLabUpdateNeeded = true;
+                        }
+                        else
+                        {
+                            project.GitLabUpdateNeeded = false;
                         }
                     }
                 }
