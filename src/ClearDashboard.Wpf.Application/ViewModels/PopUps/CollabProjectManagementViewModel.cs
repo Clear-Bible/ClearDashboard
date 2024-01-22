@@ -18,6 +18,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -358,9 +359,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public async void Close()
         {
-            await EventAggregator.PublishOnUIThreadAsync(new ReloadProjectPickerProjects());
-
+            
             await TryCloseAsync();
+        }
+
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            EventAggregator.PublishOnUIThreadAsync(new ReloadProjectPickerProjects());
+            return base.OnDeactivateAsync(close, cancellationToken);
         }
 
         private async Task GetUsersForProject()
