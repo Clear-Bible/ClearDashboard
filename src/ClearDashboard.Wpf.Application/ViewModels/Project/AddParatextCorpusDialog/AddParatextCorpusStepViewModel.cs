@@ -221,41 +221,45 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             var result = await ProjectManager.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
             if (result.Success)
             {
-                var projectDesignSurface = LifetimeScope.Resolve<ProjectDesignSurfaceViewModel>();
-                
-                var corpusIds = await DAL.Alignment.Corpora.Corpus.GetAllCorpusIds(Mediator);
-
-                List<string> currentNodeIds = new();
-
-                foreach (var corpusId in corpusIds)
+                await Task.Run(async () =>
                 {
-                    var currentlyRunning = projectDesignSurface.BackgroundTasksViewModel
-                        .CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(corpusId.Name);
-                    if (currentlyRunning)
+                    var projectDesignSurface = LifetimeScope.Resolve<ProjectDesignSurfaceViewModel>();
+
+                    var corpusIds = await DAL.Alignment.Corpora.Corpus.GetAllCorpusIds(Mediator);
+
+                    List<string> currentNodeIds = new();
+
+                    foreach (var corpusId in corpusIds)
                     {
-                        currentNodeIds.Add(corpusId.ParatextGuid);
+                        var currentlyRunning = projectDesignSurface.BackgroundTasksViewModel
+                            .CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(corpusId.Name);
+                        if (currentlyRunning)
+                        {
+                            currentNodeIds.Add(corpusId.ParatextGuid);
+                        }
                     }
-                }
 
-                var currentNodes = projectDesignSurface.DesignSurfaceViewModel.CorpusNodes;
-                currentNodes.ToList().ForEach(n => currentNodeIds.Add(n.ParatextProjectId));
+                    var currentNodes = projectDesignSurface.DesignSurfaceViewModel.CorpusNodes;
+                    currentNodes.ToList().ForEach(n => currentNodeIds.Add(n.ParatextProjectId));
 
-                if (Projects == null)
-                {
-                    Projects = result.Data.Where(c => !currentNodeIds.Contains(c.Id)).OrderBy(p => p.Name).ToList();
-                }
-
-                if (!string.IsNullOrEmpty(_initialParatextProjectId))
-                {
-                    SelectedProject = Projects.FirstOrDefault(p => p.Id == _initialParatextProjectId);
-                    if (SelectedProject != null)
+                    if (Projects == null)
                     {
-                        IsEnabledSelectedProject = false;
+                        Projects = result.Data.Where(c => !currentNodeIds.Contains(c.Id)).OrderBy(p => p.Name).ToList();
                     }
-                }
+
+                    if (!string.IsNullOrEmpty(_initialParatextProjectId))
+                    {
+                        SelectedProject = Projects.FirstOrDefault(p => p.Id == _initialParatextProjectId);
+                        if (SelectedProject != null)
+                        {
+                            IsEnabledSelectedProject = false;
+                        }
+                    }
+
+                    // send new metadata results to the Main Window    
+                    await EventAggregator.PublishOnUIThreadAsync(new ProjectsMetadataChangedMessage(result.Data), cancellationToken);
+                });
                 
-                // send new metadata results to the Main Window    
-                await EventAggregator.PublishOnUIThreadAsync(new ProjectsMetadataChangedMessage(result.Data), cancellationToken);
             }
             
             await base.OnActivateAsync(cancellationToken);
