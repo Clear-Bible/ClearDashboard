@@ -155,7 +155,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public async void DraftEmail()
         {
-            var toAddress = "nifer.sims@clear.bible";
+            var toAddress = "dashboard@biblica.com";
 
             var subject = "In-App Registration Message";
 
