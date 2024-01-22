@@ -869,6 +869,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task AddParatextCorpus()
         {
+            if (_busyState.Keys.Any(k => k.StartsWith("AddParatextCorpus_")))
+            {
+                // prevent spamming of the Add Paratext Corpus button
+                return;
+            }
+
             await AddParatextCorpus("");
         }
 
@@ -902,7 +908,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     var selectedProject = dialogViewModel!.SelectedProject;
                     var bookIds = dialogViewModel.BookIds;
-                    var taskName = $"{selectedProject!.Name}";
+                    var taskName = $"AddParatextCorpus_{selectedProject!.Name}";
                     _busyState.Add(taskName, true);
 
                     var task = _longRunningTaskManager!.Create(taskName, LongRunningTaskStatus.Running);
@@ -1047,7 +1053,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         finally
                         {
                             _longRunningTaskManager.TaskComplete(taskName);
-                            _busyState.Remove(taskName);
+                            _busyState.Remove($"AddParatextCorpus_{selectedProject!.Name}");
                             if (cancellationToken.IsCancellationRequested)
                             {
                                 DeleteCorpusNode(node, true);
