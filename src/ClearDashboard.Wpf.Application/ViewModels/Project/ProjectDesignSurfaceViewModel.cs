@@ -69,7 +69,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         IHandle<UiLanguageChangedMessage>, 
         IHandle<RedrawParallelCorpusMenus>,
         IHandle<RedrawCorpusNodeMenus>, 
-        IHandle<ProjectLoadedMessage>, 
         IHandle<GetExternalNotesMessage>,
         IDisposable
     {
@@ -158,12 +157,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _projectName, value);
         }
 
-        public bool _addParatextButtonEnabled = false;
-        public bool AddParatextButtonEnabled
-        {
-            get => _addParatextButtonEnabled;
-            set => Set(ref _addParatextButtonEnabled, value);
-        }
+        //public bool _addParatextButtonEnabled = false;
+        //public bool AddParatextButtonEnabled
+        //{
+        //    get => _addParatextButtonEnabled;
+        //    set => Set(ref _addParatextButtonEnabled, value);
+        //}
 
         private Visibility _pdsVisibility = Visibility.Collapsed;
         public Visibility PdsVisibility
@@ -278,7 +277,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             if(ProjectManager.IsParatextConnected)
             {
-                AddParatextButtonEnabled = true;
+                DesignSurfaceViewModel.AddParatextButtonEnabled = true;
             }
 
         }
@@ -869,12 +868,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task AddParatextCorpus()
         {
-            if (_busyState.Keys.Any(k => k.StartsWith("AddParatextCorpus_")))
-            {
-                // prevent spamming of the Add Paratext Corpus button
-                return;
-            }
-
             await AddParatextCorpus("");
         }
 
@@ -897,6 +890,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                 if (result)
                 {
+                    DesignSurfaceViewModel!.AddParatextButtonEnabled = false;
+
                     // check to see if we want to run this in High Performance mode
                     if (Settings.Default.EnablePowerModes && _systemPowerModes.IsLaptop)
                     {
@@ -908,7 +903,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     var selectedProject = dialogViewModel!.SelectedProject;
                     var bookIds = dialogViewModel.BookIds;
-                    var taskName = $"AddParatextCorpus_{selectedProject!.Name}";
+                    var taskName = $"{selectedProject!.Name}";
                     _busyState.Add(taskName, true);
 
                     var task = _longRunningTaskManager!.Create(taskName, LongRunningTaskStatus.Running);
@@ -1052,8 +1047,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         }
                         finally
                         {
+                            DesignSurfaceViewModel!.AddParatextButtonEnabled = true;
                             _longRunningTaskManager.TaskComplete(taskName);
-                            _busyState.Remove($"AddParatextCorpus_{selectedProject!.Name}");
+                            _busyState.Remove($"{selectedProject!.Name}");
                             if (cancellationToken.IsCancellationRequested)
                             {
                                 DeleteCorpusNode(node, true);
@@ -2337,12 +2333,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        public Task HandleAsync(ProjectLoadedMessage message, CancellationToken cancellationToken)
-        {
-            AddParatextButtonEnabled = true;
 
-            return Task.CompletedTask;
-        }
 
         #endregion
 
