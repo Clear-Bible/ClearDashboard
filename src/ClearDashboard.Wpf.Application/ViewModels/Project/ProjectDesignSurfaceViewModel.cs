@@ -576,9 +576,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
             var syntaxTree = new SyntaxTrees();
-            var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree, ClearBible.Engine.Persistence.FileGetBookIds.LanguageCodeEnum.H)
-                .Transform<SetTrainingByTrainingLowercase>()
-                .Transform<AddPronominalReferencesToTokens>();
+
+            ITextCorpus sourceCorpus = null;
+
+            // run this in a separate thread as it is blocking the UI
+            await Task.Run(() =>
+            {
+                sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree, ClearBible.Engine.Persistence.FileGetBookIds.LanguageCodeEnum.H)
+                    .Transform<SetTrainingByTrainingLowercase>()
+                    .Transform<AddPronominalReferencesToTokens>();
+            }, cancellationToken);
 
             var books = BookInfo.GenerateScriptureBookList()
                 .Where(bi => sourceCorpus.Texts
@@ -724,9 +731,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
             var syntaxTree = new SyntaxTrees();
-            var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree, ClearBible.Engine.Persistence.FileGetBookIds.LanguageCodeEnum.G)
-                .Transform<SetTrainingByTrainingLowercase>()
-                .Transform<AddPronominalReferencesToTokens>();
+            ITextCorpus sourceCorpus = null;
+
+            // run this in a separate thread as it is blocking the UI
+            await Task.Run( () =>
+            {
+                sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree, ClearBible.Engine.Persistence.FileGetBookIds.LanguageCodeEnum.G)
+                    .Transform<SetTrainingByTrainingLowercase>()
+                    .Transform<AddPronominalReferencesToTokens>();
+            }, cancellationToken);
 
             var books = BookInfo.GenerateScriptureBookList()
                 .Where(bi => sourceCorpus.Texts
@@ -1875,7 +1888,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     if (parallelCorpusConnectionViewModel != null)
                     {
                         // kill off the whole parallel line
-                        DeleteParallelCorpusConnection(parallelCorpusConnectionViewModel);
+                        await DeleteParallelCorpusConnection(parallelCorpusConnectionViewModel, false);
                         return;
                     }
                 }
@@ -2033,7 +2046,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             SelectedDesignSurfaceComponent = parallelCorpusConnection;
         }
 
-        public async void DeleteParallelCorpusConnection(ParallelCorpusConnectionViewModel connection)
+        public async Task<bool> DeleteParallelCorpusConnection(ParallelCorpusConnectionViewModel connection, bool skipConfirmationPrompt)
         {
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
 
@@ -2065,41 +2078,48 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 if ((bool)ret.GetType().GetProperty("Result").GetValue(ret, null) == false)
                 {
                     // cancelled by user
-                    return;
+                    return false;
                 }
             } 
             else
             {
-                var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
-
-                if (confirmationViewPopupViewModel == null)
+                if (skipConfirmationPrompt == false)
                 {
-                    throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
-                }
-                
-                confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.DeleteParallelLineConfirmation;
+                    var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
 
-                bool result = false;
-                OnUIThread(async () =>
-                {
-                    result = await _windowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
-                        SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
-                });
+                    if (confirmationViewPopupViewModel == null)
+                    {
+                        throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+                    }
 
-                if (!result)
-                {
-                    return;
+                    confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.DeleteParallelLineConfirmation;
+                    confirmationViewPopupViewModel.SubHeader = connection.ParallelCorpusDisplayName;
+
+                    bool result = false;
+                    OnUIThread(async () =>
+                    {
+                        result = await _windowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                            SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
+                    });
+
+                    if (!result)
+                    {
+                        return false;
+                    }
                 }
             }
 
             // disable the PDS
             PdsVisibility = Visibility.Visible;
 
-            // Removes the connector between corpus nodes:
-            DesignSurfaceViewModel!.DeleteParallelCorpusConnection(connection);
-
-            await Task.Factory.StartNew(async () =>
+            await Task.Run(() =>
             {
+                // Removes the connector between corpus nodes:
+                DesignSurfaceViewModel!.DeleteParallelCorpusConnection(connection);
+            });
+
+            //await Task.Factory.StartNew(async () =>
+            //{
                 // ****************************************************************************
                 // MICHAEL: not sure what null checking (if any) needs to happen with 
                 // connection.ParallelCorpusId.  Also, this method will accept a third
@@ -2121,7 +2141,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
                     }), cancellationToken);
 
-                    await DAL.Alignment.Corpora.ParallelCorpus.Delete(Mediator!, connection.ParallelCorpusId);
+                    await Task.Run(async () =>
+                    {
+                        await ParallelCorpus.Delete(Mediator!, connection.ParallelCorpusId);
+                    });
 
                     _longRunningTaskManager.TaskComplete(TaskName);
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
@@ -2138,10 +2161,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     PdsVisibility = Visibility.Collapsed;
                 });
-            });
+            //});
+
+            return true;
         }
 
-        public async void DeleteCorpusNode(CorpusNodeViewModel node, bool wasTokenizing)
+        public async Task DeleteCorpusNode(CorpusNodeViewModel node, bool wasTokenizing)
         {
             // check to see if is in the middle of working or not by tokenizing
             var isCorpusProcessing = BackgroundTasksViewModel.CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(node.Name);
@@ -2166,6 +2191,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
                 }
 
+                confirmationViewPopupViewModel.SubHeader = node.Name;
                 confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.DeleteCorpusNodeConfirmation;
 
                 bool result = false;
@@ -2189,21 +2215,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
             }));
 
-            // Deletes the ParallelCorpora and removes the connector between nodes. 
-            foreach (var connection in node.AttachedConnections)
+
+            await Task.Run(async () =>
             {
-                //connection.ParallelCorpusId
-                DeleteParallelCorpusConnection(connection);
-            }
+                // Deletes the ParallelCorpora and removes the connector between nodes. 
+                foreach (var connection in node.AttachedConnections)
+                {
+                    // disable the PDS
+                    PdsVisibility = Visibility.Visible;
 
+                    //connection.ParallelCorpusId
+                    var bRet = await DeleteParallelCorpusConnection(connection, true);
 
-            // disable the PDS
-            PdsVisibility = Visibility.Visible;
+                    // user cancelled midway through
+                    if (bRet == false)
+                    {
+                        // reenable the PDS
+                        PdsVisibility = Visibility.Collapsed;
 
-            // Removes the CorpusNode form the project design surface:
-            DesignSurfaceViewModel!.DeleteCorpusNode(node);
+                        return;
+                    }
+                }
 
-
+                // Removes the CorpusNode form the project design surface:
+                DesignSurfaceViewModel!.DeleteCorpusNode(node);
+            });
 
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
 
@@ -2240,6 +2276,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             // reenable the PDS
             PdsVisibility = Visibility.Collapsed;
+
+
+            PlaySound.PlaySoundFromResource(SoundType.Success);                                      
         }
 
 #endregion // Methods
