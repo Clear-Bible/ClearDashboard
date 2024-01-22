@@ -1052,6 +1052,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         // remove from the available GitLab projects
                         projects.Remove(gitLabProject);
                     }
+                    else
+                    {
+                        if (dashboardProject.IsCollabProject)
+                        {
+                            // project has been removed from GitLab so remove the SHA from the database
+                            var resultDelete = await ExecuteRequest(new ResetProjectGitLabShaQuery(dashboardProject.FullFilePath), CancellationToken.None);
+                            if (resultDelete.Success)
+                            {
+                                Logger!.LogDebug($"ResetProjectGitLabShaQuery: {dashboardProject.ProjectName} {dashboardProject.Id} SHA Removed from Project table");
+                            }
+
+                            dashboardProject.IsCollabProject = false;
+                        }
+                    }
                 }
             }
 
