@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Caliburn.Micro;
-using CefSharp.DevTools.Network;
 using ClearDashboard.Collaboration.Features;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.Collaboration.Util;
@@ -45,7 +44,7 @@ using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
     public class ProjectPickerViewModel : DashboardApplicationWorkflowStepViewModel<StartupDialogViewModel>,
-        IHandle<ParatextConnectedMessage>, IHandle<UserMessage>
+        IHandle<ParatextConnectedMessage>, IHandle<UserMessage>, IHandle<ReloadProjectPickerProjects>, IHandle<DeletedGitProject>
     {
         #region Member Variables
         private readonly ParatextProxy _paratextProxy;
@@ -805,7 +804,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private async Task GetProjectsVersion(bool afterMigration = false)
+        public async Task GetProjectsVersion(bool afterMigration = false)
         {
             DashboardProjects.Clear();
 
@@ -926,6 +925,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             string gitLabSha = string.Empty;
+            string userId = string.Empty;
             bool shaPresent = false;
             results = await ExecuteRequest(new GetProjectGitLabShaQuery(fileInfo.FullName), CancellationToken.None);
             if (results.Success && results.HasData)
@@ -934,15 +934,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 {
                     shaPresent = true;
                     gitLabSha = results.Data.ToString();
-                }
-            }
-
-            string userId = string.Empty;
-            results = await ExecuteRequest(new GetProjectGitLabShaQuery(fileInfo.FullName), CancellationToken.None);
-            if (results.Success && results.HasData)
-            {
-                if (results.Data.ToString() != "")
-                {
                     userId = results.Data.ToString();
                 }
             }
@@ -1028,7 +1019,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             await GetProjectsVersion(afterMigration: true);
         }
 
-        private async Task GetCollabProjects()
+        public async Task GetCollabProjects()
         {
             DashboardCollabProjects.Clear();
 
@@ -1048,6 +1039,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                     if (gitLabProject is not null)
                     {
+                        dashboardProject.IsCollabProject = true;
                         dashboardProject.CollabOwner = gitLabProject.RemoteOwner.Name;
                         dashboardProject.PermissionLevel = gitLabProject.RemotePermissionLevel;
 
@@ -1059,6 +1051,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                         // remove from the available GitLab projects
                         projects.Remove(gitLabProject);
+                    }
+                    else
+                    {
+                        if (dashboardProject.IsCollabProject)
+                        {
+                            // project has been removed from GitLab so remove the SHA from the database
+                            var resultDelete = await ExecuteRequest(new ResetProjectGitLabShaQuery(dashboardProject.FullFilePath), CancellationToken.None);
+                            if (resultDelete.Success)
+                            {
+                                Logger!.LogDebug($"ResetProjectGitLabShaQuery: {dashboardProject.ProjectName} {dashboardProject.Id} SHA Removed from Project table");
+                            }
+
+                            dashboardProject.IsCollabProject = false;
+                        }
                     }
                 }
             }
@@ -1527,5 +1533,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             await Task.CompletedTask;
         }
 
+
+        /// <summary>
+        /// Reload the project picker projects/collab projecst
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task HandleAsync(ReloadProjectPickerProjects message, CancellationToken cancellationToken)
+        {
+            await GetProjectsVersion();
+
+            if (Pinger.PingHost())
+            {
+                await GetCollabProjects();
+            }
+        }
+
+        /// <summary>
+        /// Remove the project's SHA from the project table
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task HandleAsync(DeletedGitProject message, CancellationToken cancellationToken)
+        {
+            var project = _dashboardProjectsDisplay.FirstOrDefault(x => x.Id == message.Guid);
+
+            if (project is not null)
+            {
+                var results = await ExecuteRequest(new ResetProjectGitLabShaQuery(project.FullFilePath), CancellationToken.None);
+                if (results.Success)
+                {
+                    Logger!.LogDebug($"ResetProjectGitLabShaQuery: {project.ProjectName} {project.Id} SHA Removed from Project table");
+                }
+            }
+        }
     }
 }

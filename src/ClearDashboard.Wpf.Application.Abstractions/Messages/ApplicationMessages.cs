@@ -3,6 +3,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
+using System;
 using System.Collections.Generic;
 
 namespace ClearDashboard.Wpf.Application.Messages
@@ -34,6 +35,10 @@ namespace ClearDashboard.Wpf.Application.Messages
     public record TextCollectionChangedMessage(List<TextCollection> TextCollections);
 
     public record ParatextConnectedMessage(bool Connected);
+
+    public record ReloadProjectPickerProjects();
+
+    public record DeletedGitProject(Guid Guid);
 
     public record UserMessage(User User);
     public record DashboardProjectNameMessage(string ProjectName);
