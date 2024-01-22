@@ -43,7 +43,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
     /// <summary>
     /// Defines a design surface with nodes and connections between the nodes.
     /// </summary>
-    public partial class DesignSurfaceViewModel : Screen, IHandle<BackgroundDeletionTaskRunning>
+    public partial class DesignSurfaceViewModel : Screen, IHandle<BackgroundDeletionTaskRunning>, IHandle<ProjectLoadedMessage>
     {
 
         public Guid Guid = Guid.NewGuid();
@@ -194,6 +194,14 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             get => _addManuscriptGreekEnabled;
             set => Set(ref _addManuscriptGreekEnabled, value);
         }
+
+        private bool _addParatextButtonEnabled = false;
+        public bool AddParatextButtonEnabled
+        {
+            get => _addParatextButtonEnabled;
+            set => Set(ref _addParatextButtonEnabled, value);
+        }
+
 
         /// <summary>
         /// This is the design surface that is displayed in the window.
@@ -1857,6 +1865,13 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 // is not running to complete the connection
                 ConnectionDragCompleted(message.NewConnection, message.ConnectorDraggedOut, message.ConnectorDraggedOver);
             }
+
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(ProjectLoadedMessage message, CancellationToken cancellationToken)
+        {
+            AddParatextButtonEnabled = true;
 
             return Task.CompletedTask;
         }

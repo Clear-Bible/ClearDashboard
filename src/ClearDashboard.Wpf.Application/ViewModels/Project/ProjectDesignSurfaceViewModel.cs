@@ -69,7 +69,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         IHandle<UiLanguageChangedMessage>, 
         IHandle<RedrawParallelCorpusMenus>,
         IHandle<RedrawCorpusNodeMenus>, 
-        IHandle<ProjectLoadedMessage>, 
         IHandle<GetExternalNotesMessage>,
         IDisposable
     {
@@ -158,12 +157,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _projectName, value);
         }
 
-        public bool _addParatextButtonEnabled = false;
-        public bool AddParatextButtonEnabled
-        {
-            get => _addParatextButtonEnabled;
-            set => Set(ref _addParatextButtonEnabled, value);
-        }
+        //public bool _addParatextButtonEnabled = false;
+        //public bool AddParatextButtonEnabled
+        //{
+        //    get => _addParatextButtonEnabled;
+        //    set => Set(ref _addParatextButtonEnabled, value);
+        //}
 
         private Visibility _pdsVisibility = Visibility.Collapsed;
         public Visibility PdsVisibility
@@ -278,7 +277,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             if(ProjectManager.IsParatextConnected)
             {
-                AddParatextButtonEnabled = true;
+                DesignSurfaceViewModel.AddParatextButtonEnabled = true;
             }
 
         }
@@ -891,6 +890,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                 if (result)
                 {
+                    DesignSurfaceViewModel!.AddParatextButtonEnabled = false;
+
                     // check to see if we want to run this in High Performance mode
                     if (Settings.Default.EnablePowerModes && _systemPowerModes.IsLaptop)
                     {
@@ -1046,8 +1047,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         }
                         finally
                         {
+                            DesignSurfaceViewModel!.AddParatextButtonEnabled = true;
                             _longRunningTaskManager.TaskComplete(taskName);
-                            _busyState.Remove(taskName);
+                            _busyState.Remove($"{selectedProject!.Name}");
                             if (cancellationToken.IsCancellationRequested)
                             {
                                 DeleteCorpusNode(node, true);
@@ -2331,12 +2333,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        public Task HandleAsync(ProjectLoadedMessage message, CancellationToken cancellationToken)
-        {
-            AddParatextButtonEnabled = true;
 
-            return Task.CompletedTask;
-        }
 
         #endregion
 
