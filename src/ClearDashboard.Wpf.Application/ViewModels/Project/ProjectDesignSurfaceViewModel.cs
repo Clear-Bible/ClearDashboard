@@ -949,33 +949,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             {
                                 Tokenizers.LatinWordTokenizer =>
                                     (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
-                                    .Tokenize<LatinWordTokenizer>()
-                                    .Transform<IntoTokensTextRowProcessor>()
-                                    .Transform<SetTrainingBySurfaceLowercase>(),
+                                    .AddTokenizer<LatinWordTokenizer>()
+                                    .AddTransformer<IntoTokensTextRowProcessor>()
+                                    .AddTransformer<SetTrainingBySurfaceLowercase>()
+                                    .TokenizeTransform(),
 
                                 Tokenizers.WhitespaceTokenizer =>
                                     (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
-                                    .Tokenize<WhitespaceTokenizer>()
-                                    .Transform<IntoTokensTextRowProcessor>()
-                                    .Transform<SetTrainingBySurfaceLowercase>(),
+                                    .AddTokenizer<WhitespaceTokenizer>()
+                                    .AddTransformer<IntoTokensTextRowProcessor>()
+                                    .AddTransformer<SetTrainingBySurfaceLowercase>()
+									.TokenizeTransform(),
 
                                 Tokenizers.ZwspWordTokenizer => 
                                     (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
-                                    .Tokenize<ZwspWordTokenizer>()
-                                    .Transform<IntoTokensTextRowProcessor>()
-                                    .Transform<SetTrainingBySurfaceLowercase>(),
+                                    .AddTokenizer<ZwspWordTokenizer>()
+                                    .AddTransformer<IntoTokensTextRowProcessor>()
+                                    .AddTransformer<SetTrainingBySurfaceLowercase>()
+                                    .TokenizeTransform(),
 
                                 Tokenizers.ChineseBibleWordTokenizer => 
                                     (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
-                                    .Tokenize<ChineseBibleWordTokenizer>()
-                                    .Transform<IntoTokensTextRowProcessor>()
-                                    .Transform<SetTrainingBySurfaceLowercase>(),
+                                    .AddTokenizer<ChineseBibleWordTokenizer>()
+                                    .AddTransformer<IntoTokensTextRowProcessor>()
+                                    .AddTransformer<SetTrainingBySurfaceLowercase>()
+                                    .TokenizeTransform(),
 
                                 _ => (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, null, cancellationToken))
-                                    .Tokenize<WhitespaceTokenizer>()
-                                    .Transform<IntoTokensTextRowProcessor>()
-                                    .Transform<SetTrainingBySurfaceLowercase>()
-                            };
+                                    .AddTokenizer<WhitespaceTokenizer>()
+                                    .AddTransformer<IntoTokensTextRowProcessor>()
+                                    .AddTransformer<SetTrainingBySurfaceLowercase>()
+                                    .TokenizeTransform()
+							};
 
                             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
                                 description: $"Creating tokenized text corpus for '{selectedProject.Name}' corpus...",
@@ -1668,12 +1673,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 bookIds,
                 cancellationToken);
 
-            var tokenizer = InstantiateTokenizer(tokenizerEnum);
-
             var textCorpus = paratextProjectTextCorpus
-               .Tokenize(tokenizer)
-               .Transform<IntoTokensTextRowProcessor>()
-               .Transform<SetTrainingBySurfaceLowercase>();
+               .AddTokenizer(tokenizerEnum.ToString())
+               .AddTransformer<IntoTokensTextRowProcessor>()
+               .AddTransformer<SetTrainingBySurfaceLowercase>()
+               .TokenizeTransform();
 
             return textCorpus;
         }

@@ -16,8 +16,20 @@
     <PackageReference Include="Caliburn.Micro.Core" Version="4.0.212" />
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.9" />
+	<PackageReference Include="Grpc.AspNetCore" Version="2.57.0" />
+	<PackageReference Include="Google.Protobuf" Version="3.25.2" />
+	<PackageReference Include="Google.Protobuf.Tools" Version="3.25.2" GeneratePathProperty="true" />
   </ItemGroup>
   <ItemGroup>
+	<Protobuf Include="Proto\VerseMapping.proto" GrpcServices="Client" ProtoRoot="Proto\" />
+	<Protobuf Include="Proto\Versification.proto" GrpcServices="Client" ProtoRoot="Proto\" />
+	<Protobuf Include="Proto\TextCorpus.proto" GrpcServices="Client" ProtoRoot="Proto\" />
+	<Protobuf Include="Proto\TokensTextCorpus.proto" GrpcServices="Client" ProtoRoot="Proto\" />
+	<Protobuf Include="Proto\Token.proto" GrpcServices="Client" ProtoRoot="Proto\" />
+	<Protobuf Include="Proto\TokenizationRequest.proto" GrpcServices="Client" ProtoRoot="Proto\" />
+	<Protobuf Include="Proto\AlignmentRequest.proto" GrpcServices="Client" ProtoRoot="Proto\" />
+  </ItemGroup>
+	<ItemGroup>
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS.Features\ClearDashboard.DAL.CQRS.Features.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS\ClearDashboard.DAL.CQRS.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Interfaces\ClearDashboard.DAL.Interfaces.csproj" />
