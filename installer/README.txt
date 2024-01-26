@@ -20,10 +20,10 @@
 13. (optional) Run the app to make sure it works.  Shut down Paratext if you open it.
 
 
-14. Publish ClearDashboard.Wpf.Application
-15. Publish PluginManager
-15. Publish ResetCurrentUser
-16. Try to compile the installer in the Inno compiler app to test if the script is working.  If it starts to compress files then everything is working.  Cancel the compiler.
+14. (optional) Publish ClearDashboard.Wpf.Application
+15. (optional) Publish PluginManager
+15. (optional) Publish ResetCurrentUser
+16. (optional) Try to compile the installer in the Inno compiler app to test if the script is working.  If it starts to compress files then everything is working.  Cancel the compiler.
 17. Run the codesign_exe.bat file in ClearDashboard/installer.  If it doesn’t seem to be properly cleaning/rebuilding you may have an extra .sln file in ClearDashboard/src
 
 
