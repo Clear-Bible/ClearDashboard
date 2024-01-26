@@ -662,10 +662,10 @@
     <value>Токен '{0}' имеет определенные выравнивания. Нажатие '{1}' удалит все выравнивания.</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>Поиск по фильтру</value>
+    <value>Поиск фильтра</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>Поиск члена фильтра</value>
+    <value>Поиск членов фильтра</value>
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
     <value>Межлинейный</value>
@@ -917,7 +917,7 @@
     <value>Лемма/формы:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Лемма для новой лексеме:</value>
+    <value>Лемма для новой лексем:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>Лекса</value>
@@ -1022,7 +1022,7 @@
     <value>Добавьте цель в качестве перевода для ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Найдите лексы, которые имеют один или несколько переводов, которые соответствуют цели</value>
+    <value>Найдите Lexemes, которые имеют один или несколько переводов, которые соответствуют цели</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Импорт проверен</value>
@@ -1232,7 +1232,7 @@
     <value>Сильные коды</value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
-    <value>Подпагнические домены:</value>
+    <value>Субсины:</value>
   </data>
   <data name="Marble_Verse" xml:space="preserve">
     <value>Стих</value>
@@ -1286,7 +1286,7 @@
     <value>Токен доступа:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Проверьте свою электронную почту и введите в код проверки:</value>
+    <value>Проверьте свою электронную почту и введите код проверки:</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Проверьте доступность пользователя</value>
@@ -1388,7 +1388,7 @@
     <value>Любой</value>
   </data>
   <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>Закрыто</value>
+    <value>Закрытый</value>
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>Открыть</value>
@@ -1418,7 +1418,7 @@
     <value>Добавить группу метки</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Добавить группу этикетки</value>
+    <value>Добавить группу ярлыков</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Группа лейблов уже существует с именем</value>
@@ -1466,7 +1466,7 @@
     <value>Открыть</value>
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>Закрыто</value>
+    <value>Закрытый</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>Ассоциации</value>
@@ -1701,6 +1701,9 @@
   </data>
   <data name="Pds_Standard" xml:space="preserve">
     <value>Стандартный</value>
+  </data>
+  <data name="Pds_StartParatextFirst" xml:space="preserve">
+    <value>Сначала запустить Paratext</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
     <value>Учебное пособие</value>
@@ -2195,7 +2198,7 @@
     <value>Включить экспериментальный плагин Aqua</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Проверьте свою электронную почту и введите в код проверки:</value>
+    <value>Проверьте свою электронную почту и введите код проверки:</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Настройки сотрудничества</value>
@@ -2297,7 +2300,7 @@
     <value>Показать расширенные виды на другом мониторе, чем панель панели</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Для систем с тремя или более мониторами показать расширенное представление о третьем мониторе</value>
+    <value>Для систем с тремя или более мониторами показать расширенный просмотр на третьем мониторе</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Текстовая коллекция</value>
@@ -2315,7 +2318,7 @@
     <value>Включить стихотворенные текстовые коллекции.</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
-    <value>Отменить задание</value>
+    <value>Отмена задания</value>
   </data>
   <data name="ShellView_Loading" xml:space="preserve">
     <value>Загрузка ...</value>

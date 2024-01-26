@@ -539,8 +539,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-            _timer.Stop();
-            _timer.Dispose();
+            if (_timer is not null)
+            {
+                try
+                {
+                    _timer.Stop();
+                    _timer.Dispose();
+                }
+                catch (Exception e)
+                {
+                    Logger?.LogError(e, "Unable to stop timer");
+                }
+            }
 
             return base.OnDeactivateAsync(close, cancellationToken);
         }
@@ -1223,10 +1233,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 return;
             }
 
-            //if (CheckIfConnectedToParatext() == false)
-            //{
-            //    return;
-            //}
+            if (CheckIfConnectedToParatext() == false)
+            {
+                var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
+
+                if (confirmationViewPopupViewModel == null)
+                {
+                    throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+                }
+
+                confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.StartParatextFirst;
+
+                await _windowManager.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                    SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
+
+                return;
+            }
 
             if (ProjectLoadingProgressBarVisibility == Visibility.Visible)
             {
@@ -1296,6 +1318,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             if (CheckIfConnectedToParatext() == false)
             {
+                var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
+
+                if (confirmationViewPopupViewModel == null)
+                {
+                    throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+                }
+
+                confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.StartParatextFirst;
+
+                await _windowManager.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                    SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
+
                 return;
             }
 

@@ -479,7 +479,7 @@
     <value>مارك تم اختياره على أنه "غير صالح"</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
-    <value>علامة تم اختيارها كـ "مراجعة احتياجات"</value>
+    <value>علامة تم اختيارها على أنها "مراجعة احتياجات"</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
     <value>تم اختيار علامة "صالحة"</value>
@@ -935,7 +935,7 @@
     <value>قم بإزالة هذا المجال الدلالي من هذا المعنى</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
-    <value>قم بإزالة هذا النموذج المعجمي من هذا الليمون</value>
+    <value>قم بإزالة هذا النموذج المعجمي من هذا ليمما</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>تعيين لمعان ل</value>
@@ -1433,7 +1433,7 @@
     <value>اسم مجموعة التسمية</value>
   </data>
   <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
-    <value>إزالة مجموعة الملصقات هذه؟</value>
+    <value>إزالة مجموعة التسمية هذه؟</value>
   </data>
   <data name="Notes_LabelGroupRemoveTooltip" xml:space="preserve">
     <value>قم بإزالة مجموعة التسمية هذه</value>
@@ -1685,7 +1685,7 @@
     <value>إعادة تعيين تعيينات الآية إلى الافتراض الافتراضي</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
-    <value>مورد</value>
+    <value>الموارد</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
     <value>قم بتوسيع المحتوى إلى 100 ٪</value>
@@ -1701,6 +1701,9 @@
   </data>
   <data name="Pds_Standard" xml:space="preserve">
     <value>معيار</value>
+  </data>
+  <data name="Pds_StartParatextFirst" xml:space="preserve">
+    <value>ابدأ Paratext أولاً</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
     <value>الدراسة</value>
@@ -1826,7 +1829,7 @@
     <value>إنشاء مشروع جديد</value>
   </data>
   <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
-    <value>بدء تشغيل سريع مشروع جديد</value>
+    <value>ابدأ سريعًا مشروعًا جديدًا</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>إنشاء مشروع:</value>
@@ -2234,7 +2237,7 @@
     <value>تجريبي</value>
   </data>
   <data name="Settings_ExportLabelGroups" xml:space="preserve">
-    <value>تصدير مجموعات الملصقات</value>
+    <value>مجموعات تسمية التصدير</value>
   </data>
   <data name="Settings_General" xml:space="preserve">
     <value>عام</value>
@@ -2363,7 +2366,7 @@
     <value>لا انترنت</value>
   </data>
   <data name="SlackMessageView_ResetForm" xml:space="preserve">
-    <value>إعادة تعيين الشكل</value>
+    <value>إعادة تعيين النموذج</value>
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>يرسل</value>
@@ -2426,7 +2429,7 @@
     <value>اضف جديد</value>
   </data>
   <data name="UpdateParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>تحديث وإضافة كتب جديدة</value>
+    <value>تحديث وأضف كتبًا جديدة</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
     <value>حدد الكتب</value>
