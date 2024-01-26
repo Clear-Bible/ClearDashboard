@@ -965,7 +965,7 @@
     <value>Encontrar tudo</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
-    <value>Formas</value>
+    <value>Formulários</value>
   </data>
   <data name="LexiconEdit_Fully" xml:space="preserve">
     <value>Completamente</value>
@@ -1268,7 +1268,7 @@
     <value>MIC</value>
   </data>
   <data name="Migrate_Header" xml:space="preserve">
-    <value>Redefinir mapeamentos de versos para a versificação padrão</value>
+    <value>Redefinir mapeamentos de versos para versificação padrão</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>MRK</value>
@@ -1478,7 +1478,7 @@
     <value>Grupos de etiquetas</value>
   </data>
   <data name="Notes_NoteLabels" xml:space="preserve">
-    <value>Etiquetas</value>
+    <value>Rótulos</value>
   </data>
   <data name="Notes_NoteReplies" xml:space="preserve">
     <value>Respostas</value>
@@ -1577,7 +1577,7 @@
     <value>Adicionar à nova visão</value>
   </data>
   <data name="Pds_AddCorpora" xml:space="preserve">
-    <value>Adicione corporal</value>
+    <value>Adicione corpora</value>
   </data>
   <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
     <value>Crie novo alinhamento de palavras</value>
@@ -1682,7 +1682,7 @@
     <value>Propriedades</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Redefinir mapeamentos de versos para a versificação padrão</value>
+    <value>Redefinir mapeamentos de versos para versificação padrão</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Recurso</value>
@@ -1702,11 +1702,14 @@
   <data name="Pds_Standard" xml:space="preserve">
     <value>Padrão</value>
   </data>
+  <data name="Pds_StartParatextFirst" xml:space="preserve">
+    <value>Comece o Paratext primeiro</value>
+  </data>
   <data name="Pds_StudyBible" xml:space="preserve">
     <value>Estudobible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
-    <value>Estudobibleadditions</value>
+    <value>Estudarbibleaddditions</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
     <value>Vá para projetos Paratext e troca. O projeto Paratext atualmente conectado ao plug -in ClearDashboard não é o mesmo que o corpus neste projeto ClearDashboard.</value>
@@ -1751,7 +1754,7 @@
     <value>Filtro:</value>
   </data>
   <data name="Pins_Forms" xml:space="preserve">
-    <value>Formas</value>
+    <value>Formulários</value>
   </data>
   <data name="Pins_Gloss" xml:space="preserve">
     <value>Lustro</value>

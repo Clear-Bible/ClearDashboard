@@ -51,6 +51,8 @@ public class ConfirmationPopupViewModel : SimpleMessagePopupViewModel
                     return "Confirmation";
                 case SimpleMessagePopupMode.ExistingProjectNameTheSame:
                     return LocalizationService!["Pds_ExistingProjectName"];
+                case SimpleMessagePopupMode.StartParatextFirst:
+                    return "Start Paratext First";
                 default:
                     return string.Empty;
             }
@@ -64,8 +66,8 @@ public class ConfirmationPopupViewModel : SimpleMessagePopupViewModel
             switch (SimpleMessagePopupMode)
             {
                 case SimpleMessagePopupMode.SwitchParatextProjectMessage:
-                    return LocalizationService!["Ok"];
                 case SimpleMessagePopupMode.ExistingProjectNameTheSame:
+                case SimpleMessagePopupMode.StartParatextFirst:
                     return LocalizationService!["Ok"];
                 default:
                     return LocalizationService!["Yes"];
@@ -82,8 +84,8 @@ public class ConfirmationPopupViewModel : SimpleMessagePopupViewModel
             switch (SimpleMessagePopupMode)
             {
                 case SimpleMessagePopupMode.SwitchParatextProjectMessage:
-                    return Visibility.Collapsed;
                 case SimpleMessagePopupMode.ExistingProjectNameTheSame:
+                case SimpleMessagePopupMode.StartParatextFirst:
                     return Visibility.Collapsed;
                 default:
                     return Visibility.Visible;
@@ -122,6 +124,8 @@ public class ConfirmationPopupViewModel : SimpleMessagePopupViewModel
                 return LocalizationService!["Pds_DeleteParallelLine"];
             case SimpleMessagePopupMode.ExistingProjectNameTheSame:
                 return LocalizationService!["Pds_ExistingProject"];
+            case SimpleMessagePopupMode.StartParatextFirst:
+                return LocalizationService!["Pds_StartParatextFirst"];
             default:
                 return string.Empty;
         }

@@ -467,6 +467,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
+            _timer.Stop();
+            _timer.Dispose();
+
             NavigationService!.Navigated -= NavigationServiceOnNavigated;
             Logger!.LogInformation($"{nameof(ShellViewModel)} is deactivating.");
 

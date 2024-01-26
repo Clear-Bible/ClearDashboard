@@ -512,7 +512,7 @@
                         Margin="10,0,10,10"
                         cm:Message.Attach="AddParatextCorpus()"
                         Content="{helpers:Localization ProjectPicker_Paratext}"
-                        IsEnabled="{Binding AddParatextButtonEnabled}"
+                        IsEnabled="{Binding DesignSurfaceViewModel.AddParatextButtonEnabled}"
                         Style="{StaticResource BigParatextButton}"
                         Tag=" ScriptTextOutline" />
 

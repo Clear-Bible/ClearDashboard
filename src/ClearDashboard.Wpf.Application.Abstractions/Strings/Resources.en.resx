@@ -1702,6 +1702,9 @@
   <data name="Pds_Standard" xml:space="preserve">
     <value>Standard</value>
   </data>
+  <data name="Pds_StartParatextFirst" xml:space="preserve">
+    <value>Start Paratext First</value>
+  </data>
   <data name="Pds_StudyBible" xml:space="preserve">
     <value>StudyBible</value>
   </data>

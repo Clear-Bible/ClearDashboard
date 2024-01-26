@@ -128,7 +128,7 @@
     <value>协作用户名：</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
-    <value> - 流动帐户详细信息 - </value>
+    <value> - 流通帐户详细信息 - </value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
     <value>停用当前许可证</value>
@@ -161,7 +161,7 @@
     <value>结盟</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
-    <value>选择您正在合作的书籍，您稍后可以随时添加更多书籍。</value>
+    <value>选择与您合作的书籍，您稍后可以随时添加更多书籍。</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>检查USFM</value>
@@ -449,7 +449,7 @@
     <value>散装对齐编辑</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>批量对准评论</value>
+    <value>批量对齐审查</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>数数</value>
@@ -491,7 +491,7 @@
     <value>部分</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>枢纽的单词</value>
+    <value>枢密性的单词</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>来源</value>
@@ -701,7 +701,7 @@
     <value>显示视图控件</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>分开令牌</value>
+    <value>拆分令牌</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>将拆分应用于其他令牌</value>
@@ -956,7 +956,7 @@
     <value>添加'{0}'作为表单</value>
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
-    <value>添加'{0}'作为第一个含义</value>
+    <value>将'{0}'添加为第一个含义</value>
   </data>
   <data name="LexiconEdit_EditingDone" xml:space="preserve">
     <value>完毕</value>
@@ -1702,6 +1702,9 @@
   <data name="Pds_Standard" xml:space="preserve">
     <value>标准</value>
   </data>
+  <data name="Pds_StartParatextFirst" xml:space="preserve">
+    <value>首先启动Paratext</value>
+  </data>
   <data name="Pds_StudyBible" xml:space="preserve">
     <value>可学习</value>
   </data>
@@ -1733,7 +1736,7 @@
     <value>放大内容</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>缩小内容</value>
+    <value>从内容中缩小</value>
   </data>
   <data name="PHM" xml:space="preserve">
     <value>PHM</value>
@@ -1811,7 +1814,7 @@
     <value>Cleardashboard</value>
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
-    <value>paratext beta不运行</value>
+    <value>PARATEXT BETA未运行</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
     <value>取消...</value>
@@ -1820,7 +1823,7 @@
     <value>协作项目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>创建您的项目以入门。</value>
+    <value>创建您的项目以开始。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>创建一个新项目</value>
@@ -1871,7 +1874,7 @@
     <value>无匹配。</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>这里很孤独。请创建一个新项目。</value>
+    <value>这里很孤单。请创建一个新项目。</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
     <value>未安装paratext。请安装Paratext并重新运行ClearDashboard应用程序。</value>
@@ -1892,7 +1895,7 @@
     <value>模型文本（LWC）</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext正在运行但未连接。</value>
+    <value>paratext正在运行但未连接。</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>PARATEXT项目</value>
@@ -2192,7 +2195,7 @@
     <value>发送</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>启用实验性水上插件</value>
+    <value>启用实验水上插件</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
     <value>检查您的电子邮件并输入验证代码：</value>
@@ -2222,7 +2225,7 @@
     <value>在实验组中启用外部Paratext注释</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
-    <value>启用外部paratext注释</value>
+    <value>启用外部Paratext注释</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>启用词典进口</value>
@@ -2294,7 +2297,7 @@
     <value>ClearDashboard设置</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>显示出与仪表板不同的显示器上扩展的视图</value>
+    <value>显示与仪表板不同的显示器上展示的视图</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
     <value>对于具有三个或三个或以上监视器的系统，在第三监视器上显示扩展的视图</value>
@@ -2429,7 +2432,7 @@
     <value>更新并添加新书</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
-    <value>选择书</value>
+    <value>选择书籍</value>
   </data>
   <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
     <value>更新并添加新</value>
