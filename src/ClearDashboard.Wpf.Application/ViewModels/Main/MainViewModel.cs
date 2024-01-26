@@ -53,6 +53,7 @@ using System.Windows.Input;
 using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
+using ClearDashboard.Collaboration.Util;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -76,7 +77,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 #nullable disable
         private readonly LongRunningTaskManager _longRunningTaskManager;
         private readonly ILocalizationService _localizationService;
+        private readonly GitLabHttpClientServices _gitLabHttpClientServices;
         private readonly CollaborationManager _collaborationManager;
+
         private ILifetimeScope LifetimeScope { get; }
         private IWindowManager WindowManager { get; }
         private INavigationService NavigationService { get; }
@@ -386,11 +389,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                              NoteManager noteManager,
                              LongRunningTaskManager longRunningTaskManager,
                              ILocalizationService localizationService,
+                             GitLabHttpClientServices gitLabHttpClientServices,
                              CollaborationManager collaborationManager)
         {
             _longRunningTaskManager = longRunningTaskManager;
             _localizationService = localizationService;
+            _gitLabHttpClientServices = gitLabHttpClientServices;
             _collaborationManager = collaborationManager;
+
 
 
             LifetimeScope = lifetimeScope;
@@ -456,10 +462,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         protected override async Task<Task> OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             Logger.LogInformation($"{nameof(MainViewModel)} is deactivating.");
+
+            UnsubscribeFromEventAggregator();
+
             _dockingManager.ActiveContentChanged -= OnActiveContentChanged;
             _dockingManager.DocumentClosed -= OnEnhancedViewClosed;
-
-
 
             if (_lastLayout == "")
             {
@@ -471,8 +478,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 await SaveProjectData();
             }
-            
-            UnsubscribeFromEventAggregator();
+
+            OpenProjectManager.RemoveProjectToOpenProjectList(ProjectManager);
+
+            //if (Pinger.PingHost())
+            //{
+            //    var projects = await _gitLabHttpClientServices.GetAllProjects();
+            //    var project = projects.FirstOrDefault(p => p.Name == ProjectManager.CurrentProject.ProjectName);
+            //}
+
+
 
             await PinsViewModel.DeactivateAsync(close);
             // await ProjectDesignSurfaceViewModel.DeactivateAsync(close);
@@ -485,7 +500,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // Clear the items in the event the user is switching projects.
             Items.Clear();
 
-            OpenProjectManager.RemoveProjectToOpenProjectList(ProjectManager);
+
+
 
             return base.OnDeactivateAsync(close, cancellationToken);
         }

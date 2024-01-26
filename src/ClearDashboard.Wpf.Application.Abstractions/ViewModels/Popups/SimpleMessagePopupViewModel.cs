@@ -25,6 +25,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Popups
         SwitchParatextProjectMessage,
         DeleteParallelLineConfirmation,
         ExistingProjectNameTheSame,
+        StartParatextFirst
     }
 
     public abstract class SimpleMessagePopupViewModel : DashboardApplicationScreen

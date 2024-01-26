@@ -13,13 +13,39 @@
 
     <Grid Background="{DynamicResource MaterialDesignBackground}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <!--<RowDefinition Height="50" />-->
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
+        <!--  SUBHEADER  -->
+        <TextBlock
+            Grid.Row="0"
+            MinWidth="219"
+            MaxWidth="550"
+            HorizontalAlignment="Center"
+            FontSize="16"
+            FontWeight="Bold"
+            Foreground="Black"
+            Text="{Binding SubHeader}"
+            TextAlignment="Center"
+            TextWrapping="Wrap">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SubHeader}" Value="">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <!--  MESSAGE  -->
         <TextBlock
             x:Name="Message"
-            Grid.Row="0"
+            Grid.Row="1"
             MinWidth="219"
             MaxWidth="550"
             Margin="10"
@@ -28,16 +54,10 @@
             Foreground="Black"
             TextAlignment="Center"
             TextWrapping="Wrap" />
-        <!--<TextBlock
-            Visibility="Collapsed"
-            x:Name="SecondaryMessage"
-            Grid.Row="1"
-            Margin="10"
-            HorizontalAlignment="Center"
-            FontSize="14"
-            Foreground="Black" />-->
+
+        <!--  BUTTONS  -->
         <StackPanel
-            Grid.Row="1"
+            Grid.Row="2"
             HorizontalAlignment="Center"
             Orientation="Horizontal">
             <Button

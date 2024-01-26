@@ -60,19 +60,19 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         /// <summary>
         /// Event raised to delete a CorpusNode.
         /// </summary>
-        private void OnDeleteCorpusNodeExecuted(object sender, ExecutedRoutedEventArgs e)
+        private async void OnDeleteCorpusNodeExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             var node = (CorpusNodeViewModel)e.Parameter;
-            ProjectDesignSurfaceViewModel!.DeleteCorpusNode(node, false);
+            await ProjectDesignSurfaceViewModel!.DeleteCorpusNode(node, false);
         }
 
         /// <summary>
         /// Event raised to delete a ParallelCorpusConnection.
         /// </summary>
-        private void OnDeleteConnectionExecuted(object sender, ExecutedRoutedEventArgs e)
+        private async void OnDeleteConnectionExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             var connection = (ParallelCorpusConnectionViewModel)e.Parameter;
-            ProjectDesignSurfaceViewModel!.DeleteParallelCorpusConnection(connection);
+            await ProjectDesignSurfaceViewModel!.DeleteParallelCorpusConnection(connection, false);
         }
 
      
