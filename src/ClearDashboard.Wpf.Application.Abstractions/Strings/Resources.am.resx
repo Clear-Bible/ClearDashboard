@@ -1702,6 +1702,9 @@
   <data name="Pds_Standard" xml:space="preserve">
     <value>ደረጃ</value>
   </data>
+  <data name="Pds_StartParatextFirst" xml:space="preserve">
+    <value>መጀመሪያ የጥበቃ ጽሑፍ ይጀምሩ</value>
+  </data>
   <data name="Pds_StudyBible" xml:space="preserve">
     <value>ጥናት</value>
   </data>
