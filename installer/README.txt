@@ -7,7 +7,7 @@
 
 
 5. Shut down Paratext
-8. SetVersionInfo tool
+8. (optional) SetVersionInfo tool
 7. (optional) Update the version number in manifest.app
 8. (optional) Update the version number in the DashboardInstaller.iss file
 9. (optional) Change Visual Studio to Release mode
@@ -24,7 +24,7 @@
 15. (optional) Publish PluginManager
 15. (optional) Publish ResetCurrentUser
 16. (optional) Try to compile the installer in the Inno compiler app to test if the script is working.  If it starts to compress files then everything is working.  Cancel the compiler.
-17. Run the codesign_exe.bat file in ClearDashboard/installer.  If it doesn’t seem to be properly cleaning/rebuilding you may have an extra .sln file in ClearDashboard/src
+17. Run the CreateInstaller.bat file in ClearDashboard/installer.  If it doesn’t seem to be properly cleaning/rebuilding you may have an extra .sln file in ClearDashboard/src
 
 
 18. Install locally to test out that it works

@@ -5,6 +5,11 @@ set "driveInno=C"
 set /p driveInno=Drive for Inno?: 
 if /i "%driveInno%" == "" goto :eof
 
+rem get the drive path for Visual Studio
+set "driveVisualStudio=C"
+set /p driveVisualStudio=Drive for Visual Studio?: 
+if /i "%driveVisualStudio%" == "" goto :eof
+
 rem get the version number
 set /p versionNumber=Dashboard Version Number?: 
 if /i "%versionNumber%" == "" goto :eof
@@ -28,9 +33,16 @@ echo
  
 rem dotnet clean --configuration Release
 
-dotnet build  --configuration Release
+rem restore the nuget packages
+dotnet restore
 
-pause
+rem build the solution
+"%driveVisualStudio%:\Program Files\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin\amd64\MSBuild.exe"  %CURRENTPATH%\..\src\ClearDashboard.sln /t:Rebuild /v:diag /nologo /clp:NoSummary;Verbosity=minimal /bl /property:Configuration=Release
+
+
+rem copy over missing runtimes that somehow MSBuild misses
+copy "%CURRENTPATH%\..\installer\Runtimes\*.*" "%CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\runtimes\win-x64\native\"
+
 
 ::========== Copy and run SetVersion Program ===================
 cd ..\installer
@@ -40,12 +52,11 @@ copy "%CURRENTPATH%\..\tools\SetVersionInfo\bin\Release\net7.0\System.CommandLin
 
 SetVersionInfo.exe --input-version-number %versionNumber%
 
-pause
 
 ::========== PUBLISH and SIGN ClearDashboard.Wpf.Application ==============
 cd ..\src\ClearDashboard.Wpf.Application
 
-dotnet publish ClearDashboard.Wpf.APplication.csproj -p:PublishProfile=FolderProfile
+dotnet publish ClearDashboard.Wpf.Application.csproj -p:PublishProfile=FolderProfile
 
 echo code sign the WPF exe
  ..\code_signing_key\signing_tool\signtool.exe ^
@@ -93,6 +104,8 @@ echo code sign the Dashboard installer
 	/p "%PASSWORD%" ^
 	/t http://timestamp.comodoca.com/authenticode ^
 	"%CURRENTPATH%\Output\ClearDashboard.exe"
+
+copy "%CURRENTPATH%\Output\ClearDashboard.exe" "%CURRENTPATH%\Output\ClearDashboard_%versionNumber%.exe"
 
 pause
 
