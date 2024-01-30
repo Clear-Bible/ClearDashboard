@@ -33,12 +33,14 @@ using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
+    using System.Dynamic;
     using System.Linq;  //  needed to move this into the namespace to allow the .Reverse() to use this over the SIL.Linq
     using ClearDashboard.DAL.Alignment;
     using ClearDashboard.DAL.Alignment.Corpora;
     using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
     using ClearDashboard.Wpf.Application.Events.Notes;
     using ClearDashboard.Wpf.Application.ViewModels.Notes;
+    using ClearDashboard.Wpf.Application.ViewModels.PopUps;
     using Paratext.PluginInterfaces;
 
     public class EnhancedViewModel : VerseAwareConductorOneActive, IEnhancedViewModel, IPaneViewModel,
@@ -1053,9 +1055,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             Message = string.Empty;
         }
 
-        public void NoteCreate(object? sender, NoteEventArgs? e)
+        public async void NoteCreate(object? sender, NoteEventArgs? e)
         {
             NoteControlVisibility = Visibility.Visible;
+
+
+             // WIP:  show non-modal window here.
+             // NB:  Keep the settings, ditch the view model.
+            dynamic settings = new ExpandoObject();
+            settings.MinWidth = 500;
+            settings.MinHeight = 500;
+            settings.Height = 500;
+            settings.MaxWidth = 800;
+            settings.MaxHeight = 700;
+            settings.Top = e.MousePosition.Y;
+            settings.Left = e.MousePosition.X;
+            settings.Owner = App.Current.MainWindow;
+
+            var viewModel = IoC.Get<ExternalNoteViewModel>();
+           // await viewModel.Initialize(TokenDisplayViewModel.ExternalNotes);
+
+            IWindowManager manager = new WindowManager();
+            manager.ShowWindowAsync(viewModel, null, settings);
+
         }
     
         public void FilterPins(object? sender, NoteEventArgs e)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Dynamic;
 using System.Threading.Tasks;
 using System.Threading;
@@ -1148,7 +1149,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 ModifierKeys = Keyboard.Modifiers,
                 MouseLeftButton = Mouse.LeftButton,
                 MouseMiddleButton = Mouse.MiddleButton,
-                MouseRightButton = Mouse.RightButton
+                MouseRightButton = Mouse.RightButton,
+                MousePosition = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(control))
             });
         }
 
@@ -1374,7 +1376,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     RoutedEvent = routedEvent,
                     TokenDisplay = tokenDisplay!,
                     Translation = tokenDisplay!.Translation,
-                    ModifierKeys = Keyboard.Modifiers
+                    ModifierKeys = Keyboard.Modifiers,
+                    MousePosition = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(control))
                 });
             }
         }
@@ -1444,12 +1447,19 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             //2
             var control = e.Source as FrameworkElement;
+
+            //var p = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(control));
+            //Debug.WriteLine($"RaiseNoteEvent - 'e.Source': {p.X}, {p.Y}");
+            //p = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(this));
+            //
+            //Debug.WriteLine($"OnCreateNote - 'this': {p.X}, {p.Y}");
             var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplayViewModel = tokenDisplay!
-            });
+                TokenDisplayViewModel = tokenDisplay!,
+                MousePosition = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(control))
+        });
         }
 
         private void OnNoteLeftButtonDown(object sender, RoutedEventArgs e)
@@ -1494,7 +1504,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnCreateNote(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteCreateEvent, e);
+           RaiseNoteEvent(NoteCreateEvent, e);
         }
 
         private void OnTokenJoin(object sender, RoutedEventArgs e)

@@ -23,5 +23,9 @@ namespace ClearDashboard.Wpf.Application.Events.Notes
 
         public EntityIdCollection EntityIds { get; set; } = new();
 
+        /// <summary>
+        /// The position of the mouse relative to the control which fired the event.
+        /// </summary>
+        public Point MousePosition { get; set; }
     }
 }

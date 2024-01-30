@@ -11,17 +11,17 @@ using ClearDashboard.Wpf.Application.Events.Notes;
 
 namespace ClearDashboard.Wpf.Application.Views.Notes
 {
-    public partial class NotesView : INotifyPropertyChanged
+    public partial class JotsPanelView : INotifyPropertyChanged
     {
-        private NotesViewModel _vm;
-        public NotesView()
+        private JotsPanelViewModel _vm;
+        public JotsPanelView()
         {
             InitializeComponent();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            _vm = (NotesViewModel)DataContext;
+            _vm = (JotsPanelViewModel)DataContext;
         }
         private void SelectionLabelsChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -89,7 +89,7 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
         private async void RadioButton_Open_Checked(object sender, RoutedEventArgs e)
         {
             var radioButton = e.Source as RadioButton;
-            var notesViewModel = radioButton?.DataContext as NotesViewModel;
+            var notesViewModel = radioButton?.DataContext as JotsPanelViewModel;
             var noteViewModel = notesViewModel.SelectedNoteViewModel;
             if (notesViewModel != null && noteViewModel != null)
             {
@@ -99,7 +99,7 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
         private async void RadioButton_Resolved_Checked(object sender, RoutedEventArgs e)
         {
             var radioButton = e.Source as RadioButton;
-            var notesViewModel = radioButton?.DataContext as NotesViewModel;
+            var notesViewModel = radioButton?.DataContext as JotsPanelViewModel;
             var noteViewModel = notesViewModel.SelectedNoteViewModel;
             if (notesViewModel != null && noteViewModel != null)
             {

@@ -66,7 +66,7 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
             NotesControl.Width = ExpanderHeaderWidth;
 
             NotesColumn.Width = new GridLength(1, GridUnitType.Auto);
-            
+
             NotesSplitter.Visibility = Visibility.Collapsed;
         }
 

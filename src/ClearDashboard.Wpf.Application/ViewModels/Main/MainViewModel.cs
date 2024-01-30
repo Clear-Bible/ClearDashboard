@@ -866,7 +866,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             //await ActivateItemAsync<WordMeaningsViewModel>();
             await ActivateItemAsync<MarbleViewModel>(cancellationToken);
 
-            await ActivateItemAsync<NotesViewModel>(cancellationToken);
+            await ActivateItemAsync<JotsPanelViewModel>(cancellationToken);
 
             _ = await Task.Factory.StartNew(async () =>
             {
@@ -1612,18 +1612,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     e.Content = e.Model.ContentId.ToUpper() switch
                     {
                         // Documents
-                        WorkspaceLayoutNames.EnhancedView => GetPaneViewModelFromItems("EnhancedViewModel"),
+                        WorkspaceLayoutNames.EnhancedView => GetPaneViewModelFromItems(nameof(EnhancedViewModel)),
                         //WorkspaceLayoutNames.EnhancedView => GetPaneViewModelFromItems<EnhancedViewModel>(),
                         // Tools
-                        WorkspaceLayoutNames.BiblicalTerms => GetToolViewModelFromItems("BiblicalTermsViewModel"),
+                        WorkspaceLayoutNames.BiblicalTerms => GetToolViewModelFromItems(nameof(BiblicalTermsViewModel)),
                         //case WorkspaceLayoutNames.WordMeanings:
                         //    e.Content = GetToolViewModelFromItems("WordMeaningsViewModel");
                         //    break;
-                        WorkspaceLayoutNames.Marble => GetToolViewModelFromItems("MarbleViewModel"),
+                        WorkspaceLayoutNames.Marble => GetToolViewModelFromItems(nameof(MarbleViewModel)),
                         //WorkspaceLayoutNames.Lexicon => GetToolViewModelFromItems("LexiconViewModel"),
-                        WorkspaceLayoutNames.Pins => GetToolViewModelFromItems("PinsViewModel"),
-                        WorkspaceLayoutNames.TextCollection => GetToolViewModelFromItems("TextCollectionsViewModel"),
-                        WorkspaceLayoutNames.Notes => GetToolViewModelFromItems("NotesViewModel"),
+                        WorkspaceLayoutNames.Pins => GetToolViewModelFromItems(nameof(PinsViewModel)),
+                        WorkspaceLayoutNames.TextCollection => GetToolViewModelFromItems(nameof(TextCollectionsViewModel)),
+                        WorkspaceLayoutNames.Notes => GetToolViewModelFromItems(nameof(JotsPanelViewModel)),
                         _ => e.Content
                     };
                 }
@@ -1661,7 +1661,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                             //case WordMeaningsViewModel:
                             case MarbleViewModel:
-                            case NotesViewModel:
+                            case JotsPanelViewModel:
                             case BiblicalTermsViewModel:
                             case ParatextViews.PinsViewModel:
                             //case LexiconViewModel:
@@ -1746,7 +1746,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case TextCollectionsViewModel:
                         //case LexiconViewModel:
                         case MarbleViewModel:
-                        case NotesViewModel:
+                        case JotsPanelViewModel:
                             return (ToolViewModel)t;
                     }
                 }
@@ -1785,7 +1785,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 //    var lexiconViewModel = GetToolViewModelFromItems("LexiconViewModel");
                 //    return (lexiconViewModel, lexiconViewModel.Title, lexiconViewModel.DockSide);
                 case WorkspaceLayoutNames.Notes:
-                    var notesViewModel = GetToolViewModelFromItems("NotesViewModel");
+                    var notesViewModel = GetToolViewModelFromItems("JotsPanelViewModel");
                     return (notesViewModel, notesViewModel.Title, notesViewModel.DockSide);
             }
             return (null, null, DockSide.Bottom);

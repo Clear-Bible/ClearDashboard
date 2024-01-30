@@ -574,6 +574,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void RaiseTokenEvent(RoutedEvent routedEvent, TokenEventArgs args)
         {
+            var control = args.Source as FrameworkElement;
+         
             RaiseEvent(new TokenEventArgs
             {
                 RoutedEvent = routedEvent,
@@ -582,7 +584,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 ModifierKeys = args.ModifierKeys,
                 MouseLeftButton = args.MouseLeftButton,
                 MouseMiddleButton = args.MouseMiddleButton,
-                MouseRightButton = args.MouseRightButton
+                MouseRightButton = args.MouseRightButton,
+                MousePosition = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(control))
             });
         }
 
@@ -889,6 +892,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void RaiseTranslationEvent(RoutedEvent routedEvent, TranslationEventArgs args)
         {
+            var control = args.Source as FrameworkElement;
+
             RaiseEvent(new TranslationEventArgs
             {
                 RoutedEvent = routedEvent,
@@ -896,7 +901,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 SelectedTokens = VerseSelectedTokens,
                 InterlinearDisplay = VerseDisplayViewModel as InterlinearDisplayViewModel,
                 Translation = args.TokenDisplay!.Translation!,
-                ModifierKeys = args.ModifierKeys
+                ModifierKeys = args.ModifierKeys,
+                MousePosition = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(control))
             });
         }
 
@@ -974,6 +980,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 RoutedEvent = routedEvent,
                 TokenDisplayViewModel = control?.TokenDisplayViewModel!,
                 SelectedTokens = VerseSelectedTokens,
+                MousePosition = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(control))
             });
         }
 

@@ -32,7 +32,7 @@ using System.Windows.Data;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 {
-    public class NotesViewModel :
+    public class JotsPanelViewModel :
         ToolViewModel,
         IHandle<NoteAddedMessage>,
         IHandle<NoteDeletedMessage>,
@@ -52,7 +52,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
         private readonly LongRunningTaskManager longRunningTaskManager_;
         private readonly NoteManager? noteManager_;
-        private NotesView view_;
+        private JotsPanelView view_;
         private LongRunningTask? currentLongRunningTask_;
 
         #endregion //Member Variables
@@ -287,14 +287,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
         #region Constructor
 
-        public NotesViewModel()
+        public JotsPanelViewModel()
         {
             // used by Caliburn Micro for design time    
         }
 
-        public NotesViewModel(
+        public JotsPanelViewModel(
             INavigationService navigationService,
-            ILogger<NotesViewModel> logger,
+            ILogger<JotsPanelViewModel> logger,
             DashboardProjectManager? projectManager,
             IEventAggregator? eventAggregator,
             IMediator mediator,
@@ -328,7 +328,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         }
         protected override void OnViewAttached(object view, object context)
         {
-            view_ = (NotesView)view;
+            view_ = (JotsPanelView)view;
             Logger!.LogInformation("OnViewAttached");
             base.OnViewAttached(view, context);
         }
@@ -381,7 +381,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
-            LaunchMirrorView<NotesView>.Show(this, actualWidth, actualHeight, this.Title);
+            LaunchMirrorView<JotsPanelView>.Show(this, actualWidth, actualHeight, this.Title);
         }
 
 
