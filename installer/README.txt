@@ -1,5 +1,12 @@
 ﻿HOW TO MAKE A RELEASE INSTALLER
 
+NOTES: The command line version of the installer for some reason does not copy over certain runtime files
+into the proper directory.  These missing files have been stashed into the \installer\Runtimes\ directory
+and are copied over to the right spot after the build has been made.  These may need to be updated if a new
+version of CEFChrome is updated.
+
+AUTOMATIC VERSION
+===================================================================
 1. Navigate to the desired branch (typically called “version-x.x.x.x”)
 2. Update the Dashboard_Instructions.pdf if needed/desired
 3. Update windowsdesktop-runtime-x.x.x-win-x64.exe to the latest version
@@ -7,7 +14,22 @@
 
 
 5. Shut down Paratext
-8. (optional) SetVersionInfo tool
+6. Run the CreateInstaller.bat file in ClearDashboard/installer.
+
+Resume at 13 below
+
+
+MANUAL VERSION
+===================================================================
+1. Navigate to the desired branch (typically called “version-x.x.x.x”)
+2. Update the Dashboard_Instructions.pdf if needed/desired
+3. Update windowsdesktop-runtime-x.x.x-win-x64.exe to the latest version
+4. Update VC_redist.x64.exe to the latest version
+
+
+5. Shut down Paratext
+
+6. (optional) SetVersionInfo tool
 7. (optional) Update the version number in manifest.app
 8. (optional) Update the version number in the DashboardInstaller.iss file
 9. (optional) Change Visual Studio to Release mode
