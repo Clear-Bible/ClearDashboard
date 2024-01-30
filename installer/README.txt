@@ -16,7 +16,7 @@ AUTOMATIC VERSION
 5. Shut down Paratext
 6. Run the CreateInstaller.bat file in ClearDashboard/installer.
 
-Resume at 13 below
+Resume at 18 below
 
 
 MANUAL VERSION
