@@ -244,13 +244,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
             (nameof(NoteRightButtonUp), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
-        /// Identifies the NoteIndicatorMouseEnterEvent routed event.
+        /// Identifies the NoteMouseEnterEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteMouseEnterEvent = EventManager.RegisterRoutedEvent
             (nameof(NoteMouseEnter), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
-        /// Identifies the NoteIndicatorMouseLeaveEvent routed event.
+        /// Identifies the NoteMouseLeaveEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteMouseLeaveEvent = EventManager.RegisterRoutedEvent
             (nameof(NoteMouseLeave), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));

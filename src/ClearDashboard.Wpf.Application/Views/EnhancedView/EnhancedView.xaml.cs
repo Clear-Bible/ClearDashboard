@@ -47,41 +47,41 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
             scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta/3);
             e.Handled = true;
         }
+        // TODO: Jots refactor
+        //private void ProjectDesignSurfaceExpander_OnExpanded(object sender, RoutedEventArgs e)
+        //{
+        //    if (NotesExpander != null && NotesControl != null)
+        //    {
+        //        NotesExpander.Width = 300;
+        //        NotesControl.Width = NotesExpander.Width - RightHandNotesMarginOnDrag;
+        //    }
 
-        private void ProjectDesignSurfaceExpander_OnExpanded(object sender, RoutedEventArgs e)
-        {
-            if (NotesExpander != null && NotesControl != null)
-            {
-                NotesExpander.Width = 300;
-                NotesControl.Width = NotesExpander.Width - RightHandNotesMarginOnDrag;
-            }
+        //    NotesColumn.Width = new GridLength(300, GridUnitType.Auto);
+        //    NotesSplitter.Visibility = Visibility.Visible;
+        //}
 
-            NotesColumn.Width = new GridLength(300, GridUnitType.Auto);
-            NotesSplitter.Visibility = Visibility.Visible;
-        }
+        //private void ProjectDesignSurfaceExpander_OnCollapsed(object sender, RoutedEventArgs e)
+        //{
+        //    NotesExpander.Width = ExpanderHeaderWidth;
+        //    NotesControl.Width = ExpanderHeaderWidth;
 
-        private void ProjectDesignSurfaceExpander_OnCollapsed(object sender, RoutedEventArgs e)
-        {
-            NotesExpander.Width = ExpanderHeaderWidth;
-            NotesControl.Width = ExpanderHeaderWidth;
+        //    NotesColumn.Width = new GridLength(1, GridUnitType.Auto);
 
-            NotesColumn.Width = new GridLength(1, GridUnitType.Auto);
+        //    NotesSplitter.Visibility = Visibility.Collapsed;
+        //}
 
-            NotesSplitter.Visibility = Visibility.Collapsed;
-        }
+        //private void ProjectDesignSurfaceSplitter_OnDragDelta(object sender, DragDeltaEventArgs e)
+        //{
+        //    NotesExpander.Width = NotesColumn.ActualWidth;
+        //    if (NotesColumn.ActualWidth - RightHandNotesMarginOnDrag >= 0)
+        //    {
+        //        NotesControl.Width = NotesColumn.ActualWidth - RightHandNotesMarginOnDrag;
+        //    }
+        //    else
+        //    {
+        //        NotesControl.Width = 0;
+        //    }
 
-        private void ProjectDesignSurfaceSplitter_OnDragDelta(object sender, DragDeltaEventArgs e)
-        {
-            NotesExpander.Width = NotesColumn.ActualWidth;
-            if (NotesColumn.ActualWidth - RightHandNotesMarginOnDrag >= 0)
-            {
-                NotesControl.Width = NotesColumn.ActualWidth - RightHandNotesMarginOnDrag;
-            }
-            else
-            {
-                NotesControl.Width = 0;
-            }
-
-        }
+        //}
     }
 }

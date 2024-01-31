@@ -44,6 +44,7 @@ namespace ClearDashboard.Wpf.Application.Services
         private LabelCollection _labelSuggestions = new();
         private LabelGroupViewModelCollection _labelGroups = new();
         private LabelGroupViewModel? _defaultLabelGroup;
+        private bool _isBusy;
 
         /// <summary>
         /// Gets the <see cref="UserId"/> of the current user.
@@ -123,10 +124,25 @@ namespace ClearDashboard.Wpf.Application.Services
             return string.Empty;
         }
 
+
+        private async Task SetIsBusy(bool isBusy)
+        {
+            await Task.Run(async () =>
+            {
+                await Execute.OnUIThreadAsync(async () =>
+                {
+                    IsBusy = isBusy;
+                    await Task.CompletedTask;
+                });
+            });
+          
+        }
+
         private async Task<LabelCollection> GetLabelSuggestionsAsync()
         {
             try
             {
+                await SetIsBusy(true);
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
@@ -142,12 +158,17 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+            finally
+            {
+                await SetIsBusy(false);
+            }
         }
 
         private async Task<LabelGroupViewModelCollection> GetLabelGroupsAsync()
         {
             try
             {
+                await SetIsBusy(true);
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
@@ -171,12 +192,17 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+            finally
+            {
+                await SetIsBusy(false);
+            }
         }
 
         public async Task<string> ExportLabelGroupsAsync()
         {
             try
             {
+                await SetIsBusy(true);
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
@@ -192,12 +218,17 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+            finally
+            {
+                await SetIsBusy(false);
+            }
         }
 
         public async Task ImportLabelGroupsAsync(string labelGroupJson)
         {
             try
             {
+                await SetIsBusy(true);
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
@@ -214,6 +245,10 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+            finally
+            {
+                await SetIsBusy(false); 
+            }
         }
 
         /// <summary>
@@ -224,6 +259,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
@@ -239,6 +275,10 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false); 
             }
         }
 
@@ -256,6 +296,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
@@ -270,6 +311,10 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 
@@ -298,6 +343,8 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
+
                 if (!collabUpdate && NotesCache.TryGetValue(noteId.Id, out var noteDetails))
                 {
                     if (doGetParatextSendNoteInformation && noteDetails.ParatextSendNoteInformation == null)
@@ -346,6 +393,16 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+            finally
+            {
+                await SetIsBusy(false);
+            }
+        }
+
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set => Set(ref _isBusy, value);
         }
 
         /// <summary>
@@ -394,13 +451,15 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
                 await note.Entity.CreateOrUpdate(Mediator);
 
                 stopwatch.Stop();
-                Logger?.LogInformation($"Added note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
+                Logger?.LogInformation(
+                    $"Added note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
 
                 foreach (var entityId in entityIds)
                 {
@@ -409,7 +468,8 @@ namespace ClearDashboard.Wpf.Application.Services
                     await note.Entity.AssociateDomainEntity(Mediator, entityId);
 
                     stopwatch.Stop();
-                    Logger?.LogInformation($"Associated note \"{note.Text}\" ({note.NoteId?.Id}) with entity {entityId} in {stopwatch.ElapsedMilliseconds} ms");
+                    Logger?.LogInformation(
+                        $"Associated note \"{note.Text}\" ({note.NoteId?.Id}) with entity {entityId} in {stopwatch.ElapsedMilliseconds} ms");
                 }
 
                 if (note.Labels.Any())
@@ -427,7 +487,8 @@ namespace ClearDashboard.Wpf.Application.Services
                     }
 
                     stopwatch.Stop();
-                    Logger?.LogInformation($"Associated labels with note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
+                    Logger?.LogInformation(
+                        $"Associated labels with note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
                 }
 
                 var newNoteDetail = await GetNoteDetailsAsync(note.NoteId!);
@@ -440,12 +501,17 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+            finally
+            {
+               await SetIsBusy(false);
+            }
         }
 
         private async Task UpdateNoteAsync(Note note)
         {
             try
             {
+                await SetIsBusy(true);
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
@@ -454,7 +520,8 @@ namespace ClearDashboard.Wpf.Application.Services
                 await note.CreateOrUpdate(Mediator);
 
                 stopwatch.Stop();
-                Logger?.LogInformation($"Updated note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
+                Logger?.LogInformation(
+                    $"Updated note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
 
                 await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.NoteId!, true));
 
@@ -464,6 +531,10 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.NoteId!, false));
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 
@@ -497,13 +568,15 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
                 await note.Entity.Delete(Mediator);
 
                 stopwatch.Stop();
-                Logger?.LogInformation($"Deleted note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
+                Logger?.LogInformation(
+                    $"Deleted note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
 
                 await EventAggregator.PublishOnUIThreadAsync(new NoteDeletedMessage(note, entityIds));
             }
@@ -511,6 +584,10 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 
@@ -556,6 +633,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
                 var matchingLabel = note.Labels.GetMatchingLabel(labelText);
                 if (matchingLabel == null)
                 {
@@ -576,17 +654,23 @@ namespace ClearDashboard.Wpf.Application.Services
                     await System.Windows.Application.Current.Dispatcher.InvokeAsync(CreateAssociateLabel);
 #if DEBUG
                     stopwatch.Stop();
-                    Logger?.LogInformation($"Created label {labelText} and associated it with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+                    Logger?.LogInformation(
+                        $"Created label {labelText} and associated it with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
 #endif
                     await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, newLabel!));
                     return newLabel;
                 }
+
                 return matchingLabel;
             }
             catch (Exception e)
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 
@@ -600,7 +684,8 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
-                if (! note.Labels.ContainsMatchingLabel(label.Text))
+                await SetIsBusy(true);
+                if (!note.Labels.ContainsMatchingLabel(label.Text))
                 {
 #if DEBUG
                     var stopwatch = new Stopwatch();
@@ -611,10 +696,12 @@ namespace ClearDashboard.Wpf.Application.Services
                     {
                         await note.Entity.AssociateLabel(Mediator, label);
                     }
+
                     await System.Windows.Application.Current.Dispatcher.InvokeAsync(AssociateLabel);
 #if DEBUG
                     stopwatch.Stop();
-                    Logger?.LogInformation($"Associated label {label.Text} with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+                    Logger?.LogInformation(
+                        $"Associated label {label.Text} with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
 #endif
                     await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, label));
                 }
@@ -623,6 +710,10 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 
@@ -636,6 +727,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
 #if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -645,10 +737,12 @@ namespace ClearDashboard.Wpf.Application.Services
                 {
                     await note.Entity.DetachLabel(Mediator, label);
                 }
+
                 await System.Windows.Application.Current.Dispatcher.InvokeAsync(DetachLabel);
 #if DEBUG
                 stopwatch.Stop();
-                Logger?.LogInformation($"Detached label {label.Text} from note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+                Logger?.LogInformation(
+                    $"Detached label {label.Text} from note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
 
                 await EventAggregator.PublishOnUIThreadAsync(new NoteLabelDetachedMessage(note.NoteId!, label));
 #endif
@@ -657,6 +751,10 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 
@@ -668,6 +766,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                SetIsBusy(true);
 #if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -684,6 +783,10 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+            finally
+            {
+                SetIsBusy(false);
+            }
         }
 
         /// <summary>
@@ -695,6 +798,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
 #if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -703,6 +807,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 {
                     await label.CreateOrUpdate(Mediator, cancellationToken);
                 }
+
                 await System.Windows.Application.Current.Dispatcher.InvokeAsync(UpdateLabel);
 #if DEBUG
                 stopwatch.Stop();
@@ -713,6 +818,10 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 
@@ -727,6 +836,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
 #if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -734,7 +844,8 @@ namespace ClearDashboard.Wpf.Application.Services
                 // For thread safety, because LabelGroup.CreateOrUpdate() modifies an observable collection, we need to invoke the operation on the dispatcher.
                 async void CreateLabelGroupWithLabelsAsync()
                 {
-                    var newLabelGroup = new LabelGroupViewModel(await labelGroup.Entity.CreateOrUpdate(Mediator, cancellationToken));
+                    var newLabelGroup =
+                        new LabelGroupViewModel(await labelGroup.Entity.CreateOrUpdate(Mediator, cancellationToken));
 
                     if (sourceLabelGroup != null)
                     {
@@ -748,8 +859,10 @@ namespace ClearDashboard.Wpf.Application.Services
                     LabelGroups.Add(newLabelGroup);
                     LabelGroups = new LabelGroupViewModelCollection(LabelGroups.OrderBy(l => l.Name));
 
-                    await EventAggregator.PublishOnUIThreadAsync(new LabelGroupAddedMessage(newLabelGroup), cancellationToken);
+                    await EventAggregator.PublishOnUIThreadAsync(new LabelGroupAddedMessage(newLabelGroup),
+                        cancellationToken);
                 }
+
                 await System.Windows.Application.Current.Dispatcher.InvokeAsync(CreateLabelGroupWithLabelsAsync);
 #if DEBUG
                 stopwatch.Stop();
@@ -762,6 +875,10 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 
@@ -776,6 +893,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
 #if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -787,6 +905,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
                     labelGroup.Labels.Add(label);
                 }
+
                 await System.Windows.Application.Current.Dispatcher.InvokeAsync(AssociateLabel);
 #if DEBUG
                 stopwatch.Stop();
@@ -798,6 +917,10 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 
@@ -812,6 +935,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
 #if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -833,6 +957,10 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+            finally
+            {
+                await SetIsBusy(false);
+            }
         }
 
         /// <summary>
@@ -845,6 +973,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
 #if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -858,6 +987,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
                     //await EventAggregator.PublishOnUIThreadAsync(new LabelGroupAddedMessage(newLabelGroup), cancellationToken);
                 }
+
                 await System.Windows.Application.Current.Dispatcher.InvokeAsync(RemoveLabelGroupViewModelAsync);
 #if DEBUG
                 stopwatch.Stop();
@@ -868,6 +998,10 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 
@@ -882,6 +1016,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+               SetIsBusy(true);
 #if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -897,6 +1032,11 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+            finally
+            {
+                SetIsBusy(false);
+            }
+
         }
 
         /// <summary>
@@ -921,6 +1061,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
 #if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -935,6 +1076,10 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 

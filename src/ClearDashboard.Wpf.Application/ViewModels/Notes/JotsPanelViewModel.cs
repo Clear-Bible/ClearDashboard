@@ -23,7 +23,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,6 +31,9 @@ using System.Windows.Data;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 {
+
+    
+
     public class JotsPanelViewModel :
         ToolViewModel,
         IHandle<NoteAddedMessage>,
