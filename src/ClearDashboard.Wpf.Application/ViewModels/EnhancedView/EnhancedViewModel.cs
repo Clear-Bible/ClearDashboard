@@ -1164,7 +1164,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 settings.Height = 500;
                 settings.MaxWidth = 800;
                 settings.MaxHeight = 700;
-                settings.Title = "Jots";
+                settings.Title = "Jot";
                 if (mousePosition.HasValue)
                 {
                     settings.Top = mousePosition.Value.Y;
