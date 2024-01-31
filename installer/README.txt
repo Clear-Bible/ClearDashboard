@@ -1,5 +1,12 @@
 ﻿HOW TO MAKE A RELEASE INSTALLER
 
+NOTES: The command line version of the installer for some reason does not copy over certain runtime files
+into the proper directory.  These missing files have been stashed into the \installer\Runtimes\ directory
+and are copied over to the right spot after the build has been made.  These may need to be updated if a new
+version of CEFChrome is updated.
+
+AUTOMATIC VERSION
+===================================================================
 1. Navigate to the desired branch (typically called “version-x.x.x.x”)
 2. Update the Dashboard_Instructions.pdf if needed/desired
 3. Update windowsdesktop-runtime-x.x.x-win-x64.exe to the latest version
@@ -7,28 +14,39 @@
 
 
 5. Shut down Paratext
-8. SetVersionInfo tool
-7. Update the version number in manifest.app
-8. Update the version number in the DashboardInstaller.iss file
-9. Change Visual Studio to Release mode
+6. Run the CreateInstaller.bat file in ClearDashboard/installer.
+
+Resume at 18 below
 
 
-Steps 10-12 are necessary to rebuild the Paratext Plugin (since codesign_exe.bat can’t) and rebuild ClearDashboard.Wpf.Application for publishing.
+MANUAL VERSION
+===================================================================
+1. Navigate to the desired branch (typically called “version-x.x.x.x”)
+2. Update the Dashboard_Instructions.pdf if needed/desired
+3. Update windowsdesktop-runtime-x.x.x-win-x64.exe to the latest version
+4. Update VC_redist.x64.exe to the latest version
 
 
-10. Clean bin and obj files
-11. Restore Nuget packages
-12. Rebuild the Solution
+5. Shut down Paratext
+
+6. (optional) SetVersionInfo tool
+7. (optional) Update the version number in manifest.app
+8. (optional) Update the version number in the DashboardInstaller.iss file
+9. (optional) Change Visual Studio to Release mode
+
+10. (optional) Clean bin and obj files
+11. (optional) Restore Nuget packages
+12. (optional) Rebuild the Solution
 
 
 13. (optional) Run the app to make sure it works.  Shut down Paratext if you open it.
 
 
-14. Publish ClearDashboard.Wpf.Application
-15. Publish PluginManager
-15. Publish ResetCurrentUser
-16. Try to compile the installer in the Inno compiler app to test if the script is working.  If it starts to compress files then everything is working.  Cancel the compiler.
-17. Run the codesign_exe.bat file in ClearDashboard/installer.  If it doesn’t seem to be properly cleaning/rebuilding you may have an extra .sln file in ClearDashboard/src
+14. (optional) Publish ClearDashboard.Wpf.Application
+15. (optional) Publish PluginManager
+15. (optional) Publish ResetCurrentUser
+16. (optional) Try to compile the installer in the Inno compiler app to test if the script is working.  If it starts to compress files then everything is working.  Cancel the compiler.
+17. Run the CreateInstaller.bat file in ClearDashboard/installer.  If it doesn’t seem to be properly cleaning/rebuilding you may have an extra .sln file in ClearDashboard/src
 
 
 18. Install locally to test out that it works

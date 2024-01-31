@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "ClearDashboard"
-#define MyAppVersion "1.4.0.0"
+#define MyAppVersion "1.4.0.1"
 #define MyAppPublisher "Clear Bible, Inc."
 #define MyAppURL "https://www.clear.bible/"
 #define MyAppExeName "ClearDashboard.Wpf.Application.exe"
@@ -135,7 +135,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}";
 
 [Files]
-Source: "windowsdesktop-runtime-7.0.5-win-x64.exe"; Flags: dontcopy noencryption
+Source: "windowsdesktop-runtime-7.0.15-win-x64.exe"; Flags: dontcopy noencryption
 Source: "VC_redist.x64.exe"; Flags: dontcopy noencryption
 
 ; Install PluginManager
@@ -287,10 +287,10 @@ begin
     
     // install the .NET Runtime
      if not DirExists('C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\7.0.5\') then begin
-      if not FileExists(ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-7.0.5-win-x64.exe') then begin          
-        ExtractTemporaryFile('windowsdesktop-runtime-7.0.5-win-x64.exe');
+      if not FileExists(ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-7.0.15-win-x64.exe') then begin          
+        ExtractTemporaryFile('windowsdesktop-runtime-7.0.15-win-x64.exe');
       end;
-     Result := ShellExec('', ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-7.0.5-win-x64.exe', '/passive', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
+     Result := ShellExec('', ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-7.0.15-win-x64.exe', '/passive', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
     end;
     Result := true;
   end;
