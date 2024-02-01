@@ -4,6 +4,7 @@ using ClearApplicationFoundation.Framework.Input;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.Wpf.Application.Converters;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure.EnhancedView;
@@ -12,7 +13,9 @@ using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.UserControls;
+using ClearDashboard.Wpf.Application.UserControls.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -26,23 +29,16 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.Wpf.Application.UserControls.Notes;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
-using ClearDashboard.Wpf.Application.Converters;
-using MahApps.Metro.Controls;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
-    using System.Dynamic;
-    using System.Linq;  //  needed to move this into the namespace to allow the .Reverse() to use this over the SIL.Linq
     using ClearDashboard.DAL.Alignment;
-    using ClearDashboard.DAL.Alignment.Corpora;
     using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
     using ClearDashboard.Wpf.Application.Events.Notes;
     using ClearDashboard.Wpf.Application.ViewModels.Notes;
-    using ClearDashboard.Wpf.Application.ViewModels.PopUps;
-    using Paratext.PluginInterfaces;
+    using System.Dynamic;
+    using System.Linq;  //  needed to move this into the namespace to allow the .Reverse() to use this over the SIL.Linq
 
     public class EnhancedViewModel : VerseAwareConductorOneActive, IEnhancedViewModel, IPaneViewModel,
         IHandle<VerseSelectedMessage>,
@@ -906,6 +902,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
         }
 
+        public async void NoteIndicatorMouseEnter(object? sender, NoteEventArgs? e)
+        {
+            if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
+            {
+                await DisplayJotsEditor(e.MousePosition);
+            }
+        }
+
+        public async void NoteLeftButtonDown(object? sender, NoteEventArgs? e)
+        {
+            if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
+            {
+                await DisplayJotsEditor(e.MousePosition);
+            }
+        }
+
+        public async void NoteLeftButtonDown(object sender, TokenEventArgs e)
+        {
+            if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
+            {
+                await DisplayJotsEditor(e.MousePosition);
+            }
+        }
+
         public async void TokenLeftButtonDown(object sender, TokenEventArgs e)
         {
             if (e.IsShiftPressed && e.TokenDisplay.VerseDisplay is AlignmentDisplayViewModel alignmentDisplayViewModel)
@@ -936,18 +956,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 SelectionManager.UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
 
                 // TODO:  Jots dialog
-                NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
-                if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
-                {
-                    await DisplayJotsEditor(e.MousePosition);
-                }
-                else
-                {
-                    if (jotsEditorDisplayed_ && jotsEditorViewModel_ != null)
-                    {
-                        await jotsEditorViewModel_.DeactivateAsync(true);
-                    }
-                }
+                //NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
+                //if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
+                //{
+                //    await DisplayJotsEditor(e.MousePosition);
+                //}
+                //else
+                //{
+                //    if (jotsEditorDisplayed_ && jotsEditorViewModel_ != null)
+                //    {
+                //        await jotsEditorViewModel_.DeactivateAsync(true);
+                //    }
+                //}
             }
         }
 
@@ -957,19 +977,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             SelectionManager.EndDragSelection(e.TokenDisplay);
 
             // TODO:  Jots dialog
-            NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
+            //NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
 
-            if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
-            {
-                await DisplayJotsEditor(e.MousePosition);
-            }
-            else
-            {
-                if (jotsEditorDisplayed_ && jotsEditorViewModel_ != null)
-                {
-                    await jotsEditorViewModel_.DeactivateAsync(true);
-                }
-            }
+            //if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
+            //{
+            //    await DisplayJotsEditor(e.MousePosition);
+            //}
+            //else
+            //{
+            //    if (jotsEditorDisplayed_ && jotsEditorViewModel_ != null)
+            //    {
+            //        await jotsEditorViewModel_.DeactivateAsync(true);
+            //    }
+            //}
         }
 
         public async void TokenCreateAlignment(object sender, TokenEventArgs e)
@@ -1001,7 +1021,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             SelectionManager.UpdateRightClickSelection(e.TokenDisplay);
 
             // TODO:  Jots dialog
-            NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
+            //NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
 
             if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
             {
@@ -1084,7 +1104,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             SelectionManager.UpdateSelection(e.TokenDisplay!, e.SelectedTokens, e.IsControlPressed);
 
             // TODO:  Jots dialog
-            NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
+            //NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
 
 
             if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
@@ -1110,7 +1130,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 SelectionManager.UpdateRightClickSelection(e.TokenDisplay);
 
                 // TODO:  Jots dialog
-                NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
+                //NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
 
 
                 if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
@@ -1525,16 +1545,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
 
         // ToDo:  Jots refactor
-        #region VerseControlMethods
+        //#region VerseControlMethods
 
-        private Visibility _noteControlVisibility = Visibility.Collapsed;
+        //private Visibility _noteControlVisibility = Visibility.Collapsed;
 
-        public Visibility NoteControlVisibility
-        {
-            get => _noteControlVisibility;
-            set => Set(ref _noteControlVisibility, value);
-        }
+        //public Visibility NoteControlVisibility
+        //{
+        //    get => _noteControlVisibility;
+        //    set => Set(ref _noteControlVisibility, value);
+        //}
 
-        #endregion
+        //#endregion
     }
 }
