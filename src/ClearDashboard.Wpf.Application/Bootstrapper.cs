@@ -34,6 +34,7 @@ using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.Extensions.Configuration;
 using DashboardApplication = System.Windows.Application;
+using ClearDashboard.DAL.Alignment.Features;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -285,7 +286,13 @@ namespace ClearDashboard.Wpf.Application
             builder
                 .RegisterAssemblyTypes(typeof(GetProjectSnapshotQueryHandler).Assembly)
                 .AsClosedTypesOf(typeof(IRequestHandler<,>));
-            }
+
+			builder.RegisterType<ClearEngineClientWebSocket>().WithParameter(
+				"host",
+				"localhost:5173")
+                .AsSelf()
+                .SingleInstance();
+		}
 
         protected override async Task NavigateToMainWindow()
         {

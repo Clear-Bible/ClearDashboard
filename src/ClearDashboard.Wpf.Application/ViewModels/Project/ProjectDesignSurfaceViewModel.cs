@@ -961,39 +961,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                             var textCorpus = dialogViewModel.SelectedTokenizer switch
                             {
-                                Tokenizers.LatinWordTokenizer =>
+                                Tokenizers.LatinWordTokenizer => await
                                     (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
                                     .AddTokenizer<LatinWordTokenizer>()
                                     .AddTransformer<IntoTokensTextRowProcessor>()
                                     .AddTransformer<SetTrainingBySurfaceLowercase>()
-                                    .TokenizeTransform(),
+                                    .TokenizeTransform(Mediator!, cancellationToken),
 
-                                Tokenizers.WhitespaceTokenizer =>
+                                Tokenizers.WhitespaceTokenizer => await
                                     (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
                                     .AddTokenizer<WhitespaceTokenizer>()
                                     .AddTransformer<IntoTokensTextRowProcessor>()
                                     .AddTransformer<SetTrainingBySurfaceLowercase>()
-									.TokenizeTransform(),
+									.TokenizeTransform(Mediator!, cancellationToken),
 
-                                Tokenizers.ZwspWordTokenizer => 
+                                Tokenizers.ZwspWordTokenizer => await
                                     (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
                                     .AddTokenizer<ZwspWordTokenizer>()
                                     .AddTransformer<IntoTokensTextRowProcessor>()
                                     .AddTransformer<SetTrainingBySurfaceLowercase>()
-                                    .TokenizeTransform(),
+                                    .TokenizeTransform(Mediator!, cancellationToken),
 
-                                Tokenizers.ChineseBibleWordTokenizer => 
+                                Tokenizers.ChineseBibleWordTokenizer => await
                                     (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
                                     .AddTokenizer<ChineseBibleWordTokenizer>()
                                     .AddTransformer<IntoTokensTextRowProcessor>()
                                     .AddTransformer<SetTrainingBySurfaceLowercase>()
-                                    .TokenizeTransform(),
+                                    .TokenizeTransform(Mediator!, cancellationToken),
 
-                                _ => (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, null, cancellationToken))
+                                _ => await (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, null, cancellationToken))
                                     .AddTokenizer<WhitespaceTokenizer>()
                                     .AddTransformer<IntoTokensTextRowProcessor>()
                                     .AddTransformer<SetTrainingBySurfaceLowercase>()
-                                    .TokenizeTransform()
+                                    .TokenizeTransform(Mediator!, cancellationToken)
 							};
 
                             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
@@ -1688,11 +1688,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 bookIds,
                 cancellationToken);
 
-            var textCorpus = paratextProjectTextCorpus
+            var textCorpus = await paratextProjectTextCorpus
                .AddTokenizer(tokenizerEnum.ToString())
                .AddTransformer<IntoTokensTextRowProcessor>()
                .AddTransformer<SetTrainingBySurfaceLowercase>()
-               .TokenizeTransform();
+               .TokenizeTransform(Mediator!, cancellationToken);
 
             return textCorpus;
         }
