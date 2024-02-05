@@ -143,7 +143,7 @@
     <value>Paratext उपयोगकर्ता नाम:</value>
   </data>
   <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
-    <value>अनुप्रयोग को पुनरारंभ करें</value>
+    <value>आवेदन को पुनरारंभ करें</value>
   </data>
   <data name="AccountInfo_SelectAccountLabel" xml:space="preserve">
     <value>स्विच करने के लिए एक खाता चुनें:</value>
@@ -155,7 +155,7 @@
     <value>जोड़ना</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>कॉर्पस को टोकन करने का चयन करें</value>
+    <value>कॉर्पस को टोकन करने के लिए चुनें</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>संरेखण</value>
@@ -674,7 +674,7 @@
     <value>टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>भाषा जोड़ी के लिए टोकन में शामिल हों</value>
+    <value>भाषा की जोड़ी के लिए टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>'अमान्य' के रूप में चिह्न संरेखण</value>
@@ -707,7 +707,7 @@
     <value>टोकन के अन्य उदाहरणों पर विभाजन लागू करें</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>टोकन को विभाजित करने के लिए कहां चुनें:</value>
+    <value>टोकन को विभाजित करने के लिए कहां से चुनें:</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>तीन-तरफ़ा विभाजन</value>
@@ -917,7 +917,7 @@
     <value>Lemma/रूप:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>न्यू लेक्सेम के लिए लेम्मा:</value>
+    <value>नए लेक्सेम के लिए लेम्मा:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>शब्दिम</value>
@@ -1142,7 +1142,7 @@
     <value>कॉरपस टोकन</value>
   </data>
   <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>चापलूसी</value>
+    <value>चकरानेवाला</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>देखना</value>
@@ -1373,16 +1373,19 @@
     <value>इस नोट को हटा दें?</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>संघों द्वारा</value>
+    <value>कविता द्वारा फ़िल्टर</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>फिल्टर</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>लेबल द्वारा</value>
+    <value>लेबल द्वारा फ़िल्टर</value>
+  </data>
+  <data name="Notes_FilterNoteStatus" xml:space="preserve">
+    <value>स्थिति से फ़िल्टर करें</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>नोट पाठ द्वारा</value>
+    <value>पाठ द्वारा फ़िल्टर</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>कोई</value>
@@ -1394,7 +1397,7 @@
     <value>खुला</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>उपयोगकर्ताओं द्वारा</value>
+    <value>लेखक द्वारा फ़िल्टर</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>एक लेबल जोड़ें</value>
@@ -1457,7 +1460,7 @@
     <value>संशोधित</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>उपयोगकर्ता</value>
+    <value>लेखक</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>स्थिति</value>
@@ -1467,6 +1470,9 @@
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
     <value>बंद किया हुआ</value>
+  </data>
+  <data name="Notes_Note_Verse" xml:space="preserve">
+    <value>कविता</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>संघों</value>
@@ -1486,11 +1492,14 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>देखा</value>
   </data>
+  <data name="Notes_NoteStatus_Archived" xml:space="preserve">
+    <value>संग्रहीत</value>
+  </data>
   <data name="Notes_NoteText" xml:space="preserve">
     <value>मूलपाठ</value>
   </data>
   <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>खुला बंद</value>
+    <value>स्थिति</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>भाग</value>
@@ -1535,7 +1544,7 @@
     <value>कॉर्पोरा छंदों के समानांतरकरण करें</value>
   </data>
   <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
-    <value>Internear बनाएँ</value>
+    <value>Interlinear बनाएँ</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
     <value>ज्सन मेटाडेटा</value>
@@ -1790,7 +1799,7 @@
     <value>उपसर्ग</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>दिखावा दिखाओ</value>
+    <value>दिखावा दिखाना</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>तना</value>
@@ -1823,10 +1832,10 @@
     <value>सहयोग परियोजनाएं</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>आरंभ करने के लिए अपना प्रोजेक्ट बनाएं।</value>
+    <value>आरंभ करने के लिए अपनी परियोजना बनाएं।</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
-    <value>एक नई परियोजना बनाएं</value>
+    <value>एक नया प्रोजेक्ट बनाएं</value>
   </data>
   <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
     <value>त्वरित शुरुआत नई परियोजना</value>
@@ -1856,7 +1865,7 @@
     <value>शुरू हो जाओ</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>आयात सर्वर प्रोजेक्ट</value>
+    <value>आयात सर्वर परियोजना</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>अपनी परियोजना बनाते समय ग्रीक और हिब्रू बाइबिल ग्रंथों को शामिल करने के लिए इस बॉक्स को देखें।</value>
@@ -2111,7 +2120,7 @@
     <value>ओबद्याह</value>
   </data>
   <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>दामाद</value>
+    <value>दाई</value>
   </data>
   <data name="ProperCase_Philippians" xml:space="preserve">
     <value>फिलिप्पियों</value>
@@ -2450,7 +2459,7 @@
     <value>कॉरपस टोकन</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
-    <value>चापलूसी</value>
+    <value>चकरानेवाला</value>
   </data>
   <data name="Windows_EnhancedView" xml:space="preserve">
     <value>देखना</value>
@@ -2471,7 +2480,7 @@
     <value>समझ:</value>
   </data>
   <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>उपडोमेन:</value>
+    <value>सबडोमेन:</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>हाँ</value>

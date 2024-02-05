@@ -1373,28 +1373,31 @@
     <value>Hapus catatan ini?</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Oleh asosiasi</value>
+    <value>Filter demi ayat</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filter</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>Oleh label</value>
+    <value>Filter berdasarkan label</value>
+  </data>
+  <data name="Notes_FilterNoteStatus" xml:space="preserve">
+    <value>Filter berdasarkan status</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>Dengan catatan teks</value>
+    <value>Filter menurut teks</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>Setiap</value>
   </data>
   <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>Ditutup</value>
+    <value>Tertutup</value>
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>Membuka</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>Oleh pengguna</value>
+    <value>Filter menurut penulis</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Tambahkan label</value>
@@ -1403,7 +1406,7 @@
     <value>Apakah Anda ingin membuat label:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
-    <value>dan asosiasikan dengan grup label:</value>
+    <value>dan kaitkan dengan grup label:</value>
   </data>
   <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
     <value>Apakah Anda ingin menghapus label:</value>
@@ -1418,7 +1421,7 @@
     <value>Tambahkan grup label</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Tambahkan Grup Label</value>
+    <value>Tambahkan grup label</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Grup label sudah ada dengan nama</value>
@@ -1457,7 +1460,7 @@
     <value>Diubah</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>Pengguna</value>
+    <value>Pengarang</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>Status</value>
@@ -1466,7 +1469,10 @@
     <value>Membuka</value>
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>Ditutup</value>
+    <value>Tertutup</value>
+  </data>
+  <data name="Notes_Note_Verse" xml:space="preserve">
+    <value>Ayat</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>Asosiasi</value>
@@ -1486,11 +1492,14 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>Terlihat</value>
   </data>
+  <data name="Notes_NoteStatus_Archived" xml:space="preserve">
+    <value>Diarsipkan</value>
+  </data>
   <data name="Notes_NoteText" xml:space="preserve">
     <value>Teks</value>
   </data>
   <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>Terbuka/ditutup</value>
+    <value>Status</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Bagian</value>
@@ -1808,7 +1817,7 @@
     <value>PRO</value>
   </data>
   <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
-    <value>Tambahkan pengguna kolaborasi baru</value>
+    <value>Tambahkan Pengguna Kolaborasi Baru</value>
   </data>
   <data name="ProjectPicker_AppName" xml:space="preserve">
     <value>ClearDashboard</value>
@@ -2087,7 +2096,7 @@
     <value>Luke</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
-    <value>Malachi</value>
+    <value>Maleakhi</value>
   </data>
   <data name="ProperCase_Mark" xml:space="preserve">
     <value>Tanda</value>

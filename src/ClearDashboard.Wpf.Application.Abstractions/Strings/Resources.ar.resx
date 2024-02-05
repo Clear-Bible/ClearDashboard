@@ -563,7 +563,7 @@
     <value>حذف تعاون المشروع</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>لديك مستخدمون آخرون متصلون بهذا المشروع. سيتم إزالة هذا المشروع لهم أيضًا. هل من المؤكد أنك تريد حذف هذا المشروع؟</value>
+    <value>لديك مستخدمون آخرون متصلون بهذا المشروع. سيتم إزالة هذا المشروع لهم كذلك. هل من المؤكد أنك تريد حذف هذا المشروع؟</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
     <value>هل أنت متأكد أنك تريد حذف هذا المشروع؟</value>
@@ -917,7 +917,7 @@
     <value>ليما/الأشكال:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Lemma من أجل lexeme الجديد:</value>
+    <value>Lemma من أجل Lexeme الجديد:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>لكلية</value>
@@ -935,7 +935,7 @@
     <value>قم بإزالة هذا المجال الدلالي من هذا المعنى</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
-    <value>قم بإزالة هذا النموذج المعجمي من هذا ليمما</value>
+    <value>قم بإزالة هذا النموذج المعجمي من هذا الليمون</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>تعيين لمعان ل</value>
@@ -1004,7 +1004,7 @@
     <value>اللغة المستهدفة</value>
   </data>
   <data name="LexiconEdit_Title" xml:space="preserve">
-    <value>تحرير معجم</value>
+    <value>معجم تحرير</value>
   </data>
   <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>ترجمة</value>
@@ -1370,19 +1370,22 @@
     <value>أضف ملاحظة جديدة</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>حذف هذه المذكرة؟</value>
+    <value>حذف هذه الملاحظة؟</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>من قبل الجمعيات</value>
+    <value>تصفية بواسطة الآية</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>المرشحات</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>بواسطة التسميات</value>
+    <value>تصفية عن طريق التسميات</value>
+  </data>
+  <data name="Notes_FilterNoteStatus" xml:space="preserve">
+    <value>تصفية حسب الحالة</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>بالملاحظة نص</value>
+    <value>تصفية بواسطة النص</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>أي</value>
@@ -1394,7 +1397,7 @@
     <value>يفتح</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>من قبل المستخدمين</value>
+    <value>تصفية من قبل المؤلف</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>إضافة تسمية</value>
@@ -1433,7 +1436,7 @@
     <value>اسم مجموعة التسمية</value>
   </data>
   <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
-    <value>إزالة مجموعة التسمية هذه؟</value>
+    <value>إزالة مجموعة الملصقات هذه؟</value>
   </data>
   <data name="Notes_LabelGroupRemoveTooltip" xml:space="preserve">
     <value>قم بإزالة مجموعة التسمية هذه</value>
@@ -1457,7 +1460,7 @@
     <value>معدل</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>مستخدم</value>
+    <value>مؤلف</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>حالة</value>
@@ -1467,6 +1470,9 @@
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
     <value>مغلق</value>
+  </data>
+  <data name="Notes_Note_Verse" xml:space="preserve">
+    <value>بيت شعر</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>ذات الصلة</value>
@@ -1486,11 +1492,14 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>مرئي</value>
   </data>
+  <data name="Notes_NoteStatus_Archived" xml:space="preserve">
+    <value>أرشفة</value>
+  </data>
   <data name="Notes_NoteText" xml:space="preserve">
     <value>نص</value>
   </data>
   <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>مفتوح/مغلق</value>
+    <value>حالة</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>جزء</value>
@@ -1541,7 +1550,7 @@
     <value>JSON METADATA</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
-    <value>موازاة آيات كوربورا</value>
+    <value>موازية آيات كوربورا</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
     <value>خوارزمية محاذاة كلمة الجهاز</value>
@@ -1685,7 +1694,7 @@
     <value>إعادة تعيين تعيينات الآية إلى الافتراض الافتراضي</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
-    <value>الموارد</value>
+    <value>مورد</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
     <value>قم بتوسيع المحتوى إلى 100 ٪</value>
@@ -1703,7 +1712,7 @@
     <value>معيار</value>
   </data>
   <data name="Pds_StartParatextFirst" xml:space="preserve">
-    <value>ابدأ Paratext أولاً</value>
+    <value>بدء Paratext أولاً</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
     <value>الدراسة</value>
@@ -1919,7 +1928,7 @@
     <value>معالج قالب المشروع: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>قائمة مشاريع التعاون</value>
+    <value>قم بتحديث قائمة مشاريع التعاون</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>البحث في الآونة الأخيرة</value>
@@ -2024,7 +2033,7 @@
     <value>خروج</value>
   </data>
   <data name="ProperCase_Ezekiel" xml:space="preserve">
-    <value>حزن</value>
+    <value>حزقيال</value>
   </data>
   <data name="ProperCase_Ezra" xml:space="preserve">
     <value>عزرا</value>
@@ -2297,7 +2306,7 @@
     <value>ClearDashboard إعدادات</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>عرض طرق عرض موسعة على شاشة مختلفة عن لوحة القيادة</value>
+    <value>عرض طرق العرض الموسعة على شاشة مختلفة عن لوحة القيادة</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
     <value>بالنسبة للأنظمة التي تحتوي على ثلاثة شاشات أو أكثر ، عرض عرض موسع على الشاشة الثالثة</value>

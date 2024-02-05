@@ -1055,7 +1055,7 @@
     <value>Target ላማው ቃል</value>
   </data>
   <data name="LexiconImport_Title" xml:space="preserve">
-    <value>LEXICON ማስመጣት</value>
+    <value>LEXEXON ማስመጣት</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
     <value>የትርጉም ግጥሚያዎች</value>
@@ -1373,16 +1373,19 @@
     <value>ይህን ማስታወሻ ይሰርዙ?</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>በማጋራት</value>
+    <value>በቁጥር ማጣሪያ</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>ማጣሪያዎች</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>በመሰየም</value>
+    <value>በማጣሪያዎች ማጣሪያ</value>
+  </data>
+  <data name="Notes_FilterNoteStatus" xml:space="preserve">
+    <value>በሁኔታ ማጣሪያ</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>በማስታወሻ ጽሑፍ</value>
+    <value>በጽሑፍ ማጣሪያ</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>ማናቸውም</value>
@@ -1394,7 +1397,7 @@
     <value>ክፈት</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>በተጠቃሚዎች</value>
+    <value>ማጣሪያ በደራሲው ማጣራት</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>መለያ ያክሉ</value>
@@ -1457,7 +1460,7 @@
     <value>ተሻሽሏል</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>ተጠቃሚ</value>
+    <value>ደራሲ ደራሲ</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>ሁኔታ</value>
@@ -1467,6 +1470,9 @@
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
     <value>ዝግ</value>
+  </data>
+  <data name="Notes_Note_Verse" xml:space="preserve">
+    <value>ቁጥር</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>ማህበራት</value>
@@ -1486,11 +1492,14 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>ታይቷል</value>
   </data>
+  <data name="Notes_NoteStatus_Archived" xml:space="preserve">
+    <value>ገብቷል</value>
+  </data>
   <data name="Notes_NoteText" xml:space="preserve">
     <value>ጽሑፍ</value>
   </data>
   <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>ክፍት / ዝግ</value>
+    <value>ሁኔታ</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>ክፍል</value>

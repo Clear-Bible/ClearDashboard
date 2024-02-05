@@ -1373,16 +1373,19 @@
     <value>លុបកំណត់ត្រានេះ?</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>ដោយសមាគម</value>
+    <value>ត្រងតាមខ</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>រុរ៉ូ</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>ដោយស្លាក</value>
+    <value>ត្រងតាមស្លាក</value>
+  </data>
+  <data name="Notes_FilterNoteStatus" xml:space="preserve">
+    <value>ត្រងតាមស្ថានភាព</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>ដោយអត្ថបទចំណាំ</value>
+    <value>ត្រងតាមអត្ថបទ</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>អវីមយយ</value>
@@ -1394,7 +1397,7 @@
     <value>ដេលចមហរ</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>ដោយអ្នកប្រើប្រាស់</value>
+    <value>ត្រងដោយអ្នកនិពន្ធ</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>បន្ថែមស្លាកមួយ</value>
@@ -1457,7 +1460,7 @@
     <value>ផ្លាស់ប្តូរ</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>អ្នក​ប្រើ</value>
+    <value>អ្នកនិបន្ធ</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>ច្បាប់</value>
@@ -1467,6 +1470,9 @@
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
     <value>ដេលបិត</value>
+  </data>
+  <data name="Notes_Note_Verse" xml:space="preserve">
+    <value>កមនាប្យ</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>សមាគម</value>
@@ -1486,11 +1492,14 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>ដេលតោស</value>
   </data>
+  <data name="Notes_NoteStatus_Archived" xml:space="preserve">
+    <value>ឃោសនារួច</value>
+  </data>
   <data name="Notes_NoteText" xml:space="preserve">
     <value>អត្ថបត</value>
   </data>
   <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>បើក / បិទ</value>
+    <value>ច្បាប់</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>ចេក</value>

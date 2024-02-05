@@ -131,7 +131,7 @@
                             Margin="5,5,0,2"
                             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                             BorderThickness="1"
-                            Header="Filter by Status">
+                            Header="{helpers:Localization Notes_FilterNoteStatus}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="25" />
@@ -261,7 +261,7 @@
                             Margin="5,5,0,2"
                             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                             BorderThickness="1"
-                            Header="Filter by Label">
+                            Header="{helpers:Localization Notes_FilterLabels}">
                             <ListBox
                                 x:Name="LabelsFilter"
                                 MaxHeight="200"
@@ -321,7 +321,7 @@
             <DataGrid.Columns>
 
 
-                <DataGridTemplateColumn MinWidth="80" Header="{helpers:Localization Notes_OpenClosed}">
+                <DataGridTemplateColumn MinWidth="80" Header="{helpers:Localization Notes_Note_NoteStatus}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <materialDesign:PackIcon HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -406,7 +406,7 @@
                 </DataGridTemplateColumn>-->
 
 
-                <DataGridTemplateColumn MinWidth="200" Header="Verse(s)">
+                <DataGridTemplateColumn MinWidth="200" Header="{helpers:Localization Notes_Note_Verse}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding AssociationVerse}" TextWrapping="Wrap" />

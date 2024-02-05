@@ -482,7 +482,7 @@
     <value>Mark sélectionné comme «Revue des besoins»</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
-    <value>Marque sélectionnée comme «valide»</value>
+    <value>Mark sélectionné comme «valide»</value>
   </data>
   <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
     <value>Besoin d'examen</value>
@@ -539,7 +539,7 @@
     <value>nouveau groupe</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
-    <value>Nouveau individu</value>
+    <value>nouveau individu</value>
   </data>
   <data name="ClockUserControl_Select" xml:space="preserve">
     <value>Sélectionnez le fuseau horaire</value>
@@ -671,7 +671,7 @@
     <value>Interlinéaire</value>
   </data>
   <data name="EnhancedView_JoinTokens" xml:space="preserve">
-    <value>Rejoignez des jetons</value>
+    <value>Rejoignez les jetons</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
     <value>Rejoignez des jetons pour la paire de langues</value>
@@ -701,7 +701,7 @@
     <value>Afficher les commandes de la vue</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>Jeton divisé</value>
+    <value>Jeton fendu</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>Appliquer la fente à d'autres cas de jeton</value>
@@ -1373,16 +1373,19 @@
     <value>Supprimer cette note?</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Par associations</value>
+    <value>Filtre par verset</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filtres</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>Par étiquettes</value>
+    <value>Filtre par étiquettes</value>
+  </data>
+  <data name="Notes_FilterNoteStatus" xml:space="preserve">
+    <value>Filtre par statut</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>Par note texte</value>
+    <value>Filtrer par texte</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>N'importe lequel</value>
@@ -1394,7 +1397,7 @@
     <value>Ouvrir</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>Par les utilisateurs</value>
+    <value>Filtre par auteur</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Ajouter une étiquette</value>
@@ -1457,7 +1460,7 @@
     <value>Modifié</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>Utilisateur</value>
+    <value>Auteur</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>Statut</value>
@@ -1467,6 +1470,9 @@
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
     <value>Fermé</value>
+  </data>
+  <data name="Notes_Note_Verse" xml:space="preserve">
+    <value>Verset</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>Les associations</value>
@@ -1486,11 +1492,14 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>Vu</value>
   </data>
+  <data name="Notes_NoteStatus_Archived" xml:space="preserve">
+    <value>Archivé</value>
+  </data>
   <data name="Notes_NoteText" xml:space="preserve">
     <value>Texte</value>
   </data>
   <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>Ouvert fermé</value>
+    <value>Statut</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Partie</value>
@@ -1847,7 +1856,7 @@
     <value>Supprimer le projet</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Activer la sélection du livre</value>
+    <value>Activer la sélection des livres</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
     <value>En cas de vérification, vous pourrez sélectionner les livres à traiter.</value>
@@ -1919,7 +1928,7 @@
     <value>Assistant de modèle de projet: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Refreindre la liste des projets de collaboration</value>
+    <value>Rafraîchir la liste des projets de collaboration</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>Recherche récente</value>
@@ -2225,7 +2234,7 @@
     <value>Activer les notes de paratext externe dans le groupe expérimental</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
-    <value>Activer les notes de paratext externes</value>
+    <value>Activer les notes externes de paratext</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Activer l'importation du lexique</value>
