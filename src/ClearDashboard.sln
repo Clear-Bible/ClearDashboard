@@ -107,6 +107,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SetVersionInfo", "..\tools\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResetCurrentUser", "..\tools\ResetCurrentUser\ResetCurrentUser.csproj", "{EAFA3ECB-41F1-442C-85EE-BA5C9A1953DA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3302EE7B-C5BC-4FCC-AE8C-A2ED0C98B89A}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Collab_Debug|Any CPU = Collab_Debug|Any CPU
