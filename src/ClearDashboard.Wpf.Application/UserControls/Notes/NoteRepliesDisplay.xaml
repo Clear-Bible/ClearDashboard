@@ -70,8 +70,8 @@
                 materialDesign:HintAssist.Hint="Type reply, then press enter"
                 materialDesign:TextFieldAssist.HasClearButton="True"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-                Foreground="{DynamicResource MaterialDesignBody}"
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontSize}"
+                Foreground="{DynamicResource MaterialDesignBody}"
                 KeyDown="AddReplyText_KeyDown"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                 TextWrapping="Wrap" />
