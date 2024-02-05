@@ -36,6 +36,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     using System.Dynamic;
     using System.Linq;  //  needed to move this into the namespace to allow the .Reverse() to use this over the SIL.Linq
+    using System.Speech.Synthesis;
     using ClearDashboard.DAL.Alignment;
     using ClearDashboard.DAL.Alignment.Corpora;
     using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
@@ -285,6 +286,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 NotifyOfPropertyChange(() => NoteIndicatorsSizeValue);
             }
         }
+
+        private bool _showNoteIndicatorsCheckbox = Settings.Default.NotesIndicatorVisibility;
+        public bool ShowNoteIndicatorsCheckbox
+        {
+            get => _showNoteIndicatorsCheckbox;
+            set
+            {
+                _showNoteIndicatorsCheckbox = value;
+                Settings.Default.NotesIndicatorVisibility = value;
+                NotifyOfPropertyChange(() => _showNoteIndicatorsCheckbox);
+            }
+        }
+
 
         private bool _paragraphMode = Settings.Default.ParagraphMode;
         public bool ParagraphMode
@@ -906,8 +920,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
         }
 
+
+
+
         public async void TokenLeftButtonDown(object sender, TokenEventArgs e)
         {
+            // 3
+
             if (e.IsShiftPressed && e.TokenDisplay.VerseDisplay is AlignmentDisplayViewModel alignmentDisplayViewModel)
             {
                 if (SelectionManager.AnySourceTokens && SelectionManager.AnyTargetTokens)

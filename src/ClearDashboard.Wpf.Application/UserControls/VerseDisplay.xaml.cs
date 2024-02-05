@@ -219,6 +219,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly RoutedEvent TranslationSetEvent = EventManager.RegisterRoutedEvent
             (nameof(TranslationSet), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
+        ///// <summary>
+        ///// Identifies the NoteIndicatorButtonDownEvent routed event.
+        ///// </summary>
+        //public static readonly RoutedEvent NoteIndicatorButtonDownEvent = EventManager.RegisterRoutedEvent
+        //    (nameof(NoteIndicatorButtonDown), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+
         /// <summary>
         /// Identifies the NoteIndicatorLeftButtonDownEvent routed event.
         /// </summary>
@@ -796,6 +803,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
         
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
+            // 2
+
             if (e is not TokenEventArgs args || args is { TokenDisplay: null })
             {
                 return;
@@ -986,7 +995,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnNoteLeftButtonDown(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteLeftButtonDownEvent, e);
+            // 2 
+            RaiseTokenEvent(TokenLeftButtonDownEvent, e);
+            //RaiseNoteEvent(NoteLeftButtonDownEvent, e);
         }
 
         private void OnNoteLeftButtonUp(object sender, RoutedEventArgs e)
@@ -1363,6 +1374,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
             add => AddHandler(TranslationSetEvent, value);
             remove => RemoveHandler(TranslationSetEvent, value);
         }
+
+        ///// <summary>
+        ///// Occurs when the left mouse button is pressed while the mouse pointer is over a note indicator.
+        ///// </summary>
+        //public event RoutedEventHandler NoteIndicatorButtonDown
+        //{
+        //    add => AddHandler(NoteIndicatorButtonDownEvent, value);
+        //    remove => RemoveHandler(NoteIndicatorButtonDownEvent, value);
+        //}
+
 
         /// <summary>
         /// Occurs when the left mouse button is pressed while the mouse pointer is over a note indicator.
