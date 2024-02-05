@@ -324,20 +324,43 @@
                 <DataGridTemplateColumn MinWidth="80" Header="{helpers:Localization Notes_Note_NoteStatus}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <materialDesign:PackIcon HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <materialDesign:PackIcon.Style>
-                                    <Style TargetType="materialDesign:PackIcon">
-                                        <Setter Property="Kind" Value="EmailOutline" />
-                                        <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightBrush}" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=NoteStatus}" Value="Open">
-                                                <Setter Property="Kind" Value="EmailOpenOutline" />
-                                                <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </materialDesign:PackIcon.Style>
-                            </materialDesign:PackIcon>
+                            <StackPanel
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                                <materialDesign:PackIcon>
+                                    <materialDesign:PackIcon.Style>
+                                        <Style TargetType="materialDesign:PackIcon">
+                                            <Setter Property="Kind" Value="EmailOutline" />
+                                            <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightBrush}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=NoteStatus}" Value="Open">
+                                                    <Setter Property="Kind" Value="EmailOpenOutline" />
+                                                    <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </materialDesign:PackIcon.Style>
+                                </materialDesign:PackIcon>
+                                <materialDesign:PackIcon Margin="-5,0,0,0">
+                                    <materialDesign:PackIcon.Style>
+                                        <Style TargetType="materialDesign:PackIcon">
+                                            <Setter Property="Kind" Value="ExclamationThick" />
+                                            <Setter Property="Foreground" Value="{StaticResource RedDarkBrush}" />
+                                        </Style>
+                                    </materialDesign:PackIcon.Style>
+                                    <materialDesign:PackIcon.Visibility>
+                                        <MultiBinding
+                                            Converter="{StaticResource GuidInGuidsToVisibilityConverter}"
+                                            ConverterParameter="{StaticResource True}"
+                                            Mode="OneWay">
+                                            <Binding Path="UserIdsSeenAllReplies" />
+                                            <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}" />
+                                        </MultiBinding>
+                                    </materialDesign:PackIcon.Visibility>
+                                </materialDesign:PackIcon>
+                            </StackPanel>
+
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
