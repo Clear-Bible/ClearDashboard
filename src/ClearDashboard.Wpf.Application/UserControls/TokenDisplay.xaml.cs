@@ -2144,17 +2144,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
             if (TokenDisplayViewModel.HasExternalNotes == false && TokenDisplayViewModel.TokenHasNote)
             {
                 // only note indicator
-                tokenLeftMargin = tokenLeftMargin + 15;
+                tokenLeftMargin = tokenLeftMargin + 10;
             }
             else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote)
             {
                 // both external notes and note indicator
-                tokenLeftMargin = tokenLeftMargin + 30;
+                tokenLeftMargin = tokenLeftMargin + 25;
             }
             else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote == false)
             {
                 // only external notes
-                tokenLeftMargin = tokenLeftMargin + 5;
+                tokenLeftMargin = tokenLeftMargin;
             }
 
             TokenMargin = new Thickness(tokenLeftMargin, 0, tokenRightMargin, 0);
