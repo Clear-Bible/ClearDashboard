@@ -55,8 +55,8 @@
                 MaxWidth="200" />
             <!--<ColumnDefinition Width="5" />-->
             <ColumnDefinition Width="7*" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="5*" />
+            <!--<ColumnDefinition Width="5" />-->
+            <!--<ColumnDefinition Width="5*" />-->
         </Grid.ColumnDefinitions>
 
         <controls:SidebarExpander
@@ -204,24 +204,31 @@
                             Margin="5,5,0,2"
                             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                             BorderThickness="1"
-                            Header="Filter by Label">
-                            <ListBox
-                                x:Name="LabelsFilter"
-                                MaxHeight="200"
-                                HorizontalAlignment="Stretch"
-                                IsEnabled="True"
-                                ItemsSource="{Binding FilterLabelsChoices}"
-                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                ScrollViewer.VerticalScrollBarVisibility="Visible"
-                                SelectionChanged="SelectionLabelsChanged"
-                                SelectionMode="Multiple"
-                                Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <ContentControl Content="{Binding Text}" />
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
+                            Header="{helpers:Localization Notes_FilterNoteText}">
+                            <TextBox
+                                x:Name="FilterNotesText"
+                                MinWidth="125"
+                                Margin="5,0,5,5"
+                                VerticalAlignment="Center"
+                                materialDesign:TextFieldAssist.HasClearButton="True"
+                                AcceptsReturn="False"
+                                Text="{Binding FilterNoteText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        </GroupBox>
+
+                        <GroupBox
+                            Margin="5,5,0,2"
+                            BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                            BorderThickness="1"
+                            Header="{helpers:Localization Notes_FilterAssociationsDescriptionText}">
+                            <TextBox
+                                x:Name="FilterAssociationsText"
+                                MinWidth="125"
+                                Margin="5,0,5,5"
+                                VerticalAlignment="Center"
+                                materialDesign:TextFieldAssist.HasClearButton="True"
+                                AcceptsReturn="False"
+                                Text="{Binding FilterAssociationsDescriptionText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </GroupBox>
 
                         <GroupBox
@@ -254,31 +261,24 @@
                             Margin="5,5,0,2"
                             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                             BorderThickness="1"
-                            Header="{helpers:Localization Notes_FilterNoteText}">
-                            <TextBox
-                                x:Name="FilterNotesText"
-                                MinWidth="125"
-                                Margin="5,0,5,5"
-                                VerticalAlignment="Center"
-                                materialDesign:TextFieldAssist.HasClearButton="True"
-                                AcceptsReturn="False"
-                                Text="{Binding FilterNoteText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-                        </GroupBox>
-
-                        <GroupBox
-                            Margin="5,5,0,2"
-                            BorderBrush="{StaticResource PrimaryHueDarkBrush}"
-                            BorderThickness="1"
-                            Header="{helpers:Localization Notes_FilterAssociationsDescriptionText}">
-                            <TextBox
-                                x:Name="FilterAssociationsText"
-                                MinWidth="125"
-                                Margin="5,0,5,5"
-                                VerticalAlignment="Center"
-                                materialDesign:TextFieldAssist.HasClearButton="True"
-                                AcceptsReturn="False"
-                                Text="{Binding FilterAssociationsDescriptionText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Header="Filter by Label">
+                            <ListBox
+                                x:Name="LabelsFilter"
+                                MaxHeight="200"
+                                HorizontalAlignment="Stretch"
+                                IsEnabled="True"
+                                ItemsSource="{Binding FilterLabelsChoices}"
+                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                SelectionChanged="SelectionLabelsChanged"
+                                SelectionMode="Multiple"
+                                Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <ContentControl Content="{Binding Text}" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
                         </GroupBox>
                     </StackPanel>
                 </StackPanel>
@@ -324,11 +324,7 @@
                 <DataGridTemplateColumn MinWidth="80" Header="{helpers:Localization Notes_OpenClosed}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <materialDesign:PackIcon
-                                Width="30"
-                                Height="30"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center">
+                            <materialDesign:PackIcon HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <materialDesign:PackIcon.Style>
                                     <Style TargetType="materialDesign:PackIcon">
                                         <Setter Property="Kind" Value="EmailOutline" />
@@ -345,7 +341,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn MinWidth="90" Header="{helpers:Localization Notes_UnreadReplies}">
+                <!--<DataGridTemplateColumn MinWidth="90" Header="{helpers:Localization Notes_UnreadReplies}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <materialDesign:PackIcon
@@ -366,7 +362,7 @@
                             </materialDesign:PackIcon>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
                 <DataGridTemplateColumn
                     Width="*"
                     MinWidth="250"
@@ -418,7 +414,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn MinWidth="100" Header="{helpers:Localization Notes_Note_Created}">
+                <!--<DataGridTemplateColumn MinWidth="100" Header="{helpers:Localization Notes_Note_Created}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -430,8 +426,8 @@
                                 TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn MinWidth="100" Header="{helpers:Localization Notes_Note_Modified}">
+                </DataGridTemplateColumn>-->
+                <!--<DataGridTemplateColumn MinWidth="100" Header="{helpers:Localization Notes_Note_Modified}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -442,7 +438,7 @@
                                 TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
                 <DataGridTemplateColumn MinWidth="150" Header="{helpers:Localization Notes_Note_ModifiedBy}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -470,12 +466,12 @@
             Visibility="{Binding ProgressBarVisibility}"
             Value="0" />
 
-        <GridSplitter
+        <!--<GridSplitter
             Grid.Column="2"
             Width="5"
-            HorizontalAlignment="Stretch" />
+            HorizontalAlignment="Stretch" />-->
 
-        <ScrollViewer
+        <!--<ScrollViewer
             Name="NoteEditorScrollView"
             Grid.Column="3"
             VerticalScrollBarVisibility="Auto">
@@ -632,6 +628,6 @@
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
-        </ScrollViewer>
+        </ScrollViewer>-->
     </Grid>
 </UserControl>

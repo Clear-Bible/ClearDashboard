@@ -130,7 +130,7 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
             )
             {
                 await _vm.AddReplyToNote(args.NoteViewModelWithReplies, args.Text);
-                NoteEditorScrollView.ScrollToEnd();
+                //NoteEditorScrollView.ScrollToEnd();
                 Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NoteReplyCount, 1);
             }
             
