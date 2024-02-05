@@ -1373,16 +1373,19 @@
     <value>Ștergeți această notă?</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>De asociații</value>
+    <value>Filtru după vers</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filtre</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>Prin etichete</value>
+    <value>Filtru după etichete</value>
+  </data>
+  <data name="Notes_FilterNoteStatus" xml:space="preserve">
+    <value>Filtru după stare</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>Prin text de notă</value>
+    <value>Filtru prin text</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>Orice</value>
@@ -1394,7 +1397,7 @@
     <value>Deschis</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>De către utilizatori</value>
+    <value>Filtru de autor</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Adăugați o etichetă</value>
@@ -1457,7 +1460,7 @@
     <value>Modificat</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>Utilizator</value>
+    <value>Autor</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>stare</value>
@@ -1467,6 +1470,9 @@
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
     <value>Închis</value>
+  </data>
+  <data name="Notes_Note_Verse" xml:space="preserve">
+    <value>Verset</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>Asociațiile</value>
@@ -1486,11 +1492,14 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>Văzut</value>
   </data>
+  <data name="Notes_NoteStatus_Archived" xml:space="preserve">
+    <value>Arhivat</value>
+  </data>
   <data name="Notes_NoteText" xml:space="preserve">
     <value>Text</value>
   </data>
   <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>Deschis inchis</value>
+    <value>stare</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Parte</value>
@@ -1538,7 +1547,7 @@
     <value>Creați interlinear</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
-    <value>Metadate JSON</value>
+    <value>JSON Metadate</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
     <value>Paralelizează versetele corporale</value>
@@ -1550,7 +1559,7 @@
     <value>Algoritm de aliniere a cuvântului mașinii</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Antrenează modelul simetrizat?</value>
+    <value>Modelul simetrizat de antrenament?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>Tren</value>
@@ -1592,7 +1601,7 @@
     <value>Adăugați text la vizualizare</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați text la New View</value>
+    <value>Adăugați text la vizualizare nouă</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Adăugați la vizualizare</value>
@@ -1895,7 +1904,7 @@
     <value>Text model (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext funcționează, dar nu este conectat.</value>
+    <value>Paratext rulează, dar nu este conectat.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>Proiect paratext</value>
@@ -2078,7 +2087,7 @@
     <value>Judecători</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentări</value>
+    <value>Lamentații</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
     <value>Levitic</value>

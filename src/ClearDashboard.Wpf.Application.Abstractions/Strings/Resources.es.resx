@@ -500,7 +500,7 @@
     <value>Parte fuente</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Reflexión de origen</value>
+    <value>Fuente Ref.</value>
   </data>
   <data name="BulkAlignmentReview_Target" xml:space="preserve">
     <value>Objetivo</value>
@@ -650,13 +650,13 @@
     <value>Eliminar la alineación?</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>Eliminar la alineación</value>
+    <value>Eliminar alineación</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
     <value>Eliminar la alineación de '{0}'?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>¿Eliminar todas las alineaciones?</value>
+    <value>Eliminar todas las alineaciones?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>El token '{0}' tiene múltiples alineaciones definidas. Haga clic en '{1}' eliminará todas las alineaciones.</value>
@@ -713,7 +713,7 @@
     <value>División de tres vías</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Un si unión a la token compuesta</value>
+    <value>Un si unir un token compuesto</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -872,7 +872,7 @@
     <value>Agregar significado</value>
   </data>
   <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
-    <value>Agregar un significado para este lema</value>
+    <value>Agregue un significado para este lema</value>
   </data>
   <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
     <value>Agregar un dominio semántico</value>
@@ -1028,7 +1028,7 @@
     <value>Importación comprobada</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
-    <value>Lexeme o coincidencias de forma</value>
+    <value>Lexeme o coincidencias de formulario</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
     <value>No hay más registros para importar.</value>
@@ -1373,16 +1373,19 @@
     <value>Eliminar esta nota?</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Por asociaciones</value>
+    <value>Filtrar por verso</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filtros</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>Por etiquetas</value>
+    <value>Filtrar por etiquetas</value>
+  </data>
+  <data name="Notes_FilterNoteStatus" xml:space="preserve">
+    <value>Filtrar por estado</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>Por nota texto</value>
+    <value>Filtrar por texto</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>Cualquier</value>
@@ -1394,7 +1397,7 @@
     <value>Abierto</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>Por usuarios</value>
+    <value>Filtrar por autor</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Agregar una etiqueta</value>
@@ -1409,7 +1412,7 @@
     <value>¿Quieres eliminar la etiqueta:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>¿Quieres disociar la etiqueta:</value>
+    <value>¿Quieres disociar la etiqueta?</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>del grupo de etiquetas:</value>
@@ -1418,7 +1421,7 @@
     <value>Agregar grupo de etiquetas</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Agregar un grupo de etiquetas</value>
+    <value>Agregar un grupo de etiqueta</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Un grupo de etiquetas ya existe con el nombre</value>
@@ -1457,7 +1460,7 @@
     <value>Modificado</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>Usuario</value>
+    <value>Autor</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>Estado</value>
@@ -1467,6 +1470,9 @@
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
     <value>Cerrado</value>
+  </data>
+  <data name="Notes_Note_Verse" xml:space="preserve">
+    <value>Verso</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>Asociaciones</value>
@@ -1486,11 +1492,14 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>Visto</value>
   </data>
+  <data name="Notes_NoteStatus_Archived" xml:space="preserve">
+    <value>Archivado</value>
+  </data>
   <data name="Notes_NoteText" xml:space="preserve">
     <value>Texto</value>
   </data>
   <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>Abrir cerrado</value>
+    <value>Estado</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Parte</value>
@@ -1622,7 +1631,7 @@
     <value>Hija</value>
   </data>
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>Eliminar la alineación</value>
+    <value>Eliminar alineación</value>
   </data>
   <data name="Pds_DeleteParallelLine" xml:space="preserve">
     <value>¿Estás seguro de que quieres eliminar esta alineación? Todas las notas, alineaciones e interlineal asociados con esta alineación se eliminarán y no se pueden recuperar.</value>
@@ -1637,7 +1646,7 @@
     <value>Diccionario</value>
   </data>
   <data name="Pds_DisabledNotice" xml:space="preserve">
-    <value>Deshabilitado mientras las tareas de fondo funcionan</value>
+    <value>Desactivado mientras las tareas de fondo funcionan</value>
   </data>
   <data name="Pds_ExistingProject" xml:space="preserve">
     <value>El nombre del proyecto ya existe: no se puede importar</value>
@@ -1703,7 +1712,7 @@
     <value>Estándar</value>
   </data>
   <data name="Pds_StartParatextFirst" xml:space="preserve">
-    <value>Inicie el paratext primero</value>
+    <value>Iniciar PARATEXT primero</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
     <value>Estudiobible</value>
@@ -2072,7 +2081,7 @@
     <value>Joshua</value>
   </data>
   <data name="ProperCase_Jude" xml:space="preserve">
-    <value>Yacuana</value>
+    <value>Judío</value>
   </data>
   <data name="ProperCase_Judges" xml:space="preserve">
     <value>Jueces</value>
@@ -2285,7 +2294,7 @@
     <value>Guardado en servidor remoto</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Guardar el usuario de GitLab al servidor</value>
+    <value>Guardar el usuario de GitLab en el servidor</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
     <value>Guardar ajustes</value>

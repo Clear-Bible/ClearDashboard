@@ -179,7 +179,7 @@
     <value>Sem erros</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
-    <value>Salve erros USFM no arquivo</value>
+    <value>Salvar erros USFM no arquivo</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
     <value>Selecionar tudo</value>
@@ -965,7 +965,7 @@
     <value>Encontrar tudo</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
-    <value>Formulários</value>
+    <value>Formas</value>
   </data>
   <data name="LexiconEdit_Fully" xml:space="preserve">
     <value>Completamente</value>
@@ -1373,16 +1373,19 @@
     <value>Excluir esta nota?</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Por associações</value>
+    <value>Filtro por versículo</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filtros</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>Por etiquetas</value>
+    <value>Filtre por etiquetas</value>
+  </data>
+  <data name="Notes_FilterNoteStatus" xml:space="preserve">
+    <value>Filtro por status</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>Por nota de nota</value>
+    <value>Filtre por texto</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>Qualquer</value>
@@ -1394,7 +1397,7 @@
     <value>Abrir</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>Por usuários</value>
+    <value>Filtro por autor</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Adicione um rótulo</value>
@@ -1457,7 +1460,7 @@
     <value>Modificado</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>Do utilizador</value>
+    <value>Autor</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>Status</value>
@@ -1467,6 +1470,9 @@
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
     <value>Fechado</value>
+  </data>
+  <data name="Notes_Note_Verse" xml:space="preserve">
+    <value>Versículo</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>Associações</value>
@@ -1486,11 +1492,14 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>Visto</value>
   </data>
+  <data name="Notes_NoteStatus_Archived" xml:space="preserve">
+    <value>Arquivado</value>
+  </data>
   <data name="Notes_NoteText" xml:space="preserve">
     <value>Texto</value>
   </data>
   <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>Aberto fechado</value>
+    <value>Status</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Papel</value>
@@ -1754,7 +1763,7 @@
     <value>Filtro:</value>
   </data>
   <data name="Pins_Forms" xml:space="preserve">
-    <value>Formulários</value>
+    <value>Formas</value>
   </data>
   <data name="Pins_Gloss" xml:space="preserve">
     <value>Lustro</value>
@@ -1766,7 +1775,7 @@
     <value>Lexeme</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
-    <value>Lexeme tipo</value>
+    <value>Lexeme Type</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
     <value>Referências de carga</value>
@@ -1817,7 +1826,7 @@
     <value>Paratext beta não está funcionando</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
-    <value>Cancelamento ...</value>
+    <value>Cancelando ...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Projetos de colaboração</value>
@@ -1907,7 +1916,7 @@
     <value>Estamos quase lá!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>Clique aqui para visualizar vídeos 'Painel de início'</value>
+    <value>Clique aqui para ver os vídeos 'Painel de início'</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
     <value>Depois de clicar no botão 'Criar' abaixo, estaremos tokenizando, alinhando e preparando seu projeto. Todas as etapas aparecerão aqui à medida que são processadas. Enquanto você espera, fique à vontade para clicar no link abaixo e assistir a alguns vídeos úteis para começar a usar o ClearDashboard!</value>
@@ -2249,7 +2258,7 @@
     <value>Grupo</value>
   </data>
   <data name="Settings_ImportLabelGroups" xml:space="preserve">
-    <value>Importar grupos de etiquetas</value>
+    <value>Grupos de etiquetas de importação</value>
   </data>
   <data name="Settings_LabelGroupsExported" xml:space="preserve">
     <value>Grupos de etiquetas exportados para:</value>
@@ -2279,13 +2288,13 @@
     <value>Reservado para expansão futura</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaure o usuário da colaboração</value>
+    <value>Restaurar o usuário de colaboração</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Salvo para servidor remoto</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Salvar o usuário do GitLab no servidor</value>
+    <value>Salve o usuário do GitLab no servidor</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
     <value>Salvar configurações</value>

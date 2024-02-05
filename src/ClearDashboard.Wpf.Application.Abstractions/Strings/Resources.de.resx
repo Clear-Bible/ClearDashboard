@@ -122,7 +122,7 @@
     <value>Zusammenarbeit E -Mail:</value>
   </data>
   <data name="AccountInfo_CollaborationUserIdLabel" xml:space="preserve">
-    <value>Kollaboration BenutzerID:</value>
+    <value>Collaboration UserId:</value>
   </data>
   <data name="AccountInfo_CollaborationUsernameLabel" xml:space="preserve">
     <value>Kollaboration Benutzername:</value>
@@ -476,7 +476,7 @@
     <value>Maschine</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsInvalid" xml:space="preserve">
-    <value>Markieren Sie als "ungültig" ausgewählt.</value>
+    <value>Markieren Sie als "ungültig" ausgewählt</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
     <value>Markieren Sie als "Bedarfsüberprüfung" ausgewählt.</value>
@@ -1253,7 +1253,7 @@
     <value>Datenbank erstellen ...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
-    <value>Vervollständigen Sie vollständig ... Nachladen der Schnittstelle neu</value>
+    <value>Führen Sie vollständig zusammen ... neu lädt die Schnittstelle neu</value>
   </data>
   <data name="MergeDialog_OperationCancelled" xml:space="preserve">
     <value>Operation storniert</value>
@@ -1292,7 +1292,7 @@
     <value>Überprüfen Sie die Verfügbarkeit der Benutzer</value>
   </data>
   <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
-    <value>Erstellen Sie einen Kollaborationsbenutzer</value>
+    <value>Erstellen Sie einen Benutzer der Zusammenarbeit</value>
   </data>
   <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
     <value>Kollaborationsbenutzer erstellen</value>
@@ -1340,7 +1340,7 @@
     <value>Nutzername:</value>
   </data>
   <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
-    <value>Der Benutzer ist bereits auf dem System!</value>
+    <value>Der Benutzer ist bereits im System!</value>
   </data>
   <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
     <value>Validieren Sie den E -Mail -Code</value>
@@ -1373,16 +1373,19 @@
     <value>Diese Notiz löschen?</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Durch Assoziationen</value>
+    <value>Filter durch Vers</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filter</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>Nach Etiketten</value>
+    <value>Filter durch Etiketten</value>
+  </data>
+  <data name="Notes_FilterNoteStatus" xml:space="preserve">
+    <value>Filter nach Status</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>Nach Anmerkung Text</value>
+    <value>Filter nach Text</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>Beliebig</value>
@@ -1394,7 +1397,7 @@
     <value>Offen</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>Von Benutzern</value>
+    <value>Filter durch Autor</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Fügen Sie ein Etikett hinzu</value>
@@ -1409,7 +1412,7 @@
     <value>Möchten Sie das Etikett löschen:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>Möchten Sie das Etikett disassoziieren:</value>
+    <value>Möchten Sie das Etikett zerlegen:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>aus der Labelgruppe:</value>
@@ -1421,7 +1424,7 @@
     <value>Fügen Sie eine Etikettengruppe hinzu</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>Eine Labelgruppe existiert bereits mit Namen</value>
+    <value>Eine Etikettengruppe existiert bereits mit Namen</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>Labelgruppe initialisieren</value>
@@ -1457,7 +1460,7 @@
     <value>Geändert</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>Benutzer</value>
+    <value>Autor</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>Status</value>
@@ -1467,6 +1470,9 @@
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
     <value>Geschlossen</value>
+  </data>
+  <data name="Notes_Note_Verse" xml:space="preserve">
+    <value>Vers</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>Assoziationen</value>
@@ -1486,11 +1492,14 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>Gesehen</value>
   </data>
+  <data name="Notes_NoteStatus_Archived" xml:space="preserve">
+    <value>Archiviert</value>
+  </data>
   <data name="Notes_NoteText" xml:space="preserve">
     <value>Text</value>
   </data>
   <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>Offen geschlossen</value>
+    <value>Status</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Teil</value>
@@ -1568,7 +1577,7 @@
     <value>Wählen Sie einen SMT -Algorithmus zum Training aus</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie die Zulassung der Masse hinzu, um sie anzeigen</value>
+    <value>Fügen Sie die Massengenehmigung hinzu, um sie anzeigen</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>Zur Anzeige hinzufügen</value>
@@ -1592,7 +1601,7 @@
     <value>Fügen Sie Text zur Anzeige hinzu</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie Text zur neuen Ansicht hinzu</value>
+    <value>Fügen Sie der neuen Ansicht Text hinzu</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Zur Anzeige hinzufügen</value>
@@ -1625,7 +1634,7 @@
     <value>Ausrichtung löschen</value>
   </data>
   <data name="Pds_DeleteParallelLine" xml:space="preserve">
-    <value>Sind Sie sicher, dass Sie diese Ausrichtung löschen möchten? Alle Notizen, Ausrichtungen und mit dieser Ausrichtung verbundenen Interlinears werden gelöscht und können nicht wiederhergestellt werden.</value>
+    <value>Sind Sie sicher, dass Sie diese Ausrichtung löschen möchten? Alle Notizen, Ausrichtungen und mit dieser Ausrichtung verbundene Interlinears werden gelöscht und können nicht wiederhergestellt werden.</value>
   </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Interlinear löschen</value>
@@ -1712,7 +1721,7 @@
     <value>StudyBiblleaTditions</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Gehen Sie zu Paratext und wechseln Sie Projekte. Das derzeit an das Cleardashboard -Plugin verbundene Paratext -Projekt entspricht nicht dem Korpus in diesem ClearDashboard -Projekt.</value>
+    <value>Gehen Sie zu Paratext und wechseln Sie Projekte. Das derzeit an das Cleardashboard -Plugin angeschlossene Paratext -Projekt entspricht nicht dem Korpus in diesem ClearDashboard -Projekt.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Ziel</value>
@@ -1847,7 +1856,7 @@
     <value>Projekt löschen</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Buchauswahl aktivieren</value>
+    <value>Aktivieren Sie die Buchauswahl</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
     <value>Wenn Sie überprüft werden, können Sie auswählen, welche Bücher zu verarbeiten sind.</value>
@@ -1859,10 +1868,10 @@
     <value>Serverprojekt importieren</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Aktivieren Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
+    <value>Überprüfen Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>NT Griechische biblische Texte einschließen?</value>
+    <value>NT -griechische biblische Texte einschließen?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>OT hebräische biblische Texte einschließen?</value>
@@ -2054,7 +2063,7 @@
     <value>James</value>
   </data>
   <data name="ProperCase_Jeremiah" xml:space="preserve">
-    <value>Jeremia</value>
+    <value>Jeremiah</value>
   </data>
   <data name="ProperCase_Job" xml:space="preserve">
     <value>Arbeit</value>

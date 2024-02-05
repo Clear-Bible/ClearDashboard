@@ -116,7 +116,7 @@
     <value>ClearDashboard用戶ID：</value>
   </data>
   <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
-    <value>Cleardashboard用戶名：</value>
+    <value>ClearDashboard用戶名：</value>
   </data>
   <data name="AccountInfo_CollaborationEmailLabel" xml:space="preserve">
     <value>協作電子郵件：</value>
@@ -449,13 +449,13 @@
     <value>散裝對齊編輯</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>批量對齊審查</value>
+    <value>批量對準評論</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>數數</value>
   </data>
   <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>按地面文本計數</value>
+    <value>按表面文本計數</value>
   </data>
   <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
     <value>通過培訓文本計數</value>
@@ -491,7 +491,7 @@
     <value>部分</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>樞密性的單詞</value>
+    <value>樞紐的單詞</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>來源</value>
@@ -632,7 +632,7 @@
     <value>添加對齊方式？</value>
   </data>
   <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>用'{1}'對齊'{0}'？</value>
+    <value>與'{1}'對齊'{0}'？</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
     <value>結盟</value>
@@ -1025,7 +1025,7 @@
     <value>查找具有與目標匹配的一個或多個翻譯的詞彙</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
-    <value>導入檢查</value>
+    <value>進口檢查</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexeme或形式匹配</value>
@@ -1067,10 +1067,10 @@
     <value>需要名字</value>
   </data>
   <data name="LicenseValidator_LastMissing" xml:space="preserve">
-    <value>需要姓氏</value>
+    <value>需要姓</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>需要許可密鑰</value>
+    <value>需要許可證密鑰</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
@@ -1373,16 +1373,19 @@
     <value>刪除此註釋？</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>通過協會</value>
+    <value>通過經文過濾</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>過濾器</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>通過標籤</value>
+    <value>通過標籤過濾</value>
+  </data>
+  <data name="Notes_FilterNoteStatus" xml:space="preserve">
+    <value>按狀態過濾</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>通過注意文本</value>
+    <value>通過文本過濾</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>任何</value>
@@ -1394,7 +1397,7 @@
     <value>打開</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>由用戶</value>
+    <value>作者過濾</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>添加標籤</value>
@@ -1421,7 +1424,7 @@
     <value>添加標籤組</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>標籤組已經存在，名稱為</value>
+    <value>一個標籤組已經存在</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>初始化標籤組</value>
@@ -1457,7 +1460,7 @@
     <value>修改的</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>用戶</value>
+    <value>作者</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>地位</value>
@@ -1467,6 +1470,9 @@
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
     <value>關閉</value>
+  </data>
+  <data name="Notes_Note_Verse" xml:space="preserve">
+    <value>詩</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>協會</value>
@@ -1486,11 +1492,14 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>看到</value>
   </data>
+  <data name="Notes_NoteStatus_Archived" xml:space="preserve">
+    <value>存檔</value>
+  </data>
   <data name="Notes_NoteText" xml:space="preserve">
     <value>文字</value>
   </data>
   <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>打開關閉</value>
+    <value>地位</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>部分</value>
@@ -1502,7 +1511,7 @@
     <value>將此註釋發送到Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>象徵化的語料庫</value>
+    <value>令牌化語料庫</value>
   </data>
   <data name="Notes_TranslationSet" xml:space="preserve">
     <value>翻譯集</value>
@@ -1544,10 +1553,10 @@
     <value>並行化語料庫經文</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>機詞對齊算法</value>
+    <value>機器字對準算法</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>機詞對齊算法</value>
+    <value>機器字對準算法</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>火車對稱模型？</value>
@@ -1583,13 +1592,13 @@
     <value>創建新單詞對齊</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>創建新的語料庫</value>
+    <value>創建新的語料庫令牌化</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
     <value>添加新的Interlinear</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
-    <value>添加文本查看</value>
+    <value>添加文字以查看</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
     <value>將文本添加到新視圖</value>
@@ -1610,7 +1619,7 @@
     <value>更改內容的縮放級別</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>顧問Notes</value>
+    <value>顧問說明</value>
   </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>創建新單詞對齊</value>
@@ -1736,7 +1745,7 @@
     <value>放大內容</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>從內容中縮小</value>
+    <value>縮小內容</value>
   </data>
   <data name="PHM" xml:space="preserve">
     <value>PHM</value>
@@ -1790,7 +1799,7 @@
     <value>字首</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>展示反向翻譯</value>
+    <value>展示退縮</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>幹</value>
@@ -1823,7 +1832,7 @@
     <value>協作項目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>創建您的項目以開始。</value>
+    <value>創建您的項目以入門。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>創建一個新項目</value>
@@ -1874,7 +1883,7 @@
     <value>無匹配。</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>這裡很孤單。請創建一個新項目。</value>
+    <value>這裡很孤獨。請創建一個新項目。</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
     <value>未安裝paratext。請安裝Paratext並重新運行ClearDashboard應用程序。</value>
@@ -1883,7 +1892,7 @@
     <value>paratext不運行</value>
   </data>
   <data name="ProjectPicker_OpenRecent" xml:space="preserve">
-    <value>近期開放</value>
+    <value>公開最近</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
     <value>PARATEXT</value>
@@ -2162,7 +2171,7 @@
     <value>解密許可證密鑰的內容與您提供的信息不符。</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
-    <value>您的許可密鑰丟失或損壞。</value>
+    <value>您的許可證密鑰要么缺少或損壞。</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
     <value>歡迎來到Cleardashboard！請輸入您的註冊信息。</value>
@@ -2225,7 +2234,7 @@
     <value>在實驗組中啟用外部Paratext註釋</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
-    <value>啟用外部Paratext註釋</value>
+    <value>啟用外部paratext註釋</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>啟用詞典進口</value>
@@ -2255,7 +2264,7 @@
     <value>標籤組導出到：</value>
   </data>
   <data name="Settings_LabelGroupsImported" xml:space="preserve">
-    <value>從：</value>
+    <value>從以下導入的標籤組：</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>多監視器支持</value>
@@ -2297,7 +2306,7 @@
     <value>ClearDashboard設置</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>顯示與儀表板不同的顯示器上展示的視圖</value>
+    <value>顯示出與儀表板不同的顯示器上擴展的視圖</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
     <value>對於具有三個或三個或以上監視器的系統，在第三監視器上顯示擴展的視圖</value>
@@ -2336,7 +2345,7 @@
     <value>發行說明</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>顯示預發行</value>
+    <value>顯示預釋放</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
     <value>更新到新版本的ClearDashboard</value>
