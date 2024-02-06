@@ -7,12 +7,21 @@
              xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
              xmlns:cm="http://caliburnmicro.com"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+             helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              
              >
     <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Rectangle Grid.Row="0" Fill="Blue"></Rectangle>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <notes:NoteCollectionDisplay
           x:Name="NotesControl"
           Margin="0,-20"
@@ -110,7 +119,19 @@
                 </i:Interaction.Triggers>
             </notes:NoteCollectionDisplay>
         </ScrollViewer>
-        <ProgressBar
+       <StackPanel Grid.Row="2"
+               HorizontalAlignment="Center"
+               Orientation="Horizontal">
+            <Button x:Name="Close"
+                   Content="{helpers:Localization Close}"
+                   Style="{StaticResource AlternativeStyle}">
+                <!--<i:EventTrigger EventName="NoteSendToParatext">
+                    <i:CallMethodAction MethodName="NoteSendToParatext" TargetObject="{Binding }" />
+                </i:EventTrigger>-->
+            </Button>
+          
+        </StackPanel>
+        <ProgressBar Grid.Row="1"
             Width="76"
             Height="75"
             HorizontalAlignment="Center"
