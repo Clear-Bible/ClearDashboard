@@ -280,7 +280,6 @@
             MouseRightButtonDown="OnNoteRightButtonDown"
             MouseRightButtonUp="OnNoteRightButtonUp"
             MouseWheel="OnNoteMouseWheel"
-            Cursor="Hand"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenNoteIndicatorVisibility}" />
 
         <!--  External Notes  -->
