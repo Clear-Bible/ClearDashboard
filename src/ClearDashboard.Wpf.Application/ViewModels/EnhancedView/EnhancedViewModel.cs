@@ -295,7 +295,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 _showNoteIndicatorsCheckbox = value;
                 Settings.Default.NotesIndicatorVisibility = value;
-                NotifyOfPropertyChange(() => _showNoteIndicatorsCheckbox);
+                NotifyOfPropertyChange(() => ShowNoteIndicatorsCheckbox);
             }
         }
 

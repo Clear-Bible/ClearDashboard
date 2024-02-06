@@ -139,86 +139,18 @@
 
 
                 <!--  Jots Notes Indicator  -->
-                <Grid>
-                    <iconPacks:PackIconBootstrapIcons
-                        x:Name="MultipleJotsIcon"
-                        Margin="3,0,0,0"
-                        Background="White"
-                        Cursor="Hand"
-                        Foreground="Orange"
-                        IsHitTestVisible="True"
-                        Kind="ChatRightDots"
-                        MouseLeftButtonDown="OnNoteLeftButtonDown"
-                        Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenNoteIndicatorVisibility}">
-                        <iconPacks:PackIconBootstrapIcons.Style>
-                            <Style TargetType="iconPacks:PackIconBootstrapIcons">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                                <Style.Triggers>
-                                    <MultiTrigger>
-                                        <MultiTrigger.Conditions>
-                                            <!--  show notes checkbox in the Enhanced View settings panel  -->
-                                            <!--<Condition Property="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowNoteIndicatorsCheckbox}" Value="True" />-->
-                                            <!--  show notes because we have a note  -->
-                                            <!--<Condition Property="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenNoteIndicatorVisibility}" Value="True" />-->
-                                        </MultiTrigger.Conditions>
-                                        <MultiTrigger.Setters>
-                                            <Setter Property="Visibility" Value="Visible" />
-                                        </MultiTrigger.Setters>
-                                    </MultiTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </iconPacks:PackIconBootstrapIcons.Style>
-                    </iconPacks:PackIconBootstrapIcons>
-
-                    <!--
                 <iconPacks:PackIconBootstrapIcons
-                    x:Name="ExternalJotsIcon"
-                    Margin="0,2,0,0"
+                    x:Name="MultipleJotsIcon"
+                    Margin="3,0,0,0"
+                    Background="White"
                     Cursor="Hand"
-                    Foreground="MediumPurple"
-                    MouseDown="PackIconModern_MouseDown">
-                    <iconPacks:PackIconBootstrapIcons.Style>
-                        <Style TargetType="{x:Type iconPacks:PackIconBootstrapIcons}">
-                            <Setter Property="Kind" Value="ChatSquareText" />
-                            <Setter Property="Visibility" Value="Collapsed" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenNoteIndicatorVisibility}" Value="True">
-                                    <Setter Property="Kind" Value="ChatSquareText" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding IsFirstExternalNoteToken}" Value="True">
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </iconPacks:PackIconBootstrapIcons.Style>
-
-                    <iconPacks:PackIconModern.ToolTip>
-                        <ToolTip
-                            Background="LightYellow"
-                            HasDropShadow="false"
-                            HorizontalOffset="10"
-                            Placement="Left"
-                            PlacementRectangle="50,0,0,0"
-                            VerticalOffset="20">
-                            <StackPanel Orientation="Vertical">
-                                <ListView ItemsSource="{Binding ExternalNotes}">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Vertical">
-                                                <Separator />
-                                                <Label Content="{Binding ExternalLabelsString}" Foreground="{StaticResource BlueMidBrush}" />
-                                                <Label Content="{Binding ExternalNoteMessagesString}" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </StackPanel>
-                        </ToolTip>
-                    </iconPacks:PackIconModern.ToolTip>
+                    Foreground="Orange"
+                    IsHitTestVisible="True"
+                    Kind="ChatRightDots"
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenNoteIndicatorVisibility}"
+                    MouseLeftButtonDown="OnNoteLeftButtonDown">
 
                 </iconPacks:PackIconBootstrapIcons>
-                    -->
-                </Grid>
             </StackPanel>
 
             <!--  Token Button  -->
