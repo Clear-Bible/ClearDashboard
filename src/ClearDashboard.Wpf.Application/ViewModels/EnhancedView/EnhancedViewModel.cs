@@ -282,6 +282,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        private bool _showNoteIndicatorsCheckbox = Settings.Default.NotesIndicatorVisibility;
+        public bool ShowNoteIndicatorsCheckbox
+        {
+            get => _showNoteIndicatorsCheckbox;
+            set
+            {
+                _showNoteIndicatorsCheckbox = value;
+                Settings.Default.NotesIndicatorVisibility = value;
+                NotifyOfPropertyChange(() => ShowNoteIndicatorsCheckbox);
+            }
+        }
+
+
         private bool _paragraphMode = Settings.Default.ParagraphMode;
         public bool ParagraphMode
         {
@@ -928,6 +941,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async void TokenLeftButtonDown(object sender, TokenEventArgs e)
         {
+            // 3
+
             if (e.IsShiftPressed && e.TokenDisplay.VerseDisplay is AlignmentDisplayViewModel alignmentDisplayViewModel)
             {
                 if (SelectionManager.AnySourceTokens && SelectionManager.AnyTargetTokens)

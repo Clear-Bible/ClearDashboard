@@ -1252,6 +1252,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
+            // 1
+
             RaiseTokenEvent(TokenLeftButtonDownEvent, e);
 
             HighlightAlignedToken();
@@ -1459,12 +1461,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 RoutedEvent = routedEvent,
                 TokenDisplayViewModel = tokenDisplay!,
                 MousePosition = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(control))
-        });
+            });
         }
 
         private void OnNoteLeftButtonDown(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteIndicatorLeftButtonDownEvent, e);
+            // 1
+            RaiseTokenEvent(TokenLeftButtonDownEvent, e);
+            //RaiseNoteEvent(NoteIndicatorLeftButtonDownEvent, e);
         }
 
         private void OnNoteLeftButtonUp(object sender, RoutedEventArgs e)
@@ -2134,6 +2138,25 @@ namespace ClearDashboard.Wpf.Application.UserControls
             TokenForeground = TokenDisplayViewModel.VerseDisplay is AlignmentDisplayViewModel
                 ? TokenDisplayViewModel.IsAligned ? TokenColor : TokenAlternateColor
                 : TokenColor;
+
+            Debug.WriteLine($"CalculateLayout  {TokenDisplayViewModel.PaddingBefore} : {tokenLeftMargin}");
+            // add spacing for the external notes icon and the note indicator
+            if (TokenDisplayViewModel.HasExternalNotes == false && TokenDisplayViewModel.TokenHasNote)
+            {
+                // only note indicator
+                tokenLeftMargin = tokenLeftMargin + 10;
+            }
+            else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote)
+            {
+                // both external notes and note indicator
+                tokenLeftMargin = tokenLeftMargin + 25;
+            }
+            else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote == false)
+            {
+                // only external notes
+                tokenLeftMargin = tokenLeftMargin;
+            }
+
             TokenMargin = new Thickness(tokenLeftMargin, 0, tokenRightMargin, 0);
             SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.SurfaceText : TokenDisplayViewModel.SurfaceText.Trim();
             ExtendedProperties = TokenDisplayViewModel.ExtendedProperties;
