@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+	<Project>
+		<PropertyGroup>
+			<!--see: https://github.com/dotnet/sdk/issues/36666#issuecomment-1814835637 -->
+			<EnableSourceControlManagerQueries>true</EnableSourceControlManagerQueries>
+		</PropertyGroup>
+	</Project>
