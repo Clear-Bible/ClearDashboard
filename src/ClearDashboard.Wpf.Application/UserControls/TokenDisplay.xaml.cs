@@ -1467,8 +1467,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnNoteLeftButtonDown(object sender, RoutedEventArgs e)
         {
             // 1
-            RaiseTokenEvent(TokenLeftButtonDownEvent, e);
-            //RaiseNoteEvent(NoteIndicatorLeftButtonDownEvent, e);
+            //RaiseTokenEvent(TokenLeftButtonDownEvent, e);
+            RaiseNoteEvent(NoteIndicatorLeftButtonDownEvent, e);
         }
 
         private void OnNoteLeftButtonUp(object sender, RoutedEventArgs e)

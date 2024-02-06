@@ -124,6 +124,9 @@
                             <b:EventTrigger EventName="NoteIndicatorMouseEnter">
                                 <b:CallMethodAction MethodName="NoteIndicatorMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
                             </b:EventTrigger>
+                            <b:EventTrigger EventName="NoteLeftButtonDown">
+                                <b:CallMethodAction MethodName="NoteLeftButtonDown" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                            </b:EventTrigger>
                             <b:EventTrigger EventName="NoteCreate">
                                 <b:CallMethodAction MethodName="NoteCreate" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
                             </b:EventTrigger>
