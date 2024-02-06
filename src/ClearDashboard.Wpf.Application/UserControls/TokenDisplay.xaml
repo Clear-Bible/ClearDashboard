@@ -147,10 +147,8 @@
                     Foreground="Orange"
                     IsHitTestVisible="True"
                     Kind="ChatRightDots"
-                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenNoteIndicatorVisibility}"
-                    MouseLeftButtonDown="OnNoteLeftButtonDown">
-
-                </iconPacks:PackIconBootstrapIcons>
+                    MouseLeftButtonDown="OnNoteLeftButtonDown"
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenNoteIndicatorVisibility}" />
             </StackPanel>
 
             <!--  Token Button  -->
@@ -272,7 +270,6 @@
             Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorMargin}"
             HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
             Cursor="Hand"
-            Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorComputedColor}"
             MouseEnter="OnNoteMouseEnter"
             MouseLeave="OnNoteMouseLeave"
             MouseLeftButtonDown="OnNoteLeftButtonDown"
@@ -280,7 +277,18 @@
             MouseRightButtonDown="OnNoteRightButtonDown"
             MouseRightButtonUp="OnNoteRightButtonUp"
             MouseWheel="OnNoteMouseWheel"
-            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenNoteIndicatorVisibility}" />
+            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenNoteIndicatorVisibility}">
+            <Rectangle.Style>
+                <Style TargetType="Rectangle">
+                    <Setter Property="Fill" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorComputedColor}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsNoteSelected}" Value="True">
+                            <Setter Property="Fill" Value="Orange" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Rectangle.Style>
+        </Rectangle>
 
         <!--  External Notes  -->
         <Border
