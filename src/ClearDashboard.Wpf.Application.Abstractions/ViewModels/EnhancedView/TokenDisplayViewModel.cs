@@ -383,19 +383,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private bool _isNoteSelected = false;
-        public bool IsNoteSelected
-        {
-            get => _isNoteSelected;
-            set 
-            { 
-                _isNoteSelected = value;
-                NotifyOfPropertyChange(nameof(IsNoteSelected));
-            }
-        }
-
-
-
         public void OnToolTipOpening(ToolTipEventArgs e)
         {
             if (!IsHighlighted && string.IsNullOrWhiteSpace(ExtendedProperties))
