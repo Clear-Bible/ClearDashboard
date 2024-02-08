@@ -72,7 +72,10 @@ public class JotsEditorViewModel : ApplicationScreen
     }
     #endregion
 
-
+    public async void Close()
+    {
+        await this.DeactivateAsync(true);
+    }
 
     #region NoteControl
 

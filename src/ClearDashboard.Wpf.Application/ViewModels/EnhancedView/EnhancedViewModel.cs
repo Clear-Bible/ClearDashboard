@@ -282,6 +282,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        private bool _showNoteIndicatorsCheckbox = Settings.Default.NotesIndicatorVisibility;
+        public bool ShowNoteIndicatorsCheckbox
+        {
+            get => _showNoteIndicatorsCheckbox;
+            set
+            {
+                _showNoteIndicatorsCheckbox = value;
+                Settings.Default.NotesIndicatorVisibility = value;
+                NotifyOfPropertyChange(() => ShowNoteIndicatorsCheckbox);
+            }
+        }
+
+
         private bool _paragraphMode = Settings.Default.ParagraphMode;
         public bool ParagraphMode
         {
@@ -739,10 +752,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 // TODO:  Jots dialog
                 //NoteControlVisibility = Visibility.Collapsed;
 
-                if (jotsEditorDisplayed_ && jotsEditorViewModel_ != null)
-                {
-                    await jotsEditorViewModel_.DeactivateAsync(true);
-                }
+                //if (jotsEditorDisplayed_ && jotsEditorViewModel_ != null)
+                //{
+                //    await jotsEditorViewModel_.DeactivateAsync(true);
+                //}
             }
 
             await Task.CompletedTask;
@@ -928,6 +941,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async void TokenLeftButtonDown(object sender, TokenEventArgs e)
         {
+            // 3
+
             if (e.IsShiftPressed && e.TokenDisplay.VerseDisplay is AlignmentDisplayViewModel alignmentDisplayViewModel)
             {
                 if (SelectionManager.AnySourceTokens && SelectionManager.AnyTargetTokens)
@@ -1023,17 +1038,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             // TODO:  Jots dialog
             //NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
 
-            if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
-            {
-                await DisplayJotsEditor(e.MousePosition);
-            }
-            else
-            {
-                if (jotsEditorDisplayed_ && jotsEditorViewModel_ != null)
-                {
-                    await jotsEditorViewModel_.DeactivateAsync(true);
-                }
-            }
+            //if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
+            //{
+            //    await DisplayJotsEditor(e.MousePosition);
+            //}
+            //else
+            //{
+            //    if (jotsEditorDisplayed_ && jotsEditorViewModel_ != null)
+            //    {
+            //        await jotsEditorViewModel_.DeactivateAsync(true);
+            //    }
+            //}
         }
 
         public void TokenMouseEnter(object sender, TokenEventArgs e)
@@ -1107,17 +1122,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             //NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
 
 
-            if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
-            {
-                await DisplayJotsEditor(e.MousePosition);
-            }
-            else
-            {
-                if (jotsEditorDisplayed_ && jotsEditorViewModel_ != null)
-                {
-                    await jotsEditorViewModel_.DeactivateAsync(true);
-                }
-            }
+            //if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
+            //{
+            //    await DisplayJotsEditor(e.MousePosition);
+            //}
+            //else
+            //{
+            //    if (jotsEditorDisplayed_ && jotsEditorViewModel_ != null)
+            //    {
+            //        await jotsEditorViewModel_.DeactivateAsync(true);
+            //    }
+            //}
         }
 
         public async void TranslationRightButtonDown(object sender, TranslationEventArgs e)
@@ -1133,17 +1148,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 //NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
 
 
-                if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
-                {
-                    await DisplayJotsEditor(e.MousePosition);
-                }
-                else
-                {
-                    if (jotsEditorDisplayed_ && jotsEditorViewModel_ != null)
-                    {
-                        await jotsEditorViewModel_.DeactivateAsync(true);
-                    }
-                }
+                //if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
+                //{
+                //    await DisplayJotsEditor(e.MousePosition);
+                //}
+                //else
+                //{
+                //    if (jotsEditorDisplayed_ && jotsEditorViewModel_ != null)
+                //    {
+                //        await jotsEditorViewModel_.DeactivateAsync(true);
+                //    }
+                //}
             }
         }
 
@@ -1185,10 +1200,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 settings.MaxWidth = 800;
                 settings.MaxHeight = 700;
                 settings.Title = "Jot";
+                //settings.WindowStyle = WindowStyle.SingleBorderWindow;
+
                 if (mousePosition.HasValue)
                 {
                     settings.Top = mousePosition.Value.Y;
                     settings.Left = mousePosition.Value.X;
+                    settings.WindowStartupLocation = WindowStartupLocation.Manual;
                 }
                 else
                 {

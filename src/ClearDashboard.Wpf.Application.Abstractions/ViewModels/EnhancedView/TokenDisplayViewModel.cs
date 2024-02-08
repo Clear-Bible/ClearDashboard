@@ -383,7 +383,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-
         public void OnToolTipOpening(ToolTipEventArgs e)
         {
             if (!IsHighlighted && string.IsNullOrWhiteSpace(ExtendedProperties))

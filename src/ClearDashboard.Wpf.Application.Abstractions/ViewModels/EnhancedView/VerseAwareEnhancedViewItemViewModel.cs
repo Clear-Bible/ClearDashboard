@@ -252,7 +252,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         {
                             foreach (var verseDisplayViewModel in Verses)
                             {
-                                //FIXME: EXTERNALNOTES - uncomment following line
+                                // EXTERNAL NOTES
                                 verseDisplayViewModel.SetExternalNotes(tokenizedCorpusNotes);
                             }
                         });
