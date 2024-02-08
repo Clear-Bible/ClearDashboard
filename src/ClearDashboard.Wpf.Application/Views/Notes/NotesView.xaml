@@ -474,6 +474,26 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn
+                    Width="*"
+                    MinWidth="250"
+                    Header="Labels">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <notes1:LabelsDisplay
+                                x:Name="LabelsDisplay"
+                                LabelBackground="BlanchedAlmond"
+                                LabelCornerRadius="10"
+                                LabelFontSize="14"
+                                LabelMargin="0 0 2 2"
+                                LabelPadding="10,6,10,5"
+                                Labels="{Binding Labels}"
+                                Note="{Binding}"
+                                RemoveLabelButtonVisibility="Collapsed" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 
