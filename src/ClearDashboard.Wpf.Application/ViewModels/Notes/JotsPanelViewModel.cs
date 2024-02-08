@@ -656,9 +656,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await noteManager_!.AddReplyToNoteAsync(parentNote, replyText);
         }
 
-        public async void ShowJotsEditor(object dataContext)
+        public async Task DisplayJotsEditor()
         {
             var something = 2;
+            await _enhancedViewModel.DisplayJotsEditor(null);
         }
 
         public async Task HandleAsync(NoteAddedMessage message, CancellationToken cancellationToken)

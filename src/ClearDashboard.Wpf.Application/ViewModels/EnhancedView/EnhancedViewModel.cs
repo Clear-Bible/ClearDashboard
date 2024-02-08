@@ -1187,7 +1187,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private JotsEditorViewModel? jotsEditorViewModel_;
 
-        private async Task DisplayJotsEditor(Point? mousePosition)
+        public async Task DisplayJotsEditor(Point? mousePosition)
         {
             if (!jotsEditorDisplayed_)
             {

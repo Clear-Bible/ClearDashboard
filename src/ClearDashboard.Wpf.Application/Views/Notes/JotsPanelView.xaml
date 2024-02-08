@@ -392,14 +392,31 @@
                     Header="{helpers:Localization Notes_NoteText}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button cm:Message.Attach="ShowJotsEditor($dataContext)">
+                            <Button
+                                HorizontalContentAlignment="Left"
+                                cm:Message.Attach="DisplayJotsEditor"
+                                Background="Transparent"
+                                BorderBrush="Transparent">
                                 <TextBlock
                                     Width="Auto"
                                     Height="Auto"
                                     Margin="-8"
                                     VerticalAlignment="Center"
+                                    FontWeight="Normal"
                                     Text="{Binding Text}"
-                                    TextWrapping="Wrap" />
+                                    TextDecorations="Underline"
+                                    TextWrapping="Wrap">
+                                    <TextBlock.Style>
+                                        <Style>
+                                            <Setter Property="TextBlock.Foreground" Value="Blue" />
+                                            <Style.Triggers>
+                                                <Trigger Property="TextBlock.IsMouseOver" Value="True">
+                                                    <Setter Property="TextBlock.Foreground" Value="Purple" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                             </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
