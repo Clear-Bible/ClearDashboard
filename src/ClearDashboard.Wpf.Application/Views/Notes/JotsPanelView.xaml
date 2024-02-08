@@ -392,13 +392,15 @@
                     Header="{helpers:Localization Notes_NoteText}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock
-                                Width="Auto"
-                                Height="Auto"
-                                Margin="-8"
-                                VerticalAlignment="Center"
-                                Text="{Binding Text}"
-                                TextWrapping="Wrap" />
+                            <Button cm:Message.Attach="ShowJotsEditor($dataContext)">
+                                <TextBlock
+                                    Width="Auto"
+                                    Height="Auto"
+                                    Margin="-8"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Text}"
+                                    TextWrapping="Wrap" />
+                            </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

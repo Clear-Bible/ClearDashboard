@@ -28,6 +28,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 {
@@ -55,6 +56,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         private readonly LongRunningTaskManager longRunningTaskManager_;
         private readonly NoteManager? noteManager_;
         private JotsPanelView view_;
+        private readonly EnhancedViewModel? _enhancedViewModel;
         private LongRunningTask? currentLongRunningTask_;
 
         #endregion //Member Variables
@@ -304,12 +306,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             LongRunningTaskManager longRunningTaskManager,
             ILocalizationService localizationService,
             NoteManager noteManager,
+            EnhancedViewModel enhancedViewModel,
             IUserProvider userProvider)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             longRunningTaskManager_ = longRunningTaskManager;
             noteManager_ = noteManager;
             _currentUser = userProvider.CurrentUser;
+            _enhancedViewModel = enhancedViewModel;
 
             //FIXME: why is this here and in MainViewModel line 1113??
             Title = "⌺ " + LocalizationService!.Get("MainView_WindowsNotes");
@@ -650,6 +654,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         public async Task AddReplyToNote(NoteViewModel parentNote, string replyText)
         {
             await noteManager_!.AddReplyToNoteAsync(parentNote, replyText);
+        }
+
+        public async void ShowJotsEditor(object dataContext)
+        {
+            var something = 2;
         }
 
         public async Task HandleAsync(NoteAddedMessage message, CancellationToken cancellationToken)
