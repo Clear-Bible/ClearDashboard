@@ -295,6 +295,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             }
         }
 
+        private bool _confirmParatextSendPopupIsOpen = false;
+        public bool ConfirmParatextSendPopupIsOpen
+        {
+            get => _confirmParatextSendPopupIsOpen;
+            set
+            {
+                _confirmParatextSendPopupIsOpen = value;
+                NotifyOfPropertyChange(() => ConfirmParatextSendPopupIsOpen);
+            }
+        }
+
         #endregion //Observable Properties
 
 
@@ -663,19 +674,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await noteManager_!.AddReplyToNoteAsync(parentNote, replyText);
         }
 
-
-
-        public  void NavigateToMainViewModel()
+        public void ConfirmParatextSend()
         {
-            var something = 2;
+            ConfirmParatextSendPopupIsOpen = true;
         }
 
-        public void NoteSendToParatext()
+        public void ParatextSendConfirmed()
+        {
+            SendNotesToParatext();
+            ConfirmParatextSendPopupIsOpen = false;
+        }
+
+        public void ParatextSendCancelled()
+        {
+            ConfirmParatextSendPopupIsOpen = false;
+        }
+
+        private void SendNotesToParatext()
         {
             foreach (var note in CheckedNoteViewModels)
             {
-                Task.Run(() => NoteSendToParatextAsync(note).GetAwaiter());
-
+                if (note.EnableParatextSend)
+                {
+                    Task.Run(() => NoteSendToParatextAsync(note).GetAwaiter());
+                }
             }
         }
 

@@ -132,7 +132,7 @@
                             Margin="10,-5,10,0"
                             Padding="0,0,0,0"
                             HorizontalAlignment="Right"
-                            cm:Message.Attach="NoteSendToParatext"
+                            cm:Message.Attach="ConfirmParatextSend"
                             Background="Transparent"
                             BorderThickness="0"
                             FontSize="12"
@@ -140,9 +140,10 @@
                             ToolTip="{helpers:Localization Notes_SendToParatext}">
                             <Image Height="18" Source="/Resources/Paratext_Send32.png" />
                         </Button>
-                        <!--<Popup
+                        <Popup
                             Name="ConfirmParatextSendPopup"
                             HorizontalOffset="100"
+                            IsOpen="{Binding ConfirmParatextSendPopupIsOpen}"
                             Placement="Left"
                             PlacementTarget="{Binding ElementName=SendToParatextButton}"
                             StaysOpen="False"
@@ -157,18 +158,18 @@
                                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                         <Button
                                             Margin="5"
-                                            Click="ParatextSendConfirmed"
+                                            cm:Message.Attach="ParatextSendConfirmed"
                                             Content="{helpers:Localization Yes}"
                                             Style="{StaticResource TransparentStyle}" />
                                         <Button
                                             Margin="5"
-                                            Click="ParatextSendCancelled"
+                                            cm:Message.Attach="ParatextSendCancelled"
                                             Content="{helpers:Localization No}"
                                             Style="{StaticResource AlternativeStyle}" />
                                     </StackPanel>
                                 </StackPanel>
                             </Border>
-                        </Popup>-->
+                        </Popup>
                     </StackPanel>
 
                     <StackPanel
@@ -369,10 +370,13 @@
 
             <DataGrid.Columns>
 
-                <DataGridTemplateColumn>
+                <DataGridTemplateColumn MinWidth="35">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox Checked="ToggleButton_OnChecked" Unchecked="ToggleButton_OnUnchecked" />
+                            <CheckBox
+                                Margin="-7,0,-7,0"
+                                Checked="ToggleButton_OnChecked"
+                                Unchecked="ToggleButton_OnUnchecked" />
                             <!--<Button
                                 x:Name="SendToParatext"
                                 Margin="10,-5,10,0"
