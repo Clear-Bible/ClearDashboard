@@ -59,7 +59,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public ICommand MoveCorpusUpRowCommand { get; set; }
         public ICommand DeleteCorpusRowCommand { get; set; }
         public ICommand IncreaseTextSizeCommand => new RelayCommand(IncreaseTextSize);
-      
+
         private void IncreaseTextSize(object? commandParameter)
         {
             SourceFontSizeValue += 1;
@@ -102,7 +102,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #region Member Variables
 
-        public NoteManager NoteManager { get; }
+        //public NoteManager NoteManager { get; }
 
         protected IEnhancedViewManager EnhancedViewManager { get; }
         private VerseManager VerseManager { get; }
@@ -115,7 +115,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private int _originalTargetFontSizeValue = 14;
         private int _originalTitleFontSizeValue = 14;
         private int _originalTranslationsFontSizeValue = 16;
-        
+
         #endregion //Member Variables
 
         #region Public Properties
@@ -134,14 +134,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public new string? Title
         {
             get => base.Title;
-            set  
+            set
             {
                 base.Title = value;
                 if (EnhancedViewLayout != null)
                 {
                     EnhancedViewLayout.Title = value;
                 }
-               
+
                 NotifyOfPropertyChange(Title);
 
             }
@@ -359,7 +359,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             get => _contentId;
             set => Set(ref _contentId, value);
         }
- 
+
         public bool IsSelected
         {
             get => _isSelected;
@@ -384,7 +384,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-   
+
         public async Task RequestClose(object? obj)
         {
             await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.PaneId));
@@ -400,23 +400,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public EnhancedViewModel(INavigationService navigationService,
             IEnhancedViewManager enhancedViewManager,
             ILogger<EnhancedViewModel> logger,
-            DashboardProjectManager? projectManager, 
-            NoteManager noteManager, 
-            VerseManager verseManager, 
-            SelectionManager selectionManager, 
+            DashboardProjectManager? projectManager,
+            //NoteManager noteManager, 
+            VerseManager verseManager,
+            SelectionManager selectionManager,
             IEventAggregator? eventAggregator,
             IMediator mediator,
             ILifetimeScope? lifetimeScope, ILocalizationService localizationService, IWindowManager windowManager) :
-            base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
+            base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
 #pragma warning restore CS8618
         {
-        
-            NoteManager = noteManager;
+
+            //NoteManager = noteManager;
             VerseManager = verseManager;
             SelectionManager = selectionManager;
             WindowManager = windowManager;
             EnhancedViewManager = enhancedViewManager;
-            
+
             Title = "⳼ " + LocalizationService!.Get("Windows_EnhancedView");
 
             ContentId = "ENHANCEDVIEW";
@@ -459,7 +459,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     BcvDictionary = await GenerateBcvFromDatabase();
                 }
             }
-            
+
             ParatextSync = enhancedViewLayout.ParatextSync;
             if (ParatextSync && ProjectManager.CurrentVerse is not null)
             {
@@ -474,7 +474,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
 
 
-            if (metadatum != null) {
+            if (metadatum != null)
+            {
 
                 if (metadatum is TokenizedCorpusEnhancedViewItemMetadatum tokenizedCorpusEnhancedViewItemMetadatum)
                 {
@@ -486,7 +487,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     await AddItem(metadatum, cancellationToken);
                 });
 
-               
+
             }
 
             EventAggregator.SubscribeOnPublishedThread(this);
@@ -561,7 +562,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             Logger?.LogInformation($"{nameof(EnhancedViewModel)} OnActivateAsync called.");
             await base.OnActivateAsync(cancellationToken);
 
-            if (Items.Count > 0 && !Items.Any(item=>item.HasFocus))
+            if (Items.Count > 0 && !Items.Any(item => item.HasFocus))
             {
                 Items[0].HasFocus = true;
             }
@@ -593,7 +594,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 var enhancedViewItemViewModel = await ActivateItemFromMetadatumAsync(enhancedViewItemMetadatum, cancellationToken);
                 enhancedViewItemViewModel.EnhancedViewItemMetadatum = enhancedViewItemMetadatum;
-               
+
             });
         }
 
@@ -623,17 +624,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             catch (Exception ex)
             {
-               Logger!.LogError(ex, "An unexpected error occurred while activating a 'EnhancedViewItemViewModel'");
-               throw;
+                Logger!.LogError(ex, "An unexpected error occurred while activating a 'EnhancedViewItemViewModel'");
+                throw;
             }
-            
+
         }
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
             DisplayName = "View";
             await base.OnInitializeAsync(cancellationToken);
         }
-   
+
 
 
         protected override async void OnViewAttached(object view, object context)
@@ -641,7 +642,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             if (ProjectManager?.CurrentParatextProject is null)
             {
                 BcvDictionary = await GenerateBcvFromDatabase();
-            } 
+            }
             else
             {
                 // grab the dictionary of all the verse lookups
@@ -660,11 +661,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             CurrentBcv.SetVerseFromId(ProjectManager!.CurrentVerse);
             NotifyOfPropertyChange(() => CurrentBcv);
             VerseChange = ProjectManager.CurrentVerse;
- 
+
             base.OnViewAttached(view, context);
         }
 
-    private ListView EnhancedViewListView { get; set; }
+        private ListView EnhancedViewListView { get; set; }
 
         #endregion //Constructor
 
@@ -715,7 +716,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private async void DeleteCorpusRow(object? obj)
         {
             var item = (EnhancedViewItemViewModel)obj!;
-            
+
             var index = Items.Select((element, index) => new { element, index })
                 .FirstOrDefault(x => x.element.Equals(item))?.index ?? -1;
 
@@ -807,7 +808,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
 
-        public async  Task HandleAsync(TokenizedCorpusUpdatedMessage message, CancellationToken cancellationToken)
+        public async Task HandleAsync(TokenizedCorpusUpdatedMessage message, CancellationToken cancellationToken)
         {
             var verseAwareEnhancedViewItemViewModels =
                 VerseAwareEnhancedViewItemViewModels.Where(vm =>
@@ -824,12 +825,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                 });
             }, cancellationToken);
-          
+
         }
 
         public async Task HandleAsync(HighlightTokensMessage message, CancellationToken cancellationToken)
         {
-            foreach (var enhancedViewItemViewModel in Items.Where(item=> item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>())
+            foreach (var enhancedViewItemViewModel in Items.Where(item => item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>())
             {
                 await enhancedViewItemViewModel.HighlightTokensAsync(message, cancellationToken);
             }
@@ -897,7 +898,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 NotifyOfPropertyChange(() => VerseAwareEnhancedViewItemViewModels);
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -917,7 +918,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async void NoteIndicatorMouseEnter(object? sender, NoteEventArgs? e)
         {
-            if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
+            // if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
+            if (SelectionManager.AnySelectedNotes)
             {
                 await DisplayJotsEditor(e.MousePosition);
             }
@@ -925,7 +927,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async void NoteLeftButtonDown(object? sender, NoteEventArgs? e)
         {
-            if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
+            //if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
+            if (SelectionManager.AnySelectedNotes)
             {
                 await DisplayJotsEditor(e.MousePosition);
             }
@@ -933,7 +936,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async void NoteLeftButtonDown(object sender, TokenEventArgs e)
         {
-            if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
+            //if (SelectionManager.AnySelectedNotes && !jotsEditorDisplayed_)
+            if (SelectionManager.AnySelectedNotes)
             {
                 await DisplayJotsEditor(e.MousePosition);
             }
@@ -1028,10 +1032,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 await alignmentDisplayViewModel.AlignmentManager!.DeleteAlignment(e.TokenDisplay);
             }
-          
+
         }
 
-        public async  void TokenRightButtonDown(object sender, TokenEventArgs e)
+        public async void TokenRightButtonDown(object sender, TokenEventArgs e)
         {
             SelectionManager.UpdateRightClickSelection(e.TokenDisplay);
 
@@ -1141,7 +1145,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 //SelectionManager.UpdateRightClickTranslationSelection(e.TokenDisplay);
                 //NoteControlVisibility = SelectionManager.AnySelectedTokenTranslationNotes ? Visibility.Visible : Visibility.Collapsed;
-                
+
                 SelectionManager.UpdateRightClickSelection(e.TokenDisplay);
 
                 // TODO:  Jots dialog
@@ -1189,47 +1193,51 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task DisplayJotsEditor(Point? mousePosition)
         {
-            if (!jotsEditorDisplayed_)
+            //if (!jotsEditorDisplayed_)
+            //{
+            // WIP:  show non-modal window here.
+            // NB:  Keep the settings, ditch the view model.
+            dynamic settings = new ExpandoObject();
+            settings.MinWidth = 500;
+            settings.MinHeight = 500;
+            settings.Height = 500;
+            settings.MaxWidth = 800;
+            settings.MaxHeight = 700;
+            settings.Title = "Jot";
+            //settings.WindowStyle = WindowStyle.SingleBorderWindow;
+
+            if (mousePosition.HasValue)
             {
-                // WIP:  show non-modal window here.
-                // NB:  Keep the settings, ditch the view model.
-                dynamic settings = new ExpandoObject();
-                settings.MinWidth = 500;
-                settings.MinHeight = 500;
-                settings.Height = 500;
-                settings.MaxWidth = 800;
-                settings.MaxHeight = 700;
-                settings.Title = "Jot";
-                //settings.WindowStyle = WindowStyle.SingleBorderWindow;
-
-                if (mousePosition.HasValue)
-                {
-                    settings.Top = mousePosition.Value.Y;
-                    settings.Left = mousePosition.Value.X;
-                    settings.WindowStartupLocation = WindowStartupLocation.Manual;
-                }
-                else
-                {
-                    settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                }
-
-                settings.Owner = App.Current.MainWindow;
-
-                jotsEditorViewModel_ = LifetimeScope.Resolve<JotsEditorViewModel>();
-                // await viewModel.Initialize(TokenDisplayViewModel.ExternalNotes);
-
-                jotsEditorViewModel_.Deactivated += (sender, args) =>
-                {
-
-                    jotsEditorDisplayed_ = false;
-                    return Task.CompletedTask;
-                };
-
-                await WindowManager.ShowWindowAsync(jotsEditorViewModel_, null, settings);
-                jotsEditorDisplayed_ = true;
+                settings.Top = mousePosition.Value.Y;
+                settings.Left = mousePosition.Value.X;
+                settings.WindowStartupLocation = WindowStartupLocation.Manual;
             }
+            else
+            {
+                settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            }
+
+            // Keep the window on top
+            settings.Topmost = true;
+            settings.Owner = System.Windows.Application.Current.MainWindow;
+
+            jotsEditorViewModel_ = LifetimeScope.Resolve<JotsEditorViewModel>();
+
+            await jotsEditorViewModel_.Initialize(SelectionManager.Clone());
+            // await viewModel.Initialize(TokenDisplayViewModel.ExternalNotes);
+
+            jotsEditorViewModel_.Deactivated += (sender, args) =>
+            {
+
+                jotsEditorDisplayed_ = false;
+                return Task.CompletedTask;
+            };
+
+            await WindowManager.ShowWindowAsync(jotsEditorViewModel_, null, settings);
+            jotsEditorDisplayed_ = true;
+            //}
         }
-    
+
         public void FilterPins(object? sender, NoteEventArgs e)
         {
             //5
@@ -1283,278 +1291,278 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         //#region NoteControl
 
-        public void NoteAdded(object sender, NoteEventArgs e)
-        {
-            Task.Run(() => NoteAddedAsync(e).GetAwaiter());
-        }
+        //public void NoteAdded(object sender, NoteEventArgs e)
+        //{
+        //    Task.Run(() => NoteAddedAsync(e).GetAwaiter());
+        //}
 
-        public async Task NoteAddedAsync(NoteEventArgs e)
-        {
-            await Execute.OnUIThreadAsync(async () =>
-            {
-                //TODO This is a TEMPORAY FIX just for the hotfix, this needs to be resolved by ANDY in the longterm
-                e.Note.Labels.Clear();
-                await NoteManager.AddNoteAsync(e.Note, e.EntityIds);
-                NotifyOfPropertyChange(() => Items);
-            });
+        //public async Task NoteAddedAsync(NoteEventArgs e)
+        //{
+        //    await Execute.OnUIThreadAsync(async () =>
+        //    {
+        //        //TODO This is a TEMPORAY FIX just for the hotfix, this needs to be resolved by ANDY in the longterm
+        //        e.Note.Labels.Clear();
+        //        await NoteManager.AddNoteAsync(e.Note, e.EntityIds);
+        //        NotifyOfPropertyChange(() => Items);
+        //    });
 
-            Message = $"Note '{e.Note.Text}' added to tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
+        //    Message = $"Note '{e.Note.Text}' added to tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
 
-            Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NoteCreationCount, 1);
-        }
+        //    Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NoteCreationCount, 1);
+        //}
 
-        public void NoteUpdated(object sender, NoteEventArgs e)
-        {
-            Task.Run(() => NoteUpdatedAsync(e).GetAwaiter());
-        }
+        //public void NoteUpdated(object sender, NoteEventArgs e)
+        //{
+        //    Task.Run(() => NoteUpdatedAsync(e).GetAwaiter());
+        //}
 
-        public async Task NoteUpdatedAsync(NoteEventArgs e)
-        {
-            await NoteManager.UpdateNoteAsync(e.Note);
-            Message = $"Note '{e.Note.Text}' updated on tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
-        }
+        //public async Task NoteUpdatedAsync(NoteEventArgs e)
+        //{
+        //    await NoteManager.UpdateNoteAsync(e.Note);
+        //    Message = $"Note '{e.Note.Text}' updated on tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
+        //}
 
-        public void NoteSendToParatext(object sender, NoteEventArgs e)
-        {
-            Task.Run(() => NoteSendToParatextAsync(e).GetAwaiter());
-        }
+        //public void NoteSendToParatext(object sender, NoteEventArgs e)
+        //{
+        //    Task.Run(() => NoteSendToParatextAsync(e).GetAwaiter());
+        //}
 
-        public async Task NoteSendToParatextAsync(NoteEventArgs e)
-        {
-            try
-            {
-                await NoteManager.SendToParatextAsync(e.Note);
-                Message = $"Note '{e.Note.Text}' sent to Paratext.";
-                Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NotePushCount, 1);
-            }
-            catch (Exception ex)
-            {
-                Message = $"Could not send note to Paratext: {ex.Message}";
-            }
-        }
+        //public async Task NoteSendToParatextAsync(NoteEventArgs e)
+        //{
+        //    try
+        //    {
+        //        await NoteManager.SendToParatextAsync(e.Note);
+        //        Message = $"Note '{e.Note.Text}' sent to Paratext.";
+        //        Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NotePushCount, 1);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Message = $"Could not send note to Paratext: {ex.Message}";
+        //    }
+        //}
 
-        public void NoteDeleted(object sender, NoteEventArgs e)
-        {
-            Task.Run(() => NoteDeletedAsync(e).GetAwaiter());
-        }
+        //public void NoteDeleted(object sender, NoteEventArgs e)
+        //{
+        //    Task.Run(() => NoteDeletedAsync(e).GetAwaiter());
+        //}
 
-        public async Task NoteDeletedAsync(NoteEventArgs e)
-        {
-            if (e.Note.NoteId != null)
-            {
-                EntityIdCollection associationIds = new();
-                e.Note.Associations.ForEach(a => associationIds.Add(a.AssociatedEntityId));
+        //public async Task NoteDeletedAsync(NoteEventArgs e)
+        //{
+        //    if (e.Note.NoteId != null)
+        //    {
+        //        EntityIdCollection associationIds = new();
+        //        e.Note.Associations.ForEach(a => associationIds.Add(a.AssociatedEntityId));
 
-                await Execute.OnUIThreadAsync(async () =>
-                {
-                    await NoteManager.DeleteNoteAsync(e.Note, associationIds);
-                    NotifyOfPropertyChange(() => Items);
-                });
-            }
-            Message = $"Note '{e.Note.Text}' deleted from tokens ({string.Join(", ", e.EntityIds.Select(id => id.ToString()))})";
-        }
+        //        await Execute.OnUIThreadAsync(async () =>
+        //        {
+        //            await NoteManager.DeleteNoteAsync(e.Note, associationIds);
+        //            NotifyOfPropertyChange(() => Items);
+        //        });
+        //    }
+        //    Message = $"Note '{e.Note.Text}' deleted from tokens ({string.Join(", ", e.EntityIds.Select(id => id.ToString()))})";
+        //}
 
-        public void NoteEditorMouseEnter(object sender, NoteEventArgs e)
-        {
-            Task.Run(() => NoteEditorMouseEnterAsync(e).GetAwaiter());
-        }
+        //public void NoteEditorMouseEnter(object sender, NoteEventArgs e)
+        //{
+        //    Task.Run(() => NoteEditorMouseEnterAsync(e).GetAwaiter());
+        //}
 
-        public async Task NoteEditorMouseEnterAsync(NoteEventArgs e)
-        {
-            await NoteManager.NoteMouseEnterAsync(e.Note, e.EntityIds);
-        }
+        //public async Task NoteEditorMouseEnterAsync(NoteEventArgs e)
+        //{
+        //    await NoteManager.NoteMouseEnterAsync(e.Note, e.EntityIds);
+        //}
 
-        public void NoteEditorMouseLeave(object sender, NoteEventArgs e)
-        {
-            Task.Run(() => NoteEditorMouseLeaveAsync(e).GetAwaiter());
-        }
+        //public void NoteEditorMouseLeave(object sender, NoteEventArgs e)
+        //{
+        //    Task.Run(() => NoteEditorMouseLeaveAsync(e).GetAwaiter());
+        //}
 
-        public async Task NoteEditorMouseLeaveAsync(NoteEventArgs e)
-        {
-            await NoteManager.NoteMouseLeaveAsync(e.Note, e.EntityIds);
-        }
+        //public async Task NoteEditorMouseLeaveAsync(NoteEventArgs e)
+        //{
+        //    await NoteManager.NoteMouseLeaveAsync(e.Note, e.EntityIds);
+        //}
 
-        public void LabelAdded(object sender, LabelEventArgs e)
-        {
-            Task.Run(() => LabelAddedAsync(e).GetAwaiter());
-        }
+        //public void LabelAdded(object sender, LabelEventArgs e)
+        //{
+        //    Task.Run(() => LabelAddedAsync(e).GetAwaiter());
+        //}
 
-        public async Task LabelAddedAsync(LabelEventArgs e)
-        {
-            if (e.Note.NoteId != null)
-            {
-                var newLabel = await NoteManager.CreateAssociateNoteLabelAsync(e.Note, e.Label.Text);
-                Message = $"Label '{e.Label.Text}' added for note";
+        //public async Task LabelAddedAsync(LabelEventArgs e)
+        //{
+        //    if (e.Note.NoteId != null)
+        //    {
+        //        var newLabel = await NoteManager.CreateAssociateNoteLabelAsync(e.Note, e.Label.Text);
+        //        Message = $"Label '{e.Label.Text}' added for note";
 
-                if (newLabel != null && e.LabelGroup is { LabelGroupId: not null })
-                {
-                    await NoteManager.AssociateLabelToLabelGroupAsync(e.LabelGroup, newLabel);
-                    Message += $" and associated to label group {e.LabelGroup.Name}";
-                }
-            }
-        }
-        public void LabelDeleted(object sender, LabelEventArgs e)
-        {
-            NoteManager.DeleteLabel(e.Label);
-            Message = $"Label '{e.Label.Text}' deleted";
-        }
+        //        if (newLabel != null && e.LabelGroup is { LabelGroupId: not null })
+        //        {
+        //            await NoteManager.AssociateLabelToLabelGroupAsync(e.LabelGroup, newLabel);
+        //            Message += $" and associated to label group {e.LabelGroup.Name}";
+        //        }
+        //    }
+        //}
+        //public void LabelDeleted(object sender, LabelEventArgs e)
+        //{
+        //    NoteManager.DeleteLabel(e.Label);
+        //    Message = $"Label '{e.Label.Text}' deleted";
+        //}
 
-        public void LabelDisassociated(object sender, LabelEventArgs e)
-        {
-            Task.Run(() => LabelDisassociatedAsync(e).GetAwaiter());
-        }
+        //public void LabelDisassociated(object sender, LabelEventArgs e)
+        //{
+        //    Task.Run(() => LabelDisassociatedAsync(e).GetAwaiter());
+        //}
 
-        public async Task LabelDisassociatedAsync(LabelEventArgs e)
-        {
-            await NoteManager.DetachLabelFromLabelGroupAsync(e.LabelGroup, e.Label);
-            Message = $"Label '{e.Label.Text}' detached from label group '{e.LabelGroup.Name}'";
-        }
+        //public async Task LabelDisassociatedAsync(LabelEventArgs e)
+        //{
+        //    await NoteManager.DetachLabelFromLabelGroupAsync(e.LabelGroup, e.Label);
+        //    Message = $"Label '{e.Label.Text}' detached from label group '{e.LabelGroup.Name}'";
+        //}
 
-        public void LabelSelected(object sender, LabelEventArgs e)
-        {
-            Task.Run(() => LabelSelectedAsync(e).GetAwaiter());
-        }
+        //public void LabelSelected(object sender, LabelEventArgs e)
+        //{
+        //    Task.Run(() => LabelSelectedAsync(e).GetAwaiter());
+        //}
 
-        public async Task LabelSelectedAsync(LabelEventArgs e)
-        {
-            if (e.Note.NoteId != null)
-            {
-                await NoteManager.AssociateNoteLabelAsync(e.Note, e.Label);
-                Message = $"Label '{e.Label.Text}' selected for note";
-            }
+        //public async Task LabelSelectedAsync(LabelEventArgs e)
+        //{
+        //    if (e.Note.NoteId != null)
+        //    {
+        //        await NoteManager.AssociateNoteLabelAsync(e.Note, e.Label);
+        //        Message = $"Label '{e.Label.Text}' selected for note";
+        //    }
 
-            if (e.LabelGroup != null && !e.LabelGroup.Labels.ContainsMatchingLabel(e.Label.Text))
-            {
-                await NoteManager.AssociateLabelToLabelGroupAsync(e.LabelGroup, e.Label);
-                Message += $" and associated to label group {e.LabelGroup.Name}";
-            }
-        }
+        //    if (e.LabelGroup != null && !e.LabelGroup.Labels.ContainsMatchingLabel(e.Label.Text))
+        //    {
+        //        await NoteManager.AssociateLabelToLabelGroupAsync(e.LabelGroup, e.Label);
+        //        Message += $" and associated to label group {e.LabelGroup.Name}";
+        //    }
+        //}
 
-        public void LabelRemoved(object sender, LabelEventArgs e)
-        {
-            Task.Run(() => LabelRemovedAsync(e).GetAwaiter());
-        }
+        //public void LabelRemoved(object sender, LabelEventArgs e)
+        //{
+        //    Task.Run(() => LabelRemovedAsync(e).GetAwaiter());
+        //}
 
-        public async Task LabelRemovedAsync(LabelEventArgs e)
-        {
-            if (e.Note.NoteId != null)
-            {
-                await NoteManager.DetachNoteLabel(e.Note, e.Label);
-            }
-            Message = $"Label '{e.Label.Text}' removed for note";
-        }
+        //public async Task LabelRemovedAsync(LabelEventArgs e)
+        //{
+        //    if (e.Note.NoteId != null)
+        //    {
+        //        await NoteManager.DetachNoteLabel(e.Note, e.Label);
+        //    }
+        //    Message = $"Label '{e.Label.Text}' removed for note";
+        //}
 
-        public void LabelUpdated(object sender, LabelEventArgs e)
-        {
-            Task.Run(() => LabelUpdatedAsync(e).GetAwaiter());
-        }
+        //public void LabelUpdated(object sender, LabelEventArgs e)
+        //{
+        //    Task.Run(() => LabelUpdatedAsync(e).GetAwaiter());
+        //}
 
-        public async Task LabelUpdatedAsync(LabelEventArgs e)
-        {
-            await NoteManager.UpdateLabelAsync(e.Label);
-            Message = $"Label '{e.Label.Text}' updated";
-        }
+        //public async Task LabelUpdatedAsync(LabelEventArgs e)
+        //{
+        //    await NoteManager.UpdateLabelAsync(e.Label);
+        //    Message = $"Label '{e.Label.Text}' updated";
+        //}
 
-        public void LabelGroupAdded(object sender, LabelGroupAddedEventArgs e)
-        {
-            Task.Run(() => LabelGroupAddedAsync(e).GetAwaiter());
-        }
+        //public void LabelGroupAdded(object sender, LabelGroupAddedEventArgs e)
+        //{
+        //    Task.Run(() => LabelGroupAddedAsync(e).GetAwaiter());
+        //}
 
-        public async Task LabelGroupAddedAsync(LabelGroupAddedEventArgs e)
-        {
-            if (e.LabelGroup.LabelGroupId == null)
-            {
-                await NoteManager.CreateLabelGroupAsync(e.LabelGroup, e.SourceLabelGroup);
-            }
-            Message = $"Label group '{e.LabelGroup.Name}' added";
-        }
+        //public async Task LabelGroupAddedAsync(LabelGroupAddedEventArgs e)
+        //{
+        //    if (e.LabelGroup.LabelGroupId == null)
+        //    {
+        //        await NoteManager.CreateLabelGroupAsync(e.LabelGroup, e.SourceLabelGroup);
+        //    }
+        //    Message = $"Label group '{e.LabelGroup.Name}' added";
+        //}
 
-        public void LabelGroupLabelAdded(object sender, LabelGroupLabelEventArgs e)
-        {
-            Task.Run(() => LabelGroupLabelAddedAsync(e).GetAwaiter());
-        }
+        //public void LabelGroupLabelAdded(object sender, LabelGroupLabelEventArgs e)
+        //{
+        //    Task.Run(() => LabelGroupLabelAddedAsync(e).GetAwaiter());
+        //}
 
-        public async Task LabelGroupLabelAddedAsync(LabelGroupLabelEventArgs e)
-        {
-            if (e.LabelGroup.LabelGroupId == null)
-            {
-            }
-            Message = $"Label group '{e.LabelGroup.Name}' added";
-        }
+        //public async Task LabelGroupLabelAddedAsync(LabelGroupLabelEventArgs e)
+        //{
+        //    if (e.LabelGroup.LabelGroupId == null)
+        //    {
+        //    }
+        //    Message = $"Label group '{e.LabelGroup.Name}' added";
+        //}
 
-        public void LabelGroupRemoved(object sender, LabelGroupEventArgs e)
-        {
-            Task.Run(() => LabelGroupRemovedAsync(e).GetAwaiter());
-        }
+        //public void LabelGroupRemoved(object sender, LabelGroupEventArgs e)
+        //{
+        //    Task.Run(() => LabelGroupRemovedAsync(e).GetAwaiter());
+        //}
 
-        public async Task LabelGroupRemovedAsync(LabelGroupEventArgs e)
-        {
-            if (e.LabelGroup.LabelGroupId != null)
-            {
-                await NoteManager.RemoveLabelGroupAsync(e.LabelGroup);
-            }
-            Message = $"Label group '{e.LabelGroup.Name}' removed";
-        }
+        //public async Task LabelGroupRemovedAsync(LabelGroupEventArgs e)
+        //{
+        //    if (e.LabelGroup.LabelGroupId != null)
+        //    {
+        //        await NoteManager.RemoveLabelGroupAsync(e.LabelGroup);
+        //    }
+        //    Message = $"Label group '{e.LabelGroup.Name}' removed";
+        //}
 
-        public void LabelGroupSelected(object sender, LabelGroupEventArgs e)
-        {
-            Task.Run(() => LabelGroupSelectedAsync(e.LabelGroup).GetAwaiter());
-        }
+        //public void LabelGroupSelected(object sender, LabelGroupEventArgs e)
+        //{
+        //    Task.Run(() => LabelGroupSelectedAsync(e.LabelGroup).GetAwaiter());
+        //}
 
-        public async Task LabelGroupSelectedAsync(LabelGroupViewModel labelGroup)
-        {
-            if (labelGroup.LabelGroupId != null)
-            {
-                NoteManager.SaveLabelGroupDefault(labelGroup);
-                Message = $"Label group '{labelGroup.Name}' selected";
-            }
-            else
-            {
-                await NoteManager.ClearLabelGroupDefault();
-            }
-        }
+        //public async Task LabelGroupSelectedAsync(LabelGroupViewModel labelGroup)
+        //{
+        //    if (labelGroup.LabelGroupId != null)
+        //    {
+        //        NoteManager.SaveLabelGroupDefault(labelGroup);
+        //        Message = $"Label group '{labelGroup.Name}' selected";
+        //    }
+        //    else
+        //    {
+        //        await NoteManager.ClearLabelGroupDefault();
+        //    }
+        //}
 
-        public void NoteReplyAdded(object sender, NoteReplyAddEventArgs e)
-        {
-            Task.Run(() => NoteReplyAddedAsync(e).GetAwaiter());
-        }
+        //public void NoteReplyAdded(object sender, NoteReplyAddEventArgs e)
+        //{
+        //    Task.Run(() => NoteReplyAddedAsync(e).GetAwaiter());
+        //}
 
-        public async Task NoteReplyAddedAsync(NoteReplyAddEventArgs args)
-        {
-            await NoteManager.AddReplyToNoteAsync(args.NoteViewModelWithReplies, args.Text);
-        }
+        //public async Task NoteReplyAddedAsync(NoteReplyAddEventArgs args)
+        //{
+        //    await NoteManager.AddReplyToNoteAsync(args.NoteViewModelWithReplies, args.Text);
+        //}
 
-        public void NoteSeen(object sender, NoteSeenEventArgs e)
-        {
-            Task.Run(() => NoteSeenAsync(e).GetAwaiter());
-        }
+        //public void NoteSeen(object sender, NoteSeenEventArgs e)
+        //{
+        //    Task.Run(() => NoteSeenAsync(e).GetAwaiter());
+        //}
 
-        public async Task NoteSeenAsync(NoteSeenEventArgs args)
-        {
-            var note = args.NoteViewModel;
-            var seen = args.Seen;
-            var userId = NoteManager.CurrentUserId;
+        //public async Task NoteSeenAsync(NoteSeenEventArgs args)
+        //{
+        //    var note = args.NoteViewModel;
+        //    var seen = args.Seen;
+        //    var userId = NoteManager.CurrentUserId;
 
-            if (note != null && seen != null && userId != null)
-            {
-                var seenByUserIdsChanged = false;
-                if (seen.Value && !note.SeenByUserIds.Contains(userId.Id))
-                {
-                    note.AddSeenByUserId(userId.Id);
-                    seenByUserIdsChanged = true;
-                }
-                else if (!seen.Value && note.SeenByUserIds.Contains(userId.Id))
-                {
-                    note.RemoveSeenByUserId(userId.Id);
-                    seenByUserIdsChanged = true;
-                }
+        //    if (note != null && seen != null && userId != null)
+        //    {
+        //        var seenByUserIdsChanged = false;
+        //        if (seen.Value && !note.SeenByUserIds.Contains(userId.Id))
+        //        {
+        //            note.AddSeenByUserId(userId.Id);
+        //            seenByUserIdsChanged = true;
+        //        }
+        //        else if (!seen.Value && note.SeenByUserIds.Contains(userId.Id))
+        //        {
+        //            note.RemoveSeenByUserId(userId.Id);
+        //            seenByUserIdsChanged = true;
+        //        }
 
-                if (seenByUserIdsChanged)
-                {
-                    await NoteManager.UpdateNoteAsync(note);
-                }
-            }
-        }
+        //        if (seenByUserIdsChanged)
+        //        {
+        //            await NoteManager.UpdateNoteAsync(note);
+        //        }
+        //    }
+        //}
 
 
         //#endregion

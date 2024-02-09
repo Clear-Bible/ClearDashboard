@@ -593,6 +593,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             {
                 //Notes.Add(args.Note);
                 NewNote = new NoteViewModel();
+     
 
                 OnPropertyChanged(nameof(Notes));
                 OnPropertyChanged(nameof(NewNote));

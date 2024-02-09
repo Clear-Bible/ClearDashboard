@@ -16,29 +16,28 @@
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
-        <Rectangle Grid.Row="0" Fill="Blue" />
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <notes:NoteCollectionDisplay
-                x:Name="NotesControl"
-                Margin="0,-20"
-                CurrentUserId="{Binding NoteManager.CurrentUserId}"
-                DefaultLabelGroup="{Binding NoteManager.DefaultLabelGroup}"
-                EntityIds="{Binding Path=SelectionManager.SelectedEntityIds}"
-                LabelBackground="BlanchedAlmond"
-                LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                LabelFontSize="14"
-                LabelGroups="{Binding NoteManager.LabelGroups}"
-                LabelPadding="10,6,10,5"
-                LabelSuggestions="{Binding NoteManager.LabelSuggestions}"
-                NoteMargin="0,0,0,0"
-                NoteTextFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                Notes="{Binding NoteManager.CurrentNotes}"
-                TimestampMargin="0,0,00,0"
-                UserFontStyle="Italic">
+  
+            <notes:NoteCollectionDisplay Grid.Row="0"
+          x:Name="NotesControl"
+          Margin="0,-20"
+          CurrentUserId="{Binding NoteManager.CurrentUserId}"
+          DefaultLabelGroup="{Binding NoteManager.DefaultLabelGroup}"
+          EntityIds="{Binding Path=SelectionManager.SelectedEntityIds}"
+          LabelBackground="BlanchedAlmond"
+          LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+          LabelFontSize="14"
+          LabelGroups="{Binding NoteManager.LabelGroups}"
+          LabelPadding="10,6,10,5"
+          LabelSuggestions="{Binding NoteManager.LabelSuggestions}"
+          NoteMargin="0,0,0,0"
+          NoteTextFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+          Notes="{Binding NoteManager.CurrentNotes}"
+          TimestampMargin="0,0,00,0"
+          UserFontStyle="Italic"
+         >
                 <i:Interaction.Triggers>
 
                     <i:EventTrigger EventName="CloseRequested">
@@ -117,15 +116,14 @@
 
                 </i:Interaction.Triggers>
             </notes:NoteCollectionDisplay>
-        </ScrollViewer>
-        <StackPanel
-            Grid.Row="2"
-            HorizontalAlignment="Center"
-            Orientation="Horizontal">
-            <Button
-                x:Name="Close"
-                Content="{helpers:Localization Close}"
-                Style="{StaticResource AlternativeStyle}">
+
+       <StackPanel Grid.Row="1"
+               HorizontalAlignment="Center"
+               Orientation="Horizontal">
+            <Button x:Name="Close"
+                   Content="{helpers:Localization Close}"
+                   Style="{StaticResource AlternativeStyle}">
+
                 <!--<i:EventTrigger EventName="NoteSendToParatext">
                     <i:CallMethodAction MethodName="NoteSendToParatext" TargetObject="{Binding }" />
                 </i:EventTrigger>-->

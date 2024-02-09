@@ -54,6 +54,7 @@ namespace ClearDashboard.Wpf.Application.Collections
 
         public TokenDisplayViewModelCollection(IEnumerable<TokenDisplayViewModel> tokens) : base(tokens)
         {
+            RecalculateEntityIds();
         }
 
         public IEnumerable<TokenId> TokenIds => Items.Select(t => t.Token.TokenId);

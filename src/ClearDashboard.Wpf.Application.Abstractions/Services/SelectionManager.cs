@@ -7,6 +7,7 @@ using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using System.Threading.Tasks;
 using System.Threading;
+using Autofac;
 using ClearDashboard.Wpf.Application.Collections.Notes;
 
 namespace ClearDashboard.Wpf.Application.Services
@@ -16,6 +17,7 @@ namespace ClearDashboard.Wpf.Application.Services
         private IEventAggregator EventAggregator { get; }
         private ILogger<SelectionManager> Logger { get; }
         private IMediator Mediator { get; }
+        private ILifetimeScope LifetimeScope { get; }
 
         private TokenDisplayViewModelCollection _selectedTokens = new();
         public TokenDisplayViewModelCollection SelectedTokens
@@ -37,6 +39,8 @@ namespace ClearDashboard.Wpf.Application.Services
         private TokenDisplayViewModelCollection DragVerseTargetTokens => DragStartVerse?.TargetTokenDisplayViewModels ?? new TokenDisplayViewModelCollection();
         private TokenDisplayViewModelCollection DragVerseTokens => DragIsSource ? DragVerseSourceTokens : DragVerseTargetTokens;
         public TokenDisplayViewModelCollection SelectedTokensBeforeDrag { get; private set; } = new();
+
+    
 
         public void StartDragSelection(TokenDisplayViewModel tokenDisplay)
         {
@@ -69,7 +73,10 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public void SelectionUpdated()
         {
-            EventAggregator.PublishOnUIThreadAsync(new SelectionUpdatedMessage(SelectedTokens));
+            if (Type == SelectionManagerType.Singleton)
+            {
+                EventAggregator.PublishOnUIThreadAsync(new SelectionUpdatedMessage(SelectedTokens));
+            }
         }
 
         public void UpdateSelection(TokenDisplayViewModel token, TokenDisplayViewModelCollection selectedTokens, bool addToSelection)
@@ -121,13 +128,45 @@ namespace ClearDashboard.Wpf.Application.Services
             await Task.CompletedTask;
         }
 
-        public SelectionManager(IEventAggregator eventAggregator, ILogger<SelectionManager> logger, IMediator mediator)
+        public SelectionManager(IEventAggregator eventAggregator, ILogger<SelectionManager> logger, IMediator mediator, ILifetimeScope lifetimeScope)
         {
             EventAggregator = eventAggregator;
             Logger = logger;
             Mediator = mediator;
 
+            LifetimeScope = lifetimeScope;
+
             EventAggregator.SubscribeOnUIThread(this);
+
+            Name = "Singleton";
+            Type = SelectionManagerType.Singleton;
         }
+
+        public string Name { get; private set; }
+
+        public SelectionManagerType Type { get;private set; }
+
+        public SelectionManager Clone()
+        {
+            var selectionManager = LifetimeScope.ResolveKeyed<SelectionManager>("TransientSelectionManager");
+           
+            selectionManager.SelectedTokens = new TokenDisplayViewModelCollection(SelectedTokens);
+  
+            // 
+            selectionManager.SelectionUpdated();
+
+            //
+            selectionManager.Name = "Cloned";
+            selectionManager.Type = SelectionManagerType.Cloned;
+
+            
+            return selectionManager;
+        }
+    }
+
+    public enum SelectionManagerType
+    {
+        Singleton,
+        Cloned
     }
 }

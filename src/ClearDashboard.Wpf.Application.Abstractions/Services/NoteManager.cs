@@ -405,6 +405,11 @@ namespace ClearDashboard.Wpf.Application.Services
             set => Set(ref _isBusy, value);
         }
 
+        public async Task GetNotes(IEnumerable<IId> noteIds)
+        {
+            CurrentNotes = await GetNoteDetailsAsync(noteIds);
+        }
+
         /// <summary>
         /// Gets the unique note details for a collection of note IDs.
         /// </summary>
@@ -1115,7 +1120,9 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
         {
-            CurrentNotes = await GetNoteDetailsAsync(message.SelectedTokens.NoteIds);
+
+            // Jots refactor
+            //CurrentNotes = await GetNoteDetailsAsync(message.SelectedTokens.NoteIds);
         }
 
         public NoteManager(IEventAggregator eventAggregator, ILogger<NoteManager>? logger, IMediator mediator, IUserProvider userProvider, ILocalizationService localizationService)
