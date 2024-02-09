@@ -586,7 +586,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
                 // Running in background thread to allow ui to be responsive
                 // when lots of notes are being loaded
-                ProcessResult(await Task.Run(async () => await awaitableFunction(cancellationToken), cancellationToken));
+                ProcessResult(
+                    //await Task.Run(async () => 
+                    await awaitableFunction(cancellationToken)
+                    //, cancellationToken)
+                    );
 
                 await SendBackgroundStatus(
                     taskName,
