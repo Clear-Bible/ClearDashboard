@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Autofac;
+using Autofac.Features.AttributeFilters;
 using Caliburn.Micro;
 using CefSharp;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
@@ -27,7 +28,7 @@ public class JotsEditorViewModel : ApplicationScreen
     protected ILogger Logger { get; }
     public NoteManager NoteManager { get; }
 
-    public SelectionManager SelectionManager { get; }
+    public SelectionManager SelectionManager { get; set; }
      
     protected DashboardProjectManager? ProjectManager { get;  }
     protected ILocalizationService? LocalizationService { get; }
@@ -40,15 +41,16 @@ public class JotsEditorViewModel : ApplicationScreen
     #region Constructor
     public JotsEditorViewModel(ILogger<JotsEditorViewModel> logger,
         DashboardProjectManager? projectManager,
-        NoteManager noteManager,
-        SelectionManager selectionManager,
+        [KeyFilter("JotsNoteManager")] NoteManager noteManager,
+        //NoteManager noteManager,
+        //[KeyFilter("JotsSelectionManager")]SelectionManager selectionManager,
         INavigationService navigationService,
         IEventAggregator? eventAggregator,
         IMediator mediator,
         ILifetimeScope? lifetimeScope, ILocalizationService localizationService): base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
     {
         NoteManager = noteManager;
-        SelectionManager = selectionManager;
+       // SelectionManager = selectionManager;
         EventAggregator = eventAggregator;
         Mediator = mediator;
         LifetimeScope = lifetimeScope;
@@ -56,7 +58,6 @@ public class JotsEditorViewModel : ApplicationScreen
         Logger = logger;
         ProjectManager = projectManager;
         Title = "Jots";  // TODO: localize me.
-
 
     }
 
@@ -71,6 +72,12 @@ public class JotsEditorViewModel : ApplicationScreen
         set => Set(ref _message, value);
     }
     #endregion
+
+    public async Task Initialize(SelectionManager clonedSelectionManager)
+    {
+        SelectionManager = clonedSelectionManager;
+        await NoteManager.GetNotes(SelectionManager.SelectedNoteIds);
+    }
 
     public async void Close()
     {

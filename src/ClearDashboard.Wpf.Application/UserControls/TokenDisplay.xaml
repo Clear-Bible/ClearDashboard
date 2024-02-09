@@ -180,9 +180,11 @@
                 MouseLeftButtonUp="OnTokenLeftButtonUp"
                 MouseRightButtonDown="OnTokenRightButtonDown"
                 MouseRightButtonUp="OnTokenRightButtonUp"
-                MouseWheel="OnTokenMouseWheel">
-                <!--  PreviewMouseLeftButtonDown="OnTokenLeftButtonDown"  -->
+                MouseWheel="OnTokenMouseWheel"
+                MouseLeftButtonDown="OnTokenLeftButtonDown"
+                 PreviewMouseLeftButtonDown="OnTokenLeftButtonDown"> 
                 <!--  ToolTipOpening="OnToolTipOpening"  -->
+                
                 <Button.ContextMenu>
                     <ContextMenu x:Name="TokenDisplayContextMenu" FlowDirection="LeftToRight">
                         <MenuItem

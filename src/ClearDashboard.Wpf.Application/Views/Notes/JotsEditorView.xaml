@@ -17,12 +17,10 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
-        <Rectangle Grid.Row="0" Fill="Blue"></Rectangle>
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <notes:NoteCollectionDisplay
+  
+            <notes:NoteCollectionDisplay Grid.Row="0"
           x:Name="NotesControl"
           Margin="0,-20"
           CurrentUserId="{Binding NoteManager.CurrentUserId}"
@@ -118,8 +116,7 @@
                    
                 </i:Interaction.Triggers>
             </notes:NoteCollectionDisplay>
-        </ScrollViewer>
-       <StackPanel Grid.Row="2"
+       <StackPanel Grid.Row="1"
                HorizontalAlignment="Center"
                Orientation="Horizontal">
             <Button x:Name="Close"
