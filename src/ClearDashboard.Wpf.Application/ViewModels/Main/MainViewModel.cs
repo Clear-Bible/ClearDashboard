@@ -184,6 +184,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             settings.MinHeight = 500;
             settings.Title = $"{localizedString}";
 
+            // Keep the window on top
+            settings.Topmost = true;
+            settings.Owner = System.Windows.Application.Current.MainWindow;
+
             var viewModel = IoC.Get<CollabProjectManagementViewModel>();
 
             IWindowManager manager = new WindowManager();
@@ -1155,6 +1159,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             settings.MinHeight = 500;
             settings.Title = $"{localizedString}";
 
+            // Keep the window on top
+            settings.Topmost = true;
+            settings.Owner = System.Windows.Application.Current.MainWindow;
+
             var viewModel = IoC.Get<SlackMessageViewModel>();
             viewModel.Files = files;
             viewModel.ParatextUser = ProjectManager.CurrentUser.ParatextUserName!;
@@ -1175,6 +1183,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             settings.MinWidth = 500;
             settings.MinHeight = 500;
             settings.Title = $"{localizedString}";
+
+
+            // Keep the window on top
+            settings.Topmost = true;
+            settings.Owner = System.Windows.Application.Current.MainWindow;
 
             var viewModel = IoC.Get<AboutViewModel>();
 
@@ -1991,6 +2004,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         settings.ResizeMode = ResizeMode.NoResize;
                         settings.MinWidth = 500;
                         settings.MinHeight = 500;
+
+                        // Keep the window on top
+                        settings.Topmost = true;
+                        settings.Owner = System.Windows.Application.Current.MainWindow;
 
                         // get this applications position on the screen
                         var thisApp = App.Current.MainWindow;

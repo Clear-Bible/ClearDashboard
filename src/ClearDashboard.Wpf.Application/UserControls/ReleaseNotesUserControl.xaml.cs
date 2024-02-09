@@ -145,6 +145,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
             settings.MinHeight = 600;
             settings.Title = $"{titleString} - {_updateData?.Version}";
 
+            // Keep the window on top
+            settings.Topmost = true;
+            settings.Owner = System.Windows.Application.Current.MainWindow;
+
             var viewModel = IoC.Get<ShowUpdateNotesViewModel>();
             viewModel.Updates = new ObservableCollection<UpdateFormat>(Updates);
 

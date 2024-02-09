@@ -178,6 +178,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             settings.Width = 1000;
             settings.Height = 800;
             settings.Title = DialogTitle;
+
+            // Keep the window on top
+            settings.Topmost = true;
+            settings.Owner = System.Windows.Application.Current.MainWindow;
+
             return settings;
         }
 
