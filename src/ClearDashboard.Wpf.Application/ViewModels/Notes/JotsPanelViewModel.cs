@@ -7,6 +7,7 @@ using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
+using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
@@ -28,6 +29,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Notes
@@ -68,7 +70,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         {
             Any,
             Open,
-            Resolved
+            Resolved,
+            Archived
         }
 
         public Guid UserId => _currentUser?.Id
@@ -283,6 +286,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             set
             {
                 selectedNoteAssociationDescriptions_ = value;
+            }
+        }
+
+        private BindableCollection<NoteViewModel> _checkedNoteViewModels = new();
+        public BindableCollection<NoteViewModel> CheckedNoteViewModels
+        {
+            get => _checkedNoteViewModels;
+            set
+            {
+                _checkedNoteViewModels = value;
+            }
+        }
+
+        private bool _confirmParatextSendPopupIsOpen = false;
+        public bool ConfirmParatextSendPopupIsOpen
+        {
+            get => _confirmParatextSendPopupIsOpen;
+            set
+            {
+                _confirmParatextSendPopupIsOpen = value;
+                NotifyOfPropertyChange(() => ConfirmParatextSendPopupIsOpen);
             }
         }
 
@@ -662,6 +686,51 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await _enhancedViewModel.DisplayJotsEditor(null);
         }
 
+        public void ConfirmParatextSend()
+        {
+            ConfirmParatextSendPopupIsOpen = true;
+        }
+
+        public void ParatextSendConfirmed()
+        {
+            SendNotesToParatext();
+            ConfirmParatextSendPopupIsOpen = false;
+        }
+
+        public void ParatextSendCancelled()
+        {
+            ConfirmParatextSendPopupIsOpen = false;
+        }
+
+        private void SendNotesToParatext()
+        {
+            foreach (var note in CheckedNoteViewModels)
+            {
+                if (note.EnableParatextSend)
+                {
+                    Task.Run(() => NoteSendToParatextAsync(note).GetAwaiter());
+                }
+            }
+        }
+
+        public async Task NoteSendToParatextAsync(NoteViewModel note)
+        {
+            try
+            {
+                Message = $"Note '{note.Text}' sent to Paratext.";
+                await noteManager_.SendToParatextAsync(note);
+                
+            }
+            catch (Exception ex)//TODO although notes make it to Paratext, the result returns a failure
+            {
+                Message = $"Could not send note to Paratext: {ex.Message}";
+            }
+
+            Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NotePushCount, 1);
+
+            await UpdateNoteStatus(note, NoteStatus.Archived);
+        }
+
         public async Task HandleAsync(NoteAddedMessage message, CancellationToken cancellationToken)
         {
             var noteViewModelWithDetails = await noteManager_!.GetNoteDetailsAsync(message.Note.NoteId!);
@@ -715,8 +784,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
         #endregion // Methods
 
-
-
+        
     }
 
     public static class Extensions

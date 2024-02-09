@@ -122,6 +122,57 @@
                             Kind="ArrowExpandAll" />
                     </Button>
 
+                    <!--  Paratext send  -->
+                    <StackPanel
+                        HorizontalAlignment="Left"
+                        Orientation="Vertical"
+                        Visibility="{Binding ElementName=NotesDisplayControl, Path=ParatextSendVisibility}">
+                        <Button
+                            x:Name="SendToParatextButton"
+                            Margin="10,-5,10,0"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Right"
+                            cm:Message.Attach="ConfirmParatextSend"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            ToolTip="{helpers:Localization Notes_SendToParatext}">
+                            <Image Height="18" Source="/Resources/Paratext_Send32.png" />
+                        </Button>
+                        <Popup
+                            Name="ConfirmParatextSendPopup"
+                            HorizontalOffset="100"
+                            IsOpen="{Binding ConfirmParatextSendPopupIsOpen}"
+                            Placement="Left"
+                            PlacementTarget="{Binding ElementName=SendToParatextButton}"
+                            StaysOpen="False"
+                            VerticalOffset="30">
+                            <Border BorderThickness="2">
+                                <StackPanel Background="LightGreen" Orientation="Vertical">
+                                    <TextBlock
+                                        Padding="10,10,10,10"
+                                        HorizontalAlignment="Center"
+                                        FontWeight="Bold"
+                                        Text="{helpers:Localization Notes_SendConfirmation}" />
+
+                                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                        <Button
+                                            Margin="5"
+                                            cm:Message.Attach="ParatextSendConfirmed"
+                                            Content="{helpers:Localization Yes}"
+                                            Style="{StaticResource TransparentStyle}" />
+                                        <Button
+                                            Margin="5"
+                                            cm:Message.Attach="ParatextSendCancelled"
+                                            Content="{helpers:Localization No}"
+                                            Style="{StaticResource AlternativeStyle}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </Popup>
+                    </StackPanel>
+
                     <StackPanel
                         Margin="0,0,5,0"
                         HorizontalAlignment="Stretch"
@@ -138,6 +189,7 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
                                     <RowDefinition Height="*" />
                                     <RowDefinition Height="*" />
                                     <RowDefinition Height="*" />
@@ -196,6 +248,23 @@
                                     Foreground="{DynamicResource PrimaryHueDarkBrush}"
                                     GroupName="radStatus"
                                     IsChecked="{Binding Path=FilterStatus, Mode=TwoWay, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Resolved}"
+                                    Style="{StaticResource DashboardRadioButtonStyle}" />
+
+                                <materialDesign:PackIcon
+                                    Grid.Row="3"
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Foreground="Gray"
+                                    Kind="EmailOutline" />
+                                <RadioButton
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    Background="{StaticResource PrimaryHueDarkBrush}"
+                                    Content="{helpers:Localization Notes_NoteStatus_Archived}"
+                                    Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                                    GroupName="radStatus"
+                                    IsChecked="{Binding Path=FilterStatus, Mode=TwoWay, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Archived}"
                                     Style="{StaticResource DashboardRadioButtonStyle}" />
                             </Grid>
                         </GroupBox>
@@ -319,8 +388,6 @@
             </DataGrid.ColumnHeaderStyle>
 
             <DataGrid.Columns>
-
-
                 <DataGridTemplateColumn MinWidth="80" Header="{helpers:Localization Notes_Note_NoteStatus}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -337,6 +404,79 @@
                                                 <DataTrigger Binding="{Binding Path=NoteStatus}" Value="Open">
                                                     <Setter Property="Kind" Value="EmailOpenOutline" />
                                                     <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </materialDesign:PackIcon.Style>
+                                </materialDesign:PackIcon>
+                                <materialDesign:PackIcon Margin="-5,0,0,0">
+                                    <materialDesign:PackIcon.Style>
+                                        <Style TargetType="materialDesign:PackIcon">
+                                            <Setter Property="Kind" Value="ExclamationThick" />
+                                            <Setter Property="Foreground" Value="{StaticResource RedDarkBrush}" />
+                                        </Style>
+                                    </materialDesign:PackIcon.Style>
+                                    <materialDesign:PackIcon.Visibility>
+                                        <MultiBinding
+                                            Converter="{StaticResource GuidInGuidsToVisibilityConverter}"
+                                            ConverterParameter="{StaticResource True}"
+                                            Mode="OneWay">
+                                            <Binding Path="UserIdsSeenAllReplies" />
+                                            <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}" />
+                                        </MultiBinding>
+                                    </materialDesign:PackIcon.Visibility>
+                                </materialDesign:PackIcon>
+                            </StackPanel>
+
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn MinWidth="35">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox
+                                Margin="-7,0,-7,0"
+                                Checked="ToggleButton_OnChecked"
+                                Unchecked="ToggleButton_OnUnchecked" />
+                            <!--<Button
+                                x:Name="SendToParatext"
+                                Margin="10,-5,10,0"
+                                Padding="0"
+                                HorizontalAlignment="Right"
+                                cm:Message.Attach="[Event Click] = [Action NoteSendToParatext]"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                FontSize="12"
+                                FontWeight="SemiBold"
+                                ToolTip="{helpers:Localization Notes_SendToParatext}">
+                                <Image Height="18" Source="/Resources/Paratext_Send32.png" />
+                            </Button>-->
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+
+                <DataGridTemplateColumn MinWidth="60" Header="{helpers:Localization Notes_Note_NoteStatus}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                                <materialDesign:PackIcon>
+                                    <materialDesign:PackIcon.Style>
+                                        <Style TargetType="materialDesign:PackIcon">
+                                            <Setter Property="Kind" Value="EmailOutline" />
+                                            <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightBrush}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=NoteStatus}" Value="Open">
+                                                    <Setter Property="Kind" Value="EmailOpenOutline" />
+                                                    <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Path=NoteStatus}" Value="Archived">
+                                                    <Setter Property="Kind" Value="EmailOutline" />
+                                                    <Setter Property="Foreground" Value="Gray" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -490,6 +630,26 @@
                                 VerticalAlignment="Center"
                                 Text="{Binding ModifiedBy}"
                                 TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn
+                    Width="*"
+                    MinWidth="250"
+                    Header="Labels">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <notes1:LabelsDisplay
+                                x:Name="LabelsDisplay"
+                                LabelBackground="BlanchedAlmond"
+                                LabelCornerRadius="10"
+                                LabelFontSize="14"
+                                LabelMargin="0 0 2 2"
+                                LabelPadding="10,6,10,5"
+                                Labels="{Binding Labels}"
+                                Note="{Binding}"
+                                RemoveLabelButtonVisibility="Collapsed" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
