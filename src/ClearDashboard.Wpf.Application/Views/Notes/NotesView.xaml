@@ -151,10 +151,11 @@
                             <Border BorderThickness="2">
                                 <StackPanel Background="LightGreen" Orientation="Vertical">
                                     <TextBlock
-                                        Padding="10"
+                                        Padding="10,10,10,10"
                                         HorizontalAlignment="Center"
                                         FontWeight="Bold"
                                         Text="{helpers:Localization Notes_SendConfirmation}" />
+
                                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                         <Button
                                             Margin="5"
@@ -188,6 +189,7 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
                                     <RowDefinition Height="*" />
                                     <RowDefinition Height="*" />
                                     <RowDefinition Height="*" />
@@ -246,6 +248,23 @@
                                     Foreground="{DynamicResource PrimaryHueDarkBrush}"
                                     GroupName="radStatus"
                                     IsChecked="{Binding Path=FilterStatus, Mode=TwoWay, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Resolved}"
+                                    Style="{StaticResource DashboardRadioButtonStyle}" />
+
+                                <materialDesign:PackIcon
+                                    Grid.Row="3"
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Foreground="Gray"
+                                    Kind="EmailOutline" />
+                                <RadioButton
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    Background="{StaticResource PrimaryHueDarkBrush}"
+                                    Content="{helpers:Localization Notes_NoteStatus_Archived}"
+                                    Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                                    GroupName="radStatus"
+                                    IsChecked="{Binding Path=FilterStatus, Mode=TwoWay, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Archived}"
                                     Style="{StaticResource DashboardRadioButtonStyle}" />
                             </Grid>
                         </GroupBox>
@@ -411,6 +430,10 @@
                                                 <DataTrigger Binding="{Binding Path=NoteStatus}" Value="Open">
                                                     <Setter Property="Kind" Value="EmailOpenOutline" />
                                                     <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Path=NoteStatus}" Value="Archived">
+                                                    <Setter Property="Kind" Value="EmailOutline" />
+                                                    <Setter Property="Foreground" Value="Gray" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>

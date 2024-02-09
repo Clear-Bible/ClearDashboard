@@ -67,7 +67,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         {
             Any,
             Open,
-            Resolved
+            Resolved,
+            Archived
         }
 
         public Guid UserId => _currentUser?.Id
@@ -705,14 +706,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         {
             try
             {
-                await noteManager_.SendToParatextAsync(note);
                 Message = $"Note '{note.Text}' sent to Paratext.";
-                Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NotePushCount, 1);
+                await noteManager_.SendToParatextAsync(note);
+                
             }
-            catch (Exception ex)
+            catch (Exception ex)//TODO although notes make it to Paratext, the result returns a failure
             {
                 Message = $"Could not send note to Paratext: {ex.Message}";
             }
+
+            Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NotePushCount, 1);
+
+            await UpdateNoteStatus(note, NoteStatus.Archived);
         }
 
 
