@@ -7,6 +7,7 @@ using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
+using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
@@ -29,6 +30,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 {
@@ -279,6 +282,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             set
             {
                 selectedNoteAssociationDescriptions_ = value;
+            }
+        }
+
+        private BindableCollection<NoteViewModel> _checkedNoteViewModels = new();
+        public BindableCollection<NoteViewModel> CheckedNoteViewModels
+        {
+            get => _checkedNoteViewModels;
+            set
+            {
+                _checkedNoteViewModels = value;
             }
         }
 
@@ -650,6 +663,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await noteManager_!.AddReplyToNoteAsync(parentNote, replyText);
         }
 
+
+
+        public  void NavigateToMainViewModel()
+        {
+            var something = 2;
+        }
+
+        public void NoteSendToParatext()
+        {
+            foreach (var note in CheckedNoteViewModels)
+            {
+                Task.Run(() => NoteSendToParatextAsync(note).GetAwaiter());
+
+            }
+        }
+
+        public async Task NoteSendToParatextAsync(NoteViewModel note)
+        {
+            try
+            {
+                await noteManager_.SendToParatextAsync(note);
+                Message = $"Note '{note.Text}' sent to Paratext.";
+                Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NotePushCount, 1);
+            }
+            catch (Exception ex)
+            {
+                Message = $"Could not send note to Paratext: {ex.Message}";
+            }
+        }
+
+
         public async Task HandleAsync(NoteAddedMessage message, CancellationToken cancellationToken)
         {
             var noteViewModelWithDetails = await noteManager_!.GetNoteDetailsAsync(message.Note.NoteId!);
@@ -703,8 +747,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
         #endregion // Methods
 
-
-
+        
     }
 
     public static class Extensions
