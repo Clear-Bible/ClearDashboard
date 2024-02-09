@@ -111,11 +111,10 @@ public class TokenDisplayBase : UserControl, IHandle<AlignmentAddedMessage>, IHa
 
     private void OnUnloaded(object sender, RoutedEventArgs e)
     {
-        if (TokenDisplayViewModel != null)
+        if (TokenDisplayViewModel is not null)
         {
             TokenDisplayViewModel.PropertyChanged -= TokenDisplayViewModelPropertyChanged;
         }
-       
     }
 
     private void TokenDisplayViewModelPropertyChanged(object? sender,

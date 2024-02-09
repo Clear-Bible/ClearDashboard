@@ -2139,23 +2139,41 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 ? TokenDisplayViewModel.IsAligned ? TokenColor : TokenAlternateColor
                 : TokenColor;
 
-            Debug.WriteLine($"CalculateLayout  {TokenDisplayViewModel.PaddingBefore} : {tokenLeftMargin}");
-            // add spacing for the external notes icon and the note indicator
-            if (TokenDisplayViewModel.HasExternalNotes == false && TokenDisplayViewModel.TokenHasNote)
+            // add spacing for the external notes icon and the note indicator for LTR
+            if (TokenDisplayViewModel.HasExternalNotes == false && TokenDisplayViewModel.TokenHasNote && FlowDirection == FlowDirection.LeftToRight)
             {
                 // only note indicator
                 tokenLeftMargin = tokenLeftMargin + 10;
             }
-            else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote)
+            else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote && FlowDirection == FlowDirection.LeftToRight)
             {
                 // both external notes and note indicator
                 tokenLeftMargin = tokenLeftMargin + 25;
             }
-            else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote == false)
+            else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote == false && FlowDirection == FlowDirection.LeftToRight)
             {
                 // only external notes
                 tokenLeftMargin = tokenLeftMargin;
             }
+
+            // add spacing for the external notes icon and the note indicator for RTL
+            if (TokenDisplayViewModel.HasExternalNotes == false && TokenDisplayViewModel.TokenHasNote && FlowDirection == FlowDirection.RightToLeft)
+            {
+                // only note indicator
+                tokenLeftMargin = tokenLeftMargin + 20;
+            }
+            else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote && FlowDirection == FlowDirection.RightToLeft)
+            {
+                // both external notes and note indicator
+                tokenLeftMargin = tokenLeftMargin + 35;
+            }
+            else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote == false && FlowDirection == FlowDirection.RightToLeft)
+            {
+                // only external notes
+                tokenLeftMargin = tokenLeftMargin;
+            }
+
+
 
             TokenMargin = new Thickness(tokenLeftMargin, 0, tokenRightMargin, 0);
             SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.SurfaceText : TokenDisplayViewModel.SurfaceText.Trim();
@@ -2164,7 +2182,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             NoteIndicatorMargin = new Thickness(tokenLeftMargin, 1, 0, TokenVerticalSpacing);
             TokenNoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TokenHasNote) ? Visibility.Visible : Visibility.Hidden;
             TranslationNoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TranslationHasNote) ? Visibility.Visible : Visibility.Hidden;
-            NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered ? Brushes.BlueViolet : NoteIndicatorColor;
+            NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered ? Brushes.Orange : NoteIndicatorColor;
 
             TranslationMargin = new Thickness(translationLeftMargin, 0, translationRightMargin, TranslationVerticalSpacing);
             TranslationVisibility = (ShowTranslation && TokenDisplayViewModel.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
