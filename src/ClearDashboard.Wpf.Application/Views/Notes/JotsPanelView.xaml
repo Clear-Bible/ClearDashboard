@@ -395,7 +395,17 @@
                             <CheckBox
                                 Margin="-7,0,-7,0"
                                 Checked="ToggleButton_OnChecked"
-                                Unchecked="ToggleButton_OnUnchecked" />
+                                Unchecked="ToggleButton_OnUnchecked">
+                                <CheckBox.Style>
+                                    <Style TargetType="CheckBox">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=NoteStatus}" Value="Archived">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </CheckBox.Style>
+                            </CheckBox>
                             <!--<Button
                                 x:Name="SendToParatext"
                                 Margin="10,-5,10,0"
@@ -409,51 +419,6 @@
                                 ToolTip="{helpers:Localization Notes_SendToParatext}">
                                 <Image Height="18" Source="/Resources/Paratext_Send32.png" />
                             </Button>-->
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-
-
-                <DataGridTemplateColumn MinWidth="80" Header="{helpers:Localization Notes_Note_NoteStatus}">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Orientation="Horizontal">
-                                <materialDesign:PackIcon>
-                                    <materialDesign:PackIcon.Style>
-                                        <Style TargetType="materialDesign:PackIcon">
-                                            <Setter Property="Kind" Value="EmailOutline" />
-                                            <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightBrush}" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Path=NoteStatus}" Value="Open">
-                                                    <Setter Property="Kind" Value="EmailOpenOutline" />
-                                                    <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </materialDesign:PackIcon.Style>
-                                </materialDesign:PackIcon>
-                                <materialDesign:PackIcon Margin="-5,0,0,0">
-                                    <materialDesign:PackIcon.Style>
-                                        <Style TargetType="materialDesign:PackIcon">
-                                            <Setter Property="Kind" Value="ExclamationThick" />
-                                            <Setter Property="Foreground" Value="{StaticResource RedDarkBrush}" />
-                                        </Style>
-                                    </materialDesign:PackIcon.Style>
-                                    <materialDesign:PackIcon.Visibility>
-                                        <MultiBinding
-                                            Converter="{StaticResource GuidInGuidsToVisibilityConverter}"
-                                            ConverterParameter="{StaticResource True}"
-                                            Mode="OneWay">
-                                            <Binding Path="UserIdsSeenAllReplies" />
-                                            <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}" />
-                                        </MultiBinding>
-                                    </materialDesign:PackIcon.Visibility>
-                                </materialDesign:PackIcon>
-                            </StackPanel>
-
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
