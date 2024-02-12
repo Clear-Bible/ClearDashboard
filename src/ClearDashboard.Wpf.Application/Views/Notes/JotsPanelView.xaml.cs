@@ -1538,5 +1538,22 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
             }
             
         }
+
+        //private void ToggleButton_OnCheckedAll(object sender, RoutedEventArgs e)
+        //{
+        //    if (sender is CheckBox checkbox && checkbox.DataContext is NoteViewModel note)
+        //    {
+        //        _vm.CheckedNoteViewModels.Add(note);
+        //    }
+        //}
+
+        //private void ToggleButton_OnUncheckedAll(object sender, RoutedEventArgs e)
+        //{
+        //    if (sender is CheckBox checkbox && checkbox.DataContext is NoteViewModel note)
+        //    {
+        //        _vm.CheckedNoteViewModels.Remove(note);
+        //    }
+
+        //}
     }
 }

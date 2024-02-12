@@ -310,6 +310,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             }
         }
 
+        private bool _confirmMarkOpenPopupIsOpen = false;
+        public bool ConfirmMarkOpenPopupIsOpen
+        {
+            get => _confirmMarkOpenPopupIsOpen;
+            set
+            {
+                _confirmMarkOpenPopupIsOpen = value;
+                NotifyOfPropertyChange(() => ConfirmMarkOpenPopupIsOpen);
+            }
+        }
+
+        private bool _confirmMarkResolvedPopupIsOpen = false;
+        public bool ConfirmMarkResolvedPopupIsOpen
+        {
+            get => _confirmMarkResolvedPopupIsOpen;
+            set
+            {
+                _confirmMarkResolvedPopupIsOpen = value;
+                NotifyOfPropertyChange(() => ConfirmMarkResolvedPopupIsOpen);
+            }
+        }
+
         #endregion //Observable Properties
 
 
@@ -712,12 +734,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             {
                 if (note.EnableParatextSend)
                 {
-                    Task.Run(() => NoteSendToParatextAsync(note).GetAwaiter());
+                    Task.Run(() => SendNotesToParatextAsync(note).GetAwaiter());
                 }
             }
         }
 
-        public async Task NoteSendToParatextAsync(NoteViewModel note)
+        public async Task SendNotesToParatextAsync(NoteViewModel note)
         {
             try
             {
@@ -733,6 +755,86 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NotePushCount, 1);
 
             await UpdateNoteStatus(note, NoteStatus.Archived);
+        }
+
+        public void ConfirmMarkNotesOpen()
+        {
+            ConfirmMarkOpenPopupIsOpen = true;
+        }
+
+        public void MarkNotesOpenConfirmed()
+        {
+            MarkNotesOpen();
+            ConfirmMarkOpenPopupIsOpen = false;
+        }
+
+        public void MarkNotesOpenCancelled()
+        {
+            ConfirmMarkOpenPopupIsOpen = false;
+        }
+
+        private void MarkNotesOpen()
+        {
+            foreach (var note in CheckedNoteViewModels)
+            {
+                if (note.NoteStatus != NoteStatus.Archived.ToString() && note.NoteStatus != NoteStatus.Open.ToString())
+                {
+                    Task.Run(() => MarkNotesOpenAsync(note).GetAwaiter());
+                }
+            }
+        }
+
+        public async Task MarkNotesOpenAsync(NoteViewModel note)
+        {
+            try
+            {
+                await UpdateNoteStatus(note, NoteStatus.Open);
+                Message = $"Note '{note.Text}' set as Open status.";
+            }
+            catch (Exception ex)
+            {
+                Message = $"Could not set note status to Open: {ex.Message}";
+            }
+        }
+
+        public void ConfirmMarkNotesResolved()
+        {
+            ConfirmMarkResolvedPopupIsOpen = true;
+        }
+
+        public void MarkNotesResolvedConfirmed()
+        {
+            MarkNotesResolved();
+            ConfirmMarkResolvedPopupIsOpen = false;
+        }
+
+        public void MarkNotesResolvedCancelled()
+        {
+            ConfirmMarkResolvedPopupIsOpen = false;
+        }
+
+        private void MarkNotesResolved()
+        {
+            foreach (var note in CheckedNoteViewModels)
+            {
+                if (note.NoteStatus != NoteStatus.Archived.ToString() && note.NoteStatus != NoteStatus.Resolved.ToString())
+                {
+                    Task.Run(() => MarkNotesResolvedAsync(note).GetAwaiter());
+                }
+            }
+        }
+
+        public async Task MarkNotesResolvedAsync(NoteViewModel note)
+        {
+            try
+            {
+                await UpdateNoteStatus(note, NoteStatus.Resolved);
+                Message = $"Note '{note.Text}' set as Resolved status.";
+            }
+            catch (Exception ex)
+            {
+                Message = $"Could not set note status to Resolved: {ex.Message}";
+            }
         }
 
         public async Task HandleAsync(NoteAddedMessage message, CancellationToken cancellationToken)

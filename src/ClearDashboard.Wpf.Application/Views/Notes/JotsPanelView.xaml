@@ -92,41 +92,140 @@
                 MaxWidth="176"
                 VerticalScrollBarVisibility="Auto">
                 <StackPanel Background="{DynamicResource MaterialDesignPaper}" Orientation="Vertical">
-                    <Button
-                        Width="20"
-                        Height="20"
-                        Margin="5,5,0,0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
-                        ToolTip="{helpers:Localization ExpandView}">
-                        <Button.Style>
-                            <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
-                                <Setter Property="Padding" Value="0" />
-                                <Setter Property="Background" Value="Transparent" />
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
-                                        <Setter Property="RenderTransform">
-                                            <Setter.Value>
-                                                <ScaleTransform ScaleX="2" ScaleY="2" />
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                        <materialDesign:PackIcon
-                            Background="Transparent"
-                            Foreground="{StaticResource AccentHueBrush}"
-                            Kind="ArrowExpandAll" />
-                    </Button>
+                    <StackPanel Margin="0,5,0,-5" Orientation="Horizontal">
+                        <Button
+                            Width="20"
+                            Height="20"
+                            Margin="5,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
+                            ToolTip="{helpers:Localization ExpandView}">
+                            <Button.Style>
+                                <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
+                                            <Setter Property="RenderTransform">
+                                                <Setter.Value>
+                                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <materialDesign:PackIcon
+                                Background="Transparent"
+                                Foreground="{StaticResource AccentHueBrush}"
+                                Kind="ArrowExpandAll" />
+                        </Button>
+
+                        <!--  Mark Open  -->
+                        <StackPanel HorizontalAlignment="Left" Orientation="Vertical">
+                            <Button
+                                Margin="10,-5,10,0"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Right"
+                                cm:Message.Attach="ConfirmMarkNotesOpen"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                FontSize="12"
+                                FontWeight="SemiBold"
+                                ToolTip="{helpers:Localization Notes_MarkOpen}">
+                                <materialDesign:PackIcon
+                                    VerticalAlignment="Center"
+                                    Foreground="{StaticResource GreenDarkBrush}"
+                                    Kind="EmailOpenOutline" />
+                            </Button>
+                            <Popup
+                                Name="ConfirmMarkOpenPopup"
+                                HorizontalOffset="100"
+                                IsOpen="{Binding ConfirmMarkOpenPopupIsOpen}"
+                                Placement="Left"
+                                PlacementTarget="{Binding ElementName=SendToParatextButton}"
+                                StaysOpen="False"
+                                VerticalOffset="30">
+                                <Border BorderThickness="2">
+                                    <StackPanel Background="LightGreen" Orientation="Vertical">
+                                        <TextBlock
+                                            Padding="10,10,10,10"
+                                            HorizontalAlignment="Center"
+                                            FontWeight="Bold"
+                                            Text="{helpers:Localization Notes_OpenConfirmation}" />
+
+                                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                            <Button
+                                                Margin="5"
+                                                cm:Message.Attach="ParatextSendConfirmed"
+                                                Content="{helpers:Localization Yes}"
+                                                Style="{StaticResource TransparentStyle}" />
+                                            <Button
+                                                Margin="5"
+                                                cm:Message.Attach="ParatextSendCancelled"
+                                                Content="{helpers:Localization No}"
+                                                Style="{StaticResource AlternativeStyle}" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </Popup>
+                        </StackPanel>
+
+                        <!--  Mark Resolved  -->
+                        <StackPanel HorizontalAlignment="Left" Orientation="Vertical">
+                            <Button
+                                Margin="10,-5,10,0"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Right"
+                                cm:Message.Attach="ConfirmMarkNotesResolved"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                FontSize="12"
+                                FontWeight="SemiBold"
+                                ToolTip="{helpers:Localization Notes_MarkResolved}">
+                                <materialDesign:PackIcon
+                                    VerticalAlignment="Center"
+                                    Foreground="{StaticResource PrimaryHueLightBrush}"
+                                    Kind="EmailOutline" />
+                            </Button>
+                            <Popup
+                                Name="ConfirmMarkResolvedPopup"
+                                HorizontalOffset="100"
+                                IsOpen="{Binding ConfirmMarkResolvedPopupIsOpen}"
+                                Placement="Left"
+                                PlacementTarget="{Binding ElementName=SendToParatextButton}"
+                                StaysOpen="False"
+                                VerticalOffset="30">
+                                <Border BorderThickness="2">
+                                    <StackPanel Background="LightGreen" Orientation="Vertical">
+                                        <TextBlock
+                                            Padding="10,10,10,10"
+                                            HorizontalAlignment="Center"
+                                            FontWeight="Bold"
+                                            Text="{helpers:Localization Notes_ResolveConfirmation}" />
+
+                                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                            <Button
+                                                Margin="5"
+                                                cm:Message.Attach="ParatextSendConfirmed"
+                                                Content="{helpers:Localization Yes}"
+                                                Style="{StaticResource TransparentStyle}" />
+                                            <Button
+                                                Margin="5"
+                                                cm:Message.Attach="ParatextSendCancelled"
+                                                Content="{helpers:Localization No}"
+                                                Style="{StaticResource AlternativeStyle}" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </Popup>
+                        </StackPanel>
+                    </StackPanel>
 
                     <!--  Paratext send  -->
-                    <StackPanel
-                        HorizontalAlignment="Left"
-                        Orientation="Vertical"
-                        Visibility="{Binding ElementName=NotesDisplayControl, Path=ParatextSendVisibility}">
+                    <StackPanel HorizontalAlignment="Left" Orientation="Vertical">
                         <Button
                             x:Name="SendToParatextButton"
                             Margin="10,-5,10,0"
@@ -390,10 +489,27 @@
             <DataGrid.Columns>
 
                 <DataGridTemplateColumn MinWidth="35">
+                    <!--<DataGridTemplateColumn.Header>
+                        <CheckBox
+                            Margin="-7,0,-7,0"
+                            Checked="ToggleButton_OnCheckedAll"
+                            Unchecked="ToggleButton_OnUncheckedAll">
+                            <CheckBox.Style>
+                                <Style TargetType="CheckBox">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=NoteStatus}" Value="Archived">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </CheckBox.Style>
+                        </CheckBox>
+                    </DataGridTemplateColumn.Header>-->
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <CheckBox
                                 Margin="-7,0,-7,0"
+                                VerticalAlignment="Center"
                                 Checked="ToggleButton_OnChecked"
                                 Unchecked="ToggleButton_OnUnchecked">
                                 <CheckBox.Style>
@@ -557,7 +673,10 @@
                 <DataGridTemplateColumn MinWidth="200" Header="{helpers:Localization Notes_Note_Verse}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding AssociationVerse}" TextWrapping="Wrap" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Text="{Binding AssociationVerse}"
+                                TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
