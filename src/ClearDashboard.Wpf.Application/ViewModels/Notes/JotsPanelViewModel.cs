@@ -460,7 +460,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await reportStatus(taskName, LongRunningTaskStatus.Running, cancellationToken, "Collecting note details for notes", null);
 
             return await noteIds
-                .Select(async nid => await noteManager.GetNoteDetailsAsync(nid, false, collabUpdate))
+                .Select(async nid => await noteManager.GetNoteDetailsAsync(nid, true, collabUpdate))
                 .WhenAll();
         }
         private void UpdateSelectedNote(NoteViewModel? selectedNoteViewModel)

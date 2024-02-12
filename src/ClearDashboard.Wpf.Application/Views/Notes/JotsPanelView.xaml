@@ -477,7 +477,8 @@
             SelectedItem="{Binding SelectedNoteViewModel}"
             SelectionMode="Single"
             SelectionUnit="FullRow"
-            VerticalGridLinesBrush="{StaticResource GridBrush}">
+            VerticalGridLinesBrush="{StaticResource GridBrush}"
+            VirtualizingStackPanel.IsVirtualizing="False">
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
