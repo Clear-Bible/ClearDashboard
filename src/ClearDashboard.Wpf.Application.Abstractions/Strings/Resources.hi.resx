@@ -167,7 +167,7 @@
     <value>USFM की जाँच करना</value>
   </data>
   <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
-    <value>क्लिपबोर्ड पर USFM त्रुटियों की प्रतिलिपि बनाएँ</value>
+    <value>क्लिपबोर्ड के लिए USFM त्रुटियों की प्रतिलिपि बनाएँ</value>
   </data>
   <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
     <value>त्रुटियों की संख्या:</value>
@@ -674,7 +674,7 @@
     <value>टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>भाषा की जोड़ी के लिए टोकन में शामिल हों</value>
+    <value>भाषा जोड़ी के लिए टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>'अमान्य' के रूप में चिह्न संरेखण</value>
@@ -917,7 +917,7 @@
     <value>Lemma/रूप:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>नए लेक्सेम के लिए लेम्मा:</value>
+    <value>न्यू लेक्सेम के लिए लेम्मा:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>शब्दिम</value>
@@ -1154,7 +1154,7 @@
     <value>नई देखें</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>नोट सूची</value>
+    <value>जोट्स</value>
   </data>
   <data name="MainView_WindowsPINS" xml:space="preserve">
     <value>PINS</value>
@@ -1256,7 +1256,7 @@
     <value>मर्ज पूर्ण ... पुनः लोडिंग इंटरफ़ेस</value>
   </data>
   <data name="MergeDialog_OperationCancelled" xml:space="preserve">
-    <value>रद्द किया गया ऑपरेशन</value>
+    <value>अभियान रद्द किया गया</value>
   </data>
   <data name="MergeDialog_OperationComplete" xml:space="preserve">
     <value>ऑपरेशन पूरा!</value>
@@ -1379,7 +1379,7 @@
     <value>फिल्टर</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>लेबल द्वारा फ़िल्टर</value>
+    <value>लेबल द्वारा फ़िल्टर करें</value>
   </data>
   <data name="Notes_FilterNoteStatus" xml:space="preserve">
     <value>स्थिति से फ़िल्टर करें</value>
@@ -1453,6 +1453,12 @@
   <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
     <value>विच्छेद लेबल</value>
   </data>
+  <data name="Notes_MarkOpen" xml:space="preserve">
+    <value>इस नोट को खुले के रूप में चिह्नित करें</value>
+  </data>
+  <data name="Notes_MarkResolved" xml:space="preserve">
+    <value>इस नोट को हल के रूप में चिह्नित करें</value>
+  </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>बनाया था</value>
   </data>
@@ -1501,11 +1507,17 @@
   <data name="Notes_OpenClosed" xml:space="preserve">
     <value>स्थिति</value>
   </data>
+  <data name="Notes_OpenConfirmation" xml:space="preserve">
+    <value>इन नोटों को खुले के रूप में चिह्नित करें?</value>
+  </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>भाग</value>
   </data>
+  <data name="Notes_ResolveConfirmation" xml:space="preserve">
+    <value>इन नोटों को हल के रूप में चिह्नित करें?</value>
+  </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>इस नोट को paratext पर भेजें?</value>
+    <value>इन नोटों को paratext पर भेजें?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
     <value>इस नोट को paratext पर भेजें</value>
@@ -1799,7 +1811,7 @@
     <value>उपसर्ग</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>दिखावा दिखाना</value>
+    <value>दिखावा दिखाओ</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>तना</value>
@@ -1832,7 +1844,7 @@
     <value>सहयोग परियोजनाएं</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>आरंभ करने के लिए अपनी परियोजना बनाएं।</value>
+    <value>आरंभ करने के लिए अपना प्रोजेक्ट बनाएं।</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>एक नया प्रोजेक्ट बनाएं</value>
@@ -2120,7 +2132,7 @@
     <value>ओबद्याह</value>
   </data>
   <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>दाई</value>
+    <value>दामाद</value>
   </data>
   <data name="ProperCase_Philippians" xml:space="preserve">
     <value>फिलिप्पियों</value>

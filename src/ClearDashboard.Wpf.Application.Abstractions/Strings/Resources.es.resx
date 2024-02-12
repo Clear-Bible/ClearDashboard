@@ -500,7 +500,7 @@
     <value>Parte fuente</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Fuente Ref.</value>
+    <value>Reflexión de origen</value>
   </data>
   <data name="BulkAlignmentReview_Target" xml:space="preserve">
     <value>Objetivo</value>
@@ -581,7 +581,7 @@
     <value>Proyectos</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
-    <value>Proyecto seleccionado</value>
+    <value>Seleccionar proyecto</value>
   </data>
   <data name="Copy" xml:space="preserve">
     <value>Copiar</value>
@@ -650,13 +650,13 @@
     <value>Eliminar la alineación?</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>Eliminar alineación</value>
+    <value>Eliminar la alineación</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
     <value>Eliminar la alineación de '{0}'?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>Eliminar todas las alineaciones?</value>
+    <value>¿Eliminar todas las alineaciones?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>El token '{0}' tiene múltiples alineaciones definidas. Haga clic en '{1}' eliminará todas las alineaciones.</value>
@@ -698,7 +698,7 @@
     <value>Eliminar corpus</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>Mostrar los controles de la vista</value>
+    <value>Mostrar los controles de vista</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>Token dividido</value>
@@ -713,7 +713,7 @@
     <value>División de tres vías</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Un si unir un token compuesto</value>
+    <value>Un si unión a la token compuesta</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -872,7 +872,7 @@
     <value>Agregar significado</value>
   </data>
   <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
-    <value>Agregue un significado para este lema</value>
+    <value>Agregar un significado para este lema</value>
   </data>
   <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
     <value>Agregar un dominio semántico</value>
@@ -884,7 +884,7 @@
     <value>Cancelar brillo</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
-    <value>Cambiar todos los ocurrencias inseguros</value>
+    <value>Cambiar todos los ocurrencias no establecidos</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Si se verifica, esto cambiará todas las ocurrencias no establecidas de esta palabra</value>
@@ -1154,7 +1154,7 @@
     <value>Nueva vista</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>Lista de notas</value>
+    <value>Jotadas</value>
   </data>
   <data name="MainView_WindowsPINS" xml:space="preserve">
     <value>PINS</value>
@@ -1421,7 +1421,7 @@
     <value>Agregar grupo de etiquetas</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Agregar un grupo de etiqueta</value>
+    <value>Agregar un grupo de etiquetas</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Un grupo de etiquetas ya existe con el nombre</value>
@@ -1452,6 +1452,12 @@
   </data>
   <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
     <value>Etiqueta disociada</value>
+  </data>
+  <data name="Notes_MarkOpen" xml:space="preserve">
+    <value>Marque esta nota como abierta</value>
+  </data>
+  <data name="Notes_MarkResolved" xml:space="preserve">
+    <value>Marque esta nota como se resuelve</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Creado</value>
@@ -1501,11 +1507,17 @@
   <data name="Notes_OpenClosed" xml:space="preserve">
     <value>Estado</value>
   </data>
+  <data name="Notes_OpenConfirmation" xml:space="preserve">
+    <value>Marcar estas notas como abiertas?</value>
+  </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Parte</value>
   </data>
+  <data name="Notes_ResolveConfirmation" xml:space="preserve">
+    <value>Marque estas notas como se resuelven?</value>
+  </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>¿Enviar esta nota a Paratext?</value>
+    <value>¿Enviar estas notas a Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
     <value>Envía esta nota a Paratext</value>
@@ -1613,7 +1625,7 @@
     <value>Traducción inversa</value>
   </data>
   <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
-    <value>Calcular el nuevo modelo de traducción</value>
+    <value>Calcule el nuevo modelo de traducción</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
     <value>Cambiar el nivel de zoom del contenido</value>
@@ -1631,7 +1643,7 @@
     <value>Hija</value>
   </data>
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>Eliminar alineación</value>
+    <value>Eliminar la alineación</value>
   </data>
   <data name="Pds_DeleteParallelLine" xml:space="preserve">
     <value>¿Estás seguro de que quieres eliminar esta alineación? Todas las notas, alineaciones e interlineal asociados con esta alineación se eliminarán y no se pueden recuperar.</value>
@@ -1646,7 +1658,7 @@
     <value>Diccionario</value>
   </data>
   <data name="Pds_DisabledNotice" xml:space="preserve">
-    <value>Desactivado mientras las tareas de fondo funcionan</value>
+    <value>Deshabilitado mientras las tareas de fondo funcionan</value>
   </data>
   <data name="Pds_ExistingProject" xml:space="preserve">
     <value>El nombre del proyecto ya existe: no se puede importar</value>
@@ -1715,7 +1727,7 @@
     <value>Iniciar PARATEXT primero</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Estudiobible</value>
+    <value>Estudio de estudio</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBIBLeadDitions</value>
@@ -2081,7 +2093,7 @@
     <value>Joshua</value>
   </data>
   <data name="ProperCase_Jude" xml:space="preserve">
-    <value>Judío</value>
+    <value>Yacuana</value>
   </data>
   <data name="ProperCase_Judges" xml:space="preserve">
     <value>Jueces</value>
@@ -2294,7 +2306,7 @@
     <value>Guardado en servidor remoto</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Guardar el usuario de GitLab en el servidor</value>
+    <value>Guardar el usuario de GitLab al servidor</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
     <value>Guardar ajustes</value>
@@ -2348,7 +2360,7 @@
     <value>Mostrar preleboseos</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
-    <value>Actualizar a la nueva versión de ClearDashboard</value>
+    <value>Actualización de la nueva versión de ClearDashboard</value>
   </data>
   <data name="ShellView_User" xml:space="preserve">
     <value>Usuario</value>

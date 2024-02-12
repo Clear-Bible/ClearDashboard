@@ -173,7 +173,7 @@
     <value>Количество ошибок:</value>
   </data>
   <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
-    <value>Межлинейный</value>
+    <value>Межлинейно</value>
   </data>
   <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
     <value>Нет ошибок</value>
@@ -665,10 +665,10 @@
     <value>Поиск по фильтру</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>Поиск члена фильтра</value>
+    <value>Поиск членов фильтра</value>
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
-    <value>Межлинейный</value>
+    <value>Межлинейно</value>
   </data>
   <data name="EnhancedView_JoinTokens" xml:space="preserve">
     <value>Присоединяйтесь к токенам</value>
@@ -701,7 +701,7 @@
     <value>Показать элементы управления представлением</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>Разделенный токен</value>
+    <value>Расколотый токен</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>Применить разделение на другие экземпляры токена</value>
@@ -1022,7 +1022,7 @@
     <value>Добавьте цель в качестве перевода для ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Найдите лексы, которые имеют один или несколько переводов, которые соответствуют цели</value>
+    <value>Найдите Lexemes, которые имеют один или несколько переводов, которые соответствуют цели</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Импорт проверен</value>
@@ -1154,7 +1154,7 @@
     <value>Новый вид</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>Заметки Список</value>
+    <value>Jots</value>
   </data>
   <data name="MainView_WindowsPINS" xml:space="preserve">
     <value>PINS</value>
@@ -1412,7 +1412,7 @@
     <value>Вы хотите удалить этикетку:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>Вы хотите понизить этикетку:</value>
+    <value>Вы хотите отменить этикетку:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>Из группы лейбла:</value>
@@ -1452,6 +1452,12 @@
   </data>
   <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
     <value>Распочеивая этикетка</value>
+  </data>
+  <data name="Notes_MarkOpen" xml:space="preserve">
+    <value>Отметьте эту ноту как открытая</value>
+  </data>
+  <data name="Notes_MarkResolved" xml:space="preserve">
+    <value>Отметьте эту ноту</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Созданный</value>
@@ -1501,11 +1507,17 @@
   <data name="Notes_OpenClosed" xml:space="preserve">
     <value>Положение дел</value>
   </data>
+  <data name="Notes_OpenConfirmation" xml:space="preserve">
+    <value>Отметьте эти заметки как открытые?</value>
+  </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Часть</value>
   </data>
+  <data name="Notes_ResolveConfirmation" xml:space="preserve">
+    <value>Отметьте эти заметки как решение?</value>
+  </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>Отправить эту записку в Paratext?</value>
+    <value>Отправить эти заметки в Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
     <value>Отправить эту записку в Paratext</value>
@@ -1553,10 +1565,10 @@
     <value>Параллелизировать стихи корпораций</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Алгоритм выравнивания машинного слова</value>
+    <value>Алгоритм выравнивания слова</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Алгоритм выравнивания машинного слова</value>
+    <value>Алгоритм выравнивания слова</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Симметризированная модель поезда?</value>
@@ -1595,7 +1607,7 @@
     <value>Создать новую токенизацию корпуса</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>Добавить новый интерлинеар</value>
+    <value>Добавить новый интернетальный</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>Добавьте текст в просмотр</value>
@@ -1661,7 +1673,7 @@
     <value>Установите всю область контента в просмотр</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>Подключить все узлы к видовому доку</value>
+    <value>Установите все узлы в Viewport</value>
   </data>
   <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
     <value>Получите последние внешние заметки</value>
@@ -1736,7 +1748,7 @@
     <value>Неизвестный</value>
   </data>
   <data name="Pds_UpdateLabelsWithExternalLabels" xml:space="preserve">
-    <value>Обновить этикетки с внешними примечаниями</value>
+    <value>Обновить этикетки с помощью внешних заметок</value>
   </data>
   <data name="Pds_Xml" xml:space="preserve">
     <value>XML</value>
@@ -1778,7 +1790,7 @@
     <value>Тип лекса</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
-    <value>Загружать ссылки</value>
+    <value>Загрузить ссылки</value>
   </data>
   <data name="Pins_Match" xml:space="preserve">
     <value>Соответствовать</value>
@@ -1871,7 +1883,7 @@
     <value>Установите этот флажок, чтобы включить греческие и еврейские библейские тексты при создании вашего проекта.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Включите NT Греко -библейские тексты?</value>
+    <value>Включите NT Грико -библейские тексты?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>Включите ивритские библейские тексты?</value>
@@ -2306,10 +2318,10 @@
     <value>Настройки ClearDashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Показать расширенные виды на другом мониторе, чем панель панели</value>
+    <value>Показать расширенные представления на другом мониторе, чем панель инструментов</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Для систем с тремя или более мониторами показать расширенный просмотр на третьем мониторе</value>
+    <value>Для систем с тремя или более мониторами показать расширенное представление о третьем мониторе</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Текстовая коллекция</value>

@@ -116,7 +116,7 @@
     <value>ClearDashboard用戶ID：</value>
   </data>
   <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
-    <value>ClearDashboard用戶名：</value>
+    <value>Cleardashboard用戶名：</value>
   </data>
   <data name="AccountInfo_CollaborationEmailLabel" xml:space="preserve">
     <value>協作電子郵件：</value>
@@ -161,7 +161,7 @@
     <value>結盟</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
-    <value>選擇與您合作的書籍，您稍後可以隨時添加更多書籍。</value>
+    <value>選擇您正在合作的書籍，您稍後可以隨時添加更多書籍。</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>檢查USFM</value>
@@ -449,13 +449,13 @@
     <value>散裝對齊編輯</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>批量對準評論</value>
+    <value>批量對齊審查</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>數數</value>
   </data>
   <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>按表面文本計數</value>
+    <value>按地面文本計數</value>
   </data>
   <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
     <value>通過培訓文本計數</value>
@@ -491,7 +491,7 @@
     <value>部分</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>樞紐的單詞</value>
+    <value>樞密性的單詞</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>來源</value>
@@ -632,7 +632,7 @@
     <value>添加對齊方式？</value>
   </data>
   <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>與'{1}'對齊'{0}'？</value>
+    <value>用'{1}'對齊'{0}'？</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
     <value>結盟</value>
@@ -956,7 +956,7 @@
     <value>添加'{0}'作為表單</value>
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
-    <value>將'{0}'添加為第一個含義</value>
+    <value>添加'{0}'作為第一個含義</value>
   </data>
   <data name="LexiconEdit_EditingDone" xml:space="preserve">
     <value>完畢</value>
@@ -1025,7 +1025,7 @@
     <value>查找具有與目標匹配的一個或多個翻譯的詞彙</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
-    <value>進口檢查</value>
+    <value>導入檢查</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexeme或形式匹配</value>
@@ -1067,10 +1067,10 @@
     <value>需要名字</value>
   </data>
   <data name="LicenseValidator_LastMissing" xml:space="preserve">
-    <value>需要姓</value>
+    <value>需要姓氏</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>需要許可證密鑰</value>
+    <value>需要許可密鑰</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
@@ -1154,7 +1154,7 @@
     <value>新視圖</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>筆記清單</value>
+    <value>jots</value>
   </data>
   <data name="MainView_WindowsPINS" xml:space="preserve">
     <value>PINS</value>
@@ -1424,7 +1424,7 @@
     <value>添加標籤組</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>一個標籤組已經存在</value>
+    <value>標籤組已經存在，名稱為</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>初始化標籤組</value>
@@ -1452,6 +1452,12 @@
   </data>
   <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
     <value>分離標籤</value>
+  </data>
+  <data name="Notes_MarkOpen" xml:space="preserve">
+    <value>將此註釋標記為打開</value>
+  </data>
+  <data name="Notes_MarkResolved" xml:space="preserve">
+    <value>將此註釋標記為已解決</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>創建</value>
@@ -1501,17 +1507,23 @@
   <data name="Notes_OpenClosed" xml:space="preserve">
     <value>地位</value>
   </data>
+  <data name="Notes_OpenConfirmation" xml:space="preserve">
+    <value>將這些筆記標記為打開？</value>
+  </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>部分</value>
   </data>
+  <data name="Notes_ResolveConfirmation" xml:space="preserve">
+    <value>將這些筆記標記為解決？</value>
+  </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>將此註釋發送到Paratext？</value>
+    <value>將這些筆記發送給Paratext？</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
     <value>將此註釋發送到Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>令牌化語料庫</value>
+    <value>象徵化的語料庫</value>
   </data>
   <data name="Notes_TranslationSet" xml:space="preserve">
     <value>翻譯集</value>
@@ -1592,13 +1604,13 @@
     <value>創建新單詞對齊</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>創建新的語料庫令牌化</value>
+    <value>創建新的語料庫</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
     <value>添加新的Interlinear</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
-    <value>添加文字以查看</value>
+    <value>添加文本查看</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
     <value>將文本添加到新視圖</value>
@@ -1745,7 +1757,7 @@
     <value>放大內容</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>縮小內容</value>
+    <value>從內容中縮小</value>
   </data>
   <data name="PHM" xml:space="preserve">
     <value>PHM</value>
@@ -1823,7 +1835,7 @@
     <value>Cleardashboard</value>
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
-    <value>PARATEXT BETA未運行</value>
+    <value>paratext beta不運行</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
     <value>取消...</value>
@@ -1832,7 +1844,7 @@
     <value>協作項目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>創建您的項目以入門。</value>
+    <value>創建您的項目以開始。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>創建一個新項目</value>
@@ -1868,7 +1880,7 @@
     <value>導入服務器項目</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>在創建項目時，請選中此框，以包括希臘語和希伯來語聖經的文本。</value>
+    <value>選中此框，以在創建項目時包括希臘語和希伯來語聖經文本。</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>包括NT希臘聖經文本？</value>
@@ -1883,7 +1895,7 @@
     <value>無匹配。</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>這裡很孤獨。請創建一個新項目。</value>
+    <value>這裡很孤單。請創建一個新項目。</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
     <value>未安裝paratext。請安裝Paratext並重新運行ClearDashboard應用程序。</value>
@@ -1892,7 +1904,7 @@
     <value>paratext不運行</value>
   </data>
   <data name="ProjectPicker_OpenRecent" xml:space="preserve">
-    <value>公開最近</value>
+    <value>近期開放</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
     <value>PARATEXT</value>
@@ -2000,7 +2012,7 @@
     <value>帖撒羅尼迦後書</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2蒂莫西</value>
+    <value>2提摩太</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3約翰</value>
@@ -2171,7 +2183,7 @@
     <value>解密許可證密鑰的內容與您提供的信息不符。</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
-    <value>您的許可證密鑰要么缺少或損壞。</value>
+    <value>您的許可密鑰丟失或損壞。</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
     <value>歡迎來到Cleardashboard！請輸入您的註冊信息。</value>
@@ -2204,7 +2216,7 @@
     <value>發送</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>啟用實驗水上插件</value>
+    <value>啟用實驗性水上插件</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
     <value>檢查您的電子郵件並輸入驗證代碼：</value>
@@ -2234,7 +2246,7 @@
     <value>在實驗組中啟用外部Paratext註釋</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
-    <value>啟用外部paratext註釋</value>
+    <value>啟用外部Paratext註釋</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>啟用詞典進口</value>
@@ -2264,7 +2276,7 @@
     <value>標籤組導出到：</value>
   </data>
   <data name="Settings_LabelGroupsImported" xml:space="preserve">
-    <value>從以下導入的標籤組：</value>
+    <value>從：</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>多監視器支持</value>
@@ -2324,7 +2336,7 @@
     <value>驗證電子郵件代碼</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>啟用逐一文字集合顯示</value>
+    <value>啟用逐節的文本集合顯示</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>取消任務</value>
@@ -2345,7 +2357,7 @@
     <value>發行說明</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>顯示預釋放</value>
+    <value>顯示預發行</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
     <value>更新到新版本的ClearDashboard</value>
@@ -2441,7 +2453,7 @@
     <value>更新並添加新書</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
-    <value>選擇書籍</value>
+    <value>選擇書</value>
   </data>
   <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
     <value>更新並添加新</value>

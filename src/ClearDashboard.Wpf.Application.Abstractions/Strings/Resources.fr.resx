@@ -425,7 +425,7 @@
     <value>Tous</value>
   </data>
   <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
-    <value>Rendages manquants</value>
+    <value>Rendements manquants</value>
   </data>
   <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
     <value>Mots alignés</value>
@@ -641,7 +641,7 @@
     <value>Supprimer cette vue?</value>
   </data>
   <data name="EnhancedView_CreateAlignment" xml:space="preserve">
-    <value>Créer l'alignement</value>
+    <value>Créer un alignement</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
     <value>Afficher / créer des notes</value>
@@ -701,7 +701,7 @@
     <value>Afficher les commandes de la vue</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>Jeton fendu</value>
+    <value>Jeton divisé</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>Appliquer la fente à d'autres cas de jeton</value>
@@ -1154,7 +1154,7 @@
     <value>Nouvelle vue</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>Liste des notes</value>
+    <value>Coups</value>
   </data>
   <data name="MainView_WindowsPINS" xml:space="preserve">
     <value>PINS</value>
@@ -1453,6 +1453,12 @@
   <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
     <value>Étiquette dissociée</value>
   </data>
+  <data name="Notes_MarkOpen" xml:space="preserve">
+    <value>Marquez cette note comme ouverte</value>
+  </data>
+  <data name="Notes_MarkResolved" xml:space="preserve">
+    <value>Marquez cette note comme résolue</value>
+  </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Créé</value>
   </data>
@@ -1501,11 +1507,17 @@
   <data name="Notes_OpenClosed" xml:space="preserve">
     <value>Statut</value>
   </data>
+  <data name="Notes_OpenConfirmation" xml:space="preserve">
+    <value>Marquez ces notes comme ouvertes?</value>
+  </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Partie</value>
   </data>
+  <data name="Notes_ResolveConfirmation" xml:space="preserve">
+    <value>Marquez ces notes comme résolues?</value>
+  </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>Envoyez cette note à PARATEXT?</value>
+    <value>Envoyez ces notes à PARATEXT?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
     <value>Envoyer cette note à PARATEXT</value>
@@ -1616,7 +1628,7 @@
     <value>Calculer le nouveau modèle de traduction</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Changer le niveau de zoom du contenu</value>
+    <value>Modifier le niveau de zoom du contenu</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
     <value>Consultant Notes</value>
@@ -1895,7 +1907,7 @@
     <value>Ouverte récente</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>Paratex</value>
+    <value>Paratext</value>
   </data>
   <data name="ProjectPicker_ParatextBackTranslation" xml:space="preserve">
     <value>Traduction de dos paratext</value>
@@ -2093,7 +2105,7 @@
     <value>Lévitique</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
-    <value>Las</value>
+    <value>Luck</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
     <value>Malachi</value>
@@ -2147,7 +2159,7 @@
     <value>Tirus</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>Zécharie</value>
+    <value>Zécharia</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
     <value>Zéphanie</value>
@@ -2288,7 +2300,7 @@
     <value>Réservé à l'expansion future</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaurer l'utilisateur de collaboration</value>
+    <value>Restaurer l'utilisateur de la collaboration</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Enregistré sur le serveur distant</value>

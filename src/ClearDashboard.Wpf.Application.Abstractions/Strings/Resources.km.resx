@@ -1154,7 +1154,7 @@
     <value>ទិដ្ឋភាពថ្មី</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>បញ្ជីចំណាំ</value>
+    <value>jots</value>
   </data>
   <data name="MainView_WindowsPINS" xml:space="preserve">
     <value>PINS</value>
@@ -1453,6 +1453,12 @@
   <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
     <value>ផ្តាច់ស្លាកស្លាក</value>
   </data>
+  <data name="Notes_MarkOpen" xml:space="preserve">
+    <value>សម្គាល់កំណត់ត្រានេះជាការបើកចំហ</value>
+  </data>
+  <data name="Notes_MarkResolved" xml:space="preserve">
+    <value>សម្គាល់កំណត់ត្រានេះដូចដែលបានដោះស្រាយ</value>
+  </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>បានបង្កើត</value>
   </data>
@@ -1501,11 +1507,17 @@
   <data name="Notes_OpenClosed" xml:space="preserve">
     <value>ច្បាប់</value>
   </data>
+  <data name="Notes_OpenConfirmation" xml:space="preserve">
+    <value>សម្គាល់កំណត់ចំណាំទាំងនេះថាបើក?</value>
+  </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>ចេក</value>
   </data>
+  <data name="Notes_ResolveConfirmation" xml:space="preserve">
+    <value>សម្គាល់កំណត់ត្រាទាំងនេះដែលបានដោះស្រាយ?</value>
+  </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>ផ្ញើកំណត់ត្រានេះទៅ ParateXT?</value>
+    <value>ផ្ញើកំណត់ចំណាំទាំងនេះទៅលោក ParateXT?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
     <value>ផ្ញើកំណត់ត្រានេះទៅ ParateXT</value>

@@ -533,7 +533,7 @@
     <value>Waktu lokal</value>
   </data>
   <data name="ClockUserControl_Name" xml:space="preserve">
-    <value>Beri nama item</value>
+    <value>Beri nama itemnya</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
     <value>grup baru</value>
@@ -554,7 +554,7 @@
     <value>Pengguna kolaborasi yang tersedia:</value>
   </data>
   <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
-    <value>Kelola proyek kolaborasi</value>
+    <value>Mengelola proyek kolaborasi</value>
   </data>
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Pengguna proyek saat ini:</value>
@@ -713,7 +713,7 @@
     <value>Split tiga arah</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Unjoin Token Komposit</value>
+    <value>Token Komposit Unjoin</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -1154,7 +1154,7 @@
     <value>Pemandangan baru</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>DAFTAR CATATAN</value>
+    <value>Jots</value>
   </data>
   <data name="MainView_WindowsPINS" xml:space="preserve">
     <value>PINS</value>
@@ -1250,7 +1250,7 @@
     <value>MAT</value>
   </data>
   <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>Membuat basis data ...</value>
+    <value>Membuat database ...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
     <value>Gabungkan ... Antarmuka Muat Ulang</value>
@@ -1421,7 +1421,7 @@
     <value>Tambahkan grup label</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Tambahkan grup label</value>
+    <value>Tambahkan Grup Label</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Grup label sudah ada dengan nama</value>
@@ -1452,6 +1452,12 @@
   </data>
   <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
     <value>Label Disassociate</value>
+  </data>
+  <data name="Notes_MarkOpen" xml:space="preserve">
+    <value>Tandai catatan ini terbuka</value>
+  </data>
+  <data name="Notes_MarkResolved" xml:space="preserve">
+    <value>Tandai catatan ini saat diselesaikan</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Dibuat</value>
@@ -1501,8 +1507,14 @@
   <data name="Notes_OpenClosed" xml:space="preserve">
     <value>Status</value>
   </data>
+  <data name="Notes_OpenConfirmation" xml:space="preserve">
+    <value>Tandai catatan ini terbuka?</value>
+  </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Bagian</value>
+  </data>
+  <data name="Notes_ResolveConfirmation" xml:space="preserve">
+    <value>Tandai catatan ini saat diselesaikan?</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>Kirim catatan ini ke Paratext?</value>
@@ -1715,7 +1727,7 @@
     <value>Mulai Paratext dulu</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Studibible</value>
+    <value>Studybible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBibleadditions</value>
@@ -1877,7 +1889,7 @@
     <value>Sertakan teks -teks Alkitab Ibrani?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
-    <value>Kelola proyek kolaborasi</value>
+    <value>Mengelola proyek kolaborasi</value>
   </data>
   <data name="ProjectPicker_NoMatches" xml:space="preserve">
     <value>Tidak ada yang cocok.</value>

@@ -222,54 +222,54 @@
                                 </Border>
                             </Popup>
                         </StackPanel>
-                    </StackPanel>
 
-                    <!--  Paratext send  -->
-                    <StackPanel HorizontalAlignment="Left" Orientation="Vertical">
-                        <Button
-                            x:Name="SendToParatextButton"
-                            Margin="10,-5,10,0"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Right"
-                            cm:Message.Attach="ConfirmParatextSend"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            FontSize="12"
-                            FontWeight="SemiBold"
-                            ToolTip="{helpers:Localization Notes_SendToParatext}">
-                            <Image Height="18" Source="/Resources/Paratext_Send32.png" />
-                        </Button>
-                        <Popup
-                            Name="ConfirmParatextSendPopup"
-                            HorizontalOffset="100"
-                            IsOpen="{Binding ConfirmParatextSendPopupIsOpen}"
-                            Placement="Left"
-                            PlacementTarget="{Binding ElementName=SendToParatextButton}"
-                            StaysOpen="False"
-                            VerticalOffset="30">
-                            <Border BorderThickness="2">
-                                <StackPanel Background="LightGreen" Orientation="Vertical">
-                                    <TextBlock
-                                        Padding="10,10,10,10"
-                                        HorizontalAlignment="Center"
-                                        FontWeight="Bold"
-                                        Text="{helpers:Localization Notes_SendConfirmation}" />
+                        <!--  Paratext send  -->
+                        <StackPanel HorizontalAlignment="Left" Orientation="Vertical">
+                            <Button
+                                x:Name="SendToParatextButton"
+                                Margin="10,-5,10,0"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Right"
+                                cm:Message.Attach="ConfirmParatextSend"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                FontSize="12"
+                                FontWeight="SemiBold"
+                                ToolTip="{helpers:Localization Notes_SendToParatext}">
+                                <Image Height="18" Source="/Resources/Paratext_Send32.png" />
+                            </Button>
+                            <Popup
+                                Name="ConfirmParatextSendPopup"
+                                HorizontalOffset="100"
+                                IsOpen="{Binding ConfirmParatextSendPopupIsOpen}"
+                                Placement="Left"
+                                PlacementTarget="{Binding ElementName=SendToParatextButton}"
+                                StaysOpen="False"
+                                VerticalOffset="30">
+                                <Border BorderThickness="2">
+                                    <StackPanel Background="LightGreen" Orientation="Vertical">
+                                        <TextBlock
+                                            Padding="10,10,10,10"
+                                            HorizontalAlignment="Center"
+                                            FontWeight="Bold"
+                                            Text="{helpers:Localization Notes_SendConfirmation}" />
 
-                                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                        <Button
-                                            Margin="5"
-                                            cm:Message.Attach="ParatextSendConfirmed"
-                                            Content="{helpers:Localization Yes}"
-                                            Style="{StaticResource TransparentStyle}" />
-                                        <Button
-                                            Margin="5"
-                                            cm:Message.Attach="ParatextSendCancelled"
-                                            Content="{helpers:Localization No}"
-                                            Style="{StaticResource AlternativeStyle}" />
+                                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                            <Button
+                                                Margin="5"
+                                                cm:Message.Attach="ParatextSendConfirmed"
+                                                Content="{helpers:Localization Yes}"
+                                                Style="{StaticResource TransparentStyle}" />
+                                            <Button
+                                                Margin="5"
+                                                cm:Message.Attach="ParatextSendCancelled"
+                                                Content="{helpers:Localization No}"
+                                                Style="{StaticResource AlternativeStyle}" />
+                                        </StackPanel>
                                     </StackPanel>
-                                </StackPanel>
-                            </Border>
-                        </Popup>
+                                </Border>
+                            </Popup>
+                        </StackPanel>
                     </StackPanel>
 
                     <StackPanel

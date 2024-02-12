@@ -1055,7 +1055,7 @@
     <value>Target ላማው ቃል</value>
   </data>
   <data name="LexiconImport_Title" xml:space="preserve">
-    <value>LEXEXON ማስመጣት</value>
+    <value>LEXICON ማስመጣት</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
     <value>የትርጉም ግጥሚያዎች</value>
@@ -1154,7 +1154,7 @@
     <value>አዲስ እይታ</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>ማስታወሻዎች ዝርዝር</value>
+    <value>ቀልድ</value>
   </data>
   <data name="MainView_WindowsPINS" xml:space="preserve">
     <value>PINS</value>
@@ -1453,6 +1453,12 @@
   <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
     <value>የአስፈፃሚነት መለያ</value>
   </data>
+  <data name="Notes_MarkOpen" xml:space="preserve">
+    <value>ይህንን ማስታወሻ እንደ ክፍት ምልክት ያድርጉበት</value>
+  </data>
+  <data name="Notes_MarkResolved" xml:space="preserve">
+    <value>እንደተፈተነው ይህንን ማስታወሻ ምልክት ያድርጉበት</value>
+  </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>ተፈጠረ</value>
   </data>
@@ -1501,11 +1507,17 @@
   <data name="Notes_OpenClosed" xml:space="preserve">
     <value>ሁኔታ</value>
   </data>
+  <data name="Notes_OpenConfirmation" xml:space="preserve">
+    <value>እነዚህን ማስታወሻዎች ክፍት እንደሆኑ ምልክት ያድርጉ?</value>
+  </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>ክፍል</value>
   </data>
+  <data name="Notes_ResolveConfirmation" xml:space="preserve">
+    <value>እነዚህን ማስታወሻዎች እንደተፈታ ምልክት ያድርጉ?</value>
+  </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>ይህንን ማስታወሻ ለማቃጠል ይላኩ?</value>
+    <value>እነዚህን ማስታወሻዎች ወደ ጥውቀት ይላኩ?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
     <value>ይህንን ማስታወሻ ለማሸነፍ ይላኩ</value>
