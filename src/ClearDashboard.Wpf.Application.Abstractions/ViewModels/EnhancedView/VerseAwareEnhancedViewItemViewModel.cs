@@ -225,9 +225,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await GetData(reloadType, cancellationToken);
         }
 
+        public virtual async Task RefreshExternalNotesData(ReloadType reloadType = ReloadType.Refresh, CancellationToken cancellationToken = default)
+        {
+            _ = SetExternalNotesAsync(
+                TokenizedTextCorpusIds,
+                cancellationToken,
+                true);
+        }
+
         private async Task SetExternalNotesAsync(
             IEnumerable<TokenizedTextCorpusId> tokenizedTextCorpusIds,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken,
+            bool clearCachedExternalNotesMap = false)
         {
             if (AbstractionsSettingsHelper.GetExternalNotesEnabled() == false)
             {
@@ -246,7 +255,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                             tokenizedTextCorpusIds,
                             Rows.Select(ptr => (VerseRef)ptr.Ref),
                             Logger,
-                            cancellationToken);
+                            cancellationToken,
+                            clearCachedExternalNotesMap);
 
                         Execute.OnUIThread(() =>
                         {

@@ -736,7 +736,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
                     Task.Run(() => SendNotesToParatextAsync(note).GetAwaiter());
                 }
             }
-            //refresh external notes
+            
+            EventAggregator.PublishOnUIThreadAsync(new ReloadExternalNotesDataMessage(ReloadType.Refresh),CancellationToken.None);
         }
 
         public async Task SendNotesToParatextAsync(NoteViewModel note)
