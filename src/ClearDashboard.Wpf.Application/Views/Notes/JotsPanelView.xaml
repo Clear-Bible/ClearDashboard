@@ -159,12 +159,12 @@
                                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                             <Button
                                                 Margin="5"
-                                                cm:Message.Attach="ParatextSendConfirmed"
+                                                cm:Message.Attach="MarkNotesOpenConfirmed"
                                                 Content="{helpers:Localization Yes}"
                                                 Style="{StaticResource TransparentStyle}" />
                                             <Button
                                                 Margin="5"
-                                                cm:Message.Attach="ParatextSendCancelled"
+                                                cm:Message.Attach="MarkNotesOpenCancelled"
                                                 Content="{helpers:Localization No}"
                                                 Style="{StaticResource AlternativeStyle}" />
                                         </StackPanel>
@@ -209,12 +209,12 @@
                                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                             <Button
                                                 Margin="5"
-                                                cm:Message.Attach="ParatextSendConfirmed"
+                                                cm:Message.Attach="MarkNotesResolvedConfirmed"
                                                 Content="{helpers:Localization Yes}"
                                                 Style="{StaticResource TransparentStyle}" />
                                             <Button
                                                 Margin="5"
-                                                cm:Message.Attach="ParatextSendCancelled"
+                                                cm:Message.Attach="MarkNotesResolvedCancelled"
                                                 Content="{helpers:Localization No}"
                                                 Style="{StaticResource AlternativeStyle}" />
                                         </StackPanel>

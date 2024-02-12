@@ -745,7 +745,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             {
                 Message = $"Note '{note.Text}' sent to Paratext.";
                 await noteManager_.SendToParatextAsync(note);
-                
+                CheckedNoteViewModels.Clear();
             }
             catch (Exception ex)//TODO although notes make it to Paratext, the result returns a failure
             {
@@ -790,6 +790,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             {
                 await UpdateNoteStatus(note, NoteStatus.Open);
                 Message = $"Note '{note.Text}' set as Open status.";
+                CheckedNoteViewModels.Clear();
             }
             catch (Exception ex)
             {
@@ -830,6 +831,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             {
                 await UpdateNoteStatus(note, NoteStatus.Resolved);
                 Message = $"Note '{note.Text}' set as Resolved status.";
+                CheckedNoteViewModels.Clear();
             }
             catch (Exception ex)
             {
