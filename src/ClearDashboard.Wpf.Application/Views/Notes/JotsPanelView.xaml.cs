@@ -16,6 +16,7 @@ using ClearDashboard.DataAccessLayer.Annotations;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -1555,5 +1556,14 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
         //    }
 
         //}
+        private void NoteTextButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is System.Windows.Controls.Button button)
+            {
+                var mousePosition = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(button));
+                _vm.DisplayJotsEditor(null);
+            }
+            
+        }
     }
 }

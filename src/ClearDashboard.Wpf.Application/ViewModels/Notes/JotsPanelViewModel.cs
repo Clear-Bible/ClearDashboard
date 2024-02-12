@@ -706,10 +706,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await noteManager_!.AddReplyToNoteAsync(parentNote, replyText);
         }
 
-        public async Task DisplayJotsEditor()
+        public async Task DisplayJotsEditor(Point? mousePosition)
         {
-            var something = 2;
-            await _enhancedViewModel.DisplayJotsEditor(null);
+            await _enhancedViewModel.DisplayJotsEditor(mousePosition);
         }
 
         public void ConfirmParatextSend()
@@ -737,6 +736,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
                     Task.Run(() => SendNotesToParatextAsync(note).GetAwaiter());
                 }
             }
+            //refresh external notes
         }
 
         public async Task SendNotesToParatextAsync(NoteViewModel note)
