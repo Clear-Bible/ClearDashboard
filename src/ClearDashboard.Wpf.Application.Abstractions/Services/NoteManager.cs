@@ -1,5 +1,6 @@
 ﻿using ClearBible.Engine.Utils;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,7 +36,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public ExternalNoteManager ExternalNoteManager { get; }
 
-        private Dictionary<Guid, NoteViewModel> NotesCache { get; } = new();
+        private ConcurrentDictionary<Guid, NoteViewModel> NotesCache { get; } = new();
         public void ClearNotesCache()
         {
             NotesCache.Clear();
@@ -384,15 +385,22 @@ namespace ClearDashboard.Wpf.Application.Services
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved details for note \"{note.Text}\" ({noteId.Id}) in {stopwatch.ElapsedMilliseconds}ms");
 
-                if (NotesCache.ContainsKey(noteId.Id))
-                {
-                    NotesCache[noteId.Id] = noteViewModel;
-                }
-                else
-                {
-                    NotesCache.Add(noteId.Id, noteViewModel);
-                }
+                NotesCache[noteId.Id] = noteViewModel;
                 
+                //if (NotesCache.ContainsKey(noteId.Id))
+                //{
+                //    NotesCache[noteId.Id] = noteViewModel;
+                //}
+                //else
+                //{
+                //    NotesCache.TryAdd(noteId.Id, noteViewModel);
+                //}
+
+                //if(!NotesCache.TryUpdate(noteId.Id, noteViewModel, NotesCache[noteId.Id]))
+                //{
+                //    NotesCache.TryAdd(noteId.Id, noteViewModel);
+                //}
+
                 return noteViewModel;
             }
             catch (Exception e)
