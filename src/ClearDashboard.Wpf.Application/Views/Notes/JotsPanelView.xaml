@@ -311,7 +311,8 @@
                                     VerticalAlignment="Center"
                                     FontSize="20"
                                     Foreground="{StaticResource GreenDarkBrush}"
-                                    Text="*" />
+                                    Text="*"
+                                    ToolTip="{helpers:Localization Notes_FilterStatus_Any}" />
                                 <RadioButton
                                     Grid.Row="0"
                                     Grid.Column="1"
@@ -329,7 +330,8 @@
                                     Grid.Column="0"
                                     VerticalAlignment="Center"
                                     Foreground="{StaticResource GreenDarkBrush}"
-                                    Kind="EmailOpenOutline" />
+                                    Kind="EmailOpenOutline"
+                                    ToolTip="{helpers:Localization Notes_FilterStatus_Open}" />
                                 <RadioButton
                                     Grid.Row="1"
                                     Grid.Column="1"
@@ -346,7 +348,8 @@
                                     Grid.Column="0"
                                     VerticalAlignment="Center"
                                     Foreground="{StaticResource PrimaryHueLightBrush}"
-                                    Kind="EmailOutline" />
+                                    Kind="EmailOutline"
+                                    ToolTip="{helpers:Localization Notes_FilterStatus_Closed}" />
                                 <RadioButton
                                     Grid.Row="2"
                                     Grid.Column="1"
@@ -363,7 +366,8 @@
                                     Grid.Column="0"
                                     VerticalAlignment="Center"
                                     Foreground="Gray"
-                                    Kind="EmailOutline" />
+                                    Kind="EmailOutline"
+                                    ToolTip="{helpers:Localization Notes_NoteStatus_Archived}" />
                                 <RadioButton
                                     Grid.Row="3"
                                     Grid.Column="1"

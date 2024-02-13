@@ -386,20 +386,6 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogInformation($"Retrieved details for note \"{note.Text}\" ({noteId.Id}) in {stopwatch.ElapsedMilliseconds}ms");
 
                 NotesCache[noteId.Id] = noteViewModel;
-                
-                //if (NotesCache.ContainsKey(noteId.Id))
-                //{
-                //    NotesCache[noteId.Id] = noteViewModel;
-                //}
-                //else
-                //{
-                //    NotesCache.TryAdd(noteId.Id, noteViewModel);
-                //}
-
-                //if(!NotesCache.TryUpdate(noteId.Id, noteViewModel, NotesCache[noteId.Id]))
-                //{
-                //    NotesCache.TryAdd(noteId.Id, noteViewModel);
-                //}
 
                 return noteViewModel;
             }

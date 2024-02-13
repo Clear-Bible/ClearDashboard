@@ -549,8 +549,8 @@ public JotsPanelViewModel()
                         FilterUsersChoices.Clear();
                         noteVms
                             .Select(nvm => nvm.ModifiedBy)
-                            .Distinct()
-                            .OrderBy(mb => mb)
+                            .Distinct()                                               
+                            .OrderBy(mb => string.IsNullOrEmpty(mb.Trim())).ThenBy(mb=>mb)
                             .Select(mb =>
                             {
                                 FilterUsersChoices.Add(mb);
