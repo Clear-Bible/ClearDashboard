@@ -332,12 +332,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             }
         }
 
-        #endregion //Observable Properties
+        private int _jotsUnableToBeSentToParatextCount;
+        public int JotsUnableToBeSentToParatextCount
+        {
+            get => _jotsUnableToBeSentToParatextCount;
+            set
+            {
+                _jotsUnableToBeSentToParatextCount = value;
+                NotifyOfPropertyChange(() => JotsUnableToBeSentToParatextCount);
+            }
+        }
+
+        private Visibility _jotsUnableToBeSentToParatextVisibility;
+        public Visibility JotsUnableToBeSentToParatextVisibility
+        {
+            get => _jotsUnableToBeSentToParatextVisibility;
+            set
+            {
+                _jotsUnableToBeSentToParatextVisibility = value;
+                NotifyOfPropertyChange(() => JotsUnableToBeSentToParatextVisibility);
+            }
+        }
 
 
-        #region Constructor
+#endregion //Observable Properties
 
-        public JotsPanelViewModel()
+
+#region Constructor
+
+public JotsPanelViewModel()
         {
             // used by Caliburn Micro for design time    
         }
@@ -713,6 +736,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
         public void ConfirmParatextSend()
         {
+            JotsUnableToBeSentToParatextCount=0;
+            
+            foreach (var note in CheckedNoteViewModels)
+            {
+                if (!note.EnableParatextSend)
+                {
+                    JotsUnableToBeSentToParatextCount++;
+                }
+            }
+
+            JotsUnableToBeSentToParatextVisibility = JotsUnableToBeSentToParatextCount > 0 ? Visibility.Visible : Visibility.Collapsed;
+
             ConfirmParatextSendPopupIsOpen = true;
         }
 

@@ -254,6 +254,15 @@
                                             FontWeight="Bold"
                                             Text="{helpers:Localization Notes_SendConfirmation}" />
 
+                                        <TextBlock
+                                            Padding="10,10,10,10"
+                                            HorizontalAlignment="Center"
+                                            Visibility="{Binding JotsUnableToBeSentToParatextVisibility}">
+                                            <Run Text="Due to your Paratext project permissions, " />
+                                            <Run FontWeight="Bold" Text="{Binding JotsUnableToBeSentToParatextCount}" />
+                                            <Run Text=" selected notes will note be sent to Paratext." />
+                                        </TextBlock>
+
                                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                             <Button
                                                 Margin="5"
