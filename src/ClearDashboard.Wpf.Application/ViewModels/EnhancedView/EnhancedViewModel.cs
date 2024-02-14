@@ -1198,11 +1198,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             // WIP:  show non-modal window here.
             // NB:  Keep the settings, ditch the view model.
             dynamic settings = new ExpandoObject();
-            settings.MinWidth = 500;
-            settings.MinHeight = 500;
-            settings.Height = 500;
+            settings.MinWidth = 800;
+            settings.MinHeight = 550;
+            settings.Height = 550;
+            settings.Width = 800;
             settings.MaxWidth = 800;
-            settings.MaxHeight = 700;
+            settings.MaxHeight = 550;
             settings.Title = "Jot";
             //settings.WindowStyle = WindowStyle.SingleBorderWindow;
 

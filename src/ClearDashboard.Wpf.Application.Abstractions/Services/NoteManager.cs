@@ -102,6 +102,15 @@ namespace ClearDashboard.Wpf.Application.Services
             private set => Set(ref _currentNotes, value);
         }
 
+        private NoteViewModel? _selectedNote;
+        private NoteViewModel? _selectedNote1;
+
+        public NoteViewModel? SelectedNote
+        {
+            get => _selectedNote1;
+            set => Set(ref _selectedNote1, value);
+        }
+
         private string GetNoteAssociationDescription(IId associatedEntityId, IReadOnlyDictionary<string, string> entityContext)
         {
             if (associatedEntityId is TokenId)
@@ -513,6 +522,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 }
 
                 var newNoteDetail = await GetNoteDetailsAsync(note.NoteId!);
+                newNoteDetail.TabHeader = $"Jot{CurrentNotes.Count + 1}";
                 CurrentNotes.Add(newNoteDetail);
                 NotifyOfPropertyChange(nameof(CurrentNotes));
                 await EventAggregator.PublishOnUIThreadAsync(new NoteAddedMessage(note, entityIds));

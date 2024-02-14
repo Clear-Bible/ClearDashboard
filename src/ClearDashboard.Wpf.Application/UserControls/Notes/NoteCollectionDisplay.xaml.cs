@@ -10,6 +10,7 @@ using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
+using MediatR;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
 namespace ClearDashboard.Wpf.Application.UserControls.Notes
@@ -591,11 +592,29 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         private void OnNoteAdded(object sender, RoutedEventArgs e)
         {
             var args = e as NoteEventArgs;
+            args.HighlightColor = System.Drawing.Color.Orange;
             if (args?.Note != null)
             {
                 //Notes.Add(args.Note);
                 NewNote = new NoteViewModel();
-     
+
+
+                //var associatedEntityIds = await note.GetFullDomainEntityIds(Mediator);
+                //var domainEntityContexts = new EntityContextDictionary(await note.GetDomainEntityContexts(Mediator));
+
+                //foreach (var associatedEntityId in associatedEntityIds)
+                //{
+                //    var association = new NoteAssociationViewModel
+                //    {
+                //        AssociatedEntityId = associatedEntityId
+                //    };
+                //    if (domainEntityContexts.TryGetValue(associatedEntityId, out var entityContext))
+                //    {
+                //        association.Description = GetNoteAssociationDescription(associatedEntityId, entityContext);
+                //    }
+                //    noteViewModel.Associations.Add(association);
+                //}
+
 
                 OnPropertyChanged(nameof(Notes));
                 OnPropertyChanged(nameof(NewNote));
@@ -638,6 +657,21 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             }
         }
         private void OnNoteEditorMouseLeave(object sender, RoutedEventArgs e)
+        {
+            if (e is NoteEventArgs args)
+            {
+                RaiseNoteEvent(NoteEditorMouseLeaveEvent, args);
+            }
+        }
+
+        private void OnAddNoteEditorMouseEnter(object sender, RoutedEventArgs e)
+        {
+            if (e is NoteEventArgs args)
+            {
+                RaiseNoteEvent(NoteEditorMouseEnterEvent, args);
+            }
+        }
+        private void OnAddNoteEditorMouseLeave(object sender, RoutedEventArgs e)
         {
             if (e is NoteEventArgs args)
             {

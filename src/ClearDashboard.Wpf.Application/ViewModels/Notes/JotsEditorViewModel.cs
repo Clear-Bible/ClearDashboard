@@ -76,7 +76,16 @@ public class JotsEditorViewModel : ApplicationScreen
     public async Task Initialize(SelectionManager clonedSelectionManager)
     {
         SelectionManager = clonedSelectionManager;
-        await NoteManager.GetNotes(SelectionManager.SelectedNoteIds);
+        await Task.Run(async () =>
+        {
+            await NoteManager.GetNotes(SelectionManager.SelectedNoteIds);
+
+            if (NoteManager.CurrentNotes.Count > 0)
+            {
+                NoteManager.SelectedNote = NoteManager.CurrentNotes[0];
+            }
+            
+        });
     }
 
     public async void Close()
