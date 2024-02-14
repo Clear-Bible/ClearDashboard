@@ -155,7 +155,7 @@
             <ScrollViewer Grid.Row="3" MaxWidth="{Binding ActualWidth, ElementName=UserControl, Converter={converters:WidthSubtraction}, ConverterParameter='30'}">
                 <ListView
                     x:Name="InnerLv"
-                    MaxWidth="{Binding ActualWidth, ElementName=UserControl, Converter={converters:WidthSubtraction}, ConverterParameter='30'}"
+                    MaxWidth="{Binding ActualWidth, ElementName=UserControl, Converter={converters:WidthSubtraction}, ConverterParameter='60'}"
                     ItemsSource="{Binding SelectedTab.ExternalNoteMessages}">
                     <ListView.ItemTemplate>
                         <DataTemplate>

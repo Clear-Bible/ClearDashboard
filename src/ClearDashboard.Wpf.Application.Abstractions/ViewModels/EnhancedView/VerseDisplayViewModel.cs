@@ -547,13 +547,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task HandleAsync(NoteMouseEnterMessage message, CancellationToken cancellationToken)
         {
-            MatchingTokenAction(t => message.Note.Associations.Any(a => a.AssociatedEntityId.IdEquals(t.Token.TokenId) || a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t => t.IsNoteHovered = true);
+            if (message is { Note.Associations: not null })
+            {
+                MatchingTokenAction(
+                    t => message.Note.Associations.Any(a =>
+                        a.AssociatedEntityId.IdEquals(t.Token.TokenId) ||
+                        a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t => t.IsNoteHovered = true);
+            }
+
             await Task.CompletedTask;
         }
 
         public async Task HandleAsync(NoteMouseLeaveMessage message, CancellationToken cancellationToken)
         {
-            MatchingTokenAction(t => message.Note.Associations.Any(a => a.AssociatedEntityId.IdEquals(t.Token.TokenId) || a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t => t.IsNoteHovered = false);
+            if (message is { Note.Associations: not null })
+            {
+                MatchingTokenAction(
+                    t => message.Note.Associations.Any(a =>
+                        a.AssociatedEntityId.IdEquals(t.Token.TokenId) ||
+                        a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t => t.IsNoteHovered = false);
+
+            }
+
             await Task.CompletedTask;
         }
 

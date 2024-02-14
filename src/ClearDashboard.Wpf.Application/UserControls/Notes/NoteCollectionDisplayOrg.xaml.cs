@@ -17,7 +17,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
     /// <summary>
     /// A user control that displays a collection of <see cref="NoteViewModel"/> instances.
     /// </summary>
-    public partial class NoteCollectionDisplay : INotifyPropertyChanged
+    public partial class NoteCollectionDisplayOrg : INotifyPropertyChanged
     {
         #region Static Routed Events
 
@@ -330,8 +330,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// Identifies the Notes dependency property.
         /// </summary>
         public static readonly DependencyProperty NotesProperty = DependencyProperty.Register(nameof(Notes), typeof(NoteViewModelCollection), typeof(NoteCollectionDisplay));
-
-        public static readonly DependencyProperty SelectedNoteProperty = DependencyProperty.Register(nameof(SelectedNote), typeof(NoteViewModel), typeof(NoteCollectionDisplay));
 
         /// <summary>
         /// Identifies the NoteTextFontFamily dependency property.
@@ -1046,13 +1044,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             set => SetValue(NotesProperty, value);
         }
 
-
-        public NoteViewModel SelectedNote
-        {
-            get => (NoteViewModel)GetValue(SelectedNoteProperty); 
-            set => SetValue(SelectedNoteProperty, value);
-        }
-
         /// <summary>
         /// Gets or sets the subtitle of the notes editor.
         /// </summary>
@@ -1515,7 +1506,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         #endregion
 
-        public NoteCollectionDisplay()
+        public NoteCollectionDisplayOrg()
         {
             InitializeComponent();
         }
