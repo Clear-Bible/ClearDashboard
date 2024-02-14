@@ -39,6 +39,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        public string TabHeader
+        {
+            get => _tabHeader;
+            set => Set(ref _tabHeader, value);
+        }
+
         public string NoteStatus
         {
             get => Entity.NoteStatus;
@@ -52,6 +58,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         private LabelCollection? _labels;
+        private string _tabHeader;
+
         public LabelCollection Labels
         {
             get => _labels ??= new LabelCollection(Entity.Labels);

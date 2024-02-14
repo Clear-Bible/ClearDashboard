@@ -108,7 +108,11 @@ namespace ClearDashboard.Wpf.Application.Services
             if (associatedEntityId is TokenId)
             {
                 var sb = new StringBuilder();
-                sb.Append($"{LocalizationService["Notes_TokenizedCorpus"]} {entityContext[EntityContextKeys.TokenizedCorpus.DisplayName]}");
+
+                // JOTS Refactor
+                //sb.Append($"{LocalizationService["Notes_TokenizedCorpus"]} {entityContext[EntityContextKeys.TokenizedCorpus.DisplayName]}");
+
+                sb.Append($" {entityContext[EntityContextKeys.TokenizedCorpus.DisplayName]}");
                 sb.Append($" {entityContext[EntityContextKeys.TokenId.BookId]} {entityContext[EntityContextKeys.TokenId.ChapterNumber]}:{entityContext[EntityContextKeys.TokenId.VerseNumber]}");
                 sb.Append($" {LocalizationService["Notes_Word"]} {entityContext[EntityContextKeys.TokenId.WordNumber]} {LocalizationService["Notes_Part"]} {entityContext[EntityContextKeys.TokenId.SubwordNumber]}");
                 return sb.ToString();
@@ -116,7 +120,11 @@ namespace ClearDashboard.Wpf.Application.Services
             else if (associatedEntityId is TranslationId)
             {
                 var sb = new StringBuilder();
-                sb.Append($"{LocalizationService["Notes_TranslationSet"]} {entityContext[EntityContextKeys.TranslationSet.DisplayName]}");
+
+                // JOTS Refactor
+                //sb.Append($"{LocalizationService["Notes_TranslationSet"]} {entityContext[EntityContextKeys.TranslationSet.DisplayName]}");
+
+                sb.Append($" {entityContext[EntityContextKeys.TranslationSet.DisplayName]}");
                 sb.Append($" {entityContext[EntityContextKeys.TokenId.BookId]} {entityContext[EntityContextKeys.TokenId.ChapterNumber]}:{entityContext[EntityContextKeys.TokenId.VerseNumber]}");
                 sb.Append($" {LocalizationService["Notes_Word"]} {entityContext[EntityContextKeys.TokenId.WordNumber]} {LocalizationService["Notes_Part"]} {entityContext[EntityContextKeys.TokenId.SubwordNumber]}");
                 return sb.ToString();
@@ -421,7 +429,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <returns>A <see cref="NoteViewModelCollection"/> containing the notes details.</returns>
         public async Task<NoteViewModelCollection> GetNoteDetailsAsync(IEnumerable<IId> noteIds)
         {
-            var result = new NoteViewModelCollection();
+            var result = new List<NoteViewModel>();
 
             foreach (var id in noteIds)
             {
@@ -439,7 +447,15 @@ namespace ClearDashboard.Wpf.Application.Services
                 }
             }
 
-            return result;
+            //var orderedList = result.OrderByDescending(n => n.CreatedLocalTime);
+
+            var index = 0;
+            foreach (var item in result)
+            {
+                item.TabHeader = $"Jot{++index}";
+            }
+
+            return new NoteViewModelCollection(result.ToArray());
         }
 
         //public async Task SetCurrentNoteIds(NoteIdCollection noteIds)
