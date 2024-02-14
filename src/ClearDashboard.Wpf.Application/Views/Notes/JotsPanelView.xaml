@@ -532,6 +532,7 @@
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Path=NoteStatus}" Value="Archived">
                                                 <Setter Property="IsEnabled" Value="False" />
+                                                <Setter Property="IsChecked" Value="False" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>

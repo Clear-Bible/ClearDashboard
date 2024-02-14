@@ -765,14 +765,25 @@ public JotsPanelViewModel()
 
         private void SendNotesToParatext()
         {
+            var itemsToUncheck = new List<NoteViewModel>();
             foreach (var note in CheckedNoteViewModels)
             {
                 if (note.EnableParatextSend)
                 {
                     Task.Run(() => SendNotesToParatextAsync(note).GetAwaiter());
+                    itemsToUncheck.Add(note);
                 }
+
+                //note.IsSelectedForBulkAction = false;
             }
-            
+
+            //foreach (var note in CheckedNoteViewModels)
+            //{
+            //    note.IsSelectedForBulkAction = false;
+            //}
+
+            CheckedNoteViewModels.RemoveRange(itemsToUncheck);
+
             EventAggregator.PublishOnUIThreadAsync(new ReloadExternalNotesDataMessage(ReloadType.Refresh),CancellationToken.None);
         }
 
@@ -782,16 +793,17 @@ public JotsPanelViewModel()
             {
                 Message = $"Note '{note.Text}' sent to Paratext.";
                 await noteManager_.SendToParatextAsync(note);
-                CheckedNoteViewModels.Clear();
+                
             }
-            catch (Exception ex)//TODO although notes make it to Paratext, the result returns a failure
+            catch (Exception ex)
             {
                 Message = $"Could not send note to Paratext: {ex.Message}";
             }
 
+            //TODO although notes make it to Paratext, the result returns a failure so I'm keeping this stuff outside the try-catch
             Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NotePushCount, 1);
-
             await UpdateNoteStatus(note, NoteStatus.Archived);
+            note.IsSelectedForBulkAction = false;
         }
 
         public void ConfirmMarkNotesOpen()
@@ -812,13 +824,24 @@ public JotsPanelViewModel()
 
         private void MarkNotesOpen()
         {
+            var itemsToUncheck = new List<NoteViewModel>();
             foreach (var note in CheckedNoteViewModels)
             {
                 if (note.NoteStatus != NoteStatus.Archived.ToString() && note.NoteStatus != NoteStatus.Open.ToString())
                 {
                     Task.Run(() => MarkNotesOpenAsync(note).GetAwaiter());
+                    itemsToUncheck.Add(note);
                 }
+
+                //note.IsSelectedForBulkAction = false;
             }
+
+            //foreach (var note in CheckedNoteViewModels)
+            //{
+            //    note.IsSelectedForBulkAction = false;
+            //}
+
+            CheckedNoteViewModels.RemoveRange(itemsToUncheck);
         }
 
         public async Task MarkNotesOpenAsync(NoteViewModel note)
@@ -827,12 +850,14 @@ public JotsPanelViewModel()
             {
                 await UpdateNoteStatus(note, NoteStatus.Open);
                 Message = $"Note '{note.Text}' set as Open status.";
-                CheckedNoteViewModels.Clear();
+                
+
             }
             catch (Exception ex)
             {
                 Message = $"Could not set note status to Open: {ex.Message}";
             }
+            note.IsSelectedForBulkAction = false;
         }
 
         public void ConfirmMarkNotesResolved()
@@ -853,13 +878,23 @@ public JotsPanelViewModel()
 
         private void MarkNotesResolved()
         {
+            var itemsToUncheck = new List<NoteViewModel>();
             foreach (var note in CheckedNoteViewModels)
             {
                 if (note.NoteStatus != NoteStatus.Archived.ToString() && note.NoteStatus != NoteStatus.Resolved.ToString())
                 {
                     Task.Run(() => MarkNotesResolvedAsync(note).GetAwaiter());
+                    itemsToUncheck.Add(note);
                 }
+                //note.IsSelectedForBulkAction = false;
             }
+
+            //foreach (var note in CheckedNoteViewModels)
+            //{
+            //    note.IsSelectedForBulkAction = false;
+            //}
+
+            CheckedNoteViewModels.RemoveRange(itemsToUncheck);
         }
 
         public async Task MarkNotesResolvedAsync(NoteViewModel note)
@@ -868,22 +903,29 @@ public JotsPanelViewModel()
             {
                 await UpdateNoteStatus(note, NoteStatus.Resolved);
                 Message = $"Note '{note.Text}' set as Resolved status.";
-                CheckedNoteViewModels.Clear();
+                
+
             }
             catch (Exception ex)
             {
                 Message = $"Could not set note status to Resolved: {ex.Message}";
             }
+            note.IsSelectedForBulkAction = false;
         }
 
         public void CheckAllFilteredNoteViewModels()
         {
-            foreach(NoteViewModel note in NotesCollectionView)
+            CheckedNoteViewModels.Clear();
+            foreach (NoteViewModel note in NotesCollectionView)
             {
                 if (note.NoteStatus != "Archived")
                 {
                     note.IsSelectedForBulkAction = true;
-                    CheckedNoteViewModels.Add(note);
+
+                    if (!CheckedNoteViewModels.Contains(note))
+                    {
+                        CheckedNoteViewModels.Add(note);
+                    }
                 }
             }
         }
@@ -892,12 +934,9 @@ public JotsPanelViewModel()
         {
             foreach (NoteViewModel note in NotesCollectionView)
             {
-                if (note.NoteStatus != "Archived")
-                {
-                    note.IsSelectedForBulkAction = false;
-                    CheckedNoteViewModels.Remove(note);
-                }
+                note.IsSelectedForBulkAction = false;
             }
+            CheckedNoteViewModels.Clear();
         }
 
         public async Task HandleAsync(NoteAddedMessage message, CancellationToken cancellationToken)

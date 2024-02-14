@@ -1525,7 +1525,7 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
 
         private void ToggleButton_OnChecked(object sender, RoutedEventArgs e)
         {
-            if (sender is CheckBox checkbox && checkbox.DataContext is NoteViewModel note)
+            if (sender is CheckBox checkbox && checkbox.DataContext is NoteViewModel note && !_vm.CheckedNoteViewModels.Contains(note))
             {
                 _vm.CheckedNoteViewModels.Add(note);
             }
@@ -1533,7 +1533,7 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
 
         private void ToggleButton_OnUnchecked(object sender, RoutedEventArgs e)
         {
-            if (sender is CheckBox checkbox && checkbox.DataContext is NoteViewModel note)
+            if (sender is CheckBox checkbox && checkbox.DataContext is NoteViewModel note && _vm.CheckedNoteViewModels.Contains(note))
             {
                 _vm.CheckedNoteViewModels.Remove(note);
             }
