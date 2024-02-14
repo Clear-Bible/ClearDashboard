@@ -290,16 +290,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             }
         }
 
-        private BindableCollection<NoteViewModel> _checkedNoteViewModels = new();
-        public BindableCollection<NoteViewModel> CheckedNoteViewModels
-        {
-            get => _checkedNoteViewModels;
-            set
-            {
-                _checkedNoteViewModels = value;
-            }
-        }
-
         private bool _confirmParatextSendPopupIsOpen = false;
         public bool ConfirmParatextSendPopupIsOpen
         {
@@ -739,9 +729,9 @@ public JotsPanelViewModel()
         {
             JotsUnableToBeSentToParatextCount=0;
             
-            foreach (var note in CheckedNoteViewModels)
+            foreach (NoteViewModel note in NotesCollectionView)
             {
-                if (!note.EnableParatextSend)
+                if (note.IsSelectedForBulkAction && !note.EnableParatextSend)
                 {
                     JotsUnableToBeSentToParatextCount++;
                 }
@@ -756,6 +746,7 @@ public JotsPanelViewModel()
         {
             SendNotesToParatext();
             ConfirmParatextSendPopupIsOpen = false;
+            UncheckAllFilteredNoteViewModels();
         }
 
         public void ParatextSendCancelled()
@@ -765,24 +756,13 @@ public JotsPanelViewModel()
 
         private void SendNotesToParatext()
         {
-            var itemsToUncheck = new List<NoteViewModel>();
-            foreach (var note in CheckedNoteViewModels)
+            foreach (NoteViewModel note in NotesCollectionView)
             {
-                if (note.EnableParatextSend)
+                if (note.IsSelectedForBulkAction && note.EnableParatextSend)
                 {
                     Task.Run(() => SendNotesToParatextAsync(note).GetAwaiter());
-                    itemsToUncheck.Add(note);
                 }
-
-                //note.IsSelectedForBulkAction = false;
             }
-
-            //foreach (var note in CheckedNoteViewModels)
-            //{
-            //    note.IsSelectedForBulkAction = false;
-            //}
-
-            CheckedNoteViewModels.RemoveRange(itemsToUncheck);
 
             EventAggregator.PublishOnUIThreadAsync(new ReloadExternalNotesDataMessage(ReloadType.Refresh),CancellationToken.None);
         }
@@ -793,17 +773,18 @@ public JotsPanelViewModel()
             {
                 Message = $"Note '{note.Text}' sent to Paratext.";
                 await noteManager_.SendToParatextAsync(note);
-                
             }
             catch (Exception ex)
             {
                 Message = $"Could not send note to Paratext: {ex.Message}";
-            }
 
-            //TODO although notes make it to Paratext, the result returns a failure so I'm keeping this stuff outside the try-catch
-            Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NotePushCount, 1);
-            await UpdateNoteStatus(note, NoteStatus.Archived);
-            note.IsSelectedForBulkAction = false;
+                if (ex == null || ex.InnerException == null)
+                {
+                    //TODO although notes make it to Paratext, the result returns a failure so I'm keeping this stuff outside the try-catch
+                    Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NotePushCount, 1);
+                    await UpdateNoteStatus(note, NoteStatus.Archived);
+                }
+            }
         }
 
         public void ConfirmMarkNotesOpen()
@@ -815,6 +796,7 @@ public JotsPanelViewModel()
         {
             MarkNotesOpen();
             ConfirmMarkOpenPopupIsOpen = false;
+            UncheckAllFilteredNoteViewModels();
         }
 
         public void MarkNotesOpenCancelled()
@@ -824,24 +806,13 @@ public JotsPanelViewModel()
 
         private void MarkNotesOpen()
         {
-            var itemsToUncheck = new List<NoteViewModel>();
-            foreach (var note in CheckedNoteViewModels)
+            foreach (NoteViewModel note in NotesCollectionView)
             {
-                if (note.NoteStatus != NoteStatus.Archived.ToString() && note.NoteStatus != NoteStatus.Open.ToString())
+                if (note.IsSelectedForBulkAction && note.NoteStatus != NoteStatus.Archived.ToString() && note.NoteStatus != NoteStatus.Open.ToString())
                 {
                     Task.Run(() => MarkNotesOpenAsync(note).GetAwaiter());
-                    itemsToUncheck.Add(note);
                 }
-
-                //note.IsSelectedForBulkAction = false;
             }
-
-            //foreach (var note in CheckedNoteViewModels)
-            //{
-            //    note.IsSelectedForBulkAction = false;
-            //}
-
-            CheckedNoteViewModels.RemoveRange(itemsToUncheck);
         }
 
         public async Task MarkNotesOpenAsync(NoteViewModel note)
@@ -850,14 +821,11 @@ public JotsPanelViewModel()
             {
                 await UpdateNoteStatus(note, NoteStatus.Open);
                 Message = $"Note '{note.Text}' set as Open status.";
-                
-
             }
             catch (Exception ex)
             {
                 Message = $"Could not set note status to Open: {ex.Message}";
             }
-            note.IsSelectedForBulkAction = false;
         }
 
         public void ConfirmMarkNotesResolved()
@@ -869,6 +837,7 @@ public JotsPanelViewModel()
         {
             MarkNotesResolved();
             ConfirmMarkResolvedPopupIsOpen = false;
+            UncheckAllFilteredNoteViewModels();
         }
 
         public void MarkNotesResolvedCancelled()
@@ -878,23 +847,13 @@ public JotsPanelViewModel()
 
         private void MarkNotesResolved()
         {
-            var itemsToUncheck = new List<NoteViewModel>();
-            foreach (var note in CheckedNoteViewModels)
+            foreach (NoteViewModel note in NotesCollectionView)
             {
-                if (note.NoteStatus != NoteStatus.Archived.ToString() && note.NoteStatus != NoteStatus.Resolved.ToString())
+                if (note.IsSelectedForBulkAction && note.NoteStatus != NoteStatus.Archived.ToString() && note.NoteStatus != NoteStatus.Resolved.ToString())
                 {
                     Task.Run(() => MarkNotesResolvedAsync(note).GetAwaiter());
-                    itemsToUncheck.Add(note);
                 }
-                //note.IsSelectedForBulkAction = false;
             }
-
-            //foreach (var note in CheckedNoteViewModels)
-            //{
-            //    note.IsSelectedForBulkAction = false;
-            //}
-
-            CheckedNoteViewModels.RemoveRange(itemsToUncheck);
         }
 
         public async Task MarkNotesResolvedAsync(NoteViewModel note)
@@ -903,29 +862,20 @@ public JotsPanelViewModel()
             {
                 await UpdateNoteStatus(note, NoteStatus.Resolved);
                 Message = $"Note '{note.Text}' set as Resolved status.";
-                
-
             }
             catch (Exception ex)
             {
                 Message = $"Could not set note status to Resolved: {ex.Message}";
             }
-            note.IsSelectedForBulkAction = false;
         }
 
         public void CheckAllFilteredNoteViewModels()
         {
-            CheckedNoteViewModels.Clear();
             foreach (NoteViewModel note in NotesCollectionView)
             {
                 if (note.NoteStatus != "Archived")
                 {
                     note.IsSelectedForBulkAction = true;
-
-                    if (!CheckedNoteViewModels.Contains(note))
-                    {
-                        CheckedNoteViewModels.Add(note);
-                    }
                 }
             }
         }
@@ -936,7 +886,6 @@ public JotsPanelViewModel()
             {
                 note.IsSelectedForBulkAction = false;
             }
-            CheckedNoteViewModels.Clear();
         }
 
         public async Task HandleAsync(NoteAddedMessage message, CancellationToken cancellationToken)
