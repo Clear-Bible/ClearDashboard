@@ -503,7 +503,7 @@
             <DataGrid.Columns>
 
                 <DataGridTemplateColumn MinWidth="35">
-                    <!--<DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.Header>
                         <CheckBox
                             Margin="-7,0,-7,0"
                             Checked="ToggleButton_OnCheckedAll"
@@ -518,13 +518,14 @@
                                 </Style>
                             </CheckBox.Style>
                         </CheckBox>
-                    </DataGridTemplateColumn.Header>-->
+                    </DataGridTemplateColumn.Header>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <CheckBox
                                 Margin="-7,0,-7,0"
                                 VerticalAlignment="Center"
                                 Checked="ToggleButton_OnChecked"
+                                IsChecked="{Binding Path=IsSelectedForBulkAction, Mode=TwoWay}"
                                 Unchecked="ToggleButton_OnUnchecked">
                                 <CheckBox.Style>
                                     <Style TargetType="CheckBox">

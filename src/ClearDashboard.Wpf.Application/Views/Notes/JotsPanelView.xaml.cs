@@ -1540,22 +1540,16 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
             
         }
 
-        //private void ToggleButton_OnCheckedAll(object sender, RoutedEventArgs e)
-        //{
-        //    if (sender is CheckBox checkbox && checkbox.DataContext is NoteViewModel note)
-        //    {
-        //        _vm.CheckedNoteViewModels.Add(note);
-        //    }
-        //}
+        private void ToggleButton_OnCheckedAll(object sender, RoutedEventArgs e)
+        {
+            _vm.CheckAllFilteredNoteViewModels();
+        }
 
-        //private void ToggleButton_OnUncheckedAll(object sender, RoutedEventArgs e)
-        //{
-        //    if (sender is CheckBox checkbox && checkbox.DataContext is NoteViewModel note)
-        //    {
-        //        _vm.CheckedNoteViewModels.Remove(note);
-        //    }
+        private void ToggleButton_OnUncheckedAll(object sender, RoutedEventArgs e)
+        {
+            _vm.UncheckAllFilteredNoteViewModels();
+        }
 
-        //}
         private void NoteTextButton_OnClick(object sender, RoutedEventArgs e)
         {
             if (sender is System.Windows.Controls.Button button)

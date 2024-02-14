@@ -31,6 +31,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 {
@@ -872,6 +873,30 @@ public JotsPanelViewModel()
             catch (Exception ex)
             {
                 Message = $"Could not set note status to Resolved: {ex.Message}";
+            }
+        }
+
+        public void CheckAllFilteredNoteViewModels()
+        {
+            foreach(NoteViewModel note in NotesCollectionView)
+            {
+                if (note.NoteStatus != "Archived")
+                {
+                    note.IsSelectedForBulkAction = true;
+                    CheckedNoteViewModels.Add(note);
+                }
+            }
+        }
+
+        public void UncheckAllFilteredNoteViewModels()
+        {
+            foreach (NoteViewModel note in NotesCollectionView)
+            {
+                if (note.NoteStatus != "Archived")
+                {
+                    note.IsSelectedForBulkAction = false;
+                    CheckedNoteViewModels.Remove(note);
+                }
             }
         }
 
