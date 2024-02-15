@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using ClearDashboard.DataAccessLayer.Annotations;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Events.Notes;
+using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.Notes;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.ViewModels.Notes;
 using System.Windows;
 using System.Windows.Controls;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
-using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Events.Notes;
 
 namespace ClearDashboard.Wpf.Application.Views.Notes
 {
@@ -130,7 +131,7 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
             )
             {
                 await _vm.AddReplyToNote(args.NoteViewModelWithReplies, args.Text);
-                NoteEditorScrollView.ScrollToEnd();
+                //NoteEditorScrollView.ScrollToEnd();
                 Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NoteReplyCount, 1);
             }
             
@@ -151,6 +152,7 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -162,6 +164,43 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
             field = value;
             OnPropertyChanged(propertyName);
             return true;
+        }
+
+        private void ToggleButton_OnChecked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkbox && checkbox.DataContext is NoteViewModel note)
+            {
+                note.IsSelectedForBulkAction = true;
+            }
+        }
+
+        private void ToggleButton_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkbox && checkbox.DataContext is NoteViewModel note)
+            {
+                note.IsSelectedForBulkAction = false;
+            }
+            
+        }
+
+        private void ToggleButton_OnCheckedAll(object sender, RoutedEventArgs e)
+        {
+            _vm.CheckAllFilteredNoteViewModels();
+        }
+
+        private void ToggleButton_OnUncheckedAll(object sender, RoutedEventArgs e)
+        {
+            _vm.UncheckAllFilteredNoteViewModels();
+        }
+
+        private void NoteTextButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is System.Windows.Controls.Button button)
+            {
+                var mousePosition = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(button));
+                _vm.DisplayJotsEditor(null);
+            }
+            
         }
     }
 }

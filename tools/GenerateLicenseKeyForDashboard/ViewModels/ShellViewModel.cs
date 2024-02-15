@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -38,7 +39,8 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
         /// Function to generate a user name from first & lastnames
         /// </summary>
         /// <returns></returns>
-        private string GetUserName() => (FirstNameBox + "." + LastNameBox).ToLower();
+        private string GetUserName() => (Regex.Replace(FirstNameBox, @"\s|\p{P}|[']", "") + "." + Regex.Replace(LastNameBox, @"\s|\p{P}|[']", "")).ToLower();
+
 
         private CollaborationConfiguration _collaborationConfiguration;
 

@@ -1067,7 +1067,7 @@
     <value>需要名字</value>
   </data>
   <data name="LicenseValidator_LastMissing" xml:space="preserve">
-    <value>需要姓氏</value>
+    <value>需要姓</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>需要許可密鑰</value>
@@ -1154,7 +1154,7 @@
     <value>新視圖</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>筆記清單</value>
+    <value>jots</value>
   </data>
   <data name="MainView_WindowsPINS" xml:space="preserve">
     <value>PINS</value>
@@ -1372,17 +1372,23 @@
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>刪除此註釋？</value>
   </data>
+  <data name="Notes_DueToPermissions" xml:space="preserve">
+    <value>由於您的Paratext項目權限，</value>
+  </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>通過協會</value>
+    <value>通過經文過濾</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>過濾器</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>通過標籤</value>
+    <value>通過標籤過濾</value>
+  </data>
+  <data name="Notes_FilterNoteStatus" xml:space="preserve">
+    <value>按狀態過濾</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>通過注意文本</value>
+    <value>通過文本過濾</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>任何</value>
@@ -1394,7 +1400,7 @@
     <value>打開</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>由用戶</value>
+    <value>作者過濾</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>添加標籤</value>
@@ -1450,6 +1456,12 @@
   <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
     <value>分離標籤</value>
   </data>
+  <data name="Notes_MarkOpen" xml:space="preserve">
+    <value>將選定的筆記標記為打開</value>
+  </data>
+  <data name="Notes_MarkResolved" xml:space="preserve">
+    <value>標記已解決的筆記</value>
+  </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>創建</value>
   </data>
@@ -1457,7 +1469,7 @@
     <value>修改的</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>用戶</value>
+    <value>作者</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>地位</value>
@@ -1467,6 +1479,9 @@
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
     <value>關閉</value>
+  </data>
+  <data name="Notes_Note_Verse" xml:space="preserve">
+    <value>詩</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>協會</value>
@@ -1486,20 +1501,32 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>看到</value>
   </data>
+  <data name="Notes_NotesNotSent" xml:space="preserve">
+    <value> 選定的筆記將發送到Paratext。</value>
+  </data>
+  <data name="Notes_NoteStatus_Archived" xml:space="preserve">
+    <value>存檔</value>
+  </data>
   <data name="Notes_NoteText" xml:space="preserve">
     <value>文字</value>
   </data>
   <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>打開關閉</value>
+    <value>地位</value>
+  </data>
+  <data name="Notes_OpenConfirmation" xml:space="preserve">
+    <value>將這些筆記標記為打開？</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>部分</value>
   </data>
+  <data name="Notes_ResolveConfirmation" xml:space="preserve">
+    <value>將這些筆記標記為解決？</value>
+  </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>將此註釋發送到Paratext？</value>
+    <value>將這些筆記發送給Paratext？</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>將此註釋發送到Paratext</value>
+    <value>將選定的筆記發送到Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>象徵化的語料庫</value>
@@ -1814,7 +1841,7 @@
     <value>Cleardashboard</value>
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
-    <value>PARATEXT BETA未運行</value>
+    <value>paratext beta不運行</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
     <value>取消...</value>
@@ -2195,7 +2222,7 @@
     <value>發送</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>啟用實驗水上插件</value>
+    <value>啟用實驗性水上插件</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
     <value>檢查您的電子郵件並輸入驗證代碼：</value>
@@ -2225,7 +2252,7 @@
     <value>在實驗組中啟用外部Paratext註釋</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
-    <value>啟用外部Paratext註釋</value>
+    <value>啟用外部paratext註釋</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>啟用詞典進口</value>
@@ -2297,7 +2324,7 @@
     <value>ClearDashboard設置</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>顯示與儀表板不同的顯示器上展示的視圖</value>
+    <value>顯示出與儀表板不同的顯示器上擴展的視圖</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
     <value>對於具有三個或三個或以上監視器的系統，在第三監視器上顯示擴展的視圖</value>

@@ -240,7 +240,8 @@ namespace ClearDashboard.Wpf.Application.Services
                 IEnumerable<TokenizedTextCorpusId> tokenizedTextCorpusIds,
                 IEnumerable<VerseRef> verseRefs,
                 ILogger? logger = null,
-                CancellationToken cancellationToken = default)
+                CancellationToken cancellationToken = default,
+                bool clearCachedExternalNotesMap = false)
         {
             bool obtainedLock = false;
             try
@@ -250,6 +251,11 @@ namespace ClearDashboard.Wpf.Application.Services
                 {
                     logger?.LogWarning($"couldn't obtain lock on ExternalProjectIdToChapterToExternalNotesMap for verseref {verseRefs.First()}");
                     throw new EngineException("Couldn't obtain lock on cache within 60 seconds");
+                }
+
+                if (clearCachedExternalNotesMap)
+                {
+                    ExternalProjectIdToChapterToExternalNotesMap.Clear();
                 }
                                 
                 return tokenizedTextCorpusIds

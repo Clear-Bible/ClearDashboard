@@ -1154,7 +1154,7 @@
     <value>አዲስ እይታ</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>ማስታወሻዎች ዝርዝር</value>
+    <value>ቀልድ</value>
   </data>
   <data name="MainView_WindowsPINS" xml:space="preserve">
     <value>PINS</value>
@@ -1372,17 +1372,23 @@
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>ይህን ማስታወሻ ይሰርዙ?</value>
   </data>
+  <data name="Notes_DueToPermissions" xml:space="preserve">
+    <value>በጥብቅ ጥበባዊ የፕሮጀክት ፈቃዶች ምክንያት,</value>
+  </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>በማጋራት</value>
+    <value>በቁጥር ማጣሪያ</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>ማጣሪያዎች</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>በመሰየም</value>
+    <value>በማጣሪያዎች ማጣሪያ</value>
+  </data>
+  <data name="Notes_FilterNoteStatus" xml:space="preserve">
+    <value>በሁኔታ ማጣሪያ</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>በማስታወሻ ጽሑፍ</value>
+    <value>በጽሑፍ ማጣሪያ</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>ማናቸውም</value>
@@ -1394,7 +1400,7 @@
     <value>ክፈት</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>በተጠቃሚዎች</value>
+    <value>ማጣሪያ በደራሲው ማጣራት</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>መለያ ያክሉ</value>
@@ -1450,6 +1456,12 @@
   <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
     <value>የአስፈፃሚነት መለያ</value>
   </data>
+  <data name="Notes_MarkOpen" xml:space="preserve">
+    <value>እንደ ተከፈተ ማስታወሻዎችን ተመርጠዋል</value>
+  </data>
+  <data name="Notes_MarkResolved" xml:space="preserve">
+    <value>እንደ ተፈትነዋል</value>
+  </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>ተፈጠረ</value>
   </data>
@@ -1457,7 +1469,7 @@
     <value>ተሻሽሏል</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>ተጠቃሚ</value>
+    <value>ደራሲ ደራሲ</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>ሁኔታ</value>
@@ -1467,6 +1479,9 @@
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
     <value>ዝግ</value>
+  </data>
+  <data name="Notes_Note_Verse" xml:space="preserve">
+    <value>ቁጥር</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>ማህበራት</value>
@@ -1486,20 +1501,32 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>ታይቷል</value>
   </data>
+  <data name="Notes_NotesNotSent" xml:space="preserve">
+    <value> የተመረጡ ማስታወሻዎች ወደ መተላለፊያዎች ይላኩ.</value>
+  </data>
+  <data name="Notes_NoteStatus_Archived" xml:space="preserve">
+    <value>ገብቷል</value>
+  </data>
   <data name="Notes_NoteText" xml:space="preserve">
     <value>ጽሑፍ</value>
   </data>
   <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>ክፍት / ዝግ</value>
+    <value>ሁኔታ</value>
+  </data>
+  <data name="Notes_OpenConfirmation" xml:space="preserve">
+    <value>እነዚህን ማስታወሻዎች ክፍት እንደሆኑ ምልክት ያድርጉ?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>ክፍል</value>
   </data>
+  <data name="Notes_ResolveConfirmation" xml:space="preserve">
+    <value>እነዚህን ማስታወሻዎች እንደተፈታ ምልክት ያድርጉ?</value>
+  </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>ይህንን ማስታወሻ ለማቃጠል ይላኩ?</value>
+    <value>እነዚህን ማስታወሻዎች ወደ ጥውቀት ይላኩ?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>ይህንን ማስታወሻ ለማሸነፍ ይላኩ</value>
+    <value>ለተመረጡ ማስታወሻዎች ወደ ጥበቃዎች ይላኩ</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>የታሸገ ኮርፖስ</value>
@@ -1688,7 +1715,7 @@
     <value>ሀብት</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
-    <value>ይዘቱን እስከ 100% ሚዛን</value>
+    <value>ይዘቱን ወደ 100% ሚዛን</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
     <value>ወደ አዲስ መስኮት ጽሑፍ ያክሉ</value>

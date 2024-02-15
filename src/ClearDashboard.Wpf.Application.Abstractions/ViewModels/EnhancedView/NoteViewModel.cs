@@ -233,6 +233,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// 3) All of the tokens must be contiguous in the corpus.
         /// </remarks>
         public ExternalSendNoteInformation? ParatextSendNoteInformation { get; set; }
+        
+
+        private bool _isSelectedForBulkAction = false;
+        public bool IsSelectedForBulkAction
+        {
+            get => _isSelectedForBulkAction;
+            set
+            {
+                _isSelectedForBulkAction = value;
+                NotifyOfPropertyChange(() => IsSelectedForBulkAction);
+            }
+        }
 
         public void NoteSeenChanged()
         {

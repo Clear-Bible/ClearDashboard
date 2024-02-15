@@ -1,5 +1,6 @@
 ﻿using ClearBible.Engine.Utils;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,7 +36,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public ExternalNoteManager ExternalNoteManager { get; }
 
-        private Dictionary<Guid, NoteViewModel> NotesCache { get; } = new();
+        private ConcurrentDictionary<Guid, NoteViewModel> NotesCache { get; } = new();
         public void ClearNotesCache()
         {
             NotesCache.Clear();

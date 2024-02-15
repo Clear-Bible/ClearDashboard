@@ -47,7 +47,8 @@
                         Background="Transparent"
                         BorderThickness="0"
                         Click="OnRemoveLabel"
-                        ToolTip="{helpers:Localization Notes_LabelRemove}">
+                        ToolTip="{helpers:Localization Notes_LabelRemove}"
+                        Visibility="{Binding ElementName=LabelsDisplayControl, Path=RemoveLabelButtonVisibility}">
                         <Image Height="18" Source="/Resources/close24.png" />
                     </Button>
                 </StackPanel>

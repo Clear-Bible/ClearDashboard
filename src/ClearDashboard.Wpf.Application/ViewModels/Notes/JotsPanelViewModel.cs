@@ -55,6 +55,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         private readonly LongRunningTaskManager longRunningTaskManager_;
         private readonly NoteManager? noteManager_;
         private JotsPanelView view_;
+        private readonly EnhancedViewModel? _enhancedViewModel;
         private LongRunningTask? currentLongRunningTask_;
 
         #endregion //Member Variables
@@ -66,7 +67,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         {
             Any,
             Open,
-            Resolved
+            Resolved,
+            Archived
         }
 
         public Guid UserId => _currentUser?.Id
@@ -284,12 +286,68 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             }
         }
 
-        #endregion //Observable Properties
+        private bool _confirmParatextSendPopupIsOpen = false;
+        public bool ConfirmParatextSendPopupIsOpen
+        {
+            get => _confirmParatextSendPopupIsOpen;
+            set
+            {
+                _confirmParatextSendPopupIsOpen = value;
+                NotifyOfPropertyChange(() => ConfirmParatextSendPopupIsOpen);
+            }
+        }
+
+        private bool _confirmMarkOpenPopupIsOpen = false;
+        public bool ConfirmMarkOpenPopupIsOpen
+        {
+            get => _confirmMarkOpenPopupIsOpen;
+            set
+            {
+                _confirmMarkOpenPopupIsOpen = value;
+                NotifyOfPropertyChange(() => ConfirmMarkOpenPopupIsOpen);
+            }
+        }
+
+        private bool _confirmMarkResolvedPopupIsOpen = false;
+        public bool ConfirmMarkResolvedPopupIsOpen
+        {
+            get => _confirmMarkResolvedPopupIsOpen;
+            set
+            {
+                _confirmMarkResolvedPopupIsOpen = value;
+                NotifyOfPropertyChange(() => ConfirmMarkResolvedPopupIsOpen);
+            }
+        }
+
+        private int _jotsUnableToBeSentToParatextCount;
+        public int JotsUnableToBeSentToParatextCount
+        {
+            get => _jotsUnableToBeSentToParatextCount;
+            set
+            {
+                _jotsUnableToBeSentToParatextCount = value;
+                NotifyOfPropertyChange(() => JotsUnableToBeSentToParatextCount);
+            }
+        }
+
+        private Visibility _jotsUnableToBeSentToParatextVisibility;
+        public Visibility JotsUnableToBeSentToParatextVisibility
+        {
+            get => _jotsUnableToBeSentToParatextVisibility;
+            set
+            {
+                _jotsUnableToBeSentToParatextVisibility = value;
+                NotifyOfPropertyChange(() => JotsUnableToBeSentToParatextVisibility);
+            }
+        }
 
 
-        #region Constructor
+#endregion //Observable Properties
 
-        public JotsPanelViewModel()
+
+#region Constructor
+
+public JotsPanelViewModel()
         {
             // used by Caliburn Micro for design time    
         }
@@ -304,12 +362,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             LongRunningTaskManager longRunningTaskManager,
             ILocalizationService localizationService,
             NoteManager noteManager,
+            EnhancedViewModel enhancedViewModel,
             IUserProvider userProvider)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             longRunningTaskManager_ = longRunningTaskManager;
             noteManager_ = noteManager;
             _currentUser = userProvider.CurrentUser;
+            _enhancedViewModel = enhancedViewModel;
 
             //FIXME: why is this here and in MainViewModel line 1113??
             Title = "⌺ " + LocalizationService!.Get("MainView_WindowsNotes");
@@ -410,7 +470,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await reportStatus(taskName, LongRunningTaskStatus.Running, cancellationToken, "Collecting note details for notes", null);
 
             return await noteIds
-                .Select(async nid => await noteManager.GetNoteDetailsAsync(nid, false, collabUpdate))
+                .Select(async nid => await noteManager.GetNoteDetailsAsync(nid, true, collabUpdate))
                 .WhenAll();
         }
         private void UpdateSelectedNote(NoteViewModel? selectedNoteViewModel)
@@ -476,8 +536,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
                         FilterUsersChoices.Clear();
                         noteVms
                             .Select(nvm => nvm.ModifiedBy)
-                            .Distinct()
-                            .OrderBy(mb => mb)
+                            .Distinct()                                               
+                            .OrderBy(mb => string.IsNullOrEmpty(mb.Trim()))
+                            .ThenBy(mb=>mb)
                             .Select(mb =>
                             {
                                 FilterUsersChoices.Add(mb);
@@ -652,6 +713,174 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await noteManager_!.AddReplyToNoteAsync(parentNote, replyText);
         }
 
+        public async Task DisplayJotsEditor(Point? mousePosition)
+        {
+            await _enhancedViewModel.DisplayJotsEditor(mousePosition);
+        }
+
+        public void ConfirmParatextSend()
+        {
+            JotsUnableToBeSentToParatextCount=0;
+            
+            foreach (NoteViewModel note in NotesCollectionView)
+            {
+                if (note.IsSelectedForBulkAction && !note.EnableParatextSend)
+                {
+                    JotsUnableToBeSentToParatextCount++;
+                }
+            }
+
+            JotsUnableToBeSentToParatextVisibility = JotsUnableToBeSentToParatextCount > 0 ? Visibility.Visible : Visibility.Collapsed;
+
+            ConfirmParatextSendPopupIsOpen = true;
+        }
+
+        public void ParatextSendConfirmed()
+        {
+            SendNotesToParatext();
+            ConfirmParatextSendPopupIsOpen = false;
+            UncheckAllFilteredNoteViewModels();
+        }
+
+        public void ParatextSendCancelled()
+        {
+            ConfirmParatextSendPopupIsOpen = false;
+        }
+
+        private void SendNotesToParatext()
+        {
+            foreach (NoteViewModel note in NotesCollectionView)
+            {
+                if (note.IsSelectedForBulkAction && note.EnableParatextSend)
+                {
+                    Task.Run(() => SendNotesToParatextAsync(note).GetAwaiter());
+                }
+            }
+
+            EventAggregator.PublishOnUIThreadAsync(new ReloadExternalNotesDataMessage(ReloadType.Refresh),CancellationToken.None);
+        }
+
+        public async Task SendNotesToParatextAsync(NoteViewModel note)
+        {
+            try
+            {
+                Message = $"Note '{note.Text}' sent to Paratext.";
+                await noteManager_.SendToParatextAsync(note);
+            }
+            catch (Exception ex)
+            {
+                Message = $"Could not send note to Paratext: {ex.Message}";
+
+                if (ex == null || ex.InnerException == null)
+                {
+                    //TODO although notes make it to Paratext, the result returns a failure so I'm keeping this stuff outside the try-catch
+                    Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NotePushCount, 1);
+                    await UpdateNoteStatus(note, NoteStatus.Archived);
+                }
+            }
+        }
+
+        public void ConfirmMarkNotesOpen()
+        {
+            ConfirmMarkOpenPopupIsOpen = true;
+        }
+
+        public void MarkNotesOpenConfirmed()
+        {
+            MarkNotesOpen();
+            ConfirmMarkOpenPopupIsOpen = false;
+            UncheckAllFilteredNoteViewModels();
+        }
+
+        public void MarkNotesOpenCancelled()
+        {
+            ConfirmMarkOpenPopupIsOpen = false;
+        }
+
+        private void MarkNotesOpen()
+        {
+            foreach (NoteViewModel note in NotesCollectionView)
+            {
+                if (note.IsSelectedForBulkAction && note.NoteStatus != NoteStatus.Archived.ToString() && note.NoteStatus != NoteStatus.Open.ToString())
+                {
+                    Task.Run(() => MarkNotesOpenAsync(note).GetAwaiter());
+                }
+            }
+        }
+
+        public async Task MarkNotesOpenAsync(NoteViewModel note)
+        {
+            try
+            {
+                await UpdateNoteStatus(note, NoteStatus.Open);
+                Message = $"Note '{note.Text}' set as Open status.";
+            }
+            catch (Exception ex)
+            {
+                Message = $"Could not set note status to Open: {ex.Message}";
+            }
+        }
+
+        public void ConfirmMarkNotesResolved()
+        {
+            ConfirmMarkResolvedPopupIsOpen = true;
+        }
+
+        public void MarkNotesResolvedConfirmed()
+        {
+            MarkNotesResolved();
+            ConfirmMarkResolvedPopupIsOpen = false;
+            UncheckAllFilteredNoteViewModels();
+        }
+
+        public void MarkNotesResolvedCancelled()
+        {
+            ConfirmMarkResolvedPopupIsOpen = false;
+        }
+
+        private void MarkNotesResolved()
+        {
+            foreach (NoteViewModel note in NotesCollectionView)
+            {
+                if (note.IsSelectedForBulkAction && note.NoteStatus != NoteStatus.Archived.ToString() && note.NoteStatus != NoteStatus.Resolved.ToString())
+                {
+                    Task.Run(() => MarkNotesResolvedAsync(note).GetAwaiter());
+                }
+            }
+        }
+
+        public async Task MarkNotesResolvedAsync(NoteViewModel note)
+        {
+            try
+            {
+                await UpdateNoteStatus(note, NoteStatus.Resolved);
+                Message = $"Note '{note.Text}' set as Resolved status.";
+            }
+            catch (Exception ex)
+            {
+                Message = $"Could not set note status to Resolved: {ex.Message}";
+            }
+        }
+
+        public void CheckAllFilteredNoteViewModels()
+        {
+            foreach (NoteViewModel note in NotesCollectionView)
+            {
+                if (note.NoteStatus != "Archived")
+                {
+                    note.IsSelectedForBulkAction = true;
+                }
+            }
+        }
+
+        public void UncheckAllFilteredNoteViewModels()
+        {
+            foreach (NoteViewModel note in NotesCollectionView)
+            {
+                note.IsSelectedForBulkAction = false;
+            }
+        }
+
         public async Task HandleAsync(NoteAddedMessage message, CancellationToken cancellationToken)
         {
             var noteViewModelWithDetails = await noteManager_!.GetNoteDetailsAsync(message.Note.NoteId!);
@@ -705,7 +934,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
         #endregion // Methods
 
-
+        
 
     }
 

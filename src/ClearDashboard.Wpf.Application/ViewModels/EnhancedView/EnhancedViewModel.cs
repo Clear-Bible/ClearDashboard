@@ -51,7 +51,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<UnhighlightTokensMessage>,
         IHandle<ParallelCorpusDeletedMessage>,
         IHandle<CorpusDeletedMessage>,
-        IHandle<ExternalNotesUpdatedMessage>
+        IHandle<ExternalNotesUpdatedMessage>,
+        IHandle<ReloadExternalNotesDataMessage>
     {
         #region Commands
 
@@ -683,6 +684,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             });
         }
 
+        public async Task ReloadExternalNotesData(ReloadType reloadType = ReloadType.Refresh)
+        {
+            await Parallel.ForEachAsync(VerseAwareEnhancedViewItemViewModels, new ParallelOptions(), async (viewModel, cancellationToken) =>
+            {
+                await Execute.OnUIThreadAsync(async () =>
+                {
+                    await viewModel.RefreshExternalNotesData(reloadType, cancellationToken);
+                });
+
+            });
+        }
+
         private void MoveCorpusUp(object? obj)
         {
             var row = obj as EnhancedViewItemViewModel;
@@ -901,6 +914,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
             return Task.CompletedTask;
         }
+
+        public Task HandleAsync(ReloadExternalNotesDataMessage message, CancellationToken cancellationToken)
+        {
+            ReloadExternalNotesData(message.reloadType);
+            return Task.CompletedTask;
+        }
+
 
         #endregion
 
@@ -1191,7 +1211,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         //private JotsEditorViewModel? jotsEditorViewModel_;
 
-        private async Task DisplayJotsEditor(Point? mousePosition)
+        public async Task DisplayJotsEditor(Point? mousePosition)
         {
 
             dynamic settings = new ExpandoObject();

@@ -255,8 +255,8 @@
                 <userControls:TogglePanel IsOpen="False">
                     <userControls:TogglePanel.Header>
                         <Label Content="{helpers:Localization Notes_NoteReplies}"
-                               FontSize="13"
-                               FontWeight="SemiBold" />
+                            FontSize="13"
+                            FontWeight="SemiBold" />
                     </userControls:TogglePanel.Header>
                     <notes:NoteRepliesDisplay
                         Margin="20,0"

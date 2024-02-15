@@ -581,7 +581,7 @@
     <value>Proyectos</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
-    <value>Proyecto seleccionado</value>
+    <value>Seleccionar proyecto</value>
   </data>
   <data name="Copy" xml:space="preserve">
     <value>Copiar</value>
@@ -884,7 +884,7 @@
     <value>Cancelar brillo</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
-    <value>Cambiar todos los ocurrencias inseguros</value>
+    <value>Cambiar todos los ocurrencias no establecidos</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Si se verifica, esto cambiará todas las ocurrencias no establecidas de esta palabra</value>
@@ -1028,7 +1028,7 @@
     <value>Importación comprobada</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
-    <value>Lexeme o coincidencias de forma</value>
+    <value>Lexeme o coincidencias de formulario</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
     <value>No hay más registros para importar.</value>
@@ -1154,7 +1154,7 @@
     <value>Nueva vista</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>Lista de notas</value>
+    <value>Jotadas</value>
   </data>
   <data name="MainView_WindowsPINS" xml:space="preserve">
     <value>PINS</value>
@@ -1372,17 +1372,23 @@
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>Eliminar esta nota?</value>
   </data>
+  <data name="Notes_DueToPermissions" xml:space="preserve">
+    <value>Debido a los permisos de su proyecto Paratext,</value>
+  </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Por asociaciones</value>
+    <value>Filtrar por verso</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filtros</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>Por etiquetas</value>
+    <value>Filtrar por etiquetas</value>
+  </data>
+  <data name="Notes_FilterNoteStatus" xml:space="preserve">
+    <value>Filtrar por estado</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>Por nota texto</value>
+    <value>Filtrar por texto</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>Cualquier</value>
@@ -1394,7 +1400,7 @@
     <value>Abierto</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>Por usuarios</value>
+    <value>Filtrar por autor</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Agregar una etiqueta</value>
@@ -1409,7 +1415,7 @@
     <value>¿Quieres eliminar la etiqueta:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>¿Quieres disociar la etiqueta:</value>
+    <value>¿Quieres disociar la etiqueta?</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>del grupo de etiquetas:</value>
@@ -1450,6 +1456,12 @@
   <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
     <value>Etiqueta disociada</value>
   </data>
+  <data name="Notes_MarkOpen" xml:space="preserve">
+    <value>Marque notas seleccionadas como abiertas</value>
+  </data>
+  <data name="Notes_MarkResolved" xml:space="preserve">
+    <value>Marque notas seleccionadas como se resuelven</value>
+  </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Creado</value>
   </data>
@@ -1457,7 +1469,7 @@
     <value>Modificado</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>Usuario</value>
+    <value>Autor</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>Estado</value>
@@ -1467,6 +1479,9 @@
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
     <value>Cerrado</value>
+  </data>
+  <data name="Notes_Note_Verse" xml:space="preserve">
+    <value>Verso</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>Asociaciones</value>
@@ -1486,20 +1501,32 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>Visto</value>
   </data>
+  <data name="Notes_NotesNotSent" xml:space="preserve">
+    <value> Las notas seleccionadas se enviarán a Paratext.</value>
+  </data>
+  <data name="Notes_NoteStatus_Archived" xml:space="preserve">
+    <value>Archivado</value>
+  </data>
   <data name="Notes_NoteText" xml:space="preserve">
     <value>Texto</value>
   </data>
   <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>Abrir cerrado</value>
+    <value>Estado</value>
+  </data>
+  <data name="Notes_OpenConfirmation" xml:space="preserve">
+    <value>Marcar estas notas como abiertas?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Parte</value>
   </data>
+  <data name="Notes_ResolveConfirmation" xml:space="preserve">
+    <value>Marque estas notas como se resuelven?</value>
+  </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>¿Enviar esta nota a Paratext?</value>
+    <value>¿Enviar estas notas a Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Envía esta nota a Paratext</value>
+    <value>Enviar notas seleccionadas a Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Corpus tokenizado</value>
@@ -1604,7 +1631,7 @@
     <value>Traducción inversa</value>
   </data>
   <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
-    <value>Calcular el nuevo modelo de traducción</value>
+    <value>Calcule el nuevo modelo de traducción</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
     <value>Cambiar el nivel de zoom del contenido</value>
@@ -1703,10 +1730,10 @@
     <value>Estándar</value>
   </data>
   <data name="Pds_StartParatextFirst" xml:space="preserve">
-    <value>Inicie el paratext primero</value>
+    <value>Iniciar PARATEXT primero</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Estudiobible</value>
+    <value>Estudio de estudio</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBIBLeadDitions</value>
@@ -2339,7 +2366,7 @@
     <value>Mostrar preleboseos</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
-    <value>Actualizar a la nueva versión de ClearDashboard</value>
+    <value>Actualización de la nueva versión de ClearDashboard</value>
   </data>
   <data name="ShellView_User" xml:space="preserve">
     <value>Usuario</value>

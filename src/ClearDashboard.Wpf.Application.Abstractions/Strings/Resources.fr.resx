@@ -128,7 +128,7 @@
     <value>Nom d'utilisateur de collaboration:</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
-    <value>-Daison du compte courant-</value>
+    <value>- Détails du compte courant-</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
     <value>Désactiver la licence actuelle</value>
@@ -1058,7 +1058,7 @@
     <value>Importation du lexique</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
-    <value>Matchs de traduction</value>
+    <value>Correspondance de traduction</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Tout déselectionner</value>
@@ -1154,7 +1154,7 @@
     <value>Nouvelle vue</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>Liste des notes</value>
+    <value>Coups</value>
   </data>
   <data name="MainView_WindowsPINS" xml:space="preserve">
     <value>PINS</value>
@@ -1372,17 +1372,23 @@
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>Supprimer cette note?</value>
   </data>
+  <data name="Notes_DueToPermissions" xml:space="preserve">
+    <value>En raison de vos autorisations de projet PARATEXT,</value>
+  </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Par associations</value>
+    <value>Filtre par verset</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filtres</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>Par étiquettes</value>
+    <value>Filtre par étiquettes</value>
+  </data>
+  <data name="Notes_FilterNoteStatus" xml:space="preserve">
+    <value>Filtre par statut</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>Par note texte</value>
+    <value>Filtrer par texte</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>N'importe lequel</value>
@@ -1394,7 +1400,7 @@
     <value>Ouvrir</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>Par les utilisateurs</value>
+    <value>Filtre par auteur</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Ajouter une étiquette</value>
@@ -1450,6 +1456,12 @@
   <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
     <value>Étiquette dissociée</value>
   </data>
+  <data name="Notes_MarkOpen" xml:space="preserve">
+    <value>Marquez les notes sélectionnées comme ouvertes</value>
+  </data>
+  <data name="Notes_MarkResolved" xml:space="preserve">
+    <value>Marquez les notes sélectionnées comme résolues</value>
+  </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Créé</value>
   </data>
@@ -1457,7 +1469,7 @@
     <value>Modifié</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>Utilisateur</value>
+    <value>Auteur</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>Statut</value>
@@ -1467,6 +1479,9 @@
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
     <value>Fermé</value>
+  </data>
+  <data name="Notes_Note_Verse" xml:space="preserve">
+    <value>Verset</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>Les associations</value>
@@ -1486,20 +1501,32 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>Vu</value>
   </data>
+  <data name="Notes_NotesNotSent" xml:space="preserve">
+    <value> Les notes sélectionnées seront envoyées à PARATEXT.</value>
+  </data>
+  <data name="Notes_NoteStatus_Archived" xml:space="preserve">
+    <value>Archivé</value>
+  </data>
   <data name="Notes_NoteText" xml:space="preserve">
     <value>Texte</value>
   </data>
   <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>Ouvert fermé</value>
+    <value>Statut</value>
+  </data>
+  <data name="Notes_OpenConfirmation" xml:space="preserve">
+    <value>Marquez ces notes comme ouvertes?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Partie</value>
   </data>
+  <data name="Notes_ResolveConfirmation" xml:space="preserve">
+    <value>Marquez ces notes comme résolues?</value>
+  </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>Envoyez cette note à PARATEXT?</value>
+    <value>Envoyez ces notes à PARATEXT?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Envoyer cette note à PARATEXT</value>
+    <value>Envoyer des notes sélectionnées à PARATEXT</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Corpus tokenisé</value>
@@ -1556,7 +1583,7 @@
     <value>Former</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Aligneur de mot de machine de train</value>
+    <value>Aligneur de la machine à train</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Définissez la cartographie du verset entre les corpus parallélisés</value>
@@ -1607,7 +1634,7 @@
     <value>Calculer le nouveau modèle de traduction</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Changer le niveau de zoom du contenu</value>
+    <value>Modifier le niveau de zoom du contenu</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
     <value>Consultant Notes</value>
@@ -1898,7 +1925,7 @@
     <value>PARATEXT est en cours d'exécution mais n'est pas connecté.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
-    <value>Projet de parattex</value>
+    <value>Projet PARATEXT</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
     <value>Projet:</value>
@@ -1919,7 +1946,7 @@
     <value>Assistant de modèle de projet: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Refreindre la liste des projets de collaboration</value>
+    <value>Rafraîchir la liste des projets de collaboration</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>Recherche récente</value>
@@ -2012,7 +2039,7 @@
     <value>Deutéronomie</value>
   </data>
   <data name="ProperCase_Ecclesiastes" xml:space="preserve">
-    <value>Ecclésiastes</value>
+    <value>Ecclésiaste</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
     <value>Éphésiens</value>
@@ -2078,7 +2105,7 @@
     <value>Juges</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentations</value>
+    <value>Lamentation</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
     <value>Lévitique</value>
@@ -2138,7 +2165,7 @@
     <value>Tirus</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>Zécharie</value>
+    <value>Zécharia</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
     <value>Zéphanie</value>
@@ -2279,7 +2306,7 @@
     <value>Réservé à l'expansion future</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaurer l'utilisateur de collaboration</value>
+    <value>Restaurer l'utilisateur de la collaboration</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Enregistré sur le serveur distant</value>

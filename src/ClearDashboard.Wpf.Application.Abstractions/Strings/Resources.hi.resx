@@ -680,7 +680,7 @@
     <value>'अमान्य' के रूप में चिह्न संरेखण</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
-    <value>मार्क संरेखण को 'समीक्षा की आवश्यकता' के रूप में संरेखित करें</value>
+    <value>मार्क संरेखण 'समीक्षा की आवश्यकता' के रूप में</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
     <value>'मान्य' के रूप में चिह्न संरेखण</value>
@@ -1142,7 +1142,7 @@
     <value>कॉरपस टोकन</value>
   </data>
   <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>चापलूसी</value>
+    <value>चकरानेवाला</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>देखना</value>
@@ -1154,7 +1154,7 @@
     <value>नई देखें</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>नोट सूची</value>
+    <value>जोट्स</value>
   </data>
   <data name="MainView_WindowsPINS" xml:space="preserve">
     <value>PINS</value>
@@ -1372,17 +1372,23 @@
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>इस नोट को हटा दें?</value>
   </data>
+  <data name="Notes_DueToPermissions" xml:space="preserve">
+    <value>आपके Paratext प्रोजेक्ट की अनुमति के कारण,</value>
+  </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>संघों द्वारा</value>
+    <value>कविता द्वारा फ़िल्टर</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>फिल्टर</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>लेबल द्वारा</value>
+    <value>लेबल द्वारा फ़िल्टर करें</value>
+  </data>
+  <data name="Notes_FilterNoteStatus" xml:space="preserve">
+    <value>स्थिति से फ़िल्टर करें</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>नोट पाठ द्वारा</value>
+    <value>पाठ द्वारा फ़िल्टर</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>कोई</value>
@@ -1394,7 +1400,7 @@
     <value>खुला</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>उपयोगकर्ताओं द्वारा</value>
+    <value>लेखक द्वारा फ़िल्टर</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>एक लेबल जोड़ें</value>
@@ -1450,6 +1456,12 @@
   <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
     <value>विच्छेद लेबल</value>
   </data>
+  <data name="Notes_MarkOpen" xml:space="preserve">
+    <value>चिह्नित नोट खुले के रूप में</value>
+  </data>
+  <data name="Notes_MarkResolved" xml:space="preserve">
+    <value>समाधान के रूप में चयनित नोटों को चिह्नित करें</value>
+  </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>बनाया था</value>
   </data>
@@ -1457,7 +1469,7 @@
     <value>संशोधित</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>उपयोगकर्ता</value>
+    <value>लेखक</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>स्थिति</value>
@@ -1467,6 +1479,9 @@
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
     <value>बंद किया हुआ</value>
+  </data>
+  <data name="Notes_Note_Verse" xml:space="preserve">
+    <value>कविता</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>संघों</value>
@@ -1486,20 +1501,32 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>देखा</value>
   </data>
+  <data name="Notes_NotesNotSent" xml:space="preserve">
+    <value> चयनित नोट्स नोट को paratext पर भेजे जाएंगे।</value>
+  </data>
+  <data name="Notes_NoteStatus_Archived" xml:space="preserve">
+    <value>संग्रहीत</value>
+  </data>
   <data name="Notes_NoteText" xml:space="preserve">
     <value>मूलपाठ</value>
   </data>
   <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>खुला बंद</value>
+    <value>स्थिति</value>
+  </data>
+  <data name="Notes_OpenConfirmation" xml:space="preserve">
+    <value>इन नोटों को खुले के रूप में चिह्नित करें?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>भाग</value>
   </data>
+  <data name="Notes_ResolveConfirmation" xml:space="preserve">
+    <value>इन नोटों को हल के रूप में चिह्नित करें?</value>
+  </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>इस नोट को paratext पर भेजें?</value>
+    <value>इन नोटों को paratext पर भेजें?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>इस नोट को paratext पर भेजें</value>
+    <value>Paratext पर चयनित नोट भेजें</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>टोकन का</value>
@@ -1850,7 +1877,7 @@
     <value>पुस्तक चयन सक्षम करें</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
-    <value>यदि जाँच की जाती है, तो आप कौन सी पुस्तकों को संसाधित करने में सक्षम होंगे।</value>
+    <value>यदि जाँच की जाती है, तो आप किन पुस्तकों को संसाधित करने के लिए चयन कर पाएंगे।</value>
   </data>
   <data name="ProjectPicker_GetStarted" xml:space="preserve">
     <value>शुरू हो जाओ</value>
@@ -2450,7 +2477,7 @@
     <value>कॉरपस टोकन</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
-    <value>चापलूसी</value>
+    <value>चकरानेवाला</value>
   </data>
   <data name="Windows_EnhancedView" xml:space="preserve">
     <value>देखना</value>

@@ -1154,7 +1154,7 @@
     <value>New View</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>Notes List</value>
+    <value>Jots</value>
   </data>
   <data name="MainView_WindowsPINS" xml:space="preserve">
     <value>Term Search</value>
@@ -1372,17 +1372,23 @@
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>Delete this note?</value>
   </data>
+  <data name="Notes_DueToPermissions" xml:space="preserve">
+    <value>Due to your Paratext project permissions, </value>
+  </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>By associations</value>
+    <value>Filter by Verse</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filters</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>By labels</value>
+    <value>Filter by Labels</value>
+  </data>
+  <data name="Notes_FilterNoteStatus" xml:space="preserve">
+    <value>Filter by Status</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>By note text</value>
+    <value>Filter by Text</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>Any</value>
@@ -1394,7 +1400,7 @@
     <value>Open</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>By users</value>
+    <value>Filter by Author</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Add a label</value>
@@ -1450,6 +1456,12 @@
   <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
     <value>Disassociate label</value>
   </data>
+  <data name="Notes_MarkOpen" xml:space="preserve">
+    <value>Mark selected notes as open</value>
+  </data>
+  <data name="Notes_MarkResolved" xml:space="preserve">
+    <value>Mark selected notes as resolved</value>
+  </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Created</value>
   </data>
@@ -1457,7 +1469,7 @@
     <value>Modified</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>User</value>
+    <value>Author</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>Status</value>
@@ -1467,6 +1479,9 @@
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
     <value>Closed</value>
+  </data>
+  <data name="Notes_Note_Verse" xml:space="preserve">
+    <value>Verse</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>Associations</value>
@@ -1486,20 +1501,32 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>Seen</value>
   </data>
+  <data name="Notes_NotesNotSent" xml:space="preserve">
+    <value> selected notes will note be sent to Paratext.</value>
+  </data>
+  <data name="Notes_NoteStatus_Archived" xml:space="preserve">
+    <value>Archived</value>
+  </data>
   <data name="Notes_NoteText" xml:space="preserve">
     <value>Text</value>
   </data>
   <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>Open/Closed</value>
+    <value>Status</value>
+  </data>
+  <data name="Notes_OpenConfirmation" xml:space="preserve">
+    <value>Mark these notes as open?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Part</value>
   </data>
+  <data name="Notes_ResolveConfirmation" xml:space="preserve">
+    <value>Mark these notes as resolved?</value>
+  </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>Send this note to Paratext?</value>
+    <value>Send these notes to Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Send this note to Paratext</value>
+    <value>Send selected notes to Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Tokenized Corpus</value>

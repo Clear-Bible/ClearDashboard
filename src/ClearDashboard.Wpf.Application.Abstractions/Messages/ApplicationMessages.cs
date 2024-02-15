@@ -3,6 +3,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using System;
 using System.Collections.Generic;
 
@@ -48,6 +49,8 @@ namespace ClearDashboard.Wpf.Application.Messages
     public record FilterPinsMessage(string Message, XmlSource XmlSource = XmlSource.All);
 
     public record CreateProjectMessage(string Message);
+
+    public record ReloadExternalNotesDataMessage(ReloadType reloadType);
 
     public record ReloadProjectMessage();
 
