@@ -19,6 +19,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using GenerateLicenseKeyForDashboard.Models;
 using LicenseManager = ClearDashboard.DataAccessLayer.LicenseManager;
+using System.Text.RegularExpressions;
 
 
 namespace GenerateLicenseKeyForDashboard.ViewModels
@@ -123,6 +124,8 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             get => _emailBox;
             set
             {
+                value = value.ToLower();
+
                 Set(ref _emailBox, value);
                 ValidateCreateButton();
             }
@@ -144,6 +147,13 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             get => _firstNameBox;
             set
             {
+                // remove any non-alphanumeric characters
+                Regex rgx = new Regex("[^_a-zA-Z\\d\\s -]");
+                value = rgx.Replace(value, "");
+
+                // replace spaces with underscore otherwise this won't work as a username
+                value = value.Replace(' ', '_');
+
                 Set(ref _firstNameBox, value);
                 ValidateCreateButton();
             }
@@ -155,6 +165,14 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             get => _lastNameBox;
             set
             {
+                // remove any non-alphanumeric characters
+                Regex rgx = new Regex("[^_a-zA-Z\\d\\s -]");
+                value = rgx.Replace(value, "");
+
+                // replace spaces with underscore otherwise this won't work as a username
+                value = value.Replace(' ', '_');
+
+
                 Set(ref _lastNameBox, value);
                 ValidateCreateButton();
             }
@@ -252,7 +270,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             get => _combinedCreateLicense;
             set => Set(ref _combinedCreateLicense, value);
         }
-        
+
 
         private string _deleteByIdBox = string.Empty;
         public string DeleteByIdBox
@@ -374,7 +392,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             get => _fetchUserMessage;
             set => Set(ref _fetchUserMessage, value);
         }
-                 
+
 
 
 
@@ -457,7 +475,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                 _projectFilterString = value ?? string.Empty;
                 CheckAndRefreshGrid();
             }
-    }
+        }
 
         #endregion //Observable Properties
 
@@ -618,6 +636,11 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
         public void ValidateCreateButton()
         {
+            if (SelectedGroup is null)
+            {
+                return;
+            }
+
             if (FirstNameBox != string.Empty && LastNameBox != string.Empty && EmailBox != string.Empty && SelectedGroup.Name != string.Empty)
             {
                 IsCreateButtonEnabled = true;
@@ -839,7 +862,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
             FetchedEmailBox = dashboardUser.Email ?? string.Empty;
             FetchedLicenseBox = dashboardUser.LicenseKey ?? string.Empty;
-            
+
             CombinedLicense = CombineLicenses(FetchedLicenseBox, FetchedGitLabLicense);
         }
 
