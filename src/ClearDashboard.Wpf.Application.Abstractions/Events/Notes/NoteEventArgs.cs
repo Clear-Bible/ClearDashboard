@@ -30,6 +30,6 @@ namespace ClearDashboard.Wpf.Application.Events.Notes
         /// </summary>
         public Point MousePosition { get; set; }
 
-        public Color HighlightColor { get; set; } = Color.MediumPurple;
+        public bool IsNewNote { get; set; } = false;
     }
 }

@@ -343,6 +343,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _isNoteHovered, value);
         }
 
+        public SolidColorBrush NoteIndicatorBrush
+        {
+            get => _noteIndicatorBrush;
+            set => Set(ref _noteIndicatorBrush, value);
+        }
+
         public bool TokenHasNote => TokenNoteIds.Any();
         public bool TranslationHasNote => TranslationNoteIds.Any();
 
@@ -373,6 +379,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         private bool _multipleExternalNotes = false;
+        private SolidColorBrush _noteIndicatorBrush;
+
         public bool MultipleExternalNotes
         {
             get => _multipleExternalNotes && AbstractionsSettingsHelper.GetShowExternalNotes();
@@ -415,6 +423,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public TokenDisplayViewModel(Token token)
         {
             Token = token;
+            NoteIndicatorBrush = Brushes.LightGray;
         }
     }
 }

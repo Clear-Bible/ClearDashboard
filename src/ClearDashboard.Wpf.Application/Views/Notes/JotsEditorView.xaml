@@ -96,8 +96,14 @@
                     <i:EventTrigger EventName="NoteEditorMouseLeave">
                         <i:CallMethodAction MethodName="NoteEditorMouseLeave" TargetObject="{Binding }" />
                     </i:EventTrigger>
+                    <i:EventTrigger EventName="AddNoteEditorMouseEnter">
+                        <i:CallMethodAction MethodName="NoteEditorMouseEnter" TargetObject="{Binding }" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="AddNoteEditorMouseLeave">
+                        <i:CallMethodAction MethodName="NoteEditorMouseLeave" TargetObject="{Binding }" />
+                    </i:EventTrigger>
 
-                    <!-- this was never implemented on NoteCollectionDisplay -->
+                <!-- this was never implemented on NoteCollectionDisplay -->
                     <!--<i:EventTrigger EventName="NoteIndicatorMouseEnter">
                         <i:CallMethodAction MethodName="NoteIndicatorMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
                     </i:EventTrigger>-->
