@@ -22,7 +22,7 @@ namespace ClearDashboard.Paranext.Module.Services
         IDisposable, 
         IHandle<VerseChangedMessage>
     {
-        private readonly string rendererUrl = "localhost:1212";
+        private readonly string rendererUrl = "localhost:1212/paranextExtensionDashboard_services";
         private ChromiumWebBrowser? browser;
 
         protected IEventAggregator eventAggregator_;
@@ -83,7 +83,6 @@ namespace ClearDashboard.Paranext.Module.Services
             browser.ConsoleMessage += (sender, e) =>
             {
                 Debug.WriteLine($"BROWSERMESSAGE: {e.Message}");
-
             };
             browser.JavascriptObjectRepository.ObjectBoundInJavascript += (sender, e) =>
             {

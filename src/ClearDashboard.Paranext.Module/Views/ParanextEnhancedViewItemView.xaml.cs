@@ -9,7 +9,7 @@ using Microsoft.Web.WebView2.Wpf;
 namespace ClearDashboard.Paranext.Module.Views
 {
     /// <summary>
-    /// Interaction logic for VerseAwareEnhancedViewItemView.xaml
+    /// Note: using CEF rather than WebView2 due to window overlapping issue https://github.com/MicrosoftEdge/WebView2Feedback/issues/356
     /// </summary>
     public partial class ParanextEnhancedViewItemView : UserControl
     {
