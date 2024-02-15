@@ -27,7 +27,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
     /// <summary>
     /// A control for displaying a single <see cref="Token"/> alongside a possible note indicator, <see cref="Translation"/>, and aligned token.
     /// </summary>
-    public partial class TokenDisplay : IHandle<SelectionUpdatedMessage>
+    public partial class TokenDisplay : IHandle<SelectionUpdatedMessage>,
+        IHandle<NoteMouseEnterMessage>,
+        IHandle<NoteMouseLeaveMessage>
     {
         #region Static DependencyProperties
 
@@ -2182,7 +2184,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
             NoteIndicatorMargin = new Thickness(tokenLeftMargin, 1, 0, TokenVerticalSpacing);
             TokenNoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TokenHasNote) ? Visibility.Visible : Visibility.Hidden;
             TranslationNoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TranslationHasNote) ? Visibility.Visible : Visibility.Hidden;
-            NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered ? Brushes.Orange : NoteIndicatorColor;
+
+            // JOTS - highlighting
+            NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered ? TokenDisplayViewModel.NoteIndicatorBrush : NoteIndicatorColor;
 
             TranslationMargin = new Thickness(translationLeftMargin, 0, translationRightMargin, TranslationVerticalSpacing);
             TranslationVisibility = (ShowTranslation && TokenDisplayViewModel.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
@@ -2243,6 +2247,34 @@ namespace ClearDashboard.Wpf.Application.UserControls
             IWindowManager manager = new WindowManager();
             manager.ShowWindowAsync(viewModel, null, settings);
 
+        }
+
+      
+        public async Task HandleAsync(NoteMouseEnterMessage message, CancellationToken cancellationToken)
+        {
+            if (TokenDisplayViewModel != null)
+            {
+                if (message.Entities.ContainsId(TokenDisplayViewModel.Token.TokenId))
+                {
+                    TokenDisplayViewModel.IsNoteHovered = true;
+                    TokenDisplayViewModel.NoteIndicatorBrush = message.NewNote ? Brushes.Orange : Brushes.MediumPurple;
+                }
+            }
+
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(NoteMouseLeaveMessage message, CancellationToken cancellationToken)
+        {
+            if (TokenDisplayViewModel != null)
+            {
+                if (message.Entities.ContainsId(TokenDisplayViewModel.Token.TokenId))
+                {
+                    TokenDisplayViewModel.IsNoteHovered = false;
+                }
+            }
+
+            await Task.CompletedTask;
         }
     }
 }

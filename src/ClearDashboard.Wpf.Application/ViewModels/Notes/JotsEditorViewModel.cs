@@ -73,10 +73,20 @@ public class JotsEditorViewModel : ApplicationScreen
     }
     #endregion
 
-    public async Task Initialize(SelectionManager clonedSelectionManager)
+    
+    public void Initialize()
     {
-        SelectionManager = clonedSelectionManager;
-        await NoteManager.GetNotes(SelectionManager.SelectedNoteIds);
+        Task.Run(async () =>
+        {
+            await NoteManager.GetNotes(SelectionManager.SelectedNoteIds);
+
+            if (NoteManager.CurrentNotes.Count > 0)
+            {
+                NoteManager.SelectedNote = NoteManager.CurrentNotes[0];
+            }
+
+        });
+
     }
 
     public async void Close()
@@ -160,7 +170,7 @@ public class JotsEditorViewModel : ApplicationScreen
 
     public async Task NoteEditorMouseEnterAsync(NoteEventArgs e)
     {
-        await NoteManager.NoteMouseEnterAsync(e.Note, e.EntityIds);
+        await NoteManager.NoteMouseEnterAsync(e.Note, e.EntityIds, e.IsNewNote);
     }
 
     public void NoteEditorMouseLeave(object sender, NoteEventArgs e)

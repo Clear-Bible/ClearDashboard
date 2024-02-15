@@ -10,6 +10,7 @@ using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
+using MediatR;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
 namespace ClearDashboard.Wpf.Application.UserControls.Notes
@@ -164,6 +165,20 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// </summary>
         public static readonly RoutedEvent NoteEditorMouseLeaveEvent = EventManager.RegisterRoutedEvent
             (nameof(NoteEditorMouseLeave), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+
+        /// <summary>
+        /// Identifies the NoteEditorMouseEnter routed event.
+        /// </summary>
+        public static readonly RoutedEvent AddNoteEditorMouseEnterEvent = EventManager.RegisterRoutedEvent
+            (nameof(AddNoteEditorMouseEnter), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+        /// <summary>
+        /// Identifies the NoteEditorMouseLeave routed event.
+        /// </summary>
+        public static readonly RoutedEvent AddNoteEditorMouseLeaveEvent = EventManager.RegisterRoutedEvent
+            (nameof(AddNoteEditorMouseLeave), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
 
         /// <summary>
         /// Identifies the NoteSeen routed event.
@@ -508,7 +523,9 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             {
                 RoutedEvent = routedEvent,
                 Note = e.Note,
-                EntityIds = e.EntityIds
+                EntityIds = e.EntityIds,
+                IsNewNote = e.IsNewNote
+                
             });
         }
 
@@ -595,7 +612,24 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             {
                 //Notes.Add(args.Note);
                 NewNote = new NoteViewModel();
-     
+
+
+                //var associatedEntityIds = await note.GetFullDomainEntityIds(Mediator);
+                //var domainEntityContexts = new EntityContextDictionary(await note.GetDomainEntityContexts(Mediator));
+
+                //foreach (var associatedEntityId in associatedEntityIds)
+                //{
+                //    var association = new NoteAssociationViewModel
+                //    {
+                //        AssociatedEntityId = associatedEntityId
+                //    };
+                //    if (domainEntityContexts.TryGetValue(associatedEntityId, out var entityContext))
+                //    {
+                //        association.Description = GetNoteAssociationDescription(associatedEntityId, entityContext);
+                //    }
+                //    noteViewModel.Associations.Add(association);
+                //}
+
 
                 OnPropertyChanged(nameof(Notes));
                 OnPropertyChanged(nameof(NewNote));
@@ -642,6 +676,25 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             if (e is NoteEventArgs args)
             {
                 RaiseNoteEvent(NoteEditorMouseLeaveEvent, args);
+            }
+        }
+
+        private void OnAddNoteEditorMouseEnter(object sender, RoutedEventArgs e)
+        {
+            var noteDisplay = (NoteDisplay)sender;
+            if (e is NoteEventArgs args)
+            {
+                args.EntityIds = noteDisplay.EntityIds;
+                args.IsNewNote = true;
+                RaiseNoteEvent(AddNoteEditorMouseEnterEvent, args);
+            }
+        }
+        private void OnAddNoteEditorMouseLeave(object sender, RoutedEventArgs e)
+        {
+            if (e is NoteEventArgs args)
+            {
+                args.IsNewNote = true;
+                RaiseNoteEvent(AddNoteEditorMouseLeaveEvent, args);
             }
         }
 
@@ -1460,6 +1513,24 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             add => AddHandler(NoteEditorMouseLeaveEvent, value);
             remove => RemoveHandler(NoteEditorMouseLeaveEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse enters one of the note editors.
+        /// </summary>
+        public event RoutedEventHandler AddNoteEditorMouseEnter
+        {
+            add => AddHandler(AddNoteEditorMouseEnterEvent, value);
+            remove => RemoveHandler(AddNoteEditorMouseEnterEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse leaves one of the note editors.
+        /// </summary>
+        public event RoutedEventHandler AddNoteEditorMouseLeave
+        {
+            add => AddHandler(AddNoteEditorMouseLeaveEvent, value);
+            remove => RemoveHandler(AddNoteEditorMouseLeaveEvent, value);
         }
 
         /// <summary>

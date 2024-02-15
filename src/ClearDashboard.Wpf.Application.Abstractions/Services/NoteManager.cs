@@ -103,6 +103,15 @@ namespace ClearDashboard.Wpf.Application.Services
             private set => Set(ref _currentNotes, value);
         }
 
+        private NoteViewModel? _selectedNote;
+        private NoteViewModel? _selectedNote1;
+
+        public NoteViewModel? SelectedNote
+        {
+            get => _selectedNote1;
+            set => Set(ref _selectedNote1, value);
+        }
+
         private string GetNoteAssociationDescription(IId associatedEntityId, IReadOnlyDictionary<string, string> entityContext)
         {
             if (associatedEntityId is TokenId)
@@ -447,15 +456,15 @@ namespace ClearDashboard.Wpf.Application.Services
                 }
             }
 
-            //var orderedList = result.OrderByDescending(n => n.CreatedLocalTime);
+            var orderedList = result.OrderByDescending(n => n.CreatedLocalTime).ToArray();
 
             var index = 0;
-            foreach (var item in result)
+            foreach (var item in orderedList)
             {
                 item.TabHeader = $"Jot{++index}";
             }
 
-            return new NoteViewModelCollection(result.ToArray());
+            return new NoteViewModelCollection(orderedList);
         }
 
         //public async Task SetCurrentNoteIds(NoteIdCollection noteIds)
@@ -514,7 +523,9 @@ namespace ClearDashboard.Wpf.Application.Services
                 }
 
                 var newNoteDetail = await GetNoteDetailsAsync(note.NoteId!);
+                newNoteDetail.TabHeader = $"Jot{CurrentNotes.Count + 1}";
                 CurrentNotes.Add(newNoteDetail);
+                SelectedNote = CurrentNotes.Last();
                 NotifyOfPropertyChange(nameof(CurrentNotes));
                 await EventAggregator.PublishOnUIThreadAsync(new NoteAddedMessage(note, entityIds));
             }
@@ -628,10 +639,11 @@ namespace ClearDashboard.Wpf.Application.Services
         /// </summary>
         /// <param name="note">The <see cref="Note"/> that was hovered.</param>
         /// <param name="entityIds">The entity IDs associated with the hovered note.</param>
+        /// <param name="isNewNote">Is this for a new note?</param>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task NoteMouseEnterAsync(NoteViewModel note, EntityIdCollection entityIds)
+        public async Task NoteMouseEnterAsync(NoteViewModel note, EntityIdCollection entityIds, bool isNewNote = false)
         {
-            await EventAggregator.PublishOnUIThreadAsync(new NoteMouseEnterMessage(note, entityIds));
+            await EventAggregator.PublishOnUIThreadAsync(new NoteMouseEnterMessage(note, entityIds, isNewNote));
         }
 
         /// <summary>
@@ -639,10 +651,11 @@ namespace ClearDashboard.Wpf.Application.Services
         /// </summary>
         /// <param name="note">The <see cref="Note"/> that was left.</param>
         /// <param name="entityIds">The entity IDs associated with the note that was left.</param>
+        /// <param name="isNewNote">Is this for a new note?</param>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task NoteMouseLeaveAsync(NoteViewModel note, EntityIdCollection entityIds)
+        public async Task NoteMouseLeaveAsync(NoteViewModel note, EntityIdCollection entityIds, bool isNewNote = false)
         {
-            await EventAggregator.PublishOnUIThreadAsync(new NoteMouseLeaveMessage(note, entityIds));
+            await EventAggregator.PublishOnUIThreadAsync(new NoteMouseLeaveMessage(note, entityIds, isNewNote));
         }
 
         /// <summary>

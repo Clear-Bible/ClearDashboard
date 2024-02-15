@@ -17,7 +17,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="90"></RowDefinition>
         </Grid.RowDefinitions>
   
             <notes:NoteCollectionDisplay Grid.Row="0"
@@ -35,8 +35,10 @@
           NoteMargin="0,0,0,0"
           NoteTextFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
           Notes="{Binding NoteManager.CurrentNotes}"
+          SelectedNote="{Binding NoteManager.SelectedNote, Mode=TwoWay}"
           TimestampMargin="0,0,00,0"
           UserFontStyle="Italic"
+          MaxHeight="500"
          >
                 <i:Interaction.Triggers>
 
@@ -94,8 +96,15 @@
                     <i:EventTrigger EventName="NoteEditorMouseLeave">
                         <i:CallMethodAction MethodName="NoteEditorMouseLeave" TargetObject="{Binding}" />
                     </i:EventTrigger>
+                    <i:EventTrigger EventName="AddNoteEditorMouseEnter">
+                        <i:CallMethodAction MethodName="NoteEditorMouseEnter" TargetObject="{Binding }" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="AddNoteEditorMouseLeave">
+                        <i:CallMethodAction MethodName="NoteEditorMouseLeave" TargetObject="{Binding }" />
+                    </i:EventTrigger>
 
-                    <!--  this was never implemented on NoteCollectionDisplay  -->
+
+                <!-- this was never implemented on NoteCollectionDisplay -->
                     <!--<i:EventTrigger EventName="NoteIndicatorMouseEnter">
                         <i:CallMethodAction MethodName="NoteIndicatorMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
                     </i:EventTrigger>-->
@@ -130,8 +139,8 @@
             </Button>
 
         </StackPanel>
-        <ProgressBar
-            Grid.Row="1"
+
+        <ProgressBar Grid.Row="0"
             Width="76"
             Height="75"
             HorizontalAlignment="Center"
