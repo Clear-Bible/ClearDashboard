@@ -143,7 +143,7 @@
     <value>Paratext उपयोगकर्ता नाम:</value>
   </data>
   <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
-    <value>आवेदन को पुनरारंभ करें</value>
+    <value>अनुप्रयोग को पुनरारंभ करें</value>
   </data>
   <data name="AccountInfo_SelectAccountLabel" xml:space="preserve">
     <value>स्विच करने के लिए एक खाता चुनें:</value>
@@ -155,7 +155,7 @@
     <value>जोड़ना</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>कॉर्पस को टोकन करने के लिए चुनें</value>
+    <value>कॉर्पस को टोकन करने का चयन करें</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>संरेखण</value>
@@ -167,7 +167,7 @@
     <value>USFM की जाँच करना</value>
   </data>
   <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
-    <value>क्लिपबोर्ड के लिए USFM त्रुटियों की प्रतिलिपि बनाएँ</value>
+    <value>क्लिपबोर्ड पर USFM त्रुटियों की प्रतिलिपि बनाएँ</value>
   </data>
   <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
     <value>त्रुटियों की संख्या:</value>
@@ -680,7 +680,7 @@
     <value>'अमान्य' के रूप में चिह्न संरेखण</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
-    <value>मार्क संरेखण को 'समीक्षा की आवश्यकता' के रूप में संरेखित करें</value>
+    <value>मार्क संरेखण 'समीक्षा की आवश्यकता' के रूप में</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
     <value>'मान्य' के रूप में चिह्न संरेखण</value>
@@ -707,7 +707,7 @@
     <value>टोकन के अन्य उदाहरणों पर विभाजन लागू करें</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>टोकन को विभाजित करने के लिए कहां से चुनें:</value>
+    <value>टोकन को विभाजित करने के लिए कहां चुनें:</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>तीन-तरफ़ा विभाजन</value>
@@ -1256,7 +1256,7 @@
     <value>मर्ज पूर्ण ... पुनः लोडिंग इंटरफ़ेस</value>
   </data>
   <data name="MergeDialog_OperationCancelled" xml:space="preserve">
-    <value>अभियान रद्द किया गया</value>
+    <value>रद्द किया गया ऑपरेशन</value>
   </data>
   <data name="MergeDialog_OperationComplete" xml:space="preserve">
     <value>ऑपरेशन पूरा!</value>
@@ -1372,6 +1372,9 @@
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>इस नोट को हटा दें?</value>
   </data>
+  <data name="Notes_DueToPermissions" xml:space="preserve">
+    <value>आपके Paratext प्रोजेक्ट की अनुमति के कारण,</value>
+  </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>कविता द्वारा फ़िल्टर</value>
   </data>
@@ -1454,10 +1457,10 @@
     <value>विच्छेद लेबल</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>इस नोट को खुले के रूप में चिह्नित करें</value>
+    <value>चिह्नित नोट खुले के रूप में</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>इस नोट को हल के रूप में चिह्नित करें</value>
+    <value>समाधान के रूप में चयनित नोटों को चिह्नित करें</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>बनाया था</value>
@@ -1498,6 +1501,9 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>देखा</value>
   </data>
+  <data name="Notes_NotesNotSent" xml:space="preserve">
+    <value> चयनित नोट्स नोट को paratext पर भेजे जाएंगे।</value>
+  </data>
   <data name="Notes_NoteStatus_Archived" xml:space="preserve">
     <value>संग्रहीत</value>
   </data>
@@ -1520,7 +1526,7 @@
     <value>इन नोटों को paratext पर भेजें?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>इस नोट को paratext पर भेजें</value>
+    <value>Paratext पर चयनित नोट भेजें</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>टोकन का</value>
@@ -1556,7 +1562,7 @@
     <value>कॉर्पोरा छंदों के समानांतरकरण करें</value>
   </data>
   <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
-    <value>Interlinear बनाएँ</value>
+    <value>Internear बनाएँ</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
     <value>ज्सन मेटाडेटा</value>
@@ -1847,7 +1853,7 @@
     <value>आरंभ करने के लिए अपना प्रोजेक्ट बनाएं।</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
-    <value>एक नया प्रोजेक्ट बनाएं</value>
+    <value>एक नई परियोजना बनाएं</value>
   </data>
   <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
     <value>त्वरित शुरुआत नई परियोजना</value>
@@ -1871,13 +1877,13 @@
     <value>पुस्तक चयन सक्षम करें</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
-    <value>यदि जाँच की जाती है, तो आप कौन सी पुस्तकों को संसाधित करने में सक्षम होंगे।</value>
+    <value>यदि जाँच की जाती है, तो आप किन पुस्तकों को संसाधित करने के लिए चयन कर पाएंगे।</value>
   </data>
   <data name="ProjectPicker_GetStarted" xml:space="preserve">
     <value>शुरू हो जाओ</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>आयात सर्वर परियोजना</value>
+    <value>आयात सर्वर प्रोजेक्ट</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>अपनी परियोजना बनाते समय ग्रीक और हिब्रू बाइबिल ग्रंथों को शामिल करने के लिए इस बॉक्स को देखें।</value>
@@ -2492,7 +2498,7 @@
     <value>समझ:</value>
   </data>
   <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>सबडोमेन:</value>
+    <value>उपडोमेन:</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>हाँ</value>

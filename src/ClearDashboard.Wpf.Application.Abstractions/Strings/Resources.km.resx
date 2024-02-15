@@ -1372,6 +1372,9 @@
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>លុបកំណត់ត្រានេះ?</value>
   </data>
+  <data name="Notes_DueToPermissions" xml:space="preserve">
+    <value>ដោយសារតែសិទ្ធិគម្រោងរបស់អ្នក,</value>
+  </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>ត្រងតាមខ</value>
   </data>
@@ -1454,10 +1457,10 @@
     <value>ផ្តាច់ស្លាកស្លាក</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>សម្គាល់កំណត់ត្រានេះជាការបើកចំហ</value>
+    <value>សម្គាល់កំណត់ចំណាំដែលបានជ្រើសរើសជាការបើក</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>សម្គាល់កំណត់ត្រានេះដូចដែលបានដោះស្រាយ</value>
+    <value>សម្គាល់កំណត់ត្រាដែលបានជ្រើសរើសដែលបានជ្រើសរើសថាបានដោះស្រាយ</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>បានបង្កើត</value>
@@ -1498,6 +1501,9 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>ដេលតោស</value>
   </data>
+  <data name="Notes_NotesNotSent" xml:space="preserve">
+    <value> កំណត់ចំណាំដែលបានជ្រើសរើសនឹងត្រូវបានផ្ញើទៅ ParateXT ។</value>
+  </data>
   <data name="Notes_NoteStatus_Archived" xml:space="preserve">
     <value>ឃោសនារួច</value>
   </data>
@@ -1520,7 +1526,7 @@
     <value>ផ្ញើកំណត់ចំណាំទាំងនេះទៅលោក ParateXT?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>ផ្ញើកំណត់ត្រានេះទៅ ParateXT</value>
+    <value>ផ្ញើកំណត់ចំណាំដែលបានជ្រើសរើសទៅភីធីធីធី</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>tokenized Corpus</value>

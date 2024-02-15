@@ -713,7 +713,7 @@
     <value>Divisão de três vias</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Token composto de unidade</value>
+    <value>Token de compósito un -joain</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -965,7 +965,7 @@
     <value>Encontrar tudo</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
-    <value>Formulários</value>
+    <value>Formas</value>
   </data>
   <data name="LexiconEdit_Fully" xml:space="preserve">
     <value>Completamente</value>
@@ -1241,7 +1241,7 @@
     <value>Versos</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Verso senso</value>
+    <value>Sentido do verso</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Verso total</value>
@@ -1286,7 +1286,7 @@
     <value>Token de acesso:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Verifique seu e -mail e digite o código de validação:</value>
+    <value>Verifique seu e -mail e insira o código de validação:</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Verifique a disponibilidade do usuário</value>
@@ -1372,6 +1372,9 @@
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>Excluir esta nota?</value>
   </data>
+  <data name="Notes_DueToPermissions" xml:space="preserve">
+    <value>Devido às suas permissões de projeto Paratext,</value>
+  </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>Filtro por versículo</value>
   </data>
@@ -1403,7 +1406,7 @@
     <value>Adicione um rótulo</value>
   </data>
   <data name="Notes_LabelAddConfirm" xml:space="preserve">
-    <value>Você quer criar rótulo:</value>
+    <value>Você quer criar o rótulo:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>e associe -o ao grupo de etiquetas:</value>
@@ -1454,10 +1457,10 @@
     <value>Rótulo desassociado</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>Marque esta nota como aberta</value>
+    <value>Mark Notas selecionadas como aberto</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>Marque esta nota como resolvido</value>
+    <value>Mark Notas selecionadas conforme resolvido</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Criada</value>
@@ -1490,13 +1493,16 @@
     <value>Grupos de etiquetas</value>
   </data>
   <data name="Notes_NoteLabels" xml:space="preserve">
-    <value>Rótulos</value>
+    <value>Etiquetas</value>
   </data>
   <data name="Notes_NoteReplies" xml:space="preserve">
     <value>Respostas</value>
   </data>
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>Visto</value>
+  </data>
+  <data name="Notes_NotesNotSent" xml:space="preserve">
+    <value> Notas selecionadas serão observadas para Paratext.</value>
   </data>
   <data name="Notes_NoteStatus_Archived" xml:space="preserve">
     <value>Arquivado</value>
@@ -1520,7 +1526,7 @@
     <value>Enviar estas notas para Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Envie esta nota para Paratext</value>
+    <value>Envie notas selecionadas para Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Corpus tokenizado</value>
@@ -1775,7 +1781,7 @@
     <value>Filtro:</value>
   </data>
   <data name="Pins_Forms" xml:space="preserve">
-    <value>Formulários</value>
+    <value>Formas</value>
   </data>
   <data name="Pins_Gloss" xml:space="preserve">
     <value>Lustro</value>
@@ -1787,7 +1793,7 @@
     <value>Lexeme</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
-    <value>Lexeme Type</value>
+    <value>Lexeme tipo</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
     <value>Referências de carga</value>
@@ -1838,7 +1844,7 @@
     <value>Paratext beta não está funcionando</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
-    <value>Cancelamento ...</value>
+    <value>Cancelando ...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Projetos de colaboração</value>
@@ -1928,7 +1934,7 @@
     <value>Estamos quase lá!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>Clique aqui para visualizar vídeos 'Painel de início'</value>
+    <value>Clique aqui para ver os vídeos 'Painel de início'</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
     <value>Depois de clicar no botão 'Criar' abaixo, estaremos tokenizando, alinhando e preparando seu projeto. Todas as etapas aparecerão aqui à medida que são processadas. Enquanto você espera, fique à vontade para clicar no link abaixo e assistir a alguns vídeos úteis para começar a usar o ClearDashboard!</value>
@@ -2219,7 +2225,7 @@
     <value>Ativar plug -in experimental aqua</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Verifique seu e -mail e digite o código de validação:</value>
+    <value>Verifique seu e -mail e insira o código de validação:</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Configurações de colaboração</value>
@@ -2243,7 +2249,7 @@
     <value>Ativar edição de alinhamento</value>
   </data>
   <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
-    <value>Ativar Notas Paratext externas no grupo experimental</value>
+    <value>Ativar notas de paratext externas no grupo experimental</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
     <value>Ativar notas de paratext externas</value>
@@ -2270,7 +2276,7 @@
     <value>Grupo</value>
   </data>
   <data name="Settings_ImportLabelGroups" xml:space="preserve">
-    <value>Importar grupos de etiquetas</value>
+    <value>Grupos de etiquetas de importação</value>
   </data>
   <data name="Settings_LabelGroupsExported" xml:space="preserve">
     <value>Grupos de etiquetas exportados para:</value>
@@ -2300,13 +2306,13 @@
     <value>Reservado para expansão futura</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaure o usuário da colaboração</value>
+    <value>Restaurar o usuário de colaboração</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Salvo para servidor remoto</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Salvar o usuário do GitLab no servidor</value>
+    <value>Salve o usuário do GitLab no servidor</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
     <value>Salvar configurações</value>

@@ -698,7 +698,7 @@
     <value>Eliminar corpus</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>Mostrar los controles de vista</value>
+    <value>Mostrar los controles de la vista</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>Token dividido</value>
@@ -1372,6 +1372,9 @@
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>Eliminar esta nota?</value>
   </data>
+  <data name="Notes_DueToPermissions" xml:space="preserve">
+    <value>Debido a los permisos de su proyecto Paratext,</value>
+  </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>Filtrar por verso</value>
   </data>
@@ -1454,10 +1457,10 @@
     <value>Etiqueta disociada</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>Marque esta nota como abierta</value>
+    <value>Marque notas seleccionadas como abiertas</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>Marque esta nota como se resuelve</value>
+    <value>Marque notas seleccionadas como se resuelven</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Creado</value>
@@ -1498,6 +1501,9 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>Visto</value>
   </data>
+  <data name="Notes_NotesNotSent" xml:space="preserve">
+    <value> Las notas seleccionadas se enviarán a Paratext.</value>
+  </data>
   <data name="Notes_NoteStatus_Archived" xml:space="preserve">
     <value>Archivado</value>
   </data>
@@ -1520,7 +1526,7 @@
     <value>¿Enviar estas notas a Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Envía esta nota a Paratext</value>
+    <value>Enviar notas seleccionadas a Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Corpus tokenizado</value>

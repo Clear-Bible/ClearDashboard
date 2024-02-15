@@ -497,7 +497,7 @@
     <value>Quelle</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Quellenteil</value>
+    <value>Quellteil</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Quelle Ref</value>
@@ -1019,7 +1019,7 @@
     <value>Finden Sie vollständige oder teilweise Lexem- oder Formularübereinstimmungen für Quelle</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Fügen Sie Ziel als Übersetzung für ...</value>
+    <value>Ziel als Übersetzung für ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Finden Sie Lexeme mit einer oder mehreren Übersetzung, die dem Ziel entspricht</value>
@@ -1292,7 +1292,7 @@
     <value>Überprüfen Sie die Verfügbarkeit der Benutzer</value>
   </data>
   <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
-    <value>Erstellen Sie einen Benutzer der Zusammenarbeit</value>
+    <value>Erstellen Sie einen Kollaborationsbenutzer</value>
   </data>
   <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
     <value>Kollaborationsbenutzer erstellen</value>
@@ -1371,6 +1371,9 @@
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>Diese Notiz löschen?</value>
+  </data>
+  <data name="Notes_DueToPermissions" xml:space="preserve">
+    <value>Aufgrund Ihrer Paratext -Projektberechtigungen,</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>Filter durch Vers</value>
@@ -1454,10 +1457,10 @@
     <value>Label disassoziieren</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>Markieren Sie diese Notiz als offen</value>
+    <value>Marke ausgewählte Notizen als offen</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>Markieren Sie diese Notiz als gelöst</value>
+    <value>Markieren Sie ausgewählte Notizen als gelöst</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Erstellt</value>
@@ -1498,6 +1501,9 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>Gesehen</value>
   </data>
+  <data name="Notes_NotesNotSent" xml:space="preserve">
+    <value> Ausgewählte Notizen werden beachten, dass sie an Paratext gesendet werden.</value>
+  </data>
   <data name="Notes_NoteStatus_Archived" xml:space="preserve">
     <value>Archiviert</value>
   </data>
@@ -1520,7 +1526,7 @@
     <value>Senden Sie diese Notizen an Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Senden Sie diesen Hinweis an Paratext</value>
+    <value>Senden Sie ausgewählte Notizen an Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Tokenisierter Korpus</value>
@@ -1712,7 +1718,7 @@
     <value>Skalieren Sie den Inhalt auf 100%</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
-    <value>Fügen Sie Text zum neuen Fenster hinzu</value>
+    <value>Fügen Sie Text zu einem neuen Fenster hinzu</value>
   </data>
   <data name="Pds_Source" xml:space="preserve">
     <value>Quelle</value>

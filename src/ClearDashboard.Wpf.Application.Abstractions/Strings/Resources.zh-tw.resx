@@ -161,7 +161,7 @@
     <value>結盟</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
-    <value>選擇您正在合作的書籍，您稍後可以隨時添加更多書籍。</value>
+    <value>選擇與您合作的書籍，您稍後可以隨時添加更多書籍。</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>檢查USFM</value>
@@ -956,7 +956,7 @@
     <value>添加'{0}'作為表單</value>
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
-    <value>添加'{0}'作為第一個含義</value>
+    <value>將'{0}'添加為第一個含義</value>
   </data>
   <data name="LexiconEdit_EditingDone" xml:space="preserve">
     <value>完畢</value>
@@ -1067,7 +1067,7 @@
     <value>需要名字</value>
   </data>
   <data name="LicenseValidator_LastMissing" xml:space="preserve">
-    <value>需要姓氏</value>
+    <value>需要姓</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>需要許可密鑰</value>
@@ -1372,6 +1372,9 @@
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>刪除此註釋？</value>
   </data>
+  <data name="Notes_DueToPermissions" xml:space="preserve">
+    <value>由於您的Paratext項目權限，</value>
+  </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>通過經文過濾</value>
   </data>
@@ -1454,10 +1457,10 @@
     <value>分離標籤</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>將此註釋標記為打開</value>
+    <value>將選定的筆記標記為打開</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>將此註釋標記為已解決</value>
+    <value>標記已解決的筆記</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>創建</value>
@@ -1498,6 +1501,9 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>看到</value>
   </data>
+  <data name="Notes_NotesNotSent" xml:space="preserve">
+    <value> 選定的筆記將發送到Paratext。</value>
+  </data>
   <data name="Notes_NoteStatus_Archived" xml:space="preserve">
     <value>存檔</value>
   </data>
@@ -1520,7 +1526,7 @@
     <value>將這些筆記發送給Paratext？</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>將此註釋發送到Paratext</value>
+    <value>將選定的筆記發送到Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>象徵化的語料庫</value>
@@ -1565,10 +1571,10 @@
     <value>並行化語料庫經文</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>機器字對準算法</value>
+    <value>機詞對齊算法</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>機器字對準算法</value>
+    <value>機詞對齊算法</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>火車對稱模型？</value>
@@ -1631,7 +1637,7 @@
     <value>更改內容的縮放級別</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>顧問說明</value>
+    <value>顧問Notes</value>
   </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>創建新單詞對齊</value>
@@ -1811,7 +1817,7 @@
     <value>字首</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>展示退縮</value>
+    <value>展示反向翻譯</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>幹</value>
@@ -1880,7 +1886,7 @@
     <value>導入服務器項目</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>選中此框，以在創建項目時包括希臘語和希伯來語聖經文本。</value>
+    <value>在創建項目時，請選中此框，以包括希臘語和希伯來語聖經的文本。</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>包括NT希臘聖經文本？</value>
@@ -2012,7 +2018,7 @@
     <value>帖撒羅尼迦後書</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2提摩太</value>
+    <value>2蒂莫西</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3約翰</value>
@@ -2246,7 +2252,7 @@
     <value>在實驗組中啟用外部Paratext註釋</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
-    <value>啟用外部Paratext註釋</value>
+    <value>啟用外部paratext註釋</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>啟用詞典進口</value>
@@ -2336,7 +2342,7 @@
     <value>驗證電子郵件代碼</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>啟用逐節的文本集合顯示</value>
+    <value>啟用逐一文字集合顯示</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>取消任務</value>
@@ -2453,7 +2459,7 @@
     <value>更新並添加新書</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
-    <value>選擇書</value>
+    <value>選擇書籍</value>
   </data>
   <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
     <value>更新並添加新</value>

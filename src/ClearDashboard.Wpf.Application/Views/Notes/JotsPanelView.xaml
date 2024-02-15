@@ -258,9 +258,9 @@
                                             Padding="10,10,10,10"
                                             HorizontalAlignment="Center"
                                             Visibility="{Binding JotsUnableToBeSentToParatextVisibility}">
-                                            <Run Text="Due to your Paratext project permissions, " />
+                                            <Run Text="{helpers:Localization Notes_DueToPermissions}" />
                                             <Run FontWeight="Bold" Text="{Binding JotsUnableToBeSentToParatextCount}" />
-                                            <Run Text=" selected notes will note be sent to Paratext." />
+                                            <Run Text="{helpers:Localization Notes_NotesNotSent}" />
                                         </TextBlock>
 
                                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
@@ -726,7 +726,7 @@
                 <DataGridTemplateColumn
                     Width="*"
                     MinWidth="250"
-                    Header="Labels">
+                    Header="{helpers:Localization Notes_NoteLabels}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <notes1:LabelsDisplay

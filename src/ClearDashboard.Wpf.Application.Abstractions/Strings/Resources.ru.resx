@@ -113,7 +113,7 @@
     <value>Версия</value>
   </data>
   <data name="AccountInfo_ClearDashboardUserIdLabel" xml:space="preserve">
-    <value>Cleardashboard userid:</value>
+    <value>ClearDashboard userId:</value>
   </data>
   <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
     <value>Имя пользователя ClearDashboard:</value>
@@ -128,7 +128,7 @@
     <value>Сотрудничество имя пользователя:</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
-    <value>-Кориент сведения об учетной записи-</value>
+    <value>-Кориент сведения о счете-</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
     <value>Деактивировать текущую лицензию</value>
@@ -161,7 +161,7 @@
     <value>Выравнивание</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
-    <value>Выберите книги (ы), с которыми вы работаете, вы всегда можете добавить больше книг позже.</value>
+    <value>Выберите книги, с которыми вы работаете, вы всегда можете добавить больше книг позже.</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Проверка USFM</value>
@@ -461,7 +461,7 @@
     <value>Считать учебным текстом</value>
   </data>
   <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
-    <value>Не одобрять</value>
+    <value>Не одобряют</value>
   </data>
   <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
     <value>Не одобрен</value>
@@ -917,7 +917,7 @@
     <value>Лемма/формы:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Лемма для новой лексем:</value>
+    <value>Лемма для новой лексеме:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>Лекса</value>
@@ -1121,7 +1121,7 @@
     <value>Быстрый новый</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Изменения в сотрудничестве доступны</value>
+    <value>Коллабные изменения доступны</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
     <value>Настройки</value>
@@ -1232,7 +1232,7 @@
     <value>Сильные коды</value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
-    <value>Субсины:</value>
+    <value>Подпагнические домены:</value>
   </data>
   <data name="Marble_Verse" xml:space="preserve">
     <value>Стих</value>
@@ -1372,6 +1372,9 @@
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>Удалить эту записку?</value>
   </data>
+  <data name="Notes_DueToPermissions" xml:space="preserve">
+    <value>Из -за ваших разрешений Paratext Project,</value>
+  </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>Фильтр по стиху</value>
   </data>
@@ -1421,7 +1424,7 @@
     <value>Добавить группу метки</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Добавить группу ярлыков</value>
+    <value>Добавить группу этикетки</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Группа лейблов уже существует с именем</value>
@@ -1433,7 +1436,7 @@
     <value>с ярлыками от:</value>
   </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
-    <value>Название группы лейбла</value>
+    <value>Название группы на этикетке</value>
   </data>
   <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
     <value>Удалить эту группу этикетки?</value>
@@ -1454,10 +1457,10 @@
     <value>Распочеивая этикетка</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>Отметьте эту ноту как открытая</value>
+    <value>Отметьте выбранные заметки как открытые</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>Отметьте эту ноту</value>
+    <value>Отметьте выбранные примечания как разрешенные</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Созданный</value>
@@ -1498,6 +1501,9 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>Видимый</value>
   </data>
+  <data name="Notes_NotesNotSent" xml:space="preserve">
+    <value> Выбранные примечания будут отмечены, отправляются в Paratext.</value>
+  </data>
   <data name="Notes_NoteStatus_Archived" xml:space="preserve">
     <value>Архивированный</value>
   </data>
@@ -1520,7 +1526,7 @@
     <value>Отправить эти заметки в Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Отправить эту записку в Paratext</value>
+    <value>Отправить выбранные заметки в Paratext</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Токенизированный корпус</value>
@@ -1667,7 +1673,7 @@
     <value>Название проекта существует</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
-    <value>Внешние заметки редактор</value>
+    <value>Редактор внешних заметок</value>
   </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>Установите всю область контента в просмотр</value>
@@ -1724,7 +1730,7 @@
     <value>Стандартный</value>
   </data>
   <data name="Pds_StartParatextFirst" xml:space="preserve">
-    <value>Сначала начните Paratext</value>
+    <value>Сначала запустить Paratext</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
     <value>Учебное пособие</value>
@@ -1742,19 +1748,19 @@
     <value>Транслитерация</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Транслитерация WithIteChoder</value>
+    <value>Транслитерация WithIntEncoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Неизвестный</value>
   </data>
   <data name="Pds_UpdateLabelsWithExternalLabels" xml:space="preserve">
-    <value>Обновить этикетки с помощью внешних заметок</value>
+    <value>Обновить этикетки с внешними примечаниями</value>
   </data>
   <data name="Pds_Xml" xml:space="preserve">
     <value>XML</value>
   </data>
   <data name="Pds_ZoomIn" xml:space="preserve">
-    <value>Увеличить контент</value>
+    <value>Увеличить содержание</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
     <value>Увеличить контент</value>
@@ -1811,7 +1817,7 @@
     <value>Префикс</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Показать переходное время</value>
+    <value>Покажите Backtranslation</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>Корень</value>
@@ -1883,10 +1889,10 @@
     <value>Установите этот флажок, чтобы включить греческие и еврейские библейские тексты при создании вашего проекта.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Включите NT Грико -библейские тексты?</value>
+    <value>Включите NT Греко -библейские тексты?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
-    <value>Включите ивритские библейские тексты?</value>
+    <value>Включите OT ивритские библейские тексты?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Управление совместными проектами</value>
@@ -2234,7 +2240,7 @@
     <value>Адрес электронной почты</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>По электронной почте ошибка</value>
+    <value>По электронной почте ошибка отправки</value>
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Код проверки электронной почты</value>
@@ -2273,7 +2279,7 @@
     <value>Импортные группы лейбл</value>
   </data>
   <data name="Settings_LabelGroupsExported" xml:space="preserve">
-    <value>Группы этикетки экспортировались в:</value>
+    <value>Группы этикетки экспортировались по адресу:</value>
   </data>
   <data name="Settings_LabelGroupsImported" xml:space="preserve">
     <value>Группы метки, импортированные из:</value>
@@ -2300,7 +2306,7 @@
     <value>Зарезервировано для будущего расширения</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Восстановите пользователя сотрудничества</value>
+    <value>Восстановить пользователь сотрудничества</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Сохраняется на удаленном сервере</value>
@@ -2312,7 +2318,7 @@
     <value>Сохранить настройки</value>
   </data>
   <data name="Settings_SendValidationEmail" xml:space="preserve">
-    <value>Отправить валидацию электронной почты</value>
+    <value>Отправить валидацию по электронной почте</value>
   </data>
   <data name="Settings_Settings" xml:space="preserve">
     <value>Настройки ClearDashboard</value>
@@ -2321,7 +2327,7 @@
     <value>Показать расширенные представления на другом мониторе, чем панель инструментов</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Для систем с тремя или более мониторами показать расширенное представление о третьем мониторе</value>
+    <value>Для систем с тремя или более мониторами показать расширенный просмотр на третьем мониторе</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Текстовая коллекция</value>
@@ -2339,7 +2345,7 @@
     <value>Включить стихотворенные текстовые коллекции.</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
-    <value>Отмена задания</value>
+    <value>Отменить задание</value>
   </data>
   <data name="ShellView_Loading" xml:space="preserve">
     <value>Загрузка ...</value>
@@ -2459,7 +2465,7 @@
     <value>Обновить и добавить новый</value>
   </data>
   <data name="UseDefaults" xml:space="preserve">
-    <value>Создать использование дефолтов</value>
+    <value>Создайте использование дефолтов</value>
   </data>
   <data name="Windows_AlignmentTool" xml:space="preserve">
     <value>Инструмент выравнивания</value>
