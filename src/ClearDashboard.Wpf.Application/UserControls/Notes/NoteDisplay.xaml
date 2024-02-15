@@ -254,22 +254,22 @@
                 <!--  Replies  -->
                 <userControls:TogglePanel IsOpen="False">
                     <userControls:TogglePanel.Header>
-                        <Label
-                            Content="{helpers:Localization Notes_NoteReplies}"
+                        <Label Content="{helpers:Localization Notes_NoteReplies}"
                             FontSize="13"
                             FontWeight="SemiBold" />
                     </userControls:TogglePanel.Header>
                     <notes:NoteRepliesDisplay
                         Margin="20,0"
                         CurrentUserId="{Binding ElementName=NotesDisplayControl, Path=CurrentUserId.Id}"
+                        NoteViewModelWithReplies="{Binding ElementName=NotesDisplayControl, Path=Note}"
                         NoteReplyAdded="OnNoteReplyAdded"
                         NoteSeen="OnNoteSeen"
-                        NoteViewModelWithReplies="{Binding ElementName=NotesDisplayControl, Path=Note}"
                         ReplyFontSize="12"
                         TimestampColor="DarkGray"
                         TimestampFontStyle="Normal"
                         TimestampMargin="-2,0,10,0"
-                        TimestampOrientation="Vertical" />
+                        TimestampOrientation="Vertical"
+                        />
 
                 </userControls:TogglePanel>
             </StackPanel>

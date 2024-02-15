@@ -7,7 +7,6 @@ using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
@@ -29,9 +28,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Forms;
-using System.Windows.Input;
-using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 {
@@ -541,7 +537,8 @@ public JotsPanelViewModel()
                         noteVms
                             .Select(nvm => nvm.ModifiedBy)
                             .Distinct()                                               
-                            .OrderBy(mb => string.IsNullOrEmpty(mb.Trim())).ThenBy(mb=>mb)
+                            .OrderBy(mb => string.IsNullOrEmpty(mb.Trim()))
+                            .ThenBy(mb=>mb)
                             .Select(mb =>
                             {
                                 FilterUsersChoices.Add(mb);
@@ -622,11 +619,7 @@ public JotsPanelViewModel()
 
                 // Running in background thread to allow ui to be responsive
                 // when lots of notes are being loaded
-                ProcessResult(
-                    await Task.Run(async () => 
-                    await awaitableFunction(cancellationToken)
-                    , cancellationToken)
-                    );
+                ProcessResult(await Task.Run(async () => await awaitableFunction(cancellationToken), cancellationToken));
 
                 await SendBackgroundStatus(
                     taskName,
@@ -942,6 +935,7 @@ public JotsPanelViewModel()
         #endregion // Methods
 
         
+
     }
 
     public static class Extensions
