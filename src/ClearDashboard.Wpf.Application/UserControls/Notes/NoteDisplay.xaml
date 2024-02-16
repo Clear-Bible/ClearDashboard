@@ -9,6 +9,7 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:strings="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     x:Name="NotesDisplayControl"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -16,6 +17,15 @@
     FontFamily="{StaticResource ClearDashboardFont}"
     FontSize="16"
     mc:Ignorable="d">
+    <UserControl.Resources>
+
+        <Style TargetType="{x:Type  materialDesign:Chip}" x:Key="TogglePanelChip" >
+            <Setter Property="FontSize" Value="8" />
+            <Setter Property="Height" Value="20" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+    </UserControl.Resources>
     <Border
         Margin="0,0,0,0"
         Padding="{Binding ElementName=NotesDisplayControl, Path=NoteBorderPadding}"
@@ -195,11 +205,15 @@
                 <!--  Labels  -->
                 <userControls:TogglePanel IsOpen="True">
                     <userControls:TogglePanel.Header>
-                        <Label
-                            Content="{helpers:Localization Notes_NoteLabels}"
-                            FontSize="13"
-                            FontWeight="SemiBold" />
-                    </userControls:TogglePanel.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Label
+                                Content="{helpers:Localization Notes_NoteLabels}"
+                                FontSize="13"
+                                FontWeight="SemiBold" />
+                            <materialDesign:Chip Style="{StaticResource TogglePanelChip}"
+                                                 Content="{Binding ElementName=NotesDisplayControl, Path=Note.Labels.Count}" />
+                        </StackPanel>
+                        </userControls:TogglePanel.Header>
                     <notes:LabelsEditor
                         Margin="0,0,0,10"
                         CurrentLabelGroup="{Binding ElementName=NotesDisplayControl, Path=DefaultLabelGroup, Mode=OneWay}"
@@ -227,11 +241,16 @@
                 <!--  Associations  -->
                 <userControls:TogglePanel IsOpen="False">
                     <userControls:TogglePanel.Header>
-                        <Label
-                            Content="{helpers:Localization Notes_NoteAssociationDescriptions}"
-                            FontSize="13"
-                            FontWeight="SemiBold" />
-                    </userControls:TogglePanel.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Label
+                                Content="{helpers:Localization Notes_NoteAssociationDescriptions}"
+                                FontSize="13"
+                                FontWeight="SemiBold" />
+                                <materialDesign:Chip Style="{StaticResource TogglePanelChip}"
+                                                 Content="{Binding ElementName=NotesDisplayControl, Path=Note.Associations.Count}" />
+                           
+                        </StackPanel>
+                        </userControls:TogglePanel.Header>
                     <notes:NoteAssociationsDisplay
                         Margin="10,0,0,0"
                         FontFamily="{Binding ElementName=NotesDisplayControl, Path=NoteAssociationFontFamily}"
@@ -254,10 +273,15 @@
                 <!--  Replies  -->
                 <userControls:TogglePanel IsOpen="False">
                     <userControls:TogglePanel.Header>
-                        <Label Content="{helpers:Localization Notes_NoteReplies}"
-                            FontSize="13"
-                            FontWeight="SemiBold" />
-                    </userControls:TogglePanel.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="{helpers:Localization Notes_NoteReplies}"
+                                   FontSize="13"
+                                   FontWeight="SemiBold" />
+                            <materialDesign:Chip Style="{StaticResource TogglePanelChip}"
+                                                 Content="{Binding ElementName=NotesDisplayControl, Path=Note.Replies.Count}" 
+                                                 />
+                        </StackPanel>
+                        </userControls:TogglePanel.Header>
                     <notes:NoteRepliesDisplay
                         Margin="20,0"
                         CurrentUserId="{Binding ElementName=NotesDisplayControl, Path=CurrentUserId.Id}"

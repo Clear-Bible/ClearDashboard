@@ -56,7 +56,7 @@
             </Border>
         </DataTemplate>
         <ItemsPanelTemplate x:Key="LabelsPanelTemplate">
-            <WrapPanel Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
+            <WrapPanel Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}"  />
         </ItemsPanelTemplate>
     </UserControl.Resources>
     <Grid>

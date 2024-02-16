@@ -515,49 +515,93 @@ public JotsPanelViewModel()
                     (cancellationToken) => AssembleNotes(noteManager_!, cancellationToken, taskName, SendBackgroundStatus, collabUpdate),
                     (noteVms) =>
                     {
-                        NoteViewModels.Clear();
 
-                        noteVms
-                            .Select(nvm =>
-                            {
-                                NoteViewModels.Add(nvm);
-                                return nvm;
-                            })
-                            .ToList();
-                        NoteViewModels.NotifyOfPropertyChange(NoteViewModels.GetType().Name);
-
-                        if (selectedNoteId != null)
+                        Execute.OnUIThread(() =>
                         {
-                            var selectedNote = NoteViewModels.Where(nvm => nvm.NoteId?.Id.Equals(selectedNoteId.Id) ?? false).FirstOrDefault();
-                            if (selectedNote != null)
-                                SelectedNoteViewModel = selectedNote;
-                        }
+                            NoteViewModels.Clear();
 
-                        FilterUsersChoices.Clear();
-                        noteVms
-                            .Select(nvm => nvm.ModifiedBy)
-                            .Distinct()                                               
-                            .OrderBy(mb => string.IsNullOrEmpty(mb.Trim()))
-                            .ThenBy(mb=>mb)
-                            .Select(mb =>
-                            {
-                                FilterUsersChoices.Add(mb);
-                                return mb;
-                            })
-                            .ToList();
+                            var list = noteVms.ToList();
 
-                        FilterLabelsChoices.Clear();
-                        noteVms
-                            .SelectMany(nvm => nvm.Labels)
-                            .GroupBy(l=>l.Text)
-                            .Select(l=>l.First())
-                            .OrderBy(l => l.Text)
-                            .Select(l =>
+                            foreach (var note in list)
                             {
-                                FilterLabelsChoices.Add(l);
-                                return l;
-                            })
-                            .ToList();
+                                NoteViewModels.Add(note);
+                            }
+
+                            //noteVms
+                            //    .Select(nvm =>
+                            //    {
+                            //        NoteViewModels.Add(nvm);
+                            //        return nvm;
+                            //    })
+                            //    .ToList();
+                            //NoteViewModels.NotifyOfPropertyChange(NoteViewModels.GetType().Name);
+
+                            NoteViewModels.NotifyOfPropertyChange(nameof(NoteViewModels));
+
+                            if (selectedNoteId != null)
+                            {
+                                var selectedNote = NoteViewModels.FirstOrDefault(nvm => nvm.NoteId?.Id.Equals(selectedNoteId.Id) ?? false);
+                                if (selectedNote != null)
+                                    SelectedNoteViewModel = selectedNote;
+                            }
+
+                            FilterUsersChoices.Clear();
+
+
+                            //list
+                            //    .Select(nvm => nvm.ModifiedBy)
+                            //    .Distinct()
+                            //    .OrderBy(mb => string.IsNullOrEmpty(mb.Trim()))
+                            //    .ThenBy(mb => mb)
+                            //    .Select(mb =>
+                            //    {
+                            //        FilterUsersChoices.Add(mb);
+                            //        return mb;
+                            //    })
+                            //    .ToList();
+
+
+
+                            var modifiedByUsers = list
+                                .Select(nvm => nvm.ModifiedBy)
+                                .Distinct()
+                                .OrderBy(mb => string.IsNullOrEmpty(mb.Trim()))
+                                .ThenBy(mb => mb)
+                                .Select(mb => mb);
+
+                            foreach (var modifiedByUser in modifiedByUsers)
+                            {
+                                FilterUsersChoices.Add(modifiedByUser);
+                            }
+
+                            FilterLabelsChoices.Clear();
+
+                            //list
+                            //    .SelectMany(nvm => nvm.Labels)
+                            //    .GroupBy(l => l.Text)
+                            //    .Select(l => l.First())
+                            //    .OrderBy(l => l.Text)
+                            //    .Select(l =>
+                            //    {
+                            //        FilterLabelsChoices.Add(l);
+                            //        return l;
+                            //    })
+                            //    .ToList();
+
+                            var labels = list
+                                .SelectMany(nvm => nvm.Labels)
+                                .GroupBy(l => l.Text)
+                                .Select(l => l.First())
+                                .OrderBy(l => l.Text)
+                                .Select(l => l);
+
+                            foreach (var label in labels)
+                            {
+                                FilterLabelsChoices.Add(label);
+                            }
+                        });
+                
+                    
                     });
 
                 switch (processStatus)

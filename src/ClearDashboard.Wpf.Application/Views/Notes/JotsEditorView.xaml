@@ -31,6 +31,7 @@
           LabelFontSize="14"
           LabelGroups="{Binding NoteManager.LabelGroups}"
           LabelPadding="10,6,10,5"
+          LabelMargin="5"
           LabelSuggestions="{Binding NoteManager.LabelSuggestions}"
           NoteMargin="0,0,0,0"
           NoteTextFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -130,7 +131,7 @@
                HorizontalAlignment="Center"
                Orientation="Horizontal">
             <Button x:Name="Close"
-                   Content="{helpers:Localization Close}"
+                   Content="{helpers:Localization Ok}"
                    Style="{StaticResource AlternativeStyle}">
 
                 <!--<i:EventTrigger EventName="NoteSendToParatext">

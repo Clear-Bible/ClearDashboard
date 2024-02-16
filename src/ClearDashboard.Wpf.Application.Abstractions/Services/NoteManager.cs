@@ -691,7 +691,9 @@ namespace ClearDashboard.Wpf.Application.Services
                     stopwatch.Stop();
                     Logger?.LogInformation(
                         $"Created label {labelText} and associated it with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+
 #endif
+                    await Task.Delay(100);
                     await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, newLabel!));
                     return newLabel;
                 }
@@ -738,6 +740,7 @@ namespace ClearDashboard.Wpf.Application.Services
                     Logger?.LogInformation(
                         $"Associated label {label.Text} with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
 #endif
+                    await Task.Delay(100);
                     await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, label));
                 }
             }
@@ -1129,7 +1132,7 @@ namespace ClearDashboard.Wpf.Application.Services
             DefaultLabelGroup = NoneLabelGroup;
         }
 
-        private async Task PopulateLabelsAsync()
+        public async Task PopulateLabelsAsync()
         {
             LabelSuggestions = await GetLabelSuggestionsAsync();
             NoneLabelGroup.Labels = LabelSuggestions;
@@ -1140,7 +1143,16 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task InitializeAsync()
         {
-            await PopulateLabelsAsync();
+            try 
+            {
+                await PopulateLabelsAsync();
+
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
         }
 
         public async Task HandleAsync(LabelsUpdatedMessage message, CancellationToken cancellationToken = default)

@@ -78,6 +78,11 @@ public class JotsEditorViewModel : ApplicationScreen
     {
         Task.Run(async () =>
         {
+            if (NoteManager.DefaultLabelGroup == null)
+            {
+                await NoteManager.PopulateLabelsAsync();
+            }
+            
             await NoteManager.GetNotes(SelectionManager.SelectedNoteIds);
 
             if (NoteManager.CurrentNotes.Count > 0)

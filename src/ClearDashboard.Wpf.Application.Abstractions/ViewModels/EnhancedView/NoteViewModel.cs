@@ -60,6 +60,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private LabelCollection? _labels;
         private string _tabHeader;
 
+
+        public bool HasLabels => Labels.Count > 0;
+
         public LabelCollection Labels
         {
             get => _labels ??= new LabelCollection(Entity.Labels);
@@ -67,14 +70,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 Entity.Labels = value;
                 _labels = new LabelCollection(Entity.Labels);
-                NotifyOfPropertyChange();
+                NotifyOfPropertyChange(nameof(Labels));
+                NotifyOfPropertyChange(nameof(HasLabels));
             }
         }
 
+
+        public bool HasAssociations => Associations.Count > 0;
         public NoteAssociationViewModelCollection Associations
         {
             get => _associations;
-            set => Set(ref _associations, value);
+            set
+            {
+                Set(ref _associations, value);
+                NotifyOfPropertyChange(nameof(HasAssociations));
+            }
         }
 
 
@@ -118,11 +128,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
 
+        
+
+        public bool HasReplies =>  Replies.Count > 0;
 
         public NoteViewModelCollection Replies
         {
             get => _replies;
-            set => Set(ref _replies, value);
+            set
+            { 
+                Set(ref _replies, value);
+                NotifyOfPropertyChange(nameof(HasReplies));
+               
+            }
         }
 
         public ICollection<Guid> SeenByUserIds

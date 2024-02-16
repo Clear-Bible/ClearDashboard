@@ -71,8 +71,8 @@
                     BorderThickness="0.5"
                     Foreground="{DynamicResource MaterialDesignBody}"
                     Grid.IsSharedSizeScope="True"
-                    ScrollViewer.CanContentScroll="False"
-                    ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                    ScrollViewer.CanContentScroll="True"
+                    ScrollViewer.VerticalScrollBarVisibility="Auto"
                     SelectionChanged="OnLabelListSelectionChanged"
                     Visibility="Collapsed">
                     <ListBox.ItemTemplate>

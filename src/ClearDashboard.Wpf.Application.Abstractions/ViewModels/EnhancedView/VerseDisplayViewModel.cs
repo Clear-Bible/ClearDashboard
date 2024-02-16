@@ -26,6 +26,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Collections.ObjectModel;
 using SIL.Extensions;
 using System.Diagnostics;
+using System.Windows.Media;
 using ClearDashboard.Wpf.Application.Helpers;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -552,7 +553,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 MatchingTokenAction(
                     t => message.Note.Associations.Any(a =>
                         a.AssociatedEntityId.IdEquals(t.Token.TokenId) ||
-                        a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t => t.IsNoteHovered = true);
+                        a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t =>
+                    {
+                        t.IsNoteHovered = true;
+                        t.NoteIndicatorBrush = message.NewNote ? Brushes.Orange : Brushes.MediumPurple;
+                    });
             }
 
             await Task.CompletedTask;

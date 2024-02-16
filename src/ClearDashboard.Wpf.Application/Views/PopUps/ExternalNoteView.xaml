@@ -252,7 +252,7 @@
                         Margin="5"
                         HorizontalAlignment="Left"
                         cm:Message.Attach="Ok($source)"
-                        Content="Ok"
+                        Content="{helpers:Localization Ok}"
                         Style="{StaticResource TransparentStyle}" />
 
                     <Button
@@ -260,7 +260,7 @@
                         Margin="5"
                         HorizontalAlignment="Left"
                         cm:Message.Attach="Close"
-                        Content="Close"
+                        Content="{helpers:Localization Close}"
                         Style="{StaticResource TransparentStyle}" />
                 </StackPanel>
             </Grid>

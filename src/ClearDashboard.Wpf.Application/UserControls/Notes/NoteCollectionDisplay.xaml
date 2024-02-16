@@ -125,76 +125,67 @@
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
-            <!--<ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">-->
-                <!--<ItemsControl
-                        
-                        ItemsPanel="{StaticResource NotesPanelTemplate}"
-                        ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Notes}" 
-                        />-->
-                <TabControl   Grid.Row="0"
+
+            <TabControl   Grid.Row="0"
                               ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Notes}" 
                               ContentTemplate="{StaticResource NoteTemplate}"
                              
                               SelectedItem="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}},  Path=SelectedNote, Mode=TwoWay}"
                               Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
                               Visibility="{Binding ShowTabControl}">
-                    <TabControl.Template>
-                        <ControlTemplate TargetType="TabControl">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-                                <ScrollViewer 
+                <TabControl.Template>
+                    <ControlTemplate TargetType="TabControl">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <ScrollViewer 
                                     HorizontalScrollBarVisibility="Disabled"  
                                     VerticalScrollBarVisibility="Visible" 
                                     FlowDirection="RightToLeft">
-                                    <TabPanel 
+                                <TabPanel 
                                         x:Name="HeaderPanel"
                                         Panel.ZIndex ="0" 
                                         KeyboardNavigation.TabIndex="1"
                                         IsItemsHost="true"
+                                       
                                     />
-                                </ScrollViewer>
-                         
-                                <ContentPresenter 
+                            </ScrollViewer>
+
+                            <ContentPresenter 
                                     x:Name="PART_SelectedContentHost"
                                     SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                     ContentSource="SelectedContent" Grid.Column="1"
                                 />
-                       
+
                         </Grid>
-                        </ControlTemplate>
-                    </TabControl.Template>
-                    <TabControl.ItemTemplate>
-                        <DataTemplate>
+                    </ControlTemplate>
+                </TabControl.Template>
+                <TabControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ToolTip="{Binding Text}">
                             <StackPanel Width="auto" Height="auto">
                                 <iconPacks:PackIconUnicons
                                     Width="24"
                                     Height="24"
                                     HorizontalAlignment="Center"
-                                    Kind="CommentAltNotes" />
+                                    Kind="CommentAltNotes"
+                                   />
                                 <TextBlock
                                     x:Name="Header"
                                     Margin="5,0,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Text="{Binding TabHeader}" />
+                                    Text="{Binding TabHeader}"
+                                    />
                             </StackPanel>
-                        </DataTemplate>
-                    </TabControl.ItemTemplate>
+                        </Grid>
+                    </DataTemplate>
+                </TabControl.ItemTemplate>
+            </TabControl>
 
 
-                    <!--<TabControl.ContentTemplate>
-                        <DataTemplate>
-                            <Grid Width="0" />
-                        </DataTemplate>
-                    </TabControl.ContentTemplate>-->
-                </TabControl>
-                
-
-
-            <!--</ScrollViewer>-->
             <notes:NoteDisplay Grid.Row="1"
                     x:Name="AddNoteControl"
                     Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteMargin}"
@@ -202,6 +193,8 @@
                     AddMode="True"
                     EntityIds="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=EntityIds}"
                     LabelAdded="OnLabelAdded"
+                    DefaultLabelGroup="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DefaultLabelGroup}"
+                    LabelGroups="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelGroups}"
                     LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
                     LabelCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}"
                     LabelFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"

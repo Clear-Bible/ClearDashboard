@@ -262,7 +262,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 CurrentLabel = labelEventArgs.Label;
                 CurrentLabelName = CurrentLabel?.Text;
 
-                if (CurrentLabelGroup.LabelGroupId == null)
+                if (CurrentLabelGroup == null || CurrentLabelGroup.LabelGroupId == null)
                 {
                     CurrentLabelName += " ?";
                 }
