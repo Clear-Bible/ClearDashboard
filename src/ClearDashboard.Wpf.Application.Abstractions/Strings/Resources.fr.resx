@@ -128,7 +128,7 @@
     <value>Nom d'utilisateur de collaboration:</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
-    <value>- Détails du compte courant-</value>
+    <value>-Daison du compte courant-</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
     <value>Désactiver la licence actuelle</value>
@@ -155,7 +155,7 @@
     <value>Ajouter</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Sélectionnez comment tokensize le corpus</value>
+    <value>Sélectionnez comment tokenize le corpus</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Alignement</value>
@@ -425,7 +425,7 @@
     <value>Tous</value>
   </data>
   <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
-    <value>Rendages manquants</value>
+    <value>Rendements manquants</value>
   </data>
   <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
     <value>Mots alignés</value>
@@ -482,7 +482,7 @@
     <value>Mark sélectionné comme «Revue des besoins»</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
-    <value>Marque sélectionnée comme «valide»</value>
+    <value>Mark sélectionné comme «valide»</value>
   </data>
   <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
     <value>Besoin d'examen</value>
@@ -539,7 +539,7 @@
     <value>nouveau groupe</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
-    <value>Nouveau individu</value>
+    <value>nouveau individu</value>
   </data>
   <data name="ClockUserControl_Select" xml:space="preserve">
     <value>Sélectionnez le fuseau horaire</value>
@@ -644,7 +644,7 @@
     <value>Créer l'alignement</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>Afficher / créer des notes</value>
+    <value>Afficher / créer des jots</value>
   </data>
   <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
     <value>Supprimer l'alignement?</value>
@@ -671,7 +671,7 @@
     <value>Interlinéaire</value>
   </data>
   <data name="EnhancedView_JoinTokens" xml:space="preserve">
-    <value>Rejoignez des jetons</value>
+    <value>Rejoignez les jetons</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
     <value>Rejoignez des jetons pour la paire de langues</value>
@@ -1058,7 +1058,7 @@
     <value>Importation du lexique</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
-    <value>Correspondance de traduction</value>
+    <value>Matchs de traduction</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Tout déselectionner</value>
@@ -1367,10 +1367,10 @@
     <value>Aucun</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Ajouter une nouvelle note</value>
+    <value>Ajouter un nouveau jot</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>Supprimer cette note?</value>
+    <value>Supprimer ce jot?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
     <value>En raison de vos autorisations de projet PARATEXT,</value>
@@ -1457,10 +1457,10 @@
     <value>Étiquette dissociée</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>Marquez les notes sélectionnées comme ouvertes</value>
+    <value>Marquez les Jots sélectionnés comme ouverts</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>Marquez les notes sélectionnées comme résolues</value>
+    <value>Marquez les Jots sélectionnés comme résolus</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Créé</value>
@@ -1502,7 +1502,7 @@
     <value>Vu</value>
   </data>
   <data name="Notes_NotesNotSent" xml:space="preserve">
-    <value> Les notes sélectionnées seront envoyées à PARATEXT.</value>
+    <value> Les Jots sélectionnés ne seront pas envoyés à PARATEXT.</value>
   </data>
   <data name="Notes_NoteStatus_Archived" xml:space="preserve">
     <value>Archivé</value>
@@ -1514,19 +1514,19 @@
     <value>Statut</value>
   </data>
   <data name="Notes_OpenConfirmation" xml:space="preserve">
-    <value>Marquez ces notes comme ouvertes?</value>
+    <value>Marquez ces Jots comme ouverts?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Partie</value>
   </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
-    <value>Marquez ces notes comme résolues?</value>
+    <value>Marquez ces Jots comme résolus?</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>Envoyez ces notes à PARATEXT?</value>
+    <value>Envoyez ces Jots à paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Envoyer des notes sélectionnées à PARATEXT</value>
+    <value>Envoyer des Jots sélectionnés à PARATEXT?</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Corpus tokenisé</value>
@@ -1583,7 +1583,7 @@
     <value>Former</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Aligneur de la machine à train</value>
+    <value>Aligneur de mot de machine de train</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Définissez la cartographie du verset entre les corpus parallélisés</value>
@@ -1634,7 +1634,7 @@
     <value>Calculer le nouveau modèle de traduction</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Modifier le niveau de zoom du contenu</value>
+    <value>Changer le niveau de zoom du contenu</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
     <value>Consultant Notes</value>
@@ -1874,7 +1874,7 @@
     <value>Supprimer le projet</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Activer la sélection du livre</value>
+    <value>Activer la sélection des livres</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
     <value>En cas de vérification, vous pourrez sélectionner les livres à traiter.</value>
@@ -1925,7 +1925,7 @@
     <value>PARATEXT est en cours d'exécution mais n'est pas connecté.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
-    <value>Projet PARATEXT</value>
+    <value>Projet de parattex</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
     <value>Projet:</value>
@@ -1946,7 +1946,7 @@
     <value>Assistant de modèle de projet: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Rafraîchir la liste des projets de collaboration</value>
+    <value>Refreindre la liste des projets de collaboration</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>Recherche récente</value>
@@ -2039,7 +2039,7 @@
     <value>Deutéronomie</value>
   </data>
   <data name="ProperCase_Ecclesiastes" xml:space="preserve">
-    <value>Ecclésiaste</value>
+    <value>Ecclésiastes</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
     <value>Éphésiens</value>
@@ -2105,7 +2105,7 @@
     <value>Juges</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentation</value>
+    <value>Lamentations</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
     <value>Lévitique</value>
@@ -2165,7 +2165,7 @@
     <value>Tirus</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>Zécharia</value>
+    <value>Zécharie</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
     <value>Zéphanie</value>
@@ -2306,7 +2306,7 @@
     <value>Réservé à l'expansion future</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaurer l'utilisateur de la collaboration</value>
+    <value>Restaurer l'utilisateur de collaboration</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Enregistré sur le serveur distant</value>

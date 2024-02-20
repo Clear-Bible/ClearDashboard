@@ -644,7 +644,7 @@
     <value>አሰላለፍ ፍጠር</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>ማስታወሻዎችን ይመልከቱ / ይፍጠሩ</value>
+    <value>ቀዳዳዎችን ይመልከቱ / ይፍጠሩ</value>
   </data>
   <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
     <value>አሰላለፍ ሰርዝ?</value>
@@ -1367,10 +1367,10 @@
     <value>የለም</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>አዲስ ማስታወሻ ያክሉ</value>
+    <value>አዲስ ጆን ያክሉ</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>ይህን ማስታወሻ ይሰርዙ?</value>
+    <value>ይህንን ጆን ሰርዝ?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
     <value>በጥብቅ ጥበባዊ የፕሮጀክት ፈቃዶች ምክንያት,</value>
@@ -1457,10 +1457,10 @@
     <value>የአስፈፃሚነት መለያ</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>እንደ ተከፈተ ማስታወሻዎችን ተመርጠዋል</value>
+    <value>እንደ ተከፈተ የተመረጡ ቀፎዎችን ምልክት ያድርጉ</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>እንደ ተፈትነዋል</value>
+    <value>እንደተመረጠ የተመረጡ ቀዳዳዎችን ምልክት ያድርጉ</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>ተፈጠረ</value>
@@ -1502,7 +1502,7 @@
     <value>ታይቷል</value>
   </data>
   <data name="Notes_NotesNotSent" xml:space="preserve">
-    <value> የተመረጡ ማስታወሻዎች ወደ መተላለፊያዎች ይላኩ.</value>
+    <value> የተመረጡት ተቀባዮች ወደ መተላለፊያዎች አይላኩም.</value>
   </data>
   <data name="Notes_NoteStatus_Archived" xml:space="preserve">
     <value>ገብቷል</value>
@@ -1514,19 +1514,19 @@
     <value>ሁኔታ</value>
   </data>
   <data name="Notes_OpenConfirmation" xml:space="preserve">
-    <value>እነዚህን ማስታወሻዎች ክፍት እንደሆኑ ምልክት ያድርጉ?</value>
+    <value>እነዚህን ቀሌቶች ክፍት እንደሆኑ ምልክት ያድርጉ?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>ክፍል</value>
   </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
-    <value>እነዚህን ማስታወሻዎች እንደተፈታ ምልክት ያድርጉ?</value>
+    <value>እነዚህን ቀፎዎች እንደተፈተኑ ምልክት ያድርጉ?</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>እነዚህን ማስታወሻዎች ወደ ጥውቀት ይላኩ?</value>
+    <value>እነዚህን ቀፎዎች ወደ ፍፁም ይላኩ?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>ለተመረጡ ማስታወሻዎች ወደ ጥበቃዎች ይላኩ</value>
+    <value>ለተመረጡ የቀን አቀማመጥ ወደ ጥውቀት ይላኩ?</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>የታሸገ ኮርፖስ</value>
@@ -1715,7 +1715,7 @@
     <value>ሀብት</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
-    <value>ይዘቱን ወደ 100% ሚዛን</value>
+    <value>ይዘቱን እስከ 100% ሚዛን</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
     <value>ወደ አዲስ መስኮት ጽሑፍ ያክሉ</value>

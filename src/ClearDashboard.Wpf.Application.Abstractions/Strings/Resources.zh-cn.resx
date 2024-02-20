@@ -449,7 +449,7 @@
     <value>散装对齐编辑</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>批量对齐审查</value>
+    <value>批量对准评论</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>数数</value>
@@ -491,7 +491,7 @@
     <value>部分</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>枢密性的单词</value>
+    <value>枢纽的单词</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>来源</value>
@@ -506,7 +506,7 @@
     <value>目标</value>
   </data>
   <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
-    <value>目标零件</value>
+    <value>目标部分</value>
   </data>
   <data name="BulkAlignmentReview_Type" xml:space="preserve">
     <value>类型</value>
@@ -644,7 +644,7 @@
     <value>创建对齐</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>查看/创建笔记</value>
+    <value>查看/创建JOTS</value>
   </data>
   <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
     <value>删除对齐方式？</value>
@@ -656,7 +656,7 @@
     <value>删除“ {0}”的对齐？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>删除所有路线？</value>
+    <value>删除所有对齐方式？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>令牌'{0}'具有多个对齐定义。单击'{1}'将删除所有对齐。</value>
@@ -1067,7 +1067,7 @@
     <value>需要名字</value>
   </data>
   <data name="LicenseValidator_LastMissing" xml:space="preserve">
-    <value>需要姓</value>
+    <value>需要姓氏</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>需要许可密钥</value>
@@ -1322,7 +1322,7 @@
     <value>姓</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
-    <value>新的合作用户</value>
+    <value>新的协作用户</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
     <value>密码：</value>
@@ -1367,10 +1367,10 @@
     <value>没有任何</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>添加新笔记</value>
+    <value>添加新的杂志</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>删除此注释？</value>
+    <value>删除此jot？</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
     <value>由于您的Paratext项目权限，</value>
@@ -1457,10 +1457,10 @@
     <value>分离标签</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>将选定的笔记标记为打开</value>
+    <value>标记选择的流浪汉作为开放</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>标记已解决的笔记</value>
+    <value>马克选择的jots已解决</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>创建</value>
@@ -1502,7 +1502,7 @@
     <value>看到</value>
   </data>
   <data name="Notes_NotesNotSent" xml:space="preserve">
-    <value> 选定的笔记将发送到Paratext。</value>
+    <value> 选定的JOTS不会发送到Paratext。</value>
   </data>
   <data name="Notes_NoteStatus_Archived" xml:space="preserve">
     <value>存档</value>
@@ -1514,22 +1514,22 @@
     <value>地位</value>
   </data>
   <data name="Notes_OpenConfirmation" xml:space="preserve">
-    <value>将这些笔记标记为打开？</value>
+    <value>将这些jots标记为开放？</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>部分</value>
   </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
-    <value>将这些笔记标记为解决？</value>
+    <value>将这些jots标记为解决？</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>将这些笔记发送给Paratext？</value>
+    <value>将这些JOTS发送到Paratext？</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>将选定的笔记发送到Paratext</value>
+    <value>将选定的JOTS发送到Paratext？</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>象征化的语料库</value>
+    <value>令牌化语料库</value>
   </data>
   <data name="Notes_TranslationSet" xml:space="preserve">
     <value>翻译集</value>
@@ -1817,7 +1817,7 @@
     <value>字首</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>展示反向翻译</value>
+    <value>展示退缩</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>干</value>
@@ -2252,7 +2252,7 @@
     <value>在实验组中启用外部Paratext注释</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
-    <value>启用外部paratext注释</value>
+    <value>启用外部Paratext注释</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>启用词典进口</value>
@@ -2459,7 +2459,7 @@
     <value>更新并添加新书</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
-    <value>选择书籍</value>
+    <value>选择书</value>
   </data>
   <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
     <value>更新并添加新</value>

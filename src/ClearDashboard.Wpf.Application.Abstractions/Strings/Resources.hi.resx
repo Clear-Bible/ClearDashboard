@@ -644,7 +644,7 @@
     <value>संरेखण बनाएँ</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>नोट देखें/बनाएं</value>
+    <value>देखें/जॉट्स बनाएं</value>
   </data>
   <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
     <value>संरेखण हटाएं?</value>
@@ -1121,7 +1121,7 @@
     <value>त्वरित नया</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Collab परिवर्तन उपलब्ध हैं</value>
+    <value>Collab परिवर्तन उपलब्ध है</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
     <value>समायोजन</value>
@@ -1367,10 +1367,10 @@
     <value>कोई नहीं</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>एक नया नोट जोड़ें</value>
+    <value>एक नया जोट जोड़ें</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>इस नोट को हटा दें?</value>
+    <value>इस jot को हटा दें?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
     <value>आपके Paratext प्रोजेक्ट की अनुमति के कारण,</value>
@@ -1457,10 +1457,10 @@
     <value>विच्छेद लेबल</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>चिह्नित नोट खुले के रूप में</value>
+    <value>मार्क ने जॉट्स को ओपन के रूप में चुना</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>समाधान के रूप में चयनित नोटों को चिह्नित करें</value>
+    <value>मार्क ने जॉट्स को हल किया</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>बनाया था</value>
@@ -1502,7 +1502,7 @@
     <value>देखा</value>
   </data>
   <data name="Notes_NotesNotSent" xml:space="preserve">
-    <value> चयनित नोट्स नोट को paratext पर भेजे जाएंगे।</value>
+    <value> चयनित जॉट्स को Paratext में नहीं भेजा जाएगा।</value>
   </data>
   <data name="Notes_NoteStatus_Archived" xml:space="preserve">
     <value>संग्रहीत</value>
@@ -1514,19 +1514,19 @@
     <value>स्थिति</value>
   </data>
   <data name="Notes_OpenConfirmation" xml:space="preserve">
-    <value>इन नोटों को खुले के रूप में चिह्नित करें?</value>
+    <value>इन जॉट्स को खुले के रूप में चिह्नित करें?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>भाग</value>
   </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
-    <value>इन नोटों को हल के रूप में चिह्नित करें?</value>
+    <value>इन जॉट्स को हल के रूप में चिह्नित करें?</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>इन नोटों को paratext पर भेजें?</value>
+    <value>इन जॉट्स को paratext पर भेजें?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Paratext पर चयनित नोट भेजें</value>
+    <value>Paratext के लिए चयनित Jots भेजें?</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>टोकन का</value>

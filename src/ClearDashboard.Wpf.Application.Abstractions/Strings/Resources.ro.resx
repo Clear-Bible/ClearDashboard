@@ -170,7 +170,7 @@
     <value>Copiați erorile USFM pe clipboard</value>
   </data>
   <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
-    <value>Numărul erorilor:</value>
+    <value>Numărul de erori:</value>
   </data>
   <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
     <value>Interlinear</value>
@@ -644,7 +644,7 @@
     <value>Creați alinierea</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>Vizualizați/creați note</value>
+    <value>Vizualizați/creați JOTS</value>
   </data>
   <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
     <value>Ștergeți alinierea?</value>
@@ -662,7 +662,7 @@
     <value>Token '{0}' are mai multe alinieri definite. Făcând clic pe '{1}' va șterge toate alinierile.</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>Căutare pe termen</value>
+    <value>Căutare la termen de filtrare</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
     <value>Căutarea termenului de filtrare după termeni cheie</value>
@@ -692,7 +692,7 @@
     <value>Note</value>
   </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
-    <value>Nu există date de versuri în acest interval de versuri.</value>
+    <value>Nu există date de versuri în acest game de versuri.</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
     <value>Îndepărtați corpusul</value>
@@ -710,7 +710,7 @@
     <value>Selectați unde să împărțiți token:</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
-    <value>Despărțire cu trei căi</value>
+    <value>Split cu trei căi</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
     <value>Unjoin compus jeton</value>
@@ -911,7 +911,7 @@
     <value>Introduceți un nou luciu</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
-    <value>LEMMA</value>
+    <value>Lemma</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
     <value>Lemma/forme:</value>
@@ -971,7 +971,7 @@
     <value>Complet</value>
   </data>
   <data name="LexiconEdit_FullyMatching" xml:space="preserve">
-    <value>Potrivirea completă</value>
+    <value>Potrivire completă</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexem</value>
@@ -1106,7 +1106,7 @@
     <value>Ștergeți aspectul salvat</value>
   </data>
   <data name="MainView_LayoutsProjectLayouts" xml:space="preserve">
-    <value>Machete de proiect</value>
+    <value>Aspecte de proiect</value>
   </data>
   <data name="MainView_LayoutsSave" xml:space="preserve">
     <value>Salvați aspectul curent</value>
@@ -1367,10 +1367,10 @@
     <value>Nici unul</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Adăugați o notă nouă</value>
+    <value>Adăugați un nou JOT</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>Ștergeți această notă?</value>
+    <value>Ștergeți acest JOT?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
     <value>Datorită permisiunilor proiectului dvs. paratext,</value>
@@ -1418,7 +1418,7 @@
     <value>Doriți să dezasociați eticheta:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
-    <value>din grupul de etichete:</value>
+    <value>din Grupul de etichete:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
     <value>Adăugați grupul de etichete</value>
@@ -1457,10 +1457,10 @@
     <value>Dezasociați eticheta</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>Marcați notele selectate ca fiind deschise</value>
+    <value>Marcați JOTS selectat ca fiind deschis</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>Marcați notele selectate ca rezolvate</value>
+    <value>Mark a selectat JOTS ca rezolvat</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Creată</value>
@@ -1502,7 +1502,7 @@
     <value>Văzut</value>
   </data>
   <data name="Notes_NotesNotSent" xml:space="preserve">
-    <value> Notele selectate vor fi trimise către Paratext.</value>
+    <value> JOT -urile selectate nu vor fi trimise la Paratext.</value>
   </data>
   <data name="Notes_NoteStatus_Archived" xml:space="preserve">
     <value>Arhivat</value>
@@ -1514,19 +1514,19 @@
     <value>stare</value>
   </data>
   <data name="Notes_OpenConfirmation" xml:space="preserve">
-    <value>Marcați aceste note ca fiind deschise?</value>
+    <value>Marcați aceste joturi ca fiind deschise?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Parte</value>
   </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
-    <value>Marcați aceste note ca fiind rezolvate?</value>
+    <value>Marcați aceste joturi ca fiind rezolvate?</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>Trimiteți aceste note către Paratext?</value>
+    <value>Trimiteți aceste JOT -uri la Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Trimiteți note selectate la paratext</value>
+    <value>Trimiteți JOT -uri selectate la Paratext?</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Corpus tokenizat</value>
@@ -1583,7 +1583,7 @@
     <value>Tren</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>ALIGNIER DE CUMPĂRĂ A CAMERULUI DE TRAIN</value>
+    <value>ALIGNER WORD MASINE DE TRAIN</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Setați cartografierea versului între Corpora paralelizată</value>
@@ -1691,7 +1691,7 @@
     <value>Afișați informații despre acest proiect</value>
   </data>
   <data name="Pds_ManuscriptGreek" xml:space="preserve">
-    <value>Greacă (NT) macula</value>
+    <value>Macula greacă (NT)</value>
   </data>
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>Ebraică (OT) macula</value>
@@ -1883,7 +1883,7 @@
     <value>Incepe</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>Import proiect de server</value>
+    <value>Proiect de import server</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>Verificați această casetă pentru a include textele biblice grecești și ebraice atunci când vă creați proiectul.</value>
@@ -1922,7 +1922,7 @@
     <value>Text model (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext rulează, dar nu este conectat.</value>
+    <value>Paratext funcționează, dar nu este conectat.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>Proiect paratext</value>
@@ -1934,7 +1934,7 @@
     <value>Suntem aproape acolo!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>Faceți clic aici pentru a vizualiza videoclipurile „tabloul de bord”</value>
+    <value>Faceți clic aici pentru a vizualiza videoclipurile „bordul de bord”</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
     <value>După ce faceți clic pe butonul „Creați” de mai jos, vom fi tokenizarea, alinierea și pregătirea proiectului dvs. Toți pașii vor apărea aici pe măsură ce sunt procesate. În timp ce așteptați, nu ezitați să faceți clic pe linkul de mai jos și să vizionați câteva videoclipuri utile pentru a începe utilizarea ClearDashboard!</value>
@@ -2105,7 +2105,7 @@
     <value>Judecători</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentații</value>
+    <value>Lamentări</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
     <value>Levitic</value>
@@ -2195,7 +2195,7 @@
     <value>Bine ați venit la ClearDashboard! Vă rugăm să introduceți informațiile de înregistrare.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
-    <value>Vă rugăm să introduceți prenumele dvs.</value>
+    <value>Vă rugăm să introduceți numele dvs.</value>
   </data>
   <data name="RegistrationView_LastName" xml:space="preserve">
     <value>Vă rugăm să introduceți numele dvs. de familie</value>
@@ -2258,7 +2258,7 @@
     <value>Activați importul de lexic</value>
   </data>
   <data name="Settings_EnableTokenSplitting" xml:space="preserve">
-    <value>Activați divizarea jetoanelor</value>
+    <value>Activați împărțirea jetoanelor</value>
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Experimental</value>
@@ -2327,7 +2327,7 @@
     <value>Afișați vizualizări extinse pe un monitor diferit de tabloul de bord</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Pentru sistemele cu trei sau mai multe monitoare, afișați vizualizare extinsă pe a treia monitor</value>
+    <value>Pentru sistemele cu trei sau mai multe monitoare, afișați o vizualizare extinsă pe a treia monitor</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Colecția de text</value>
@@ -2408,7 +2408,7 @@
     <value>Editor</value>
   </data>
   <data name="SlackMessageView_SuggestionMarkdown" xml:space="preserve">
-    <value>Acceptă formatul de marcare</value>
+    <value>Suportă formatul Markdown</value>
   </data>
   <data name="SlackMessageView_SuggestionPreview" xml:space="preserve">
     <value>previzualizare</value>

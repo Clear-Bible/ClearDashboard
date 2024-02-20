@@ -449,7 +449,7 @@
     <value>散裝對齊編輯</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>批量對齊審查</value>
+    <value>批量對準評論</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>數數</value>
@@ -491,7 +491,7 @@
     <value>部分</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>樞密性的單詞</value>
+    <value>樞紐的單詞</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>來源</value>
@@ -506,7 +506,7 @@
     <value>目標</value>
   </data>
   <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
-    <value>目標零件</value>
+    <value>目標部分</value>
   </data>
   <data name="BulkAlignmentReview_Type" xml:space="preserve">
     <value>類型</value>
@@ -644,7 +644,7 @@
     <value>創建對齊</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>查看/創建筆記</value>
+    <value>查看/創建JOTS</value>
   </data>
   <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
     <value>刪除對齊方式？</value>
@@ -656,7 +656,7 @@
     <value>刪除“ {0}”的對齊？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>刪除所有路線？</value>
+    <value>刪除所有對齊方式？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>令牌'{0}'具有多個對齊定義。單擊'{1}'將刪除所有對齊。</value>
@@ -1067,7 +1067,7 @@
     <value>需要名字</value>
   </data>
   <data name="LicenseValidator_LastMissing" xml:space="preserve">
-    <value>需要姓</value>
+    <value>需要姓氏</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>需要許可密鑰</value>
@@ -1322,7 +1322,7 @@
     <value>姓</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
-    <value>新的合作用戶</value>
+    <value>新的協作用戶</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
     <value>密碼：</value>
@@ -1367,10 +1367,10 @@
     <value>沒有任何</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>添加新筆記</value>
+    <value>添加新的雜誌</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>刪除此註釋？</value>
+    <value>刪除此jot？</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
     <value>由於您的Paratext項目權限，</value>
@@ -1457,10 +1457,10 @@
     <value>分離標籤</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>將選定的筆記標記為打開</value>
+    <value>標記選擇的流浪漢作為開放</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>標記已解決的筆記</value>
+    <value>馬克選擇的jots已解決</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>創建</value>
@@ -1502,7 +1502,7 @@
     <value>看到</value>
   </data>
   <data name="Notes_NotesNotSent" xml:space="preserve">
-    <value> 選定的筆記將發送到Paratext。</value>
+    <value> 選定的JOTS不會發送到Paratext。</value>
   </data>
   <data name="Notes_NoteStatus_Archived" xml:space="preserve">
     <value>存檔</value>
@@ -1514,22 +1514,22 @@
     <value>地位</value>
   </data>
   <data name="Notes_OpenConfirmation" xml:space="preserve">
-    <value>將這些筆記標記為打開？</value>
+    <value>將這些jots標記為開放？</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>部分</value>
   </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
-    <value>將這些筆記標記為解決？</value>
+    <value>將這些jots標記為解決？</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>將這些筆記發送給Paratext？</value>
+    <value>將這些JOTS發送到Paratext？</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>將選定的筆記發送到Paratext</value>
+    <value>將選定的JOTS發送到Paratext？</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>象徵化的語料庫</value>
+    <value>令牌化語料庫</value>
   </data>
   <data name="Notes_TranslationSet" xml:space="preserve">
     <value>翻譯集</value>
@@ -1817,7 +1817,7 @@
     <value>字首</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>展示反向翻譯</value>
+    <value>展示退縮</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>幹</value>
@@ -2252,7 +2252,7 @@
     <value>在實驗組中啟用外部Paratext註釋</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
-    <value>啟用外部paratext註釋</value>
+    <value>啟用外部Paratext註釋</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>啟用詞典進口</value>
@@ -2459,7 +2459,7 @@
     <value>更新並添加新書</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
-    <value>選擇書籍</value>
+    <value>選擇書</value>
   </data>
   <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
     <value>更新並添加新</value>

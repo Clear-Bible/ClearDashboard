@@ -134,7 +134,7 @@
     <value>Nonaktifkan lisensi saat ini</value>
   </data>
   <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
-    <value>-Kekening lainnya-</value>
+    <value>-Sekuntuhan-lainnya-</value>
   </data>
   <data name="AccountInfo_ParatextEmailLabel" xml:space="preserve">
     <value>Email Paratext:</value>
@@ -290,7 +290,7 @@
     <value>buah</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>Batu permata</value>
+    <value>batu permata</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>rumput</value>
@@ -644,7 +644,7 @@
     <value>Buat Alignment</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>Lihat/Buat Catatan</value>
+    <value>Lihat/Buat Jot</value>
   </data>
   <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
     <value>Hapus Penyelarasan?</value>
@@ -713,7 +713,7 @@
     <value>Split tiga arah</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Unjoin Token Komposit</value>
+    <value>Token Komposit Unjoin</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -1250,7 +1250,7 @@
     <value>MAT</value>
   </data>
   <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>Membuat basis data ...</value>
+    <value>Membuat database ...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
     <value>Gabungkan ... Antarmuka Muat Ulang</value>
@@ -1367,10 +1367,10 @@
     <value>Tidak ada</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Tambahkan Catatan Baru</value>
+    <value>Tambahkan Jot Baru</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>Hapus catatan ini?</value>
+    <value>Hapus jot ini?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
     <value>Karena izin proyek paratext Anda,</value>
@@ -1388,7 +1388,7 @@
     <value>Filter berdasarkan status</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>Filter menurut teks</value>
+    <value>Filter dengan teks</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>Setiap</value>
@@ -1457,10 +1457,10 @@
     <value>Label Disassociate</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>Tandai catatan yang dipilih sebagai terbuka</value>
+    <value>Tandai jot terpilih sebagai terbuka</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>Tandai catatan yang dipilih saat diselesaikan</value>
+    <value>Tandai jot terpilih saat diselesaikan</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Dibuat</value>
@@ -1502,7 +1502,7 @@
     <value>Terlihat</value>
   </data>
   <data name="Notes_NotesNotSent" xml:space="preserve">
-    <value> Catatan yang dipilih akan dicatat ke Paratext.</value>
+    <value> Jot yang dipilih tidak akan dikirim ke Paratext.</value>
   </data>
   <data name="Notes_NoteStatus_Archived" xml:space="preserve">
     <value>Diarsipkan</value>
@@ -1514,19 +1514,19 @@
     <value>Status</value>
   </data>
   <data name="Notes_OpenConfirmation" xml:space="preserve">
-    <value>Tandai catatan ini terbuka?</value>
+    <value>Tandai jot ini terbuka?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Bagian</value>
   </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
-    <value>Tandai catatan ini saat diselesaikan?</value>
+    <value>Tandai keributan ini seperti yang diselesaikan?</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>Kirim catatan ini ke Paratext?</value>
+    <value>Kirim Jots ini ke Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Kirim Catatan yang Dipilih ke Paratext</value>
+    <value>Kirim Jots yang Dipilih ke Paratext?</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Corpus tokenized</value>
@@ -1835,7 +1835,7 @@
     <value>PRO</value>
   </data>
   <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
-    <value>Tambahkan pengguna kolaborasi baru</value>
+    <value>Tambahkan Pengguna Kolaborasi Baru</value>
   </data>
   <data name="ProjectPicker_AppName" xml:space="preserve">
     <value>ClearDashboard</value>
@@ -1949,7 +1949,7 @@
     <value>Daftar Proyek Kolaborasi Refresh</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>Cari Terbaru</value>
+    <value>Cari Terkini</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
     <value>Klik di sini untuk memulai Paratext</value>
@@ -1970,7 +1970,7 @@
     <value>Proyek dengan nama yang sama sudah ada. Pilih nama unik.</value>
   </data>
   <data name="ProjectValidator_TooLong" xml:space="preserve">
-    <value>Nama proyek yang diberikan terlalu panjang.</value>
+    <value>Nama proyek yang diberikan terlalu lama.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Tawarikh</value>
@@ -2114,7 +2114,7 @@
     <value>Luke</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
-    <value>Malachi</value>
+    <value>Maleakhi</value>
   </data>
   <data name="ProperCase_Mark" xml:space="preserve">
     <value>Tanda</value>

@@ -644,7 +644,7 @@
     <value>Create Alignment</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>View/Create Notes</value>
+    <value>View/Create Jots</value>
   </data>
   <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
     <value>Delete Alignment?</value>
@@ -1367,10 +1367,10 @@
     <value>None</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Add a new note</value>
+    <value>Add a new jot </value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>Delete this note?</value>
+    <value>Delete this jot?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
     <value>Due to your Paratext project permissions, </value>
@@ -1457,10 +1457,10 @@
     <value>Disassociate label</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>Mark selected notes as open</value>
+    <value>Mark selected jots as open</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>Mark selected notes as resolved</value>
+    <value>Mark selected jots as resolved</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Created</value>
@@ -1502,7 +1502,7 @@
     <value>Seen</value>
   </data>
   <data name="Notes_NotesNotSent" xml:space="preserve">
-    <value> selected notes will note be sent to Paratext.</value>
+    <value> selected jots will not be sent to Paratext.</value>
   </data>
   <data name="Notes_NoteStatus_Archived" xml:space="preserve">
     <value>Archived</value>
@@ -1514,19 +1514,19 @@
     <value>Status</value>
   </data>
   <data name="Notes_OpenConfirmation" xml:space="preserve">
-    <value>Mark these notes as open?</value>
+    <value>Mark these jots as open?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Part</value>
   </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
-    <value>Mark these notes as resolved?</value>
+    <value>Mark these jots as resolved?</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>Send these notes to Paratext?</value>
+    <value>Send these jots to Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Send selected notes to Paratext</value>
+    <value>Send selected jots to Paratext?</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Tokenized Corpus</value>

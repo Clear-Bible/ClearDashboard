@@ -500,7 +500,7 @@
     <value>Parte fuente</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Reflexión de origen</value>
+    <value>Fuente Ref.</value>
   </data>
   <data name="BulkAlignmentReview_Target" xml:space="preserve">
     <value>Objetivo</value>
@@ -644,13 +644,13 @@
     <value>Crear alineación</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>Ver/Crear notas</value>
+    <value>Ver/Crear Jots</value>
   </data>
   <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
     <value>Eliminar la alineación?</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>Eliminar la alineación</value>
+    <value>Eliminar alineación</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
     <value>Eliminar la alineación de '{0}'?</value>
@@ -698,7 +698,7 @@
     <value>Eliminar corpus</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>Mostrar los controles de la vista</value>
+    <value>Mostrar los controles de vista</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>Token dividido</value>
@@ -872,7 +872,7 @@
     <value>Agregar significado</value>
   </data>
   <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
-    <value>Agregar un significado para este lema</value>
+    <value>Agregue un significado para este lema</value>
   </data>
   <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
     <value>Agregar un dominio semántico</value>
@@ -1367,10 +1367,10 @@
     <value>Ninguno</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Agregar una nueva nota</value>
+    <value>Agrega una nueva jot</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>Eliminar esta nota?</value>
+    <value>¿Eliminar esta jot?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
     <value>Debido a los permisos de su proyecto Paratext,</value>
@@ -1424,7 +1424,7 @@
     <value>Agregar grupo de etiquetas</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Agregar un grupo de etiquetas</value>
+    <value>Agregar un grupo de etiqueta</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Un grupo de etiquetas ya existe con el nombre</value>
@@ -1457,10 +1457,10 @@
     <value>Etiqueta disociada</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>Marque notas seleccionadas como abiertas</value>
+    <value>Mark Selected Jots como abierto</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>Marque notas seleccionadas como se resuelven</value>
+    <value>Mark Jots seleccionados como se resuelve</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Creado</value>
@@ -1502,7 +1502,7 @@
     <value>Visto</value>
   </data>
   <data name="Notes_NotesNotSent" xml:space="preserve">
-    <value> Las notas seleccionadas se enviarán a Paratext.</value>
+    <value> Las jotas seleccionadas no se enviarán a Paratext.</value>
   </data>
   <data name="Notes_NoteStatus_Archived" xml:space="preserve">
     <value>Archivado</value>
@@ -1514,19 +1514,19 @@
     <value>Estado</value>
   </data>
   <data name="Notes_OpenConfirmation" xml:space="preserve">
-    <value>Marcar estas notas como abiertas?</value>
+    <value>Marcar estas jotas como abiertas?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Parte</value>
   </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
-    <value>Marque estas notas como se resuelven?</value>
+    <value>Marcar estas jotas como se resuelven?</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>¿Enviar estas notas a Paratext?</value>
+    <value>¿Enviar estas Jots a Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Enviar notas seleccionadas a Paratext</value>
+    <value>¿Enviar Jots seleccionadas a Paratext?</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Corpus tokenizado</value>
@@ -1649,7 +1649,7 @@
     <value>Hija</value>
   </data>
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>Eliminar la alineación</value>
+    <value>Eliminar alineación</value>
   </data>
   <data name="Pds_DeleteParallelLine" xml:space="preserve">
     <value>¿Estás seguro de que quieres eliminar esta alineación? Todas las notas, alineaciones e interlineal asociados con esta alineación se eliminarán y no se pueden recuperar.</value>
@@ -2099,7 +2099,7 @@
     <value>Joshua</value>
   </data>
   <data name="ProperCase_Jude" xml:space="preserve">
-    <value>Yacuana</value>
+    <value>Judío</value>
   </data>
   <data name="ProperCase_Judges" xml:space="preserve">
     <value>Jueces</value>

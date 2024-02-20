@@ -467,7 +467,7 @@
     <value>Không chấp thuận</value>
   </data>
   <data name="BulkAlignmentReview_DisapproveSelected" xml:space="preserve">
-    <value>Không chấp thuận được chọn</value>
+    <value>Đã chọn không từ chối</value>
   </data>
   <data name="BulkAlignmentReview_Invalid" xml:space="preserve">
     <value>Không hợp lệ</value>
@@ -644,7 +644,7 @@
     <value>Tạo sự liên kết</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>Xem/Tạo ghi chú</value>
+    <value>Xem/Tạo jots</value>
   </data>
   <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
     <value>Xóa căn chỉnh?</value>
@@ -914,7 +914,7 @@
     <value>Bổ đề</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
-    <value>Bổ đề/hình thức:</value>
+    <value>Bổ đề/các hình thức:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
     <value>Bổ đề cho Lexeme mới:</value>
@@ -932,7 +932,7 @@
     <value>Bóng mới</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>Loại bỏ miền ngữ nghĩa này khỏi ý nghĩa này</value>
+    <value>Xóa miền ngữ nghĩa này khỏi ý nghĩa này</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
     <value>Loại bỏ hình thức từ vựng này khỏi bổ đề này</value>
@@ -986,7 +986,7 @@
     <value>Phù hợp</value>
   </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
-    <value>Ý nghĩa [dịch]</value>
+    <value>Ý nghĩa [Dịch]</value>
   </data>
   <data name="LexiconEdit_Or" xml:space="preserve">
     <value>Hoặc</value>
@@ -1205,7 +1205,7 @@
     <value>Glosses:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Các phần của lời nói</value>
+    <value>Các phần của bài phát biểu</value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
     <value>Bổ số liên quan</value>
@@ -1367,10 +1367,10 @@
     <value>Không có</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Thêm một ghi chú mới</value>
+    <value>Thêm một cú hích mới</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>Xóa ghi chú này?</value>
+    <value>Xóa JOT này?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
     <value>Do quyền dự án paratext của bạn,</value>
@@ -1457,10 +1457,10 @@
     <value>Disassociate Label</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>Đánh dấu các ghi chú được chọn là mở</value>
+    <value>Đánh dấu các jot đã chọn là mở</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>Đánh dấu các ghi chú được chọn là đã được giải quyết</value>
+    <value>Đánh dấu các jot được chọn là đã giải quyết</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Tạo</value>
@@ -1502,7 +1502,7 @@
     <value>Đã xem</value>
   </data>
   <data name="Notes_NotesNotSent" xml:space="preserve">
-    <value> Ghi chú được chọn sẽ lưu ý được gửi đến Paratext.</value>
+    <value> Các jots được chọn sẽ không được gửi đến paratext.</value>
   </data>
   <data name="Notes_NoteStatus_Archived" xml:space="preserve">
     <value>Lưu trữ</value>
@@ -1514,19 +1514,19 @@
     <value>Trạng thái</value>
   </data>
   <data name="Notes_OpenConfirmation" xml:space="preserve">
-    <value>Đánh dấu những ghi chú này là mở?</value>
+    <value>Đánh dấu những jots này là mở?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Phần</value>
   </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
-    <value>Đánh dấu những ghi chú này như được giải quyết?</value>
+    <value>Đánh dấu những jots này như đã giải quyết?</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>Gửi các ghi chú này đến paratext?</value>
+    <value>Gửi các jot này đến paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Gửi ghi chú đã chọn đến paratext</value>
+    <value>Gửi jots đã chọn đến paratext?</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Tokenized Corpus</value>
@@ -1568,7 +1568,7 @@
     <value>Siêu dữ liệu JSON</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
-    <value>Song song với những câu thơ</value>
+    <value>Song song hóa câu thơ</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
     <value>Thuật toán căn chỉnh từ máy</value>
@@ -1724,7 +1724,7 @@
     <value>Nguồn</value>
   </data>
   <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>Language chua</value>
+    <value>Language Sourcel</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
     <value>Tiêu chuẩn</value>
@@ -1754,7 +1754,7 @@
     <value>không xác định</value>
   </data>
   <data name="Pds_UpdateLabelsWithExternalLabels" xml:space="preserve">
-    <value>Cập nhật nhãn có ghi chú bên ngoài</value>
+    <value>Cập nhật nhãn với các ghi chú bên ngoài</value>
   </data>
   <data name="Pds_Xml" xml:space="preserve">
     <value>XML</value>
@@ -1883,13 +1883,13 @@
     <value>Bắt đầu</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>Nhập dự án máy chủ</value>
+    <value>Dự án máy chủ nhập khẩu</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>Kiểm tra hộp này để bao gồm các văn bản Kinh thánh Hy Lạp và tiếng Do Thái khi tạo dự án của bạn.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Bao gồm các văn bản Kinh thánh NT Hy Lạp?</value>
+    <value>Bao gồm các văn bản Kinh Thánh Hy Lạp NT?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>Bao gồm các văn bản Kinh thánh tiếng Do Thái OT?</value>
@@ -2018,7 +2018,7 @@
     <value>2 Tê -sa -lô -ni -ca</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2 Timothy</value>
+    <value>2 Ti -mô -thê</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3 John</value>
@@ -2030,7 +2030,7 @@
     <value>Amos</value>
   </data>
   <data name="ProperCase_Colossians" xml:space="preserve">
-    <value>COLOSSIANS</value>
+    <value>Cô -lô -se</value>
   </data>
   <data name="ProperCase_Daniel" xml:space="preserve">
     <value>Daniel</value>
@@ -2327,7 +2327,7 @@
     <value>Hiển thị chế độ xem mở rộng trên một màn hình khác với bảng điều khiển</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Đối với các hệ thống có ba màn hình trở lên, hãy hiển thị chế độ xem mở rộng trên màn hình thứ ba</value>
+    <value>Đối với các hệ thống có ba hoặc nhiều màn hình, hãy hiển thị chế độ xem mở rộng trên màn hình thứ ba</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Bộ sưu tập văn bản</value>

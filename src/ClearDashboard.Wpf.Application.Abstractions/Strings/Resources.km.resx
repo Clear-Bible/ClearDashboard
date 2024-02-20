@@ -644,7 +644,7 @@
     <value>បង្កើតការតម្រឹម</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>មើល / បង្កើតកំណត់ចំណាំ</value>
+    <value>មើល / បង្កើត Jots</value>
   </data>
   <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
     <value>លុបការតែងតាំង?</value>
@@ -1004,7 +1004,7 @@
     <value>ភាសាគោលដៅ</value>
   </data>
   <data name="LexiconEdit_Title" xml:space="preserve">
-    <value>lexicon កែប្រែ</value>
+    <value>lexicon កែសម្រួល</value>
   </data>
   <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>ការបករេប</value>
@@ -1367,10 +1367,10 @@
     <value>ឥតមានអវីសោហ</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>បន្ថែមកំណត់ត្រាថ្មី</value>
+    <value>បន្ថែម jot ថ្មី</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>លុបកំណត់ត្រានេះ?</value>
+    <value>លុប jot នេះ?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
     <value>ដោយសារតែសិទ្ធិគម្រោងរបស់អ្នក,</value>
@@ -1457,10 +1457,10 @@
     <value>ផ្តាច់ស្លាកស្លាក</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>សម្គាល់កំណត់ចំណាំដែលបានជ្រើសរើសជាការបើក</value>
+    <value>សម្គាល់ jots ដែលបានជ្រើសរើសឱ្យបើកចំហ</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>សម្គាល់កំណត់ត្រាដែលបានជ្រើសរើសដែលបានជ្រើសរើសថាបានដោះស្រាយ</value>
+    <value>សម្គាល់ jots ដែលបានជ្រើសរើសដែលបានជ្រើសរើសដូចដែលបានដោះស្រាយ</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>បានបង្កើត</value>
@@ -1502,7 +1502,7 @@
     <value>ដេលតោស</value>
   </data>
   <data name="Notes_NotesNotSent" xml:space="preserve">
-    <value> កំណត់ចំណាំដែលបានជ្រើសរើសនឹងត្រូវបានផ្ញើទៅ ParateXT ។</value>
+    <value> jots ដែលបានជ្រើសរើសនឹងមិនត្រូវបានផ្ញើទៅ paratlett ទេ។</value>
   </data>
   <data name="Notes_NoteStatus_Archived" xml:space="preserve">
     <value>ឃោសនារួច</value>
@@ -1514,19 +1514,19 @@
     <value>ច្បាប់</value>
   </data>
   <data name="Notes_OpenConfirmation" xml:space="preserve">
-    <value>សម្គាល់កំណត់ចំណាំទាំងនេះថាបើក?</value>
+    <value>សម្គាល់ jots ទាំងនេះឱ្យបើក?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>ចេក</value>
   </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
-    <value>សម្គាល់កំណត់ត្រាទាំងនេះដែលបានដោះស្រាយ?</value>
+    <value>សម្គាល់ jots ទាំងនេះដូចដែលបានដោះស្រាយ?</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>ផ្ញើកំណត់ចំណាំទាំងនេះទៅលោក ParateXT?</value>
+    <value>ផ្ញើ Jots ទាំងនេះទៅ Paratlets?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>ផ្ញើកំណត់ចំណាំដែលបានជ្រើសរើសទៅភីធីធីធី</value>
+    <value>ផ្ញើ Jots ដែលបានជ្រើសរើសទៅ ParateXT?</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>tokenized Corpus</value>
