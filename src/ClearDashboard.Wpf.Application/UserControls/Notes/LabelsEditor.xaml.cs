@@ -315,6 +315,16 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             CacheCurrentLabel(e);
             RaiseLabelEvent(LabelSelectedEvent);
             //Execute.OnUIThread(AddCurrentLabel);
+
+            // JOTS refactor
+            Execute.OnUIThread(() =>
+            {
+                if (Note.NoteId == null &&  e is LabelEventArgs labelEventArgs)
+                {
+                    Note.Labels.AddDistinct(labelEventArgs.Label);
+                }
+            });
+            
         }
 
         private void OnLabelDeleted(object sender, RoutedEventArgs e)

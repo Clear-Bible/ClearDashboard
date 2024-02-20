@@ -10,6 +10,7 @@ using MediatR;
 using System.Diagnostics;
 using System.Text;
 using System.Threading;
+using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Corpora;
 using Microsoft.Extensions.Logging;
@@ -28,6 +29,11 @@ namespace ClearDashboard.Wpf.Application.Services
         IHandle<SelectionUpdatedMessage>, IHandle<LabelsUpdatedMessage>
     {
         private NoteViewModelCollection _currentNotes = new();
+
+        private NoteViewModel _newNote = new();
+
+        private NoteViewModel? _selectedNote;
+
         private IEventAggregator EventAggregator { get; }
         private ILogger<NoteManager>? Logger { get; }
         private IMediator Mediator { get; }
@@ -36,16 +42,40 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public ExternalNoteManager ExternalNoteManager { get; }
 
+        public SelectionManager SelectionManager { get; set; }
+
+        public ILifetimeScope LifetimeScope { get; }
+
         private ConcurrentDictionary<Guid, NoteViewModel> NotesCache { get; } = new();
-        public void ClearNotesCache()
-        {
-            NotesCache.Clear();
-        }
+      
+
         private UserId? _currentUserId;
         private LabelCollection _labelSuggestions = new();
         private LabelGroupViewModelCollection _labelGroups = new();
         private LabelGroupViewModel? _defaultLabelGroup;
         private bool _isBusy;
+
+
+        public NoteManager(IEventAggregator eventAggregator,
+            ILogger<NoteManager>? logger,
+            IMediator mediator,
+            IUserProvider userProvider,
+            ILocalizationService localizationService,
+            ILifetimeScope lifetimeScope)
+        {
+            LocalizationService = localizationService;
+            EventAggregator = eventAggregator;
+            Logger = logger;
+            Mediator = mediator;
+            UserProvider = userProvider;
+            ExternalNoteManager = new ExternalNoteManager(EventAggregator);
+
+            NoneLabelGroup.Name = $"<{LocalizationService["None"]}>";
+
+            LifetimeScope = lifetimeScope;
+
+            EventAggregator.SubscribeOnUIThread(this);
+        }
 
         /// <summary>
         /// Gets the <see cref="UserId"/> of the current user.
@@ -103,13 +133,23 @@ namespace ClearDashboard.Wpf.Application.Services
             private set => Set(ref _currentNotes, value);
         }
 
-        private NoteViewModel? _selectedNote;
-        private NoteViewModel? _selectedNote1;
+      
 
         public NoteViewModel? SelectedNote
         {
-            get => _selectedNote1;
-            set => Set(ref _selectedNote1, value);
+            get => _selectedNote;
+            set => Set(ref _selectedNote, value);
+        }
+
+        public NoteViewModel? NewNote
+        {
+            get => _newNote;
+            set => Set(ref _newNote, value);
+        }
+
+        public void ClearNotesCache()
+        {
+            NotesCache.Clear();
         }
 
         private string GetNoteAssociationDescription(IId associatedEntityId, IReadOnlyDictionary<string, string> entityContext)
@@ -381,19 +421,9 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 var associatedEntityIds = await note.GetFullDomainEntityIds(Mediator);
                 var domainEntityContexts = new EntityContextDictionary(await note.GetDomainEntityContexts(Mediator));
-                
-                foreach (var associatedEntityId in associatedEntityIds)
-                {
-                    var association = new NoteAssociationViewModel
-                    {
-                        AssociatedEntityId = associatedEntityId
-                    };
-                    if (domainEntityContexts.TryGetValue(associatedEntityId, out var entityContext))
-                    {
-                        association.Description = GetNoteAssociationDescription(associatedEntityId, entityContext);
-                    }
-                    noteViewModel.Associations.Add(association);
-                }
+
+                noteViewModel.Associations = GetNoteAssociations(associatedEntityIds, domainEntityContexts);
+
                 noteViewModel.Replies = new NoteViewModelCollection((await note.GetReplyNotes(Mediator)).Select(n => new NoteViewModel(n)));
 
                 if (doGetParatextSendNoteInformation)
@@ -415,6 +445,27 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 await SetIsBusy(false);
             }
+        }
+
+        private NoteAssociationViewModelCollection GetNoteAssociations(IEnumerable<IId> associatedEntityIds, EntityContextDictionary domainEntityContexts)
+        {
+            
+            var noteAssociationViewModelCollection = new NoteAssociationViewModelCollection();
+                
+            foreach (var associatedEntityId in associatedEntityIds)
+            {
+                var association = new NoteAssociationViewModel
+                {
+                    AssociatedEntityId = associatedEntityId
+                };
+                if (domainEntityContexts.TryGetValue(associatedEntityId, out var entityContext))
+                {
+                    association.Description = GetNoteAssociationDescription(associatedEntityId, entityContext);
+                }
+                noteAssociationViewModelCollection.Add(association);
+            }
+
+            return noteAssociationViewModelCollection;
         }
 
         public bool IsBusy
@@ -1167,18 +1218,34 @@ namespace ClearDashboard.Wpf.Application.Services
             //CurrentNotes = await GetNoteDetailsAsync(message.SelectedTokens.NoteIds);
         }
 
-        public NoteManager(IEventAggregator eventAggregator, ILogger<NoteManager>? logger, IMediator mediator, IUserProvider userProvider, ILocalizationService localizationService)
+
+        public async Task CreateNewNote()
         {
-            LocalizationService = localizationService;
-            EventAggregator = eventAggregator;
-            Logger = logger;
-            Mediator = mediator;
-            UserProvider = userProvider;
-            ExternalNoteManager = new ExternalNoteManager(EventAggregator);
+            try
+            {
+                if (SelectionManager == null)
+                {
+                    throw new NullReferenceException(
+                        $"'SelectionManager' must be set before a new note can be created.");
+                }
 
-            NoneLabelGroup.Name = $"<{LocalizationService["None"]}>";
+                NewNote = new NoteViewModel();
+              
+                NewNote.Entity.SetDomainEntityIds(SelectionManager.SelectedEntityIds);
 
-            EventAggregator.SubscribeOnUIThread(this);
+                //new NoteDomainEntityAssociationId(noteDomainEntityAssociation.Id)
+
+                var domainEntityContexts =
+                    new EntityContextDictionary(await Note.GetDomainEntityContexts(Mediator, SelectionManager.SelectedEntityIds));
+                NewNote.Associations =
+                    GetNoteAssociations(SelectionManager.SelectedEntityIds, domainEntityContexts);
+            }
+            catch (Exception e)
+            {
+                var s = e.Message;
+                throw;
+            }
+          
         }
     }
 }

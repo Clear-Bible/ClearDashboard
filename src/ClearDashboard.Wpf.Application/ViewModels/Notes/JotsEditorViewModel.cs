@@ -90,6 +90,10 @@ public class JotsEditorViewModel : ApplicationScreen
                 NoteManager.SelectedNote = NoteManager.CurrentNotes[0];
             }
 
+            NoteManager.SelectionManager = SelectionManager;
+
+            await NoteManager.CreateNewNote();
+
         });
 
     }
@@ -120,7 +124,8 @@ public class JotsEditorViewModel : ApplicationScreen
         await Execute.OnUIThreadAsync(async () =>
         {
             //TODO This is a TEMPORARY FIX just for the hotfix, this needs to be resolved by ANDY in the longterm
-            e.Note.Labels.Clear();
+           // e.Note.Labels.Clear();
+            e.Note.Associations.Clear();
             await NoteManager.AddNoteAsync(e.Note, e.EntityIds);
 
             // NB:  What to do here?
@@ -402,6 +407,15 @@ public class JotsEditorViewModel : ApplicationScreen
             await NoteManager.AssociateNoteLabelAsync(e.Note, e.Label);
             Message = $"Label '{e.Label.Text}' selected for note";
         }
+        else
+        {
+            // JOTS refactor
+            Execute.OnUIThread(()=> NoteManager.NewNote.Labels.AddDistinct(e.Label));
+        }
+
+
+
+        // JOTS refactor - need to capture label add to new jot here
 
         if (e.LabelGroup != null && !e.LabelGroup.Labels.ContainsMatchingLabel(e.Label.Text))
         {

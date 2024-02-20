@@ -1213,14 +1213,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task DisplayJotsEditor(Point? mousePosition)
         {
+            var height = 780;
+            var width = 800;
 
             dynamic settings = new ExpandoObject();
-            settings.MinWidth = 800;
-            settings.MinHeight = 550;
-            settings.Height = 550;
-            settings.Width = 800;
-            settings.MaxWidth = 800;
-            settings.MaxHeight = 550;
+            settings.MinWidth = width;
+            settings.MinHeight = height;
+            settings.Height = height;
+            settings.Width = width;
+            settings.MaxWidth = width;
+            settings.MaxHeight = height;
             settings.Title = "Jot";
 
             if (mousePosition.HasValue)
@@ -1235,7 +1237,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
 
             // Keep the window on top
-            settings.Topmost = true;
+            //settings.Topmost = true;
             settings.Owner = System.Windows.Application.Current.MainWindow;
 
             var jotsEditorViewModel = LifetimeScope.Resolve<JotsEditorViewModel>();

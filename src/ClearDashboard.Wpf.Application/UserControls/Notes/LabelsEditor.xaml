@@ -25,7 +25,7 @@
         <Grid Grid.Row="0" Margin="5,0,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
@@ -41,7 +41,7 @@
             <ComboBox
                 x:Name="LabelGroupComboBox"
                 Grid.Column="1"
-                Width="100"
+                Width="400"
                 Margin="10,0,0,0"
                 Padding="5"
                 HorizontalAlignment="Left"

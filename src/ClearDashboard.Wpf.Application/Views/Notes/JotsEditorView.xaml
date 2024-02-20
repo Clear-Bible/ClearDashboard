@@ -16,13 +16,13 @@
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="640"></RowDefinition>
             <RowDefinition Height="90"></RowDefinition>
         </Grid.RowDefinitions>
   
             <notes:NoteCollectionDisplay Grid.Row="0"
           x:Name="NotesControl"
-          Margin="0,-20"
+          Margin="0,0"
           CurrentUserId="{Binding NoteManager.CurrentUserId}"
           DefaultLabelGroup="{Binding NoteManager.DefaultLabelGroup}"
           EntityIds="{Binding Path=SelectionManager.SelectedEntityIds}"
@@ -36,10 +36,10 @@
           NoteMargin="0,0,0,0"
           NoteTextFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
           Notes="{Binding NoteManager.CurrentNotes}"
+          NewNote="{Binding NoteManager.NewNote}"
           SelectedNote="{Binding NoteManager.SelectedNote, Mode=TwoWay}"
           TimestampMargin="0,0,00,0"
           UserFontStyle="Italic"
-          MaxHeight="500"
          >
                 <i:Interaction.Triggers>
 

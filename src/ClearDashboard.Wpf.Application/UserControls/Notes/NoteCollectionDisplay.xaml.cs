@@ -346,7 +346,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// </summary>
         public static readonly DependencyProperty NotesProperty = DependencyProperty.Register(nameof(Notes), typeof(NoteViewModelCollection), typeof(NoteCollectionDisplay));
 
+        /// <summary>
+        /// Identifies the SelectedNote dependency property
+        /// </summary>
         public static readonly DependencyProperty SelectedNoteProperty = DependencyProperty.Register(nameof(SelectedNote), typeof(NoteViewModel), typeof(NoteCollectionDisplay));
+
+        /// <summary>
+        /// Identifies the NewNote dependency property
+        /// </summary>
+        public static readonly DependencyProperty NewNoteProperty = DependencyProperty.Register(nameof(NewNote), typeof(NoteViewModel), typeof(NoteCollectionDisplay));
 
         /// <summary>
         /// Identifies the NoteTextFontFamily dependency property.
@@ -1106,6 +1114,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             set => SetValue(SelectedNoteProperty, value);
         }
 
+        public NoteViewModel NewNote
+        {
+            get => (NoteViewModel)GetValue(NewNoteProperty);
+            set => SetValue(NewNoteProperty, value);
+        }
+
         /// <summary>
         /// Gets or sets the subtitle of the notes editor.
         /// </summary>
@@ -1304,7 +1318,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             set => SetValue(UserMarginProperty, value);
         }
 
-        public NoteViewModel NewNote { get; set; } = new();
 
         #endregion
         #region Public Events

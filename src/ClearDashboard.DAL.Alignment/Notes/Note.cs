@@ -71,8 +71,14 @@ namespace ClearDashboard.DAL.Alignment.Notes
 #endif
         }
 
-        private readonly ICollection<IId> domainEntityIds_;
-        public IEnumerable<IId> DomainEntityIds { get { return domainEntityIds_; } }
+        private ICollection<IId> domainEntityIds_;
+        public IEnumerable<IId> DomainEntityIds => domainEntityIds_;
+
+        public void SetDomainEntityIds(IEnumerable<IId> domainEntityIds)
+        {
+            domainEntityIds_ = new HashSet<IId>(domainEntityIds, new IIdEqualityComparer());
+        }
+
 
         public ICollection<Guid> SeenByUserIds { get; private set; }
 

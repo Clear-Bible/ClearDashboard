@@ -851,6 +851,9 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         public Visibility NoteSaveCancelButtonVisibility => IsChanged ? Visibility.Visible : Visibility.Collapsed;
         public Visibility TimestampRowVisibility => AddMode || IsChanged ? Visibility.Collapsed : Visibility.Visible;
         public Visibility NotePropertiesVisibility => AddMode ? Visibility.Collapsed : Visibility.Visible;
+
+        public Visibility LabelPanelVisibility => Visibility.Visible;
+        public Visibility AssociationsPanelVisibility => Visibility.Visible;
         //public Visibility AssociationsVisibility => AddMode || !IsAssociationButtonClicked ? Visibility.Collapsed : Visibility.Visible;
         //public Visibility AssociationsButtonVisibility => IsAssociationButtonClicked ? Visibility.Hidden : Visibility.Visible;
         public Visibility ParatextSendVisibility => !AddMode && Note != null && Note.EnableParatextSend ? Visibility.Visible : Visibility.Collapsed;
