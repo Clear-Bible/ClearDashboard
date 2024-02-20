@@ -856,7 +856,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         public Visibility AssociationsPanelVisibility => Visibility.Visible;
         //public Visibility AssociationsVisibility => AddMode || !IsAssociationButtonClicked ? Visibility.Collapsed : Visibility.Visible;
         //public Visibility AssociationsButtonVisibility => IsAssociationButtonClicked ? Visibility.Hidden : Visibility.Visible;
-        public Visibility ParatextSendVisibility => !AddMode && Note != null && Note.EnableParatextSend ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility ParatextSendVisibility => (!AddMode && Note != null && Note.EnableParatextSend) ? Visibility.Visible : Visibility.Collapsed;
+            // 
         //private bool IsAssociationButtonClicked { get; set; }
 
         /// <summary>

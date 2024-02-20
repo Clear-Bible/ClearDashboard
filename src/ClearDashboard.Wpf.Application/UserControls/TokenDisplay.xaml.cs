@@ -226,14 +226,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty TokenNoteIndicatorVisibilityProperty = DependencyProperty.Register(
             nameof(TokenNoteIndicatorVisibility), typeof(Visibility), typeof(TokenDisplay),
-            new PropertyMetadata(Visibility.Visible));
+            new PropertyMetadata(Visibility.Collapsed));
 
         /// <summary>
         /// Identifies the TranslationNoteIndicatorVisibility dependency property.
         /// </summary>
         public static readonly DependencyProperty TranslationNoteIndicatorVisibilityProperty = DependencyProperty.Register(
             nameof(TranslationNoteIndicatorVisibility), typeof(Visibility), typeof(TokenDisplay),
-            new PropertyMetadata(Visibility.Visible));
+            new PropertyMetadata(Visibility.Collapsed));
 
         /// <summary>
         /// Identifies the Orientation dependency property.
