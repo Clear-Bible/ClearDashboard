@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -7,6 +8,7 @@ using Autofac.Features.AttributeFilters;
 using Caliburn.Micro;
 using CefSharp;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearBible.Engine.Utils;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.Helpers;
@@ -74,7 +76,7 @@ public class JotsEditorViewModel : ApplicationScreen
     #endregion
 
     
-    public void Initialize()
+    public void Initialize(IEnumerable<IId>? noteIds = null)
     {
         Task.Run(async () =>
         {
@@ -82,8 +84,15 @@ public class JotsEditorViewModel : ApplicationScreen
             {
                 await NoteManager.PopulateLabelsAsync();
             }
-            
-            await NoteManager.GetNotes(SelectionManager.SelectedNoteIds);
+
+            if (noteIds != null)
+            {
+                await NoteManager.GetNotes(noteIds);
+            }
+            else
+            {
+                await NoteManager.GetNotes(SelectionManager.SelectedNoteIds);
+            }
 
             if (NoteManager.CurrentNotes.Count > 0)
             {

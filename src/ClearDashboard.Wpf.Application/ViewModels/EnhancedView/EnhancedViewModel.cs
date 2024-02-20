@@ -34,6 +34,7 @@ using Uri = System.Uri;
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     using ClearDashboard.DAL.Alignment;
+    using ClearDashboard.DAL.Alignment.Notes;
     using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
     using ClearDashboard.Wpf.Application.Events.Notes;
     using ClearDashboard.Wpf.Application.ViewModels.Notes;
@@ -965,6 +966,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async void TokenLeftButtonDown(object sender, TokenEventArgs e)
         {
+            var two = 2;
+        }
+
+
+        public async void TokenLeftButtonDown2(object sender, TokenEventArgs e)
+        {
             // 3
 
             if (e.IsShiftPressed && e.TokenDisplay.VerseDisplay is AlignmentDisplayViewModel alignmentDisplayViewModel)
@@ -1211,7 +1218,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         //private JotsEditorViewModel? jotsEditorViewModel_;
 
-        public async Task DisplayJotsEditor(Point? mousePosition)
+        public async Task DisplayJotsEditor(Point? mousePosition, List<NoteId>? notedIds = null)
         {
             var height = 780;
             var width = 800;
@@ -1246,7 +1253,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             //  so that the dialog will be drawn while the data is being fetched.
             jotsEditorViewModel.SelectionManager = SelectionManager.Clone();
             await WindowManager.ShowWindowAsync(jotsEditorViewModel, null, settings);
-            jotsEditorViewModel.Initialize();
+            jotsEditorViewModel.Initialize(notedIds);
 
         }
 
