@@ -1394,7 +1394,7 @@
     <value>Setiap</value>
   </data>
   <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>Tertutup</value>
+    <value>Terselesaikan</value>
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>Membuka</value>
@@ -1478,7 +1478,7 @@
     <value>Membuka</value>
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>Tertutup</value>
+    <value>Terselesaikan</value>
   </data>
   <data name="Notes_Note_Verse" xml:space="preserve">
     <value>Ayat</value>
