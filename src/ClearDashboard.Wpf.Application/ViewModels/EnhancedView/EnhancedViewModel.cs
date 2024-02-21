@@ -964,12 +964,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        public async void TokenLeftButtonDown2(object sender, TokenEventArgs e)
-        {
-            var two = 2;
-        }
-
-
+        
         public async void TokenLeftButtonDown(object sender, TokenEventArgs e)
         {
             // 3
