@@ -282,6 +282,9 @@
     <Compile Update="UserControls\Lexicon\LabelEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControls\Notes\AddNote.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\Notes\NoteReplyDisplay.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -475,6 +478,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\Lexicon\LabelEditor.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="UserControls\Notes\AddNote.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="UserControls\Notes\NoteReplyDisplay.xaml">

@@ -1213,7 +1213,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task DisplayJotsEditor(Point? mousePosition)
         {
-            var height = 780;
+            var height = 600;
             var width = 800;
 
             dynamic settings = new ExpandoObject();

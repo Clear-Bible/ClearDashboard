@@ -79,6 +79,11 @@ namespace ClearDashboard.DAL.Alignment.Notes
             domainEntityIds_ = new HashSet<IId>(domainEntityIds, new IIdEqualityComparer());
         }
 
+        public void ClearDomainEntityIds()
+        {
+            domainEntityIds_ = new HashSet<IId>(new IIdEqualityComparer());
+        }
+
 
         public ICollection<Guid> SeenByUserIds { get; private set; }
 

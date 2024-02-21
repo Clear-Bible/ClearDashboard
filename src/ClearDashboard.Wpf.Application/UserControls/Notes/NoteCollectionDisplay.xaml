@@ -98,11 +98,10 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label
+        <!--<Label
                 Grid.Row="0"
                 Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleMargin}"
                 HorizontalContentAlignment="Center"
@@ -119,12 +118,12 @@
                 FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SubtitleFontFamily}"
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SubtitleFontSize}"
                 FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SubtitleFontStyle}"
-                FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SubtitleFontWeight}" />
-        <Grid Grid.Row="2">
+                FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SubtitleFontWeight}" />-->
+        <!--<Grid Grid.Row="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="320"></RowDefinition>
-                <RowDefinition Height="320"></RowDefinition>
-            </Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="200"></RowDefinition>
+            </Grid.RowDefinitions>-->
 
             <TabControl   Grid.Row="0"
                               ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Notes}" 
@@ -184,59 +183,90 @@
                     </DataTemplate>
                 </TabControl.ItemTemplate>
             </TabControl>
+        <Button Grid.Row="1" x:Name="TogglePopupButton" 
+                Margin="10,10 " 
+                HorizontalAlignment="Left" 
+                Content="{helpers:Localization Notes_AddNewNote}"  Click="OpenAddJot" Style="{StaticResource AlternativeStyle}">
+                <!--<StackPanel  Height="130" Width="150"> 
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"  Height="130" Width="150">
+                            <Run Text="Is button toggled? " />
+                            <Run Text="{Binding IsChecked, ElementName=TogglePopupButton}" />
+                    </TextBlock>
+
+                    </StackPanel>-->
+            </Button>
 
 
-            <notes:NoteDisplay Grid.Row="1"
-                    x:Name="AddNoteControl"
-                    Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteMargin}"
-                    Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NotePadding}"
-                    AddMode="True"
-                    EntityIds="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=EntityIds}"
-                    LabelAdded="OnLabelAdded"
-                    DefaultLabelGroup="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DefaultLabelGroup}"
-                    LabelGroups="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelGroups}"
-                    LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
-                    LabelCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}"
-                    LabelFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"
-                    LabelMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelMargin}"
-                    LabelPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelPadding}"
-                    LabelSelected="OnLabelSelected"
-                    LabelSuggestions="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSuggestions}"
-                    Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NewNote}"
-                    NoteAdded="OnNoteAdded"
-                    NoteAssociationFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontFamily}"
-                    NoteAssociationFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontSize}"
-                    NoteAssociationFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontStyle}"
-                    NoteAssociationFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontWeight}"
-                    NoteAssociationMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationMargin}"
-                    NoteAssociationPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationPadding}"
-                    NoteBorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderBrush}"
-                    NoteBorderCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderCornerRadius}"
-                    NoteBorderPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderPadding}"
-                    NoteBorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderThickness}"
-                    NoteDeleted="OnNoteDeleted"
-                    NoteEditorMouseEnter="OnAddNoteEditorMouseEnter"
-                    NoteEditorMouseLeave="OnAddNoteEditorMouseLeave"
-                    NoteReplyAdded="OnNoteReplyAdded"
-                    NoteSeen="OnNoteSeen"
-                    NoteTextFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontFamily}"
-                    NoteTextFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontSize}"
-                    NoteTextFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontStyle}"
-                    NoteTextFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontWeight}"
-                    NoteTextMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextMargin}"
-                    NoteTextPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextPadding}"
-                    NoteUpdated="OnNoteUpdated"
-                    TimestampFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontFamily}"
-                    TimestampFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontSize}"
-                    TimestampFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontStyle}"
-                    TimestampFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontWeight}"
-                    UserFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontFamily}"
-                    UserFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontSize}"
-                    UserFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontStyle}"
-                    UserFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontWeight}"
-                    UserMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserMargin}"
-                    Watermark="{helpers:Localization Notes_AddNewNote}"
-                    MinHeight="320"/>
+        <!--
+         VerticalOffset="30" 
+    HorizontalOffset="400">
+        -->
+        <Popup Grid.Row="1" Name="AddNewJotPopup"
+               IsOpen="{Binding IsAddJotOpen, ElementName=NoteCollectionDisplayControl}"   
+               PlacementTarget="{Binding ElementName=TogglePopupButton}"
+               Placement="Top"
+               HorizontalOffset="400"
+               StaysOpen="True">
+           
+            <Border BorderThickness="1" Background="WhiteSmoke"  >
+                    <notes:AddNote 
+                                x:Name="AddNoteControl"
+                                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteMargin}"
+                                Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NotePadding}"
+                                AddMode="True"
+                                EntityIds="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=EntityIds}"
+
+                                DefaultLabelGroup="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DefaultLabelGroup}"
+                                LabelGroups="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelGroups}"
+                                LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
+                                LabelCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}"
+                                LabelFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"
+                                LabelMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelMargin}"
+                                LabelPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelPadding}"
+                               
+                                LabelSuggestions="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSuggestions}"
+                                Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NewNote}"
+                                NoteAdded="OnNoteAdded"
+                                NoteAssociationFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontFamily}"
+                                NoteAssociationFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontSize}"
+                                NoteAssociationFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontStyle}"
+                                NoteAssociationFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontWeight}"
+                                NoteAssociationMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationMargin}"
+                                NoteAssociationPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationPadding}"
+                                NoteBorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderBrush}"
+                                NoteBorderCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderCornerRadius}"
+                                NoteBorderPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderPadding}"
+                                NoteBorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderThickness}"
+                                AddPopupClosed="OnAddPopupClosed"
+                                NoteEditorMouseEnter="OnAddNoteEditorMouseEnter"
+                                NoteEditorMouseLeave="OnAddNoteEditorMouseLeave"
+                                NoteReplyAdded="OnNoteReplyAdded"
+                                NoteSeen="OnNoteSeen"
+                                NoteTextFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontFamily}"
+                                NoteTextFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontSize}"
+                                NoteTextFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontStyle}"
+                                NoteTextFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontWeight}"
+                                NoteTextMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextMargin}"
+                                NoteTextPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextPadding}"
+                                NoteUpdated="OnNoteUpdated"
+                                TimestampFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontFamily}"
+                                TimestampFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontSize}"
+                                TimestampFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontStyle}"
+                                TimestampFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontWeight}"
+                                UserFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontFamily}"
+                                UserFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontSize}"
+                                UserFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontStyle}"
+                                UserFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontWeight}"
+                                UserMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserMargin}"
+                                Watermark="{helpers:Localization Notes_AddNewNote}"
+                                MinHeight="320"/>
+
+                </Border>
+            </Popup>
+            <!--LabelAdded="OnLabelAdded"-->
+            <!--LabelSelected="OnLabelSelected"-->
+            <!--NoteDeleted="OnNoteDeleted"-->
+
         </Grid>
-    </Grid>
+    <!--</Grid>-->
 </UserControl>
