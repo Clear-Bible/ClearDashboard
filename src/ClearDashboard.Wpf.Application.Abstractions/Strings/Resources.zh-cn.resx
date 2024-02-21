@@ -1394,7 +1394,7 @@
     <value>任何</value>
   </data>
   <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>关闭</value>
+    <value>解决</value>
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>打开</value>
@@ -1478,7 +1478,7 @@
     <value>打开</value>
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>关闭</value>
+    <value>解决</value>
   </data>
   <data name="Notes_Note_Verse" xml:space="preserve">
     <value>诗</value>

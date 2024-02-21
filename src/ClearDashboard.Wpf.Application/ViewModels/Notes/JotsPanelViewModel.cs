@@ -757,9 +757,16 @@ public JotsPanelViewModel()
             await noteManager_!.AddReplyToNoteAsync(parentNote, replyText);
         }
 
-        public async Task DisplayJotsEditor(Point? mousePosition)
+        public async Task DisplayJotsEditor(Point? mousePosition, NoteViewModel note)
         {
-            await _enhancedViewModel.DisplayJotsEditor(mousePosition);
+            var noteIds = new List<NoteId>();
+
+            if (note.NoteId != null)
+            {
+                noteIds.Add(note.NoteId);
+            }
+
+            await _enhancedViewModel.DisplayJotsEditor(mousePosition, noteIds);
         }
 
         public void ConfirmParatextSend()

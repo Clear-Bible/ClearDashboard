@@ -1394,7 +1394,7 @@
     <value>Cualquier</value>
   </data>
   <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>Cerrado</value>
+    <value>Resuelto</value>
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>Abierto</value>
@@ -1478,7 +1478,7 @@
     <value>Abierto</value>
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>Cerrado</value>
+    <value>Resuelto</value>
   </data>
   <data name="Notes_Note_Verse" xml:space="preserve">
     <value>Verso</value>

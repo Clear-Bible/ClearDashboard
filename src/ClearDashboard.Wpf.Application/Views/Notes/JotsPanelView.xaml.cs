@@ -195,10 +195,10 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
 
         private void NoteTextButton_OnClick(object sender, RoutedEventArgs e)
         {
-            if (sender is System.Windows.Controls.Button button)
+            if (sender is System.Windows.Controls.Button button && button.DataContext is NoteViewModel note)
             {
                 var mousePosition = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(button));
-                _vm.DisplayJotsEditor(null);
+                _vm.DisplayJotsEditor(null, note);
             }
             
         }

@@ -1394,7 +1394,7 @@
     <value>Qualquer</value>
   </data>
   <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>Fechado</value>
+    <value>Resolvido</value>
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>Abrir</value>
@@ -1478,7 +1478,7 @@
     <value>Abrir</value>
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>Fechado</value>
+    <value>Resolvido</value>
   </data>
   <data name="Notes_Note_Verse" xml:space="preserve">
     <value>Versículo</value>
@@ -1493,7 +1493,7 @@
     <value>Grupos de etiquetas</value>
   </data>
   <data name="Notes_NoteLabels" xml:space="preserve">
-    <value>Etiquetas</value>
+    <value>Rótulos</value>
   </data>
   <data name="Notes_NoteReplies" xml:space="preserve">
     <value>Respostas</value>

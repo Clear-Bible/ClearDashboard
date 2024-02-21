@@ -977,7 +977,7 @@
     <value>Từ vựng</value>
   </data>
   <data name="LexiconEdit_LoadingData" xml:space="preserve">
-    <value>Tải dữ liệu ...</value>
+    <value>Đang tải dữ liệu ...</value>
   </data>
   <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
     <value>Một lỗi bất ngờ xảy ra trong khi tải dữ liệu. {0}</value>
@@ -1394,7 +1394,7 @@
     <value>Bất kì</value>
   </data>
   <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>Đóng</value>
+    <value>Đã giải quyết</value>
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>Mở</value>
@@ -1478,7 +1478,7 @@
     <value>Mở</value>
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>Đóng</value>
+    <value>Đã giải quyết</value>
   </data>
   <data name="Notes_Note_Verse" xml:space="preserve">
     <value>Thơ</value>

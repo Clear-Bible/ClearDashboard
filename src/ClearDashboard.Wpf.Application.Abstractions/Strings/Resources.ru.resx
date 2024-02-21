@@ -461,7 +461,7 @@
     <value>Считать учебным текстом</value>
   </data>
   <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
-    <value>Не одобрять</value>
+    <value>Не одобряют</value>
   </data>
   <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
     <value>Не одобрен</value>
@@ -1394,7 +1394,7 @@
     <value>Любой</value>
   </data>
   <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>Закрыто</value>
+    <value>Решено</value>
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>Открыть</value>
@@ -1478,7 +1478,7 @@
     <value>Открыть</value>
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>Закрыто</value>
+    <value>Решено</value>
   </data>
   <data name="Notes_Note_Verse" xml:space="preserve">
     <value>Стих</value>
