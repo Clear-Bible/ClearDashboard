@@ -29,6 +29,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearBible.Engine.Utils;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -90,21 +91,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             TranslationsFontSizeValue = _originalTranslationsFontSizeValue;
         }
 
-        public ICommand InsertNoteCommand => new RelayCommand(InsertNote);
-
-        private void InsertNote(object? commandParameter)
-        {
-            if (SelectionManager.SelectedEntityIds.Count != 0)
-            {
-                NoteCreate(null, null);
-            }
-        }
-
-        #endregion
+   #endregion
 
         #region Member Variables
-
-        //public NoteManager NoteManager { get; }
 
         protected IEnhancedViewManager EnhancedViewManager { get; }
         private VerseManager VerseManager { get; }
@@ -1213,7 +1202,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         //private JotsEditorViewModel? jotsEditorViewModel_;
 
-        public async Task DisplayJotsEditor(Point? mousePosition, List<NoteId>? notedIds = null)
+        public async Task DisplayJotsEditor(Point? mousePosition, List<NoteId>? notedIds = null, List<IId>? entityIds = null)
         {
             var height = 600;
             var width = 800;
@@ -1247,8 +1236,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             // NB:  The following three lines need to be executed in this order
             //  so that the dialog will be drawn while the data is being fetched.
             jotsEditorViewModel.SelectionManager = SelectionManager.Clone();
+
             await WindowManager.ShowWindowAsync(jotsEditorViewModel, null, settings);
-            jotsEditorViewModel.Initialize(notedIds);
+            jotsEditorViewModel.Initialize(notedIds, entityIds);
 
         }
 

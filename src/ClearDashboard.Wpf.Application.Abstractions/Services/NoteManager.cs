@@ -42,7 +42,11 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public ExternalNoteManager ExternalNoteManager { get; }
 
-        public SelectionManager SelectionManager { get; set; }
+        public EntityIdCollection SelectedEntityIds
+        {
+            get => _selectedEntityIds;
+            set => Set(ref _selectedEntityIds, value);
+        }
 
         public ILifetimeScope LifetimeScope { get; }
 
@@ -54,6 +58,7 @@ namespace ClearDashboard.Wpf.Application.Services
         private LabelGroupViewModelCollection _labelGroups = new();
         private LabelGroupViewModel? _defaultLabelGroup;
         private bool _isBusy;
+        private EntityIdCollection _selectedEntityIds = new EntityIdCollection();
 
 
         public NoteManager(IEventAggregator eventAggregator,
@@ -1225,24 +1230,19 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
-                if (SelectionManager == null)
-                {
-                    throw new NullReferenceException(
-                        $"'SelectionManager' must be set before a new note can be created.");
-                }
-
+               
                 await Execute.OnUIThreadAsync(async () =>
                 {
                     
                     var newNote = new NoteViewModel();
 
-                    newNote.Entity.SetDomainEntityIds(SelectionManager.SelectedEntityIds);
+                    newNote.Entity.SetDomainEntityIds( SelectedEntityIds);
                     
                     var domainEntityContexts =
                         new EntityContextDictionary(
-                            await Note.GetDomainEntityContexts(Mediator, SelectionManager.SelectedEntityIds));
+                            await Note.GetDomainEntityContexts(Mediator,  SelectedEntityIds));
                     newNote.Associations =
-                        GetNoteAssociations(SelectionManager.SelectedEntityIds, domainEntityContexts);
+                        GetNoteAssociations(SelectedEntityIds, domainEntityContexts);
 
                     NewNote = newNote;
                 });

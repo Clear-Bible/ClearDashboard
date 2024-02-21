@@ -26,7 +26,7 @@
           Margin="0,0"
           CurrentUserId="{Binding NoteManager.CurrentUserId}"
           DefaultLabelGroup="{Binding NoteManager.DefaultLabelGroup}"
-          EntityIds="{Binding Path=SelectionManager.SelectedEntityIds}"
+          EntityIds="{Binding Path=NoteManager.SelectedEntityIds}"
           LabelBackground="BlanchedAlmond"
           LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
           LabelFontSize="14"

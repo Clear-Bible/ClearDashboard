@@ -80,8 +80,8 @@ public class JotsEditorViewModel : ApplicationScreen
     }
     #endregion
 
-    
-    public void Initialize(IEnumerable<IId>? noteIds = null)
+
+    public void Initialize(IEnumerable<IId>? noteIds = null, IEnumerable<IId>? selectedEntityIds = null)
     {
         Task.Run(async () =>
         {
@@ -104,8 +104,8 @@ public class JotsEditorViewModel : ApplicationScreen
                 NoteManager.SelectedNote = NoteManager.CurrentNotes[0];
             }
 
-            NoteManager.SelectionManager = SelectionManager;
-
+            NoteManager.SelectedEntityIds = selectedEntityIds != null ? new EntityIdCollection(selectedEntityIds) : SelectionManager.SelectedEntityIds;
+      
             await NoteManager.CreateNewNote();
 
         });
