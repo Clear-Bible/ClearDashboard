@@ -2,7 +2,6 @@
     x:Class="ClearDashboard.Wpf.Application.UserControls.Notes.NoteReplyDisplay"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    FontFamily="{StaticResource ClearDashboardFont}"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
@@ -13,6 +12,7 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    FontFamily="{StaticResource ClearDashboardFont}"
     FontSize="16"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -43,11 +43,10 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0" 
-                        Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampOrientation}">
+            <StackPanel Grid.Column="0" Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampOrientation}">
                 <Label
-                    Padding="4,0,0,0"
                     Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampMargin}"
+                    Padding="4,0,0,0"
                     VerticalContentAlignment="Center"
                     Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyAuthor}"
                     FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontFamily}"
@@ -56,8 +55,8 @@
                     FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontWeight}"
                     Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampColor}" />
                 <Label
-                    Padding="4,0"
                     Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampMargin}"
+                    Padding="4,0"
                     VerticalContentAlignment="Center"
                     Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyTimestamp}"
                     FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontFamily}"
@@ -68,8 +67,8 @@
             </StackPanel>
             <StackPanel Grid.Column="1" Orientation="Horizontal">
                 <Label
-                    Padding="0"
                     Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SeenMargin}"
+                    Padding="0"
                     VerticalContentAlignment="Bottom"
                     Content="{helpers:Localization Notes_NoteReplies_Read}"
                     FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SeenFontFamily}"
@@ -92,6 +91,58 @@
                         </MultiBinding>
                     </CheckBox.IsChecked>
                 </CheckBox>
+                <!--  Paratext send  -->
+                <StackPanel
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Orientation="Vertical"
+                    Visibility="{Binding ElementName=NotesDisplayControl, Path=ParatextSendVisibility}">
+                    <!--    -->
+                    <Button
+                        Name="SendToParatextButton"
+                        Margin="10,-5,10,0"
+                        Padding="0,0,0,0"
+                        HorizontalAlignment="Right"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Click="ConfirmParatextSend"
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        ToolTip="{helpers:Localization Notes_SendToParatext}">
+                        <Image Height="18" Source="/Resources/Paratext_Send32.png" />
+                    </Button>
+                    <Popup
+                        Name="ConfirmParatextSendPopup"
+                        HorizontalOffset="100"
+                        Placement="Left"
+                        PlacementTarget="{Binding ElementName=SendToParatextButton}"
+                        StaysOpen="False"
+                        VerticalOffset="30">
+                        <Border BorderThickness="2">
+                            <StackPanel Background="LightGreen" Orientation="Vertical">
+                                <TextBlock
+                                    Padding="10"
+                                    HorizontalAlignment="Center"
+                                    FontWeight="Bold"
+                                    Text="{helpers:Localization Notes_SendConfirmation}" />
+                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                    <!--    -->
+                                    <Button
+                                        Margin="5"
+                                        Click="ParatextSendConfirmed"
+                                        Content="{helpers:Localization Yes}"
+                                        Style="{StaticResource TransparentStyle}" />
+                                    <!--    -->
+                                    <Button
+                                        Margin="5"
+                                        Click="ParatextSendCancelled"
+                                        Content="{helpers:Localization No}"
+                                        Style="{StaticResource AlternativeStyle}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </Popup>
+                </StackPanel>
             </StackPanel>
         </Grid>
     </Grid>
