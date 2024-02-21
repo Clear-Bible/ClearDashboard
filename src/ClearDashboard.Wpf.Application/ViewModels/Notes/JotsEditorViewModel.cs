@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Autofac;
@@ -7,10 +9,15 @@ using Autofac.Features.AttributeFilters;
 using Caliburn.Micro;
 using CefSharp;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearBible.Engine.Utils;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -74,7 +81,7 @@ public class JotsEditorViewModel : ApplicationScreen
     #endregion
 
     
-    public void Initialize()
+    public void Initialize(IEnumerable<IId>? noteIds = null)
     {
         Task.Run(async () =>
         {
@@ -82,8 +89,15 @@ public class JotsEditorViewModel : ApplicationScreen
             {
                 await NoteManager.PopulateLabelsAsync();
             }
-            
-            await NoteManager.GetNotes(SelectionManager.SelectedNoteIds);
+
+            if (noteIds != null)
+            {
+                await NoteManager.GetNotes(noteIds);
+            }
+            else
+            {
+                await NoteManager.GetNotes(SelectionManager.SelectedNoteIds);
+            }
 
             if (NoteManager.CurrentNotes.Count > 0)
             {
@@ -262,19 +276,40 @@ public class JotsEditorViewModel : ApplicationScreen
     public void NoteSendToParatext(object sender, NoteEventArgs e)
     {
         Task.Run(() => NoteSendToParatextAsync(e).GetAwaiter());
+        EventAggregator.PublishOnUIThreadAsync(new ReloadExternalNotesDataMessage(ReloadType.Refresh), CancellationToken.None);
     }
-
+    
     public async Task NoteSendToParatextAsync(NoteEventArgs e)
     {
         try
         {
-            await NoteManager.SendToParatextAsync(e.Note);
             Message = $"Note '{e.Note.Text}' sent to Paratext.";
-            Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NotePushCount, 1);
+            await NoteManager.SendToParatextAsync(e.Note);
         }
         catch (Exception ex)
         {
             Message = $"Could not send note to Paratext: {ex.Message}";
+
+            if (ex == null || ex.InnerException == null)
+            {
+                //TODO although notes make it to Paratext, the result returns a failure so I'm keeping this stuff in the catch for now
+                Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NotePushCount, 1);
+                await UpdateNoteStatus(e.Note, NoteStatus.Archived);
+            }
+        }
+    }
+
+    public async Task UpdateNoteStatus(NoteViewModel noteViewModel, DataAccessLayer.Models.NoteStatus noteStatus)
+    {
+        if (noteViewModel.NoteStatus != noteStatus.ToString())
+        {
+            noteViewModel.NoteStatus = noteStatus.ToString();
+            await NoteManager!.UpdateNoteAsync(noteViewModel);
+
+            if (noteStatus == NoteStatus.Resolved)
+            {
+                Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NoteClosedCount, 1);
+            }
         }
     }
 

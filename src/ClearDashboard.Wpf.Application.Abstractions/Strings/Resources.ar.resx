@@ -1394,7 +1394,7 @@
     <value>أي</value>
   </data>
   <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>مغلق</value>
+    <value>تم الحل</value>
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>يفتح</value>
@@ -1478,7 +1478,7 @@
     <value>يفتح</value>
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>مغلق</value>
+    <value>تم الحل</value>
   </data>
   <data name="Notes_Note_Verse" xml:space="preserve">
     <value>بيت شعر</value>

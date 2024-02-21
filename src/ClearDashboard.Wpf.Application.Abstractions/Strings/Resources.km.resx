@@ -1394,7 +1394,7 @@
     <value>អវីមយយ</value>
   </data>
   <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>ដេលបិត</value>
+    <value>បានរកឃើញ</value>
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>ដេលចមហរ</value>
@@ -1478,7 +1478,7 @@
     <value>ដេលចមហរ</value>
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>ដេលបិត</value>
+    <value>បានរកឃើញ</value>
   </data>
   <data name="Notes_Note_Verse" xml:space="preserve">
     <value>កមនាប្យ</value>

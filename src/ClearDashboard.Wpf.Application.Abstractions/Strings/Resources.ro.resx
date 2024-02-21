@@ -1394,7 +1394,7 @@
     <value>Orice</value>
   </data>
   <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>Închis</value>
+    <value>Rezolvat</value>
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>Deschis</value>
@@ -1478,7 +1478,7 @@
     <value>Deschis</value>
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>Închis</value>
+    <value>Rezolvat</value>
   </data>
   <data name="Notes_Note_Verse" xml:space="preserve">
     <value>Verset</value>

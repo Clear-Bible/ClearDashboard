@@ -44,6 +44,9 @@
                     <Trigger Property="IsMouseOver" Value="true">
                         <Setter Property="Background" Value="{Binding ElementName=NotesDisplayControl, Path=NoteHoverBrush}" />
                     </Trigger>
+                    <DataTrigger Binding="{Binding ElementName=NotesDisplayControl, Path=Note.NoteStatus}" Value="Archived">
+                        <Setter Property="IsEnabled" Value="False" />
+                    </DataTrigger>
                 </Style.Triggers>
             </Style>
         </Border.Style>
