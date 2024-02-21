@@ -1231,16 +1231,22 @@ namespace ClearDashboard.Wpf.Application.Services
                         $"'SelectionManager' must be set before a new note can be created.");
                 }
 
-                NewNote = new NoteViewModel();
-              
-                NewNote.Entity.SetDomainEntityIds(SelectionManager.SelectedEntityIds);
+                await Execute.OnUIThreadAsync(async () =>
+                {
+                    
+                    var newNote = new NoteViewModel();
 
-                //new NoteDomainEntityAssociationId(noteDomainEntityAssociation.Id)
+                    newNote.Entity.SetDomainEntityIds(SelectionManager.SelectedEntityIds);
+                    
+                    var domainEntityContexts =
+                        new EntityContextDictionary(
+                            await Note.GetDomainEntityContexts(Mediator, SelectionManager.SelectedEntityIds));
+                    newNote.Associations =
+                        GetNoteAssociations(SelectionManager.SelectedEntityIds, domainEntityContexts);
 
-                var domainEntityContexts =
-                    new EntityContextDictionary(await Note.GetDomainEntityContexts(Mediator, SelectionManager.SelectedEntityIds));
-                NewNote.Associations =
-                    GetNoteAssociations(SelectionManager.SelectedEntityIds, domainEntityContexts);
+                    NewNote = newNote;
+                });
+
             }
             catch (Exception e)
             {

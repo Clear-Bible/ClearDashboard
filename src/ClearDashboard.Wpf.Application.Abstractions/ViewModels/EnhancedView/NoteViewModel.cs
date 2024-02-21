@@ -54,6 +54,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     return;
                 Entity.NoteStatus = value;
                 NotifyOfPropertyChange();
+                NotifyOfPropertyChange(nameof(HasNoteStatus));
             }
         }
 
@@ -263,6 +264,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 NotifyOfPropertyChange(() => IsSelectedForBulkAction);
             }
         }
+
+        public bool HasNoteStatus => !string.IsNullOrEmpty(NoteStatus);
 
         public void NoteSeenChanged()
         {

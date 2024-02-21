@@ -66,8 +66,6 @@ public class JotsEditorViewModel : ApplicationScreen
     #region public properties
 
     private string? _message;
-    private bool _isAddJotPopupOpen;
-
     public string? Message
     {
         get => _message;
@@ -142,26 +140,18 @@ public class JotsEditorViewModel : ApplicationScreen
     {
         await Execute.OnUIThreadAsync(async () =>
         {
-            //TODO This is a TEMPORARY FIX just for the hotfix, this needs to be resolved by ANDY in the longterm
-            // e.Note.Labels.Clear();
-            //e.Note.Associations.Clear();
 
             try
             {
                 await NoteManager.AddNoteAsync(e.Note, e.EntityIds);
+                await NoteManager.CreateNewNote();
             }
             catch (Exception ex)
             {
                 var s = ex.Message;
                 throw;
             }
-            finally
-            {
-                //IsAddJotPopupOpen = false;
-            }
 
-            // NB:  What to do here?
-            //NotifyOfPropertyChange(() => Items);
         });
 
         Message = $"Note '{e.Note.Text}' added to tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";

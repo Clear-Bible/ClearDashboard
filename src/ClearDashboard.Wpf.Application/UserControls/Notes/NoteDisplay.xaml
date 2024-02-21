@@ -10,6 +10,7 @@
     xmlns:strings="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     x:Name="NotesDisplayControl"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -196,8 +197,36 @@
                     Foreground="{DynamicResource MaterialDesignBody}"
                     Style="{StaticResource TransparentStyle}" />
             </StackPanel>
+                <StackPanel
+                x:Name="NoteStatusPanel"
+                Margin="0,10,0,0"
+                MinWidth="500"
+                HorizontalAlignment="Left"
+                Orientation="Horizontal">
+                    <TextBlock
+                        Padding="0,10,10,5"
+                        FontFamily="{StaticResource ClearDashboardFont}"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        FontStyle="Normal"
+                        FontWeight="Normal"
+                        Text="{helpers:Localization Notes_Note_NoteStatus}" />
+                    <ComboBox
+                        x:Name="NoteStatusComboBox"
+                        Width="200"
+                        Height="30"
+                        Margin="0,15,15,5"
+                        HorizontalAlignment="Right"
+                        VerticalContentAlignment="Top"
+                        FontSize="12"
+                        ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type models:NoteStatus}}}"
+                        SelectedItem="{Binding ElementName=NotesDisplayControl, Path=SelectedNoteStatus, Mode=TwoWay}"
+                       
+                       />
+                </StackPanel>
+                <!--<SelectionChanged="OnNoteStatusChanged"-->
 
-            <!--  Note properties: Labels, Associations, Replies, etc.  -->
+                <!--  Note properties: Labels, Associations, Replies, etc.  -->
             <StackPanel
                 x:Name="NotePropertiesPanel"
                 Margin="0,10,0,0"
