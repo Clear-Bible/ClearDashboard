@@ -543,6 +543,8 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogInformation(
                     $"Added note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
 
+                // clear the existing domain entities so we can properly add them to the database.
+                note.Entity.ClearDomainEntityIds();
                 foreach (var entityId in entityIds)
                 {
                     stopwatch.Restart();

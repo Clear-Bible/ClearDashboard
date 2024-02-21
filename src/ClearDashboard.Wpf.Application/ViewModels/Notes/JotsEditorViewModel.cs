@@ -68,6 +68,8 @@ public class JotsEditorViewModel : ApplicationScreen
     #region public properties
 
     private string? _message;
+    private bool _isAddJotPopupOpen;
+
     public string? Message
     {
         get => _message;
@@ -128,14 +130,44 @@ public class JotsEditorViewModel : ApplicationScreen
         Task.Run(() => NoteAddedAsync(e).GetAwaiter());
     }
 
+
+    //public bool IsAddJotPopupOpen
+    //{
+    //    get => _isAddJotPopupOpen;
+    //    set => Set(ref _isAddJotPopupOpen, value);
+    //}
+
+    //public void OpenAddJotPopup()
+    //{
+    //    IsAddJotPopupOpen = true;
+    //}
+
+    //public void CloseAddJotPopup()
+    //{
+    //    IsAddJotPopupOpen = false;
+    //}
+
     public async Task NoteAddedAsync(NoteEventArgs e)
     {
         await Execute.OnUIThreadAsync(async () =>
         {
             //TODO This is a TEMPORARY FIX just for the hotfix, this needs to be resolved by ANDY in the longterm
-           // e.Note.Labels.Clear();
-            e.Note.Associations.Clear();
-            await NoteManager.AddNoteAsync(e.Note, e.EntityIds);
+            // e.Note.Labels.Clear();
+            //e.Note.Associations.Clear();
+
+            try
+            {
+                await NoteManager.AddNoteAsync(e.Note, e.EntityIds);
+            }
+            catch (Exception ex)
+            {
+                var s = ex.Message;
+                throw;
+            }
+            finally
+            {
+                //IsAddJotPopupOpen = false;
+            }
 
             // NB:  What to do here?
             //NotifyOfPropertyChange(() => Items);

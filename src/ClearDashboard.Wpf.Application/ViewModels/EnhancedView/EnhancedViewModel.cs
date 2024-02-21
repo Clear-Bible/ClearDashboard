@@ -1220,7 +1220,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task DisplayJotsEditor(Point? mousePosition, List<NoteId>? notedIds = null)
         {
-            var height = 780;
+            var height = 600;
             var width = 800;
 
             dynamic settings = new ExpandoObject();
