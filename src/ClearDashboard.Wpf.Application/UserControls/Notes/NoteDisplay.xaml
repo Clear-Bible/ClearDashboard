@@ -10,6 +10,8 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:strings="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     x:Name="NotesDisplayControl"
     MinHeight="280"
     d:DesignHeight="450"

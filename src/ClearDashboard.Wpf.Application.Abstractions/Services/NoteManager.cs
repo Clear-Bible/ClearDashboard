@@ -42,7 +42,11 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public ExternalNoteManager ExternalNoteManager { get; }
 
-        public SelectionManager SelectionManager { get; set; }
+        public EntityIdCollection SelectedEntityIds
+        {
+            get => _selectedEntityIds;
+            set => Set(ref _selectedEntityIds, value);
+        }
 
         public ILifetimeScope LifetimeScope { get; }
 
@@ -54,6 +58,7 @@ namespace ClearDashboard.Wpf.Application.Services
         private LabelGroupViewModelCollection _labelGroups = new();
         private LabelGroupViewModel? _defaultLabelGroup;
         private bool _isBusy;
+        private EntityIdCollection _selectedEntityIds = new EntityIdCollection();
 
 
         public NoteManager(IEventAggregator eventAggregator,
@@ -1237,22 +1242,23 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
-                if (SelectionManager == null)
+               
+                await Execute.OnUIThreadAsync(async () =>
                 {
-                    throw new NullReferenceException(
-                        $"'SelectionManager' must be set before a new note can be created.");
-                }
+                    
+                    var newNote = new NoteViewModel();
 
-                NewNote = new NoteViewModel();
-              
-                NewNote.Entity.SetDomainEntityIds(SelectionManager.SelectedEntityIds);
+                    newNote.Entity.SetDomainEntityIds( SelectedEntityIds);
+                    
+                    var domainEntityContexts =
+                        new EntityContextDictionary(
+                            await Note.GetDomainEntityContexts(Mediator,  SelectedEntityIds));
+                    newNote.Associations =
+                        GetNoteAssociations(SelectedEntityIds, domainEntityContexts);
 
-                //new NoteDomainEntityAssociationId(noteDomainEntityAssociation.Id)
+                    NewNote = newNote;
+                });
 
-                var domainEntityContexts =
-                    new EntityContextDictionary(await Note.GetDomainEntityContexts(Mediator, SelectionManager.SelectedEntityIds));
-                NewNote.Associations =
-                    GetNoteAssociations(SelectionManager.SelectedEntityIds, domainEntityContexts);
             }
             catch (Exception e)
             {

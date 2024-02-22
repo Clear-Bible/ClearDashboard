@@ -378,10 +378,11 @@
                 Height="40"
                 Margin="3,5,0,0"
                 Click="ApplyNote"
-                Content="{Binding ElementName=AddNoteControl, Path=ApplyLabel}"
+                Content="{helpers:Localization Notes_AddJot}"
                 FontSize="11"
                 Foreground="{DynamicResource MaterialDesignBody}"
-                Style="{StaticResource TransparentStyle}" />
+                Style="{StaticResource TransparentStyle}" 
+                IsEnabled="{Binding ElementName=AddNoteControl, Path=Note.HasText}"/>
         </StackPanel>
         <!--</Border>-->
     </Grid>

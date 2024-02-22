@@ -28,7 +28,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// </summary>
         public static readonly RoutedEvent LabelAddedEvent = EventManager.RegisterRoutedEvent
             (nameof(LabelAdded), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelSelector));
-        
+
         /// <summary>
         /// Identifies the LabelDeletedEvent routed event.
         /// </summary>
@@ -42,19 +42,23 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             (nameof(LabelSelected), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelSelector));
 
         #endregion
+
         #region Static Dependency Properties
 
         /// <summary>
         /// Identifies the LabelGroup dependency property.
         /// </summary>
-        public static readonly DependencyProperty LabelGroupProperty = DependencyProperty.Register(nameof(LabelGroup), typeof(LabelGroupViewModel), typeof(LabelSelector));
-        
+        public static readonly DependencyProperty LabelGroupProperty =
+            DependencyProperty.Register(nameof(LabelGroup), typeof(LabelGroupViewModel), typeof(LabelSelector));
+
         /// <summary>
         /// Identifies the LabelSuggestions dependency property.
         /// </summary>
-        public static readonly DependencyProperty LabelSuggestionsProperty = DependencyProperty.Register(nameof(LabelSuggestions), typeof(LabelCollection), typeof(LabelSelector));
-        
+        public static readonly DependencyProperty LabelSuggestionsProperty =
+            DependencyProperty.Register(nameof(LabelSuggestions), typeof(LabelCollection), typeof(LabelSelector));
+
         #endregion
+
         #region Private event handlers
 
         private void RaiseLabelEvent(RoutedEvent routedEvent, NotesLabel label)
@@ -70,7 +74,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             if (LabelSuggestions != null && LabelTextBox.Text.Length > 0)
             {
-                LabelSuggestionListBox.ItemsSource = LabelSuggestions.Where(ls => ls.Text.Contains(LabelTextBox.Text, StringComparison.InvariantCultureIgnoreCase));
+                LabelSuggestionListBox.ItemsSource = LabelSuggestions.Where(ls =>
+                    ls.Text.Contains(LabelTextBox.Text, StringComparison.InvariantCultureIgnoreCase));
                 OpenSuggestionPopup();
             }
         }
@@ -102,7 +107,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             {
                 if (!String.IsNullOrWhiteSpace(LabelTextBox.Text))
                 {
-                    var matchingLabel = LabelSuggestions?.FirstOrDefault(ls => ls.Text.Equals(LabelTextBox.Text, StringComparison.CurrentCultureIgnoreCase));
+                    var matchingLabel = LabelSuggestions?.FirstOrDefault(ls =>
+                        ls.Text.Equals(LabelTextBox.Text, StringComparison.CurrentCultureIgnoreCase));
                     if (matchingLabel != null)
                     {
                         RaiseLabelEvent(LabelSelectedEvent, matchingLabel);
@@ -147,7 +153,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         private void OnToolTipOpening(object sender, ToolTipEventArgs e)
         {
-            var button = (FrameworkElement) sender;
+            var button = (FrameworkElement)sender;
             var label = button.DataContext as NotesLabel;
 
             var tooltipText = LabelGroup.IsNoneLabelGroup
@@ -163,6 +169,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         }
 
         #endregion
+
         #region Public properties
 
         /// <summary>
@@ -249,6 +256,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         private void LabelTextBox_OnLostFocus(object sender, RoutedEventArgs e)
         {
+            CloseSuggestionPopup();
         }
 
         private void LabelTextBox_OnLostKeyboardFocus(object sender, RoutedEventArgs e)
@@ -258,6 +266,11 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             {
                 System.Windows.Application.Current.Dispatcher.Invoke(SetTextboxFocus, DispatcherPriority.Render);
             }
+        }
+
+        private void LabelTextBox_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Dispatcher.Invoke(OpenSuggestionPopup, DispatcherPriority.Render);
         }
     }
 }

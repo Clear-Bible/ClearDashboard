@@ -11,6 +11,7 @@
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:cm="http://caliburnmicro.com"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     x:Name="NoteCollectionDisplayControl"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -186,7 +187,9 @@
         <Button Grid.Row="1" x:Name="TogglePopupButton" 
                 Margin="10,10 " 
                 HorizontalAlignment="Left" 
-                Content="{helpers:Localization Notes_AddNewNote}"  Click="OpenAddJot" Style="{StaticResource AlternativeStyle}">
+                Content="{helpers:Localization Notes_AddNewNote}"  Click="OpenAddJot" Style="{StaticResource AlternativeStyle}"
+                MouseEnter="OnPopupMouseEnter"
+                MouseLeave="OnPopupMouseLeave">
                 <!--<StackPanel  Height="130" Width="150"> 
                     <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"  Height="130" Width="150">
                             <Run Text="Is button toggled? " />
@@ -206,16 +209,19 @@
                PlacementTarget="{Binding ElementName=TogglePopupButton}"
                Placement="Top"
                HorizontalOffset="400"
-               StaysOpen="True">
+               StaysOpen="True"
+               MouseEnter="OnPopupMouseEnter"
+               MouseLeave="OnPopupMouseLeave"
+               >
            
             <Border BorderThickness="1" Background="WhiteSmoke"  >
-                    <notes:AddNote 
+                <notes:AddNote 
                                 x:Name="AddNoteControl"
                                 Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteMargin}"
                                 Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NotePadding}"
                                 AddMode="True"
                                 EntityIds="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=EntityIds}"
-
+                                LabelAdded="OnLabelAdded"
                                 DefaultLabelGroup="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DefaultLabelGroup}"
                                 LabelGroups="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelGroups}"
                                 LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
@@ -223,7 +229,7 @@
                                 LabelFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"
                                 LabelMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelMargin}"
                                 LabelPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelPadding}"
-                               
+                                LabelSelected="OnLabelSelected"
                                 LabelSuggestions="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSuggestions}"
                                 Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NewNote}"
                                 NoteAdded="OnNoteAdded"
@@ -238,8 +244,7 @@
                                 NoteBorderPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderPadding}"
                                 NoteBorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderThickness}"
                                 AddPopupClosed="OnAddPopupClosed"
-                                NoteEditorMouseEnter="OnAddNoteEditorMouseEnter"
-                                NoteEditorMouseLeave="OnAddNoteEditorMouseLeave"
+                             
                                 NoteReplyAdded="OnNoteReplyAdded"
                                 NoteSeen="OnNoteSeen"
                                 NoteTextFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontFamily}"
@@ -259,7 +264,21 @@
                                 UserFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontWeight}"
                                 UserMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserMargin}"
                                 Watermark="{helpers:Localization Notes_AddNewNote}"
-                                MinHeight="320"/>
+                                MinHeight="320">
+                    <!--NoteEditorMouseEnter="OnAddNoteEditorMouseEnter"
+                    NoteEditorMouseLeave="OnAddNoteEditorMouseLeave"
+                       MouseEnter="OnAddNoteEditorMouseEnter"
+   MouseLeave="OnAddNoteEditorMouseLeave"-->
+                                <b:Interaction.Triggers>
+
+                                    <b:EventTrigger EventName="NoteEditorMouseEnter">
+                                        <b:CallMethodAction MethodName="OnAddNoteEditorMouseEnter" TargetObject="{Binding}" />
+                                    </b:EventTrigger>
+                                    <b:EventTrigger EventName="NoteEditorMouseLeave">
+                                        <b:CallMethodAction MethodName="OnAddNoteEditorMouseLeave" TargetObject="{Binding}" />
+                                    </b:EventTrigger>
+                                </b:Interaction.Triggers>
+                </notes:AddNote>
 
                 </Border>
             </Popup>

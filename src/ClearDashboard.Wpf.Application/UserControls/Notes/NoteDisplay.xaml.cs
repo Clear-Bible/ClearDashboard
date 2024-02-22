@@ -1,18 +1,19 @@
-﻿using System;
+﻿using ClearBible.Engine.Utils;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DataAccessLayer.Annotations;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.Wpf.Application.Collections.Notes;
+using ClearDashboard.Wpf.Application.Events.Notes;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearBible.Engine.Utils;
-using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DataAccessLayer.Annotations;
-using ClearDashboard.Wpf.Application.Collections;
-using ClearDashboard.Wpf.Application.Collections.Notes;
-using ClearDashboard.Wpf.Application.Events.Notes;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
 using Brushes = System.Windows.Media.Brushes;
 using FontFamily = System.Windows.Media.FontFamily;
 using FontStyle = System.Windows.FontStyle;
@@ -434,6 +435,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             var control = (NoteDisplay)d;
             control.OnPropertyChanged(nameof(Labels));
             control.OnPropertyChanged(nameof(ParatextSendVisibility));
+            control.OnPropertyChanged(nameof(SelectedNoteStatus));
         }
 
         private static void OnAddModeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
@@ -802,6 +804,40 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             }
         }
 
+        private void NoteDisplayBorder_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            NoteTextBox.Focus();
+        }
+
+        public NoteStatus SelectedNoteStatus
+        {
+            get => Note is { HasNoteStatus: true } ? (NoteStatus)Enum.Parse(typeof(NoteStatus),Note.NoteStatus) : NoteStatus.Open;
+            set
+            {
+                var noteStatus = value.ToString();
+                if (Note.NoteStatus != noteStatus)
+                {
+                    Note.NoteStatus = noteStatus;
+                    RaiseNoteEvent(NoteUpdatedEvent);
+                    OnPropertyChanged(nameof(SelectedNoteStatus));
+                }
+            }
+        }
+
+        //private void OnNoteStatusChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    if (e.AddedItems.Count > 0)
+        //    {
+        //        var noteStatus = (NoteStatus)(e.AddedItems[0] ?? Note.NoteStatus);
+        //        if (Note.NoteStatus != noteStatus.ToString())
+        //        {
+        //            Note.NoteStatus = noteStatus.ToString();
+        //            RaiseNoteEvent(NoteUpdatedEvent);
+                    
+        //        }
+        //    }
+        //}
+
         #endregion Private event handlers
         #region Public Properties
 
@@ -814,8 +850,9 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             set => SetValue(AddModeProperty, value);
         }
 
+
         // TODO: localize
-        public string ApplyLabel => AddMode ? "Add Note" : "Update Note";
+        public string ApplyLabel => AddMode ? "Add Jot" : "Update Jot";
 
         private string? OriginalNoteText { get; set; } = string.Empty;
 
@@ -958,6 +995,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             get => (NoteViewModel)GetValue(NoteProperty);
             set => SetValue(NoteProperty, value);
         }
+
+    
 
         /// <summary>
         /// Gets or sets the font size for the note associations.
@@ -1455,6 +1494,17 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             add => AddHandler(NoteUpdatedEvent, value);
             remove => RemoveHandler(NoteUpdatedEvent, value);
         }
+
+
+        // JOT refactor
+        ///// <summary>
+        ///// Occurs when a note is updated.
+        ///// </summary>
+        //public event RoutedEventHandler NoteStatusChanged
+        //{
+        //    add => AddHandler(NoteStatusChangedEvent, value);
+        //    remove => RemoveHandler(NoteStatusChangedEvent, value);
+        //}
 
         /// <summary>
         /// Occurs when a property value changes.

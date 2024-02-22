@@ -1,16 +1,16 @@
-﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Media;
-using ClearDashboard.DAL.Alignment.Corpora;
+﻿using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
-using MediatR;
+using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
 namespace ClearDashboard.Wpf.Application.UserControls.Notes
@@ -570,8 +570,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 OnPropertyChanged();
             }
         }
-
-     
+   
 
         private void OpenAddJot(object sender, RoutedEventArgs e)
         {
@@ -648,29 +647,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             var args = e as NoteEventArgs;
             if (args?.Note != null)
             {
-                //Notes.Add(args.Note);
-                NewNote = new NoteViewModel();
 
-
-                //var associatedEntityIds = await note.GetFullDomainEntityIds(Mediator);
-                //var domainEntityContexts = new EntityContextDictionary(await note.GetDomainEntityContexts(Mediator));
-
-                //foreach (var associatedEntityId in associatedEntityIds)
-                //{
-                //    var association = new NoteAssociationViewModel
-                //    {
-                //        AssociatedEntityId = associatedEntityId
-                //    };
-                //    if (domainEntityContexts.TryGetValue(associatedEntityId, out var entityContext))
-                //    {
-                //        association.Description = GetNoteAssociationDescription(associatedEntityId, entityContext);
-                //    }
-                //    noteViewModel.Associations.Add(association);
-                //}
-
-
-                OnPropertyChanged(nameof(Notes));
-                OnPropertyChanged(nameof(NewNote));
                 RaiseNoteEvent(NoteAddedEvent, args);
             }
         }
@@ -690,7 +667,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 RaiseNoteEvent(NoteUpdatedEvent, args);
             }
         }
-
+    
         private void OnNoteDeleted(object sender, RoutedEventArgs e)
         {
             var args = e as NoteEventArgs;
@@ -727,6 +704,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 RaiseNoteEvent(AddNoteEditorMouseEnterEvent, args);
             }
         }
+
         private void OnAddNoteEditorMouseLeave(object sender, RoutedEventArgs e)
         {
             if (e is NoteEventArgs args)
@@ -735,6 +713,40 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 RaiseNoteEvent(AddNoteEditorMouseLeaveEvent, args);
             }
         }
+
+        private void OnAddPopupOpened(object sender, RoutedEventArgs e)
+        {
+
+            IsAddJotOpen = true;
+        }
+
+        private void OnAddPopupClosed(object sender, RoutedEventArgs e)
+        {
+            IsAddJotOpen = false;
+        }
+
+        private void OnPopupMouseEnter(object sender, MouseEventArgs e)
+        {
+            var args = new NoteEventArgs
+            {
+                EntityIds = AddNoteControl.EntityIds,
+                IsNewNote = true,
+            };
+            RaiseNoteEvent(AddNoteEditorMouseEnterEvent, args);
+            
+        }
+
+        private void OnPopupMouseLeave(object sender, MouseEventArgs e)
+        {
+            var args = new NoteEventArgs
+            {
+                EntityIds = AddNoteControl.EntityIds,
+                IsNewNote = true,
+            };
+            RaiseNoteEvent(NoteEditorMouseLeaveEvent, args);
+        }
+
+     
 
         private void RaiseNoteAssociationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
@@ -1653,15 +1665,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         }
 
 
-        private void OnAddPopupOpened(object sender, RoutedEventArgs e)
-        {
-           
-            IsAddJotOpen = true;
-        }
-
-        private void OnAddPopupClosed(object sender, RoutedEventArgs e)
-        {
-            IsAddJotOpen = false;
-        }
+    
     }
 }

@@ -36,8 +36,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 if (Equals(value, Entity.Text)) return;
                 Entity.Text = value;
                 NotifyOfPropertyChange();
+                NotifyOfPropertyChange(nameof(HasText));
             }
         }
+
+        public bool HasText => !string.IsNullOrEmpty(Text);
 
         public string TabHeader
         {
@@ -54,6 +57,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     return;
                 Entity.NoteStatus = value;
                 NotifyOfPropertyChange();
+                NotifyOfPropertyChange(nameof(HasNoteStatus));
             }
         }
 
@@ -263,6 +267,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 NotifyOfPropertyChange(() => IsSelectedForBulkAction);
             }
         }
+
+        public bool HasNoteStatus => !string.IsNullOrEmpty(NoteStatus);
 
         public void NoteSeenChanged()
         {

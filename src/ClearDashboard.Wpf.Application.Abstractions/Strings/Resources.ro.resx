@@ -662,7 +662,7 @@
     <value>Token '{0}' are mai multe alinieri definite. Făcând clic pe '{1}' va șterge toate alinierile.</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>Căutare la termen de filtrare</value>
+    <value>Căutare pe termen</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
     <value>Căutarea termenului de filtrare după termeni cheie</value>
@@ -911,7 +911,7 @@
     <value>Introduceți un nou luciu</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
-    <value>Lemma</value>
+    <value>LEMMA</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
     <value>Lemma/forme:</value>
@@ -971,7 +971,7 @@
     <value>Complet</value>
   </data>
   <data name="LexiconEdit_FullyMatching" xml:space="preserve">
-    <value>Potrivire completă</value>
+    <value>Potrivirea completă</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexem</value>
@@ -1241,7 +1241,7 @@
     <value>Versuri</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Simțul versetului</value>
+    <value>Sense verset</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Total verset</value>
@@ -1366,6 +1366,9 @@
   <data name="None" xml:space="preserve">
     <value>Nici unul</value>
   </data>
+  <data name="Notes_AddJot" xml:space="preserve">
+    <value>Adăugați JOT</value>
+  </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
     <value>Adăugați un nou JOT</value>
   </data>
@@ -1460,7 +1463,7 @@
     <value>Marcați JOTS selectat ca fiind deschis</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>Mark a selectat JOTS ca rezolvat</value>
+    <value>Mark a selectat Jots ca rezolvat</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Creată</value>
@@ -1540,6 +1543,9 @@
   <data name="Notes_UnreadRepliesPresent" xml:space="preserve">
     <value>Răspunsuri necitite prezente</value>
   </data>
+  <data name="Notes_UpdateJot" xml:space="preserve">
+    <value>Actualizați JOT</value>
+  </data>
   <data name="Notes_Word" xml:space="preserve">
     <value>Cuvânt</value>
   </data>
@@ -1583,7 +1589,7 @@
     <value>Tren</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>ALIGNER WORD MASINE DE TRAIN</value>
+    <value>ALIGNIER DE CUMPĂRĂ A CAMERULUI DE TRAIN</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Setați cartografierea versului între Corpora paralelizată</value>
@@ -1619,7 +1625,7 @@
     <value>Adăugați text la vizualizare</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați text la New View</value>
+    <value>Adăugați text la vizualizare nouă</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Adăugați la vizualizare</value>
@@ -1691,7 +1697,7 @@
     <value>Afișați informații despre acest proiect</value>
   </data>
   <data name="Pds_ManuscriptGreek" xml:space="preserve">
-    <value>Macula greacă (NT)</value>
+    <value>Greacă (NT) macula</value>
   </data>
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
     <value>Ebraică (OT) macula</value>
@@ -1922,7 +1928,7 @@
     <value>Text model (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext funcționează, dar nu este conectat.</value>
+    <value>Paratext rulează, dar nu este conectat.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>Proiect paratext</value>
@@ -1934,7 +1940,7 @@
     <value>Suntem aproape acolo!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>Faceți clic aici pentru a vizualiza videoclipurile „bordul de bord”</value>
+    <value>Faceți clic aici pentru a vizualiza videoclipurile „tabloul de bord”</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
     <value>După ce faceți clic pe butonul „Creați” de mai jos, vom fi tokenizarea, alinierea și pregătirea proiectului dvs. Toți pașii vor apărea aici pe măsură ce sunt procesate. În timp ce așteptați, nu ezitați să faceți clic pe linkul de mai jos și să vizionați câteva videoclipuri utile pentru a începe utilizarea ClearDashboard!</value>
@@ -2195,7 +2201,7 @@
     <value>Bine ați venit la ClearDashboard! Vă rugăm să introduceți informațiile de înregistrare.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
-    <value>Vă rugăm să introduceți numele dvs.</value>
+    <value>Vă rugăm să introduceți prenumele dvs.</value>
   </data>
   <data name="RegistrationView_LastName" xml:space="preserve">
     <value>Vă rugăm să introduceți numele dvs. de familie</value>
@@ -2258,7 +2264,7 @@
     <value>Activați importul de lexic</value>
   </data>
   <data name="Settings_EnableTokenSplitting" xml:space="preserve">
-    <value>Activați împărțirea jetoanelor</value>
+    <value>Activați divizarea jetoanelor</value>
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Experimental</value>

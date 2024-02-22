@@ -766,7 +766,8 @@ public JotsPanelViewModel()
                 noteIds.Add(note.NoteId);
             }
 
-            await _enhancedViewModel.DisplayJotsEditor(mousePosition, noteIds);
+            var entityIds = note.Associations.Select(a => a.AssociatedEntityId).ToList();
+            await _enhancedViewModel.DisplayJotsEditor(mousePosition, noteIds, entityIds);
         }
 
         public void ConfirmParatextSend()
