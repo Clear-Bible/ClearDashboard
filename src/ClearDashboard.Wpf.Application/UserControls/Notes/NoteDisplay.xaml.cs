@@ -804,11 +804,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             }
         }
 
-        private void NoteDisplayBorder_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            NoteTextBox.Focus();
-        }
-
         public NoteStatus SelectedNoteStatus
         {
             get => Note is { HasNoteStatus: true } ? (NoteStatus)Enum.Parse(typeof(NoteStatus),Note.NoteStatus) : NoteStatus.Open;
