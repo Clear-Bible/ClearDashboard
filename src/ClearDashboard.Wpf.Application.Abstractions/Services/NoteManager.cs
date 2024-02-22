@@ -408,6 +408,11 @@ namespace ClearDashboard.Wpf.Application.Services
                     if (doGetParatextSendNoteInformation && noteDetails.ParatextSendNoteInformation == null)
                     {
                         noteDetails.ParatextSendNoteInformation = await ExternalNoteManager.GetExternalSendNoteInformationAsync(Mediator, noteDetails.NoteId!, UserProvider, Logger);
+
+                        foreach (var reply in noteDetails.Replies)
+                        {
+                            reply.ParatextSendNoteInformation = await ExternalNoteManager.GetExternalSendNoteInformationAsync(Mediator, noteDetails.NoteId!, UserProvider, Logger);
+                        }
                     }
                     Logger?.LogInformation($"Returning cached details for note \"{noteDetails.Text}\" ({noteId.Id})");
                     return noteDetails;
@@ -427,8 +432,14 @@ namespace ClearDashboard.Wpf.Application.Services
                 noteViewModel.Replies = new NoteViewModelCollection((await note.GetReplyNotes(Mediator)).Select(n => new NoteViewModel(n)));
 
                 if (doGetParatextSendNoteInformation)
+                {
                     noteViewModel.ParatextSendNoteInformation = await ExternalNoteManager.GetExternalSendNoteInformationAsync(Mediator, noteViewModel.NoteId!, UserProvider, Logger);
-
+                    
+                    foreach(var reply in noteViewModel.Replies)
+                    {
+                        reply.ParatextSendNoteInformation = await ExternalNoteManager.GetExternalSendNoteInformationAsync(Mediator, noteViewModel.NoteId!, UserProvider, Logger);
+                    }
+                }
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved details for note \"{note.Text}\" ({noteId.Id}) in {stopwatch.ElapsedMilliseconds}ms");
 

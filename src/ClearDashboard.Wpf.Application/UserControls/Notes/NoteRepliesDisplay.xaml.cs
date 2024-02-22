@@ -526,5 +526,40 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             }
         }
 
+        /// <summary>
+        /// Occurs when the user requests a note be sent to Paratext.
+        /// </summary>
+        public event RoutedEventHandler NoteSendToParatext
+        {
+            add => AddHandler(NoteSendToParatextEvent, value);
+            remove => RemoveHandler(NoteSendToParatextEvent, value);
+        }
+
+        /// <summary>
+        /// Identifies the NoteSendToParatext routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteSendToParatextEvent = EventManager.RegisterRoutedEvent
+            (nameof(NoteSendToParatext), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteRepliesDisplay));
+
+        public void OnNoteSendToParatext(object sender, RoutedEventArgs e)
+        {
+            if (e is NoteEventArgs args)
+            {
+                RaiseNoteEvent(NoteSendToParatextEvent, args);
+            }
+        }
+
+        public void RaiseNoteEvent(RoutedEvent routedEvent, NoteEventArgs e)
+        {
+            RaiseEvent(new NoteEventArgs
+            {
+                RoutedEvent = routedEvent,
+                Note = e.Note,
+                EntityIds = e.EntityIds,
+                IsNewNote = e.IsNewNote
+
+            });
+        }
+
     }
 }

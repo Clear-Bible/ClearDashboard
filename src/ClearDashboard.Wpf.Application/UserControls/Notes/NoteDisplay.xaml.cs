@@ -1474,5 +1474,25 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             NoteTextBox.Focus();
         }
+
+        public void OnNoteSendToParatext(object sender, RoutedEventArgs e)
+        {
+            if (e is NoteEventArgs args)
+            {
+                RaiseNoteEvent(NoteSendToParatextEvent, args);
+            }
+        }
+
+        public void RaiseNoteEvent(RoutedEvent routedEvent, NoteEventArgs e)
+        {
+            RaiseEvent(new NoteEventArgs
+            {
+                RoutedEvent = routedEvent,
+                Note = e.Note,
+                EntityIds = e.EntityIds,
+                IsNewNote = e.IsNewNote
+
+            });
+        }
     }
 }
