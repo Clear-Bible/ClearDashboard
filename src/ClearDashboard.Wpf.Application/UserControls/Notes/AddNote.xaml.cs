@@ -828,17 +828,22 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             }
         }
 
-        private bool IsChanged
+        public bool IsChanged
         {
             get => _isChanged;
             set
             {
                 _isChanged = value;
+                RaisePropertyChanged(nameof(IsChanged));
                 OnPropertyChanged(nameof(TimestampRowVisibility));
                 OnPropertyChanged(nameof(NoteSaveCancelButtonVisibility));
             } 
         }
-        
+        public void RaisePropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
         public LabelCollection Labels => Note?.Labels ?? new LabelCollection();
 
         public Visibility NoteLabelVisibility => IsEditing ? Visibility.Hidden : Visibility.Visible;
