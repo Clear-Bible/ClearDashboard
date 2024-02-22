@@ -70,11 +70,15 @@ public class JotsEditorViewModel : ApplicationScreen
     #region public properties
 
     private string? _message;
+    private bool _isAddJotOpen;
+
     public string? Message
     {
         get => _message;
         set => Set(ref _message, value);
     }
+
+    public bool ShowTabControl => NoteManager.CurrentNotes.Count > 0;
     #endregion
 
 
@@ -96,9 +100,16 @@ public class JotsEditorViewModel : ApplicationScreen
                 await NoteManager.GetNotes(SelectionManager.SelectedNoteIds);
             }
 
+            NotifyOfPropertyChange(nameof(ShowTabControl));
+
             if (NoteManager.CurrentNotes.Count > 0)
             {
                 NoteManager.SelectedNote = NoteManager.CurrentNotes[0];
+            }
+
+            if (NoteManager.CurrentNotes.Count == 0)
+            {
+                IsAddJotOpen = true;
             }
 
             NoteManager.SelectedEntityIds = selectedEntityIds != null ? new EntityIdCollection(selectedEntityIds) : SelectionManager.SelectedEntityIds;
@@ -108,6 +119,12 @@ public class JotsEditorViewModel : ApplicationScreen
 
         });
 
+    }
+
+    public bool IsAddJotOpen
+    {
+        get => _isAddJotOpen;
+        set => Set(ref _isAddJotOpen, value);
     }
 
     public async void Close()
@@ -137,8 +154,11 @@ public class JotsEditorViewModel : ApplicationScreen
             IsBusy = true;
             try
             {
+                IsAddJotOpen = false;
                 await NoteManager.AddNoteAsync(e.Note, e.EntityIds);
                 await NoteManager.CreateNewNote();
+
+                NotifyOfPropertyChange(nameof(ShowTabControl));
             }
             catch (Exception ex)
             {

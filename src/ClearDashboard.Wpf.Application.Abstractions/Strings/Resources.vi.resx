@@ -1205,7 +1205,7 @@
     <value>Glosses:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Các phần của bài phát biểu</value>
+    <value>Các phần của lời nói</value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
     <value>Bổ số liên quan</value>
@@ -1522,6 +1522,9 @@
   <data name="Notes_Part" xml:space="preserve">
     <value>Phần</value>
   </data>
+  <data name="Notes_PleaseAddJot" xml:space="preserve">
+    <value>Vui lòng thêm một cú hích bằng hộp thoại dưới đây.</value>
+  </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
     <value>Đánh dấu những jot này như đã giải quyết?</value>
   </data>
@@ -1658,7 +1661,7 @@
     <value>Xóa căn chỉnh</value>
   </data>
   <data name="Pds_DeleteParallelLine" xml:space="preserve">
-    <value>Bạn có chắc là bạn muốn xóa căn chỉnh này không? Tất cả các ghi chú, sắp xếp và xen kẽ liên quan đến sự liên kết này sẽ bị xóa và không thể được phục hồi.</value>
+    <value>Bạn có chắc là bạn muốn xóa căn chỉnh này không? Tất cả các ghi chú, sắp xếp và xen kẽ liên quan đến căn chỉnh này sẽ bị xóa và không thể được phục hồi.</value>
   </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Xóa Interlinear</value>
@@ -1730,7 +1733,7 @@
     <value>Nguồn</value>
   </data>
   <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>Language Sourcel</value>
+    <value>Language chua</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
     <value>Tiêu chuẩn</value>

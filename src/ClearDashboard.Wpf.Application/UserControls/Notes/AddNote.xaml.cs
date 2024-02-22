@@ -13,6 +13,7 @@ using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
+using ClearDashboard.Wpf.Application.ViewModels.Notes;
 using Brushes = System.Windows.Media.Brushes;
 using FontFamily = System.Windows.Media.FontFamily;
 using FontStyle = System.Windows.FontStyle;
@@ -492,10 +493,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         private void Cancel(object sender, RoutedEventArgs e)
         {
-            //Note.Text = OriginalNoteText;
-            //OnPropertyChanged(nameof(NoteText));
-
-
 
             CloseEdit();
             RaiseEvent(new NoteEventArgs
@@ -703,22 +700,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         private void OnNoteReplyAdded(object sender, RoutedEventArgs e)
         {
             RaiseReplyAddedEvent(e as NoteReplyAddEventArgs);
-        }
-
-        private void ConfirmNoteDeletion(object sender, RoutedEventArgs e)
-        {
-            ConfirmDeletePopup.IsOpen = true;
-        }
-
-        private void DeleteNoteConfirmed(object sender, RoutedEventArgs e)
-        {
-            RaiseNoteEvent(NoteDeletedEvent);
-            ConfirmDeletePopup.IsOpen = false;
-        }
-
-        private void DeleteNoteCancelled(object sender, RoutedEventArgs e)
-        {
-            ConfirmDeletePopup.IsOpen = false;
         }
 
         private void ConfirmParatextSend(object sender, RoutedEventArgs e)

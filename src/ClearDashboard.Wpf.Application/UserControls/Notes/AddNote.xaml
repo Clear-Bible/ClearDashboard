@@ -87,7 +87,7 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <Button
+                    <!--<Button
                     x:Name="DeleteNoteButton"
                     Grid.Column="1"
                     Margin="9,-5,0,0"
@@ -128,7 +128,7 @@
                                 </StackPanel>
                             </StackPanel>
                         </Border>
-                    </Popup>
+                    </Popup>-->
                 </Grid>
 
                 <!--  User and timestamp  -->

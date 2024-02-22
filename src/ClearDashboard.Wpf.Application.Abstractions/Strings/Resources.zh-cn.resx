@@ -1522,6 +1522,9 @@
   <data name="Notes_Part" xml:space="preserve">
     <value>部分</value>
   </data>
+  <data name="Notes_PleaseAddJot" xml:space="preserve">
+    <value>请使用下面的对话框添加jot。</value>
+  </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
     <value>将这些jots标记为解决？</value>
   </data>
@@ -1643,7 +1646,7 @@
     <value>更改内容的缩放级别</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>顾问说明</value>
+    <value>顾问Notes</value>
   </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>创建新单词对齐</value>

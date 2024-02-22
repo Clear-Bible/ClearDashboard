@@ -1522,6 +1522,9 @@
   <data name="Notes_Part" xml:space="preserve">
     <value>Bagian</value>
   </data>
+  <data name="Notes_PleaseAddJot" xml:space="preserve">
+    <value>Harap tambahkan jot menggunakan dialog di bawah ini.</value>
+  </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
     <value>Tandai jot ini seperti yang diselesaikan?</value>
   </data>
@@ -1955,7 +1958,7 @@
     <value>Daftar Proyek Kolaborasi Refresh</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>Cari Terkini</value>
+    <value>Cari Terbaru</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
     <value>Klik di sini untuk memulai Paratext</value>

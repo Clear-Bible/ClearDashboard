@@ -1522,6 +1522,9 @@
   <data name="Notes_Part" xml:space="preserve">
     <value>भाग</value>
   </data>
+  <data name="Notes_PleaseAddJot" xml:space="preserve">
+    <value>कृपया नीचे दिए गए संवाद का उपयोग करके एक JOT जोड़ें।</value>
+  </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
     <value>इन जॉट्स को हल के रूप में चिह्नित करें?</value>
   </data>

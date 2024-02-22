@@ -1522,6 +1522,9 @@
   <data name="Notes_Part" xml:space="preserve">
     <value>ចេក</value>
   </data>
+  <data name="Notes_PleaseAddJot" xml:space="preserve">
+    <value>សូមបន្ថែម jot ដោយប្រើប្រអប់ខាងក្រោម។</value>
+  </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
     <value>សម្គាល់ jots ទាំងនេះដូចដែលបានដោះស្រាយ?</value>
   </data>

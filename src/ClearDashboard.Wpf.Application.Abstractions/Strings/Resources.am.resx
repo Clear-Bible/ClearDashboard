@@ -1522,6 +1522,9 @@
   <data name="Notes_Part" xml:space="preserve">
     <value>ክፍል</value>
   </data>
+  <data name="Notes_PleaseAddJot" xml:space="preserve">
+    <value>እባክዎ ከዚህ በታች ያለውን ንግግር በመጠቀም አንድ ጆን ያክሉ.</value>
+  </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
     <value>እነዚህን ቀፎዎች እንደተፈተኑ ምልክት ያድርጉ?</value>
   </data>

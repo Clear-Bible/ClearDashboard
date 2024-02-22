@@ -1522,6 +1522,9 @@
   <data name="Notes_Part" xml:space="preserve">
     <value>Parte</value>
   </data>
+  <data name="Notes_PleaseAddJot" xml:space="preserve">
+    <value>Agregue una anotación con el cuadro de diálogo a continuación.</value>
+  </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
     <value>Marcar estas jotas como se resuelven?</value>
   </data>
@@ -2105,7 +2108,7 @@
     <value>Joshua</value>
   </data>
   <data name="ProperCase_Jude" xml:space="preserve">
-    <value>Judío</value>
+    <value>Yacuana</value>
   </data>
   <data name="ProperCase_Judges" xml:space="preserve">
     <value>Jueces</value>

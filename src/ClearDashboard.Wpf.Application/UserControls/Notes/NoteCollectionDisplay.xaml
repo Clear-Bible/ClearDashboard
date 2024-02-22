@@ -99,12 +99,17 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" 
+                   Text="{helpers:Localization Notes_PleaseAddJot}"   
+                   FontSize="20"
+                   Margin="10"
+                   Visibility="{Binding ShowTabControl, Converter={StaticResource InverseBooleanToVisibilityConverter}}"></TextBlock>
             <TabControl   Grid.Row="0"
                               ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Notes}" 
                               ContentTemplate="{StaticResource NoteTemplate}"
                               SelectedItem="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}},  Path=SelectedNote, Mode=TwoWay}"
                               Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
-                              Visibility="{Binding ShowTabControl}"
+                              Visibility="{Binding ShowTabControl, Converter={StaticResource BooleanToVisibilityConverter}}"
                               VerticalAlignment="Top">
                 <TabControl.Template>
                     <ControlTemplate TargetType="TabControl">
@@ -178,13 +183,15 @@
 
 
         <Popup Grid.Row="1" Name="AddNewJotPopup"
-               IsOpen="{Binding IsAddJotOpen, ElementName=NoteCollectionDisplayControl}"   
+               IsOpen="{Binding DataContext.IsAddJotOpen, ElementName=NoteCollectionDisplayControl}"   
                PlacementTarget="{Binding ElementName=TogglePopupButton}"
                Placement="Top"
                HorizontalOffset="400"
                StaysOpen="True"
                MouseEnter="OnPopupMouseEnter"
                MouseLeave="OnPopupMouseLeave"
+               Opened="AddNewJotPopup_OnOpened"
+               Closed="AddNewJotPopup_OnClosed"
                >
            
             <Border BorderThickness="1" Background="WhiteSmoke"  >

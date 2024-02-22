@@ -1522,6 +1522,9 @@
   <data name="Notes_Part" xml:space="preserve">
     <value>Teil</value>
   </data>
+  <data name="Notes_PleaseAddJot" xml:space="preserve">
+    <value>Bitte fügen Sie einen JOT mit dem folgenden Dialog hinzu.</value>
+  </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
     <value>Markieren Sie diese Jots als gelöst?</value>
   </data>

@@ -1522,6 +1522,9 @@
   <data name="Notes_Part" xml:space="preserve">
     <value>جزء</value>
   </data>
+  <data name="Notes_PleaseAddJot" xml:space="preserve">
+    <value>الرجاء إضافة JOT باستخدام مربع الحوار أدناه.</value>
+  </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
     <value>بمناسبة هذه jots كما تم حلها؟</value>
   </data>
@@ -1718,7 +1721,7 @@
     <value>إعادة تعيين تعيينات الآية إلى الافتراض الافتراضي</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
-    <value>مورد</value>
+    <value>الموارد</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
     <value>قم بتوسيع المحتوى إلى 100 ٪</value>

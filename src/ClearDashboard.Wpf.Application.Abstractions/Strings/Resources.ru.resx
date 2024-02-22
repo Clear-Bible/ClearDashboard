@@ -461,7 +461,7 @@
     <value>Считать учебным текстом</value>
   </data>
   <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
-    <value>Не одобряют</value>
+    <value>Не одобрять</value>
   </data>
   <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
     <value>Не одобрен</value>
@@ -1521,6 +1521,9 @@
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Часть</value>
+  </data>
+  <data name="Notes_PleaseAddJot" xml:space="preserve">
+    <value>Пожалуйста, добавьте JOT, используя диалог ниже.</value>
   </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
     <value>Отметьте эти записи как решенные?</value>
