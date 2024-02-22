@@ -172,6 +172,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         public static readonly DependencyProperty TimestampPaddingProperty = DependencyProperty.Register(nameof(TimestampPadding), typeof(Thickness), typeof(NoteRepliesDisplay),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
+
+        /// <summary>
+        /// Identifies the NoteSendToParatext routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteSendToParatextEvent = EventManager.RegisterRoutedEvent
+            (nameof(NoteSendToParatext), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteRepliesDisplay));
         #endregion
         #region Private Event Handlers
 
@@ -193,6 +199,14 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
         }
 
+        public void OnNoteSendToParatext(object sender, RoutedEventArgs e)
+        {
+            if (e is NoteEventArgs args)
+            {
+                RaiseNoteEvent(NoteSendToParatextEvent, args);
+            }
+        }
+
         private void RaiseReplySeenEvent(NoteSeenEventArgs args)
         {
             RaiseEvent(new NoteSeenEventArgs
@@ -203,6 +217,17 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             });
         }
 
+        public void RaiseNoteEvent(RoutedEvent routedEvent, NoteEventArgs e)
+        {
+            RaiseEvent(new NoteEventArgs
+            {
+                RoutedEvent = routedEvent,
+                Note = e.Note,
+                EntityIds = e.EntityIds,
+                IsNewNote = e.IsNewNote
+
+            });
+        }
 
         private void OnNoteSeen(object sender, RoutedEventArgs e)
         {
@@ -448,6 +473,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         }
 
         /// <summary>
+        /// Occurs when the user requests a note be sent to Paratext.
+        /// </summary>
+        public event RoutedEventHandler NoteSendToParatext
+        {
+            add => AddHandler(NoteSendToParatextEvent, value);
+            remove => RemoveHandler(NoteSendToParatextEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when a property value changes.
         /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -525,6 +559,10 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 NoteReplyTextBox.Text = string.Empty;
             }
         }
+
+        
+
+        
 
     }
 }

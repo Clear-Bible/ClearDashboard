@@ -559,6 +559,18 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             });
         }
 
+        public void RaiseNoteEvent(RoutedEvent routedEvent, NoteEventArgs e)
+        {
+            RaiseEvent(new NoteEventArgs
+            {
+                RoutedEvent = routedEvent,
+                Note = e.Note,
+                EntityIds = e.EntityIds,
+                IsNewNote = e.IsNewNote
+
+            });
+        }
+
         private void OnLabelAdded(object sender, RoutedEventArgs e)
         {
             if (e is LabelEventArgs labelEventArgs)
@@ -789,6 +801,14 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         private void OnMouseLeave(object sender, MouseEventArgs e)
         {
             RaiseNoteEvent(NoteEditorMouseLeaveEvent);
+        }
+
+        public void OnNoteSendToParatext(object sender, RoutedEventArgs e)
+        {
+            if (e is NoteEventArgs args)
+            {
+                RaiseNoteEvent(NoteSendToParatextEvent, args);
+            }
         }
 
         [NotifyPropertyChangedInvocator]
@@ -1531,6 +1551,5 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             Loaded += OnLoaded;
         }
 
-     
     }
 }
