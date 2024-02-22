@@ -49,15 +49,12 @@ public class JotsEditorViewModel : ApplicationScreen
     public JotsEditorViewModel(ILogger<JotsEditorViewModel> logger,
         DashboardProjectManager? projectManager,
         [KeyFilter("JotsNoteManager")] NoteManager noteManager,
-        //NoteManager noteManager,
-        //[KeyFilter("JotsSelectionManager")]SelectionManager selectionManager,
         INavigationService navigationService,
         IEventAggregator? eventAggregator,
         IMediator mediator,
         ILifetimeScope? lifetimeScope, ILocalizationService localizationService): base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
     {
         NoteManager = noteManager;
-       // SelectionManager = selectionManager;
         EventAggregator = eventAggregator;
         Mediator = mediator;
         LifetimeScope = lifetimeScope;
@@ -106,6 +103,7 @@ public class JotsEditorViewModel : ApplicationScreen
 
             NoteManager.SelectedEntityIds = selectedEntityIds != null ? new EntityIdCollection(selectedEntityIds) : SelectionManager.SelectedEntityIds;
       
+            // Create a placeholder jot for the add jot popup
             await NoteManager.CreateNewNote();
 
         });
@@ -122,39 +120,21 @@ public class JotsEditorViewModel : ApplicationScreen
 
     public async void CloseNotePaneRequested(object sender, RoutedEventArgs args)
     {
-        // TODO:  Jots dialog  
-        //NoteControlVisibility = Visibility.Collapsed;
         await this.DeactivateAsync(true);
     }
 
 
     public void NoteAdded(object sender, NoteEventArgs e)
     {
-        Task.Run(() => NoteAddedAsync(e).GetAwaiter());
+        Task.Run(() => NoteAddedAsync(e)); //.GetAwaiter());
     }
 
-
-    //public bool IsAddJotPopupOpen
-    //{
-    //    get => _isAddJotPopupOpen;
-    //    set => Set(ref _isAddJotPopupOpen, value);
-    //}
-
-    //public void OpenAddJotPopup()
-    //{
-    //    IsAddJotPopupOpen = true;
-    //}
-
-    //public void CloseAddJotPopup()
-    //{
-    //    IsAddJotPopupOpen = false;
-    //}
 
     public async Task NoteAddedAsync(NoteEventArgs e)
     {
         await Execute.OnUIThreadAsync(async () =>
         {
-
+            IsBusy = true;
             try
             {
                 await NoteManager.AddNoteAsync(e.Note, e.EntityIds);
@@ -165,6 +145,10 @@ public class JotsEditorViewModel : ApplicationScreen
                 var s = ex.Message;
                 throw;
             }
+            finally
+            {
+                IsBusy = false; 
+            }
 
         });
 
@@ -173,19 +157,7 @@ public class JotsEditorViewModel : ApplicationScreen
         Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NoteCreationCount, 1);
     }
 
-    public void NoteAssociationClicked(object sender, NoteEventArgs e)
-    {
-        Task.Run(() => NoteAssociationClickedAsync(e).GetAwaiter());
-    }
-
-    public async Task NoteAssociationClickedAsync(NoteEventArgs e)
-    {
-       
-
-        // No-op for now
-       
-    }
-
+ 
     public void NoteDeleted(object sender, NoteEventArgs e)
     {
         Task.Run(() => NoteDeletedAsync(e).GetAwaiter());
@@ -201,9 +173,6 @@ public class JotsEditorViewModel : ApplicationScreen
             await Execute.OnUIThreadAsync(async () =>
             {
                 await NoteManager.DeleteNoteAsync(e.Note, associationIds);
-
-                // TODO:  Jots
-                //NotifyOfPropertyChange(() => Items);
             });
         }
         Message = $"Note '{e.Note.Text}' deleted from tokens ({string.Join(", ", e.EntityIds.Select(id => id.ToString()))})";
@@ -238,8 +207,6 @@ public class JotsEditorViewModel : ApplicationScreen
     {
         await NoteManager.AddReplyToNoteAsync(args.NoteViewModelWithReplies, args.Text);
     }
-
-  
 
     public void NoteSeen(object sender, NoteSeenEventArgs e)
     {

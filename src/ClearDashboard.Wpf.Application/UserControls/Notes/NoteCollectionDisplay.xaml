@@ -1,17 +1,16 @@
 ﻿<UserControl
     x:Class="ClearDashboard.Wpf.Application.UserControls.Notes.NoteCollectionDisplay"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    FontFamily="{StaticResource ClearDashboardFont}"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
-    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:cm="http://caliburnmicro.com"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
+    FontFamily="{StaticResource ClearDashboardFont}"
     x:Name="NoteCollectionDisplayControl"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -90,42 +89,16 @@
                 UserFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontWeight}"
                 UserMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserMargin}" />
         </DataTemplate>
-        <ItemsPanelTemplate x:Key="NotesPanelTemplate">
-            <StackPanel Orientation="Vertical" />
-        </ItemsPanelTemplate>
         <Style TargetType="ListViewItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         </Style>
+        <converters:BooleanInversionConverter x:Key="BooleanInversionConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <!--<Label
-                Grid.Row="0"
-                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleMargin}"
-                HorizontalContentAlignment="Center"
-                Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Title}"
-                FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleFontFamily}"
-                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleFontSize}"
-                FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleFontStyle}"
-                FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleFontWeight}" />
-        <Label
-                Grid.Row="1"
-                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SubtitleMargin}"
-                HorizontalContentAlignment="Center"
-                Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Subtitle}"
-                FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SubtitleFontFamily}"
-                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SubtitleFontSize}"
-                FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SubtitleFontStyle}"
-                FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SubtitleFontWeight}" />-->
-        <!--<Grid Grid.Row="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="200"></RowDefinition>
-            </Grid.RowDefinitions>-->
-
             <TabControl   Grid.Row="0"
                               ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Notes}" 
                               ContentTemplate="{StaticResource NoteTemplate}"
@@ -189,21 +162,21 @@
                 HorizontalAlignment="Left" 
                 Content="{helpers:Localization Notes_AddNewNote}"  Click="OpenAddJot" Style="{StaticResource AlternativeStyle}"
                 MouseEnter="OnPopupMouseEnter"
-                MouseLeave="OnPopupMouseLeave">
-                <!--<StackPanel  Height="130" Width="150"> 
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"  Height="130" Width="150">
-                            <Run Text="Is button toggled? " />
-                            <Run Text="{Binding IsChecked, ElementName=TogglePopupButton}" />
-                    </TextBlock>
-
-                    </StackPanel>-->
+                MouseLeave="OnPopupMouseLeave"
+                IsEnabled="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path= DataContext.NoteManager.IsBusy, Converter={StaticResource BooleanInversionConverter}}">
+    
             </Button>
 
+        <ProgressBar Grid.Row="1"
+            Width="250"
+            Height="5"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            IsIndeterminate="True"
+            Visibility="{Binding NoteManager.IsBusyBackground, Converter={StaticResource BooleanToVisibilityConverter}}"
+            Value="0" />
 
-        <!--
-         VerticalOffset="30" 
-    HorizontalOffset="400">
-        -->
+
         <Popup Grid.Row="1" Name="AddNewJotPopup"
                IsOpen="{Binding IsAddJotOpen, ElementName=NoteCollectionDisplayControl}"   
                PlacementTarget="{Binding ElementName=TogglePopupButton}"
@@ -219,7 +192,6 @@
                                 x:Name="AddNoteControl"
                                 Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteMargin}"
                                 Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NotePadding}"
-                                AddMode="True"
                                 EntityIds="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=EntityIds}"
                                 LabelAdded="OnLabelAdded"
                                 DefaultLabelGroup="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DefaultLabelGroup}"
@@ -244,7 +216,6 @@
                                 NoteBorderPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderPadding}"
                                 NoteBorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderThickness}"
                                 AddPopupClosed="OnAddPopupClosed"
-                             
                                 NoteReplyAdded="OnNoteReplyAdded"
                                 NoteSeen="OnNoteSeen"
                                 NoteTextFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontFamily}"
@@ -287,5 +258,4 @@
             <!--NoteDeleted="OnNoteDeleted"-->
 
         </Grid>
-    <!--</Grid>-->
 </UserControl>

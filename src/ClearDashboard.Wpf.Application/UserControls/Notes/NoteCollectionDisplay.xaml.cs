@@ -27,14 +27,17 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// </summary>
         public static readonly RoutedEvent CloseRequestedEvent = EventManager.RegisterRoutedEvent
             (nameof(CloseRequested), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
-
+        /// <summary>
+        /// Identifies the AddPopupOpenedEvent routed event.
+        /// </summary>
         public static readonly RoutedEvent AddPopupOpenedEvent = EventManager.RegisterRoutedEvent
             (nameof(AddPopupOpened), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
 
+        /// <summary>
+        /// Identifies the AddPopupClosedEvent routed event.
+        /// </summary>
         public static readonly RoutedEvent AddPopupClosedEvent = EventManager.RegisterRoutedEvent
             (nameof(AddPopupClosed), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
-
-     
 
         /// <summary>
         /// Identifies the LabelAddedEvent routed event.
@@ -530,7 +533,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         public static readonly DependencyProperty UserMarginProperty = DependencyProperty.Register(nameof(UserMargin), typeof(Thickness), typeof(NoteCollectionDisplay),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
-        private bool _addJotIsOpen;
+
         private bool _isAddJotOpen;
 
         #endregion
@@ -606,23 +609,23 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             });
         }
 
-        private void RaiseNoteSeenEvent(NoteSeenEventArgs args)
+        private void RaiseNoteSeenEvent(NoteSeenEventArgs? args)
         {
             RaiseEvent(new NoteSeenEventArgs
             {
                 RoutedEvent = NoteSeenEvent,
-                Seen = args.Seen,
-                NoteViewModel = args.NoteViewModel
+                Seen = args?.Seen,
+                NoteViewModel = args?.NoteViewModel
             });
         }
 
-        private void RaiseReplyAddedEvent(NoteReplyAddEventArgs args)
+        private void RaiseReplyAddedEvent(NoteReplyAddEventArgs? args)
         {
             RaiseEvent(new NoteReplyAddEventArgs
             {
                 RoutedEvent = NoteReplyAddedEvent,
-                Text = args.Text,
-                NoteViewModelWithReplies = args.NoteViewModelWithReplies
+                Text = args?.Text,
+                NoteViewModelWithReplies = args?.NoteViewModelWithReplies
             });
         }
 

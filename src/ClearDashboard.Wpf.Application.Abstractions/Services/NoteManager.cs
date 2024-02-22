@@ -59,6 +59,7 @@ namespace ClearDashboard.Wpf.Application.Services
         private LabelGroupViewModel? _defaultLabelGroup;
         private bool _isBusy;
         private EntityIdCollection _selectedEntityIds = new EntityIdCollection();
+        private bool _isBusyBackground;
 
 
         public NoteManager(IEventAggregator eventAggregator,
@@ -199,6 +200,19 @@ namespace ClearDashboard.Wpf.Application.Services
                 });
             });
           
+        }
+
+        private async Task SetIsBusyBackground(bool isBusy)
+        {
+            await Task.Run(async () =>
+            {
+                await Execute.OnUIThreadAsync(async () =>
+                {
+                    IsBusyBackground = isBusy;
+                    await Task.CompletedTask;
+                });
+            });
+
         }
 
         private async Task<LabelCollection> GetLabelSuggestionsAsync()
@@ -402,11 +416,14 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <param name="noteId">A note ID for which to retrieve the note details.</param>
         /// <param name="doGetParatextSendNoteInformation">If true, also retrieve information needed for sending the note to Paratext.</param>
         /// <returns>A <see cref="NoteViewModel"/> containing the note details.</returns>
-        public async Task<NoteViewModel> GetNoteDetailsAsync(NoteId noteId, bool doGetParatextSendNoteInformation = true, bool collabUpdate = false)
+        public async Task<NoteViewModel> GetNoteDetailsAsync(NoteId noteId, bool doGetParatextSendNoteInformation = true, bool collabUpdate = false, bool setIsBusy = true)
         {
             try
             {
-                await SetIsBusy(true);
+                if (setIsBusy)
+                {
+                    await SetIsBusy(true);
+                }
 
                 if (!collabUpdate && NotesCache.TryGetValue(noteId.Id, out var noteDetails))
                 {
@@ -448,7 +465,10 @@ namespace ClearDashboard.Wpf.Application.Services
             }
             finally
             {
-                await SetIsBusy(false);
+                if (setIsBusy)
+                {
+                    await SetIsBusy(false);
+                }
             }
         }
 
@@ -479,9 +499,36 @@ namespace ClearDashboard.Wpf.Application.Services
             set => Set(ref _isBusy, value);
         }
 
+        public bool IsBusyBackground
+        {
+            get => _isBusyBackground;
+            set => Set(ref _isBusyBackground, value);
+        }
+
+        
+
         public async Task GetNotes(IEnumerable<IId> noteIds)
         {
-            CurrentNotes = await GetNoteDetailsAsync(noteIds);
+            CurrentNotes = await GetNotesDetailsAsync(noteIds, doGetParatextSendNoteInformation:false);
+
+            // Get any paratext information in the background.
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await SetIsBusyBackground(true);
+                    foreach (var note in CurrentNotes)
+                    {
+                        await GetNoteDetailsAsync(note.NoteId, doGetParatextSendNoteInformation: true,
+                            setIsBusy: false);
+                    }
+                }
+                finally
+                {
+                    SetIsBusyBackground(false);
+                }
+            });
+
         }
 
         /// <summary>
@@ -491,8 +538,9 @@ namespace ClearDashboard.Wpf.Application.Services
         /// Each note ID will be included in the resulting collection only once, for example in the case where two entities are associated to the same note.
         /// </remarks>
         /// <param name="noteIds">A collection of note IDs for which to retrieve the notes details.</param>
+        /// <param name="doGetParatextSendNoteInformation"></param>
         /// <returns>A <see cref="NoteViewModelCollection"/> containing the notes details.</returns>
-        public async Task<NoteViewModelCollection> GetNoteDetailsAsync(IEnumerable<IId> noteIds)
+        public async Task<NoteViewModelCollection> GetNotesDetailsAsync(IEnumerable<IId> noteIds, bool doGetParatextSendNoteInformation = true)
         {
             var result = new List<NoteViewModel>();
 
@@ -503,7 +551,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 {
                     if (!result.Any(n => n.NoteId != null && n.NoteId.Id == noteId.Id))
                     {
-                        result.Add(await GetNoteDetailsAsync(noteId));
+                        result.Add(await GetNoteDetailsAsync(noteId, doGetParatextSendNoteInformation, collabUpdate:false, setIsBusy:true));
                     }
                 }
                 else

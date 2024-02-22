@@ -436,7 +436,19 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             control.OnPropertyChanged(nameof(Labels));
             control.OnPropertyChanged(nameof(ParatextSendVisibility));
             control.OnPropertyChanged(nameof(SelectedNoteStatus));
+
+            control.RaisePropertyChanged(nameof(ParatextSendVisibility));
         }
+
+        #region INotifyPropertyChanged implementation
+      
+
+        public void RaisePropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
 
         private static void OnAddModeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
@@ -893,7 +905,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         public Visibility AssociationsPanelVisibility => Visibility.Visible;
         //public Visibility AssociationsVisibility => AddMode || !IsAssociationButtonClicked ? Visibility.Collapsed : Visibility.Visible;
         //public Visibility AssociationsButtonVisibility => IsAssociationButtonClicked ? Visibility.Hidden : Visibility.Visible;
-        public Visibility ParatextSendVisibility => (!AddMode && Note != null && Note.EnableParatextSend) ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility ParatextSendVisibility => (!AddMode && Note is { EnableParatextSend: true }) ? Visibility.Visible : Visibility.Collapsed;
             // 
         //private bool IsAssociationButtonClicked { get; set; }
 
@@ -996,7 +1008,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             set => SetValue(NoteProperty, value);
         }
 
-    
 
         /// <summary>
         /// Gets or sets the font size for the note associations.

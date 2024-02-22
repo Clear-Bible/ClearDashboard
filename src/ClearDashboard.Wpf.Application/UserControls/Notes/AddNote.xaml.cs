@@ -217,12 +217,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         #endregion Static Routed Events
         #region Static Dependency Properties
 
-        /// <summary>
-        /// Identifies the AddMode dependency property.
-        /// </summary>
-        public static readonly DependencyProperty AddModeProperty = DependencyProperty.Register(nameof(AddMode), typeof(bool), typeof(AddNote),
-            new PropertyMetadata(false, OnAddModeChanged));
-
+      
         /// <summary>
         /// Identifies the CurrentUserId dependency property.
         /// </summary>
@@ -465,16 +460,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             var control = (AddNote)obj;
             control.UpdateControlLayout();
-            control.OnPropertyChanged(nameof(ApplyLabel));
             control.OnPropertyChanged(nameof(NotePropertiesVisibility));
         }
 
         private void UpdateControlLayout()
         {
-            if (AddMode)
-            {
-                IsEditing = true;
-            }
+            IsEditing = true;
         }
 
         private void CloseEdit()
@@ -488,7 +479,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             CloseEdit();
             RaiseEvent(new NoteEventArgs
             {
-                RoutedEvent = AddMode ? NoteAddedEvent : NoteUpdatedEvent,
+                RoutedEvent = NoteAddedEvent,
                 EntityIds = EntityIds,
                 Note = Note
             });
@@ -823,17 +814,14 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         protected override void OnGotFocus(RoutedEventArgs e)
         {
-            if (AddMode)
-            {
-                NoteTextBox.Focus();
-            }
+            NoteTextBox.Focus();
             base.OnGotFocus(e);
         }
 
         private bool _firstClick = true;
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
-            if (AddMode && _firstClick)
+            if (_firstClick)
             {
                 BeginEdit();
                 _firstClick = false;
@@ -843,19 +831,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         #endregion Private event handlers
         #region Public Properties
 
-        /// <summary>
-        /// Gets or sets whether the control is adding a new note or editing an existing one.
-        /// </summary>
-        public bool AddMode 
-        {
-            get => (bool)GetValue(AddModeProperty);
-            set => SetValue(AddModeProperty, value);
-        }
-
-        // TODO: localize
-        public string ApplyLabel => "Add Jot";
-
-        private string? OriginalNoteText { get; set; } = string.Empty;
+       private string? OriginalNoteText { get; set; } = string.Empty;
 
         private bool _isEditing;
         private bool _isChanged;
@@ -887,15 +863,14 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         public Visibility NoteLabelVisibility => IsEditing ? Visibility.Hidden : Visibility.Visible;
         public Visibility NoteTextBoxVisibility => IsEditing ? Visibility.Visible : Visibility.Hidden;
         public Visibility NoteSaveCancelButtonVisibility => IsChanged ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility TimestampRowVisibility => AddMode || IsChanged ? Visibility.Collapsed : Visibility.Visible;
-        public Visibility NotePropertiesVisibility => AddMode ? Visibility.Collapsed : Visibility.Visible;
+        public Visibility TimestampRowVisibility => IsChanged ? Visibility.Collapsed : Visibility.Visible;
+        public Visibility NotePropertiesVisibility =>  Visibility.Collapsed;
 
         public Visibility LabelPanelVisibility => Visibility.Visible;
         public Visibility AssociationsPanelVisibility => Visibility.Visible;
-        //public Visibility AssociationsVisibility => AddMode || !IsAssociationButtonClicked ? Visibility.Collapsed : Visibility.Visible;
-        //public Visibility AssociationsButtonVisibility => IsAssociationButtonClicked ? Visibility.Hidden : Visibility.Visible;
-        public Visibility ParatextSendVisibility => !AddMode && Note != null && Note.EnableParatextSend ? Visibility.Visible : Visibility.Collapsed;
-        //private bool IsAssociationButtonClicked { get; set; }
+
+        public Visibility ParatextSendVisibility => Note is { EnableParatextSend: true } ? Visibility.Visible : Visibility.Collapsed;
+
 
         /// <summary>
         /// Gets or sets the <see cref="UserId"/> for the current user.
@@ -1509,9 +1484,5 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             Loaded += OnLoaded;
         }
 
-        private void AddNoteBorder_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            NoteTextBox.Focus();
-        }
     }
 }

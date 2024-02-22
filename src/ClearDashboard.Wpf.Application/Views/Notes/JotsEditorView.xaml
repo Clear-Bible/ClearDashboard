@@ -84,11 +84,6 @@
                     <i:EventTrigger EventName="NoteAdded">
                         <i:CallMethodAction MethodName="NoteAdded" TargetObject="{Binding}" />
                     </i:EventTrigger>
-
-                    <!--<i:EventTrigger EventName="NoteAssociationClicked">
-                        <i:CallMethodAction MethodName="NoteAssociationClicked" TargetObject="{Binding }" />
-                    </i:EventTrigger>-->
-
                     <i:EventTrigger EventName="NoteDeleted">
                         <i:CallMethodAction MethodName="NoteDeleted" TargetObject="{Binding}" />
                     </i:EventTrigger>
@@ -133,13 +128,13 @@
                Orientation="Horizontal">
             <Button x:Name="Close"
                    Content="{helpers:Localization Ok}"
-                   Style="{StaticResource AlternativeStyle}">
-
+                   Style="{StaticResource AlternativeStyle}"
+                   >
                 <!--<i:EventTrigger EventName="NoteSendToParatext">
                     <i:CallMethodAction MethodName="NoteSendToParatext" TargetObject="{Binding }" />
                 </i:EventTrigger>-->
             </Button>
-
+        
         </StackPanel>
 
         <ProgressBar Grid.Row="0"
@@ -151,5 +146,7 @@
             Style="{StaticResource ClearDashboardCircularProgressBar}"
             Visibility="{Binding NoteManager.IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
             Value="0" />
+
+      
     </Grid>
 </UserControl>

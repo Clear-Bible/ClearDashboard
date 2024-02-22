@@ -273,9 +273,6 @@
     <Compile Update="UserControls\Notes\LabelsEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="UserControls\Notes\NoteCollectionDisplayOrg.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="UserControls\Notes\NoteCollectionDisplay.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -468,9 +465,6 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="UserControls\Notes\NoteAssociationsDisplay.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="UserControls\Notes\NoteCollectionDisplayOrg.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="UserControls\Notes\NoteCollectionDisplay.xaml">
