@@ -547,6 +547,18 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             });
         }
 
+        public void RaiseNoteEvent(RoutedEvent routedEvent, NoteEventArgs e)
+        {
+            RaiseEvent(new NoteEventArgs
+            {
+                RoutedEvent = routedEvent,
+                Note = e.Note,
+                EntityIds = e.EntityIds,
+                IsNewNote = e.IsNewNote
+
+            });
+        }
+
         private void OnLabelAdded(object sender, RoutedEventArgs e)
         {
             if (e is LabelEventArgs labelEventArgs)
@@ -779,6 +791,14 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             RaiseNoteEvent(NoteEditorMouseLeaveEvent);
         }
 
+        public void OnNoteSendToParatext(object sender, RoutedEventArgs e)
+        {
+            if (e is NoteEventArgs args)
+            {
+                RaiseNoteEvent(NoteSendToParatextEvent, args);
+            }
+        }
+
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
@@ -802,6 +822,11 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 BeginEdit();
                 _firstClick = false;
             }
+        }
+
+        private void NoteDisplayBorder_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            NoteTextBox.Focus();
         }
 
         public NoteStatus SelectedNoteStatus
@@ -1515,29 +1540,5 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             Loaded += OnLoaded;
         }
 
-        private void NoteDisplayBorder_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            NoteTextBox.Focus();
-        }
-
-        public void OnNoteSendToParatext(object sender, RoutedEventArgs e)
-        {
-            if (e is NoteEventArgs args)
-            {
-                RaiseNoteEvent(NoteSendToParatextEvent, args);
-            }
-        }
-
-        public void RaiseNoteEvent(RoutedEvent routedEvent, NoteEventArgs e)
-        {
-            RaiseEvent(new NoteEventArgs
-            {
-                RoutedEvent = routedEvent,
-                Note = e.Note,
-                EntityIds = e.EntityIds,
-                IsNewNote = e.IsNewNote
-
-            });
-        }
     }
 }
