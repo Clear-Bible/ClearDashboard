@@ -36,8 +36,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 if (Equals(value, Entity.Text)) return;
                 Entity.Text = value;
                 NotifyOfPropertyChange();
+                NotifyOfPropertyChange(nameof(HasText));
             }
         }
+
+        public bool HasText => !string.IsNullOrEmpty(Text);
 
         public string TabHeader
         {

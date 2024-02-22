@@ -853,7 +853,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         }
 
         // TODO: localize
-        public string ApplyLabel => AddMode ? "Add Note" : "Update Note";
+        public string ApplyLabel => "Add Jot";
 
         private string? OriginalNoteText { get; set; } = string.Empty;
 

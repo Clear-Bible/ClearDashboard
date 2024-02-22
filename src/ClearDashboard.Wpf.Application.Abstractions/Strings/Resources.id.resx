@@ -134,7 +134,7 @@
     <value>Nonaktifkan lisensi saat ini</value>
   </data>
   <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
-    <value>-Sekuntuhan-lainnya-</value>
+    <value>-Kekening lainnya-</value>
   </data>
   <data name="AccountInfo_ParatextEmailLabel" xml:space="preserve">
     <value>Email Paratext:</value>
@@ -290,7 +290,7 @@
     <value>buah</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>batu permata</value>
+    <value>Batu permata</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>rumput</value>
@@ -533,7 +533,7 @@
     <value>Waktu lokal</value>
   </data>
   <data name="ClockUserControl_Name" xml:space="preserve">
-    <value>Beri nama itemnya</value>
+    <value>Beri nama item</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
     <value>grup baru</value>
@@ -761,7 +761,7 @@
     <value>Sumber Font Ukuran:</value>
   </data>
   <data name="FontSettings_Target" xml:space="preserve">
-    <value>Teks target:</value>
+    <value>Teks Target:</value>
   </data>
   <data name="FontSettings_TargetFontSize" xml:space="preserve">
     <value>Ukuran font target:</value>
@@ -1016,7 +1016,7 @@
     <value>Tambahkan sebagai formulir untuk ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Temukan pencocokan leksem atau bentuk penuh atau parsial untuk sumber</value>
+    <value>Temukan Lexeme atau Bentuk Penting atau Parsial untuk Sumber</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Tambahkan target sebagai terjemahan untuk ...</value>
@@ -1250,7 +1250,7 @@
     <value>MAT</value>
   </data>
   <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>Membuat database ...</value>
+    <value>Membuat basis data ...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
     <value>Gabungkan ... Antarmuka Muat Ulang</value>
@@ -1366,6 +1366,9 @@
   <data name="None" xml:space="preserve">
     <value>Tidak ada</value>
   </data>
+  <data name="Notes_AddJot" xml:space="preserve">
+    <value>Tambahkan Jot</value>
+  </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
     <value>Tambahkan Jot Baru</value>
   </data>
@@ -1388,7 +1391,7 @@
     <value>Filter berdasarkan status</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>Filter dengan teks</value>
+    <value>Filter menurut teks</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>Setiap</value>
@@ -1424,7 +1427,7 @@
     <value>Tambahkan grup label</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Tambahkan Grup Label</value>
+    <value>Tambahkan grup label</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Grup label sudah ada dengan nama</value>
@@ -1520,7 +1523,7 @@
     <value>Bagian</value>
   </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
-    <value>Tandai keributan ini seperti yang diselesaikan?</value>
+    <value>Tandai jot ini seperti yang diselesaikan?</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>Kirim Jots ini ke Paratext?</value>
@@ -1539,6 +1542,9 @@
   </data>
   <data name="Notes_UnreadRepliesPresent" xml:space="preserve">
     <value>Membalas balasan hadir</value>
+  </data>
+  <data name="Notes_UpdateJot" xml:space="preserve">
+    <value>Perbarui Jot</value>
   </data>
   <data name="Notes_Word" xml:space="preserve">
     <value>Kata</value>
@@ -1583,7 +1589,7 @@
     <value>Kereta</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Pelatih mesin pelurus mesin</value>
+    <value>Pelatihan mesin pelurus mesin</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Atur pemetaan ayat antara korpora yang disejajarkan</value>
@@ -1595,7 +1601,7 @@
     <value>Pilih algoritma SMT untuk berlatih</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Tambahkan persetujuan curah untuk dilihat</value>
+    <value>Tambahkan persetujuan massal untuk dilihat</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>Tambahkan ke tampilan</value>
@@ -1733,7 +1739,7 @@
     <value>Mulai Paratext dulu</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Studibible</value>
+    <value>Studybible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBibleadditions</value>
@@ -1835,7 +1841,7 @@
     <value>PRO</value>
   </data>
   <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
-    <value>Tambahkan Pengguna Kolaborasi Baru</value>
+    <value>Tambahkan pengguna kolaborasi baru</value>
   </data>
   <data name="ProjectPicker_AppName" xml:space="preserve">
     <value>ClearDashboard</value>

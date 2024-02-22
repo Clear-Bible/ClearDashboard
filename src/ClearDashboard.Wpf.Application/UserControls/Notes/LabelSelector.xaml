@@ -32,6 +32,7 @@
                 Margin="5,0,0,0"
                 FontSize="13"
                 KeyUp="OnLabelTextBoxKeyUp"
+                GotFocus="LabelTextBox_OnGotFocus"
                 LostFocus="LabelTextBox_OnLostFocus"
                 LostKeyboardFocus="LabelTextBox_OnLostKeyboardFocus"
                 TextChanged="OnLabelTextChanged" />

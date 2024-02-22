@@ -195,7 +195,7 @@
                     Height="40"
                     Margin="3,5,0,0"
                     Click="ApplyNote"
-                    Content="{Binding ElementName=NotesDisplayControl, Path=ApplyLabel}"
+                    Content="{helpers:Localization Notes_UpdateJot}"
                     FontSize="11"
                     Foreground="{DynamicResource MaterialDesignBody}"
                     Style="{StaticResource TransparentStyle}" />

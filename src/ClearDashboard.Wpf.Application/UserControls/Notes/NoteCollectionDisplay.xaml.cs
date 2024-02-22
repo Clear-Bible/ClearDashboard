@@ -9,6 +9,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
@@ -703,6 +704,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 RaiseNoteEvent(AddNoteEditorMouseEnterEvent, args);
             }
         }
+
         private void OnAddNoteEditorMouseLeave(object sender, RoutedEventArgs e)
         {
             if (e is NoteEventArgs args)
@@ -711,6 +713,40 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 RaiseNoteEvent(AddNoteEditorMouseLeaveEvent, args);
             }
         }
+
+        private void OnAddPopupOpened(object sender, RoutedEventArgs e)
+        {
+
+            IsAddJotOpen = true;
+        }
+
+        private void OnAddPopupClosed(object sender, RoutedEventArgs e)
+        {
+            IsAddJotOpen = false;
+        }
+
+        private void OnPopupMouseEnter(object sender, MouseEventArgs e)
+        {
+            var args = new NoteEventArgs
+            {
+                EntityIds = AddNoteControl.EntityIds,
+                IsNewNote = true,
+            };
+            RaiseNoteEvent(AddNoteEditorMouseEnterEvent, args);
+            
+        }
+
+        private void OnPopupMouseLeave(object sender, MouseEventArgs e)
+        {
+            var args = new NoteEventArgs
+            {
+                EntityIds = AddNoteControl.EntityIds,
+                IsNewNote = true,
+            };
+            RaiseNoteEvent(NoteEditorMouseLeaveEvent, args);
+        }
+
+     
 
         private void RaiseNoteAssociationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
@@ -1629,15 +1665,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         }
 
 
-        private void OnAddPopupOpened(object sender, RoutedEventArgs e)
-        {
-           
-            IsAddJotOpen = true;
-        }
-
-        private void OnAddPopupClosed(object sender, RoutedEventArgs e)
-        {
-            IsAddJotOpen = false;
-        }
+    
     }
 }

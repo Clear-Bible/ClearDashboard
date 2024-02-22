@@ -581,7 +581,7 @@
     <value>Proyectos</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
-    <value>Seleccionar proyecto</value>
+    <value>Proyecto seleccionado</value>
   </data>
   <data name="Copy" xml:space="preserve">
     <value>Copiar</value>
@@ -698,7 +698,7 @@
     <value>Eliminar corpus</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>Mostrar los controles de vista</value>
+    <value>Mostrar los controles de la vista</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
     <value>Token dividido</value>
@@ -872,7 +872,7 @@
     <value>Agregar significado</value>
   </data>
   <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
-    <value>Agregue un significado para este lema</value>
+    <value>Agregar un significado para este lema</value>
   </data>
   <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
     <value>Agregar un dominio semántico</value>
@@ -1028,7 +1028,7 @@
     <value>Importación comprobada</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
-    <value>Lexeme o coincidencias de formulario</value>
+    <value>Lexeme o coincidencias de forma</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
     <value>No hay más registros para importar.</value>
@@ -1366,6 +1366,9 @@
   <data name="None" xml:space="preserve">
     <value>Ninguno</value>
   </data>
+  <data name="Notes_AddJot" xml:space="preserve">
+    <value>Agregar JOT</value>
+  </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
     <value>Agrega una nueva jot</value>
   </data>
@@ -1415,7 +1418,7 @@
     <value>¿Quieres eliminar la etiqueta:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>¿Quieres disociar la etiqueta?</value>
+    <value>¿Quieres disociar la etiqueta:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>del grupo de etiquetas:</value>
@@ -1539,6 +1542,9 @@
   </data>
   <data name="Notes_UnreadRepliesPresent" xml:space="preserve">
     <value>Respuestas no leídas presentes</value>
+  </data>
+  <data name="Notes_UpdateJot" xml:space="preserve">
+    <value>Actualizar JOT</value>
   </data>
   <data name="Notes_Word" xml:space="preserve">
     <value>Palabra</value>
@@ -1730,10 +1736,10 @@
     <value>Estándar</value>
   </data>
   <data name="Pds_StartParatextFirst" xml:space="preserve">
-    <value>Iniciar PARATEXT primero</value>
+    <value>Inicie el paratext primero</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Estudio de estudio</value>
+    <value>Estudiobible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBIBLeadDitions</value>

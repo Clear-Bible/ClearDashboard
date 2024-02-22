@@ -1366,6 +1366,9 @@
   <data name="None" xml:space="preserve">
     <value>None</value>
   </data>
+  <data name="Notes_AddJot" xml:space="preserve">
+    <value>Add Jot</value>
+  </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
     <value>Add a new jot </value>
   </data>
@@ -1539,6 +1542,9 @@
   </data>
   <data name="Notes_UnreadRepliesPresent" xml:space="preserve">
     <value>Unread replies present</value>
+  </data>
+  <data name="Notes_UpdateJot" xml:space="preserve">
+    <value>Update Jot</value>
   </data>
   <data name="Notes_Word" xml:space="preserve">
     <value>Word</value>

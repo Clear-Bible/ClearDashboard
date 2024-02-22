@@ -1366,6 +1366,9 @@
   <data name="None" xml:space="preserve">
     <value>የለም</value>
   </data>
+  <data name="Notes_AddJot" xml:space="preserve">
+    <value>ጆን ያክሉ</value>
+  </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
     <value>አዲስ ጆን ያክሉ</value>
   </data>
@@ -1539,6 +1542,9 @@
   </data>
   <data name="Notes_UnreadRepliesPresent" xml:space="preserve">
     <value>ያልተነበቡ ምላሾች አሉ</value>
+  </data>
+  <data name="Notes_UpdateJot" xml:space="preserve">
+    <value>ጆን ያዘምኑ</value>
   </data>
   <data name="Notes_Word" xml:space="preserve">
     <value>ቃል</value>
