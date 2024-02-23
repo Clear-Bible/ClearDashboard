@@ -1111,6 +1111,14 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+
+
+                //TODO:  should we bail here?
+                if (labelGroup.Name == LocalizationService["All"])
+                {
+                    return;
+                }
+
                 await SetIsBusy(true);
 #if DEBUG
                 var stopwatch = new Stopwatch();
