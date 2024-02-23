@@ -265,7 +265,9 @@ namespace ClearDashboard.Wpf.Application.Services
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                var result = new LabelGroupViewModelCollection { NoneLabelGroup, AllLabelGroup };
+                //var result = new LabelGroupViewModelCollection { NoneLabelGroup, AllLabelGroup };
+
+                var result = new LabelGroupViewModelCollection { NoneLabelGroup };
 
                 DomainLabelGroups = new LabelGroupViewModelCollection();
 
