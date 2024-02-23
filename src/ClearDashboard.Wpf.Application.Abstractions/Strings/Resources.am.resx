@@ -158,7 +158,7 @@
     <value>አስከሬኑን እንዴት እንደሚያስቆርጡ ይምረጡ</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
-    <value>አሰላለፍ</value>
+    <value>Loading...</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
     <value>አብረው የሚሠሩበት መጽሐፍ (ቶች) ይምረጡ, ሁል ጊዜም ተጨማሪ መጽሐፍትን በኋላ ማከል ይችላሉ.</value>
@@ -176,7 +176,7 @@
     <value>ኢንተርናሽናል</value>
   </data>
   <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
-    <value>ምንም ስህተቶች የሉም</value>
+    <value>Loading...</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
     <value>የ USFM ስህተቶችን ወደ ፋይል ያስቀምጡ</value>
@@ -199,6 +199,9 @@
   <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
     <value>ሁሉንም አይምረጡ</value>
   </data>
+  <data name="All" xml:space="preserve">
+    <value>ሁሉም</value>
+  </data>
   <data name="AMO" xml:space="preserve">
     <value>AMO</value>
   </data>
@@ -215,7 +218,7 @@
     <value>ምዕራፍ</value>
   </data>
   <data name="Bcv_NextBook" xml:space="preserve">
-    <value>የሚቀጥለው መጽሐፍ</value>
+    <value>Loading...</value>
   </data>
   <data name="Bcv_NextChapter" xml:space="preserve">
     <value>የሚቀጥለው ምዕራፍ</value>
@@ -254,7 +257,7 @@
     <value>ቁጥር</value>
   </data>
   <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
-    <value>ፍቅር</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
     <value>እርሻ</value>
@@ -290,7 +293,7 @@
     <value>ፍራፍሬዎች</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>gesmstone</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>ሳርዎች</value>
@@ -536,7 +539,7 @@
     <value>እቃውን ይሰይሙ</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
-    <value>አዲስ ቡድን</value>
+    <value>Loading...</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
     <value>አዲስ ግለሰብ</value>
@@ -635,7 +638,7 @@
     <value>'{0}' ጋር '{1}'?</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
-    <value>አሰላለፍ</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
     <value>ይህንን አመለካከት ሰርዝ?</value>
@@ -659,7 +662,7 @@
     <value>ሁሉንም አሰጣጦች ይሰርዙ?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>የምስጋና የምስክር ወረቀቶች {0} "በርካታ ምደባዎች አሉት. '{1}' ጠቅ ማድረግ 'ሁሉንም አሰጣጦች ሁሉ ይሰርዛል.</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
     <value>የማጣሪያ ቃል ፍለጋ</value>
@@ -812,13 +815,13 @@
     <value>JHN</value>
   </data>
   <data name="JiraResultsView_Password" xml:space="preserve">
-    <value>የይለፍ ቃል:</value>
+    <value>Loading...</value>
   </data>
   <data name="JiraResultsView_URL" xml:space="preserve">
     <value>ዩ አር ኤል</value>
   </data>
   <data name="JiraResultsView_Username" xml:space="preserve">
-    <value>የተጠቃሚ ስም</value>
+    <value>Loading...</value>
   </data>
   <data name="JOB" xml:space="preserve">
     <value>JOB</value>
@@ -926,10 +929,10 @@
     <value>ለሎማ ቀድሞውኑ ለመጨረሻ ጊዜ ለመኖር</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
-    <value>ትርጉሞች</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>አዲስ አንጸባራቂ</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>ከዚህ ትርጉም ይህንን የትርጉም ጎራ ያስወግዱ</value>
@@ -992,7 +995,7 @@
     <value>ወይም</value>
   </data>
   <data name="LexiconEdit_Partially" xml:space="preserve">
-    <value>በከፊል</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>ለውጦችን አስቀምጥ</value>
@@ -1118,7 +1121,7 @@
     <value>ምርጫዎች</value>
   </data>
   <data name="MainView_QuickNew" xml:space="preserve">
-    <value>ፈጣን አዲስ</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>የሚገኙ ለውጦች</value>
@@ -1142,7 +1145,7 @@
     <value>CRPOPOS ማስኬዶች</value>
   </data>
   <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>ዳሽቦርድ</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>እይታ</value>
@@ -1319,13 +1322,13 @@
     <value>ቡድን</value>
   </data>
   <data name="NewCollabUserView_LastName" xml:space="preserve">
-    <value>የአያት ስም</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
     <value>አዲስ ትብብር ተጠቃሚ</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
-    <value>የይለፍ ቃል:</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
     <value>በርቀት አገልጋይ የተቀመጠ</value>
@@ -1337,7 +1340,7 @@
     <value>ተጠቃሚው በአገልጋይ ላይ ቀድሞውኑ አለ</value>
   </data>
   <data name="NewCollabUserView_Username" xml:space="preserve">
-    <value>የተጠቃሚ ስም</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
     <value>ተጠቃሚው ቀድሞውኑ በስርዓቱ ላይ ነው!</value>
@@ -1634,7 +1637,7 @@
     <value>ለማየት ያክሉ</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
-    <value>ረዳትነት</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_BackTranslation" xml:space="preserve">
     <value>የኋላ መመለሻ</value>
@@ -1895,7 +1898,7 @@
     <value>አስመጪ አገልጋይ ፕሮጀክት</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>ፕሮጀክትዎን በሚፈጠሩበት ጊዜ የግሪክ እና የዕብራይስጥ መጽሐፍ ቅዱሳዊ ጽሑፎችን ለማካተት ይህንን ሳጥን ይመልከቱ.</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>የአኪ ግሪክ መጽሐፍ ቅዱሳዊ ጽሑፎችን ያካቱ?</value>
@@ -1913,7 +1916,7 @@
     <value>እዚህ ብቸኛ ነው. እባክዎን አዲስ ፕሮጀክት ይፍጠሩ.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>ጥበቃዎች አልተጫነም. እባክዎን የጥቃቅን ጠቅ ያድርጉ እና CleardardHobodbobod መተግበሪያን እንደገና ይደግፉ.</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>ጥበቃዎች ማካሄድ አይደለም</value>
@@ -1937,7 +1940,7 @@
     <value>የጥበቃ ፕሮጀክት</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>ፕሮጀክት:</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>እኛ እዚያ ነን!</value>
@@ -1964,7 +1967,7 @@
     <value>የጥቃቅን ጥቆማ ለመጀመር እዚህ ጠቅ ያድርጉ</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>ስሪት</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>እባክዎን ለፕሮጄክትዎ ስም ያስገቡ</value>
@@ -2003,7 +2006,7 @@
     <value>1 ተሰሎንቄ</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 ጢሞቴዎስ</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 ዜና መዋዕል</value>
@@ -2027,7 +2030,7 @@
     <value>2 ተሰሎንቄ</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2 ጢሞቴዎስ</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3 ዮሐንስ</value>
@@ -2051,7 +2054,7 @@
     <value>መክብብ</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
-    <value>ኤፌሶን</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_Esther" xml:space="preserve">
     <value>አስቴር</value>
@@ -2066,7 +2069,7 @@
     <value>ዕዝራ</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>ገላትያ ሰዎች</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>ዘፍጥረት</value>
@@ -2117,7 +2120,7 @@
     <value>ሰቆሚዎች</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
-    <value>ዘሌዋውያን</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
     <value>ሉቃስ</value>
@@ -2174,10 +2177,10 @@
     <value>ቲቶ</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>ዘካርያስ</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
-    <value>ሶፎንያስ</value>
+    <value>Loading...</value>
   </data>
   <data name="PSA" xml:space="preserve">
     <value>PSA</value>
@@ -2192,7 +2195,7 @@
     <value>ይመዝገቡ</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>የተሰጠው ቁልፍ ስህተት ነው. ዲክሪፕት በሚሆንበት ጊዜ የተወሰኑ የ JSON ነገሮች ሊገኙ አልቻሉም.</value>
+    <value>Loading...</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>የዲክሪፕት የፈቃድ ቁልፍ ይዘቶች ከሰጡት መረጃ ጋር አይዛመድም.</value>
@@ -2423,7 +2426,7 @@
     <value>ቅድመ-እይታ</value>
   </data>
   <data name="SlackMessageView_SuggestionSeverity" xml:space="preserve">
-    <value>ከባድነት: -</value>
+    <value>Loading...</value>
   </data>
   <data name="SlackMessageView_SuggestionTitle" xml:space="preserve">
     <value>ርዕስ</value>
@@ -2441,7 +2444,7 @@
     <value>ሁኔታ</value>
   </data>
   <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>ቅርጸት ተደርጓል</value>
+    <value>Loading...</value>
   </data>
   <data name="TargetContextView_Unformatted" xml:space="preserve">
     <value>ያልተስተካከለ</value>
@@ -2456,7 +2459,7 @@
     <value>TIT</value>
   </data>
   <data name="TokenDisplay_SetTranslation" xml:space="preserve">
-    <value>የሸንበቆ ግንድ</value>
+    <value>Loading...</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>ዝመና</value>
@@ -2486,7 +2489,7 @@
     <value>CRPOPOS ማስኬዶች</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
-    <value>ዳሽቦርድ</value>
+    <value>Loading...</value>
   </data>
   <data name="Windows_EnhancedView" xml:space="preserve">
     <value>እይታ</value>

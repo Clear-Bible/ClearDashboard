@@ -56,10 +56,12 @@ namespace ClearDashboard.Wpf.Application.Services
         private UserId? _currentUserId;
         private LabelCollection _labelSuggestions = new();
         private LabelGroupViewModelCollection _labelGroups = new();
+
         private LabelGroupViewModel? _defaultLabelGroup;
         private bool _isBusy;
         private EntityIdCollection _selectedEntityIds = new EntityIdCollection();
         private bool _isBusyBackground;
+        private LabelGroupViewModelCollection _domainLabelGroups = new();
 
 
         public NoteManager(IEventAggregator eventAggregator,
@@ -77,6 +79,7 @@ namespace ClearDashboard.Wpf.Application.Services
             ExternalNoteManager = new ExternalNoteManager(EventAggregator);
 
             NoneLabelGroup.Name = $"<{LocalizationService["None"]}>";
+            AllLabelGroup.Name = $"<{LocalizationService["All"]}>";
 
             LifetimeScope = lifetimeScope;
 
@@ -101,7 +104,14 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <summary>
         /// Gets the LabelGroup which contains all label suggestions.
         /// </summary>
+        public static LabelGroupViewModel AllLabelGroup { get; } = new LabelGroupViewModel();
+
+        /// <summary>
+        /// Gets the LabelGroup which contains label suggestions which are not part of a LabelGroup.
+        /// </summary>
         public static LabelGroupViewModel NoneLabelGroup { get; } = new LabelGroupViewModel() ;
+
+
 
         /// <summary>
         /// Gets the default <see cref="LabelGroupViewModel"/> for the current user, if any.
@@ -128,6 +138,12 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             get => _labelGroups;
             private set => Set(ref _labelGroups, value);
+        }
+
+        private LabelGroupViewModelCollection DomainLabelGroups
+        {
+            get => _domainLabelGroups;
+            set => Set(ref _domainLabelGroups, value);
         }
 
         /// <summary>
@@ -249,15 +265,19 @@ namespace ClearDashboard.Wpf.Application.Services
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                var result = new LabelGroupViewModelCollection { NoneLabelGroup };
+                var result = new LabelGroupViewModelCollection { NoneLabelGroup, AllLabelGroup };
+
+                DomainLabelGroups = new LabelGroupViewModelCollection();
 
                 var labelGroups = await LabelGroup.GetAll(Mediator);
                 foreach (var labelGroup in labelGroups.OrderBy(lg => lg.Name))
                 {
                     var labelIds = await labelGroup.GetLabelIds(Mediator);
                     var labels = new LabelCollection(LabelSuggestions.Where(ls => labelIds.Contains(ls.LabelId)));
-                    result.Add(new LabelGroupViewModel(labelGroup) { Labels = labels });
+                    DomainLabelGroups.Add(new LabelGroupViewModel(labelGroup) { Labels = labels });
                 }
+
+                result.AddRange(DomainLabelGroups);
 
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved label groups in {stopwatch.ElapsedMilliseconds}ms");
@@ -1253,10 +1273,17 @@ namespace ClearDashboard.Wpf.Application.Services
         public async Task PopulateLabelsAsync()
         {
             LabelSuggestions = await GetLabelSuggestionsAsync();
-            NoneLabelGroup.Labels = LabelSuggestions;
+            AllLabelGroup.Labels = LabelSuggestions;
             LabelGroups = await GetLabelGroupsAsync();
+            NoneLabelGroup.Labels = GetNoneLabelGroupLabels();
 
             DefaultLabelGroup = await GetUserDefaultLabelGroupAsync();
+        }
+
+        private LabelCollection GetNoneLabelGroupLabels()
+        {
+            var allGroupedLabels = DomainLabelGroups.SelectMany(lg => lg.Labels).Distinct().ToList();
+            return new LabelCollection(AllLabelGroup.Labels.Except(allGroupedLabels));
         }
 
         public async Task InitializeAsync()
