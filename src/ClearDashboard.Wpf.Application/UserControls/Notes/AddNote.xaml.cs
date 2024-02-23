@@ -1,11 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using ClearBible.Engine.Utils;
+﻿using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Collections;
@@ -13,7 +6,13 @@ using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
-using ClearDashboard.Wpf.Application.ViewModels.Notes;
+using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 using Brushes = System.Windows.Media.Brushes;
 using FontFamily = System.Windows.Media.FontFamily;
 using FontStyle = System.Windows.FontStyle;
@@ -457,12 +456,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             control.OnPropertyChanged(nameof(ParatextSendVisibility));
         }
 
-        private static void OnAddModeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
-        {
-            var control = (AddNote)obj;
-            control.UpdateControlLayout();
-            control.OnPropertyChanged(nameof(NotePropertiesVisibility));
-        }
+   
 
         private void UpdateControlLayout()
         {
@@ -518,7 +512,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             NoteTextBox.Focus();
             NoteTextBox.Select(NoteTextBox.Text.Length, 0);
 
-            OriginalNoteText = Note.Text;
+            //OriginalNoteText = Note.Text;
         }
 
         private void OnNoteTextBoxChanged(object sender, TextChangedEventArgs e)
@@ -672,23 +666,23 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             });
         }
 
-        private void RaiseNoteSeenEvent(NoteSeenEventArgs args)
+        private void RaiseNoteSeenEvent(NoteSeenEventArgs? args)
         {
             RaiseEvent(new NoteSeenEventArgs
             {
                 RoutedEvent = NoteSeenEvent,
-                Seen = args.Seen,
-                NoteViewModel = args.NoteViewModel
+                Seen = args?.Seen,
+                NoteViewModel = args?.NoteViewModel
             });
         }
 
-        private void RaiseReplyAddedEvent(NoteReplyAddEventArgs args)
+        private void RaiseReplyAddedEvent(NoteReplyAddEventArgs? args)
         {
             RaiseEvent(new NoteReplyAddEventArgs
             {
                 RoutedEvent = NoteReplyAddedEvent,
-                Text = args.Text,
-                NoteViewModelWithReplies = args.NoteViewModelWithReplies
+                Text = args?.Text,
+                NoteViewModelWithReplies = args?.NoteViewModelWithReplies
             });
         }
 
@@ -777,15 +771,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             RaiseNoteAssociationEvent(NoteAssociationMouseLeaveEvent, e);
         }
 
-        private void OnMouseEnter(object sender, MouseEventArgs e)
-        {
-            RaiseNoteEvent(NoteEditorMouseEnterEvent);
-        }
+        //private void OnMouseEnter(object sender, MouseEventArgs e)
+        //{
+        //    RaiseNoteEvent(NoteEditorMouseEnterEvent);
+        //}
 
-        private void OnMouseLeave(object sender, MouseEventArgs e)
-        {
-            RaiseNoteEvent(NoteEditorMouseLeaveEvent);
-        }
+        //private void OnMouseLeave(object sender, MouseEventArgs e)
+        //{
+        //    RaiseNoteEvent(NoteEditorMouseLeaveEvent);
+        //}
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -811,8 +805,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         #endregion Private event handlers
         #region Public Properties
-
-       private string? OriginalNoteText { get; set; } = string.Empty;
 
         private bool _isEditing;
         private bool _isChanged;

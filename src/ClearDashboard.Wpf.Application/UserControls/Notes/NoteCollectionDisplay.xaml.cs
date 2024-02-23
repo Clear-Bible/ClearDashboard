@@ -697,6 +697,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             {
                 args.EntityIds = noteDisplay.EntityIds;
                 args.IsNewNote = true;
+                args.Note = noteDisplay.Note;
                 RaiseNoteEvent(AddNoteEditorMouseEnterEvent, args);
             }
         }
@@ -727,6 +728,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             var args = new NoteEventArgs
             {
                 EntityIds = AddNoteControl.EntityIds,
+                Note = AddNoteControl.Note,
                 IsNewNote = true,
             };
             RaiseNoteEvent(AddNoteEditorMouseEnterEvent, args);
