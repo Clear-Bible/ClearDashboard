@@ -7,6 +7,7 @@ using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
@@ -682,6 +683,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 RaiseNoteEvent(NoteEditorMouseEnterEvent, args);
             }
         }
+
         private void OnNoteEditorMouseLeave(object sender, RoutedEventArgs e)
         {
             if (e is NoteEventArgs args)
@@ -689,7 +691,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 RaiseNoteEvent(NoteEditorMouseLeaveEvent, args);
             }
         }
-
+        
         private void OnAddNoteEditorMouseEnter(object sender, RoutedEventArgs e)
         {
             var noteDisplay = (AddNote)sender;
@@ -721,6 +723,32 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             var jotEditViewModel = (JotsEditorViewModel)DataContext;
             jotEditViewModel.IsAddJotOpen = false;
+        }
+
+        private void OnTabHeaderMouseEnter(object sender, MouseEventArgs e)
+        {
+            var viewModel = (NoteViewModel)TabControl.SelectedContent;
+            var args = new NoteEventArgs
+            {
+                EntityIds = new EntityIdCollection(viewModel.Associations.
+                    Select(a=>a.AssociatedEntityId)),
+                Note = viewModel,
+                IsNewNote = false,
+            };
+            RaiseNoteEvent(AddNoteEditorMouseEnterEvent, args);
+
+        }
+
+        private void OnTabHeaderMouseLeave(object sender, MouseEventArgs e)
+        {
+            var viewModel = (NoteViewModel)TabControl.SelectedContent;
+            var args = new NoteEventArgs
+            {
+                EntityIds = new EntityIdCollection(viewModel.Associations.
+                    Select(a => a.AssociatedEntityId)),
+                IsNewNote = false,
+            };
+            RaiseNoteEvent(NoteEditorMouseLeaveEvent, args);
         }
 
         private void OnPopupMouseEnter(object sender, MouseEventArgs e)
