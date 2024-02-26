@@ -113,7 +113,7 @@
     <value>Версия</value>
   </data>
   <data name="AccountInfo_ClearDashboardUserIdLabel" xml:space="preserve">
-    <value>ClearDashboard userId:</value>
+    <value>Cleardashboard userid:</value>
   </data>
   <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
     <value>Имя пользователя ClearDashboard:</value>
@@ -198,6 +198,9 @@
   </data>
   <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
     <value>Снять все</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Все</value>
   </data>
   <data name="AMO" xml:space="preserve">
     <value>Ам.</value>
@@ -662,10 +665,10 @@
     <value>Токен '{0}' имеет определенные выравнивания. Нажатие '{1}' удалит все выравнивания.</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>Поиск по фильтру</value>
+    <value>Поиск фильтра</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>Поиск члена фильтра</value>
+    <value>Поиск членов фильтра</value>
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
     <value>Межлинейный</value>
@@ -701,7 +704,7 @@
     <value>Показать элементы управления представлением</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>Расколотый токен</value>
+    <value>Разделенный токен</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>Применить разделение на другие экземпляры токена</value>
@@ -1268,7 +1271,7 @@
     <value>Мих.</value>
   </data>
   <data name="Migrate_Header" xml:space="preserve">
-    <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
+    <value>Сбросить сопоставления стихов в стихование по умолчанию</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>Мк.</value>
@@ -1286,7 +1289,7 @@
     <value>Токен доступа:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Проверьте свою электронную почту и введите код проверки:</value>
+    <value>Проверьте свою электронную почту и введите в код проверки:</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Проверьте доступность пользователя</value>
@@ -1427,7 +1430,7 @@
     <value>Добавить группу метки</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Добавить группу этикетки</value>
+    <value>Добавить группу ярлыков</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Группа лейблов уже существует с именем</value>
@@ -1522,6 +1525,9 @@
   <data name="Notes_Part" xml:space="preserve">
     <value>Часть</value>
   </data>
+  <data name="Notes_PleaseAddJot" xml:space="preserve">
+    <value>Пожалуйста, добавьте JOT, используя диалог ниже.</value>
+  </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
     <value>Отметьте эти записи как решенные?</value>
   </data>
@@ -1529,7 +1535,10 @@
     <value>Отправить эти записи в Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Отправить выбранные Jots в Paratext?</value>
+    <value>Отправить Jots в paratext</value>
+  </data>
+  <data name="Notes_TakeAction" xml:space="preserve">
+    <value />
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Токенизированный корпус</value>
@@ -1619,7 +1628,7 @@
     <value>Создать новую токенизацию корпуса</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>Добавить новый интернетальный</value>
+    <value>Добавить новый интерлинеар</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>Добавьте текст в просмотр</value>
@@ -1679,7 +1688,7 @@
     <value>Название проекта существует</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
-    <value>Внешние заметки редактор</value>
+    <value>Редактор внешних заметок</value>
   </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
     <value>Установите всю область контента в просмотр</value>
@@ -1715,7 +1724,7 @@
     <value>Характеристики</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Сбросить сопоставления стихов по умолчанию по умолчанию</value>
+    <value>Сбросить сопоставления стихов в стихование по умолчанию</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Ресурс</value>
@@ -1736,7 +1745,7 @@
     <value>Стандартный</value>
   </data>
   <data name="Pds_StartParatextFirst" xml:space="preserve">
-    <value>Сначала начните Paratext</value>
+    <value>Сначала запустить Paratext</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
     <value>Учебное пособие</value>
@@ -1754,7 +1763,7 @@
     <value>Транслитерация</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Транслитерация WithIntEncoder</value>
+    <value>Транслитерация WithIteChoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Неизвестный</value>
@@ -1802,7 +1811,7 @@
     <value>Тип лекса</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
-    <value>Загружать ссылки</value>
+    <value>Загрузить ссылки</value>
   </data>
   <data name="Pins_Match" xml:space="preserve">
     <value>Соответствовать</value>
@@ -1898,7 +1907,7 @@
     <value>Включите NT Грико -библейские тексты?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
-    <value>Включите OT ивритские библейские тексты?</value>
+    <value>Включите ивритские библейские тексты?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>Управление совместными проектами</value>
@@ -2231,7 +2240,7 @@
     <value>Включить экспериментальный плагин Aqua</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Проверьте свою электронную почту и введите код проверки:</value>
+    <value>Проверьте свою электронную почту и введите в код проверки:</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Настройки сотрудничества</value>
@@ -2324,7 +2333,7 @@
     <value>Сохранить настройки</value>
   </data>
   <data name="Settings_SendValidationEmail" xml:space="preserve">
-    <value>Отправить валидацию по электронной почте</value>
+    <value>Отправить валидацию электронной почты</value>
   </data>
   <data name="Settings_Settings" xml:space="preserve">
     <value>Настройки ClearDashboard</value>

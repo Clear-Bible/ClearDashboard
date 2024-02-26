@@ -199,6 +199,9 @@
   <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
     <value>Unselect All</value>
   </data>
+  <data name="All" xml:space="preserve">
+    <value>All</value>
+  </data>
   <data name="AMO" xml:space="preserve">
     <value>AMO</value>
   </data>
@@ -1522,6 +1525,9 @@
   <data name="Notes_Part" xml:space="preserve">
     <value>Part</value>
   </data>
+  <data name="Notes_PleaseAddJot" xml:space="preserve">
+    <value>Please add a jot using the dialog below.</value>
+  </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
     <value>Mark these jots as resolved?</value>
   </data>
@@ -1529,7 +1535,10 @@
     <value>Send these jots to Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Send selected jots to Paratext?</value>
+    <value>Send jots to Paratext</value>
+  </data>
+  <data name="Notes_TakeAction" xml:space="preserve">
+    <value>Take Action</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Tokenized Corpus</value>

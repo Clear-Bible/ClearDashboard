@@ -199,6 +199,9 @@
   <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
     <value>មិនជ្រើសរើសទាំងអស់</value>
   </data>
+  <data name="All" xml:space="preserve">
+    <value>តាមងអស់</value>
+  </data>
   <data name="AMO" xml:space="preserve">
     <value>AMO</value>
   </data>
@@ -1522,6 +1525,9 @@
   <data name="Notes_Part" xml:space="preserve">
     <value>ចេក</value>
   </data>
+  <data name="Notes_PleaseAddJot" xml:space="preserve">
+    <value>សូមបន្ថែម jot ដោយប្រើប្រអប់ខាងក្រោម។</value>
+  </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
     <value>សម្គាល់ jots ទាំងនេះដូចដែលបានដោះស្រាយ?</value>
   </data>
@@ -1529,7 +1535,10 @@
     <value>ផ្ញើ Jots ទាំងនេះទៅ Paratlets?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>ផ្ញើ Jots ដែលបានជ្រើសរើសទៅ ParateXT?</value>
+    <value>ផ្ញើ JOST ទៅ Parathxt</value>
+  </data>
+  <data name="Notes_TakeAction" xml:space="preserve">
+    <value />
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>tokenized Corpus</value>

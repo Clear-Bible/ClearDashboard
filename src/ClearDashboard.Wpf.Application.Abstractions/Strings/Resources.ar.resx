@@ -199,6 +199,9 @@
   <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
     <value>إلغاء تحديد الكل</value>
   </data>
+  <data name="All" xml:space="preserve">
+    <value>الجميع</value>
+  </data>
   <data name="AMO" xml:space="preserve">
     <value>AMO</value>
   </data>
@@ -566,7 +569,7 @@
     <value>لديك مستخدمون آخرون متصلون بهذا المشروع. سيتم إزالة هذا المشروع لهم أيضًا. هل من المؤكد أنك تريد حذف هذا المشروع؟</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
-    <value>هل أنت متأكد من أنك تريد حذف هذا المشروع؟</value>
+    <value>هل أنت متأكد أنك تريد حذف هذا المشروع؟</value>
   </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>وصف</value>
@@ -611,7 +614,7 @@
     <value>حذف المشروع</value>
   </data>
   <data name="Delete_Project_Confirmation" xml:space="preserve">
-    <value>هل أنت متأكد من أنك تريد حذف هذا المشروع؟</value>
+    <value>هل أنت متأكد أنك تريد حذف هذا المشروع؟</value>
   </data>
   <data name="DEU" xml:space="preserve">
     <value>DEU</value>
@@ -770,7 +773,7 @@
     <value>عنوان:</value>
   </data>
   <data name="FontSettings_TitleFontSize" xml:space="preserve">
-    <value>حجم خط الخط:</value>
+    <value>حجم خط العنوان:</value>
   </data>
   <data name="FontSettings_Translations" xml:space="preserve">
     <value>الترجمات:</value>
@@ -1004,7 +1007,7 @@
     <value>اللغة المستهدفة</value>
   </data>
   <data name="LexiconEdit_Title" xml:space="preserve">
-    <value>معجم تحرير</value>
+    <value>تحرير معجم</value>
   </data>
   <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>ترجمة</value>
@@ -1522,6 +1525,9 @@
   <data name="Notes_Part" xml:space="preserve">
     <value>جزء</value>
   </data>
+  <data name="Notes_PleaseAddJot" xml:space="preserve">
+    <value>الرجاء إضافة JOT باستخدام مربع الحوار أدناه.</value>
+  </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
     <value>بمناسبة هذه jots كما تم حلها؟</value>
   </data>
@@ -1529,7 +1535,10 @@
     <value>أرسل هذه Jots إلى Paratext؟</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>إرسال Jots المحددة إلى Paratext؟</value>
+    <value>أرسل Jots إلى Paratext</value>
+  </data>
+  <data name="Notes_TakeAction" xml:space="preserve">
+    <value />
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>مجموعة رمزية</value>
@@ -1928,7 +1937,7 @@
     <value>نص النموذج (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext قيد التشغيل ولكن غير متصل.</value>
+    <value>Paratext قيد التشغيل ولكنه غير متصل.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>مشروع Paratext</value>
@@ -1952,7 +1961,7 @@
     <value>معالج قالب المشروع: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>قائمة مشاريع التعاون</value>
+    <value>قم بتحديث قائمة مشاريع التعاون</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>البحث في الآونة الأخيرة</value>
@@ -2270,7 +2279,7 @@
     <value>تجريبي</value>
   </data>
   <data name="Settings_ExportLabelGroups" xml:space="preserve">
-    <value>تصدير مجموعات الملصقات</value>
+    <value>مجموعات تسمية التصدير</value>
   </data>
   <data name="Settings_General" xml:space="preserve">
     <value>عام</value>
@@ -2330,7 +2339,7 @@
     <value>ClearDashboard إعدادات</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>عرض طرق العرض الموسعة على شاشة مختلفة عن لوحة القيادة</value>
+    <value>عرض طرق عرض موسعة على شاشة مختلفة عن لوحة القيادة</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
     <value>بالنسبة للأنظمة التي تحتوي على ثلاثة شاشات أو أكثر ، عرض عرض موسع على الشاشة الثالثة</value>

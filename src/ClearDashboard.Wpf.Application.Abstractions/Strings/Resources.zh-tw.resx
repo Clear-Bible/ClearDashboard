@@ -161,7 +161,7 @@
     <value>結盟</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
-    <value>選擇與您合作的書籍，您稍後可以隨時添加更多書籍。</value>
+    <value>選擇您正在合作的書籍，您稍後可以隨時添加更多書籍。</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>檢查USFM</value>
@@ -198,6 +198,9 @@
   </data>
   <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
     <value>全部取消選擇</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>全部</value>
   </data>
   <data name="AMO" xml:space="preserve">
     <value>AMO</value>
@@ -278,7 +281,7 @@
     <value>建造;宗教活動</value>
   </data>
   <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>構造；畜牧業</value>
+    <value>建築；畜牧業</value>
   </data>
   <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
     <value>容器；畜牧業</value>
@@ -455,7 +458,7 @@
     <value>數數</value>
   </data>
   <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>按地面文本計數</value>
+    <value>按表面文本計數</value>
   </data>
   <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
     <value>通過培訓文本計數</value>
@@ -506,7 +509,7 @@
     <value>目標</value>
   </data>
   <data name="BulkAlignmentReview_TargetPart" xml:space="preserve">
-    <value>目標部分</value>
+    <value>目標零件</value>
   </data>
   <data name="BulkAlignmentReview_Type" xml:space="preserve">
     <value>類型</value>
@@ -656,7 +659,7 @@
     <value>刪除“ {0}”的對齊？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>刪除所有路線？</value>
+    <value>刪除所有對齊方式？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
     <value>令牌'{0}'具有多個對齊定義。單擊'{1}'將刪除所有對齊。</value>
@@ -701,7 +704,7 @@
     <value>顯示視圖控件</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>拆分令牌</value>
+    <value>分開令牌</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
     <value>將拆分應用於其他令牌</value>
@@ -887,7 +890,7 @@
     <value>更改所有不設置的事件</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>如果檢查了，這將改變此詞的所有不設置</value>
+    <value>如果檢查了，這將改變此詞的所有不設置的情況</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>一致性</value>
@@ -956,7 +959,7 @@
     <value>添加'{0}'作為表單</value>
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
-    <value>將'{0}'添加為第一個含義</value>
+    <value>添加'{0}'作為第一個含義</value>
   </data>
   <data name="LexiconEdit_EditingDone" xml:space="preserve">
     <value>完畢</value>
@@ -1070,7 +1073,7 @@
     <value>需要姓氏</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>需要許可證密鑰</value>
+    <value>需要許可密鑰</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
@@ -1370,7 +1373,7 @@
     <value>添加JOT</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>添加一個新的jot</value>
+    <value>添加新的雜誌</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>刪除此jot？</value>
@@ -1522,6 +1525,9 @@
   <data name="Notes_Part" xml:space="preserve">
     <value>部分</value>
   </data>
+  <data name="Notes_PleaseAddJot" xml:space="preserve">
+    <value>請使用下面的對話框添加一個jot。</value>
+  </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
     <value>將這些jots標記為解決？</value>
   </data>
@@ -1529,10 +1535,13 @@
     <value>將這些JOTS發送到Paratext？</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>將選定的JOTS發送到Paratext？</value>
+    <value>將Jots發送到Paratext</value>
+  </data>
+  <data name="Notes_TakeAction" xml:space="preserve">
+    <value />
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>象徵化的語料庫</value>
+    <value>令牌化語料庫</value>
   </data>
   <data name="Notes_TranslationSet" xml:space="preserve">
     <value>翻譯集</value>
@@ -1616,13 +1625,13 @@
     <value>創建新單詞對齊</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>創建新的語料庫</value>
+    <value>創建新的語料庫令牌化</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
     <value>添加新的Interlinear</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
-    <value>添加文本查看</value>
+    <value>添加文字以查看</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
     <value>將文本添加到新視圖</value>
@@ -1643,7 +1652,7 @@
     <value>更改內容的縮放級別</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>顧問說明</value>
+    <value>顧問Notes</value>
   </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>創建新單詞對齊</value>
@@ -1664,7 +1673,7 @@
     <value>刪除Interlinear</value>
   </data>
   <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>您確定要刪除此語料庫嗎？與此語料庫相關的所有註釋，對齊和中間性都將被刪除，無法恢復。</value>
+    <value>您確定要刪除此語料庫嗎？所有註釋，對齊和與此語料庫相關的中線都將被刪除，無法恢復。</value>
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>字典</value>
@@ -1823,7 +1832,7 @@
     <value>字首</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>展示反向翻譯</value>
+    <value>展示退縮</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>幹</value>
@@ -1928,7 +1937,7 @@
     <value>模型文本（LWC）</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>paratext正在運行但未連接。</value>
+    <value>Paratext正在運行但未連接。</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>PARATEXT項目</value>
@@ -2024,7 +2033,7 @@
     <value>帖撒羅尼迦後書</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2蒂莫西</value>
+    <value>2提摩太</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3約翰</value>
@@ -2288,7 +2297,7 @@
     <value>標籤組導出到：</value>
   </data>
   <data name="Settings_LabelGroupsImported" xml:space="preserve">
-    <value>從以下導入的標籤組：</value>
+    <value>從：</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>多監視器支持</value>
@@ -2348,7 +2357,7 @@
     <value>驗證電子郵件代碼</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>啟用逐一文字集合顯示</value>
+    <value>啟用逐節的文本集合顯示</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>取消任務</value>
@@ -2465,7 +2474,7 @@
     <value>更新並添加新書</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
-    <value>選擇書籍</value>
+    <value>選擇書</value>
   </data>
   <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
     <value>更新並添加新</value>
