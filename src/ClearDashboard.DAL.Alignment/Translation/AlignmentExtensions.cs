@@ -1,10 +1,11 @@
-﻿using ClearBible.Engine.Corpora;
+﻿using Autofac;
+using ClearBible.Engine.Corpora;
+using EC = ClearBible.Engine.EngineCommands;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features;
-using ClearDashboard.DAL.Alignment.Features.Translation;
-using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
+using ClearBible.Engine.EngineCommands;
 
 namespace ClearDashboard.DAL.Alignment.Translation
 {
@@ -39,5 +40,13 @@ namespace ClearDashboard.DAL.Alignment.Translation
             return AlignmentModelExtensions.ToAlignmentType(alignment.OriginatedFrom, alignment.Verification, alignmentTypesUsedInQuery);
         }
 
-    }
+		public static async Task<TokensAlignment> AlignTokenizedCorporaAsync(this EC.AlignTokenizedCorporaCommand command, IComponentContext context, CancellationToken cancellationToken)
+		{
+			var alReceiver = context.Resolve<EC.IEngineCommandReceiver<EC.AlignTokenizedCorporaCommand, EC.TokensAlignment>>();
+			var alReply = await alReceiver.RequestAsync(command, cancellationToken);
+
+			return alReply;
+		}
+
+	}
 }

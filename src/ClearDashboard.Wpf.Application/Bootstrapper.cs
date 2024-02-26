@@ -34,7 +34,11 @@ using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.Extensions.Configuration;
 using DashboardApplication = System.Windows.Application;
-using ClearDashboard.DAL.Alignment.Features;
+using ClearBible.Engine.Network;
+using ClearBible.Engine.EngineCommandReceiverProxy;
+using ClearBible.Engine.EngineCommandReceivers;
+using ClearBible.Engine.EngineCommands;
+
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -289,12 +293,32 @@ namespace ClearDashboard.Wpf.Application
 
 			builder.RegisterType<ClearEngineClientWebSocket>().WithParameter(
 				"host",
-				"localhost:5173")
+				"192.168.1.47:5173")
                 .AsSelf()
                 .SingleInstance();
+
+			builder.RegisterType<TokenizeTextCorpusCommandReceiver>();
+			builder.RegisterType<TokenizeTextCorpusCommandReceiverProxy>()
+				.WithParameter(
+					(pi, ctx) => pi.ParameterType == typeof(IEngineCommandReceiver<TokenizeTextCorpusCommand, TokensTextCorpus>) && pi.Name == "nextReceiver",
+					(pi, ctx) => ctx.Resolve<TokenizeTextCorpusCommandReceiver>())
+				.As<IEngineCommandReceiver<TokenizeTextCorpusCommand, TokensTextCorpus>>();
+
+			builder.RegisterType<AlignTokenizedCorporaCommandReceiver>();
+			builder.RegisterType<AlignTokenizedCorporaCommandReceiverProxy>()
+				.WithParameter(
+					(pi, ctx) => pi.ParameterType == typeof(IEngineCommandReceiver<AlignTokenizedCorporaCommand, TokensAlignment>) && pi.Name == "nextReceiver",
+					(pi, ctx) => ctx.Resolve<AlignTokenizedCorporaCommandReceiver>())
+				.As<IEngineCommandReceiver<AlignTokenizedCorporaCommand, TokensAlignment>>();
+
+			builder.RegisterType<DynamicCommandReceiverProxy>()
+				.WithParameter(
+					(pi, ctx) => pi.ParameterType == typeof(IEngineCommandReceiver<DynamicCommand, DynamicCommandResult>) && pi.Name == "nextReceiver",
+					(pi, ctx) => null)
+				.As<IEngineCommandReceiver<DynamicCommand, DynamicCommandResult>>();
 		}
 
-        protected override async Task NavigateToMainWindow()
+		protected override async Task NavigateToMainWindow()
         {
             //EnsureApplicationMainWindowVisible();
             //NavigateToViewModel<EnhancedViewDemoViewModel>();

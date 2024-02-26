@@ -38,16 +38,28 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 			return this;
 		}
 
-		public async Task<ITextCorpus> TokenizeTransform(IMediator mediator, CancellationToken cancellationToken)
-		{
-			var command = new TokenizeTextCorpusCommand(TextCorpus, TokenizeTransformChain);
-			var result = await mediator.Send(command, cancellationToken);
-			result.ThrowIfCanceledOrFailed(true);
-
-			return result.Data!;
-		}
-
 		public ScriptureTextCorpus TextCorpus { get; private set; }
 		public List<string> TokenizeTransformChain { get; }
+	}
+
+	public static class TokenizerTransformerExtentions
+	{
+		public static TextCorpusTokenizerTransformer AddTokenizer<T>(this ScriptureTextCorpus corpus)
+			where T : ITokenizer<string, int, string>, new()
+		{
+			var tokenizerTransformer = new TextCorpusTokenizerTransformer(corpus);
+			tokenizerTransformer.AddTokenizer<T>();
+
+			return tokenizerTransformer;
+		}
+
+		public static TextCorpusTokenizerTransformer AddTokenizer(this ScriptureTextCorpus corpus, string tokenizerClassName)
+		{
+			var tokenizerTransformer = new TextCorpusTokenizerTransformer(corpus);
+			tokenizerTransformer.AddTokenizer(tokenizerClassName);
+
+			return tokenizerTransformer;
+		}
+
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Core.Lifetime;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
@@ -966,34 +967,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                     .AddTokenizer<LatinWordTokenizer>()
                                     .AddTransformer<IntoTokensTextRowProcessor>()
                                     .AddTransformer<SetTrainingBySurfaceLowercase>()
-                                    .TokenizeTransform(Mediator!, cancellationToken),
+                                    .TokenizeTransformAsync(LifetimeScope!, cancellationToken),
 
                                 Tokenizers.WhitespaceTokenizer => await
                                     (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
                                     .AddTokenizer<WhitespaceTokenizer>()
                                     .AddTransformer<IntoTokensTextRowProcessor>()
                                     .AddTransformer<SetTrainingBySurfaceLowercase>()
-									.TokenizeTransform(Mediator!, cancellationToken),
+									.TokenizeTransformAsync(LifetimeScope!, cancellationToken),
 
                                 Tokenizers.ZwspWordTokenizer => await
                                     (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
                                     .AddTokenizer<ZwspWordTokenizer>()
                                     .AddTransformer<IntoTokensTextRowProcessor>()
                                     .AddTransformer<SetTrainingBySurfaceLowercase>()
-                                    .TokenizeTransform(Mediator!, cancellationToken),
+                                    .TokenizeTransformAsync(LifetimeScope!, cancellationToken),
 
                                 Tokenizers.ChineseBibleWordTokenizer => await
                                     (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
                                     .AddTokenizer<ChineseBibleWordTokenizer>()
                                     .AddTransformer<IntoTokensTextRowProcessor>()
                                     .AddTransformer<SetTrainingBySurfaceLowercase>()
-                                    .TokenizeTransform(Mediator!, cancellationToken),
+                                    .TokenizeTransformAsync(LifetimeScope!, cancellationToken),
 
                                 _ => await (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, null, cancellationToken))
                                     .AddTokenizer<WhitespaceTokenizer>()
                                     .AddTransformer<IntoTokensTextRowProcessor>()
                                     .AddTransformer<SetTrainingBySurfaceLowercase>()
-                                    .TokenizeTransform(Mediator!, cancellationToken)
+                                    .TokenizeTransformAsync(LifetimeScope!, cancellationToken)
 							};
 
                             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
@@ -1692,7 +1693,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                .AddTokenizer(tokenizerEnum.ToString())
                .AddTransformer<IntoTokensTextRowProcessor>()
                .AddTransformer<SetTrainingBySurfaceLowercase>()
-               .TokenizeTransform(Mediator!, cancellationToken);
+               .TokenizeTransformAsync(LifetimeScope!, cancellationToken);
 
             return textCorpus;
         }

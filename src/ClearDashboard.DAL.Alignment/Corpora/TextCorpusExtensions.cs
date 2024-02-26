@@ -1,11 +1,12 @@
-﻿using ClearBible.Engine.Corpora;
+﻿using Autofac;
+using ClearBible.Engine.Corpora;
+using EC = ClearBible.Engine.EngineCommands;
 using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using MediatR;
 using SIL.Machine.Corpora;
-using SIL.Machine.Tokenization;
 using SIL.Scripture;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
@@ -50,38 +51,17 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 			return createdTokenizedTextCorpus;
 		}
 
-		public static TextCorpusTokenizerTransformer AddTokenizer<T>(this ScriptureTextCorpus corpus)
-			where T : ITokenizer<string, int, string>, new()
+		public static async Task<ITextCorpus> TokenizeTransformAsync(this TextCorpusTokenizerTransformer tokenizerTransformer, IComponentContext context, CancellationToken cancellationToken)
 		{
-			var tokenizerTransformer = new TextCorpusTokenizerTransformer(corpus);
-			tokenizerTransformer.AddTokenizer<T>();
+			var tcReceiver = context.Resolve<EC.IEngineCommandReceiver<EC.TokenizeTextCorpusCommand,EC.TokensTextCorpus>>();
+			var tcReply = await tcReceiver.RequestAsync(new EC.TokenizeTextCorpusCommand
+			{
+				TokenizeTransformChainFullNames = tokenizerTransformer.TokenizeTransformChain,
+				TextCorpus = tokenizerTransformer.TextCorpus
+			},
+			cancellationToken);
 
-			return tokenizerTransformer;
-		}
-
-		public static TextCorpusTokenizerTransformer AddTokenizer(this ScriptureTextCorpus corpus, string tokenizerClassName)
-		{
-			var tokenizerTransformer = new TextCorpusTokenizerTransformer(corpus);
-			tokenizerTransformer.AddTokenizer(tokenizerClassName);
-
-			return tokenizerTransformer;
-		}
-
-		public static TextCorpusTokenizerTransformer AddTransformer<T>(this ScriptureTextCorpus corpus)
-			where T : IRowProcessor<TextRow>, new()
-		{
-			var tokenizerTransformer = new TextCorpusTokenizerTransformer(corpus);
-			tokenizerTransformer.AddTransformer<T>();
-
-			return tokenizerTransformer;
-		}
-
-		public static TextCorpusTokenizerTransformer AddTransformer(this ScriptureTextCorpus corpus, string transformerClassName)
-		{
-			var tokenizerTransformer = new TextCorpusTokenizerTransformer(corpus);
-			tokenizerTransformer.AddTransformer(transformerClassName);
-
-			return tokenizerTransformer;
+			return tcReply.TokensTextRowCorpus;
 		}
 	}
 }
