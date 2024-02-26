@@ -200,31 +200,91 @@
                         Foreground="{DynamicResource MaterialDesignBody}"
                         Style="{StaticResource TransparentStyle}" />
                 </StackPanel>
-                <StackPanel
-                    x:Name="NoteStatusPanel"
-                    MinWidth="500"
-                    Margin="0,10,0,0"
-                    HorizontalAlignment="Left"
-                    Orientation="Horizontal">
-                    <TextBlock
-                        Padding="0,10,10,5"
-                        VerticalAlignment="Center"
-                        FontFamily="{StaticResource ClearDashboardFont}"
-                        FontSize="12"
-                        FontStyle="Normal"
-                        FontWeight="Normal"
-                        Text="{helpers:Localization Notes_Note_NoteStatus}" />
-                    <ComboBox
-                        x:Name="NoteStatusComboBox"
-                        Width="200"
-                        Height="30"
-                        Margin="0,15,15,5"
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel
+                        x:Name="NoteStatusPanel"
+                        Grid.Column="0"
+                        MinWidth="500"
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Left"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Padding="0,10,10,5"
+                            VerticalAlignment="Center"
+                            FontFamily="{StaticResource ClearDashboardFont}"
+                            FontSize="12"
+                            FontStyle="Normal"
+                            FontWeight="Normal"
+                            Text="{helpers:Localization Notes_Note_NoteStatus}" />
+                        <ComboBox
+                            x:Name="NoteStatusComboBox"
+                            Width="200"
+                            Height="30"
+                            Margin="0,15,15,5"
+                            HorizontalAlignment="Right"
+                            VerticalContentAlignment="Top"
+                            FontSize="12"
+                            ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type models:NoteStatus}}}"
+                            SelectedItem="{Binding ElementName=NotesDisplayControl, Path=SelectedNoteStatus, Mode=TwoWay}" />
+
+                    </StackPanel>
+                    <!--  Paratext send  -->
+                    <StackPanel
+                        Grid.Column="2"
                         HorizontalAlignment="Right"
-                        VerticalContentAlignment="Top"
-                        FontSize="12"
-                        ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type models:NoteStatus}}}"
-                        SelectedItem="{Binding ElementName=NotesDisplayControl, Path=SelectedNoteStatus, Mode=TwoWay}" />
-                </StackPanel>
+                        VerticalAlignment="Bottom"
+                        Orientation="Vertical"
+                        Visibility="{Binding ElementName=NotesDisplayControl, Path=ParatextSendVisibility}">
+                        <Button
+                            Name="SendToParatextButton"
+                            Margin="10,-5,10,0"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Right"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Click="ConfirmParatextSend"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            ToolTip="{helpers:Localization Notes_SendToParatext}">
+                            <Image Height="18" Source="/Resources/Paratext_Send32.png" />
+                        </Button>
+                        <Popup
+                            Name="ConfirmParatextSendPopup"
+                            HorizontalOffset="100"
+                            Placement="Left"
+                            PlacementTarget="{Binding ElementName=SendToParatextButton}"
+                            StaysOpen="False"
+                            VerticalOffset="30">
+                            <Border BorderThickness="2">
+                                <StackPanel Background="LightGreen" Orientation="Vertical">
+                                    <TextBlock
+                                        Padding="10"
+                                        HorizontalAlignment="Center"
+                                        FontWeight="Bold"
+                                        Text="{helpers:Localization Notes_SendConfirmation}" />
+                                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                        <Button
+                                            Margin="5"
+                                            Click="ParatextSendConfirmed"
+                                            Content="{helpers:Localization Yes}"
+                                            Style="{StaticResource TransparentStyle}" />
+                                        <Button
+                                            Margin="5"
+                                            Click="ParatextSendCancelled"
+                                            Content="{helpers:Localization No}"
+                                            Style="{StaticResource AlternativeStyle}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </Popup>
+                    </StackPanel>
+                </Grid>
                 <!--  <SelectionChanged="OnNoteStatusChanged"  -->
                 <!--  Note properties: Labels, Associations, Replies, etc.  -->
                 <StackPanel
@@ -320,55 +380,6 @@
                             TimestampMargin="-2,0,10,0"
                             TimestampOrientation="Vertical" />
                     </userControls:TogglePanel>
-                </StackPanel>
-                <!--  Paratext send  -->
-                <StackPanel
-                    Grid.Row="3"
-                    Grid.Column="1"
-                    Orientation="Vertical"
-                    Visibility="{Binding ElementName=NotesDisplayControl, Path=ParatextSendVisibility}">
-                    <Button
-                        Name="SendToParatextButton"
-                        Margin="10,-5,10,0"
-                        Padding="0,0,0,0"
-                        HorizontalAlignment="Right"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Click="ConfirmParatextSend"
-                        FontSize="12"
-                        FontWeight="SemiBold"
-                        ToolTip="{helpers:Localization Notes_SendToParatext}">
-                        <Image Height="18" Source="/Resources/Paratext_Send32.png" />
-                    </Button>
-                    <Popup
-                        Name="ConfirmParatextSendPopup"
-                        HorizontalOffset="100"
-                        Placement="Left"
-                        PlacementTarget="{Binding ElementName=SendToParatextButton}"
-                        StaysOpen="False"
-                        VerticalOffset="30">
-                        <Border BorderThickness="2">
-                            <StackPanel Background="LightGreen" Orientation="Vertical">
-                                <TextBlock
-                                    Padding="10"
-                                    HorizontalAlignment="Center"
-                                    FontWeight="Bold"
-                                    Text="{helpers:Localization Notes_SendConfirmation}" />
-                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                    <Button
-                                        Margin="5"
-                                        Click="ParatextSendConfirmed"
-                                        Content="{helpers:Localization Yes}"
-                                        Style="{StaticResource TransparentStyle}" />
-                                    <Button
-                                        Margin="5"
-                                        Click="ParatextSendCancelled"
-                                        Content="{helpers:Localization No}"
-                                        Style="{StaticResource AlternativeStyle}" />
-                                </StackPanel>
-                            </StackPanel>
-                        </Border>
-                    </Popup>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
