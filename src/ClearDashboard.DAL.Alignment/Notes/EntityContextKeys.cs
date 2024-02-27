@@ -29,6 +29,7 @@
             public const string VerseNumber = "TokenId.VerseNumber";
             public const string WordNumber = "TokenId.WordNumber";
             public const string SubwordNumber = "TokenId.SubwordNumber";
+            public const string SurfaceText = "TokenId.SurfaceText";
         }
 
         public static class AlignmentSet

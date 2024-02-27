@@ -186,6 +186,11 @@ namespace ClearDashboard.Wpf.Application.Services
                 sb.Append($" {entityContext[EntityContextKeys.TokenizedCorpus.DisplayName]}");
                 sb.Append($" {entityContext[EntityContextKeys.TokenId.BookId]} {entityContext[EntityContextKeys.TokenId.ChapterNumber]}:{entityContext[EntityContextKeys.TokenId.VerseNumber]}");
                 sb.Append($" {LocalizationService["Notes_Word"]} {entityContext[EntityContextKeys.TokenId.WordNumber]} {LocalizationService["Notes_Part"]} {entityContext[EntityContextKeys.TokenId.SubwordNumber]}");
+                if (entityContext.ContainsKey(EntityContextKeys.TokenId.SurfaceText))
+                {
+                    sb.Append($" ({entityContext[EntityContextKeys.TokenId.SurfaceText]})");
+                }
+                
                 return sb.ToString();
             }
             else if (associatedEntityId is TranslationId)
