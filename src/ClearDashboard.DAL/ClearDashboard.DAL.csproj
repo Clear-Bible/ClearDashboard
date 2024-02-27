@@ -6,11 +6,11 @@
     <Nullable>enable</Nullable>
     <Platforms>AnyCPU</Platforms>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>1.4.0.4</Version>
+    <Version>1.4.0.5</Version>
     <PackageProjectUrl>https://github.com/Clear-Bible/ClearDashboard</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Clear-Bible/ClearDashboard</RepositoryUrl>
-    <FileVersion>1.4.0.4</FileVersion>
-    <AssemblyVersion>1.4.0.4</AssemblyVersion>
+    <FileVersion>1.4.0.5</FileVersion>
+    <AssemblyVersion>1.4.0.5</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Models\**" />
