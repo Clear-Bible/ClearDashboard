@@ -929,8 +929,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async void NoteLeftButtonDown(object? sender, NoteEventArgs? e)
         {
+            // 3
             if (SelectionManager.AnySelectedNotes)
             {
+                // requires tokens to have been selected
                 await DisplayJotsEditor(e.MousePosition);
             }
         }

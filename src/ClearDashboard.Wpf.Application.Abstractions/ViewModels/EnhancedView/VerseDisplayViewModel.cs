@@ -28,6 +28,7 @@ using SIL.Extensions;
 using System.Diagnostics;
 using System.Windows.Media;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -197,6 +198,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             
             bool firstToken = true;
 
+            Dictionary<Guid,Guid> noteGuids = new();
+
             foreach (var (token, paddingBefore, paddingAfter) in tokenMap.PaddedTokens)
             {
                 var compositeToken = tokenMap.GetCompositeToken(token);
@@ -212,6 +215,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     TokenNoteIds = await NoteManager.GetNoteIdsAsync(token.TokenId),
                     IsSource = isSource,
                 };
+
+                // check to see if this is the first jot note in a series of notes
+                if (tokenDisplayViewModel.TokenNoteIds.Count > 0)
+                {
+                    foreach (var noteId in tokenDisplayViewModel.TokenNoteIds)
+                    {
+                        if (!noteGuids.ContainsKey(noteId.Id))
+                        {
+                            noteGuids.Add(noteId.Id, Guid.NewGuid());
+                        }
+                        else
+                        {
+                            tokenDisplayViewModel.IsFirstJotsNoteToken = false;
+                        }
+                    }
+                }
+
+                //Debug.WriteLine($"TokenDisplayViewModel: {tokenDisplayViewModel.SurfaceText} {tokenDisplayViewModel.TokenHasNote} {tokenDisplayViewModel.IsFirstJotsNoteToken}");
+
                 if (tokenDisplayViewModel.Translation?.TranslationId != null)
                 {
                     tokenDisplayViewModel.TranslationNoteIds = await NoteManager.GetNoteIdsAsync(tokenDisplayViewModel.Translation.TranslationId);
@@ -536,7 +558,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             MatchingTokenAction(message.EntityIds.Where(e => e.GetType() == typeof(TokenId)), t => t.TokenNoteAdded(message.Note));
             MatchingTokenAction(message.EntityIds.Where(e => e.GetType() == typeof(TranslationId)), t => t.TranslationNoteAdded(message.Note));
-            await Task.CompletedTask;
+
+            await BuildTokenDisplayViewModelsAsync();
+
+            //foreach (var source in SourceTokenDisplayViewModels)
+            //{
+            //    Debug.WriteLine($"Source: {source.SurfaceText} {source.TokenHasNote} {source.IsFirstJotsNoteToken}");
+            //}
+            //NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
         }
 
         public async Task HandleAsync(NoteDeletedMessage message, CancellationToken cancellationToken)

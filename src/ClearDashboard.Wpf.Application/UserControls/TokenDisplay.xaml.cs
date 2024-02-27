@@ -229,6 +229,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(Visibility.Collapsed));
 
         /// <summary>
+        /// Identifies the TokenNoteIndicatorVisibility dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokenNoteFlagIndicatorVisibilityProperty = DependencyProperty.Register(
+            nameof(TokenNoteFlagIndicatorVisibility), typeof(Visibility), typeof(TokenDisplay),
+            new PropertyMetadata(Visibility.Collapsed));
+
+        /// <summary>
         /// Identifies the TranslationNoteIndicatorVisibility dependency property.
         /// </summary>
         public static readonly DependencyProperty TranslationNoteIndicatorVisibilityProperty = DependencyProperty.Register(
@@ -1858,6 +1865,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             private set => SetValue(TokenNoteIndicatorVisibilityProperty, value);
         }
 
+        public Visibility TokenNoteFlagIndicatorVisibility
+        {
+            get => (Visibility)GetValue(TokenNoteFlagIndicatorVisibilityProperty);
+            private set => SetValue(TokenNoteFlagIndicatorVisibilityProperty, value);
+        }
+
         /// <summary>
         /// Gets or sets the <see cref="Visibility"/> of the note indicator on a translation/gloss.
         /// </summary>
@@ -2182,7 +2195,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ExtendedProperties = TokenDisplayViewModel.ExtendedProperties;
 
             NoteIndicatorMargin = new Thickness(tokenLeftMargin, 1, 0, TokenVerticalSpacing);
+            if (TokenDisplayViewModel.TokenHasNote)
+            {
+                Console.WriteLine();
+            }
+
+
             TokenNoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TokenHasNote) ? Visibility.Visible : Visibility.Hidden;
+            TokenNoteFlagIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TokenHasNote && TokenDisplayViewModel.IsFirstJotsNoteToken) ? Visibility.Visible : Visibility.Hidden;
             TranslationNoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TranslationHasNote) ? Visibility.Visible : Visibility.Hidden;
 
             // JOTS - highlighting

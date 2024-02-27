@@ -188,7 +188,7 @@
                IsOpen="{Binding DataContext.IsAddJotOpen, ElementName=NoteCollectionDisplayControl}"   
                PlacementTarget="{Binding ElementName=TogglePopupButton}"
                Placement="Top"
-               HorizontalOffset="400"
+               HorizontalOffset="0"
                StaysOpen="True"
                MouseEnter="OnPopupMouseEnter"
                MouseLeave="OnPopupMouseLeave"
