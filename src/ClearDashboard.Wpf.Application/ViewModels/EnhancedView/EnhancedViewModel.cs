@@ -929,6 +929,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async void NoteLeftButtonDown(object? sender, NoteEventArgs? e)
         {
+            // select the attached token
+            if (e.SelectedTokens.Count == 0)
+            {
+                e.TokenDisplayViewModel.IsTokenSelected = true;
+                e.SelectedTokens.Add(e.TokenDisplayViewModel);
+            }
+
             // 3
             if (SelectionManager.AnySelectedNotes)
             {
