@@ -536,7 +536,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         public async Task HandleAsync(NoteUpdatedMessage message, CancellationToken cancellationToken)
         {
-            if (message.NoteId == Reply?.NoteId)
+            if (message.Note.NoteId == Reply?.NoteId)
             {
                 //Reply.NoteSeenChanged();
             }

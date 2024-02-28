@@ -1535,7 +1535,10 @@
     <value>እነዚህን ቀፎዎች ወደ ፍፁም ይላኩ?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>ለተመረጡ የቀን አቀማመጥ ወደ ጥውቀት ይላኩ?</value>
+    <value>ወደ መተላለፊያዎች ወደታች ይላኩ</value>
+  </data>
+  <data name="Notes_TakeAction" xml:space="preserve">
+    <value />
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>የታሸገ ኮርፖስ</value>
@@ -2261,7 +2264,7 @@
     <value>የምደባ አርት editing ትን አንቃ</value>
   </data>
   <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
-    <value>በሙከራ ቡድኑ ውስጥ ውጫዊ የጥላቻ ማስታወሻዎችን አንቃ</value>
+    <value>በሙከራ ቡድኑ ውስጥ ውጫዊ የጥላቻ ማስታወሻዎችን ያንቁ</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
     <value>ውጫዊ ትግበራ ማስታወሻዎችን ያንቁ</value>

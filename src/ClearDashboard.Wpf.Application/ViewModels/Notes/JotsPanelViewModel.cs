@@ -962,7 +962,10 @@ public JotsPanelViewModel()
         public async Task HandleAsync(NoteUpdatedMessage message, CancellationToken cancellationToken)
         {
             if (message.succeeded)
+            {
+                noteManager_?.UpdateNoteInCache(message.Note);
                 await GetAllNotesAndSetNoteViewModelsAsync();
+            }
             else
                 ProgressBarVisibility = Visibility.Hidden;
         }

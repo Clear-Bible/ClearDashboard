@@ -14,6 +14,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Caliburn.Micro;
 using Brushes = System.Windows.Media.Brushes;
 using FontFamily = System.Windows.Media.FontFamily;
 using FontStyle = System.Windows.FontStyle;
@@ -856,20 +857,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             }
         }
 
-        //private void OnNoteStatusChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    if (e.AddedItems.Count > 0)
-        //    {
-        //        var noteStatus = (NoteStatus)(e.AddedItems[0] ?? Note.NoteStatus);
-        //        if (Note.NoteStatus != noteStatus.ToString())
-        //        {
-        //            Note.NoteStatus = noteStatus.ToString();
-        //            RaiseNoteEvent(NoteUpdatedEvent);
-                    
-        //        }
-        //    }
-        //}
-
         #endregion Private event handlers
         #region Public Properties
 
@@ -1550,6 +1537,5 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
             Loaded += OnLoaded;
         }
-
     }
 }
