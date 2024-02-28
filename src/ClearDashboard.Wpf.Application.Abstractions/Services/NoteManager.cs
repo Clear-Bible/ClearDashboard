@@ -22,6 +22,10 @@ using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DataAccessLayer.Models;
+using Label = ClearDashboard.DAL.Alignment.Notes.Label;
+using LabelGroup = ClearDashboard.DAL.Alignment.Notes.LabelGroup;
+using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -123,7 +127,7 @@ namespace ClearDashboard.Wpf.Application.Services
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="Label"/>s that can be used for auto-completion.
+        /// Gets a collection of <see cref="DAL.Alignment.Notes.Label"/>s that can be used for auto-completion.
         /// </summary>
         public LabelCollection LabelSuggestions
         {
@@ -729,6 +733,7 @@ namespace ClearDashboard.Wpf.Application.Services
         public async Task AddReplyToNoteAsync(NoteViewModel parentNote, string replyText)
         {
             var replyNote = new NoteViewModel(parentNote.Entity) { Text = replyText };
+            replyNote.NoteStatus = NoteStatus.Open.ToString();
             await UpdateNoteAsync(replyNote);
 
             replyNote.ParatextSendNoteInformation = await ExternalNoteManager.GetExternalSendNoteInformationAsync(Mediator, replyNote.NoteId!, UserProvider, Logger);
