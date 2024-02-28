@@ -144,17 +144,20 @@
                     Margin="3,0,0,0"
                     Background="White"
                     Cursor="Hand"
-                    Foreground="Orange"
                     IsHitTestVisible="True"
                     MouseLeftButtonDown="OnNoteLeftButtonDown"
-                    RenderTransformOrigin="0.5,0.5"
-                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenNoteIndicatorVisibility}">
+                    RenderTransformOrigin="0.5,0.5">
                     <iconPacks:PackIconBootstrapIcons.Style>
                         <Style TargetType="iconPacks:PackIconBootstrapIcons">
                             <Setter Property="Kind" Value="ChatRightDots" />
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Setter Property="Foreground" Value="Orange" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFlowDirection}" Value="RightToLeft">
                                     <Setter Property="Kind" Value="ChatLeftDots" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenNoteFlagIndicatorVisibility}" Value="Visible">
+                                    <Setter Property="Visibility" Value="Visible" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -188,14 +191,14 @@
                 MouseDoubleClick="OnTokenDoubleClicked"
                 MouseEnter="OnTokenMouseEnter"
                 MouseLeave="OnTokenMouseLeave"
+                MouseLeftButtonDown="OnTokenLeftButtonDown"
                 MouseLeftButtonUp="OnTokenLeftButtonUp"
                 MouseRightButtonDown="OnTokenRightButtonDown"
                 MouseRightButtonUp="OnTokenRightButtonUp"
                 MouseWheel="OnTokenMouseWheel"
-                MouseLeftButtonDown="OnTokenLeftButtonDown"
-                 PreviewMouseLeftButtonDown="OnTokenLeftButtonDown"> 
+                PreviewMouseLeftButtonDown="OnTokenLeftButtonDown">
                 <!--  ToolTipOpening="OnToolTipOpening"  -->
-                
+
                 <Button.ContextMenu>
                     <ContextMenu x:Name="TokenDisplayContextMenu" FlowDirection="LeftToRight">
                         <MenuItem
@@ -271,7 +274,17 @@
                     </ToolTip>
                 </Button.ToolTip>
             </Button>
-
+            <!--  DEBUG STUFF  -->
+            <!--<Label
+                Margin="20,35,0,0"
+                Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.TokenHasNote}"
+                Foreground="Purple"
+                IsHitTestVisible="False" />
+            <Label
+                Margin="20,45,0,0"
+                Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.IsFirstJotsNoteToken}"
+                Foreground="DarkCyan"
+                IsHitTestVisible="False" />-->
         </Grid>
 
 
