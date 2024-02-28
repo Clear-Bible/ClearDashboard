@@ -22,7 +22,7 @@ namespace ClearDashboard.Paranext.Module.Services
         IDisposable, 
         IHandle<VerseChangedMessage>
     {
-        private readonly string rendererUrl = "localhost:1212/paranextExtensionDashboard_services";
+        private readonly string rendererUrl = "localhost:1212/dashboardintegration_services";
         private ChromiumWebBrowser? browser;
 
         protected IEventAggregator eventAggregator_;

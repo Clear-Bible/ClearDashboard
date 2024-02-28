@@ -27,11 +27,20 @@ namespace ClearDashboard.Paranext.Module.Menu
             var paranextExtensionInfos = new List<(string menuId,  ParanextEnhancedViewItemMetadatum metadatum)>()
             {
                 (
-                    "AQuA Analysis", 
+                    "Dashboard Webview",
                     new ParanextEnhancedViewItemMetadatum()
                     {
-                        DisplayName = "Dashboard AQuA Analysis Extension",
-                        UrlString = "http://localhost:1212/paranextExtensionDashboard_aquaanalysis?assessment_id=211&version_id=71",
+                        DisplayName = "Dashboard Webview",
+                        UrlString = "http://localhost:1212/dashboard_webview?assessment_id=211&version_id=71",
+                        IsNewWindow = false
+                    }
+                ),
+                (
+                    "LotOfStuff", 
+                    new ParanextEnhancedViewItemMetadatum()
+                    {
+                        DisplayName = "Dashboard LotOfStuff Extension",
+                        UrlString = "http://localhost:1212/dashboardaquaanalysis_webview?assessment_id=211&version_id=71",
                         IsNewWindow = false
                     }
                 ),
@@ -39,7 +48,7 @@ namespace ClearDashboard.Paranext.Module.Menu
                     new ParanextEnhancedViewItemMetadatum()
                     {
                         DisplayName = "Dashboard Lexicon Extension",
-                        UrlString = "http://localhost:1212/paranextExtensionDashboard_lexicon",
+                        UrlString = "http://localhost:1212/dashboardlexicon_webview",
                         IsNewWindow = false
                     }
                 )

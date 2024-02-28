@@ -79,7 +79,8 @@ namespace ClearDashboard.Paranext.Module.Views
         {
             if (frame.IsMain)
             {
-                await frame.EvaluateScriptAsync("localStorage.clear();");
+                await frame.EvaluateScriptAsync("localStorage.removeItem('client-network-connector:clientGuid');");
+                // await frame.EvaluateScriptAsync("localStorage.clear();");
             }
         }
     }
