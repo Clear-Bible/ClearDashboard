@@ -45,9 +45,9 @@
                     <Trigger Property="IsMouseOver" Value="true">
                         <Setter Property="Background" Value="{Binding ElementName=NotesDisplayControl, Path=NoteHoverBrush}" />
                     </Trigger>
-                    <DataTrigger Binding="{Binding ElementName=NotesDisplayControl, Path=Note.NoteStatus}" Value="Archived">
+                    <!--<DataTrigger Binding="{Binding ElementName=NotesDisplayControl, Path=Note.NoteStatus}" Value="Archived">
                         <Setter Property="IsEnabled" Value="False" />
-                    </DataTrigger>
+                    </DataTrigger>-->
                 </Style.Triggers>
             </Style>
         </Border.Style>
@@ -83,7 +83,17 @@
                         Text="{Binding ElementName=NotesDisplayControl, Path=Note.Text}"
                         TextChanged="OnNoteTextBoxChanged"
                         TextWrapping="Wrap"
-                        Visibility="{Binding ElementName=NotesDisplayControl, Path=NoteTextBoxVisibility}" />
+                        Visibility="{Binding ElementName=NotesDisplayControl, Path=NoteTextBoxVisibility}">
+                        <TextBox.Style>
+                            <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="{x:Type TextBox}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=NotesDisplayControl, Path=Note.NoteStatus}" Value="Archived">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
                     <TextBlock
                         Grid.Row="0"
                         Grid.Column="0"
@@ -116,6 +126,15 @@
                         FontWeight="SemiBold"
                         Visibility="{Binding ElementName=NotesDisplayControl, Path=TimestampRowVisibility}">
                         <Image Height="18" Source="/Resources/close24.png" />
+                        <Button.Style>
+                            <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=NotesDisplayControl, Path=Note.NoteStatus}" Value="Archived">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
                     </Button>
                     <Popup
                         x:Name="ConfirmDeletePopup"
@@ -202,9 +221,9 @@
                 </StackPanel>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
                     <StackPanel
@@ -230,10 +249,40 @@
                             HorizontalAlignment="Right"
                             VerticalContentAlignment="Top"
                             FontSize="12"
-                            ItemsSource="{Binding Source={helpers:EnumBindingSource
-                            {x:Type models:NoteStatus}, Archived
-                            }}"
-                            SelectedItem="{Binding ElementName=NotesDisplayControl, Path=SelectedNoteStatus, Mode=TwoWay}" />
+                            ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type models:NoteStatus}, Archived}}"
+                            SelectedItem="{Binding ElementName=NotesDisplayControl, Path=SelectedNoteStatus, Mode=TwoWay}">
+                            <ComboBox.Style>
+                                <Style BasedOn="{StaticResource {x:Type ComboBox}}" TargetType="{x:Type ComboBox}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=NotesDisplayControl, Path=Note.NoteStatus}" Value="Archived">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ComboBox.Style>
+                        </ComboBox>
+                        <Label
+                            Width="200"
+                            Height="30"
+                            Margin="0,15,15,5"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            BorderBrush="Gray"
+                            BorderThickness="0,0,0,1"
+                            Content="{helpers:Localization Notes_NoteStatus_Archived}"
+                            FontSize="12">
+                            <Label.Style>
+                                <Style BasedOn="{StaticResource {x:Type Label}}" TargetType="{x:Type Label}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=NotesDisplayControl, Path=Note.NoteStatus}" Value="Archived">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Label.Style>
+                        </Label>
 
                     </StackPanel>
                     <!--  Paratext send  -->
@@ -254,6 +303,15 @@
                             FontSize="12"
                             FontWeight="SemiBold"
                             ToolTip="{helpers:Localization Notes_SendToParatext}">
+                            <Button.Style>
+                                <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=NotesDisplayControl, Path=Note.NoteStatus}" Value="Archived">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
                             <Image Height="18" Source="/Resources/Paratext_Send32.png" />
                         </Button>
                         <Popup
@@ -296,6 +354,15 @@
                     <!--  Visibility="{Binding ElementName=NotesDisplayControl, Path=NotePropertiesVisibility}"  -->
                     <!--  Labels  -->
                     <userControls:TogglePanel IsOpen="True" Visibility="{Binding ElementName=NotesDisplayControl, Path=LabelPanelVisibility}">
+                        <userControls:TogglePanel.Style>
+                            <Style BasedOn="{StaticResource {x:Type userControls:TogglePanel}}" TargetType="{x:Type userControls:TogglePanel}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=NotesDisplayControl, Path=Note.NoteStatus}" Value="Archived">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </userControls:TogglePanel.Style>
                         <userControls:TogglePanel.Header>
                             <StackPanel Orientation="Horizontal">
                                 <Label
