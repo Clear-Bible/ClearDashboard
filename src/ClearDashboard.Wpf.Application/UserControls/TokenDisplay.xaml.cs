@@ -2195,11 +2195,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ExtendedProperties = TokenDisplayViewModel.ExtendedProperties;
 
             NoteIndicatorMargin = new Thickness(tokenLeftMargin, 1, 0, TokenVerticalSpacing);
-            if (TokenDisplayViewModel.TokenHasNote)
-            {
-                Console.WriteLine();
-            }
-
 
             TokenNoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TokenHasNote) ? Visibility.Visible : Visibility.Hidden;
             TokenNoteFlagIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TokenHasNote && TokenDisplayViewModel.IsFirstJotsNoteToken) ? Visibility.Visible : Visibility.Hidden;

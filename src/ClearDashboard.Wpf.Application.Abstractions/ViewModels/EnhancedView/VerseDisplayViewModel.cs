@@ -27,6 +27,7 @@ using System.Collections.ObjectModel;
 using SIL.Extensions;
 using System.Diagnostics;
 using System.Windows.Media;
+using System.Windows.Threading;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Messages;
 
@@ -76,7 +77,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <summary>
         /// Gets a collection of source <see cref="TokenDisplayViewModel"/>s to be rendered.
         /// </summary>
-        public TokenDisplayViewModelCollection SourceTokenDisplayViewModels { get; private set; } = new();
+  
+        private TokenDisplayViewModelCollection _sourceTokenDisplayViewModels = new();
+        public TokenDisplayViewModelCollection SourceTokenDisplayViewModels
+        {
+            get => _sourceTokenDisplayViewModels;
+            set 
+            { 
+                _sourceTokenDisplayViewModels = value;
+                NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
+            }
+        }
+
+
 
         /// <summary>
         /// Gets a collection of target <see cref="TokenDisplayViewModel"/>s to be rendered.
@@ -559,13 +572,46 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             MatchingTokenAction(message.EntityIds.Where(e => e.GetType() == typeof(TokenId)), t => t.TokenNoteAdded(message.Note));
             MatchingTokenAction(message.EntityIds.Where(e => e.GetType() == typeof(TranslationId)), t => t.TranslationNoteAdded(message.Note));
 
-            await BuildTokenDisplayViewModelsAsync();
+            Dictionary<Guid, Guid> noteGuids = new();
 
-            //foreach (var source in SourceTokenDisplayViewModels)
-            //{
-            //    Debug.WriteLine($"Source: {source.SurfaceText} {source.TokenHasNote} {source.IsFirstJotsNoteToken}");
-            //}
-            //NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
+            foreach (var model in SourceTokenDisplayViewModels)
+            {
+                // check to see if this is the first jot note in a series of notes
+                if (model.TokenNoteIds.Count > 0)
+                {
+                    foreach (var noteId in model.TokenNoteIds)
+                    {
+                        if (!noteGuids.ContainsKey(noteId.Id))
+                        {
+                            noteGuids.Add(noteId.Id, Guid.NewGuid());
+                        }
+                        else
+                        {
+                            model.IsFirstJotsNoteToken = false;
+                        }
+                    }
+                }
+            }
+
+            noteGuids = new();
+            foreach (var model in TargetTokenDisplayViewModels)
+            {
+                // check to see if this is the first jot note in a series of notes
+                if (model.TokenNoteIds.Count > 0)
+                {
+                    foreach (var noteId in model.TokenNoteIds)
+                    {
+                        if (!noteGuids.ContainsKey(noteId.Id))
+                        {
+                            noteGuids.Add(noteId.Id, Guid.NewGuid());
+                        }
+                        else
+                        {
+                            model.IsFirstJotsNoteToken = false;
+                        }
+                    }
+                }
+            }
         }
 
         public async Task HandleAsync(NoteDeletedMessage message, CancellationToken cancellationToken)
