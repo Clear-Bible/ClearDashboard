@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
+using System.Windows.Controls;
 using System.Windows.Markup;
+using ClearDashboard.DataAccessLayer.Models;
+using SIL.Extensions;
 
 namespace ClearDashboard.Wpf.Application.Helpers
 {
@@ -27,11 +32,44 @@ namespace ClearDashboard.Wpf.Application.Helpers
             }
         }
 
+        private string _excludedValue;
+        public string ExcludedValue
+        {
+            get { return _excludedValue; }
+            set
+            {
+                _excludedValue = value;
+            }
+        }
+
         public EnumBindingSourceExtension() { }
 
         public EnumBindingSourceExtension(Type enumType)
         {
             EnumType = enumType;
+        }
+
+        public EnumBindingSourceExtension(Type enumType, string exludedValue)
+        {
+            EnumType = enumType;
+            ExcludedValue = exludedValue;
+        }
+
+        static Array GetValuesWithoutItem(Type enumType, Array originalValues, object itemToRemove)
+        {
+            Array newArray = Array.CreateInstance(enumType, originalValues.Length - 1);
+
+            int newIndex = 0;
+            foreach (var value in originalValues)
+            {
+                if (!value.Equals(itemToRemove))
+                {
+                    newArray.SetValue(value, newIndex);
+                    newIndex++;
+                }
+            }
+
+            return newArray;
         }
 
         public override object ProvideValue(IServiceProvider serviceProvider)
@@ -40,7 +78,19 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 throw new InvalidOperationException("The EnumType must be specified.");
 
             Type actualEnumType = Nullable.GetUnderlyingType(this._enumType) ?? this._enumType;
-            Array enumValues = Enum.GetValues(actualEnumType);
+            
+            object excludedEnumValue;
+            Enum.TryParse(actualEnumType, ExcludedValue, out excludedEnumValue);
+
+            Array enumValues;
+            if (excludedEnumValue != null)
+            {
+                enumValues = GetValuesWithoutItem(actualEnumType, Enum.GetValues(actualEnumType), excludedEnumValue);
+            }
+            else
+            {
+                enumValues = Enum.GetValues(actualEnumType);
+            }
 
             if (actualEnumType == this._enumType)
                 return enumValues;

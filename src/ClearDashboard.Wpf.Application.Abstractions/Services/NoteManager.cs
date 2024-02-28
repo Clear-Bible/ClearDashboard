@@ -700,13 +700,13 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogInformation(
                     $"Updated note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
 
-                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.NoteId!, true));
+                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.NoteId!, true, note.NoteStatus));
 
             }
             catch (Exception e)
             {
                 Logger?.LogCritical(e.ToString());
-                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.NoteId!, false));
+                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.NoteId!, false, note.NoteStatus));
                 throw;
             }
             finally

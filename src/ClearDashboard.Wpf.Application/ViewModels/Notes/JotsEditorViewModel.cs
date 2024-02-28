@@ -16,6 +16,7 @@ using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.UserControls.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
@@ -63,6 +64,7 @@ public class JotsEditorViewModel : ApplicationScreen
         ProjectManager = projectManager;
         Title = "Jots";  // TODO: localize me.
 
+        NoteDisplay.EventAggregator = eventAggregator;
     }
 
     #endregion

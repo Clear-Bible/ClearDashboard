@@ -230,7 +230,9 @@
                             HorizontalAlignment="Right"
                             VerticalContentAlignment="Top"
                             FontSize="12"
-                            ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type models:NoteStatus}}}"
+                            ItemsSource="{Binding Source={helpers:EnumBindingSource
+                            {x:Type models:NoteStatus}, Archived
+                            }}"
                             SelectedItem="{Binding ElementName=NotesDisplayControl, Path=SelectedNoteStatus, Mode=TwoWay}" />
 
                     </StackPanel>
