@@ -127,7 +127,7 @@ namespace ClearDashboard.Wpf.Application.Services
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="DAL.Alignment.Notes.Label"/>s that can be used for auto-completion.
+        /// Gets a collection of <see cref="Label"/>s that can be used for auto-completion.
         /// </summary>
         public LabelCollection LabelSuggestions
         {
