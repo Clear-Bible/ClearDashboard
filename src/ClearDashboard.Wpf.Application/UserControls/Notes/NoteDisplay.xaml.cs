@@ -860,20 +860,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             }
         }
 
-        //private void OnNoteStatusChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    if (e.AddedItems.Count > 0)
-        //    {
-        //        var noteStatus = (NoteStatus)(e.AddedItems[0] ?? Note.NoteStatus);
-        //        if (Note.NoteStatus != noteStatus.ToString())
-        //        {
-        //            Note.NoteStatus = noteStatus.ToString();
-        //            RaiseNoteEvent(NoteUpdatedEvent);
-                    
-        //        }
-        //    }
-        //}
-
         #endregion Private event handlers
         #region Public Properties
 

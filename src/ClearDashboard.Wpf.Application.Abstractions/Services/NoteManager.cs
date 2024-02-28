@@ -698,7 +698,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        private async Task UpdateNoteAsync(Note note, NoteViewModel noteViewModelToCache=null)
+        private async Task UpdateNoteAsync(Note note)
         {
             try
             {
@@ -713,11 +713,6 @@ namespace ClearDashboard.Wpf.Application.Services
                 stopwatch.Stop();
                 Logger?.LogInformation(
                     $"Updated note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
-
-                if (noteViewModelToCache != null)
-                {
-                    NotesCache[noteViewModelToCache.NoteId!.Id] = noteViewModelToCache;
-                }
 
                 await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note, true));
 
@@ -741,7 +736,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <returns>An awaitable <see cref="Task"/>.</returns>
         public async Task UpdateNoteAsync(NoteViewModel noteViewModel)
         {
-            await UpdateNoteAsync(noteViewModel.Entity, noteViewModel);
+            await UpdateNoteAsync(noteViewModel.Entity);
         }
 
         public async Task AddReplyToNoteAsync(NoteViewModel parentNote, string replyText)
@@ -751,7 +746,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
             var replyNoteViewModel = new NoteViewModel(replyNote);
 
-            replyNoteViewModel.ParatextSendNoteInformation = parentNote.ParatextSendNoteInformation;//await ExternalNoteManager.GetExternalSendNoteInformationAsync(Mediator, replyNote.NoteId!, UserProvider, Logger);
+            replyNoteViewModel.ParatextSendNoteInformation = parentNote.ParatextSendNoteInformation;
             parentNote.Replies.Add(replyNoteViewModel);
             NotesCache[parentNote.NoteId!.Id] = parentNote;
         }
