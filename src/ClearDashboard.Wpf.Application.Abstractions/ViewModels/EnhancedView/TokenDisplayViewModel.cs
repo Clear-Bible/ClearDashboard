@@ -378,6 +378,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        private bool _isFirstJotsNoteToken = true;
+        public bool IsFirstJotsNoteToken
+        {
+            get => _isFirstJotsNoteToken;
+            set
+            {
+                _isFirstJotsNoteToken = value;
+                NotifyOfPropertyChange(nameof(IsFirstJotsNoteToken));
+                NotifyOfPropertyChange(nameof(TokenHasNote));
+            }
+        }
+
+
         private bool _multipleExternalNotes = false;
         private SolidColorBrush _noteIndicatorBrush;
 
