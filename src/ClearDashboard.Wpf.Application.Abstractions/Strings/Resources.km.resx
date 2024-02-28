@@ -158,7 +158,7 @@
     <value>ជ្រើសរើសរបៀបថូខឹនសាកសព</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
-    <value>ការតម្រឹម</value>
+    <value>Loading...</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
     <value>ជ្រើសរើសសៀវភៅដែលអ្នកកំពុងធ្វើការជាមួយអ្នកតែងតែអាចបន្ថែមសៀវភៅបន្ថែមទៀតនៅពេលក្រោយ។</value>
@@ -176,7 +176,7 @@
     <value>អន្តរធិបតេយ្យ</value>
   </data>
   <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
-    <value>គ្មានកំហុស</value>
+    <value>Loading...</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
     <value>រក្សាទុកកំហុសរបស់ USFM ទៅឯកសារ</value>
@@ -218,7 +218,7 @@
     <value>ចមបុក</value>
   </data>
   <data name="Bcv_NextBook" xml:space="preserve">
-    <value>សៀវភៅបន្ទាប់</value>
+    <value>Loading...</value>
   </data>
   <data name="Bcv_NextChapter" xml:space="preserve">
     <value>ជំពូកបន្ទាប់</value>
@@ -257,7 +257,7 @@
     <value>កមនាប្យ</value>
   </data>
   <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
-    <value>សេចកី្ដរសលាញ់</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
     <value>កសិកម្ម</value>
@@ -293,7 +293,7 @@
     <value>ផ្លែឈើ</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>ត្បូង</value>
+    <value>Loading...</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>មេរូច</value>
@@ -539,7 +539,7 @@
     <value>ដាក់ឈ្មោះធាតុ</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
-    <value>ក្រុមថ្មី</value>
+    <value>Loading...</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
     <value>បុគ្គលថ្មី</value>
@@ -638,7 +638,7 @@
     <value>តម្រឹម '{0}' ដោយ '{1}'?</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
-    <value>ការតម្រឹម</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
     <value>លុបទស្សនៈនេះ?</value>
@@ -662,7 +662,7 @@
     <value>លុបរាល់ការតម្រឹម?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>ថូខឹន '{0}' មានការតម្រឹមច្រើនដែលបានកំណត់។ ចុច '{1}' នឹងលុបរាល់ការតម្រឹម។</value>
+    <value>Loading...</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
     <value>ត្រងពាក្យស្វែងរក</value>
@@ -815,13 +815,13 @@
     <value>JHN</value>
   </data>
   <data name="JiraResultsView_Password" xml:space="preserve">
-    <value>លេខសម្ងាត់:</value>
+    <value>Loading...</value>
   </data>
   <data name="JiraResultsView_URL" xml:space="preserve">
     <value>url:</value>
   </data>
   <data name="JiraResultsView_Username" xml:space="preserve">
-    <value>ឈ្មោះ​អ្នកប្រើប្រាស់:</value>
+    <value>Loading...</value>
   </data>
   <data name="JOB" xml:space="preserve">
     <value>JOB</value>
@@ -929,10 +929,10 @@
     <value>lexme សម្រាប់មានរួចហើយសម្រាប់ Lemma</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
-    <value>អត្ថន័យ:</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>រលោងថ្មី</value>
+    <value>Loading...</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>យកដែន semory នេះចេញពីអត្ថន័យនេះ</value>
@@ -995,7 +995,7 @@
     <value>រឺ</value>
   </data>
   <data name="LexiconEdit_Partially" xml:space="preserve">
-    <value>មួយផ្នែក</value>
+    <value>Loading...</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>រក្សាទុកការផ្លាស់ប្តូរ</value>
@@ -1121,7 +1121,7 @@
     <value>ចំណូលចិត្ត</value>
   </data>
   <data name="MainView_QuickNew" xml:space="preserve">
-    <value>ថ្មីរហ័ស</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>ការផ្លាស់ប្តូរ Collab មាន</value>
@@ -1145,7 +1145,7 @@
     <value>ថូខឹនខនធែន</value>
   </data>
   <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>របដាប់ខ</value>
+    <value>Loading...</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>កមហើញ</value>
@@ -1322,13 +1322,13 @@
     <value>ក្រុម:</value>
   </data>
   <data name="NewCollabUserView_LastName" xml:space="preserve">
-    <value>នាមត្រកូល</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
     <value>អ្នកប្រើប្រាស់សហការថ្មី</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
-    <value>លេខសម្ងាត់:</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
     <value>បានរក្សាទុកទៅម៉ាស៊ីនមេពីចម្ងាយ</value>
@@ -1340,7 +1340,7 @@
     <value>អ្នកប្រើមានរួចហើយនៅលើម៉ាស៊ីនមេ</value>
   </data>
   <data name="NewCollabUserView_Username" xml:space="preserve">
-    <value>ឈ្មោះ​អ្នកប្រើប្រាស់:</value>
+    <value>Loading...</value>
   </data>
   <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
     <value>អ្នកប្រើមានរួចហើយនៅលើប្រព័ន្ធហើយ!</value>
@@ -1640,7 +1640,7 @@
     <value>បន្ថែមទៅមើល</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
-    <value>auxiliary</value>
+    <value>Loading...</value>
   </data>
   <data name="Pds_BackTranslation" xml:space="preserve">
     <value>ការបញ្ចោញត្រឡប់មកវិញ</value>
@@ -1901,7 +1901,7 @@
     <value>គម្រោងនាំចូលម៉ាស៊ីនមេ</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>ធីកប្រអប់នេះដើម្បីបញ្ចូលអត្ថបទព្រះគម្ពីរក្រិកនិងហេប្រ៊ូនៅពេលបង្កើតគម្រោងរបស់អ្នក។</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>រួមបញ្ចូលទាំងអត្ថបទព្រះគម្ពីរទេ?</value>
@@ -1919,7 +1919,7 @@
     <value>វាឯកកោនៅទីនេះ។ សូមបង្កើតគម្រោងថ្មីមួយ។</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Paratext មិនត្រូវបានតំឡើងទេ។ សូមដំឡើង PartateXT ហើយ Rerun កម្មវិធី ClearDashboard ។</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>ParateXT មិនដំណើរការទេ</value>
@@ -1943,7 +1943,7 @@
     <value>គម្រោង ParateXT</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>គំរោង:</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>យើងស្ទើរតែនៅទីនោះ!</value>
@@ -1970,7 +1970,7 @@
     <value>ចុចត្រង់នេះដើម្បីចាប់ផ្តើម ParateXT</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>កំណែ:</value>
+    <value>Loading...</value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>សូមបញ្ចូលឈ្មោះសម្រាប់គម្រោងរបស់អ្នក</value>
@@ -2009,7 +2009,7 @@
     <value>ថែស្សាឡូនីចទី 1</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>ធីម៉ូថេ 1</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>របាក្សត្រទី 2</value>
@@ -2033,7 +2033,7 @@
     <value>ថែស្សាឡូនីចទី 2</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>ធីម៉ូថេទី 2</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>ចន 3</value>
@@ -2057,7 +2057,7 @@
     <value>សាស្ដា</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
-    <value>អេភេសូរ</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_Esther" xml:space="preserve">
     <value>ដេលលក់បាន</value>
@@ -2072,7 +2072,7 @@
     <value>ហេហេរ៉ា</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>កាឡាទី</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>ាំងលោអៀងខាងលិច</value>
@@ -2123,7 +2123,7 @@
     <value>បរិទេវ</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
-    <value>លេវីវិន័យ</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
     <value>ផ្លេលកខេ</value>
@@ -2180,10 +2180,10 @@
     <value>ទីតុស</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>សាការី</value>
+    <value>Loading...</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
-    <value>សេផានា</value>
+    <value>Loading...</value>
   </data>
   <data name="PSA" xml:space="preserve">
     <value>PSA</value>
@@ -2198,7 +2198,7 @@
     <value>ការចុហបហ្ជី</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>គន្លឹះដែលបានផ្តល់គឺមានកំហុស។ នៅពេលដែលបានឌិគ្រីបធាតុ JSON មួយចំនួនមិនអាចរកឃើញទេ។</value>
+    <value>Loading...</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>ខ្លឹមសារនៃគ្រាប់ចុចអាជ្ញាប័ណ្ណឌិគ្រីបមិនត្រូវគ្នានឹងព័ត៌មានដែលអ្នកបានផ្តល់ទេ។</value>
@@ -2429,7 +2429,7 @@
     <value>បុរេតសសន៍</value>
   </data>
   <data name="SlackMessageView_SuggestionSeverity" xml:space="preserve">
-    <value>ភាពធ្ងន់ធ្ងរ:</value>
+    <value>Loading...</value>
   </data>
   <data name="SlackMessageView_SuggestionTitle" xml:space="preserve">
     <value>ចំណងជើង:</value>
@@ -2447,7 +2447,7 @@
     <value>ច្បាប់</value>
   </data>
   <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>បានធ្វើទ្រង់ទ្រាយ</value>
+    <value>Loading...</value>
   </data>
   <data name="TargetContextView_Unformatted" xml:space="preserve">
     <value>ដេលមិនចត</value>
@@ -2462,7 +2462,7 @@
     <value>TIT</value>
   </data>
   <data name="TokenDisplay_SetTranslation" xml:space="preserve">
-    <value>កំណត់ស្នាមរលោង</value>
+    <value>Loading...</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>ធេវីអាេយយរមយរ</value>
@@ -2492,7 +2492,7 @@
     <value>ថូខឹនខនធែន</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
-    <value>របដាប់ខ</value>
+    <value>Loading...</value>
   </data>
   <data name="Windows_EnhancedView" xml:space="preserve">
     <value>កមហើញ</value>

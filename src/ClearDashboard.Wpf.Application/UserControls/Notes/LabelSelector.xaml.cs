@@ -12,6 +12,7 @@ using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
+using static ICSharpCode.AvalonEdit.Document.TextDocumentWeakEventManager;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
 namespace ClearDashboard.Wpf.Application.UserControls.Notes
@@ -55,7 +56,16 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// Identifies the LabelSuggestions dependency property.
         /// </summary>
         public static readonly DependencyProperty LabelSuggestionsProperty =
-            DependencyProperty.Register(nameof(LabelSuggestions), typeof(LabelCollection), typeof(LabelSelector));
+            DependencyProperty.Register(nameof(LabelSuggestions), typeof(LabelCollection), typeof(LabelSelector), new PropertyMetadata(OnLabelSuggestionsChanged));
+
+        private static void OnLabelSuggestionsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (LabelSelector)d;
+            control.PopulateSuggestionListBoxItemsSource();
+
+        }
+
+      
 
         #endregion
 
@@ -70,14 +80,32 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             });
         }
 
+        private void PopulateSuggestionListBoxItemsSource()
+        {
+            if (LabelSuggestions != null)
+            {
+                switch (LabelTextBox.Text.Length)
+                {
+                    case > 0:
+                    {
+                        LabelSuggestionListBox.ItemsSource = LabelSuggestions.Where(ls =>
+                            ls.Text.Contains(LabelTextBox.Text, StringComparison.InvariantCultureIgnoreCase));
+                            break;
+                    }
+
+                    default:
+                    {
+                        LabelSuggestionListBox.ItemsSource = LabelSuggestions;
+                        break;
+                    }
+                }
+            }
+        }
+
         private void OnLabelTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (LabelSuggestions != null && LabelTextBox.Text.Length > 0)
-            {
-                LabelSuggestionListBox.ItemsSource = LabelSuggestions.Where(ls =>
-                    ls.Text.Contains(LabelTextBox.Text, StringComparison.InvariantCultureIgnoreCase));
-                OpenSuggestionPopup();
-            }
+            PopulateSuggestionListBoxItemsSource();
+            OpenSuggestionPopup();
         }
 
         private void OnLabelListSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -135,6 +163,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             LabelTextBox.Focus();
             Keyboard.Focus(LabelTextBox);
         }
+
 
         private void AddLabelButtonClicked(object sender, RoutedEventArgs e)
         {
@@ -254,12 +283,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             InitializeComponent();
         }
 
-        private void LabelTextBox_OnLostFocus(object sender, RoutedEventArgs e)
+        private void OnLabelTextBoxLostFocus(object sender, RoutedEventArgs e)
         {
             CloseSuggestionPopup();
         }
 
-        private void LabelTextBox_OnLostKeyboardFocus(object sender, RoutedEventArgs e)
+        private void OnLabelTextBoxLostKeyboardFocus(object sender, RoutedEventArgs e)
         {
             var args = e as KeyboardFocusChangedEventArgs;
             if (args?.NewFocus?.GetType() == typeof(ScrollViewer))
@@ -268,9 +297,22 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             }
         }
 
-        private void LabelTextBox_OnGotFocus(object sender, RoutedEventArgs e)
+        private void OnLabelTextBoxGotFocus(object sender, RoutedEventArgs e)
         {
+            //OpenSuggestionPopup();
+            //Execute.OnUIThread(OpenSuggestionPopup);
             System.Windows.Application.Current.Dispatcher.Invoke(OpenSuggestionPopup, DispatcherPriority.Render);
+        }
+
+        private void OnLabelTextBoxKeyDown(object sender, KeyEventArgs e)
+        {
+            Console.WriteLine($"Key pressed - {e.Key}");
+            if (e.KeyboardDevice.Modifiers == ModifierKeys.Alt &&  e is { Key: Key.System, SystemKey: Key.Down })
+            {
+                //OpenSuggestionPopup();
+               // Execute.OnUIThread(OpenSuggestionPopup);
+                System.Windows.Application.Current.Dispatcher.Invoke(OpenSuggestionPopup, DispatcherPriority.Render);
+            }
         }
     }
 }

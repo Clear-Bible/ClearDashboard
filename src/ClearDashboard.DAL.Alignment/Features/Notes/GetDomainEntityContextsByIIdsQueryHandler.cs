@@ -339,6 +339,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 domainEntityContext.Add("TokenId.VerseNumber", t.VerseNumber.ToString());
                 domainEntityContext.Add("TokenId.WordNumber", t.WordNumber.ToString());
                 domainEntityContext.Add("TokenId.SubwordNumber", t.SubwordNumber.ToString());
+                if (!string.IsNullOrEmpty(t.SurfaceText))
+                {
+                    domainEntityContext.Add("TokenId.SurfaceText", t.SurfaceText);
+                }
             }
             else
             {
@@ -348,6 +352,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 domainEntityContext.Add("TokenId.VerseNumber", tokenIdInfo?.VerseNumber.ToString() ?? string.Empty);
                 domainEntityContext.Add("TokenId.WordNumber", tokenIdInfo?.WordNumber.ToString() ?? string.Empty);
                 domainEntityContext.Add("TokenId.SubwordNumber", tokenIdInfo?.SubwordNumber.ToString() ?? string.Empty);
+                if (!string.IsNullOrEmpty(tc.SurfaceText))
+                {
+                    domainEntityContext.Add("TokenId.SurfaceText", tc.SurfaceText);
+                }
             }
         }
     }

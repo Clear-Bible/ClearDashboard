@@ -87,48 +87,6 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <Button
-                    x:Name="DeleteNoteButton"
-                    Grid.Column="1"
-                    Margin="9,-5,0,0"
-                    Padding="0,0,0,0"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Click="ConfirmNoteDeletion"
-                    FontSize="12"
-                    FontWeight="SemiBold"
-                    Visibility="{Binding ElementName=AddNoteControl, Path=TimestampRowVisibility}">
-                        <Image Height="18" Source="/Resources/close24.png" />
-                    </Button>
-                    <Popup
-                    x:Name="ConfirmDeletePopup"
-                    Grid.Column="1"
-                    Placement="Left"
-                    PlacementTarget="{Binding ElementName=DeleteNoteButton}"
-                    StaysOpen="False"
-                    VerticalOffset="30">
-                        <Border BorderThickness="2">
-                            <StackPanel Background="WhiteSmoke" Orientation="Vertical">
-                                <TextBlock
-                                Padding="10"
-                                HorizontalAlignment="Center"
-                                FontWeight="Bold"
-                                Text="{helpers:Localization Notes_DeleteConfirmation}" />
-                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                    <Button
-                                    Margin="5"
-                                    Click="DeleteNoteConfirmed"
-                                    Content="{helpers:Localization Yes}"
-                                    Style="{StaticResource TransparentStyle}" />
-                                    <Button
-                                    Margin="5"
-                                    Click="DeleteNoteCancelled"
-                                    Content="{helpers:Localization No}"
-                                    Style="{StaticResource AlternativeStyle}" />
-                                </StackPanel>
-                            </StackPanel>
-                        </Border>
-                    </Popup>
                 </Grid>
 
                 <!--  User and timestamp  -->
@@ -340,7 +298,7 @@
                 FontSize="11"
                 Foreground="{DynamicResource MaterialDesignBody}"
                 Style="{StaticResource TransparentStyle}" 
-                IsEnabled="{Binding ElementName=AddNoteControl, Path=Note.HasText}"/>
+                IsEnabled="{Binding ElementName=AddNoteControl, Path=IsChanged}"/>
         </StackPanel>
     </Grid>
 </UserControl>
