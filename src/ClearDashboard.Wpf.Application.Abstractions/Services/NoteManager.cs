@@ -737,6 +737,7 @@ namespace ClearDashboard.Wpf.Application.Services
         public async Task UpdateNoteAsync(NoteViewModel noteViewModel)
         {
             await UpdateNoteAsync(noteViewModel.Entity);
+            NotesCache[noteViewModel.NoteId!.Id] = noteViewModel;
         }
 
         public async Task AddReplyToNoteAsync(NoteViewModel parentNote, string replyText)

@@ -19,16 +19,13 @@ using Brushes = System.Windows.Media.Brushes;
 using FontFamily = System.Windows.Media.FontFamily;
 using FontStyle = System.Windows.FontStyle;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
-using System.Threading.Tasks;
-using System.Threading;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 
 namespace ClearDashboard.Wpf.Application.UserControls.Notes
 {
     /// <summary>
     /// A control that displays the details of a single <see cref="NoteViewModel"/>.
     /// </summary>
-    public partial class NoteDisplay : INotifyPropertyChanged//, IHandle<NoteUpdatedMessage>
+    public partial class NoteDisplay : INotifyPropertyChanged
     {
         #region Static Routed Events
 
@@ -1539,21 +1536,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             InitializeComponent();
 
             Loaded += OnLoaded;
-
-            EventAggregator?.SubscribeOnUIThread(this);
         }
-
-        public static IEventAggregator? EventAggregator { get; set; }
-
-        //public Task HandleAsync(NoteUpdatedMessage message, CancellationToken cancellationToken)
-        //{
-        //    Enum.TryParse(typeof(NoteStatus), message.NoteStatus, out object parsedEnum);
-        //    if (parsedEnum is NoteStatus selectedNoteStatus)
-        //    {
-        //        SelectedNoteStatus = selectedNoteStatus;
-        //    }
-
-        //    return Task.CompletedTask;
-        //}
     }
 }
