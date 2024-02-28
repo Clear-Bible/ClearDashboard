@@ -441,6 +441,16 @@ namespace ClearDashboard.Wpf.Application.Services
             return dictionary.TryGetValue(entityId, out var noteIds) ? noteIds : new NoteIdCollection();
         }
 
+        public void UpdateNoteInCache(Note note)
+        {
+            if (NotesCache.ContainsKey(note.NoteId.Id))
+            {
+                var existing = NotesCache[note.NoteId.Id];
+                existing.Entity = note;
+                existing.Labels = new LabelCollection(note.Labels);
+            }
+        }
+
         /// <summary>
         /// Gets the note details for a specific note ID.
         /// </summary>
@@ -688,7 +698,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        private async Task UpdateNoteAsync(Note note)
+        private async Task UpdateNoteAsync(Note note, NoteViewModel noteViewModelToCache=null)
         {
             try
             {
@@ -704,13 +714,18 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogInformation(
                     $"Updated note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
 
-                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.NoteId!, true, note.NoteStatus));
+                if (noteViewModelToCache != null)
+                {
+                    NotesCache[noteViewModelToCache.NoteId!.Id] = noteViewModelToCache;
+                }
+
+                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note, true));
 
             }
             catch (Exception e)
             {
                 Logger?.LogCritical(e.ToString());
-                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.NoteId!, false, note.NoteStatus));
+                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note, false));
                 throw;
             }
             finally
@@ -726,8 +741,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <returns>An awaitable <see cref="Task"/>.</returns>
         public async Task UpdateNoteAsync(NoteViewModel noteViewModel)
         {
-            await UpdateNoteAsync(noteViewModel.Entity);
-            NotesCache[noteViewModel.NoteId!.Id] = noteViewModel;
+            await UpdateNoteAsync(noteViewModel.Entity, noteViewModel);
         }
 
         public async Task AddReplyToNoteAsync(NoteViewModel parentNote, string replyText)
@@ -736,7 +750,8 @@ namespace ClearDashboard.Wpf.Application.Services
             await UpdateNoteAsync(replyNote);
 
             var replyNoteViewModel = new NoteViewModel(replyNote);
-            replyNoteViewModel.ParatextSendNoteInformation = parentNote.ParatextSendNoteInformation;
+
+            replyNoteViewModel.ParatextSendNoteInformation = parentNote.ParatextSendNoteInformation;//await ExternalNoteManager.GetExternalSendNoteInformationAsync(Mediator, replyNote.NoteId!, UserProvider, Logger);
             parentNote.Replies.Add(replyNoteViewModel);
             NotesCache[parentNote.NoteId!.Id] = parentNote;
         }
@@ -845,6 +860,7 @@ namespace ClearDashboard.Wpf.Application.Services
 #endif
                     await Task.Delay(100);
                     await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, newLabel!));
+                    await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.Entity, true));
                     return newLabel;
                 }
 

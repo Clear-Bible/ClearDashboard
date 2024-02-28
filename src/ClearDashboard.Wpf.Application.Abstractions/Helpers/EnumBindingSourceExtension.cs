@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
-using System.Windows.Controls;
 using System.Windows.Markup;
-using ClearDashboard.DataAccessLayer.Models;
-using SIL.Extensions;
 
 namespace ClearDashboard.Wpf.Application.Helpers
 {
