@@ -77,18 +77,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <summary>
         /// Gets a collection of source <see cref="TokenDisplayViewModel"/>s to be rendered.
         /// </summary>
-  
-        private TokenDisplayViewModelCollection _sourceTokenDisplayViewModels = new();
-        public TokenDisplayViewModelCollection SourceTokenDisplayViewModels
-        {
-            get => _sourceTokenDisplayViewModels;
-            set 
-            { 
-                _sourceTokenDisplayViewModels = value;
-                NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
-            }
-        }
-
+        public TokenDisplayViewModelCollection SourceTokenDisplayViewModels = new();
 
 
         /// <summary>
