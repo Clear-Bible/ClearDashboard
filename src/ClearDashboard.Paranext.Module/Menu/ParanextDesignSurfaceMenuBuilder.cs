@@ -31,7 +31,7 @@ namespace ClearDashboard.Paranext.Module.Menu
                     new ParanextEnhancedViewItemMetadatum()
                     {
                         DisplayName = "Dashboard Webview",
-                        UrlString = "http://localhost:1212/dashboard_webview?assessment_id=211&version_id=71",
+                        UrlString = "http://localhost:1212/verseaware_webview?assessment_id=211&version_id=71",
                         IsNewWindow = false
                     }
                 ),
