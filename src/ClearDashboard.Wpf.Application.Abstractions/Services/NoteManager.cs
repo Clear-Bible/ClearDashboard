@@ -904,6 +904,7 @@ namespace ClearDashboard.Wpf.Application.Services
 #endif
                     await Task.Delay(100);
                     await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, label));
+                    await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.Entity, true));
                 }
             }
             catch (Exception e)
