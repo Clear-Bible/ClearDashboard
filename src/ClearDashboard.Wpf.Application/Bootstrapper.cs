@@ -34,6 +34,9 @@ using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.Extensions.Configuration;
 using DashboardApplication = System.Windows.Application;
+using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.Alignment.CommandReceivers;
+using ClearDashboard.DAL.Alignment.Commands;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -285,9 +288,12 @@ namespace ClearDashboard.Wpf.Application
             builder
                 .RegisterAssemblyTypes(typeof(GetProjectSnapshotQueryHandler).Assembly)
                 .AsClosedTypesOf(typeof(IRequestHandler<,>));
-            }
 
-        protected override async Task NavigateToMainWindow()
+			builder.RegisterType<GetVerseRangeTokensCommandReceiver>()
+	            .As<IApiCommandReceiver<GetVerseRangeTokensCommand, (IEnumerable<TokensTextRow> Rows, int IndexOfVerse)>>();
+		}
+
+		protected override async Task NavigateToMainWindow()
         {
             //EnsureApplicationMainWindowVisible();
             //NavigateToViewModel<EnhancedViewDemoViewModel>();

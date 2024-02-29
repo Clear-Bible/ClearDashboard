@@ -2,8 +2,11 @@
 using Autofac.Configuration;
 using Autofac.Extensions.DependencyInjection;
 using Caliburn.Micro;
+using ClearBible.Engine.Corpora;
 using ClearDashboard.Collaboration.Features;
 using ClearDashboard.Collaboration.Services;
+using ClearDashboard.DAL.Alignment.CommandReceivers;
+using ClearDashboard.DAL.Alignment.Commands;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.Alignment.Tests.Mocks;
 using ClearDashboard.DAL.Alignment.Translation;
@@ -19,6 +22,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -89,8 +93,11 @@ namespace ClearDashboard.DAL.Alignment.Tests
             builder.RegisterModule(configModule);
             builder.RegisterType<CollaborationManager>().AsSelf().SingleInstance();
 
-            // Register Paratext as our "External" lexicon provider / drafting tool:
-            builder.RegisterType<ParatextPlugin.CQRS.Features.Lexicon.GetLexiconQuery>()
+			builder.RegisterType<GetVerseRangeTokensCommandReceiver>()
+	            .As<IApiCommandReceiver<GetVerseRangeTokensCommand, (IEnumerable<TokensTextRow> Rows, int IndexOfVerse)>>();
+
+			// Register Paratext as our "External" lexicon provider / drafting tool:
+			builder.RegisterType<ParatextPlugin.CQRS.Features.Lexicon.GetLexiconQuery>()
                 .As<IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>>>()
                 .Keyed<IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>>>("External");
 
