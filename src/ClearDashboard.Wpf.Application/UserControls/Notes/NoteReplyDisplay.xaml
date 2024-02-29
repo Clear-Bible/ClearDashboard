@@ -118,6 +118,16 @@
                         FontSize="12"
                         FontWeight="SemiBold"
                         ToolTip="{helpers:Localization Notes_SendToParatext}">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyParatextSendInformation}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
                         <Image Height="18" Source="/Resources/Paratext_Send32.png" />
                     </Button>
                     <Popup
