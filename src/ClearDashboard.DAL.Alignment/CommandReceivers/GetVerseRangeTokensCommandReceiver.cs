@@ -24,7 +24,7 @@ namespace ClearDashboard.DAL.Alignment.CommandReceivers
 		public async Task<(IEnumerable<TokensTextRow> Rows, int IndexOfVerse)> RequestAsync(GetVerseRangeTokensCommand command, CancellationToken cancellationToken)
 		{
 			var tokenizedCorpusId = new TokenizedTextCorpusId(command.TokenizedCorpusId);
-			var tokenizedCorpus = await TokenizedTextCorpus.Get(_mediator, tokenizedCorpusId);
+			var tokenizedCorpus = await TokenizedTextCorpus.Get(_mediator, tokenizedCorpusId, true, cancellationToken);
 
 			if (tokenizedCorpus == null)
 			{
