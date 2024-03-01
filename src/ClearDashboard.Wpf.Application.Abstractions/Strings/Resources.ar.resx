@@ -1535,7 +1535,10 @@
     <value>أرسل هذه Jots إلى Paratext؟</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>إرسال Jots المحددة إلى Paratext؟</value>
+    <value>أرسل Jots إلى Paratext</value>
+  </data>
+  <data name="Notes_TakeAction" xml:space="preserve">
+    <value />
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>مجموعة رمزية</value>
@@ -1958,7 +1961,7 @@
     <value>معالج قالب المشروع: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>قائمة مشاريع التعاون</value>
+    <value>قم بتحديث قائمة مشاريع التعاون</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>البحث في الآونة الأخيرة</value>

@@ -170,7 +170,7 @@
     <value>Copiați erorile USFM pe clipboard</value>
   </data>
   <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
-    <value>Numărul de erori:</value>
+    <value>Numărul erorilor:</value>
   </data>
   <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
     <value>Interlinear</value>
@@ -695,7 +695,7 @@
     <value>Note</value>
   </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
-    <value>Nu există date de versuri în acest game de versuri.</value>
+    <value>Nu există date de versuri în acest interval de versuri.</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
     <value>Îndepărtați corpusul</value>
@@ -1535,7 +1535,10 @@
     <value>Trimiteți aceste JOT -uri la Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Trimiteți JOT -uri selectate la Paratext?</value>
+    <value>Trimiteți joturi la Paratext</value>
+  </data>
+  <data name="Notes_TakeAction" xml:space="preserve">
+    <value />
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Corpus tokenizat</value>
@@ -1589,7 +1592,7 @@
     <value>Algoritm de aliniere a cuvântului mașinii</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Modelul simetrizat de antrenament?</value>
+    <value>Antrenează modelul simetrizat?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>Tren</value>
@@ -1880,7 +1883,7 @@
     <value>Bază de date:</value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
-    <value>Nu puteți șterge acest proiect, o altă aplicație îl folosește în continuare.</value>
+    <value>Nu puteți șterge acel proiect, o altă aplicație îl folosește în continuare.</value>
   </data>
   <data name="ProjectPicker_DeleteProject" xml:space="preserve">
     <value>Ștergeți proiectul</value>
@@ -2375,7 +2378,7 @@
     <value>Note de lansare</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>Afișați pre-lansarea</value>
+    <value>Afișați pre-versiuni</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
     <value>Actualizați la noua versiune a ClearDashboard</value>

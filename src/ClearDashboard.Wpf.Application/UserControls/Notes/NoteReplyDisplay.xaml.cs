@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.Models;
 using TimeZoneNames;
 using FontFamily = System.Windows.Media.FontFamily;
 using FontStyle = System.Windows.FontStyle;
@@ -279,6 +280,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         public string ReplyText => Reply != null ? Reply.Text : string.Empty;
         public string ReplyAuthor => Reply != null ? Reply.ModifiedBy : string.Empty;
 
+        public ExternalSendNoteInformation ReplyParatextSendInformation => Reply != null ? Reply.ParatextSendNoteInformation : null;
+
         public string ReplyTimestamp
         {
             get
@@ -536,7 +539,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         public async Task HandleAsync(NoteUpdatedMessage message, CancellationToken cancellationToken)
         {
-            if (message.NoteId == Reply?.NoteId)
+            if (message.Note.NoteId == Reply?.NoteId)
             {
                 //Reply.NoteSeenChanged();
             }

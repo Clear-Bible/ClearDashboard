@@ -1535,7 +1535,10 @@
     <value>Send these jots to Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Send selected jots to Paratext?</value>
+    <value>Send jots to Paratext</value>
+  </data>
+  <data name="Notes_TakeAction" xml:space="preserve">
+    <value>Take Action</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Tokenized Corpus</value>

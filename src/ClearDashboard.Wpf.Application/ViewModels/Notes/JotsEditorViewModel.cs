@@ -62,7 +62,6 @@ public class JotsEditorViewModel : ApplicationScreen
         Logger = logger;
         ProjectManager = projectManager;
         Title = "Jots";  // TODO: localize me.
-
     }
 
     #endregion

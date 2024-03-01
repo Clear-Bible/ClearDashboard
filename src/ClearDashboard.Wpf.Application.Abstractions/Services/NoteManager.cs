@@ -22,6 +22,10 @@ using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DataAccessLayer.Models;
+using Label = ClearDashboard.DAL.Alignment.Notes.Label;
+using LabelGroup = ClearDashboard.DAL.Alignment.Notes.LabelGroup;
+using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -437,6 +441,16 @@ namespace ClearDashboard.Wpf.Application.Services
             return dictionary.TryGetValue(entityId, out var noteIds) ? noteIds : new NoteIdCollection();
         }
 
+        public void UpdateNoteInCache(Note note)
+        {
+            if (NotesCache.ContainsKey(note.NoteId.Id))
+            {
+                var existing = NotesCache[note.NoteId.Id];
+                existing.Entity = note;
+                existing.Labels = new LabelCollection(note.Labels);
+            }
+        }
+
         /// <summary>
         /// Gets the note details for a specific note ID.
         /// </summary>
@@ -700,13 +714,13 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogInformation(
                     $"Updated note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
 
-                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.NoteId!, true));
+                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note, true));
 
             }
             catch (Exception e)
             {
                 Logger?.LogCritical(e.ToString());
-                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.NoteId!, false));
+                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note, false));
                 throw;
             }
             finally
@@ -728,11 +742,13 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task AddReplyToNoteAsync(NoteViewModel parentNote, string replyText)
         {
-            var replyNote = new NoteViewModel(parentNote.Entity) { Text = replyText };
+            var replyNote = new Note(parentNote.Entity) { Text = replyText, NoteStatus = NoteStatus.Open.ToString()};
             await UpdateNoteAsync(replyNote);
 
-            replyNote.ParatextSendNoteInformation = await ExternalNoteManager.GetExternalSendNoteInformationAsync(Mediator, replyNote.NoteId!, UserProvider, Logger);
-            parentNote.Replies.Add(replyNote);
+            var replyNoteViewModel = new NoteViewModel(replyNote);
+
+            replyNoteViewModel.ParatextSendNoteInformation = parentNote.ParatextSendNoteInformation;
+            parentNote.Replies.Add(replyNoteViewModel);
             NotesCache[parentNote.NoteId!.Id] = parentNote;
         }
 
@@ -840,6 +856,7 @@ namespace ClearDashboard.Wpf.Application.Services
 #endif
                     await Task.Delay(100);
                     await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, newLabel!));
+                    await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.Entity, true));
                     return newLabel;
                 }
 
@@ -887,6 +904,7 @@ namespace ClearDashboard.Wpf.Application.Services
 #endif
                     await Task.Delay(100);
                     await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, label));
+                    await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.Entity, true));
                 }
             }
             catch (Exception e)

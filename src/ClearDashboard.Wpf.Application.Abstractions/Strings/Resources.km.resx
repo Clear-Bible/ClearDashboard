@@ -1535,7 +1535,10 @@
     <value>ផ្ញើ Jots ទាំងនេះទៅ Paratlets?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>ផ្ញើ Jots ដែលបានជ្រើសរើសទៅ ParateXT?</value>
+    <value>ផ្ញើ JOST ទៅ Parathxt</value>
+  </data>
+  <data name="Notes_TakeAction" xml:space="preserve">
+    <value />
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>tokenized Corpus</value>

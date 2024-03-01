@@ -653,7 +653,7 @@
     <value>Hapus Penyelarasan?</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentMenu" xml:space="preserve">
-    <value>Hapus Penyelarasan</value>
+    <value>Hapus penyelarasan</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
     <value>Hapus Alignment untuk '{0}'?</value>
@@ -1019,7 +1019,7 @@
     <value>Tambahkan sebagai formulir untuk ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Temukan Lexeme atau Bentuk Penting atau Parsial untuk Sumber</value>
+    <value>Temukan pencocokan leksem atau bentuk penuh atau parsial untuk sumber</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Tambahkan target sebagai terjemahan untuk ...</value>
@@ -1535,7 +1535,10 @@
     <value>Kirim Jots ini ke Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Kirim Jots yang Dipilih ke Paratext?</value>
+    <value>Kirim Jots ke Paratext</value>
+  </data>
+  <data name="Notes_TakeAction" xml:space="preserve">
+    <value />
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Corpus tokenized</value>
@@ -1661,7 +1664,7 @@
     <value>Anak perempuan</value>
   </data>
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
-    <value>Hapus Penyelarasan</value>
+    <value>Hapus penyelarasan</value>
   </data>
   <data name="Pds_DeleteParallelLine" xml:space="preserve">
     <value>Apakah Anda yakin ingin menghapus penyelarasan ini? Semua catatan, keberpihakan, dan antar -garis yang terkait dengan penyelarasan ini akan dihapus dan tidak dapat dipulihkan.</value>
@@ -1745,7 +1748,7 @@
     <value>Mulai Paratext dulu</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Studybible</value>
+    <value>Studibible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBibleadditions</value>
@@ -1847,7 +1850,7 @@
     <value>PRO</value>
   </data>
   <data name="ProjectPicker_AddNewCollabUser" xml:space="preserve">
-    <value>Tambahkan pengguna kolaborasi baru</value>
+    <value>Tambahkan Pengguna Kolaborasi Baru</value>
   </data>
   <data name="ProjectPicker_AppName" xml:space="preserve">
     <value>ClearDashboard</value>
