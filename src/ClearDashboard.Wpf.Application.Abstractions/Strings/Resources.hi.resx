@@ -158,7 +158,7 @@
     <value>कॉर्पस को टोकन करने का चयन करें</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
-    <value>Loading...</value>
+    <value>संरेखण</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
     <value>आप जिस पुस्तक के साथ काम कर रहे हैं, उसका चयन करें, आप हमेशा बाद में अधिक किताबें जोड़ सकते हैं।</value>
@@ -176,7 +176,7 @@
     <value>इंटरलीनियर</value>
   </data>
   <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
-    <value>Loading...</value>
+    <value>त्रुटियाँ नहीं</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
     <value>फाइल करने के लिए USFM त्रुटियों को सहेजें</value>
@@ -218,7 +218,7 @@
     <value>अध्याय</value>
   </data>
   <data name="Bcv_NextBook" xml:space="preserve">
-    <value>Loading...</value>
+    <value>अगली किताब</value>
   </data>
   <data name="Bcv_NextChapter" xml:space="preserve">
     <value>अगला अध्याय</value>
@@ -257,7 +257,7 @@
     <value>कविता</value>
   </data>
   <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
-    <value>Loading...</value>
+    <value>स्नेह</value>
   </data>
   <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
     <value>कृषि</value>
@@ -293,7 +293,7 @@
     <value>फल</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>Loading...</value>
+    <value>रत्न शामिल हैं</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>घास</value>
@@ -539,7 +539,7 @@
     <value>आइटम का नाम</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
-    <value>Loading...</value>
+    <value>नया समूह</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
     <value>नया व्यक्ति</value>
@@ -638,7 +638,7 @@
     <value>'{1}' के साथ '{0}' संरेखित करें?</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
-    <value>Loading...</value>
+    <value>संरेखण</value>
   </data>
   <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
     <value>इस दृश्य को हटा दें?</value>
@@ -662,7 +662,7 @@
     <value>सभी संरेखण हटाएं?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>Loading...</value>
+    <value>टोकन '{0}' में कई संरेखण परिभाषित हैं। '{1}' पर क्लिक करने से सभी संरेखण हटा देंगे।</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
     <value>फ़िल्टर शब्द खोज</value>
@@ -683,7 +683,7 @@
     <value>'अमान्य' के रूप में चिह्न संरेखण</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
-    <value>मार्क संरेखण 'समीक्षा की आवश्यकता' के रूप में</value>
+    <value>मार्क संरेखण को 'समीक्षा की आवश्यकता' के रूप में संरेखित करें</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
     <value>'मान्य' के रूप में चिह्न संरेखण</value>
@@ -710,7 +710,7 @@
     <value>टोकन के अन्य उदाहरणों पर विभाजन लागू करें</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>टोकन को विभाजित करने के लिए कहां चुनें:</value>
+    <value>टोकन को विभाजित करने के लिए कहां से चुनें:</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>तीन-तरफ़ा विभाजन</value>
@@ -815,13 +815,13 @@
     <value>JHN</value>
   </data>
   <data name="JiraResultsView_Password" xml:space="preserve">
-    <value>Loading...</value>
+    <value>पासवर्ड:</value>
   </data>
   <data name="JiraResultsView_URL" xml:space="preserve">
     <value>Url:</value>
   </data>
   <data name="JiraResultsView_Username" xml:space="preserve">
-    <value>Loading...</value>
+    <value>उपयोगकर्ता नाम:</value>
   </data>
   <data name="JOB" xml:space="preserve">
     <value>JOB</value>
@@ -929,10 +929,10 @@
     <value>पहले से ही एक लेक्सम लेम्मा के लिए मौजूद है</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
-    <value>Loading...</value>
+    <value>अर्थ:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Loading...</value>
+    <value>नई चमक</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>इस अर्थ डोमेन को इस अर्थ से निकालें</value>
@@ -995,7 +995,7 @@
     <value>या</value>
   </data>
   <data name="LexiconEdit_Partially" xml:space="preserve">
-    <value>Loading...</value>
+    <value>आंशिक रूप से</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>परिवर्तनों को सुरक्षित करें</value>
@@ -1121,10 +1121,10 @@
     <value>पसंद</value>
   </data>
   <data name="MainView_QuickNew" xml:space="preserve">
-    <value>Loading...</value>
+    <value>त्वरित नया</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Collab परिवर्तन उपलब्ध है</value>
+    <value>Collab परिवर्तन उपलब्ध हैं</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
     <value>समायोजन</value>
@@ -1145,7 +1145,7 @@
     <value>कॉरपस टोकन</value>
   </data>
   <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>Loading...</value>
+    <value>चकरानेवाला</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>देखना</value>
@@ -1259,7 +1259,7 @@
     <value>मर्ज पूर्ण ... पुनः लोडिंग इंटरफ़ेस</value>
   </data>
   <data name="MergeDialog_OperationCancelled" xml:space="preserve">
-    <value>रद्द किया गया ऑपरेशन</value>
+    <value>अभियान रद्द किया गया</value>
   </data>
   <data name="MergeDialog_OperationComplete" xml:space="preserve">
     <value>ऑपरेशन पूरा!</value>
@@ -1322,13 +1322,13 @@
     <value>समूह:</value>
   </data>
   <data name="NewCollabUserView_LastName" xml:space="preserve">
-    <value>Loading...</value>
+    <value>उपनाम</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
     <value>नया सहयोग उपयोगकर्ता</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
-    <value>Loading...</value>
+    <value>पासवर्ड:</value>
   </data>
   <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
     <value>दूरस्थ सर्वर के लिए सहेजा गया</value>
@@ -1340,7 +1340,7 @@
     <value>उपयोगकर्ता पहले से ही सर्वर पर मौजूद है</value>
   </data>
   <data name="NewCollabUserView_Username" xml:space="preserve">
-    <value>Loading...</value>
+    <value>उपयोगकर्ता नाम:</value>
   </data>
   <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
     <value>उपयोगकर्ता पहले से ही सिस्टम पर है!</value>
@@ -1375,6 +1375,12 @@
   <data name="Notes_AddNewNote" xml:space="preserve">
     <value>एक नया जोट जोड़ें</value>
   </data>
+  <data name="Notes_Body" xml:space="preserve">
+    <value>शरीर</value>
+  </data>
+  <data name="Notes_Delete" xml:space="preserve">
+    <value>जोत को हटा दें</value>
+  </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>इस jot को हटा दें?</value>
   </data>
@@ -1388,7 +1394,7 @@
     <value>फिल्टर</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>लेबल द्वारा फ़िल्टर</value>
+    <value>लेबल द्वारा फ़िल्टर करें</value>
   </data>
   <data name="Notes_FilterNoteStatus" xml:space="preserve">
     <value>स्थिति से फ़िल्टर करें</value>
@@ -1640,7 +1646,7 @@
     <value>देखने के लिए जोड़ें</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
-    <value>Loading...</value>
+    <value>सहायक</value>
   </data>
   <data name="Pds_BackTranslation" xml:space="preserve">
     <value>अणुवादित का वापस से अनुवाद</value>
@@ -1832,7 +1838,7 @@
     <value>उपसर्ग</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>दिखावा दिखाना</value>
+    <value>दिखावा दिखाओ</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>तना</value>
@@ -1865,7 +1871,7 @@
     <value>सहयोग परियोजनाएं</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>आरंभ करने के लिए अपना प्रोजेक्ट बनाएं।</value>
+    <value>आरंभ करने के लिए अपनी परियोजना बनाएं।</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>एक नया प्रोजेक्ट बनाएं</value>
@@ -1892,16 +1898,16 @@
     <value>पुस्तक चयन सक्षम करें</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
-    <value>यदि जाँच की जाती है, तो आप किन पुस्तकों को संसाधित करने के लिए चयन कर पाएंगे।</value>
+    <value>यदि जाँच की जाती है, तो आप कौन सी पुस्तकों को संसाधित करने में सक्षम होंगे।</value>
   </data>
   <data name="ProjectPicker_GetStarted" xml:space="preserve">
     <value>शुरू हो जाओ</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>आयात सर्वर प्रोजेक्ट</value>
+    <value>आयात सर्वर परियोजना</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Loading...</value>
+    <value>अपनी परियोजना बनाते समय ग्रीक और हिब्रू बाइबिल ग्रंथों को शामिल करने के लिए इस बॉक्स को देखें।</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>NT ग्रीक बाइबिल ग्रंथों को शामिल करें?</value>
@@ -1919,7 +1925,7 @@
     <value>यहां अकेलापन है। कृपया एक नई परियोजना बनाएं।</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Paratext स्थापित नहीं है। कृपया Paratext इंस्टॉल करें और ClearDashboard एप्लिकेशन को फिर से तैयार करें।</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>Paratext नहीं चल रहा है</value>
@@ -1943,7 +1949,7 @@
     <value>पैराटेक्स्ट प्रोजेक्ट</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Loading...</value>
+    <value>परियोजना:</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>हम बस पहुँच गए!</value>
@@ -1970,7 +1976,7 @@
     <value>Paratext शुरू करने के लिए यहां क्लिक करें</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Loading...</value>
+    <value>संस्करण:</value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>कृपया अपनी परियोजना के लिए एक नाम दर्ज करें</value>
@@ -1997,7 +2003,7 @@
     <value>1 जॉन</value>
   </data>
   <data name="ProperCase_1_Kings" xml:space="preserve">
-    <value>1 राजा</value>
+    <value>1 किंग्स</value>
   </data>
   <data name="ProperCase_1_Peter" xml:space="preserve">
     <value>1 पीटर</value>
@@ -2009,7 +2015,7 @@
     <value>1 थिस्सलोनियन</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>Loading...</value>
+    <value>1 तीमुथियुस</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 इतिहास</value>
@@ -2033,7 +2039,7 @@
     <value>2 थिस्सलोनियन</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>Loading...</value>
+    <value>2 तीमुथियुस</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3 जॉन</value>
@@ -2057,7 +2063,7 @@
     <value>ऐकलेसिस्टास</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
-    <value>Loading...</value>
+    <value>इफिसियों</value>
   </data>
   <data name="ProperCase_Esther" xml:space="preserve">
     <value>एस्थर</value>
@@ -2072,7 +2078,7 @@
     <value>एजरा</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Loading...</value>
+    <value>गलाटियन्स</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>उत्पत्ति</value>
@@ -2123,7 +2129,7 @@
     <value>विलाप</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
-    <value>Loading...</value>
+    <value>छिछोरापन</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
     <value>ल्यूक</value>
@@ -2153,7 +2159,7 @@
     <value>ओबद्याह</value>
   </data>
   <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>दामाद</value>
+    <value>दाई</value>
   </data>
   <data name="ProperCase_Philippians" xml:space="preserve">
     <value>फिलिप्पियों</value>
@@ -2180,10 +2186,10 @@
     <value>टाइटस</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>Loading...</value>
+    <value>जकर्याह</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
-    <value>Loading...</value>
+    <value>सपन्याह</value>
   </data>
   <data name="PSA" xml:space="preserve">
     <value>PSA</value>
@@ -2198,7 +2204,7 @@
     <value>पंजीकरण करवाना</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Loading...</value>
+    <value>प्रदान की गई कुंजी दोषपूर्ण है। जब डिक्रिप्ट किया जाता है, तो कुछ JSON तत्व नहीं मिल सके।</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>डिक्रिप्टेड लाइसेंस कुंजी की सामग्री आपके द्वारा प्रदान की गई जानकारी से मेल नहीं खाती है।</value>
@@ -2429,7 +2435,7 @@
     <value>पूर्व दर्शन</value>
   </data>
   <data name="SlackMessageView_SuggestionSeverity" xml:space="preserve">
-    <value>Loading...</value>
+    <value>तीव्रता:</value>
   </data>
   <data name="SlackMessageView_SuggestionTitle" xml:space="preserve">
     <value>शीर्षक:</value>
@@ -2447,7 +2453,7 @@
     <value>स्थिति</value>
   </data>
   <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>Loading...</value>
+    <value>प्रारूपित</value>
   </data>
   <data name="TargetContextView_Unformatted" xml:space="preserve">
     <value>अस्वरूपित</value>
@@ -2462,7 +2468,7 @@
     <value>TIT</value>
   </data>
   <data name="TokenDisplay_SetTranslation" xml:space="preserve">
-    <value>Loading...</value>
+    <value>नज़दीक रखना</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>अद्यतन</value>
@@ -2492,7 +2498,7 @@
     <value>कॉरपस टोकन</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
-    <value>Loading...</value>
+    <value>चकरानेवाला</value>
   </data>
   <data name="Windows_EnhancedView" xml:space="preserve">
     <value>देखना</value>
@@ -2513,7 +2519,7 @@
     <value>समझ:</value>
   </data>
   <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>उपडोमेन:</value>
+    <value>सबडोमेन:</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>हाँ</value>

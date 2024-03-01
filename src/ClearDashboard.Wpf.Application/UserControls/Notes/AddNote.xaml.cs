@@ -696,21 +696,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             RaiseReplyAddedEvent(e as NoteReplyAddEventArgs);
         }
 
-        private void ConfirmParatextSend(object sender, RoutedEventArgs e)
-        {
-            ConfirmParatextSendPopup.IsOpen = true;
-        }
-
-        private void ParatextSendConfirmed(object sender, RoutedEventArgs e)
-        {
-            RaiseNoteEvent(NoteSendToParatextEvent);
-            ConfirmParatextSendPopup.IsOpen = false;
-        }
-
-        private void ParatextSendCancelled(object sender, RoutedEventArgs e)
-        {
-            ConfirmParatextSendPopup.IsOpen = false;
-        }
 
         private void RaiseNoteAssociationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {

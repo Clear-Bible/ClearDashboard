@@ -155,10 +155,10 @@
     <value>Ajouter</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Sélectionnez comment tokenize le corpus</value>
+    <value>Sélectionnez comment tokensize le corpus</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Alignement</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
     <value>Sélectionnez des livres avec lesquels vous travaillez, vous pouvez toujours ajouter plus de livres plus tard.</value>
@@ -176,7 +176,7 @@
     <value>Interlinéaire</value>
   </data>
   <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Aucune erreur</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
     <value>Enregistrer les erreurs USFM dans le fichier</value>
@@ -218,7 +218,7 @@
     <value>CHAPITRE</value>
   </data>
   <data name="Bcv_NextBook" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Livre suivant</value>
   </data>
   <data name="Bcv_NextChapter" xml:space="preserve">
     <value>Chapitre suivant</value>
@@ -257,7 +257,7 @@
     <value>Verset</value>
   </data>
   <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
-    <value>Loading...</value>
+    <value>affection</value>
   </data>
   <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
     <value>agriculture</value>
@@ -293,7 +293,7 @@
     <value>des fruits</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>Loading...</value>
+    <value>pierres précieuses</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>herbes</value>
@@ -485,7 +485,7 @@
     <value>Mark sélectionné comme «Revue des besoins»</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
-    <value>Marque sélectionnée comme «valide»</value>
+    <value>Mark sélectionné comme «valide»</value>
   </data>
   <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
     <value>Besoin d'examen</value>
@@ -539,10 +539,10 @@
     <value>Nommez l'article</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
-    <value>Loading...</value>
+    <value>nouveau groupe</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
-    <value>Nouveau individu</value>
+    <value>nouveau individu</value>
   </data>
   <data name="ClockUserControl_Select" xml:space="preserve">
     <value>Sélectionnez le fuseau horaire</value>
@@ -638,7 +638,7 @@
     <value>Aligner '{0}' avec '{1}'?</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Alignement</value>
   </data>
   <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
     <value>Supprimer cette vue?</value>
@@ -662,7 +662,7 @@
     <value>Supprimer tous les alignements?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Le jeton '{0}' a plusieurs alignements définis. Cliquez sur '{1}' supprimera tous les alignements.</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
     <value>Recherche de termes de filtre</value>
@@ -815,13 +815,13 @@
     <value>JHN</value>
   </data>
   <data name="JiraResultsView_Password" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Mot de passe:</value>
   </data>
   <data name="JiraResultsView_URL" xml:space="preserve">
     <value>URL:</value>
   </data>
   <data name="JiraResultsView_Username" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Nom d'utilisateur:</value>
   </data>
   <data name="JOB" xml:space="preserve">
     <value>JOB</value>
@@ -929,10 +929,10 @@
     <value>Un lexème pour déjà existe pour le lemme</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Significations:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Nouveau brillant</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Supprimer ce domaine sémantique de ce sens</value>
@@ -995,7 +995,7 @@
     <value>Ou</value>
   </data>
   <data name="LexiconEdit_Partially" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Partiellement</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>Sauvegarder les modifications</value>
@@ -1061,7 +1061,7 @@
     <value>Importation du lexique</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
-    <value>Correspondance de traduction</value>
+    <value>Matchs de traduction</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Tout déselectionner</value>
@@ -1121,7 +1121,7 @@
     <value>Préférences</value>
   </data>
   <data name="MainView_QuickNew" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Rapide</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Modifications de collaboration disponibles</value>
@@ -1145,7 +1145,7 @@
     <value>Jetons de corpus</value>
   </data>
   <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Tableau de bord</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>Voir</value>
@@ -1322,13 +1322,13 @@
     <value>Groupe:</value>
   </data>
   <data name="NewCollabUserView_LastName" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Nom de famille</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
     <value>Nouvel utilisateur de collaboration</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Mot de passe:</value>
   </data>
   <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
     <value>Enregistré sur le serveur distant</value>
@@ -1340,7 +1340,7 @@
     <value>L'utilisateur existe déjà sur le serveur</value>
   </data>
   <data name="NewCollabUserView_Username" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Nom d'utilisateur:</value>
   </data>
   <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
     <value>L'utilisateur est déjà sur le système!</value>
@@ -1374,6 +1374,12 @@
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
     <value>Ajouter un nouveau jot</value>
+  </data>
+  <data name="Notes_Body" xml:space="preserve">
+    <value>Corps</value>
+  </data>
+  <data name="Notes_Delete" xml:space="preserve">
+    <value>Supprimer Jot</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>Supprimer ce jot?</value>
@@ -1520,7 +1526,7 @@
     <value>Statut</value>
   </data>
   <data name="Notes_OpenConfirmation" xml:space="preserve">
-    <value>Marquez ces Jots comme ouvert?</value>
+    <value>Marquez ces Jots comme ouverts?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Partie</value>
@@ -1535,7 +1541,10 @@
     <value>Envoyez ces Jots à paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Envoyer des Jots sélectionnés à PARATEXT?</value>
+    <value>Envoyer des jots à paratext</value>
+  </data>
+  <data name="Notes_TakeAction" xml:space="preserve">
+    <value />
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Corpus tokenisé</value>
@@ -1595,7 +1604,7 @@
     <value>Former</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Aligneur de la machine à train</value>
+    <value>Aligneur de mot de machine de train</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Définissez la cartographie du verset entre les corpus parallélisés</value>
@@ -1637,7 +1646,7 @@
     <value>Ajouter à la vue</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Auxiliaire</value>
   </data>
   <data name="Pds_BackTranslation" xml:space="preserve">
     <value>Traduction arrière</value>
@@ -1898,7 +1907,7 @@
     <value>Projet d'importation du serveur</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Cochez cette case pour inclure les textes bibliques grecs et hébreux lors de la création de votre projet.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>Inclure des textes bibliques grecs NT?</value>
@@ -1916,7 +1925,7 @@
     <value>C'est seul ici. Veuillez créer un nouveau projet.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Loading...</value>
+    <value>PARATEXT n'est pas installé. Veuillez installer PARATEXT et relancer l'application ClearDashboard.</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>Paratext ne fonctionne pas</value>
@@ -1925,7 +1934,7 @@
     <value>Ouverte récente</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>Paratex</value>
+    <value>Paratext</value>
   </data>
   <data name="ProjectPicker_ParatextBackTranslation" xml:space="preserve">
     <value>Traduction de dos paratext</value>
@@ -1937,10 +1946,10 @@
     <value>PARATEXT est en cours d'exécution mais n'est pas connecté.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
-    <value>Projet de parattex</value>
+    <value>Projet PARATEXT</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Projet:</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>Nous y sommes presque!</value>
@@ -1958,7 +1967,7 @@
     <value>Assistant de modèle de projet: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Rafraîchir la liste des projets de collaboration</value>
+    <value>Refreindre la liste des projets de collaboration</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>Recherche récente</value>
@@ -1967,7 +1976,7 @@
     <value>Cliquez ici pour démarrer paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Version:</value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>Veuillez saisir un nom pour votre projet</value>
@@ -2006,7 +2015,7 @@
     <value>1 Thessaloniciens</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>Loading...</value>
+    <value>1 Timothée</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 Chroniques</value>
@@ -2030,7 +2039,7 @@
     <value>2 Thessaloniciens</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>Loading...</value>
+    <value>2 Timothée</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3 John</value>
@@ -2054,7 +2063,7 @@
     <value>Ecclésiastes</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Éphésiens</value>
   </data>
   <data name="ProperCase_Esther" xml:space="preserve">
     <value>Esther</value>
@@ -2069,7 +2078,7 @@
     <value>Ezra</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Galates</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>Genèse</value>
@@ -2117,13 +2126,13 @@
     <value>Juges</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentations</value>
+    <value>Lamentation</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Lévitique</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
-    <value>Luck</value>
+    <value>Las</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
     <value>Malachi</value>
@@ -2177,10 +2186,10 @@
     <value>Tirus</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Zécharia</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Zéphanie</value>
   </data>
   <data name="PSA" xml:space="preserve">
     <value>PSA</value>
@@ -2195,7 +2204,7 @@
     <value>Registre</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Loading...</value>
+    <value>La clé fournie est défectueuse. Lorsqu'ils sont décryptés, certains éléments JSON n'ont pas pu être trouvés.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>Le contenu de la clé de licence décryptée ne correspond pas aux informations que vous avez fournies.</value>
@@ -2264,7 +2273,7 @@
     <value>Activer les notes de paratext externe dans le groupe expérimental</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
-    <value>Activer les notes externes de paratext</value>
+    <value>Activer les notes de paratext externes</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
     <value>Activer l'importation du lexique</value>
@@ -2318,7 +2327,7 @@
     <value>Réservé à l'expansion future</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaurer l'utilisateur de la collaboration</value>
+    <value>Restaurer l'utilisateur de collaboration</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Enregistré sur le serveur distant</value>
@@ -2426,7 +2435,7 @@
     <value>Aperçu</value>
   </data>
   <data name="SlackMessageView_SuggestionSeverity" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Gravité:</value>
   </data>
   <data name="SlackMessageView_SuggestionTitle" xml:space="preserve">
     <value>Titre:</value>
@@ -2444,7 +2453,7 @@
     <value>Statut</value>
   </data>
   <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Formaté</value>
   </data>
   <data name="TargetContextView_Unformatted" xml:space="preserve">
     <value>Non formaté</value>
@@ -2459,7 +2468,7 @@
     <value>TIT</value>
   </data>
   <data name="TokenDisplay_SetTranslation" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Set Gloss</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Mise à jour</value>
@@ -2489,7 +2498,7 @@
     <value>Jetons de corpus</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Tableau de bord</value>
   </data>
   <data name="Windows_EnhancedView" xml:space="preserve">
     <value>Voir</value>

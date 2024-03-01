@@ -158,7 +158,7 @@
     <value>Wählen Sie, wie Sie den Korpus tokenisieren</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Ausrichtung</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
     <value>Wählen Sie Buch (en), mit denen Sie zusammenarbeiten, Sie können später immer mehr Bücher hinzufügen.</value>
@@ -176,7 +176,7 @@
     <value>Interlinear</value>
   </data>
   <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Keine Fehler</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
     <value>Speichern Sie USFM -Fehler in Datei</value>
@@ -218,7 +218,7 @@
     <value>KAPITEL</value>
   </data>
   <data name="Bcv_NextBook" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Nächstes Buch</value>
   </data>
   <data name="Bcv_NextChapter" xml:space="preserve">
     <value>Nächstes Kapitel</value>
@@ -257,7 +257,7 @@
     <value>Vers</value>
   </data>
   <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Zuneigung</value>
   </data>
   <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
     <value>Landwirtschaft</value>
@@ -293,7 +293,7 @@
     <value>Früchte</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Edelsteine</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>Gräser</value>
@@ -500,7 +500,7 @@
     <value>Quelle</value>
   </data>
   <data name="BulkAlignmentReview_SourcePart" xml:space="preserve">
-    <value>Quellenteil</value>
+    <value>Quellteil</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
     <value>Quelle Ref</value>
@@ -539,7 +539,7 @@
     <value>Nennen Sie den Artikel</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Neue Gruppe</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
     <value>Neue Person</value>
@@ -638,7 +638,7 @@
     <value>Ausrichtung '{0}' mit '{1}'?</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Ausrichtung</value>
   </data>
   <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
     <value>Diese Ansicht löschen?</value>
@@ -662,7 +662,7 @@
     <value>Alle Ausrichtungen löschen?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Das Token '{0}' hat mehrere Ausrichtungen definiert. Durch Klicken auf '{1}' löscht alle Ausrichtungen.</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
     <value>Filterbegriffsuche</value>
@@ -815,13 +815,13 @@
     <value>JHN</value>
   </data>
   <data name="JiraResultsView_Password" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Passwort:</value>
   </data>
   <data name="JiraResultsView_URL" xml:space="preserve">
     <value>URL:</value>
   </data>
   <data name="JiraResultsView_Username" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Nutzername:</value>
   </data>
   <data name="JOB" xml:space="preserve">
     <value>JOB</value>
@@ -929,10 +929,10 @@
     <value>Ein Lexem für bereits vorhanden für Lemma</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Bedeutungen:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Neuer Glanz</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Entfernen Sie diese semantische Domäne aus dieser Bedeutung</value>
@@ -995,7 +995,7 @@
     <value>Oder</value>
   </data>
   <data name="LexiconEdit_Partially" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Teilweise</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>Änderungen speichern</value>
@@ -1019,10 +1019,10 @@
     <value>Fügen Sie als Form für ... hinzu</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Finden Sie vollständige oder teilweise Lexem- oder Formularübereinstimmungen für Quelle</value>
+    <value>Finden Sie vollständige oder partielle Lexeme- oder Formularübereinstimmungen für die Quelle</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Ziel als Übersetzung für ...</value>
+    <value>Fügen Sie Ziel als Übersetzung für ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Finden Sie Lexeme mit einer oder mehreren Übersetzung, die dem Ziel entspricht</value>
@@ -1121,7 +1121,7 @@
     <value>Vorlieben</value>
   </data>
   <data name="MainView_QuickNew" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Schnell neu</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Zusammenarbeit mit Zusammenarbeit verfügbar</value>
@@ -1145,7 +1145,7 @@
     <value>Corpus -Token</value>
   </data>
   <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Armaturenbrett</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>Sicht</value>
@@ -1295,7 +1295,7 @@
     <value>Überprüfen Sie die Verfügbarkeit der Benutzer</value>
   </data>
   <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
-    <value>Erstellen Sie einen Kollaborationsbenutzer</value>
+    <value>Erstellen Sie einen Benutzer der Zusammenarbeit</value>
   </data>
   <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
     <value>Kollaborationsbenutzer erstellen</value>
@@ -1322,13 +1322,13 @@
     <value>Gruppe:</value>
   </data>
   <data name="NewCollabUserView_LastName" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Familienname, Nachname</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
     <value>Neuer Benutzer der Zusammenarbeit</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Passwort:</value>
   </data>
   <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
     <value>Auf Remote Server gespeichert</value>
@@ -1340,7 +1340,7 @@
     <value>Der Benutzer existiert bereits auf dem Server</value>
   </data>
   <data name="NewCollabUserView_Username" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Nutzername:</value>
   </data>
   <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
     <value>Der Benutzer ist bereits im System!</value>
@@ -1374,6 +1374,12 @@
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
     <value>Fügen Sie einen neuen Jot hinzu</value>
+  </data>
+  <data name="Notes_Body" xml:space="preserve">
+    <value>Körper</value>
+  </data>
+  <data name="Notes_Delete" xml:space="preserve">
+    <value>JoT löschen</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>Diesen Jot löschen?</value>
@@ -1421,7 +1427,7 @@
     <value>Möchten Sie das Etikett löschen:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>Möchten Sie das Etikett zerlegen:</value>
+    <value>Möchten Sie das Etikett disassoziieren:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>aus der Labelgruppe:</value>
@@ -1535,7 +1541,10 @@
     <value>Senden Sie diese Jots an Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Senden Sie ausgewählte JOTs an Paratext?</value>
+    <value>Senden Sie JOTs an Paratext</value>
+  </data>
+  <data name="Notes_TakeAction" xml:space="preserve">
+    <value />
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Tokenisierter Korpus</value>
@@ -1631,13 +1640,13 @@
     <value>Fügen Sie Text zur Anzeige hinzu</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Fügen Sie der neuen Ansicht Text hinzu</value>
+    <value>Fügen Sie Text zur neuen Ansicht hinzu</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Zur Anzeige hinzufügen</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Hilfs</value>
   </data>
   <data name="Pds_BackTranslation" xml:space="preserve">
     <value>Rückübersetzung</value>
@@ -1886,7 +1895,7 @@
     <value>Projekt löschen</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Aktivieren Sie die Buchauswahl</value>
+    <value>Buchauswahl aktivieren</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
     <value>Wenn Sie überprüft werden, können Sie auswählen, welche Bücher zu verarbeiten sind.</value>
@@ -1898,10 +1907,10 @@
     <value>Serverprojekt importieren</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Aktivieren Sie dieses Kontrollkästchen, um die griechischen und hebräischen biblischen Texte bei der Erstellung Ihres Projekts einzuschließen.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>NT Griechische biblische Texte einschließen?</value>
+    <value>NT -griechische biblische Texte einschließen?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
     <value>OT hebräische biblische Texte einschließen?</value>
@@ -1916,7 +1925,7 @@
     <value>Es ist einsam hier. Bitte erstellen Sie ein neues Projekt.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Paratext ist nicht installiert. Bitte installieren Sie die Paratext und leisten Sie die Cleardashboard -Anwendung erneut aus.</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>Paratext läuft nicht</value>
@@ -1940,7 +1949,7 @@
     <value>Paratext -Projekt</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Projekt:</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>Wir sind fast da!</value>
@@ -1967,7 +1976,7 @@
     <value>Klicken Sie hier, um den Paratext zu starten</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Ausführung:</value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>Bitte geben Sie einen Namen für Ihr Projekt ein</value>
@@ -2006,7 +2015,7 @@
     <value>1 Thessalonicher</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>Loading...</value>
+    <value>1 Timothy</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 Chroniken</value>
@@ -2030,7 +2039,7 @@
     <value>2 Thessalonicher</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>Loading...</value>
+    <value>2 Timothy</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3 John</value>
@@ -2054,7 +2063,7 @@
     <value>Prediger</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Epheser</value>
   </data>
   <data name="ProperCase_Esther" xml:space="preserve">
     <value>Esther</value>
@@ -2069,7 +2078,7 @@
     <value>Ezra</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Galater</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>Genesis</value>
@@ -2093,7 +2102,7 @@
     <value>James</value>
   </data>
   <data name="ProperCase_Jeremiah" xml:space="preserve">
-    <value>Jeremiah</value>
+    <value>Jeremia</value>
   </data>
   <data name="ProperCase_Job" xml:space="preserve">
     <value>Arbeit</value>
@@ -2120,7 +2129,7 @@
     <value>Wehklagen</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Leviticus</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
     <value>Lukas</value>
@@ -2177,10 +2186,10 @@
     <value>Titus</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Zecharja</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Zephaniah</value>
   </data>
   <data name="PSA" xml:space="preserve">
     <value>PSA</value>
@@ -2195,7 +2204,7 @@
     <value>Registrieren</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Der vorgesehene Schlüssel ist fehlerhaft. Bei der Entschlüsselung konnten bestimmte JSON -Elemente nicht gefunden werden.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>Der Inhalt des entschlüsselten Lizenzschlüssels entspricht nicht den von Ihnen angegebenen Informationen.</value>
@@ -2354,7 +2363,7 @@
     <value>Validieren Sie den E -Mail -Code</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Aktivieren Sie die Anzeige von Versen durch Versuchssammlungen</value>
+    <value>Aktivieren Sie die Anzeige von Verse-by-Vers-Textsammlungen</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>Aufgabe abbrechen</value>
@@ -2426,7 +2435,7 @@
     <value>Vorschau</value>
   </data>
   <data name="SlackMessageView_SuggestionSeverity" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Schwere:</value>
   </data>
   <data name="SlackMessageView_SuggestionTitle" xml:space="preserve">
     <value>Titel:</value>
@@ -2444,7 +2453,7 @@
     <value>Status</value>
   </data>
   <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Formatiert</value>
   </data>
   <data name="TargetContextView_Unformatted" xml:space="preserve">
     <value>Unformatiert</value>
@@ -2459,7 +2468,7 @@
     <value>TIT</value>
   </data>
   <data name="TokenDisplay_SetTranslation" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Gloss setzen</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Aktualisieren</value>
@@ -2489,7 +2498,7 @@
     <value>Corpus -Token</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Armaturenbrett</value>
   </data>
   <data name="Windows_EnhancedView" xml:space="preserve">
     <value>Sicht</value>

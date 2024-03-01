@@ -113,10 +113,10 @@
     <value>版本</value>
   </data>
   <data name="AccountInfo_ClearDashboardUserIdLabel" xml:space="preserve">
-    <value>ClearDashboard用户ID：</value>
+    <value>Cleardashboard用户ID：</value>
   </data>
   <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
-    <value>Cleardashboard用户名：</value>
+    <value>ClearDashboard用户名：</value>
   </data>
   <data name="AccountInfo_CollaborationEmailLabel" xml:space="preserve">
     <value>协作电子邮件：</value>
@@ -128,7 +128,7 @@
     <value>协作用户名：</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
-    <value> - 流通帐户详细信息 - </value>
+    <value> - 流动帐户详细信息 - </value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
     <value>停用当前许可证</value>
@@ -158,7 +158,7 @@
     <value>选择如何象征语料库</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
-    <value>Loading...</value>
+    <value>结盟</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
     <value>选择与您合作的书籍，您稍后可以随时添加更多书籍。</value>
@@ -176,7 +176,7 @@
     <value>线性</value>
   </data>
   <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
-    <value>Loading...</value>
+    <value>没有错误</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
     <value>将USFM错误保存到文件</value>
@@ -218,7 +218,7 @@
     <value>章节</value>
   </data>
   <data name="Bcv_NextBook" xml:space="preserve">
-    <value>Loading...</value>
+    <value>下一本书</value>
   </data>
   <data name="Bcv_NextChapter" xml:space="preserve">
     <value>下一章</value>
@@ -257,7 +257,7 @@
     <value>诗</value>
   </data>
   <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
-    <value>Loading...</value>
+    <value>感情</value>
   </data>
   <data name="BiblicalTermsDomains_Agriculture" xml:space="preserve">
     <value>农业</value>
@@ -281,7 +281,7 @@
     <value>建造;宗教活动</value>
   </data>
   <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>建筑；畜牧业</value>
+    <value>构造；畜牧业</value>
   </data>
   <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
     <value>容器；畜牧业</value>
@@ -293,7 +293,7 @@
     <value>水果</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>Loading...</value>
+    <value>宝石</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>草</value>
@@ -452,7 +452,7 @@
     <value>散装对齐编辑</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>批量对齐审查</value>
+    <value>批量对准评论</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>数数</value>
@@ -494,7 +494,7 @@
     <value>部分</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>枢密性的单词</value>
+    <value>枢纽的单词</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>来源</value>
@@ -539,7 +539,7 @@
     <value>命名项目</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
-    <value>Loading...</value>
+    <value>新小组</value>
   </data>
   <data name="ClockUserControl_NewIndivdual" xml:space="preserve">
     <value>新个人</value>
@@ -635,10 +635,10 @@
     <value>添加对齐方式？</value>
   </data>
   <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>用'{1}'对齐'{0}'？</value>
+    <value>与'{1}'对齐'{0}'？</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
-    <value>Loading...</value>
+    <value>结盟</value>
   </data>
   <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
     <value>删除此视图？</value>
@@ -656,13 +656,13 @@
     <value>删除对齐</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>删除“ {0}”的对齐？</value>
+    <value>删除“ {0}”的对齐方式？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
     <value>删除所有路线？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>Loading...</value>
+    <value>令牌'{0}'具有多个对齐定义。单击'{1}'将删除所有对齐。</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
     <value>过滤期搜索</value>
@@ -815,13 +815,13 @@
     <value>JHN</value>
   </data>
   <data name="JiraResultsView_Password" xml:space="preserve">
-    <value>Loading...</value>
+    <value>密码：</value>
   </data>
   <data name="JiraResultsView_URL" xml:space="preserve">
     <value>URL：</value>
   </data>
   <data name="JiraResultsView_Username" xml:space="preserve">
-    <value>Loading...</value>
+    <value>用户名：</value>
   </data>
   <data name="JOB" xml:space="preserve">
     <value>JOB</value>
@@ -890,7 +890,7 @@
     <value>更改所有不设置的事件</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>如果检查了，这将改变此词的所有不设置的情况</value>
+    <value>如果检查了，这将改变此词的所有不设置</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>一致性</value>
@@ -929,10 +929,10 @@
     <value>引理已经存在的词汇</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
-    <value>Loading...</value>
+    <value>含义：</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Loading...</value>
+    <value>新的光泽</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>从此含义中删除这个语义域</value>
@@ -959,7 +959,7 @@
     <value>添加'{0}'作为表单</value>
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
-    <value>将'{0}'添加为第一个含义</value>
+    <value>添加'{0}'作为第一个含义</value>
   </data>
   <data name="LexiconEdit_EditingDone" xml:space="preserve">
     <value>完毕</value>
@@ -995,7 +995,7 @@
     <value>或者</value>
   </data>
   <data name="LexiconEdit_Partially" xml:space="preserve">
-    <value>Loading...</value>
+    <value>部分</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>保存更改</value>
@@ -1070,7 +1070,7 @@
     <value>需要名字</value>
   </data>
   <data name="LicenseValidator_LastMissing" xml:space="preserve">
-    <value>需要姓</value>
+    <value>需要姓氏</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>需要许可证密钥</value>
@@ -1121,7 +1121,7 @@
     <value>优先</value>
   </data>
   <data name="MainView_QuickNew" xml:space="preserve">
-    <value>Loading...</value>
+    <value>快速新</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>可用的合作更改</value>
@@ -1145,7 +1145,7 @@
     <value>语料库令牌</value>
   </data>
   <data name="MainView_WindowsDashboard" xml:space="preserve">
-    <value>Loading...</value>
+    <value>仪表板</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>看法</value>
@@ -1322,13 +1322,13 @@
     <value>团体：</value>
   </data>
   <data name="NewCollabUserView_LastName" xml:space="preserve">
-    <value>Loading...</value>
+    <value>姓</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
-    <value>新的合作用户</value>
+    <value>新的协作用户</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
-    <value>Loading...</value>
+    <value>密码：</value>
   </data>
   <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
     <value>保存到远程服务器</value>
@@ -1340,7 +1340,7 @@
     <value>用户已经存在于服务器上</value>
   </data>
   <data name="NewCollabUserView_Username" xml:space="preserve">
-    <value>Loading...</value>
+    <value>用户名：</value>
   </data>
   <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
     <value>用户已经在系统上！</value>
@@ -1373,7 +1373,13 @@
     <value>添加JOT</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>添加一个新的jot</value>
+    <value>添加新的杂志</value>
+  </data>
+  <data name="Notes_Body" xml:space="preserve">
+    <value>身体</value>
+  </data>
+  <data name="Notes_Delete" xml:space="preserve">
+    <value>删除jot</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>删除此jot？</value>
@@ -1433,7 +1439,7 @@
     <value>添加标签组</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>标签组已经存在，名称为</value>
+    <value>一个标签组已经存在</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>初始化标签组</value>
@@ -1526,7 +1532,7 @@
     <value>部分</value>
   </data>
   <data name="Notes_PleaseAddJot" xml:space="preserve">
-    <value>请使用下面的对话框添加jot。</value>
+    <value>请使用下面的对话框添加一个jot。</value>
   </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
     <value>将这些jots标记为解决？</value>
@@ -1535,7 +1541,10 @@
     <value>将这些JOTS发送到Paratext？</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>将选定的JOTS发送到Paratext？</value>
+    <value>将Jots发送到Paratext</value>
+  </data>
+  <data name="Notes_TakeAction" xml:space="preserve">
+    <value />
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>象征化的语料库</value>
@@ -1583,10 +1592,10 @@
     <value>并行化语料库经文</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>机器字对准算法</value>
+    <value>机词对齐算法</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>机器字对准算法</value>
+    <value>机词对齐算法</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>火车对称模型？</value>
@@ -1622,7 +1631,7 @@
     <value>创建新单词对齐</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>创建新的语料库</value>
+    <value>创建新的语料库令牌化</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
     <value>添加新的Interlinear</value>
@@ -1637,7 +1646,7 @@
     <value>添加到查看</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
-    <value>Loading...</value>
+    <value>辅助的</value>
   </data>
   <data name="Pds_BackTranslation" xml:space="preserve">
     <value>退缩</value>
@@ -1649,7 +1658,7 @@
     <value>更改内容的缩放级别</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>顾问说明</value>
+    <value>顾问Notes</value>
   </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>创建新单词对齐</value>
@@ -1862,7 +1871,7 @@
     <value>协作项目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>创建您的项目以开始。</value>
+    <value>创建您的项目以入门。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>创建一个新项目</value>
@@ -1898,7 +1907,7 @@
     <value>导入服务器项目</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Loading...</value>
+    <value>在创建项目时，请选中此框，以包括希腊语和希伯来语圣经的文本。</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>包括NT希腊圣经文本？</value>
@@ -1916,13 +1925,13 @@
     <value>这里很孤单。请创建一个新项目。</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Loading...</value>
+    <value>未安装paratext。请安装Paratext并重新运行ClearDashboard应用程序。</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>paratext不运行</value>
   </data>
   <data name="ProjectPicker_OpenRecent" xml:space="preserve">
-    <value>近期开放</value>
+    <value>公开最近</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
     <value>PARATEXT</value>
@@ -1934,13 +1943,13 @@
     <value>模型文本（LWC）</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>paratext正在运行但未连接。</value>
+    <value>Paratext正在运行但未连接。</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
     <value>PARATEXT项目</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Loading...</value>
+    <value>项目：</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>我们快到了！</value>
@@ -1967,7 +1976,7 @@
     <value>单击此处启动Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Loading...</value>
+    <value>版本：</value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>请输入您的项目的名称</value>
@@ -2006,7 +2015,7 @@
     <value>1个帖撒罗尼迦人</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>Loading...</value>
+    <value>1蒂莫西</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>历代志下</value>
@@ -2030,7 +2039,7 @@
     <value>帖撒罗尼迦后书</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>Loading...</value>
+    <value>2提摩太</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
     <value>3约翰</value>
@@ -2054,7 +2063,7 @@
     <value>传道书</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
-    <value>Loading...</value>
+    <value>以弗所书</value>
   </data>
   <data name="ProperCase_Esther" xml:space="preserve">
     <value>以斯帖记</value>
@@ -2069,7 +2078,7 @@
     <value>以斯拉记</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Loading...</value>
+    <value>加拉太书</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>创世纪</value>
@@ -2120,7 +2129,7 @@
     <value>哀叹</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
-    <value>Loading...</value>
+    <value>利未记</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
     <value>路加福音</value>
@@ -2195,13 +2204,13 @@
     <value>登记</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Loading...</value>
+    <value>提供的密钥是错误的。解密时，找不到某些JSON元素。</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>解密许可证密钥的内容与您提供的信息不符。</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
-    <value>您的许可证密钥要么缺少或损坏。</value>
+    <value>您的许可密钥丢失或损坏。</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
     <value>欢迎来到Cleardashboard！请输入您的注册信息。</value>
@@ -2387,7 +2396,7 @@
     <value>错误报告</value>
   </data>
   <data name="SlackMessageView_Combo1" xml:space="preserve">
-    <value>我在项目中丢失了数据</value>
+    <value>我在一个项目中丢失了数据</value>
   </data>
   <data name="SlackMessageView_Combo2" xml:space="preserve">
     <value>我无法完成任务</value>
@@ -2426,7 +2435,7 @@
     <value>预览</value>
   </data>
   <data name="SlackMessageView_SuggestionSeverity" xml:space="preserve">
-    <value>Loading...</value>
+    <value>严重性：</value>
   </data>
   <data name="SlackMessageView_SuggestionTitle" xml:space="preserve">
     <value>标题：</value>
@@ -2444,7 +2453,7 @@
     <value>地位</value>
   </data>
   <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>Loading...</value>
+    <value>格式化</value>
   </data>
   <data name="TargetContextView_Unformatted" xml:space="preserve">
     <value>毫无形态</value>
@@ -2459,7 +2468,7 @@
     <value>TIT</value>
   </data>
   <data name="TokenDisplay_SetTranslation" xml:space="preserve">
-    <value>Loading...</value>
+    <value>设置光泽</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>更新</value>
@@ -2489,7 +2498,7 @@
     <value>语料库令牌</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
-    <value>Loading...</value>
+    <value>仪表板</value>
   </data>
   <data name="Windows_EnhancedView" xml:space="preserve">
     <value>看法</value>

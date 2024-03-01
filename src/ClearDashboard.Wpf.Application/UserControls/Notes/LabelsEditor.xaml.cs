@@ -114,7 +114,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         private static void OnCurrentLabelGroupChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = d as LabelsEditor;
-            if (control != null)
+            if (control != null && control.CurrentLabelGroup != null)
             {
                 control.LabelSuggestions = control.CurrentLabelGroup.Labels;
             }

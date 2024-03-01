@@ -671,9 +671,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             var args = e as NoteEventArgs;
             if (args?.Note != null)
             {
-                Notes.Remove(args.Note);
-
                 RaiseNoteEvent(NoteDeletedEvent, args);
+                Notes.Remove(args.Note);
             }
         }
 

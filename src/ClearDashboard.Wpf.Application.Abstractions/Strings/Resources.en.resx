@@ -1375,6 +1375,12 @@
   <data name="Notes_AddNewNote" xml:space="preserve">
     <value>Add a new jot </value>
   </data>
+  <data name="Notes_Body" xml:space="preserve">
+    <value>Body</value>
+  </data>
+  <data name="Notes_Delete" xml:space="preserve">
+    <value>Delete Jot</value>
+  </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>Delete this jot?</value>
   </data>

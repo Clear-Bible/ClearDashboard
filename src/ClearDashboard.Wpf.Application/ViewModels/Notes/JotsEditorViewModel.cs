@@ -410,7 +410,7 @@ public class JotsEditorViewModel : ApplicationScreen
 
     public async Task LabelGroupSelectedAsync(LabelGroupViewModel labelGroup)
     {
-        if (labelGroup.LabelGroupId != null)
+        if (labelGroup != null && labelGroup.LabelGroupId != null)
         {
             NoteManager.SaveLabelGroupDefault(labelGroup);
             Message = $"Label group '{labelGroup.Name}' selected";
