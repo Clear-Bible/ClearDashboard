@@ -53,6 +53,19 @@
         </Border.Style>
         <ScrollViewer MaxHeight="400" VerticalScrollBarVisibility="Auto">
             <StackPanel Orientation="Vertical">
+                <!--
+                 Labels section first (and reorder within Labels section as follows)
+                  - chosen label icons in the first row(s)
+                  - Label +  selection next
+                  - Group selection next 
+-  Body next 
+                  - add "Body" as a section with bold name like the others, make it expandable.  
+                  - add Send to PT icon next to "Body" to send Jot body to PT
+                  - Include Author and Date on the same line below the body text
+- Associations- same content
+- Replies- same content
+- Status- same content
+                -->
                 <!--  Note text and delete button  -->
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -167,7 +180,7 @@
                         FontStyle="{Binding ElementName=NotesDisplayControl, Path=UserFontStyle}"
                         FontWeight="{Binding ElementName=NotesDisplayControl, Path=UserFontWeight}" />
                     <Label
-                        Grid.Row="1"
+                        Grid.Row="0"
                         Margin="{Binding ElementName=NotesDisplayControl, Path=TimestampMargin}"
                         HorizontalAlignment="Right"
                         HorizontalContentAlignment="Right"
