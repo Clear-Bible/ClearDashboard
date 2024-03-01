@@ -15,6 +15,7 @@ using System.Windows.Media;
 using ClearDashboard.Wpf.Application.ViewModels.Notes;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 using System.Windows.Controls.Primitives;
+using ClearDashboard.Wpf.Application.Helpers;
 
 namespace ClearDashboard.Wpf.Application.UserControls.Notes
 {
@@ -1691,9 +1692,48 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             InitializeComponent();
         }
 
+        protected override void OnInitialized(EventArgs e)
+        {
+           
+            base.OnInitialized(e);
+        }
+
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+            PopupHorizontalOffset = CalculatePopupHorizontalOffset();
+            base.OnRender(drawingContext);
+        }
+
+        private double CalculatePopupHorizontalOffset()
+        {
+            //var parentWindow = Window.GetWindow(this);
+            //var screen = WpfScreen.GetScreenFrom(parentWindow);
+
+            //var factor = PresentationSource.FromVisual(this).CompositionTarget.TransformToDevice.M11;
+
+            //switch (factor)
+            //{
+            //    case <= 1:
+            //        return 0;
+            //    case > 1:
+            //        return 160 * factor;
+            //    default:
+            //        return 0;
+
+            //}
+            return 400;
+        }
+
+        public double PopupHorizontalOffset
+        {
+            get => _popupHorizontalOffset;
+            set => _popupHorizontalOffset = value;
+        }
+
 
         #region move popup with parent hack
         private Window? _parentWindow;
+        private double _popupHorizontalOffset;
 
         private void AddNewJotPopup_OnOpened(object? sender, EventArgs e)
         {
