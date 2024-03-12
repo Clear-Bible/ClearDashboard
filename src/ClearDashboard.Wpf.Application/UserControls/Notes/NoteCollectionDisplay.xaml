@@ -194,7 +194,7 @@
                IsOpen="{Binding DataContext.IsAddJotOpen, ElementName=NoteCollectionDisplayControl}"   
                PlacementTarget="{Binding ElementName=TogglePopupButton}"
                Placement="Top"
-               HorizontalOffset="400"
+               HorizontalOffset="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}},  Path=AddJotHorizontalOffset}"
                StaysOpen="True"
                MouseEnter="OnPopupMouseEnter"
                MouseLeave="OnPopupMouseLeave"

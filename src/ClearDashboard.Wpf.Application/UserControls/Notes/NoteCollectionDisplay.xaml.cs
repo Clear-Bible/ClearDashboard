@@ -10,12 +10,14 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using ClearDashboard.Wpf.Application.ViewModels.Notes;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 using System.Windows.Controls.Primitives;
 using ClearDashboard.Wpf.Application.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.UserControls.Notes
 {
@@ -568,10 +570,35 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             });
         }
 
+        public double AddJotHorizontalOffset
+        {
+            get => _addJotHorizontalOffset;
+            set
+            {
+                if (value.Equals(_addJotHorizontalOffset)) return;
+                _addJotHorizontalOffset = value;
+                OnPropertyChanged();
+            }
+        }
 
         private void OpenAddJot(object sender, RoutedEventArgs e)
         {
+            var dpi = VisualTreeHelper.GetDpi((Button)sender);
             var jotEditViewModel = (JotsEditorViewModel)DataContext;
+
+            const int nominalOffset = 160;
+            switch (dpi.DpiScaleX)
+            {
+                case > 1.25:
+                    AddJotHorizontalOffset = nominalOffset * dpi.DpiScaleX;
+                    break;
+                default:
+                    AddJotHorizontalOffset = 0;
+                    break;
+            }
+
+            jotEditViewModel.Logger.Log(LogLevel.Information, $"DPI ScaleX: {dpi.DpiScaleX}, DPI ScaleY: {dpi.DpiScaleY}");
+            jotEditViewModel.Logger.Log(LogLevel.Information, $"Horizontal Offset: {AddJotHorizontalOffset}");
             jotEditViewModel.IsAddJotOpen = true;
         }
 
@@ -1699,40 +1726,19 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            PopupHorizontalOffset = CalculatePopupHorizontalOffset();
-            base.OnRender(drawingContext);
+            
+           base.OnRender(drawingContext);
         }
 
-        private double CalculatePopupHorizontalOffset()
-        {
-            //var parentWindow = Window.GetWindow(this);
-            //var screen = WpfScreen.GetScreenFrom(parentWindow);
+       
 
-            //var factor = PresentationSource.FromVisual(this).CompositionTarget.TransformToDevice.M11;
-
-            //switch (factor)
-            //{
-            //    case <= 1:
-            //        return 0;
-            //    case > 1:
-            //        return 160 * factor;
-            //    default:
-            //        return 0;
-
-            //}
-            return 400;
-        }
-
-        public double PopupHorizontalOffset
-        {
-            get => _popupHorizontalOffset;
-            set => _popupHorizontalOffset = value;
-        }
+     
 
 
         #region move popup with parent hack
         private Window? _parentWindow;
         private double _popupHorizontalOffset;
+        private double _addJotHorizontalOffset;
 
         private void AddNewJotPopup_OnOpened(object? sender, EventArgs e)
         {
