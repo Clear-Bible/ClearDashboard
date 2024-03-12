@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -22,6 +23,13 @@ using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
+
+    public class CompositeTokenEx : CompositeToken 
+    {
+        public CompositeTokenEx(IEnumerable<Token> tokens, IEnumerable<Token>? otherTokens = null) : base(tokens, otherTokens)
+        {
+        }
+    }
     /// <summary>
     /// A class containing the needed information to render a <see cref="Token"/> in the UI.
     /// </summary>
@@ -129,11 +137,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                               (a.AlignedTokenPair.SourceToken.TokenId.Id == AlignmentToken.TokenId.Id || a.AlignedTokenPair.TargetToken.TokenId.Id == AlignmentToken.TokenId.Id)
                                               && a.OriginatedFrom == "Assigned" && a.Verification == AlignmentVerificationStatus.Unverified);
 
-        private CompositeToken? _compositeToken;
+        private CompositeTokenEx? _compositeToken;
         /// <summary>
         /// Gets or sets the parent <see cref="CompositeToken"/> of this token, if any.
         /// </summary>
-        public CompositeToken? CompositeToken
+        /// TODO808:  Added a decorator version of CompositeToken with the ParallelCorpusId? if (Composite(paraell))
+        public CompositeTokenEx? CompositeToken
         {
             get => _compositeToken;
             set

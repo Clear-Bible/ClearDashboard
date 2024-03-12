@@ -562,6 +562,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await Task.CompletedTask;
         }
 
+        // TODO808:  look at this
         public async Task HandleAsync(TokensJoinedMessage message, CancellationToken cancellationToken)
         {
             MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = message.CompositeToken);

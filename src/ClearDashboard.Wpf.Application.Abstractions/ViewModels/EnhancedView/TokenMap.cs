@@ -117,6 +117,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// Adds a <see cref="CompositeToken"/> to the token map, replacing its child tokens.
         /// </summary>
         /// <param name="compositeToken">The <see cref="CompositeToken"/> to add.</param>
+        /// TODO808:  look at me
         public void AddCompositeToken(CompositeToken compositeToken)
         {
             var firstChild = compositeToken.Tokens.FirstOrDefault();
