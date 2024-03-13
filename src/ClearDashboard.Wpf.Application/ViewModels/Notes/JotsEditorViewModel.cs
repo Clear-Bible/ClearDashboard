@@ -32,7 +32,7 @@ public class JotsEditorViewModel : ApplicationScreen
 {
     #region Member Variables
 
-    protected ILogger Logger { get; }
+    public new ILogger Logger { get; }
     public NoteManager NoteManager { get; }
 
     public SelectionManager SelectionManager { get; set; }
@@ -70,6 +70,7 @@ public class JotsEditorViewModel : ApplicationScreen
 
     private string? _message;
     private bool _isAddJotOpen;
+    private double _addJotHorizontalOffset;
 
     public string? Message
     {
@@ -79,6 +80,8 @@ public class JotsEditorViewModel : ApplicationScreen
 
     public bool ShowTabControl => NoteManager.CurrentNotes.Count > 0;
     #endregion
+
+    
 
 
     public void Initialize(IEnumerable<IId>? noteIds = null, IEnumerable<IId>? selectedEntityIds = null)
@@ -124,6 +127,12 @@ public class JotsEditorViewModel : ApplicationScreen
     {
         get => _isAddJotOpen;
         set => Set(ref _isAddJotOpen, value);
+    }
+
+    public double AddJotHorizontalOffset
+    {
+        get => _addJotHorizontalOffset;
+        set => Set(ref _addJotHorizontalOffset, value);
     }
 
     public async void Close()
