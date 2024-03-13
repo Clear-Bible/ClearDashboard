@@ -987,8 +987,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,
+                Source = e.OriginalSource,
                 TokenDisplayViewModel = control?.TokenDisplayViewModel!,
                 SelectedTokens = VerseSelectedTokens,
+                
                 MousePosition = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(control))
             });
         }

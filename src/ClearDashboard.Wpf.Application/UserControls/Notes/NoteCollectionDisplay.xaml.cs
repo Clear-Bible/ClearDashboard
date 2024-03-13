@@ -586,16 +586,20 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             var dpi = VisualTreeHelper.GetDpi((Button)sender);
             var jotEditViewModel = (JotsEditorViewModel)DataContext;
 
+            AddJotHorizontalOffset = 0;
+
+#if HIGHDPIDEBUG
             const int nominalOffset = 160;
             switch (dpi.DpiScaleX)
             {
-                case > 1.25:
+                case >= 2.5:
                     AddJotHorizontalOffset = nominalOffset * dpi.DpiScaleX;
                     break;
                 default:
                     AddJotHorizontalOffset = 0;
                     break;
             }
+#endif
 
             jotEditViewModel.Logger.Log(LogLevel.Information, $"DPI ScaleX: {dpi.DpiScaleX}, DPI ScaleY: {dpi.DpiScaleY}");
             jotEditViewModel.Logger.Log(LogLevel.Information, $"Horizontal Offset: {AddJotHorizontalOffset}");
@@ -931,7 +935,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #endregion
+#endregion
         #region Public Properties
 
         /// <summary>

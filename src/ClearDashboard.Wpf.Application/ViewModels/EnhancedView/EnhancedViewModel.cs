@@ -1114,6 +1114,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async void NoteCreate(object? sender, NoteEventArgs? e)
         {
+            var dpi = VisualTreeHelper.GetDpi(App.Current.Windows[0]);
+            var location = (e.OriginalSource as FrameworkElement).PointToScreen(new Point(0,0));
             await DisplayJotsEditor(e?.MousePosition);
         }
 
@@ -1121,6 +1123,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             const int height = 600;
             const int width = 800;
+
+            //Point? mousePosition
 
             dynamic settings = new ExpandoObject();
             settings.MinWidth = width;
@@ -1131,6 +1135,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             settings.MaxHeight = height;
             settings.Title = "Jot";
 
+#if HIGHDPIDEBUG
+            
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            
+#else
             if (mousePosition.HasValue)
             {
                 settings.Top = mousePosition.Value.Y;
@@ -1141,6 +1150,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             }
+#endif
 
             // Keep the window on top
             //settings.Topmost = true;
