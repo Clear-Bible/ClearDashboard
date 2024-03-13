@@ -1090,17 +1090,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
 
-        // JOTS Refactor -- can probably be deleted
-        //public async void TranslationRightButtonDown(object sender, TranslationEventArgs e)
-        //{
-        //    if (e.TokenDisplay is not null)
-        //    {
-        //        //SelectionManager.UpdateRightClickTranslationSelection(e.TokenDisplay);
-        //        //NoteControlVisibility = SelectionManager.AnySelectedTokenTranslationNotes ? Visibility.Visible : Visibility.Collapsed;
+        //JOTS Refactor -- can probably be deleted
+        public async void TranslationRightButtonDown(object sender, TranslationEventArgs e)
+        {
+            if (e.TokenDisplay is not null)
+            {
+                //SelectionManager.UpdateRightClickTranslationSelection(e.TokenDisplay);
+                //NoteControlVisibility = SelectionManager.AnySelectedTokenTranslationNotes ? Visibility.Visible : Visibility.Collapsed;
 
-        //        SelectionManager.UpdateRightClickSelection(e.TokenDisplay);
-        //    }
-        //}
+                SelectionManager.UpdateRightClickSelection(e.TokenDisplay);
+            }
+        }
 
         public void TranslationMouseEnter(object sender, TranslationEventArgs e)
         {
