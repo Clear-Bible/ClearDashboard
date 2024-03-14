@@ -537,12 +537,23 @@ namespace ClearDashboard.Wpf.Application.Services
                 };
                 if (domainEntityContexts.TryGetValue(associatedEntityId, out var entityContext))
                 {
+                    association.Book = entityContext[EntityContextKeys.TokenId.BookId];
+                    association.Chapter = entityContext[EntityContextKeys.TokenId.ChapterNumber];
+                    association.Verse = entityContext[EntityContextKeys.TokenId.VerseNumber];
+                    association.Word = entityContext[EntityContextKeys.TokenId.WordNumber];
+                    association.Part = entityContext[EntityContextKeys.TokenId.SubwordNumber];
                     association.Description = GetNoteAssociationDescription(associatedEntityId, entityContext);
                 }
                 noteAssociationViewModelCollection.Add(association);
             }
 
-            return noteAssociationViewModelCollection;
+            var orderedList = noteAssociationViewModelCollection.OrderBy(a => a.Book)
+                .ThenBy(a => a.Chapter)
+                .ThenBy(a => a.Verse)
+                .ThenBy(a => a.Word)
+                .ThenBy(a => a.Part);
+
+            return new NoteAssociationViewModelCollection(orderedList);
         }
 
         public bool IsBusy
