@@ -468,7 +468,9 @@
                 ScrollViewer.CanContentScroll="False"
                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                 ScrollViewer.VerticalScrollBarVisibility="Visible"
-                Visibility="{Binding NoProjectVisibility}">
+                Visibility="{Binding NoProjectVisibility}"
+              >
+                <!--  IsEnabled="{Binding IsParatextRunning}"-->
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
