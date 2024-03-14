@@ -1422,7 +1422,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         private bool CheckIfConnectedToParatext()
         {
-            if (ProjectManager?.HasCurrentParatextProject == false)
+
+            //if (IsParatextRunning)
+            //{
+            //    return true;
+            //}
+            if (ProjectManager?.HasCurrentParatextProject == false || !IsParatextRunning)
             {
                 AlertVisibility = Visibility.Visible;
                 return false;
