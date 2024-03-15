@@ -575,22 +575,19 @@ namespace ClearDashboard.Wpf.Application.Services
             CurrentNotes = await GetNotesDetailsAsync(noteIds, doGetParatextSendNoteInformation:false);
 
             // Get any paratext information in the background.
-            _ = Task.Run(async () =>
+            try
             {
-                try
+                await SetIsBusyBackground(true);
+                foreach (var note in CurrentNotes)
                 {
-                    await SetIsBusyBackground(true);
-                    foreach (var note in CurrentNotes)
-                    {
-                        await GetNoteDetailsAsync(note.NoteId, doGetParatextSendNoteInformation: true,
-                            setIsBusy: false);
-                    }
+                    await GetNoteDetailsAsync(note.NoteId, doGetParatextSendNoteInformation: true,
+                        setIsBusy: false);
                 }
-                finally
-                {
-                    SetIsBusyBackground(false);
-                }
-            });
+            }
+            finally
+            {
+                SetIsBusyBackground(false);
+            }
 
         }
 
