@@ -498,6 +498,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             UpdateControlLayout();
+            BeginEdit();
         }
 
         private void OnNoteLabelClick(object sender, MouseButtonEventArgs e)
@@ -508,9 +509,11 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         private void BeginEdit()
         {
             IsEditing = true;
-
+           
             NoteTextBox.Focus();
             NoteTextBox.Select(NoteTextBox.Text.Length, 0);
+
+            Keyboard.Focus(NoteTextBox);
 
             //OriginalNoteText = Note.Text;
         }
