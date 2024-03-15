@@ -1,22 +1,21 @@
 ﻿using Caliburn.Micro;
+using ClearApplicationFoundation.Framework.Input;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using SIL.Extensions;
 using System;
+using System.Dynamic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using ClearApplicationFoundation.Framework.Input;
-using System.Threading;
 using System.Windows.Input;
-using ClearDashboard.Wpf.Application.Events.Notes;
-using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.Wpf.Application.ViewModels.PopUps;
-using System.Dynamic;
+using System.Windows.Media;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -982,8 +981,24 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
+
+           
             //4
             var control = e.Source as TokenDisplay;
+
+            // Fix for #1249
+            // Clear the VerseSelectedTokens collection and add 
+            // the token selected on the TokenDisplay control 
+            if (control != null)
+            {
+                if (!VerseSelectedTokens.Contains(control?.TokenDisplayViewModel!))
+                {
+                    VerseSelectedTokens.Clear();
+                    control.TokenDisplayViewModel.IsTokenSelected = true;
+                    VerseSelectedTokens.Add(control?.TokenDisplayViewModel!);
+                }
+            }
+
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,
