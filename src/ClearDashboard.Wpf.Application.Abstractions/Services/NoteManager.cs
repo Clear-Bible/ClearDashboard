@@ -469,7 +469,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 if (!collabUpdate && NotesCache.TryGetValue(noteId.Id, out var noteDetails))
                 {
                     if (doGetParatextSendNoteInformation && noteDetails.ParatextSendNoteInformation == null)
-                    {
+                    { 
                         noteDetails.ParatextSendNoteInformation = await ExternalNoteManager.GetExternalSendNoteInformationAsync(Mediator, noteDetails.NoteId!, UserProvider, Logger);
 
                         foreach (var reply in noteDetails.Replies)
@@ -509,6 +509,41 @@ namespace ClearDashboard.Wpf.Application.Services
                 NotesCache[noteId.Id] = noteViewModel;
 
                 return noteViewModel;
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+            finally
+            {
+                if (setIsBusy)
+                {
+                    await SetIsBusy(false);
+                }
+            }
+        }
+
+        public async void ForceNotePropertyChangedAsync(NoteId noteId, bool doGetParatextSendNoteInformation = true, bool setIsBusy = true)
+        {
+            try
+            {
+                if (setIsBusy)
+                {
+                    await SetIsBusy(true);
+                }
+
+                if (NotesCache.TryGetValue(noteId.Id, out var noteDetails))
+                {
+                    noteDetails.ParatextSendNoteInformation = noteDetails.ParatextSendNoteInformation;
+
+                    foreach (var reply in noteDetails.Replies)
+                    {
+                        reply.ParatextSendNoteInformation = reply.ParatextSendNoteInformation;
+                    }
+                    
+                    Logger?.LogInformation($"Forced NotePropertyChanged to Run");
+                }
             }
             catch (Exception e)
             {
@@ -575,7 +610,8 @@ namespace ClearDashboard.Wpf.Application.Services
             CurrentNotes = await GetNotesDetailsAsync(noteIds, doGetParatextSendNoteInformation:false);
 
             // Get any paratext information in the background.
-            _ = Task.Run(async () =>
+                
+            var updatingParatextSendInfo = Task.Run(async () =>
             {
                 try
                 {
@@ -589,6 +625,18 @@ namespace ClearDashboard.Wpf.Application.Services
                 finally
                 {
                     SetIsBusyBackground(false);
+                }
+
+                
+
+            });
+
+            await updatingParatextSendInfo.ContinueWith((completedTask) =>
+            {
+                foreach (var note in CurrentNotes)
+                {
+                    ForceNotePropertyChangedAsync(note.NoteId, doGetParatextSendNoteInformation: true,
+                        setIsBusy: false);
                 }
             });
 
