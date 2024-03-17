@@ -515,8 +515,8 @@ public JotsPanelViewModel()
                     (cancellationToken) => AssembleNotes(noteManager_!, cancellationToken, taskName, SendBackgroundStatus, collabUpdate),
                     (noteVms) =>
                     {
-
-                        Execute.OnUIThread(() =>
+                        System.Windows.Application.Current.Dispatcher.Invoke(()=>
+                        //Execute.OnUIThread(() =>
                         {
                             NoteViewModels.Clear();
 

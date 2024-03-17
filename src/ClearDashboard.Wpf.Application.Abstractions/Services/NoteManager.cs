@@ -948,6 +948,9 @@ namespace ClearDashboard.Wpf.Application.Services
                 async void DetachLabel()
                 {
                     await note.Entity.DetachLabel(Mediator, label);
+                    await Task.Delay(100);
+                    await EventAggregator.PublishOnUIThreadAsync(new NoteLabelDetachedMessage(note.NoteId!, label));
+                    await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.Entity, true));
                 }
 
                 await System.Windows.Application.Current.Dispatcher.InvokeAsync(DetachLabel);
@@ -956,7 +959,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogInformation(
                     $"Detached label {label.Text} from note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
 
-                await EventAggregator.PublishOnUIThreadAsync(new NoteLabelDetachedMessage(note.NoteId!, label));
+               
 #endif
             }
             catch (Exception e)
