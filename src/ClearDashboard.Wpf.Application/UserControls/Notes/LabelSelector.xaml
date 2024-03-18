@@ -36,7 +36,8 @@
                 KeyDown="OnLabelTextBoxKeyDown"
                 LostFocus="OnLabelTextBoxLostFocus"
                 LostKeyboardFocus="OnLabelTextBoxLostKeyboardFocus"
-                TextChanged="OnLabelTextChanged" />
+                TextChanged="OnLabelTextChanged"
+                PreviewTextInput="OnLabelTextBoxPreviewTextInput"/>
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="0"

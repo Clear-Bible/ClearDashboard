@@ -910,5 +910,16 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             Unloaded += OnUnloaded;
             EventAggregator?.SubscribeOnUIThread(this);
         }
+
+      
+
+        private void OnNewLabelGroupTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // Prevent underscore characters in labels.
+            if (e.Text == "_")
+            {
+                e.Handled = true;
+            }
+        }
     }
 }

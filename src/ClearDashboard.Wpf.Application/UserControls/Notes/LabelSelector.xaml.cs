@@ -329,5 +329,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 System.Windows.Application.Current.Dispatcher.Invoke(OpenSuggestionPopup, DispatcherPriority.Render);
             }
         }
+
+        private void OnLabelTextBoxPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+
+            // Prevent underscore characters in labels.
+            if (e.Text == "_")
+            {
+                e.Handled = true;
+            }
+        }
     }
 }
