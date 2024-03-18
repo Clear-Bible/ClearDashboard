@@ -208,8 +208,7 @@
                                                 Background="{StaticResource MaterialDesignPaper}"
                                                 BorderThickness="2"
                                                 FontSize="12"
-                                                FontWeight="SemiBold"
-                                                ToolTip="{helpers:Localization Notes_BulkAction}">
+                                                FontWeight="SemiBold">
                                                 <materialDesign:PackIcon
                                                     Width="30"
                                                     Height="30"
@@ -225,8 +224,7 @@
                                                 Background="{StaticResource MaterialDesignPaper}"
                                                 BorderThickness="2"
                                                 FontSize="12"
-                                                FontWeight="SemiBold"
-                                                ToolTip="{helpers:Localization Notes_BulkAction}">
+                                                FontWeight="SemiBold">
                                                 <materialDesign:PackIcon
                                                     Width="30"
                                                     Height="30"
