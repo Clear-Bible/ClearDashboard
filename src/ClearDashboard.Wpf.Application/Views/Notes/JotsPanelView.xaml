@@ -103,38 +103,40 @@
                             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                             BorderThickness="1"
                             Header="{helpers:Localization Notes_TakeAction}">
-                            <StackPanel Margin="0,5,0,-5" Orientation="Horizontal">
-                                <Button
-                                    Width="20"
-                                    Height="20"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
-                                    ToolTip="{helpers:Localization ExpandView}">
-                                    <Button.Style>
-                                        <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
-                                            <Setter Property="Padding" Value="0" />
-                                            <Setter Property="Background" Value="Transparent" />
-                                            <Style.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
-                                                    <Setter Property="RenderTransform">
-                                                        <Setter.Value>
-                                                            <ScaleTransform ScaleX="2" ScaleY="2" />
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Button.Style>
-                                    <materialDesign:PackIcon
-                                        Background="Transparent"
-                                        Foreground="{StaticResource AccentHueBrush}"
-                                        Kind="ArrowExpandAll" />
-                                </Button>
 
-                                <!--  Mark Open  -->
-                                <StackPanel HorizontalAlignment="Left" Orientation="Vertical">
+                            <StackPanel Orientation="Vertical">
+
+                                <StackPanel Margin="0,5,0,-5" Orientation="Horizontal">
+                                    <Button
+                                        Width="20"
+                                        Height="20"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top"
+                                        cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
+                                        ToolTip="{helpers:Localization ExpandView}">
+                                        <Button.Style>
+                                            <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
+                                                <Setter Property="Padding" Value="0" />
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
+                                                        <Setter Property="RenderTransform">
+                                                            <Setter.Value>
+                                                                <ScaleTransform ScaleX="2" ScaleY="2" />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                        <materialDesign:PackIcon
+                                            Background="Transparent"
+                                            Foreground="{StaticResource AccentHueBrush}"
+                                            Kind="ArrowExpandAll" />
+                                    </Button>
+
+                                    <!--  Mark Open  -->
                                     <Button
                                         Margin="10,-5,10,0"
                                         Padding="0,0,0,0"
@@ -150,41 +152,8 @@
                                             Foreground="{StaticResource GreenDarkBrush}"
                                             Kind="EmailOpenOutline" />
                                     </Button>
-                                    <Popup
-                                        Name="ConfirmMarkOpenPopup"
-                                        HorizontalOffset="100"
-                                        IsOpen="{Binding ConfirmMarkOpenPopupIsOpen}"
-                                        Placement="Left"
-                                        PlacementTarget="{Binding ElementName=SendToParatextButton}"
-                                        StaysOpen="False"
-                                        VerticalOffset="30">
-                                        <Border BorderThickness="2">
-                                            <StackPanel Background="LightGreen" Orientation="Vertical">
-                                                <TextBlock
-                                                    Padding="10,10,10,10"
-                                                    HorizontalAlignment="Center"
-                                                    FontWeight="Bold"
-                                                    Text="{helpers:Localization Notes_OpenConfirmation}" />
 
-                                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                                    <Button
-                                                        Margin="5"
-                                                        cm:Message.Attach="MarkNotesOpenConfirmed"
-                                                        Content="{helpers:Localization Yes}"
-                                                        Style="{StaticResource TransparentStyle}" />
-                                                    <Button
-                                                        Margin="5"
-                                                        cm:Message.Attach="MarkNotesOpenCancelled"
-                                                        Content="{helpers:Localization No}"
-                                                        Style="{StaticResource AlternativeStyle}" />
-                                                </StackPanel>
-                                            </StackPanel>
-                                        </Border>
-                                    </Popup>
-                                </StackPanel>
-
-                                <!--  Mark Resolved  -->
-                                <StackPanel HorizontalAlignment="Left" Orientation="Vertical">
+                                    <!--  Mark Resolved  -->
                                     <Button
                                         Margin="10,-5,10,0"
                                         Padding="0,0,0,0"
@@ -200,41 +169,8 @@
                                             Foreground="{StaticResource PrimaryHueLightBrush}"
                                             Kind="EmailOutline" />
                                     </Button>
-                                    <Popup
-                                        Name="ConfirmMarkResolvedPopup"
-                                        HorizontalOffset="100"
-                                        IsOpen="{Binding ConfirmMarkResolvedPopupIsOpen}"
-                                        Placement="Left"
-                                        PlacementTarget="{Binding ElementName=SendToParatextButton}"
-                                        StaysOpen="False"
-                                        VerticalOffset="30">
-                                        <Border BorderThickness="2">
-                                            <StackPanel Background="LightGreen" Orientation="Vertical">
-                                                <TextBlock
-                                                    Padding="10,10,10,10"
-                                                    HorizontalAlignment="Center"
-                                                    FontWeight="Bold"
-                                                    Text="{helpers:Localization Notes_ResolveConfirmation}" />
 
-                                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                                    <Button
-                                                        Margin="5"
-                                                        cm:Message.Attach="MarkNotesResolvedConfirmed"
-                                                        Content="{helpers:Localization Yes}"
-                                                        Style="{StaticResource TransparentStyle}" />
-                                                    <Button
-                                                        Margin="5"
-                                                        cm:Message.Attach="MarkNotesResolvedCancelled"
-                                                        Content="{helpers:Localization No}"
-                                                        Style="{StaticResource AlternativeStyle}" />
-                                                </StackPanel>
-                                            </StackPanel>
-                                        </Border>
-                                    </Popup>
-                                </StackPanel>
-
-                                <!--  Paratext send  -->
-                                <StackPanel HorizontalAlignment="Left" Orientation="Vertical">
+                                    <!--  Send to Paratext  -->
                                     <Button
                                         x:Name="SendToParatextButton"
                                         Margin="10,-5,10,0"
@@ -248,49 +184,63 @@
                                         ToolTip="{helpers:Localization Notes_SendToParatext}">
                                         <Image Height="18" Source="/Resources/Paratext_Send32.png" />
                                     </Button>
-                                    <Popup
-                                        Name="ConfirmParatextSendPopup"
-                                        HorizontalOffset="100"
-                                        IsOpen="{Binding ConfirmParatextSendPopupIsOpen}"
-                                        Placement="Left"
-                                        PlacementTarget="{Binding ElementName=SendToParatextButton}"
-                                        StaysOpen="False"
-                                        VerticalOffset="30">
-                                        <Border BorderThickness="2">
-                                            <StackPanel Background="LightGreen" Orientation="Vertical">
-                                                <TextBlock
-                                                    Padding="10,10,10,10"
-                                                    HorizontalAlignment="Center"
-                                                    FontWeight="Bold"
-                                                    Text="{helpers:Localization Notes_SendConfirmation}" />
-
-                                                <TextBlock
-                                                    Padding="10,10,10,10"
-                                                    HorizontalAlignment="Center"
-                                                    Visibility="{Binding JotsUnableToBeSentToParatextVisibility}">
-                                                    <Run Text="{helpers:Localization Notes_DueToPermissions}" />
-                                                    <Run FontWeight="Bold" Text="{Binding JotsUnableToBeSentToParatextCount}" />
-                                                    <Run Text="{helpers:Localization Notes_NotesNotSent}" />
-                                                </TextBlock>
-
-                                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                                    <Button
-                                                        Margin="5"
-                                                        cm:Message.Attach="ParatextSendConfirmed"
-                                                        Content="{helpers:Localization Yes}"
-                                                        Style="{StaticResource TransparentStyle}" />
-                                                    <Button
-                                                        Margin="5"
-                                                        cm:Message.Attach="ParatextSendCancelled"
-                                                        Content="{helpers:Localization No}"
-                                                        Style="{StaticResource AlternativeStyle}" />
-                                                </StackPanel>
-                                            </StackPanel>
-                                        </Border>
-                                    </Popup>
                                 </StackPanel>
+
+                                <!--  CONFIRMATION DIALOG  -->
+                                <Border
+                                    Margin="2,5,2,5"
+                                    Background="LightGreen"
+                                    BorderBrush="{StaticResource PrimaryHueMidBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="3"
+                                    Visibility="{Binding ConfirmationDialog}">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding ConfirmationText}" TextWrapping="Wrap" />
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Button
+                                                Margin="5"
+                                                Padding="-5"
+                                                cm:Message.Attach="BulkAction"
+                                                Background="{StaticResource MaterialDesignPaper}"
+                                                BorderThickness="2"
+                                                FontSize="12"
+                                                FontWeight="SemiBold"
+                                                ToolTip="{helpers:Localization Notes_BulkAction}">
+                                                <materialDesign:PackIcon
+                                                    Width="30"
+                                                    Height="30"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{StaticResource PrimaryHueMidBrush}"
+                                                    Kind="Check" />
+                                            </Button>
+                                            <Button
+                                                Grid.Column="1"
+                                                Margin="5"
+                                                Padding="-5"
+                                                cm:Message.Attach="BulkActionCancelled"
+                                                Background="{StaticResource MaterialDesignPaper}"
+                                                BorderThickness="2"
+                                                FontSize="12"
+                                                FontWeight="SemiBold"
+                                                ToolTip="{helpers:Localization Notes_BulkAction}">
+                                                <materialDesign:PackIcon
+                                                    Width="30"
+                                                    Height="30"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{StaticResource RedMidBrush}"
+                                                    Kind="Close" />
+                                            </Button>
+                                        </Grid>
+
+                                    </StackPanel>
+                                </Border>
                             </StackPanel>
                         </GroupBox>
+
                         <GroupBox
                             Margin="5,5,0,2"
                             BorderBrush="{StaticResource PrimaryHueDarkBrush}"

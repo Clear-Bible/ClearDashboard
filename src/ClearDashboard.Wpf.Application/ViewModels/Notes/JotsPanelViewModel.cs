@@ -32,7 +32,7 @@ using System.Windows.Data;
 namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 {
 
-    
+
 
     public class JotsPanelViewModel :
         ToolViewModel,
@@ -44,7 +44,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         IHandle<NoteLabelDetachedMessage>,
         IHandle<TokenizedCorpusUpdatedMessage>, IHandle<ReloadNotesListMessage>
     {
+
         #region Member Variables   
+
+        private enum NoteAction
+        {
+            Open,
+            Resolved,
+            SendToParatext,
+        }
+
+        private NoteAction _noteAction = NoteAction.Open;
 
         private Guid Guid = Guid.NewGuid();
 
@@ -57,6 +67,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         private JotsPanelView view_;
         private readonly EnhancedViewModel? _enhancedViewModel;
         private LongRunningTask? currentLongRunningTask_;
+
+
 
         #endregion //Member Variables
 
@@ -78,6 +90,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
 
         #region Observable Properties
+
+        private Visibility _confirmationDialog = Visibility.Collapsed;
+        public Visibility ConfirmationDialog
+        {
+            get => _confirmationDialog;
+            set 
+            { 
+                _confirmationDialog = value; 
+                NotifyOfPropertyChange(() => ConfirmationDialog);
+            }
+        }
+
+        private string _confirmationText = "";
+        public string ConfirmationText
+        {
+            get => _confirmationText;
+            set
+            {
+                _confirmationText = value;
+                NotifyOfPropertyChange(() => ConfirmationText);
+            }
+        }
+
 
         private Visibility _progressBarVisibility = Visibility.Visible;
         public Visibility ProgressBarVisibility
@@ -283,39 +318,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             set
             {
                 selectedNoteAssociationDescriptions_ = value;
-            }
-        }
-
-        private bool _confirmParatextSendPopupIsOpen = false;
-        public bool ConfirmParatextSendPopupIsOpen
-        {
-            get => _confirmParatextSendPopupIsOpen;
-            set
-            {
-                _confirmParatextSendPopupIsOpen = value;
-                NotifyOfPropertyChange(() => ConfirmParatextSendPopupIsOpen);
-            }
-        }
-
-        private bool _confirmMarkOpenPopupIsOpen = false;
-        public bool ConfirmMarkOpenPopupIsOpen
-        {
-            get => _confirmMarkOpenPopupIsOpen;
-            set
-            {
-                _confirmMarkOpenPopupIsOpen = value;
-                NotifyOfPropertyChange(() => ConfirmMarkOpenPopupIsOpen);
-            }
-        }
-
-        private bool _confirmMarkResolvedPopupIsOpen = false;
-        public bool ConfirmMarkResolvedPopupIsOpen
-        {
-            get => _confirmMarkResolvedPopupIsOpen;
-            set
-            {
-                _confirmMarkResolvedPopupIsOpen = value;
-                NotifyOfPropertyChange(() => ConfirmMarkResolvedPopupIsOpen);
             }
         }
 
@@ -772,11 +774,11 @@ public JotsPanelViewModel()
 
         public void ConfirmParatextSend()
         {
-            JotsUnableToBeSentToParatextCount=0;
+            JotsUnableToBeSentToParatextCount =0;
             
             foreach (NoteViewModel note in NotesCollectionView)
             {
-                if (note.IsSelectedForBulkAction && !note.EnableParatextSend)
+                if (note.IsSelectedForBulkAction && note.EnableParatextSend)
                 {
                     JotsUnableToBeSentToParatextCount++;
                 }
@@ -784,19 +786,9 @@ public JotsPanelViewModel()
 
             JotsUnableToBeSentToParatextVisibility = JotsUnableToBeSentToParatextCount > 0 ? Visibility.Visible : Visibility.Collapsed;
 
-            ConfirmParatextSendPopupIsOpen = true;
-        }
-
-        public void ParatextSendConfirmed()
-        {
-            SendNotesToParatext();
-            ConfirmParatextSendPopupIsOpen = false;
-            UncheckAllFilteredNoteViewModels();
-        }
-
-        public void ParatextSendCancelled()
-        {
-            ConfirmParatextSendPopupIsOpen = false;
+            _noteAction = NoteAction.SendToParatext;
+            ConfirmationDialog = JotsUnableToBeSentToParatextCount > 0 ? Visibility.Visible : Visibility.Collapsed;
+            ConfirmationText = LocalizationService!["Notes_SendConfirmation"];
         }
 
         private void SendNotesToParatext()
@@ -832,21 +824,57 @@ public JotsPanelViewModel()
             }
         }
 
-        public void ConfirmMarkNotesOpen()
+        private int CountSelected()
         {
-            ConfirmMarkOpenPopupIsOpen = true;
+            int count = 0;
+
+            foreach (NoteViewModel note in NotesCollectionView)
+            {
+                if (note.IsSelectedForBulkAction)
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
 
-        public void MarkNotesOpenConfirmed()
+
+        public void ConfirmMarkNotesOpen()
         {
-            MarkNotesOpen();
-            ConfirmMarkOpenPopupIsOpen = false;
+            if (CountSelected() == 0)
+            {
+                return;
+            }
+
+            _noteAction = NoteAction.Open;
+            ConfirmationDialog= Visibility.Visible;
+            ConfirmationText = LocalizationService!["Notes_OpenConfirmation"];
+        }
+
+        public void BulkAction()
+        {
+            ConfirmationDialog = Visibility.Collapsed;
+
+            switch (_noteAction)
+            {
+                case NoteAction.Open:
+                    MarkNotesOpen();
+                    break;
+                case NoteAction.Resolved:
+                    MarkNotesResolved();
+                    break;
+                case NoteAction.SendToParatext:
+                    SendNotesToParatext();
+                    break;
+            }
+
             UncheckAllFilteredNoteViewModels();
         }
 
-        public void MarkNotesOpenCancelled()
+        public void BulkActionCancelled()
         {
-            ConfirmMarkOpenPopupIsOpen = false;
+            ConfirmationDialog = Visibility.Collapsed;
         }
 
         private void MarkNotesOpen()
@@ -875,19 +903,15 @@ public JotsPanelViewModel()
 
         public void ConfirmMarkNotesResolved()
         {
-            ConfirmMarkResolvedPopupIsOpen = true;
-        }
+            if (CountSelected() == 0)
+            {
+                return;
+            }
 
-        public void MarkNotesResolvedConfirmed()
-        {
-            MarkNotesResolved();
-            ConfirmMarkResolvedPopupIsOpen = false;
-            UncheckAllFilteredNoteViewModels();
-        }
 
-        public void MarkNotesResolvedCancelled()
-        {
-            ConfirmMarkResolvedPopupIsOpen = false;
+            _noteAction = NoteAction.Resolved;
+            ConfirmationDialog = Visibility.Visible;
+            ConfirmationText = LocalizationService!["Notes_ResolveConfirmation"];
         }
 
         private void MarkNotesResolved()
