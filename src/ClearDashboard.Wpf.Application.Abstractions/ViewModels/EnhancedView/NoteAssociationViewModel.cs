@@ -1,6 +1,8 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using Caliburn.Micro;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment;
+using ClearDashboard.Wpf.Application.Models.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -54,6 +56,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             get => _part;
             set => Set(ref _part, value);
+        }
+
+        public int SortOrder => CalculateSortOrder();
+
+        private int CalculateSortOrder()
+        {
+            if (string.IsNullOrEmpty(Book))
+            {
+                Book = "0";
+            }
+
+            if (string.IsNullOrEmpty(Chapter))
+            {
+                Chapter = "0";
+            }
+
+            if (string.IsNullOrEmpty(Verse))
+            {
+                Verse = "0";
+            }
+
+            if (string.IsNullOrEmpty(Word))
+            {
+                Word = "0";
+            }
+
+            if (string.IsNullOrEmpty(Part))
+            {
+                Part = "0";
+            }
+
+            return Convert.ToInt32($"{Book}{Chapter}{Verse}{Word}{Part}");
         }
     }
 }

@@ -582,11 +582,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 noteAssociationViewModelCollection.Add(association);
             }
 
-            var orderedList = noteAssociationViewModelCollection.OrderBy(a => a.Book)
-                .ThenBy(a => a.Chapter)
-                .ThenBy(a => a.Verse)
-                .ThenBy(a => a.Word)
-                .ThenBy(a => a.Part);
+            var orderedList = noteAssociationViewModelCollection.OrderBy(a => a.SortOrder);
 
             return new NoteAssociationViewModelCollection(orderedList);
         }
