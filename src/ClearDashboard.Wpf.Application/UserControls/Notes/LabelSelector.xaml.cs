@@ -285,6 +285,21 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         private void OnLabelTextBoxLostFocus(object sender, RoutedEventArgs e)
         {
+
+            if (!String.IsNullOrWhiteSpace(LabelTextBox.Text))
+            {
+                var matchingLabel = LabelSuggestions?.FirstOrDefault(ls =>
+                    ls.Text.Equals(LabelTextBox.Text, StringComparison.CurrentCultureIgnoreCase));
+                if (matchingLabel != null)
+                {
+                    RaiseLabelEvent(LabelSelectedEvent, matchingLabel);
+                }
+                else
+                {
+                    RaiseLabelEvent(LabelAddedEvent, new NotesLabel { Text = LabelTextBox.Text });
+                }
+            }
+            CloseTextBox();
             CloseSuggestionPopup();
         }
 
