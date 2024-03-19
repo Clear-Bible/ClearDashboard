@@ -1925,7 +1925,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             settings.Left = Mouse.GetPosition(this).X + screenPoint.X;
 
             // Keep the window on top
-            settings.Topmost = true;
+            //settings.Topmost = true;
             settings.Owner = System.Windows.Application.Current.MainWindow;
 
             var viewModel = IoC.Get<ExternalNoteViewModel>();

@@ -2253,7 +2253,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
 
             // Keep the window on top
-            settings.Topmost = true;
+            //settings.Topmost = true;
             settings.Owner = System.Windows.Application.Current.MainWindow;
 
             var viewModel = IoC.Get<ExternalNoteViewModel>();

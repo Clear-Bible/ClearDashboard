@@ -1304,7 +1304,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
 
             // Keep the window on top
-            settings.Topmost = true;
+            //settings.Topmost = true;
             settings.Owner = System.Windows.Application.Current.MainWindow;
 
             var parameters = new List<Autofac.Core.Parameter>

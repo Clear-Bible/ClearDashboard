@@ -49,7 +49,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Popups
             settings.Height = 200;
 
             // Keep the window on top
-            settings.Topmost = true;
+            //settings.Topmost = true;
             settings.Owner = System.Windows.Application.Current.MainWindow;
             return settings;
 

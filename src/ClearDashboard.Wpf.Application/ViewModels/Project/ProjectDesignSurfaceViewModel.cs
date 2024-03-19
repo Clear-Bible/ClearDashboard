@@ -1145,7 +1145,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             settings.Title = $"{localizedString}";
 
             // Keep the window on top
-            settings.Topmost = true;
+            //settings.Topmost = true;
             settings.Owner = System.Windows.Application.Current.MainWindow;
 
             var viewModel = LifetimeScope!.Resolve<MigrateDatabaseViewModel>();
@@ -2020,7 +2020,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             settings.Title = $"{localizedString}";
 
             // Keep the window on top
-            settings.Topmost = true;
+            //settings.Topmost = true;
             settings.Owner = System.Windows.Application.Current.MainWindow;
 
             var viewModel  = LifetimeScope!.Resolve<LexiconImportsViewModel>();
@@ -2077,7 +2077,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 settings.Title = "Delete Alignments/Interlinears";
 
                 // Keep the window on top
-                settings.Topmost = true;
+                //settings.Topmost = true;
                 settings.Owner = System.Windows.Application.Current.MainWindow;
 
                 var viewModel = LifetimeScope!.Resolve<DeleteParallelizationLineViewModel>();

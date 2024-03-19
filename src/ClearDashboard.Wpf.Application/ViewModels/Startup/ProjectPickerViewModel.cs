@@ -587,7 +587,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             settings.MinHeight = 500;
 
             // Keep the window on top
-            settings.Topmost = true;
+            //settings.Topmost = true;
             settings.Owner = System.Windows.Application.Current.MainWindow;
 
             // get this applications position on the screen
@@ -646,7 +646,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             //settings.Title = $"{localizedString}";
 
             // Keep the window on top
-            settings.Topmost = true;
+            //settings.Topmost = true;
             settings.Owner = System.Windows.Application.Current.MainWindow;
 
             var viewModel = IoC.Get<NewCollabUserViewModel>();
@@ -672,7 +672,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
 
             // Keep the window on top
-            settings.Topmost = true;
+            //settings.Topmost = true;
             settings.Owner = System.Windows.Application.Current.MainWindow;
 
             var viewModel = IoC.Get<CollabProjectManagementViewModel>();
@@ -1064,7 +1064,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             settings.Title = $"{localizedString}";
 
             // Keep the window on top
-            settings.Topmost = true;
+            //settings.Topmost = true;
             settings.Owner = System.Windows.Application.Current.MainWindow;
 
             var viewModel = IoC.Get<MigrateDatabaseViewModel>();

@@ -711,7 +711,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             settings.Title = "Markdown Format";
 
             // Keep the window on top
-            settings.Topmost = true;
+            //settings.Topmost = true;
             settings.Owner = System.Windows.Application.Current.MainWindow;
 
             var viewModel = IoC.Get<MarkDownViewModel>();

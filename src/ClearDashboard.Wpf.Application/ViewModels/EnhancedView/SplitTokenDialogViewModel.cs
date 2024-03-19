@@ -290,7 +290,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             settings.Title = DialogTitle;
 
             // Keep the window on top
-            settings.Topmost = true;
+            //settings.Topmost = true;
             settings.Owner = System.Windows.Application.Current.MainWindow;
 
             return settings;

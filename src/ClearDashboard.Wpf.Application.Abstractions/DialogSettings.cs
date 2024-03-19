@@ -18,7 +18,7 @@ public static class DialogSettings
         settings.ResizeMode = ResizeMode.NoResize;
 
         // Keep the window on top
-        settings.Topmost = true;
+        //settings.Topmost = true;
         settings.Owner = System.Windows.Application.Current.MainWindow;
 
         return settings;
@@ -35,7 +35,7 @@ public static class DialogSettings
         settings.Height = 600;
 
         // Keep the window on top
-        settings.Topmost = true;
+        //settings.Topmost = true;
         settings.Owner = System.Windows.Application.Current.MainWindow;
         return settings;
     }
@@ -51,7 +51,7 @@ public static class DialogSettings
         settings.Height = 600;
 
         // Keep the window on top
-        settings.Topmost = true;
+        //settings.Topmost = true;
         settings.Owner = System.Windows.Application.Current.MainWindow;
 
         return settings;
