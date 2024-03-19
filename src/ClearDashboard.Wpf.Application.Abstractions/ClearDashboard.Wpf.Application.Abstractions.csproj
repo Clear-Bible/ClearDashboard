@@ -12,10 +12,10 @@
     <PackageIcon>ClearDashboard_logo_100.png</PackageIcon>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Version>1.4.0.8</Version>
+    <Version>1.4.0.9</Version>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <FileVersion>1.4.0.8</FileVersion>
-    <AssemblyVersion>1.4.0.8</AssemblyVersion>
+    <FileVersion>1.4.0.9</FileVersion>
+    <AssemblyVersion>1.4.0.9</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\ClearDashboard.Wpf.Application\Assets\ClearDashboard_logo_100.png">
