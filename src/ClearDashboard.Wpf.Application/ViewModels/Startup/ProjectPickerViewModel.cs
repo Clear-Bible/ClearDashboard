@@ -1285,6 +1285,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 ProjectLoadingProgressBarVisibility = Visibility.Visible;
 
                 ProjectManager!.CurrentDashboardProject = project;
+
+                // fix any hyphenated label groups in the database
+                await Mediator.Send(new UpdateLabelGroupHyphenQuery(ProjectManager.CurrentDashboardProject));
+                
                 await EventAggregator.PublishOnUIThreadAsync(
                     new DashboardProjectNameMessage(ProjectManager!.CurrentDashboardProject.ProjectName));
                 await EventAggregator.PublishOnUIThreadAsync(
