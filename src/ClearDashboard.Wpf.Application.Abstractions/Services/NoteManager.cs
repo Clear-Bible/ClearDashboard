@@ -802,11 +802,22 @@ namespace ClearDashboard.Wpf.Application.Services
         public async Task AddReplyToNoteAsync(NoteViewModel parentNote, string replyText)
         {
             var replyNote = new Note(parentNote.Entity) { Text = replyText, NoteStatus = NoteStatus.Open.ToString()};
+
+
+            // FIX:  1267
+            replyNote.SetDomainEntityIds(parentNote.Entity.DomainEntityIds);
             await UpdateNoteAsync(replyNote);
 
-            var replyNoteViewModel = new NoteViewModel(replyNote);
 
-            replyNoteViewModel.ParatextSendNoteInformation = parentNote.ParatextSendNoteInformation;
+            
+            var replyNoteViewModel = new NoteViewModel(replyNote)
+            {
+                // FIX:  1267
+                Associations = parentNote.Associations,
+                ParatextSendNoteInformation = parentNote.ParatextSendNoteInformation
+            };
+
+
             parentNote.Replies.Add(replyNoteViewModel);
             NotesCache[parentNote.NoteId!.Id] = parentNote;
         }

@@ -100,7 +100,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                             if (anchors.Count() > request.Data.OccuranceIndexOfSelectedTextInVerseText)
                                 anchor = anchors[request.Data.OccuranceIndexOfSelectedTextInVerseText];
                             else
-                                throw new Exception($"Couldn't find match for occurance index {request.Data.OccuranceIndexOfSelectedTextInVerseText} of selected text {request.Data.SelectedText}");
+                                throw new Exception($"Couldn't find match for occurence index {request.Data.OccuranceIndexOfSelectedTextInVerseText} of selected text {request.Data.SelectedText}");
                         }
                     }
                     if (anchor == null)
