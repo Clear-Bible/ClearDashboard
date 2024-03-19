@@ -572,6 +572,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 };
                 if (domainEntityContexts.TryGetValue(associatedEntityId, out var entityContext))
                 {
+                    association.CorpusName = entityContext[EntityContextKeys.TokenizedCorpus.DisplayName];
                     association.Book = entityContext[EntityContextKeys.TokenId.BookId];
                     association.Chapter = entityContext[EntityContextKeys.TokenId.ChapterNumber];
                     association.Verse = entityContext[EntityContextKeys.TokenId.VerseNumber];
@@ -582,7 +583,10 @@ namespace ClearDashboard.Wpf.Application.Services
                 noteAssociationViewModelCollection.Add(association);
             }
 
-            var orderedList = noteAssociationViewModelCollection.OrderBy(a => a.SortOrder);
+            var orderedList = noteAssociationViewModelCollection.
+                OrderBy(a=>a.CorpusName).
+                ThenBy(a=>a.Book).
+                ThenBy(a => a.SortOrder);
 
             return new NoteAssociationViewModelCollection(orderedList);
         }

@@ -14,6 +14,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private string _verse;
         private string _word;
         private string _part;
+        private string _corpusName;
 
         public IId AssociatedEntityId { get; set; } = new EmptyEntityId();
 
@@ -60,12 +61,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public int SortOrder => CalculateSortOrder();
 
+        public string CorpusName
+        {
+            get => _corpusName;
+            set => Set(ref _corpusName, value);
+        }
+
         private int CalculateSortOrder()
         {
-            if (string.IsNullOrEmpty(Book))
-            {
-                Book = "0";
-            }
+            //if (string.IsNullOrEmpty(Book))
+            //{
+            //    Book = "0";
+            //}
 
             if (string.IsNullOrEmpty(Chapter))
             {
@@ -87,7 +94,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 Part = "0";
             }
 
-            return Convert.ToInt32($"{Book}{Chapter}{Verse}{Word}{Part}");
+            //return Convert.ToInt32($"{Book}{Chapter}{Verse}{Word}{Part}");
+            return Convert.ToInt32($"{Chapter}{Verse}{Word}{Part}");
         }
     }
 }
