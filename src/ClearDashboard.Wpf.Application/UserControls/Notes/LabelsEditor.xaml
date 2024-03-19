@@ -8,6 +8,7 @@
     xmlns:notesControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:strings="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     x:Name="LabelsEditorControl"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -116,8 +117,8 @@
                 </Button>
             </StackPanel>
 
-            <Popup
-                Name="AddLabelGroupPopup"
+            <userControls:NonTopmostPopup
+                x:Name="AddLabelGroupPopup"
                 Grid.Column="2"
                 Width="400"
                 Placement="Left"
@@ -206,7 +207,7 @@
                         </StackPanel>
                     </StackPanel>
                 </Border>
-            </Popup>
+            </userControls:NonTopmostPopup>
 
             <Popup
                 Name="ConfirmDeleteLabelGroupPopup"

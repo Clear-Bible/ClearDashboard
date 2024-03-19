@@ -10,6 +10,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     x:Name="NoteCollectionDisplayControl"
     MaxHeight="600"
     d:DesignHeight="450"
@@ -190,7 +191,7 @@
       HorizontalOffset="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}},  Path=PopupHorizontalOffset}"  
          HorizontalOffset="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}},  Path=PopupHorizontalOffset}"  
         -->
-        <Popup Grid.Row="1" Name="AddNewJotPopup"
+        <userControls:NonTopmostPopup Grid.Row="1" x:Name="AddNewJotPopup"
                IsOpen="{Binding DataContext.IsAddJotOpen, ElementName=NoteCollectionDisplayControl}"   
                PlacementTarget="{Binding ElementName=TogglePopupButton}"
                Placement="Top"
@@ -271,7 +272,7 @@
                 </notes:AddNote>
 
             </Border>
-        </Popup>
+        </userControls:NonTopmostPopup>
         <!--  LabelAdded="OnLabelAdded"  -->
         <!--  LabelSelected="OnLabelSelected"  -->
         <!--  NoteDeleted="OnNoteDeleted"  -->
