@@ -4,9 +4,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Platforms>AnyCPU</Platforms>
-    <FileVersion>1.4.0.10</FileVersion>
-    <Version>1.4.0.10</Version>
-    <AssemblyVersion>1.4.0.10</AssemblyVersion>
+    <FileVersion>1.4.0.11</FileVersion>
+    <Version>1.4.0.11</Version>
+    <AssemblyVersion>1.4.0.11</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MediatR" Version="9.0.0" />
