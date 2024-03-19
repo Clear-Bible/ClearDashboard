@@ -226,6 +226,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         if (!noteGuids.ContainsKey(noteId.Id))
                         {
                             noteGuids.Add(noteId.Id, Guid.NewGuid());
+                            tokenDisplayViewModel.IsFirstJotsNoteToken = true;
                         }
                         else
                         {
@@ -573,6 +574,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         if (!noteGuids.ContainsKey(noteId.Id))
                         {
                             noteGuids.Add(noteId.Id, Guid.NewGuid());
+                            model.IsFirstJotsNoteToken = true;
                         }
                         else
                         {
@@ -593,6 +595,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         if (!noteGuids.ContainsKey(noteId.Id))
                         {
                             noteGuids.Add(noteId.Id, Guid.NewGuid());
+                            model.IsFirstJotsNoteToken = true;
                         }
                         else
                         {
