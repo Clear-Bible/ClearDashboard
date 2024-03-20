@@ -90,6 +90,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
 
         #region Observable Properties
+        
+        private bool _bulkCheckBoxIsChecked;
+        public bool BulkCheckBoxIsChecked
+        {
+            get => _bulkCheckBoxIsChecked;
+            set
+            {
+                _bulkCheckBoxIsChecked = value;
+                NotifyOfPropertyChange(() => BulkCheckBoxIsChecked);
+            }
+        }
 
         private Visibility _confirmationDialog = Visibility.Collapsed;
         public Visibility ConfirmationDialog
@@ -870,6 +881,7 @@ public JotsPanelViewModel()
             }
 
             UncheckAllFilteredNoteViewModels();
+            BulkCheckBoxIsChecked = false;
         }
 
         public void BulkActionCancelled()
