@@ -36,6 +36,7 @@
                 LabelFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"
                 LabelGroupAdded="OnLabelGroupAdded"
                 LabelGroupLabelAdded="OnLabelGroupLabelAdded"
+                LabelGroupLabelRemoved="OnLabelGroupLabelRemoved"
                 LabelGroupRemoved="OnLabelGroupRemoved"
                 LabelGroupSelected="OnLabelGroupSelected"
                 LabelGroups="{Binding ElementName=NoteCollectionDisplayControl, Path=LabelGroups}"
@@ -190,20 +191,23 @@
 <!--
       HorizontalOffset="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}},  Path=PopupHorizontalOffset}"  
          HorizontalOffset="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}},  Path=PopupHorizontalOffset}"  
+          PlacementTarget="{Binding ElementName=TogglePopupButton}"
+         HorizontalOffset="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}},  Path=AddJotHorizontalOffset}"
+         PlacementTarget="{Binding ElementName=TogglePopupButton}"
         -->
-        <userControls:NonTopmostPopup Grid.Row="1" x:Name="AddNewJotPopup"
+        <userControls:NonTopmostPopup x:Name="AddNewJotPopup"
                IsOpen="{Binding DataContext.IsAddJotOpen, ElementName=NoteCollectionDisplayControl}"   
-               PlacementTarget="{Binding ElementName=TogglePopupButton}"
-               Placement="Top"
-               HorizontalOffset="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}},  Path=AddJotHorizontalOffset}"
+              
+               Placement="Center"
+              
                StaysOpen="True"
                MouseEnter="OnPopupMouseEnter"
                MouseLeave="OnPopupMouseLeave"
                Opened="AddNewJotPopup_OnOpened"
                Closed="AddNewJotPopup_OnClosed"
                >
-           
-            <Border BorderThickness="1" Background="WhiteSmoke"  >
+
+            <Border BorderThickness="2" Background="WhiteSmoke"   Padding="5" >
                 <notes:AddNote 
                                 x:Name="AddNoteControl"
                                 Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteMargin}"

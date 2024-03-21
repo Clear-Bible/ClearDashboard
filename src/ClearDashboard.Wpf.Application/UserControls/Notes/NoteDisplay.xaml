@@ -125,6 +125,7 @@
                             LabelFontSize="{Binding ElementName=NotesDisplayControl, Path=LabelFontSize}"
                             LabelGroupAdded="OnLabelGroupAdded"
                             LabelGroupLabelAdded="OnLabelGroupLabelAdded"
+                            LabelGroupLabelRemoved="OnLabelGroupLabelRemoved"
                             LabelGroupRemoved="OnLabelGroupRemoved"
                             LabelGroupSelected="OnLabelGroupSelected"
                             LabelGroups="{Binding ElementName=NotesDisplayControl, Path=LabelGroups}"

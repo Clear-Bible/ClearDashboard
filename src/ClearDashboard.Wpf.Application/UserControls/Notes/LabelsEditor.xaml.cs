@@ -409,6 +409,24 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             }
         }
 
+        private void OnLabelGroupManageEscapePressed(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                OnLabelGroupManageCancelled(sender, e);
+            }
+        }
+
+
+        private void OnLabelGroupManageClicked(object sender, RoutedEventArgs e)
+        {
+            if (CurrentLabelGroup.Name != "<None>")
+            {
+                CurrentLabelGroup.InitializeSelectableLabels();
+                ManageLabelGroupPopup.IsOpen = true;
+            }
+        }
+
         private void OnLabelGroupAddNameChanged(object sender, TextChangedEventArgs e)
         {
             NewLabelGroupInitializationVisibility = NewLabelGroupTextBox.Text.Length > 0 ? Visibility.Visible : Visibility.Hidden;
@@ -437,9 +455,19 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             }
         }
 
+        private void OnLabelGroupManageConfirmed(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         private void OnLabelGroupAddCancelled(object sender, RoutedEventArgs e)
         {
             AddLabelGroupPopup.IsOpen = false;
+        }
+
+        private void OnLabelGroupManageCancelled(object sender, RoutedEventArgs e)
+        {
+            ManageLabelGroupPopup.IsOpen = false;
         }
 
         private void OnLabelGroupSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -921,5 +949,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 e.Handled = true;
             }
         }
+
+
+     
     }
 }

@@ -915,6 +915,13 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             RaiseLabelGroupLabelEvent(LabelGroupLabelAddedEvent, labelGroupLabelEventArgs!);
         }
 
+        private void OnLabelGroupLabelRemoved(object sender, RoutedEventArgs e)
+        {
+            var labelGroupLabelEventArgs = e as LabelGroupLabelEventArgs;
+
+            RaiseLabelGroupLabelEvent(LabelGroupLabelRemovedEvent, labelGroupLabelEventArgs!);
+        }
+
         private void OnLabelGroupRemoved(object sender, RoutedEventArgs e)
         {
             var labelGroupEventArgs = e as LabelGroupEventArgs;
@@ -1771,5 +1778,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             }
         }
         #endregion move popup with parent hack
+
+       
     }
 }

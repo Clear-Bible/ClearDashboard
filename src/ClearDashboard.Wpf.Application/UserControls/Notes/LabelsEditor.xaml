@@ -9,6 +9,8 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:strings="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:cm="http://caliburnmicro.com"
     x:Name="LabelsEditorControl"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -115,7 +117,105 @@
                     ToolTip="{helpers:Localization Notes_LabelGroupAddTooltip}">
                     <Image Height="18" Source="/Resources/add24.png" />
                 </Button>
+                <Button
+                    Name="ManageLabelGroupButton"
+                    Margin="0,-5,0,0"
+                    Padding="0,0,0,0"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Click="OnLabelGroupManageClicked"
+                    FontSize="12"
+                    FontWeight="SemiBold"
+                    ToolTip="{helpers:Localization Notes_LabelGroupManageTooltip}"
+                    Visibility="{Binding ElementName=LabelsEditorControl, Path=LabelGroupDeleteVisibility}">
+                    <iconPacks:PackIconMaterial Kind="PencilCircleOutline" Margin="5, 0" />
+                 
+                </Button>
             </StackPanel>
+
+            <userControls:NonTopmostPopup
+        x:Name="ManageLabelGroupPopup"
+        Grid.Column="2"
+        Width="450"
+        Placement="Center"
+        PreviewKeyDown="OnLabelGroupManageEscapePressed"
+        StaysOpen="True">
+                <Border
+            Padding="5"
+            Background="WhiteSmoke"
+            BorderThickness="2">
+                    <StackPanel
+                VerticalAlignment="Center"
+                Background="WhiteSmoke"
+                Orientation="Vertical">
+                        <TextBlock
+                    Padding="10"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    FontSize="14">
+                            <TextBlock.Inlines>
+                                <Run FontWeight="Bold" Text="{helpers:Localization Notes_SelectLabelsToDeleteFromLabelGroup}" />
+                                <Run Text=": " />
+                                <Run Text="{Binding ElementName=LabelsEditorControl, Path=CurrentLabelGroup.Name}" />
+                            </TextBlock.Inlines>
+                        </TextBlock>
+               
+
+                        <ListView
+                            Height="150"
+                            Margin="5"
+                            BorderBrush="{StaticResource PrimaryHueMidBrush}"
+                            BorderThickness="1"
+                            ItemsSource="{Binding ElementName=LabelsEditorControl, Path=CurrentLabelGroup.SelectableLabels}"
+                            ScrollViewer.VerticalScrollBarVisibility="Visible">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="200" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+
+                                        </Grid.RowDefinitions>
+                                        <CheckBox
+                                            Grid.RowSpan="2"
+                                            Margin="0,0,5,0"
+                                            VerticalAlignment="Center"
+                                            IsChecked="{Binding Selected}" />
+                                        <TextBlock
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            HorizontalAlignment="Stretch"
+                                            FontSize="13.5"
+                                            FontWeight="Bold"
+                                            Text="{Binding Text}" />
+                                    </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                                    <StackPanel
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+                            <Button
+                        Margin="5"
+                        Click="OnLabelGroupManageConfirmed"
+                        Content="{helpers:Localization Delete}"
+                        IsDefault="True"
+                        Style="{StaticResource TransparentStyle}" />
+                            <Button
+                        Margin="5"
+                        Click="OnLabelGroupManageCancelled"
+                        Content="{helpers:Localization Cancel}"
+                        Style="{StaticResource AlternativeStyle}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </userControls:NonTopmostPopup>
 
             <userControls:NonTopmostPopup
                 x:Name="AddLabelGroupPopup"

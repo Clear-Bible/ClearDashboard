@@ -89,12 +89,12 @@
                                     <RowDefinition Height="20" />
                                 </Grid.RowDefinitions>
                                 <TextBlock Grid.Column="0" Text="{Binding Text}" />
-                                <Button
+                                <!--<Button
                                     x:Name="DeleteLabelButton"
                                     Grid.Column="1"
                                     Margin="20,-5,5,0"
                                     Padding="0,0,0,0"
-                                    Background="Transparent"
+                                    Background="Red"
                                     BorderThickness="0"
                                     Click="DeleteLabelClicked"
                                     FontWeight="SemiBold"
@@ -104,7 +104,7 @@
                                         Width="24"
                                         Height="14"
                                         Source="/Resources/close24.png" />
-                                </Button>
+                                </Button>-->
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

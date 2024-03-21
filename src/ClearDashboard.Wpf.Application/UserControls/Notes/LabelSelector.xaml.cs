@@ -33,6 +33,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// <summary>
         /// Identifies the LabelDeletedEvent routed event.
         /// </summary>
+        /// Dashboard 1.4 release - no longer used
         public static readonly RoutedEvent LabelDeletedEvent = EventManager.RegisterRoutedEvent
             (nameof(LabelDeleted), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelSelector));
 
@@ -175,10 +176,13 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             System.Windows.Application.Current.Dispatcher.Invoke(SetTextboxFocus, DispatcherPriority.Render);
         }
 
+        // Dashboard 1.4 release - no longer used.  
         private void DeleteLabelClicked(object sender, RoutedEventArgs e)
         {
             RaiseLabelEvent(LabelDeletedEvent, (sender as Button).DataContext as NotesLabel);
         }
+
+
 
         private void OnToolTipOpening(object sender, ToolTipEventArgs e)
         {
@@ -243,6 +247,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// <summary>
         /// Occurs when the user asks to remove an existing label suggestion.
         /// </summary>
+        /// Dashboard 1.4 release - no longer used
         public event RoutedEventHandler LabelDeleted
         {
             add => AddHandler(LabelDeletedEvent, value);
@@ -339,5 +344,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 e.Handled = true;
             }
         }
+
+       
     }
 }
