@@ -1,10 +1,13 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Markup;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -13,6 +16,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
     /// <summary>
     /// Popup with code to not be the topmost control
     /// </summary>
+    [ContentProperty("Child")]
+    [DefaultEvent("Opened")]
+    [DefaultProperty("Child")]
+    [Localizability(LocalizationCategory.None)]
     public class NonTopmostPopup : Popup
     {
         /// <summary>
@@ -24,6 +31,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private bool _alreadyLoaded;
         private Window _parentWindow;
 
+
+      
         /// <summary>
         /// Get/Set IsTopmost
         /// </summary>
@@ -33,6 +42,19 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set { SetValue(IsTopmostProperty, value); }
         }
 
+
+        /// <summary>
+        /// The original child added via Xaml
+        /// </summary>
+        public UIElement TrueChild { get; private set; }
+
+        public Thumb Thumb { get; private set; } = new Thumb
+        {
+            Width = 0,
+            Height = 0,
+        };
+
+
         /// <summary>
         /// ctor
         /// </summary>
@@ -40,6 +62,34 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             Loaded += OnPopupLoaded;
             Unloaded += OnPopupUnloaded;
+
+            MouseDown += (sender, e) =>
+            {
+                Thumb.RaiseEvent(e);
+            };
+
+            Thumb.DragDelta += (sender, e) =>
+            {
+                HorizontalOffset += e.HorizontalChange;
+                VerticalOffset += e.VerticalChange;
+            };
+        }
+
+        protected override void OnInitialized(EventArgs e)
+        {
+            base.OnInitialized(e);
+
+            TrueChild = Child;
+
+            var surrogateChild = new StackPanel();
+
+            RemoveLogicalChild(TrueChild);
+
+            surrogateChild.Children.Add(Thumb);
+            surrogateChild.Children.Add(TrueChild);
+
+            AddLogicalChild(surrogateChild);
+            Child = surrogateChild;
         }
 
 
