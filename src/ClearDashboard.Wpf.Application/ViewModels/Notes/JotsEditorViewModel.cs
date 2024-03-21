@@ -299,7 +299,35 @@ public class JotsEditorViewModel : ApplicationScreen
         if (noteViewModel.NoteStatus != noteStatus.ToString())
         {
             noteViewModel.NoteStatus = noteStatus.ToString();
-            await NoteManager!.UpdateNoteAsync(noteViewModel);
+
+            if (noteStatus == NoteStatus.Archived)
+            {
+                // archive the whole note and replies
+                var parentNote = NoteManager.CurrentNotes.FirstOrDefault(n => n.NoteId.Id == noteViewModel.ThreadId.Id);
+                if (parentNote != null) 
+                {
+                    parentNote.NoteStatus = NoteStatus.Archived.ToString();
+
+                    foreach (var reply in parentNote.Replies)
+                    {
+                        reply.NoteStatus = NoteStatus.Archived.ToString();
+                        await NoteManager!.UpdateNoteAsync(reply);
+                    }
+
+                    await NoteManager!.UpdateNoteAsync(parentNote);
+                }
+                else
+                {
+                    await NoteManager!.UpdateNoteAsync(noteViewModel);
+                }
+
+            }
+            else
+            {
+                await NoteManager!.UpdateNoteAsync(noteViewModel);
+            }
+
+
 
             if (noteStatus == NoteStatus.Resolved)
             {
