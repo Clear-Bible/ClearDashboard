@@ -113,40 +113,40 @@
     <value>Versiune</value>
   </data>
   <data name="AccountInfo_ClearDashboardUserIdLabel" xml:space="preserve">
-    <value>ClearDashboard Userrid:</value>
+    <value>ClearDashboard UserId:</value>
   </data>
   <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
-    <value>Numele de utilizator ClearDashboard:</value>
+    <value>Nume utilizator ClearDashboard:</value>
   </data>
   <data name="AccountInfo_CollaborationEmailLabel" xml:space="preserve">
-    <value>Email de colaborare:</value>
+    <value>E-mail de colaborare:</value>
   </data>
   <data name="AccountInfo_CollaborationUserIdLabel" xml:space="preserve">
-    <value>Colaborare Userrid:</value>
+    <value>ID utilizator colaborare:</value>
   </data>
   <data name="AccountInfo_CollaborationUsernameLabel" xml:space="preserve">
-    <value>Nume utilizator de colaborare:</value>
+    <value>Nume de utilizator pentru colaborare:</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
-    <value>-I DETALII DE CURTURINT</value>
+    <value>-DETALII CONTUL CURENT-</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
     <value>Dezactivați licența curentă</value>
   </data>
   <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
-    <value>-Alte conturi-</value>
+    <value>-ALTE CONTURI-</value>
   </data>
   <data name="AccountInfo_ParatextEmailLabel" xml:space="preserve">
-    <value>E -mail paratext:</value>
+    <value>E-mail paratext:</value>
   </data>
   <data name="AccountInfo_ParatextUsernameLabel" xml:space="preserve">
-    <value>Nume utilizator de paratext:</value>
+    <value>Nume utilizator Paratext:</value>
   </data>
   <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
-    <value>Reporniți cererea</value>
+    <value>Reporniți aplicația</value>
   </data>
   <data name="AccountInfo_SelectAccountLabel" xml:space="preserve">
-    <value>Selectați un cont pentru a trece la:</value>
+    <value>Selectați un cont la care să comutați:</value>
   </data>
   <data name="ACT" xml:space="preserve">
     <value>ACT</value>
@@ -155,46 +155,46 @@
     <value>Adăuga</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Selectați cum se tokenizează corpusul</value>
+    <value>Selectați Cum să tokenizați corpus</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Aliniere</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
-    <value>Selectați cartea cu care lucrați, puteți adăuga întotdeauna mai multe cărți mai târziu.</value>
+    <value>Selectați cărțile cu care lucrați, puteți oricând să adăugați mai multe cărți mai târziu.</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Verificarea USFM</value>
   </data>
   <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
-    <value>Copiați erorile USFM pe clipboard</value>
+    <value>Copiați erorile USFM în Clipboard</value>
   </data>
   <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
-    <value>Numărul de erori:</value>
+    <value>Număr de erori:</value>
   </data>
   <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
-    <value>Interlinear</value>
+    <value>Interliniar</value>
   </data>
   <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
     <value>Fără erori</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
-    <value>Salvați erorile USFM la fișier</value>
+    <value>Salvați erorile USFM în fișier</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
     <value>Selectează tot</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>Selectați cărți de procesat</value>
+    <value>Selectați Cărți de procesat</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
-    <value>Cărți selectate</value>
+    <value>Cărți alese</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
-    <value>Selectați cărțile USFM pentru a trimite</value>
+    <value>Selectați Cărți USFM de trimis</value>
   </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
-    <value>Selectați Proiectul Paratext</value>
+    <value>Selectați Proiect Paratext</value>
   </data>
   <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
     <value>Deselectează tot</value>
@@ -224,7 +224,7 @@
     <value>Capitolul următor</value>
   </data>
   <data name="Bcv_NextVerse" xml:space="preserve">
-    <value>Următorul verset</value>
+    <value>Următorul vers</value>
   </data>
   <data name="Bcv_Offset" xml:space="preserve">
     <value>DECALAJ</value>
@@ -233,13 +233,13 @@
     <value>Cartea anterioară</value>
   </data>
   <data name="Bcv_PreviousChapter" xml:space="preserve">
-    <value>Capitolul anterior</value>
+    <value>Capitolul precedent</value>
   </data>
   <data name="Bcv_PreviousVerse" xml:space="preserve">
-    <value>Versetul anterior</value>
+    <value>Versetul precedent</value>
   </data>
   <data name="Bcv_Sync" xml:space="preserve">
-    <value>Sincronizare</value>
+    <value>SINCRONIZARE</value>
   </data>
   <data name="Bcv_Verse" xml:space="preserve">
     <value>VERSET</value>
@@ -266,7 +266,7 @@
     <value>*</value>
   </data>
   <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
-    <value>animale</value>
+    <value>animalelor</value>
   </data>
   <data name="BiblicalTermsDomains_Area" xml:space="preserve">
     <value>zonă</value>
@@ -278,10 +278,10 @@
     <value>asociere</value>
   </data>
   <data name="BiblicalTermsDomains_ConstructionReligiousActivities" xml:space="preserve">
-    <value>constructie; activități religioase</value>
+    <value>constructie; activitati religioase</value>
   </data>
   <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>construcții; creșterea animalelor</value>
+    <value>constructii; creșterea animalelor</value>
   </data>
   <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
     <value>containere; creșterea animalelor</value>
@@ -293,7 +293,7 @@
     <value>fructe</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>pietre prețioase</value>
+    <value>pietre pretioase</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
     <value>ierburi</value>
@@ -320,7 +320,7 @@
     <value>monument</value>
   </data>
   <data name="BiblicalTermsDomains_MoralsAndEthics" xml:space="preserve">
-    <value>moravuri și etică</value>
+    <value>morala si etica</value>
   </data>
   <data name="BiblicalTermsDomains_Mourning" xml:space="preserve">
     <value>doliu</value>
@@ -347,16 +347,16 @@
     <value>scop</value>
   </data>
   <data name="BiblicalTermsDomains_ReligiousActivities" xml:space="preserve">
-    <value>activități religioase</value>
+    <value>activitati religioase</value>
   </data>
   <data name="BiblicalTermsDomains_SacrificesAndOfferings" xml:space="preserve">
-    <value>sacrificii și oferte</value>
+    <value>jertfe și ofrande</value>
   </data>
   <data name="BiblicalTermsDomains_Settlement" xml:space="preserve">
-    <value>decontare</value>
+    <value>aşezare</value>
   </data>
   <data name="BiblicalTermsDomains_SignsAndWonders" xml:space="preserve">
-    <value>Semne și minuni</value>
+    <value>semne și minuni</value>
   </data>
   <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowers" xml:space="preserve">
     <value>ființe și puteri supranaturale</value>
@@ -365,22 +365,22 @@
     <value>ființe și puteri supranaturale; titluri</value>
   </data>
   <data name="BiblicalTermsDomains_Tools" xml:space="preserve">
-    <value>instrumente</value>
+    <value>unelte</value>
   </data>
   <data name="BiblicalTermsDomains_ToolsChildbirth" xml:space="preserve">
-    <value>instrumente; naştere</value>
+    <value>unelte; naştere</value>
   </data>
   <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
-    <value>instrumente; greutate; comerţ</value>
+    <value>unelte; greutate; comerţ</value>
   </data>
   <data name="BiblicalTermsDomains_TreesFruits" xml:space="preserve">
     <value>copaci; fructe</value>
   </data>
   <data name="BiblicalTermsDomains_TreesPerfumesAndSpices" xml:space="preserve">
-    <value>copaci; Parfumuri și condimente</value>
+    <value>copaci; parfumuri si condimente</value>
   </data>
   <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>Înțelepciune, înțelegere</value>
+    <value>înțelepciune, înțelegere</value>
   </data>
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>Toate</value>
@@ -428,13 +428,13 @@
     <value>Toate</value>
   </data>
   <data name="BiblicalTermsRendering_MissingRenderings" xml:space="preserve">
-    <value>Redarea lipsă</value>
+    <value>Redări lipsă</value>
   </data>
   <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
     <value>Cuvinte aliniate</value>
   </data>
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
-    <value>Alinieri</value>
+    <value>Aliniamente</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
     <value>Tip de aliniere:</value>
@@ -446,22 +446,22 @@
     <value>Aprobat</value>
   </data>
   <data name="BulkAlignmentReview_ApproveSelected" xml:space="preserve">
-    <value>Aproba selectată</value>
+    <value>Aprobați selectat</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentEditor" xml:space="preserve">
-    <value>Editor de aliniere în vrac</value>
+    <value>Editor de aliniere în bloc</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>Revizuirea alinierii în vrac</value>
+    <value>Examinarea alinierii în bloc</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>Numara</value>
   </data>
   <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>Numărați după text de suprafață</value>
+    <value>Numărați după textul de suprafață</value>
   </data>
   <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
-    <value>Numărați prin instruire text</value>
+    <value>Numărați după text de antrenament</value>
   </data>
   <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
     <value>Dezaproba</value>
@@ -470,7 +470,7 @@
     <value>Dezaprobat</value>
   </data>
   <data name="BulkAlignmentReview_DisapproveSelected" xml:space="preserve">
-    <value>Dezaproba selectată</value>
+    <value>Respinge selectat</value>
   </data>
   <data name="BulkAlignmentReview_Invalid" xml:space="preserve">
     <value>Invalid</value>
@@ -479,13 +479,13 @@
     <value>Mașinărie</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsInvalid" xml:space="preserve">
-    <value>Marcajul selectat ca „nevalid”</value>
+    <value>Marcați selectat ca „Invalid”</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
-    <value>Mark selectat drept „revizuire a nevoilor”</value>
+    <value>Marcați selectat ca „Necesită revizuire”</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
-    <value>Marcajul selectat drept „valabil”</value>
+    <value>Marcați selectat ca „Valid”</value>
   </data>
   <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
     <value>Necesită revizuire</value>
@@ -503,7 +503,7 @@
     <value>Partea sursă</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Sursa ref</value>
+    <value>Ref. sursă</value>
   </data>
   <data name="BulkAlignmentReview_Target" xml:space="preserve">
     <value>Ţintă</value>
@@ -518,7 +518,7 @@
     <value>Valabil</value>
   </data>
   <data name="BulkAlignmentReview_VerseText" xml:space="preserve">
-    <value>Textul versului</value>
+    <value>Text în vers</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Anulare</value>
@@ -530,13 +530,13 @@
     <value>Șterge</value>
   </data>
   <data name="ClockUserControl_Include" xml:space="preserve">
-    <value>Includeți în rotația afișajului de ceas</value>
+    <value>Includeți în rotația afișajului ceasului</value>
   </data>
   <data name="ClockUserControl_LocalTime" xml:space="preserve">
     <value>Ora locala</value>
   </data>
   <data name="ClockUserControl_Name" xml:space="preserve">
-    <value>Numiți elementul</value>
+    <value>Denumiți elementul</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
     <value>grup nou</value>
@@ -557,25 +557,25 @@
     <value>Utilizatori de colaborare disponibili:</value>
   </data>
   <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
-    <value>Gestionați proiectele de colaborare</value>
+    <value>Gestionați proiecte de colaborare</value>
   </data>
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
-    <value>Utilizatorii actuali ai proiectului:</value>
+    <value>Utilizatori actuali ai proiectului:</value>
   </data>
   <data name="CollabProjectManagementView_Delete" xml:space="preserve">
-    <value>Ștergeți colaborarea proiectului</value>
+    <value>Ștergeți colaborarea la proiect</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>Aveți alți utilizatori conectați la acest proiect. Acest proiect va fi eliminat și pentru ei. Sunteți sigur că doriți să ștergeți acest proiect?</value>
+    <value>Aveți alți utilizatori conectați la acest proiect. Acest proiect va fi eliminat și pentru ei. Sigur doriți să ștergeți acest proiect?</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
-    <value>Ești sigur că vrei să ștergi acest proiect?</value>
+    <value>Sigur doriți să ștergeți acest proiect?</value>
   </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>Descriere</value>
   </data>
   <data name="CollabProjectManagementView_ProjectMember" xml:space="preserve">
-    <value>Membru al proiectului</value>
+    <value>Membru de proiect</value>
   </data>
   <data name="CollabProjectManagementView_ProjectOwner" xml:space="preserve">
     <value>Detinatorul proiectului</value>
@@ -584,7 +584,7 @@
     <value>Proiecte</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
-    <value>Selectați proiect</value>
+    <value>Selectați Proiect</value>
   </data>
   <data name="Copy" xml:space="preserve">
     <value>Copie</value>
@@ -614,7 +614,7 @@
     <value>Ștergeți proiectul</value>
   </data>
   <data name="Delete_Project_Confirmation" xml:space="preserve">
-    <value>Ești sigur că vrei să ștergi acest proiect?</value>
+    <value>Sigur doriți să ștergeți acest proiect?</value>
   </data>
   <data name="DEU" xml:space="preserve">
     <value>DEU</value>
@@ -632,22 +632,22 @@
     <value>Editați | ×</value>
   </data>
   <data name="EnhancedView_AddAlignment" xml:space="preserve">
-    <value>Adăugați alinierea?</value>
+    <value>Adăugați o aliniere?</value>
   </data>
   <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>Aliniați '{0}' cu '{1}'?</value>
+    <value>Aliniați „{0}” cu „{1}”?</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
     <value>Aliniere</value>
   </data>
   <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
-    <value>Ștergeți această viziune?</value>
+    <value>Ștergeți această vizualizare?</value>
   </data>
   <data name="EnhancedView_CreateAlignment" xml:space="preserve">
     <value>Creați alinierea</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>Vizualizați/creați JOTS</value>
+    <value>Vizualizați/Creați Jots</value>
   </data>
   <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
     <value>Ștergeți alinierea?</value>
@@ -659,37 +659,37 @@
     <value>Ștergeți alinierea pentru „{0}”?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>Ștergeți toate alinierile?</value>
+    <value>Ștergeți toate aliniamentele?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>Token '{0}' are mai multe alinieri definite. Făcând clic pe '{1}' va șterge toate alinierile.</value>
+    <value>Indicatorul „{0}” are mai multe aliniamente definite. Făcând clic pe „{1}” se vor șterge toate aliniamentele.</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>Căutare la termen de filtrare</value>
+    <value>Căutare de termeni de filtrare</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>Căutarea termenului de filtrare după termeni cheie</value>
+    <value>Filtrați căutarea termenilor după termeni cheie</value>
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
-    <value>Interlinear</value>
+    <value>Interliniar</value>
   </data>
   <data name="EnhancedView_JoinTokens" xml:space="preserve">
-    <value>Alăturați -vă jetoane</value>
+    <value>Alăturați-vă Tokens</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Alăturați -vă jetoane pentru pereche de limbă</value>
+    <value>Alăturați-vă Tokens pentru perechea de limbi</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
-    <value>Marcați alinierea drept „invalid”</value>
+    <value>Marcați alinierea ca „Invalid”</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
-    <value>Marcați alinierea ca „revizuire a nevoilor”</value>
+    <value>Marcați alinierea ca „Necesită revizuire”</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
-    <value>Marcați alinierea drept „valabilă”</value>
+    <value>Marcați alinierea ca „Valid”</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
-    <value>NOU JEGAT: Text de instruire</value>
+    <value>Token nou: text de antrenament</value>
   </data>
   <data name="EnhancedView_Notes" xml:space="preserve">
     <value>Note</value>
@@ -698,25 +698,25 @@
     <value>Nu există date de versuri în acest interval de versuri.</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
-    <value>Îndepărtați corpusul</value>
+    <value>Eliminați corpus</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>Afișați controalele de vizualizare</value>
+    <value>Afișați comenzile de vizualizare</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>Jeton împărțit</value>
+    <value>Split Token</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Aplicați despărțiți în alte cazuri de jeton</value>
+    <value>Aplicați diviziunea altor instanțe de token</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>Selectați unde să împărțiți token:</value>
+    <value>Selectați unde să împărțiți jetonul:</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
-    <value>Despărțire cu trei căi</value>
+    <value>Împărțire în trei</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Unjoin compus jeton</value>
+    <value>Deconectați tokenul compus</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -731,7 +731,7 @@
     <value>EXO</value>
   </data>
   <data name="ExpandView" xml:space="preserve">
-    <value>Extindeți vizualizarea</value>
+    <value>Extindeți Vizualizare</value>
   </data>
   <data name="EZK" xml:space="preserve">
     <value>EZK</value>
@@ -746,13 +746,13 @@
     <value>Înălţime:</value>
   </data>
   <data name="FontSettings_Horizontal" xml:space="preserve">
-    <value>Distanțare orizontală:</value>
+    <value>Spațiere orizontală:</value>
   </data>
   <data name="FontSettings_NoteIndicators" xml:space="preserve">
-    <value>Notă indicatori:</value>
+    <value>Indicatori de notă:</value>
   </data>
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
-    <value>Modul de paragraf</value>
+    <value>Modul Paragraf</value>
   </data>
   <data name="FontSettings_ShowExternalNotes" xml:space="preserve">
     <value>Afișați note externe</value>
@@ -764,22 +764,22 @@
     <value>Dimensiunea fontului sursă:</value>
   </data>
   <data name="FontSettings_Target" xml:space="preserve">
-    <value>Textul țintă:</value>
+    <value>Text țintă:</value>
   </data>
   <data name="FontSettings_TargetFontSize" xml:space="preserve">
-    <value>Dimensiunea fontului țintă:</value>
+    <value>Dimensiunea țintă a fontului:</value>
   </data>
   <data name="FontSettings_Title" xml:space="preserve">
     <value>Titlu:</value>
   </data>
   <data name="FontSettings_TitleFontSize" xml:space="preserve">
-    <value>Dimensiunea fontului titlu:</value>
+    <value>Dimensiunea fontului titlului:</value>
   </data>
   <data name="FontSettings_Translations" xml:space="preserve">
     <value>Traduceri:</value>
   </data>
   <data name="FontSettings_Vertical" xml:space="preserve">
-    <value>Distanțare verticală:</value>
+    <value>Spațiere verticală:</value>
   </data>
   <data name="GAL" xml:space="preserve">
     <value>GAL</value>
@@ -860,46 +860,46 @@
     <value>LEV</value>
   </data>
   <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>Adăugați un domeniu semantic la acest sens</value>
+    <value>Adăugați un domeniu semantic acestui sens</value>
   </data>
   <data name="Lexicon_AddForm" xml:space="preserve">
-    <value>Adăugați o formă lexicală la această lemmă</value>
+    <value>Adăugați o formă lexicală la această lemă</value>
   </data>
   <data name="Lexicon_AddLexeme" xml:space="preserve">
     <value>Adăugați Lexeme</value>
   </data>
   <data name="Lexicon_AddLexemeTooltip" xml:space="preserve">
-    <value>Adăugați un Lexeme</value>
+    <value>Adăugați un lexem</value>
   </data>
   <data name="Lexicon_AddMeaning" xml:space="preserve">
-    <value>Adăugați sens</value>
+    <value>Adăugați un sens</value>
   </data>
   <data name="Lexicon_AddMeaningTooltip" xml:space="preserve">
-    <value>Adăugați un sens pentru această lemmă</value>
+    <value>Adăugați un sens pentru această lemă</value>
   </data>
   <data name="Lexicon_AddSemanticDomain" xml:space="preserve">
     <value>Adăugați un domeniu semantic</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>Aplicați luciu</value>
+    <value>Aplicați Gloss</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Anulați luciul</value>
+    <value>Anulează luciul</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
-    <value>Schimbați toate aparițiile nesemnificative</value>
+    <value>Modificați toate aparițiile nesetate</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>Dacă este verificat, acest lucru va schimba toate aparițiile nesemnificative ale acestui cuvânt</value>
+    <value>Dacă este bifată, aceasta va schimba toate aparițiile nesetate ale acestui cuvânt</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Concordanţă</value>
   </data>
   <data name="Lexicon_DeleteLexeme" xml:space="preserve">
-    <value>Ștergeți această lexemă</value>
+    <value>Ștergeți acest lexem</value>
   </data>
   <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
-    <value>Ștergeți acest Lexeme?</value>
+    <value>Ștergeți acest lexem?</value>
   </data>
   <data name="Lexicon_DeleteMeaning" xml:space="preserve">
     <value>Ștergeți acest sens</value>
@@ -908,40 +908,40 @@
     <value>Ștergeți această traducere</value>
   </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
-    <value>Introduceți o nouă traducere pentru</value>
+    <value>Introdu o nouă traducere pentru</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Introduceți un nou luciu</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
-    <value>LEMMA</value>
+    <value>Lema</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
-    <value>Lemma/forme:</value>
+    <value>Lema/Forme:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Lemma pentru New Lexeme:</value>
+    <value>Lema pentru noul lexem:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>Lexem</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
-    <value>Există deja un lexeme pentru lemma</value>
+    <value>Un lexem pentru există deja pentru lemă</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
-    <value>Sensuri:</value>
+    <value>Semnificatii:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Nou luciu</value>
+    <value>Gloss nou</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>Îndepărtați acest domeniu semantic din acest sens</value>
+    <value>Eliminați acest domeniu semantic din acest sens</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
-    <value>Scoateți această formă lexicală din această lemmă</value>
+    <value>Eliminați această formă lexicală din această lemă</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>Pune pe cineva</value>
+    <value>Setați un luciu pentru</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Și</value>
@@ -956,7 +956,7 @@
     <value>Editați | ×</value>
   </data>
   <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
-    <value>Adăugați „{0}” ca formă</value>
+    <value>Adăugați „{0}” ca formular</value>
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
     <value>Adăugați „{0}” ca traducere la primul sens</value>
@@ -1007,7 +1007,7 @@
     <value>Limbă țintă</value>
   </data>
   <data name="LexiconEdit_Title" xml:space="preserve">
-    <value>Lexicon Edit</value>
+    <value>Editare lexic</value>
   </data>
   <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>Traducere</value>
@@ -1016,25 +1016,25 @@
     <value>Tip</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>Adăugați ca formă pentru ...</value>
+    <value>Adăugați ca formular pentru...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Găsiți potriviri complete sau parțiale de lexeme sau formular pentru sursă</value>
+    <value>Găsiți lexemul complet sau parțial sau potriviri de formular pentru sursă</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Adăugați ținta ca traducere pentru ...</value>
+    <value>Adăugați ținta ca traducere pentru...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Găsiți lexeme care au una sau mai multe traduceri care se potrivesc cu ținta</value>
+    <value>Găsiți lexeme care au una sau mai multe traduceri care se potrivesc țintei</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Import verificat</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
-    <value>Lexeme sau Form se potrivește</value>
+    <value>Lexemul sau potrivirile de formă</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
-    <value>Nu mai există înregistrări de importat.</value>
+    <value>Nu mai sunt înregistrări de importat.</value>
   </data>
   <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
     <value>Vă rugăm să alegeți un corpus.</value>
@@ -1055,22 +1055,22 @@
     <value>Limbă țintă</value>
   </data>
   <data name="LexiconImport_TargetWord" xml:space="preserve">
-    <value>Cuvânt țintă</value>
+    <value>Cuvântul țintă</value>
   </data>
   <data name="LexiconImport_Title" xml:space="preserve">
     <value>Import de lexic</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
-    <value>Meciuri de traducere</value>
+    <value>Se potrivește traducerea</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Deselectează tot</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
-    <value>Prenume este necesar</value>
+    <value>Prenumele este obligatoriu</value>
   </data>
   <data name="LicenseValidator_LastMissing" xml:space="preserve">
-    <value>Numele este necesar</value>
+    <value>Numele de familie este obligatoriu</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>Cheia de licență este necesară</value>
@@ -1094,7 +1094,7 @@
     <value>Deschis</value>
   </data>
   <data name="MainView_GatherLogs" xml:space="preserve">
-    <value>Trimiteți un mesaj pentru a șterge</value>
+    <value>Trimiteți mesajul către Clear</value>
   </data>
   <data name="MainView_GettingStartedGuide" xml:space="preserve">
     <value>Ghidul începătorului</value>
@@ -1103,7 +1103,7 @@
     <value>Ajutor</value>
   </data>
   <data name="MainView_Layouts" xml:space="preserve">
-    <value>Machete</value>
+    <value>Aspecte</value>
   </data>
   <data name="MainView_LayoutsDelete" xml:space="preserve">
     <value>Ștergeți aspectul salvat</value>
@@ -1115,16 +1115,16 @@
     <value>Salvați aspectul curent</value>
   </data>
   <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
-    <value>Machete standard</value>
+    <value>Aspecte standard</value>
   </data>
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>Preferințe</value>
   </data>
   <data name="MainView_QuickNew" xml:space="preserve">
-    <value>NOU RAPID</value>
+    <value>Rapid Nou</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Modificări de colab disponibile</value>
+    <value>Modificări de colaborare disponibile</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
     <value>Setări</value>
@@ -1133,7 +1133,7 @@
     <value>Arată jurnal</value>
   </data>
   <data name="MainView_Windows" xml:space="preserve">
-    <value>Ferestre</value>
+    <value>Windows</value>
   </data>
   <data name="MainView_WindowsAlignmentTool" xml:space="preserve">
     <value>Instrument de aliniere</value>
@@ -1142,7 +1142,7 @@
     <value>Termeni biblici</value>
   </data>
   <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
-    <value>Jetoane de corpus</value>
+    <value>Jetoane Corpus</value>
   </data>
   <data name="MainView_WindowsDashboard" xml:space="preserve">
     <value>Bord</value>
@@ -1157,16 +1157,16 @@
     <value>Vizualizare nouă</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>Joturi</value>
+    <value>Jots</value>
   </data>
   <data name="MainView_WindowsPINS" xml:space="preserve">
     <value>PINS</value>
   </data>
   <data name="MainView_WindowsTextCollections" xml:space="preserve">
-    <value>Colecții de text</value>
+    <value>Colecții de texte</value>
   </data>
   <data name="MainView_WindowsWordMeanings" xml:space="preserve">
-    <value>Semnificații cuvinte</value>
+    <value>Sensurile cuvintelor</value>
   </data>
   <data name="MAL" xml:space="preserve">
     <value>MAL</value>
@@ -1184,13 +1184,13 @@
     <value>Definiție</value>
   </data>
   <data name="Marble_DefinitionLong" xml:space="preserve">
-    <value>Definiție Long:</value>
+    <value>Definiție lungă:</value>
   </data>
   <data name="Marble_DefinitionShort" xml:space="preserve">
     <value>Definiție scurtă:</value>
   </data>
   <data name="Marble_DefinitionUnavailable" xml:space="preserve">
-    <value>Definiția indisponibilă</value>
+    <value>definiție indisponibilă</value>
   </data>
   <data name="Marble_Domains" xml:space="preserve">
     <value>Domenii:</value>
@@ -1199,19 +1199,19 @@
     <value>Domenii</value>
   </data>
   <data name="Marble_FrequencyGraph" xml:space="preserve">
-    <value>Grafic de frecvență</value>
+    <value>Graficul de frecvență</value>
   </data>
   <data name="Marble_GeneralInformation" xml:space="preserve">
     <value>Informații generale</value>
   </data>
   <data name="Marble_Glosses" xml:space="preserve">
-    <value>GLUSE:</value>
+    <value>Glosuri:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
     <value>Fragmente din discurs</value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>Lematele înrudite</value>
+    <value>Leme înrudite</value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>Domeniu de aplicare:</value>
@@ -1220,22 +1220,22 @@
     <value>Căutare</value>
   </data>
   <data name="Marble_SearchEnglish" xml:space="preserve">
-    <value>Căutare de Gloss English</value>
+    <value>Căutare după English Gloss</value>
   </data>
   <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>Căutare de ebraică/greacă</value>
+    <value>Căutați după ebraică/greacă</value>
   </data>
   <data name="Marble_Sense" xml:space="preserve">
     <value>Sens</value>
   </data>
   <data name="Marble_Senses" xml:space="preserve">
-    <value>Simțuri</value>
+    <value>Simțurile</value>
   </data>
   <data name="Marble_StrongCodes" xml:space="preserve">
     <value>Coduri puternice</value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
-    <value>Sub domenii:</value>
+    <value>Subdomenii:</value>
   </data>
   <data name="Marble_Verse" xml:space="preserve">
     <value>Verset</value>
@@ -1244,25 +1244,25 @@
     <value>Versuri</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Simțul versetului</value>
+    <value>Simțul versurilor</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
-    <value>Total verset</value>
+    <value>Vers Total</value>
   </data>
   <data name="MAT" xml:space="preserve">
     <value>MAT</value>
   </data>
   <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>Crearea bazei de date ...</value>
+    <value>Se creează baza de date...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
-    <value>Îmbinați -vă complet ... interfață de reîncărcare</value>
+    <value>Îmbinare completă... Se reîncarcă interfața</value>
   </data>
   <data name="MergeDialog_OperationCancelled" xml:space="preserve">
-    <value>Operația a fost anulată</value>
+    <value>Operațiunea anulată</value>
   </data>
   <data name="MergeDialog_OperationComplete" xml:space="preserve">
-    <value>Funcționare completă!</value>
+    <value>Operațiunea finalizată!</value>
   </data>
   <data name="MergeDialog_OperationErrored" xml:space="preserve">
     <value>Eroare întâlnită</value>
@@ -1271,7 +1271,7 @@
     <value>MIC</value>
   </data>
   <data name="Migrate_Header" xml:space="preserve">
-    <value>Resetați mapări de versuri la versificarea implicită</value>
+    <value>Resetați mapările versurilor la versificarea implicită</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>MRK</value>
@@ -1289,7 +1289,7 @@
     <value>Jeton de acces:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Verificați -vă e -mailul și introduceți codul de validare:</value>
+    <value>Verificați-vă e-mailul și introduceți codul de validare:</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Verificați disponibilitatea utilizatorului</value>
@@ -1301,7 +1301,7 @@
     <value>Creați utilizator de colaborare</value>
   </data>
   <data name="NewCollabUserView_DashboardEmailValidationCode" xml:space="preserve">
-    <value>Cod de validare a e -mailului ClearDashboard</value>
+    <value>Codul de validare a e-mailului ClearDashboard</value>
   </data>
   <data name="NewCollabUserView_Email" xml:space="preserve">
     <value>E-mail:</value>
@@ -1310,7 +1310,7 @@
     <value>Adresa de e-mail</value>
   </data>
   <data name="NewCollabUserView_EmailValidationCode" xml:space="preserve">
-    <value>Cod de verificare a e -mailului:</value>
+    <value>Cod de verificare a e-mailului:</value>
   </data>
   <data name="NewCollabUserView_ErrorCreatingUser" xml:space="preserve">
     <value>Eroare la crearea utilizatorului pe server</value>
@@ -1325,7 +1325,7 @@
     <value>Nume</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
-    <value>Nou utilizator de colaborare</value>
+    <value>Utilizator nou de colaborare</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
     <value>Parola:</value>
@@ -1334,7 +1334,7 @@
     <value>Salvat pe serverul de la distanță</value>
   </data>
   <data name="NewCollabUserView_SelectOrganization" xml:space="preserve">
-    <value>Selectați organizarea</value>
+    <value>Selectați Organizație</value>
   </data>
   <data name="NewCollabUserView_UserAlreadyExists" xml:space="preserve">
     <value>Utilizatorul există deja pe server</value>
@@ -1343,13 +1343,13 @@
     <value>Nume de utilizator:</value>
   </data>
   <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
-    <value>Utilizatorul este deja pe sistem!</value>
+    <value>Utilizatorul este deja în sistem!</value>
   </data>
   <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
-    <value>Validați codul de e -mail</value>
+    <value>Validați codul de e-mail</value>
   </data>
   <data name="NewProject_ProjectExistsTemplate" xml:space="preserve">
-    <value>Există deja un proiect cu numele '{0}'. Vă rugăm să alegeți un nume unic. "</value>
+    <value>Un proiect cu numele „{0}” există deja. Vă rugăm să alegeți un nume unic.”</value>
   </data>
   <data name="NewProjectDialog_Title" xml:space="preserve">
     <value>Creați un nou proiect</value>
@@ -1370,37 +1370,37 @@
     <value>Nici unul</value>
   </data>
   <data name="Notes_AddJot" xml:space="preserve">
-    <value>Adăugați JOT</value>
+    <value>Adăugați Jot</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Adăugați un nou JOT</value>
+    <value>Adăugați o notă nouă</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Corp</value>
   </data>
   <data name="Notes_Delete" xml:space="preserve">
-    <value>Ștergeți JOT</value>
+    <value>Ștergeți Jot</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>Ștergeți acest JOT?</value>
+    <value>Ștergeți această notă?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
-    <value>Datorită permisiunilor proiectului dvs. paratext,</value>
+    <value>Datorită permisiunilor dvs. de proiect Paratext,</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Filtru după vers</value>
+    <value>Filtrați după vers</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filtre</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>Filtru după etichete</value>
+    <value>Filtrați după etichete</value>
   </data>
   <data name="Notes_FilterNoteStatus" xml:space="preserve">
-    <value>Filtru după stare</value>
+    <value>Filtrați după stare</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>Filtru prin text</value>
+    <value>Filtrați după text</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>Orice</value>
@@ -1412,67 +1412,70 @@
     <value>Deschis</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>Filtru de autor</value>
+    <value>Filtrați după autor</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Adăugați o etichetă</value>
   </data>
   <data name="Notes_LabelAddConfirm" xml:space="preserve">
-    <value>Doriți să creați etichetă:</value>
+    <value>Doriți să creați o etichetă:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
-    <value>și asociați -l cu Grupul de etichete:</value>
+    <value>și asociați-l cu grupul de etichete:</value>
   </data>
   <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
     <value>Doriți să ștergeți eticheta:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>Doriți să dezasociați eticheta:</value>
+    <value>Doriți să deconectați eticheta:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
-    <value>din Grupul de etichete:</value>
+    <value>din grupul de etichete:</value>
   </data>
   <data name="Notes_LabelGroupAdd" xml:space="preserve">
-    <value>Adăugați grupul de etichete</value>
+    <value>Adăugați un grup de etichete</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
     <value>Adăugați un grup de etichete</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>Un grup de etichete există deja cu nume</value>
+    <value>Există deja un grup de etichete cu nume</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
-    <value>Inițializează grupul de etichete</value>
+    <value>Inițializați grupul de etichete</value>
   </data>
   <data name="Notes_LabelGroupInitializeFrom" xml:space="preserve">
     <value>cu etichete de la:</value>
   </data>
+  <data name="Notes_LabelGroupManageTooltip" xml:space="preserve">
+    <value>Gestionați etichetele unui grup de etichete</value>
+  </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
-    <value>Numele grupului de etichete</value>
+    <value>Nume grup de etichete</value>
   </data>
   <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
-    <value>Îndepărtați acest grup de etichete?</value>
+    <value>Eliminați acest grup de etichete?</value>
   </data>
   <data name="Notes_LabelGroupRemoveTooltip" xml:space="preserve">
     <value>Eliminați acest grup de etichete</value>
   </data>
   <data name="Notes_LabelRemove" xml:space="preserve">
-    <value>Scoateți această etichetă</value>
+    <value>Eliminați această etichetă</value>
   </data>
   <data name="Notes_LabelTextAttached" xml:space="preserve">
-    <value>Text atașat la etichetă</value>
+    <value>Text atașat etichetei</value>
   </data>
   <data name="Notes_LabelTooltipDelete" xml:space="preserve">
     <value>Ștergeți eticheta</value>
   </data>
   <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
-    <value>Dezasociați eticheta</value>
+    <value>Deconectați eticheta</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>Marcați JOTS selectat ca fiind deschis</value>
+    <value>Marcați note selectate ca deschise</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>Mark a selectat Jots ca rezolvat</value>
+    <value>Marcați joturile selectate ca rezolvate</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Creată</value>
@@ -1514,7 +1517,7 @@
     <value>Văzut</value>
   </data>
   <data name="Notes_NotesNotSent" xml:space="preserve">
-    <value> JOT -urile selectate nu vor fi trimise la Paratext.</value>
+    <value> notele selectate nu vor fi trimise către Paratext.</value>
   </data>
   <data name="Notes_NoteStatus_Archived" xml:space="preserve">
     <value>Arhivat</value>
@@ -1526,22 +1529,25 @@
     <value>stare</value>
   </data>
   <data name="Notes_OpenConfirmation" xml:space="preserve">
-    <value>Marcați aceste joturi ca fiind deschise?</value>
+    <value>Marcați aceste note ca fiind deschise?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Parte</value>
   </data>
   <data name="Notes_PleaseAddJot" xml:space="preserve">
-    <value>Vă rugăm să adăugați un JOT folosind dialogul de mai jos.</value>
+    <value>Vă rugăm să adăugați o notă folosind caseta de dialog de mai jos.</value>
   </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
-    <value>Marcați aceste joturi ca fiind rezolvate?</value>
+    <value>Marcați aceste note ca rezolvate?</value>
+  </data>
+  <data name="Notes_SelectLabelsToDeleteFromLabelGroup" xml:space="preserve">
+    <value>Selectați etichetele de șters din grupul de etichete</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>Trimiteți aceste JOT -uri la Paratext?</value>
+    <value>Trimiți aceste note către Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Trimiteți joturi la Paratext</value>
+    <value>Trimiteți note către Paratext</value>
   </data>
   <data name="Notes_TakeAction" xml:space="preserve">
     <value />
@@ -1559,7 +1565,7 @@
     <value>Răspunsuri necitite prezente</value>
   </data>
   <data name="Notes_UpdateJot" xml:space="preserve">
-    <value>Actualizați JOT</value>
+    <value>Actualizați Jot</value>
   </data>
   <data name="Notes_Word" xml:space="preserve">
     <value>Cuvânt</value>
@@ -1580,67 +1586,67 @@
     <value>Creați alinierea cuvintelor</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
-    <value>Creați paralelizarea versurilor corporale</value>
+    <value>Creați o paralelă a versurilor corpurilor</value>
   </data>
   <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
-    <value>Creați interlinear</value>
+    <value>Creați interliniar</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
-    <value>Metadate JSON</value>
+    <value>Metadatele JSON</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
-    <value>Paralelizează versetele corporale</value>
+    <value>Paralelizați versurile corpurilor</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Algoritm de aliniere a cuvântului mașinii</value>
+    <value>Algoritmul de aliniere a cuvintelor mașinii</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Algoritm de aliniere a cuvântului mașinii</value>
+    <value>Algoritmul de aliniere a cuvintelor mașinii</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Antrenează modelul simetrizat?</value>
+    <value>Tren model simetrizat?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>Tren</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>ALIGNIER DE CUMPĂRĂ A CAMERULUI DE TRAIN</value>
+    <value>Aliniere de cuvinte a mașinii de tren</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
-    <value>Setați cartografierea versului între Corpora paralelizată</value>
+    <value>Setați maparea versurilor între corpurile paralelizate</value>
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Corpus paratext</value>
   </data>
   <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
-    <value>Selectați un algoritm SMT pentru a vă antrena</value>
+    <value>Selectați un algoritm SMT pentru antrenament</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați aprobarea în vrac pentru a vizualiza</value>
+    <value>Adăugați aprobare în bloc la vizualizare</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>Adăugați la vizualizare</value>
   </data>
   <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați la New View</value>
+    <value>Adăugați la noua vizualizare</value>
   </data>
   <data name="Pds_AddCorpora" xml:space="preserve">
     <value>Adăugați Corpora</value>
   </data>
   <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
-    <value>Creați alinierea cuvintelor noi</value>
+    <value>Creați o nouă aliniere a cuvintelor</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>Creați o nouă tokenizare a corpusului</value>
+    <value>Creați o nouă tokenizare Corpus</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>Adăugați un nou interlinear</value>
+    <value>Adăugați un nou interliniar</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>Adăugați text la vizualizare</value>
   </data>
   <data name="Pds_AddToNewEnhancedViewMenu" xml:space="preserve">
-    <value>Adăugați text la New View</value>
+    <value>Adăugați text la noua vizualizare</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
     <value>Adăugați la vizualizare</value>
@@ -1649,37 +1655,37 @@
     <value>Auxiliar</value>
   </data>
   <data name="Pds_BackTranslation" xml:space="preserve">
-    <value>Backtranslație</value>
+    <value>Traducere înapoi</value>
   </data>
   <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
-    <value>Calculați noul model de traducere</value>
+    <value>Calculați modelul de traducere nou</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Schimbați nivelul zoom al conținutului</value>
+    <value>Schimbați nivelul de zoom al conținutului</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>Consultantnote</value>
+    <value>ConsultantNotes</value>
   </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
-    <value>Creați alinierea cuvintelor noi</value>
+    <value>Creați o nouă aliniere a cuvintelor</value>
   </data>
   <data name="Pds_CreateNewInterlinear" xml:space="preserve">
-    <value>Creați noi interlinear</value>
+    <value>Creați un nou interliniar</value>
   </data>
   <data name="Pds_Daughter" xml:space="preserve">
-    <value>Fiică</value>
+    <value>fiica</value>
   </data>
   <data name="Pds_DeleteAlignmentSet" xml:space="preserve">
     <value>Ștergeți alinierea</value>
   </data>
   <data name="Pds_DeleteParallelLine" xml:space="preserve">
-    <value>Ești sigur că vrei să ștergi această aliniere? Toate notele, alinierile și interlinarile asociate cu această aliniere vor fi șterse și nu pot fi recuperate.</value>
+    <value>Sigur doriți să ștergeți această aliniere? Toate notele, aliniamentele și elementele interliniare asociate cu această aliniere vor fi șterse și nu pot fi recuperate.</value>
   </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
-    <value>Ștergeți interlinear</value>
+    <value>Ștergeți Interlinear</value>
   </data>
   <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>Ești sigur că vrei să ștergi acest corpus? Toate notele, alinierile și interlinarile asociate cu acest corpus vor fi șterse și nu pot fi recuperate.</value>
+    <value>Sigur doriți să ștergeți acest corpus? Toate notele, aliniamentele și interliniarele asociate cu acest corpus vor fi șterse și nu pot fi recuperate.</value>
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Dicţionar</value>
@@ -1688,7 +1694,7 @@
     <value>Dezactivat în timp ce sarcinile de fundal funcționează</value>
   </data>
   <data name="Pds_ExistingProject" xml:space="preserve">
-    <value>Numele proiectului există deja - nu se poate importa</value>
+    <value>Numele proiectului există deja - Nu se poate importa</value>
   </data>
   <data name="Pds_ExistingProjectName" xml:space="preserve">
     <value>Numele proiectului există</value>
@@ -1697,40 +1703,40 @@
     <value>Editor de note externe</value>
   </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
-    <value>Montați întreaga zonă de conținut la Viewport</value>
+    <value>Potriviți întreaga zonă de conținut în fereastra de vizualizare</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>Montați toate nodurile la Viewport</value>
+    <value>Potriviți toate nodurile în fereastra de vizualizare</value>
   </data>
   <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
     <value>Obțineți cele mai recente note externe</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
-    <value>Obțineți cele mai recente de la paratext</value>
+    <value>Obțineți cele mai recente de la Paratext</value>
   </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
     <value>Afișați informații despre acest proiect</value>
   </data>
   <data name="Pds_ManuscriptGreek" xml:space="preserve">
-    <value>Greacă (NT) macula</value>
+    <value>Greacă (NT) MACULA</value>
   </data>
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
-    <value>Ebraică (OT) macula</value>
+    <value>ebraică (VT) MACULA</value>
   </data>
   <data name="Pds_MARBLE Resource" xml:space="preserve">
-    <value>Resursă de marmură</value>
+    <value>Resursa MARMURA</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
-    <value>Număr de tokenizări diferite</value>
+    <value>Numărul de tokenizări diferite</value>
   </data>
   <data name="Pds_ProjectDesignSurface" xml:space="preserve">
-    <value>Suprafață de proiectare a proiectului</value>
+    <value>Suprafața de proiectare a proiectului</value>
   </data>
   <data name="Pds_PropertiesMenu" xml:space="preserve">
     <value>Proprietăți</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Resetați mapări de versuri la versificarea implicită</value>
+    <value>Resetați mapările versurilor la versificarea implicită</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Resursă</value>
@@ -1739,7 +1745,7 @@
     <value>Scalați conținutul la 100%</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
-    <value>Adăugați text la fereastra nouă</value>
+    <value>Adăugați text în fereastră nouă</value>
   </data>
   <data name="Pds_Source" xml:space="preserve">
     <value>Sursă</value>
@@ -1751,25 +1757,25 @@
     <value>Standard</value>
   </data>
   <data name="Pds_StartParatextFirst" xml:space="preserve">
-    <value>Începeți mai întâi paratext</value>
+    <value>Începeți mai întâi Paratextul</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Studiu</value>
+    <value>Studiază Biblia</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
-    <value>StudiuBibleAdDitions</value>
+    <value>StudiazăBibliaAdăugiri</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Accesați paratext și schimbați proiecte. Proiectul Paratext conectat în prezent la pluginul ClearDashboard nu este același cu corpul din acest proiect ClearDashboard.</value>
+    <value>Accesați Paratext și comutați proiecte. Proiectul Paratext conectat în prezent la pluginul ClearDashboard nu este același cu corpus din acest proiect ClearDashboard.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Ţintă</value>
   </data>
   <data name="Pds_TransliterationManual" xml:space="preserve">
-    <value>TransliterationManual</value>
+    <value>Manual de transliterație</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Transliterarewithencoder</value>
+    <value>TransliterationWithEncoder</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Necunoscut</value>
@@ -1778,13 +1784,13 @@
     <value>Actualizați etichetele cu note externe</value>
   </data>
   <data name="Pds_Xml" xml:space="preserve">
-    <value>XML</value>
+    <value>Xml</value>
   </data>
   <data name="Pds_ZoomIn" xml:space="preserve">
     <value>Măriți conținutul</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>Măriți din conținut</value>
+    <value>Micșorați conținutul</value>
   </data>
   <data name="PHM" xml:space="preserve">
     <value>PHM</value>
@@ -1793,7 +1799,7 @@
     <value>PHP</value>
   </data>
   <data name="Pins_ClearFilter" xml:space="preserve">
-    <value>Filtru clar</value>
+    <value>Șterge filtrul</value>
   </data>
   <data name="Pins_Code" xml:space="preserve">
     <value>Cod</value>
@@ -1814,10 +1820,10 @@
     <value>Lexem</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
-    <value>Tip lexeme</value>
+    <value>Tip de lexemă</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
-    <value>Referințe de încărcare</value>
+    <value>Încărcați referințe</value>
   </data>
   <data name="Pins_Match" xml:space="preserve">
     <value>Meci</value>
@@ -1838,16 +1844,16 @@
     <value>Prefix</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Arată backtranslație</value>
+    <value>Afișează BackTranslation</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
-    <value>Tulpină</value>
+    <value>Tulpina</value>
   </data>
   <data name="Pins_Suffix" xml:space="preserve">
     <value>Sufix</value>
   </data>
   <data name="Pins_VerseReferences" xml:space="preserve">
-    <value>Referințe de vers</value>
+    <value>Referințe în versuri</value>
   </data>
   <data name="Pins_Word" xml:space="preserve">
     <value>Cuvânt</value>
@@ -1859,37 +1865,37 @@
     <value>Adăugați un nou utilizator de colaborare</value>
   </data>
   <data name="ProjectPicker_AppName" xml:space="preserve">
-    <value>Cleardashboard</value>
+    <value>ClearDashboard</value>
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
-    <value>Paratext beta nu rulează</value>
+    <value>Paratext Beta nu rulează</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
-    <value>Anularea ...</value>
+    <value>Se anulează...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>Proiecte de colaborare</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>Creați -vă proiectul pentru a începe.</value>
+    <value>Creați-vă proiectul pentru a începe.</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>Creați un nou proiect</value>
   </data>
   <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
-    <value>Proiect nou de pornire rapidă</value>
+    <value>Pornire rapidă Proiect nou</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>Creați proiect:</value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
-    <value>Creați -vă proiectul folosind expertul șablonului de proiect.</value>
+    <value>Creați-vă proiectul utilizând expertul pentru șablon de proiect.</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
     <value>Bază de date:</value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
-    <value>Nu puteți șterge acest proiect, o altă aplicație îl folosește în continuare.</value>
+    <value>Nu puteți șterge acel proiect, o altă aplicație încă îl folosește.</value>
   </data>
   <data name="ProjectPicker_DeleteProject" xml:space="preserve">
     <value>Ștergeți proiectul</value>
@@ -1898,37 +1904,37 @@
     <value>Activați selecția cărților</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
-    <value>Dacă este verificat, veți putea selecta ce cărți să procesați.</value>
+    <value>Dacă bifați, veți putea selecta ce cărți să procesați.</value>
   </data>
   <data name="ProjectPicker_GetStarted" xml:space="preserve">
     <value>Incepe</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>Proiect de import server</value>
+    <value>Import Server Project</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Verificați această casetă pentru a include textele biblice grecești și ebraice atunci când vă creați proiectul.</value>
+    <value>Bifați această casetă pentru a include textele biblice grecești și ebraice atunci când vă creați proiectul.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Includeți textele biblice grecești NT?</value>
+    <value>Includeți texte biblice grecești din NT?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
-    <value>Includeți texte biblice ebraice?</value>
+    <value>Includeți textele biblice ebraice din VT?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
-    <value>Gestionați proiectele de colaborare</value>
+    <value>Gestionați proiecte de colaborare</value>
   </data>
   <data name="ProjectPicker_NoMatches" xml:space="preserve">
     <value>Nici-o potrivire.</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>Este singuratic aici. Vă rugăm să creați un nou proiect.</value>
+    <value>Este singuratic aici. Vă rugăm să creați un proiect nou.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Paratext nu este instalat. Vă rugăm să instalați Paratext și să reluați aplicația ClearDashboard.</value>
+    <value>Paratext nu este instalat. Instalați Paratext și rulați din nou aplicația ClearDashboard.</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
-    <value>Paratext nu rulează</value>
+    <value>Paratextul nu rulează</value>
   </data>
   <data name="ProjectPicker_OpenRecent" xml:space="preserve">
     <value>Deschideți recent</value>
@@ -1937,16 +1943,16 @@
     <value>Paratext</value>
   </data>
   <data name="ProjectPicker_ParatextBackTranslation" xml:space="preserve">
-    <value>Paratext traducere înapoi</value>
+    <value>Paratext Back Translation</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>Text model (LWC)</value>
+    <value>Textul modelului (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
-    <value>Paratext funcționează, dar nu este conectat.</value>
+    <value>Paratext rulează, dar nu este conectat.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
-    <value>Proiect paratext</value>
+    <value>Proiect Paratext</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
     <value>Proiect:</value>
@@ -1955,40 +1961,40 @@
     <value>Suntem aproape acolo!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>Faceți clic aici pentru a vizualiza videoclipurile „tabloul de bord”</value>
+    <value>Faceți clic aici pentru a vedea videoclipurile „Tabloul de bord Introducere”.</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
-    <value>După ce faceți clic pe butonul „Creați” de mai jos, vom fi tokenizarea, alinierea și pregătirea proiectului dvs. Toți pașii vor apărea aici pe măsură ce sunt procesate. În timp ce așteptați, nu ezitați să faceți clic pe linkul de mai jos și să vizionați câteva videoclipuri utile pentru a începe utilizarea ClearDashboard!</value>
+    <value>După ce faceți clic pe butonul „Creați” de mai jos, vom tokeniza, vă vom alinia și vă vom pregăti proiectul. Toți pașii vor apărea aici pe măsură ce sunt procesați. În timp ce așteptați, nu ezitați să faceți clic pe linkul de mai jos și să vizionați câteva videoclipuri utile pentru a începe să utilizați ClearDashboard!</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
-    <value>Vrăjitor de șablon de proiect</value>
+    <value>Expert șablon de proiect</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizardTemplate" xml:space="preserve">
-    <value>Proiect de șablon vrăjitor: {0}</value>
+    <value>Expert șablon de proiect: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Reîmprospătați lista de proiecte de colaborare</value>
+    <value>Actualizați lista proiectelor de colaborare</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>Căutați recent</value>
+    <value>Caută recent</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
-    <value>Faceți clic aici pentru a începe Paratext</value>
+    <value>Faceți clic aici pentru a porni Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
     <value>Versiune:</value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
-    <value>Vă rugăm să introduceți un nume pentru proiectul dvs.</value>
+    <value>Vă rugăm să introduceți un nume pentru proiectul dvs</value>
   </data>
   <data name="ProjectSetup_Title" xml:space="preserve">
-    <value>Creați -vă noul proiect</value>
+    <value>Creați-vă noul proiect</value>
   </data>
   <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>Numele proiectului dat conține caractere ilegale. Caracterele valide includ „A-Z” (MADICACASE ȘI UPPERCASE), NUMĂRĂ „0-9” și caracterele '-' și „_”.</value>
+    <value>Numele proiectului dat conține caractere ilegale. Caracterele valide includ „A-Z” (minuscule și majuscule), numerele „0-9” și caracterele „-” și „_”.</value>
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
-    <value>Există deja un proiect cu același nume. Vă rugăm să alegeți un nume unic.</value>
+    <value>Un proiect cu același nume există deja. Vă rugăm să alegeți un nume unic.</value>
   </data>
   <data name="ProjectValidator_TooLong" xml:space="preserve">
     <value>Numele proiectului dat este prea lung.</value>
@@ -2057,10 +2063,10 @@
     <value>Daniel</value>
   </data>
   <data name="ProperCase_Deuteronomy" xml:space="preserve">
-    <value>Deuteronom</value>
+    <value>Deuteronomul</value>
   </data>
   <data name="ProperCase_Ecclesiastes" xml:space="preserve">
-    <value>Eclesiastes</value>
+    <value>Eclesiastul</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
     <value>Efeseni</value>
@@ -2084,13 +2090,13 @@
     <value>Geneză</value>
   </data>
   <data name="ProperCase_Habakkuk" xml:space="preserve">
-    <value>Habakkuk</value>
+    <value>Habacuc</value>
   </data>
   <data name="ProperCase_Haggai" xml:space="preserve">
-    <value>Haggai</value>
+    <value>Hagai</value>
   </data>
   <data name="ProperCase_Hebrews" xml:space="preserve">
-    <value>Evrei</value>
+    <value>evrei</value>
   </data>
   <data name="ProperCase_Hosea" xml:space="preserve">
     <value>Osea</value>
@@ -2123,19 +2129,19 @@
     <value>Jude</value>
   </data>
   <data name="ProperCase_Judges" xml:space="preserve">
-    <value>Judecători</value>
+    <value>Judecătorii</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentări</value>
+    <value>Lamentații</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
-    <value>Levitic</value>
+    <value>Leviticul</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
-    <value>Luca</value>
+    <value>Luke</value>
   </data>
   <data name="ProperCase_Malachi" xml:space="preserve">
-    <value>Malachi</value>
+    <value>Maleahi</value>
   </data>
   <data name="ProperCase_Mark" xml:space="preserve">
     <value>marcă</value>
@@ -2144,7 +2150,7 @@
     <value>Matei</value>
   </data>
   <data name="ProperCase_Micah" xml:space="preserve">
-    <value>Micah</value>
+    <value>Mica</value>
   </data>
   <data name="ProperCase_Nahum" xml:space="preserve">
     <value>Nahum</value>
@@ -2153,13 +2159,13 @@
     <value>Neemia</value>
   </data>
   <data name="ProperCase_Numbers" xml:space="preserve">
-    <value>Numere</value>
+    <value>Numerele</value>
   </data>
   <data name="ProperCase_Obadiah" xml:space="preserve">
-    <value>Obadia</value>
+    <value>Obadiah</value>
   </data>
   <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>Philemon</value>
+    <value>Filemon</value>
   </data>
   <data name="ProperCase_Philippians" xml:space="preserve">
     <value>Filipeni</value>
@@ -2168,28 +2174,28 @@
     <value>Proverbe</value>
   </data>
   <data name="ProperCase_Psalms" xml:space="preserve">
-    <value>Psalmi</value>
+    <value>Psalmii</value>
   </data>
   <data name="ProperCase_Revelation" xml:space="preserve">
     <value>Revelatie</value>
   </data>
   <data name="ProperCase_Romans" xml:space="preserve">
-    <value>Romani</value>
+    <value>romani</value>
   </data>
   <data name="ProperCase_Ruth" xml:space="preserve">
     <value>Ruth</value>
   </data>
   <data name="ProperCase_Song of Songs" xml:space="preserve">
-    <value>Cântec de cântece</value>
+    <value>Cântecul Cântărilor</value>
   </data>
   <data name="ProperCase_Titus" xml:space="preserve">
-    <value>Tit</value>
+    <value>Titus</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
     <value>Zaharia</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
-    <value>Zephaniah</value>
+    <value>Sofonia</value>
   </data>
   <data name="PSA" xml:space="preserve">
     <value>PSA</value>
@@ -2198,25 +2204,25 @@
     <value>Reîmprospăta</value>
   </data>
   <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
-    <value>Aplicație închidere</value>
+    <value>Închideți aplicația</value>
   </data>
   <data name="RegistrationDialogView_Register" xml:space="preserve">
     <value>Inregistreaza-te</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Cheia furnizată este defectuoasă. Când sunt decriptate, anumite elemente JSON nu au putut fi găsite.</value>
+    <value>Cheia furnizată este defectă. Când au fost decriptate, anumite elemente json nu au putut fi găsite.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>Conținutul cheii de licență decriptate nu se potrivește cu informațiile furnizate.</value>
+    <value>Conținutul cheii de licență decriptate nu se potrivește cu informațiile furnizate de dvs.</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
-    <value>Cheia dvs. de licență este lipsită sau ruptă.</value>
+    <value>Cheia de licență fie lipsește, fie este ruptă.</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>Bine ați venit la ClearDashboard! Vă rugăm să introduceți informațiile de înregistrare.</value>
+    <value>Bun venit la ClearDashboard! Vă rugăm să introduceți informațiile de înregistrare.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
-    <value>Vă rugăm să introduceți numele dvs.</value>
+    <value>Vă rugăm să introduceți prenumele</value>
   </data>
   <data name="RegistrationView_LastName" xml:space="preserve">
     <value>Vă rugăm să introduceți numele dvs. de familie</value>
@@ -2243,16 +2249,16 @@
     <value>Trimite</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>Activați pluginul Aqua experimental</value>
+    <value>Activați pluginul AQUA experimental</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Verificați -vă e -mailul și introduceți codul de validare:</value>
+    <value>Verificați-vă e-mailul și introduceți codul de validare:</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Setări de colaborare</value>
   </data>
   <data name="Settings_DashboardEmailValidationCode" xml:space="preserve">
-    <value>Cod de validare a e -mailului ClearDashboard</value>
+    <value>Codul de validare a e-mailului ClearDashboard</value>
   </data>
   <data name="Settings_Email" xml:space="preserve">
     <value>E-mail</value>
@@ -2261,22 +2267,22 @@
     <value>Adresa de e-mail</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>E -mail de trimitere</value>
+    <value>Eroare la trimiterea e-mailului</value>
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
-    <value>Cod de verificare a e -mailului</value>
+    <value>Codul de verificare a e-mailului</value>
   </data>
   <data name="Settings_EnableAlignmentEditing" xml:space="preserve">
     <value>Activați editarea alinierii</value>
   </data>
   <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
-    <value>Activați note de paratext extern în grupul experimental</value>
+    <value>Activați Notele externe paratextului în grupul experimental</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
-    <value>Activați note de paratext extern</value>
+    <value>Activați note paratext externe</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
-    <value>Activați importul de lexic</value>
+    <value>Activați importarea lexicului</value>
   </data>
   <data name="Settings_EnableTokenSplitting" xml:space="preserve">
     <value>Activați divizarea jetoanelor</value>
@@ -2285,7 +2291,7 @@
     <value>Experimental</value>
   </data>
   <data name="Settings_ExportLabelGroups" xml:space="preserve">
-    <value>Grupuri de etichete de export</value>
+    <value>Exportați grupuri de etichete</value>
   </data>
   <data name="Settings_General" xml:space="preserve">
     <value>General</value>
@@ -2297,19 +2303,19 @@
     <value>grup</value>
   </data>
   <data name="Settings_ImportLabelGroups" xml:space="preserve">
-    <value>Import grupuri de etichete</value>
+    <value>Importați grupuri de etichete</value>
   </data>
   <data name="Settings_LabelGroupsExported" xml:space="preserve">
-    <value>Grupuri de etichete exportate la:</value>
+    <value>Grupuri de etichete exportate în:</value>
   </data>
   <data name="Settings_LabelGroupsImported" xml:space="preserve">
-    <value>Grupuri de etichete importate de la:</value>
+    <value>Grupuri de etichete importate din:</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
-    <value>Suport multi -monitor</value>
+    <value>Suport multimonitor</value>
   </data>
   <data name="Settings_NotFoundOnSystem" xml:space="preserve">
-    <value>Nu este găsit pe sistem!</value>
+    <value>Nu a fost găsit pe sistem!</value>
   </data>
   <data name="Settings_Plugins" xml:space="preserve">
     <value>Pluginuri</value>
@@ -2318,7 +2324,7 @@
     <value>Moduri de putere</value>
   </data>
   <data name="Settings_PowerModesDescription" xml:space="preserve">
-    <value>Permiteți ClearDashboard să schimbe modurile de putere în timpul evenimentelor de calcul înalte</value>
+    <value>Permiteți ClearDashboard să schimbe modurile de alimentare în timpul evenimentelor de calcul ridicat</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
     <value>Rezervat</value>
@@ -2327,7 +2333,7 @@
     <value>Rezervat pentru extinderea viitoare</value>
   </data>
   <data name="Settings_RestoreCollaborationUser" xml:space="preserve">
-    <value>Restaurați utilizatorul de colaborare</value>
+    <value>Restabiliți utilizatorul de colaborare</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
     <value>Salvat pe serverul de la distanță</value>
@@ -2339,19 +2345,19 @@
     <value>Salvează setările</value>
   </data>
   <data name="Settings_SendValidationEmail" xml:space="preserve">
-    <value>Trimiteți e -mail de validare</value>
+    <value>Trimite e-mail de validare</value>
   </data>
   <data name="Settings_Settings" xml:space="preserve">
-    <value>Setări ClearDashboard</value>
+    <value>ClearDashboard Settings</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Afișați vizualizări extinse pe un monitor diferit de tabloul de bord</value>
+    <value>Afișați vizualizările extinse pe un alt monitor decât Tabloul de bord</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Pentru sistemele cu trei sau mai multe monitoare, afișați o vizualizare extinsă pe a treia monitor</value>
+    <value>Pentru sistemele cu trei sau mai multe monitoare, afișați vizualizarea extinsă pe al treilea monitor</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
-    <value>Colecția de text</value>
+    <value>Colecția de texte</value>
   </data>
   <data name="Settings_UserAlreadyExists" xml:space="preserve">
     <value>Utilizatorul există deja pe server</value>
@@ -2360,22 +2366,22 @@
     <value>Nume de utilizator</value>
   </data>
   <data name="Settings_ValidateEmailCode" xml:space="preserve">
-    <value>Validați codul de e -mail</value>
+    <value>Validați codul de e-mail</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Activați afișarea colecțiilor de text vers-by-versel</value>
+    <value>Activați afișarea colecțiilor de text verset cu verset</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
-    <value>Anulați sarcina</value>
+    <value>Anulează sarcina</value>
   </data>
   <data name="ShellView_Loading" xml:space="preserve">
     <value>Se încarcă...</value>
   </data>
   <data name="ShellView_NoBackGroundTasks" xml:space="preserve">
-    <value>Nu rulează sarcini de fundal</value>
+    <value>Nicio sarcină de fundal care rulează</value>
   </data>
   <data name="ShellView_PowerModeEnabled" xml:space="preserve">
-    <value>Mod de putere activat</value>
+    <value>Modul de alimentare activat</value>
   </data>
   <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
     <value>Afișați sarcini de fundal</value>
@@ -2384,7 +2390,7 @@
     <value>Note de lansare</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>Afișați pre-versiuni</value>
+    <value>Afișează pre-lansări</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
     <value>Actualizați la noua versiune a ClearDashboard</value>
@@ -2393,16 +2399,16 @@
     <value>Utilizator</value>
   </data>
   <data name="SlackMessageView_BugReport" xml:space="preserve">
-    <value>Raport de erori</value>
+    <value>Raport de eroare</value>
   </data>
   <data name="SlackMessageView_Combo1" xml:space="preserve">
-    <value>Am pierdut datele într -un proiect</value>
+    <value>Am pierdut date într-un proiect</value>
   </data>
   <data name="SlackMessageView_Combo2" xml:space="preserve">
-    <value>Nu sunt în stare să finalizez o sarcină</value>
+    <value>Nu sunt în stare să duc la bun sfârșit o sarcină</value>
   </data>
   <data name="SlackMessageView_Combo3" xml:space="preserve">
-    <value>Am finalizat o sarcină, dar a fost dificil</value>
+    <value>Am îndeplinit o sarcină, dar a fost dificil</value>
   </data>
   <data name="SlackMessageView_Combo4" xml:space="preserve">
     <value>As dori sa fac...</value>
@@ -2414,7 +2420,7 @@
     <value>Fara Internet</value>
   </data>
   <data name="SlackMessageView_ResetForm" xml:space="preserve">
-    <value>Formular de resetare</value>
+    <value>Resetare formular</value>
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>Trimite</value>
@@ -2429,7 +2435,7 @@
     <value>Editor</value>
   </data>
   <data name="SlackMessageView_SuggestionMarkdown" xml:space="preserve">
-    <value>Suportă formatul Markdown</value>
+    <value>Suporta formatul Markdown</value>
   </data>
   <data name="SlackMessageView_SuggestionPreview" xml:space="preserve">
     <value>previzualizare</value>
@@ -2441,7 +2447,7 @@
     <value>Titlu:</value>
   </data>
   <data name="SlackMessageView_Title" xml:space="preserve">
-    <value>Trimiteți un mesaj slab</value>
+    <value>Trimiteți un mesaj Slack</value>
   </data>
   <data name="SNG" xml:space="preserve">
     <value>SNG</value>
@@ -2456,7 +2462,7 @@
     <value>Formatat</value>
   </data>
   <data name="TargetContextView_Unformatted" xml:space="preserve">
-    <value>Neformat</value>
+    <value>Neformatat</value>
   </data>
   <data name="TargetContextView_ZoomIn" xml:space="preserve">
     <value>A mari</value>
@@ -2480,13 +2486,13 @@
     <value>Actualizați și adăugați cărți noi</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Title" xml:space="preserve">
-    <value>Selectați cărți</value>
+    <value>Selectați Cărți</value>
   </data>
   <data name="UpdateParatextCorpusDialog_UpdateAndAdd" xml:space="preserve">
-    <value>Actualizați și adăugați noi</value>
+    <value>Actualizați și adăugați nou</value>
   </data>
   <data name="UseDefaults" xml:space="preserve">
-    <value>Creați utilizarea valorilor implicite</value>
+    <value>Creați folosind valorile implicite</value>
   </data>
   <data name="Windows_AlignmentTool" xml:space="preserve">
     <value>Instrument de aliniere</value>
@@ -2495,7 +2501,7 @@
     <value>Termeni biblici</value>
   </data>
   <data name="Windows_CorpusTokens" xml:space="preserve">
-    <value>Jetoane de corpus</value>
+    <value>Jetoane Corpus</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
     <value>Bord</value>
@@ -2504,13 +2510,13 @@
     <value>Vedere</value>
   </data>
   <data name="Windows_PINS" xml:space="preserve">
-    <value>Căutare termen</value>
+    <value>Căutare de termeni</value>
   </data>
   <data name="Windows_TextCollection" xml:space="preserve">
-    <value>Colecția de text</value>
+    <value>Colecția de texte</value>
   </data>
   <data name="Windows_WordMeanings" xml:space="preserve">
-    <value>Semnificații cuvinte</value>
+    <value>Sensurile cuvintelor</value>
   </data>
   <data name="WordMeaningsView_Domain" xml:space="preserve">
     <value>Domeniu:</value>
