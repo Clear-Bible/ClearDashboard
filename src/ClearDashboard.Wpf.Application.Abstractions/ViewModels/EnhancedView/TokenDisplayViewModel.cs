@@ -378,7 +378,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private bool _isFirstJotsNoteToken = true;
+        private bool _isFirstJotsNoteToken = false;
         public bool IsFirstJotsNoteToken
         {
             get => _isFirstJotsNoteToken;
