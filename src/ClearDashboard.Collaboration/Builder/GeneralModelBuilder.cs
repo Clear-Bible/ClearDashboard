@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.Core;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -225,7 +226,34 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
 
         if (parts.Length != expectedNumberOfParts)
         {
-            throw new PropertyResolutionException($"Unable to decode {refPrefixNoUnderscore} Ref {refValue}");
+            // label and group test
+            if (refPrefixNoUnderscore == "Label" || refPrefixNoUnderscore == "LabelGroup")
+            {
+                //Debug.WriteLine($"Unable to decode {refPrefixNoUnderscore} {decodedString} Ref {refValue}");
+                parts = decodedString.Split("bogus!!delimiter");
+
+                /* 
+                 * the below code of just trying to replace underscores with hyphens throws an exception
+                 * later on:
+                 * 
+                 * Exception thrown attempting to initialize project database: Unable to initialize database for project '5f98deaf-23c0-4654-bf3d-ec46168ec1cc', 
+                 * commit 'efb46e8aec0240d9064a80343e6398831083f810':  
+                 * exception type: SqliteException, having message: SQLite Error 19: 'NOT NULL constraint failed: LabelNoteAssociation.LabelId'.
+                 * 
+                 */
+                
+                //decodedString = decodedString.Replace("_", "-");
+
+                //parts = decodedString.Split('_');
+                //if (parts.Length != expectedNumberOfParts)
+                //{
+                //    throw new PropertyResolutionException($"Unable to decode {refPrefixNoUnderscore} Ref {refValue}");
+                //}
+            }
+            else
+            {
+                throw new PropertyResolutionException($"Unable to decode {refPrefixNoUnderscore} Ref {refValue}");
+            }
         }
 
         return parts;

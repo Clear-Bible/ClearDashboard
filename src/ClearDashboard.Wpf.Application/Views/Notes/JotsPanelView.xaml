@@ -460,6 +460,7 @@
                         <CheckBox
                             Margin="-7,0,-7,0"
                             Checked="ToggleButton_OnCheckedAll"
+                            IsChecked="{Binding DataContext.BulkCheckBoxIsChecked, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                             Unchecked="ToggleButton_OnUncheckedAll">
                             <CheckBox.Style>
                                 <Style TargetType="CheckBox">

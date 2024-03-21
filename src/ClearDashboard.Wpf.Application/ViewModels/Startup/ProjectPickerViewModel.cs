@@ -1287,7 +1287,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 ProjectManager!.CurrentDashboardProject = project;
 
                 // fix any hyphenated label groups in the database
-                await Mediator.Send(new UpdateLabelGroupHyphenQuery(ProjectManager.CurrentDashboardProject));
+                await Mediator.Send(new UpdateDatabaseHyphenQuery(ProjectManager.CurrentDashboardProject));
                 
                 await EventAggregator.PublishOnUIThreadAsync(
                     new DashboardProjectNameMessage(ProjectManager!.CurrentDashboardProject.ProjectName));

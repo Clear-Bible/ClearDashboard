@@ -228,10 +228,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                             noteGuids.Add(noteId.Id, Guid.NewGuid());
                             tokenDisplayViewModel.IsFirstJotsNoteToken = true;
                         }
-                        else
-                        {
-                            tokenDisplayViewModel.IsFirstJotsNoteToken = false;
-                        }
                     }
                 }
 
@@ -576,10 +572,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                             noteGuids.Add(noteId.Id, Guid.NewGuid());
                             model.IsFirstJotsNoteToken = true;
                         }
-                        else
-                        {
-                            model.IsFirstJotsNoteToken = false;
-                        }
                     }
                 }
             }
@@ -596,10 +588,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         {
                             noteGuids.Add(noteId.Id, Guid.NewGuid());
                             model.IsFirstJotsNoteToken = true;
-                        }
-                        else
-                        {
-                            model.IsFirstJotsNoteToken = false;
                         }
                     }
                 }
