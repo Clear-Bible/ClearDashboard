@@ -426,6 +426,33 @@ public class JotsEditorViewModel : ApplicationScreen
         Message = $"Label group '{e.LabelGroup.Name}' removed";
     }
 
+    public void LabelGroupLabelsRemoved(object sender, LabelGroupLabelsRemovedEventArgs e)
+    {
+        Task.Run(() => LabelGroupLabelsRemovedAsync(e).GetAwaiter());
+    }
+
+    public async Task LabelGroupLabelsRemovedAsync(LabelGroupLabelsRemovedEventArgs e)
+    {
+
+        if (e.Labels == null)
+        {
+            return;
+        }
+        
+        foreach (var label in e.Labels)
+        {
+            await NoteManager.DetachLabelFromLabelGroupAsync(e.LabelGroup, label);
+        }
+
+        //foreach (var label in e.Labels)
+        //{
+        //    await NoteManager.AssociateLabelToLabelGroupAsync(e.NoneLabelGroup, label);
+
+        //}
+
+
+    }
+
     public void LabelGroupRemoved(object sender, LabelGroupEventArgs e)
     {
         Task.Run(() => LabelGroupRemovedAsync(e).GetAwaiter());

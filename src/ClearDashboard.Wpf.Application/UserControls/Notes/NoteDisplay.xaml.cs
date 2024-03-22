@@ -66,6 +66,13 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             (nameof(LabelGroupLabelRemoved), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
+        /// Identifies the LabelGroupLabelRemovedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelGroupLabelsRemovedEvent = EventManager.RegisterRoutedEvent
+            (nameof(LabelGroupLabelsRemoved), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+
+        /// <summary>
         /// Identifies the LabelGroupRemovedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent LabelGroupRemovedEvent = EventManager.RegisterRoutedEvent
@@ -627,6 +634,20 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             var labelGroupLabelEventArgs = e as LabelGroupLabelEventArgs;
 
             RaiseLabelGroupLabelEvent(LabelGroupLabelRemovedEvent, labelGroupLabelEventArgs!);
+        }
+
+
+        private void OnLabelGroupLabelsRemoved(object sender, RoutedEventArgs e)
+        {
+            var eventArgs = e as LabelGroupLabelsRemovedEventArgs;
+
+            RaiseEvent(new LabelGroupLabelsRemovedEventArgs
+            {
+                RoutedEvent = LabelGroupLabelsRemovedEvent,
+                LabelGroup = eventArgs.LabelGroup,
+                NoneLabelGroup = eventArgs.NoneLabelGroup,
+                Labels = eventArgs.Labels
+            });
         }
 
         private void OnLabelGroupRemoved(object sender, RoutedEventArgs e)
@@ -1340,6 +1361,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         }
 
         /// <summary>
+        /// Occurs when a set of labels is removed from a label group.
+        /// </summary>
+        public event RoutedEventHandler LabelGroupLabelsRemoved
+        {
+            add => AddHandler(LabelGroupLabelsRemovedEvent, value);
+            remove => RemoveHandler(LabelGroupLabelsRemovedEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when an existing label group is removed.
         /// </summary>
         public event RoutedEventHandler LabelGroupRemoved
@@ -1545,6 +1575,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             Loaded += OnLoaded;
         }
 
-       
+
     }
 }

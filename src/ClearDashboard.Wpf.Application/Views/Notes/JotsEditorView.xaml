@@ -65,7 +65,10 @@
                     <i:EventTrigger EventName="LabelGroupLabelRemoved">
                         <i:CallMethodAction MethodName="LabelGroupLabelRemoved" TargetObject="{Binding}" />
                     </i:EventTrigger>
-                    <i:EventTrigger EventName="LabelGroupRemoved">
+                    <i:EventTrigger EventName="LabelGroupLabelsRemoved">
+                        <i:CallMethodAction MethodName="LabelGroupLabelsRemoved" TargetObject="{Binding}" />
+                    </i:EventTrigger>
+                <i:EventTrigger EventName="LabelGroupRemoved">
                         <i:CallMethodAction MethodName="LabelGroupRemoved" TargetObject="{Binding}" />
                     </i:EventTrigger>
                     <i:EventTrigger EventName="LabelGroupSelected">

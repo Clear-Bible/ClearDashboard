@@ -18,6 +18,7 @@ using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 using System.Windows.Controls.Primitives;
 using ClearDashboard.Wpf.Application.Helpers;
 using Microsoft.Extensions.Logging;
+using SIL.EventsAndDelegates;
 
 namespace ClearDashboard.Wpf.Application.UserControls.Notes
 {
@@ -80,6 +81,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// </summary>
         public static readonly RoutedEvent LabelGroupLabelRemovedEvent = EventManager.RegisterRoutedEvent
             (nameof(LabelGroupLabelRemoved), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+        /// <summary>
+        /// Identifies the LabelGroupLabelRemovedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelGroupLabelsRemovedEvent = EventManager.RegisterRoutedEvent
+            (nameof(LabelGroupLabelsRemoved), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
 
         /// <summary>
         /// Identifies the LabelGroupRemovedEvent routed event.
@@ -922,6 +929,20 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             RaiseLabelGroupLabelEvent(LabelGroupLabelRemovedEvent, labelGroupLabelEventArgs!);
         }
 
+        private void OnLabelGroupLabelsRemoved(object sender, RoutedEventArgs e)
+        {
+            var eventArgs = e as LabelGroupLabelsRemovedEventArgs;
+
+            RaiseEvent(new LabelGroupLabelsRemovedEventArgs
+            {
+                RoutedEvent = LabelGroupLabelsRemovedEvent,
+                LabelGroup = eventArgs.LabelGroup,
+                NoneLabelGroup = eventArgs.NoneLabelGroup,
+                Labels = eventArgs.Labels
+            });
+            
+        }
+
         private void OnLabelGroupRemoved(object sender, RoutedEventArgs e)
         {
             var labelGroupEventArgs = e as LabelGroupEventArgs;
@@ -1492,6 +1513,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         }
 
         /// <summary>
+        /// Occurs when a label is removed from a label group.
+        /// </summary>
+        public event RoutedEventHandler LabelGroupLabelsRemoved
+        {
+            add => AddHandler(LabelGroupLabelsRemovedEvent, value);
+            remove => RemoveHandler(LabelGroupLabelsRemovedEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when an existing label group is removed.
         /// </summary>
         public event RoutedEventHandler LabelGroupRemoved
@@ -1779,6 +1809,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         }
         #endregion move popup with parent hack
 
-       
+
+      
     }
 }

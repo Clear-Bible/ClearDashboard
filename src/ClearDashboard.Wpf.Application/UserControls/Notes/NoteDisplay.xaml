@@ -126,6 +126,7 @@
                             LabelGroupAdded="OnLabelGroupAdded"
                             LabelGroupLabelAdded="OnLabelGroupLabelAdded"
                             LabelGroupLabelRemoved="OnLabelGroupLabelRemoved"
+                            LabelGroupLabelsRemoved="OnLabelGroupLabelsRemoved"
                             LabelGroupRemoved="OnLabelGroupRemoved"
                             LabelGroupSelected="OnLabelGroupSelected"
                             LabelGroups="{Binding ElementName=NotesDisplayControl, Path=LabelGroups}"

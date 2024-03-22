@@ -159,7 +159,16 @@
                                 <Run Text="{Binding ElementName=LabelsEditorControl, Path=CurrentLabelGroup.Name}" />
                             </TextBlock.Inlines>
                         </TextBlock>
-               
+                        <TextBlock
+                            Padding="10"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            FontSize="14">
+                            <TextBlock.Inlines>
+                                <Run Text="{helpers:Localization Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage}" />
+                            </TextBlock.Inlines>
+                        </TextBlock>
+
 
                         <ListView
                             Height="150"
@@ -204,7 +213,7 @@
                             <Button
                         Margin="5"
                         Click="OnLabelGroupManageConfirmed"
-                        Content="{helpers:Localization Delete}"
+                        Content="{helpers:Localization Ok}"
                         IsDefault="True"
                         Style="{StaticResource TransparentStyle}" />
                             <Button

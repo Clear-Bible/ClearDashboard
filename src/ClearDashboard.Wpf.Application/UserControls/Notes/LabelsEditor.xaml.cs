@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -11,6 +12,7 @@ using System.Windows.Media;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Annotations;
+using ClearDashboard.DataAccessLayer.Data.Migrations;
 using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
@@ -71,6 +73,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// </summary>
         public static readonly RoutedEvent LabelGroupLabelRemovedEvent = EventManager.RegisterRoutedEvent
             (nameof(LabelGroupLabelRemoved), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelsEditor));
+
+        /// <summary>
+        /// Identifies the LabelGroupLabelRemovedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelGroupLabelsRemovedEvent = EventManager.RegisterRoutedEvent
+            (nameof(LabelGroupLabelsRemoved), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelsEditor));
 
         /// <summary>
         /// Identifies the LabelGroupRemovedEvent routed event.
@@ -240,6 +248,17 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 RoutedEvent = routedEvent,
                 LabelGroup = labelGroup,
                 SourceLabelGroup = sourceLabelGroup
+            });
+        }
+
+        private void RaiseLabelGroupLabelsRemovedEvent(RoutedEvent routedEvent, LabelGroupViewModel labelGroup, List<NotesLabel> labels)
+        {
+            RaiseEvent(new LabelGroupLabelsRemovedEventArgs
+            {
+                RoutedEvent = routedEvent,
+                LabelGroup = labelGroup,
+                NoneLabelGroup = LabelGroups.FirstOrDefault(lg => lg.IsNoneLabelGroup),
+                Labels = labels
             });
         }
 
@@ -457,7 +476,31 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         private void OnLabelGroupManageConfirmed(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var selectedLabelsToDelete = CurrentLabelGroup.SelectableLabels.Where(l => l.Selected).Select(l => l.Entity).ToList();
+
+               
+                var noneLabelGroup = LabelGroups.FirstOrDefault(lg => lg.IsNoneLabelGroup);
+                if (noneLabelGroup != null)
+                {
+                    foreach (var label in selectedLabelsToDelete)
+                    {
+                        CurrentLabelGroup.Labels.RemoveIfExists(label);
+                        noneLabelGroup.Labels.AddDistinct(label);
+                    }
+                }
+                ManageLabelGroupPopup.IsOpen = false;
+
+                RaiseLabelGroupLabelsRemovedEvent(LabelGroupLabelsRemovedEvent, CurrentLabelGroup, selectedLabelsToDelete);
+            }
+            catch (Exception ex)
+            {
+                var s = ex.ToString();
+            }
+         
+
+
         }
 
         private void OnLabelGroupAddCancelled(object sender, RoutedEventArgs e)
@@ -467,6 +510,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         private void OnLabelGroupManageCancelled(object sender, RoutedEventArgs e)
         {
+
             ManageLabelGroupPopup.IsOpen = false;
         }
 
@@ -647,6 +691,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// Gets or sets the <see cref="EventAggregator"/> to be used for participating in the Caliburn Micro eventing system.
         /// </summary>
         public static IEventAggregator? EventAggregator { get; set; }
+
 
         /// <summary>
         /// Gets or sets the label group collection associated with the editor.
@@ -877,6 +922,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             add => AddHandler(LabelGroupLabelRemovedEvent, value);
             remove => RemoveHandler(LabelGroupLabelRemovedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when a set of labels is removed from a label group.
+        /// </summary>
+        public event RoutedEventHandler LabelGroupLabelsRemoved
+        {
+            add => AddHandler(LabelGroupLabelsRemovedEvent, value);
+            remove => RemoveHandler(LabelGroupLabelsRemovedEvent, value);
         }
 
         /// <summary>
