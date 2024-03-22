@@ -333,8 +333,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             CacheCurrentLabel(e);
             RaiseLabelEvent(LabelSelectedEvent);
-            //Execute.OnUIThread(AddCurrentLabel);
-
+         
             // JOTS refactor
             Execute.OnUIThread(() =>
             {
@@ -363,7 +362,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         private void OnLabelDeleteConfirmed(object sender, RoutedEventArgs e)
         {
             RaiseLabelEvent(LabelDeletedEvent);
-            //Execute.OnUIThread(RemoveCurrentLabel);
             ConfirmDeleteLabelPopup.IsOpen = false;
             LabelSelector.CloseSuggestionPopup();
             LabelSelector.CloseTextBox();
@@ -496,11 +494,9 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             }
             catch (Exception ex)
             {
-                var s = ex.ToString();
+                var s = ex.Message;
+                throw;
             }
-         
-
-
         }
 
         private void OnLabelGroupAddCancelled(object sender, RoutedEventArgs e)
