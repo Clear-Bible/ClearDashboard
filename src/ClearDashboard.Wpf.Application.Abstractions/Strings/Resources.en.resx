@@ -1448,7 +1448,7 @@
     <value>with labels from:</value>
   </data>
   <data name="Notes_LabelGroupManageTooltip" xml:space="preserve">
-    <value>Manage the labels of a label group</value>
+    <value>Manage labels in a label group</value>
   </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
     <value>Label Group Name</value>
@@ -1541,7 +1541,10 @@
     <value>Mark these jots as resolved?</value>
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroup" xml:space="preserve">
-    <value>Select the labels to delete from the label group</value>
+    <value>Select the labels to remove from the label group</value>
+  </data>
+  <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
+    <value>Note: these labels will appear under label group:  None</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>Send these jots to Paratext?</value>

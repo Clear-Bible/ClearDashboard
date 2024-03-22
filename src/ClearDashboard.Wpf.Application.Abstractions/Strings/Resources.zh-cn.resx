@@ -1247,7 +1247,7 @@
     <value>诗意</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
-    <value>诗篇总数</value>
+    <value>诗歌总数</value>
   </data>
   <data name="MAT" xml:space="preserve">
     <value>MAT</value>
@@ -1448,7 +1448,7 @@
     <value>标签来自：</value>
   </data>
   <data name="Notes_LabelGroupManageTooltip" xml:space="preserve">
-    <value>管理标签组的标签</value>
+    <value>管理标签组中的标签</value>
   </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
     <value>标签组名称</value>
@@ -1542,6 +1542,9 @@
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroup" xml:space="preserve">
     <value>选择要从标签组中删除的标签</value>
+  </data>
+  <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
+    <value>注意：这些标签将出现在标签组下：无</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>将这些笔记发送到 Paratext？</value>
@@ -1685,7 +1688,7 @@
     <value>删除行间</value>
   </data>
   <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>您确定要删除该语料库吗？与该语料库相关的所有注释、对齐方式和行间文字都将被删除且无法恢复。</value>
+    <value>您确定要删除该语料库吗？与该语料库相关的所有注释、对齐和行间都将被删除且无法恢复。</value>
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>字典</value>

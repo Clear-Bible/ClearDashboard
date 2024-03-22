@@ -974,7 +974,7 @@
     <value>Pleinement</value>
   </data>
   <data name="LexiconEdit_FullyMatching" xml:space="preserve">
-    <value>Entièrement assorti</value>
+    <value>Entièrement correspondant</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexème</value>
@@ -1247,7 +1247,7 @@
     <value>Sens du verset</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
-    <value>Verset Total</value>
+    <value>Verset total</value>
   </data>
   <data name="MAT" xml:space="preserve">
     <value>MAT</value>
@@ -1448,7 +1448,7 @@
     <value>avec des étiquettes de :</value>
   </data>
   <data name="Notes_LabelGroupManageTooltip" xml:space="preserve">
-    <value>Gérer les étiquettes d'un groupe d'étiquettes</value>
+    <value>Gérer les étiquettes dans un groupe d'étiquettes</value>
   </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
     <value>Nom du groupe d'étiquettes</value>
@@ -1542,6 +1542,9 @@
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroup" xml:space="preserve">
     <value>Sélectionnez les étiquettes à supprimer du groupe d'étiquettes</value>
+  </data>
+  <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
+    <value>Remarque : ces étiquettes apparaîtront sous le groupe d'étiquettes : Aucun</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>Envoyer ces notes à Paratext ?</value>

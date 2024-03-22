@@ -1448,7 +1448,7 @@
     <value>ជាមួយនឹងស្លាកសញ្ញាពី៖</value>
   </data>
   <data name="Notes_LabelGroupManageTooltip" xml:space="preserve">
-    <value>គ្រប់គ្រងស្លាករបស់ក្រុមស្លាក</value>
+    <value>គ្រប់គ្រងស្លាកនៅក្នុងក្រុមស្លាក</value>
   </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
     <value>ស្លាកឈ្មោះក្រុម</value>
@@ -1541,7 +1541,10 @@
     <value>សម្គាល់ចំណុចទាំងនេះថាត្រូវបានដោះស្រាយ?</value>
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroup" xml:space="preserve">
-    <value>ជ្រើសរើសស្លាកដើម្បីលុបចេញពីក្រុមស្លាក</value>
+    <value>ជ្រើសរើសស្លាកដើម្បីដកចេញពីក្រុមស្លាក</value>
+  </data>
+  <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
+    <value>ចំណាំ៖ ស្លាកទាំងនេះនឹងបង្ហាញនៅក្រោមក្រុមស្លាក៖ គ្មាន</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>ផ្ញើពាក្យចចាមអារ៉ាមទាំងនេះទៅ Paratext?</value>

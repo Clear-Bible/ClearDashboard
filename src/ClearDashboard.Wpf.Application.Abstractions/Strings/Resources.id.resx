@@ -1271,7 +1271,7 @@
     <value>MIC</value>
   </data>
   <data name="Migrate_Header" xml:space="preserve">
-    <value>Reset pemetaan ayat ke versifikasi default</value>
+    <value>Reset pemetaan ayat ke versi default</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>MRK</value>
@@ -1448,7 +1448,7 @@
     <value>dengan label dari:</value>
   </data>
   <data name="Notes_LabelGroupManageTooltip" xml:space="preserve">
-    <value>Kelola label grup label</value>
+    <value>Kelola label dalam grup label</value>
   </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
     <value>Nama Grup Label</value>
@@ -1542,6 +1542,9 @@
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroup" xml:space="preserve">
     <value>Pilih label yang akan dihapus dari grup label</value>
+  </data>
+  <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
+    <value>Catatan: label ini akan muncul di bawah grup label: Tidak ada</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>Kirim catatan ini ke Paratext?</value>
@@ -1736,7 +1739,7 @@
     <value>Properti</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Reset pemetaan ayat ke versifikasi default</value>
+    <value>Reset pemetaan ayat ke versi default</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Sumber</value>
@@ -1976,7 +1979,7 @@
     <value>Segarkan Daftar Proyek Kolaborasi</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>Cari terbaru</value>
+    <value>Cari terkini</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
     <value>Klik di sini untuk memulai Paratext</value>

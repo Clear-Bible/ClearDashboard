@@ -1448,7 +1448,7 @@
     <value>com rótulos de:</value>
   </data>
   <data name="Notes_LabelGroupManageTooltip" xml:space="preserve">
-    <value>Gerenciar os rótulos de um grupo de rótulos</value>
+    <value>Gerenciar rótulos em um grupo de rótulos</value>
   </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
     <value>Nome do grupo de rótulos</value>
@@ -1541,7 +1541,10 @@
     <value>Marcar esses pontos como resolvidos?</value>
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroup" xml:space="preserve">
-    <value>Selecione os rótulos para excluir do grupo de rótulos</value>
+    <value>Selecione os rótulos a serem removidos do grupo de rótulos</value>
+  </data>
+  <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
+    <value>Observação: esses rótulos aparecerão no grupo de rótulos: Nenhum</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>Enviar essas anotações para o Paratext?</value>

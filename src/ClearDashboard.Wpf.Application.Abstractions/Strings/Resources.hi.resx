@@ -305,7 +305,7 @@
     <value>समूह; क्षेत्र</value>
   </data>
   <data name="BiblicalTermsDomains_HonorRespectStatus" xml:space="preserve">
-    <value>आदर, सम्मान, रुतबा</value>
+    <value>आदर, आदर, रुतबा</value>
   </data>
   <data name="BiblicalTermsDomains_Locale" xml:space="preserve">
     <value>स्थान</value>
@@ -338,7 +338,7 @@
     <value>लोग; अधिकार</value>
   </data>
   <data name="BiblicalTermsDomains_PeopleHonorRespectStatus" xml:space="preserve">
-    <value>लोग; आदर, सम्मान, रुतबा</value>
+    <value>लोग; आदर, आदर, रुतबा</value>
   </data>
   <data name="BiblicalTermsDomains_Person" xml:space="preserve">
     <value>व्यक्ति</value>
@@ -941,7 +941,7 @@
     <value>इस लेम्मा से इस शाब्दिक रूप को हटा दें</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>के लिए एक चमक सेट करें</value>
+    <value>के लिए ग्लॉस सेट करें</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>और</value>
@@ -1400,7 +1400,7 @@
     <value>स्थिति के अनुसार फ़िल्टर करें</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>पाठ द्वारा फ़िल्टर करें</value>
+    <value>पाठ के अनुसार फ़िल्टर करें</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>कोई</value>
@@ -1448,7 +1448,7 @@
     <value>से लेबल के साथ:</value>
   </data>
   <data name="Notes_LabelGroupManageTooltip" xml:space="preserve">
-    <value>किसी लेबल समूह के लेबल प्रबंधित करें</value>
+    <value>किसी लेबल समूह में लेबल प्रबंधित करें</value>
   </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
     <value>लेबल समूह का नाम</value>
@@ -1542,6 +1542,9 @@
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroup" xml:space="preserve">
     <value>लेबल समूह से हटाने के लिए लेबल का चयन करें</value>
+  </data>
+  <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
+    <value>ध्यान दें: ये लेबल लेबल समूह के अंतर्गत दिखाई देंगे: कोई नहीं</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>इन जोट्स को पैराटेक्स्ट पर भेजें?</value>

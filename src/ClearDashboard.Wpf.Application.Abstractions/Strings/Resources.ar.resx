@@ -923,7 +923,7 @@
     <value>Lemma للمفردات الجديدة:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
-    <value>المعجم</value>
+    <value>معجم</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>معجم لـ موجود بالفعل لـ lemma</value>
@@ -977,7 +977,7 @@
     <value>مطابقة كاملة</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
-    <value>المعجم</value>
+    <value>معجم</value>
   </data>
   <data name="LexiconEdit_LoadingData" xml:space="preserve">
     <value>تحميل البيانات...</value>
@@ -1253,7 +1253,7 @@
     <value>MAT</value>
   </data>
   <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>جارٍ إنشاء قاعدة بيانات...</value>
+    <value>جارٍ إنشاء قاعدة البيانات...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
     <value>اكتمل الدمج...جاري إعادة تحميل الواجهة</value>
@@ -1448,7 +1448,7 @@
     <value>مع تسميات من:</value>
   </data>
   <data name="Notes_LabelGroupManageTooltip" xml:space="preserve">
-    <value>إدارة تسميات مجموعة التصنيفات</value>
+    <value>إدارة التصنيفات في مجموعة التصنيفات</value>
   </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
     <value>تسمية اسم المجموعة</value>
@@ -1541,7 +1541,10 @@
     <value>هل تريد وضع علامة على هذه النقاط على أنها تم حلها؟</value>
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroup" xml:space="preserve">
-    <value>حدد التصنيفات المراد حذفها من مجموعة التصنيفات</value>
+    <value>حدد التصنيفات المراد إزالتها من مجموعة التصنيفات</value>
+  </data>
+  <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
+    <value>ملاحظة: ستظهر هذه التصنيفات ضمن مجموعة التصنيفات: لا شيء</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>إرسال هذه الملاحظات إلى Paratext؟</value>
@@ -1817,7 +1820,7 @@
     <value>لغة</value>
   </data>
   <data name="Pins_Lexeme" xml:space="preserve">
-    <value>المعجم</value>
+    <value>معجم</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
     <value>نوع المفردات</value>

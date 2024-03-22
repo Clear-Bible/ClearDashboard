@@ -1034,7 +1034,7 @@
     <value>詞位或形式匹配</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
-    <value>沒有更多記錄可供導入。</value>
+    <value>沒有更多記錄可供匯入。</value>
   </data>
   <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
     <value>請選擇一個語料庫。</value>
@@ -1247,7 +1247,7 @@
     <value>詩意</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
-    <value>詩篇總數</value>
+    <value>詩歌總數</value>
   </data>
   <data name="MAT" xml:space="preserve">
     <value>MAT</value>
@@ -1352,7 +1352,7 @@
     <value>名為「{0}」的項目已存在。請選擇一個獨特的名稱。”</value>
   </data>
   <data name="NewProjectDialog_Title" xml:space="preserve">
-    <value>建立新專案</value>
+    <value>建立新項目</value>
   </data>
   <data name="NewProjectDialogView_EnterName" xml:space="preserve">
     <value>請輸入您的項目的名稱。</value>
@@ -1448,7 +1448,7 @@
     <value>標籤來自：</value>
   </data>
   <data name="Notes_LabelGroupManageTooltip" xml:space="preserve">
-    <value>管理標籤組的標籤</value>
+    <value>管理標籤組中的標籤</value>
   </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
     <value>標籤組名稱</value>
@@ -1542,6 +1542,9 @@
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroup" xml:space="preserve">
     <value>選擇要從標籤組中刪除的標籤</value>
+  </data>
+  <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
+    <value>注意：這些標籤將出現在標籤組下方：無</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>將這些筆記傳送到 Paratext？</value>
@@ -1685,7 +1688,7 @@
     <value>刪除行間</value>
   </data>
   <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>您確定要刪除該語料嗎？與該語料庫相關的所有註釋、對齊方式和行間文字都將被刪除且無法恢復。</value>
+    <value>您確定要刪除該語料嗎？與該語料庫相關的所有註釋、對齊和行間都將被刪除且無法復原。</value>
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>字典</value>

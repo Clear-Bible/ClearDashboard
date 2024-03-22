@@ -1448,7 +1448,7 @@
     <value>ከሚከተለው መለያዎች ጋር፡-</value>
   </data>
   <data name="Notes_LabelGroupManageTooltip" xml:space="preserve">
-    <value>የመለያ ቡድን መለያዎችን ያስተዳድሩ</value>
+    <value>በመለያ ቡድን ውስጥ መለያዎችን ያስተዳድሩ</value>
   </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
     <value>መለያ የቡድን ስም</value>
@@ -1541,7 +1541,10 @@
     <value>እነዚህ ጆቶች እንደተፈቱ ምልክት ያድርጉባቸው?</value>
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroup" xml:space="preserve">
-    <value>ከመለያው ቡድን ለመሰረዝ መለያዎቹን ይምረጡ</value>
+    <value>ከመለያው ቡድን ለማስወገድ መለያዎቹን ይምረጡ</value>
+  </data>
+  <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
+    <value>ማስታወሻ፡ እነዚህ መለያዎች በመለያ ቡድን ስር ይታያሉ፡ ምንም</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>እነዚህ ጆቶች ወደ Paratext ይላኩ?</value>
@@ -1703,7 +1706,7 @@
     <value>የውጪ ማስታወሻዎች አርታዒ</value>
   </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
-    <value>መላውን የይዘት ቦታ ወደ መመልከቻ ቦታ ያመቻቹ</value>
+    <value>መላውን የይዘት ቦታ ወደ መመልከቻ ቦታ ያጥፉ</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
     <value>ሁሉንም አንጓዎች ወደ መመልከቻ ቦታ ያጥፉ</value>
@@ -2459,7 +2462,7 @@
     <value>ሁኔታ</value>
   </data>
   <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>የተቀረጸ</value>
+    <value>የተቀረፀው</value>
   </data>
   <data name="TargetContextView_Unformatted" xml:space="preserve">
     <value>ቅርጸት ያልተሰራ</value>

@@ -389,7 +389,7 @@
     <value>Категория</value>
   </data>
   <data name="BiblicalTermsForm_Counts" xml:space="preserve">
-    <value>Считает</value>
+    <value>имеет значение</value>
   </data>
   <data name="BiblicalTermsForm_Found" xml:space="preserve">
     <value>Найденный</value>
@@ -668,7 +668,7 @@
     <value>Фильтровать поиск по терминам</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>Фильтровать поиск по ключевым словам</value>
+    <value>Фильтрация поиска по ключевым словам</value>
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
     <value>Подстрочный</value>
@@ -893,7 +893,7 @@
     <value>Если этот флажок установлен, это изменит все неустановленные вхождения этого слова.</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
-    <value>Согласование</value>
+    <value>Согласие</value>
   </data>
   <data name="Lexicon_DeleteLexeme" xml:space="preserve">
     <value>Удалить эту лексему</value>
@@ -1421,7 +1421,7 @@
     <value>Вы хотите создать ярлык:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
-    <value>и свяжем его с группой меток:</value>
+    <value>и свяжите его с группой меток:</value>
   </data>
   <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
     <value>Вы хотите удалить ярлык:</value>
@@ -1448,7 +1448,7 @@
     <value>с этикетками от:</value>
   </data>
   <data name="Notes_LabelGroupManageTooltip" xml:space="preserve">
-    <value>Управление ярлыками группы ярлыков</value>
+    <value>Управление ярлыками в группе ярлыков</value>
   </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
     <value>Имя группы меток</value>
@@ -1542,6 +1542,9 @@
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroup" xml:space="preserve">
     <value>Выберите ярлыки, которые нужно удалить из группы ярлыков.</value>
+  </data>
+  <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
+    <value>Примечание. Эти ярлыки появятся в группе ярлыков: Нет.</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>Отправить эти йоты в Паратекст?</value>
@@ -1679,7 +1682,7 @@
     <value>Удалить выравнивание</value>
   </data>
   <data name="Pds_DeleteParallelLine" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить это выравнивание? Все примечания, выравнивания и подстрочники, связанные с этим выравниванием, будут удалены без возможности восстановления.</value>
+    <value>Вы уверены, что хотите удалить это выравнивание? Все примечания, выравнивания и подстрочные знаки, связанные с этим выравниванием, будут удалены без возможности восстановления.</value>
   </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
     <value>Удалить подстрочный текст</value>
@@ -1934,7 +1937,7 @@
     <value>Паратекст не установлен. Пожалуйста, установите Paratext и перезапустите приложение ClearDashboard.</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
-    <value>Паратекст не работает</value>
+    <value>Паратекст не запускается</value>
   </data>
   <data name="ProjectPicker_OpenRecent" xml:space="preserve">
     <value>Открыть недавние</value>

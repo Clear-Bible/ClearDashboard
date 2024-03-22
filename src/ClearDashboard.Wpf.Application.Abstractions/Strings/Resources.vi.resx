@@ -1058,7 +1058,7 @@
     <value>Từ mục tiêu</value>
   </data>
   <data name="LexiconImport_Title" xml:space="preserve">
-    <value>Nhập từ điển</value>
+    <value>Nhập từ vựng</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
     <value>Trận đấu dịch</value>
@@ -1448,7 +1448,7 @@
     <value>với nhãn từ:</value>
   </data>
   <data name="Notes_LabelGroupManageTooltip" xml:space="preserve">
-    <value>Quản lý nhãn của nhóm nhãn</value>
+    <value>Quản lý nhãn trong nhóm nhãn</value>
   </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
     <value>Tên nhóm nhãn</value>
@@ -1542,6 +1542,9 @@
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroup" xml:space="preserve">
     <value>Chọn các nhãn cần xóa khỏi nhóm nhãn</value>
+  </data>
+  <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
+    <value>Lưu ý: các nhãn này sẽ xuất hiện trong nhóm nhãn: Không có</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>Gửi những ghi chú này tới Paratext?</value>
@@ -1766,7 +1769,7 @@
     <value>Nghiên CứuKinh ThánhBổ Sung</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Đi đến Paratext và chuyển đổi dự án. Dự án Paratext hiện được kết nối với plugin ClearDashboard không giống với kho văn bản trong dự án ClearDashboard này.</value>
+    <value>Đi tới Paratext và chuyển đổi dự án. Dự án Paratext hiện được kết nối với plugin ClearDashboard không giống với kho văn bản trong dự án ClearDashboard này.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Mục tiêu</value>
@@ -2177,7 +2180,7 @@
     <value>Thánh vịnh</value>
   </data>
   <data name="ProperCase_Revelation" xml:space="preserve">
-    <value>Khải Huyền</value>
+    <value>Khải huyền</value>
   </data>
   <data name="ProperCase_Romans" xml:space="preserve">
     <value>người La Mã</value>

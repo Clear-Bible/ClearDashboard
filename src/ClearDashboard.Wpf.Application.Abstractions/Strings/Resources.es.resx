@@ -503,7 +503,7 @@
     <value>Parte fuente</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Referencia de fuente</value>
+    <value>Fuente de referencia</value>
   </data>
   <data name="BulkAlignmentReview_Target" xml:space="preserve">
     <value>Objetivo</value>
@@ -1448,7 +1448,7 @@
     <value>con etiquetas de:</value>
   </data>
   <data name="Notes_LabelGroupManageTooltip" xml:space="preserve">
-    <value>Administrar las etiquetas de un grupo de etiquetas</value>
+    <value>Administrar etiquetas en un grupo de etiquetas</value>
   </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
     <value>Nombre del grupo de etiquetas</value>
@@ -1542,6 +1542,9 @@
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroup" xml:space="preserve">
     <value>Seleccione las etiquetas para eliminar del grupo de etiquetas</value>
+  </data>
+  <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
+    <value>Nota: estas etiquetas aparecerán en el grupo de etiquetas: Ninguna</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>¿Enviar estas notas a Paratext?</value>
@@ -2084,7 +2087,7 @@
     <value>Esdras</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>gálatas</value>
+    <value>Gálatas</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>Génesis</value>

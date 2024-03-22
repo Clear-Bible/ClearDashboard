@@ -764,7 +764,7 @@
     <value>Dimensiunea fontului sursă:</value>
   </data>
   <data name="FontSettings_Target" xml:space="preserve">
-    <value>Text țintă:</value>
+    <value>Textul țintă:</value>
   </data>
   <data name="FontSettings_TargetFontSize" xml:space="preserve">
     <value>Dimensiunea țintă a fontului:</value>
@@ -902,7 +902,7 @@
     <value>Ștergeți acest lexem?</value>
   </data>
   <data name="Lexicon_DeleteMeaning" xml:space="preserve">
-    <value>Ștergeți acest sens</value>
+    <value>Șterge acest sens</value>
   </data>
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Ștergeți această traducere</value>
@@ -1448,7 +1448,7 @@
     <value>cu etichete de la:</value>
   </data>
   <data name="Notes_LabelGroupManageTooltip" xml:space="preserve">
-    <value>Gestionați etichetele unui grup de etichete</value>
+    <value>Gestionați etichetele într-un grup de etichete</value>
   </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
     <value>Nume grup de etichete</value>
@@ -1541,7 +1541,10 @@
     <value>Marcați aceste note ca rezolvate?</value>
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroup" xml:space="preserve">
-    <value>Selectați etichetele de șters din grupul de etichete</value>
+    <value>Selectați etichetele de eliminat din grupul de etichete</value>
+  </data>
+  <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
+    <value>Notă: aceste etichete vor apărea sub grupul de etichete: Niciuna</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>Trimiți aceste note către Paratext?</value>
@@ -1913,7 +1916,7 @@
     <value>Import Server Project</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Bifați această casetă pentru a include textele biblice grecești și ebraice atunci când vă creați proiectul.</value>
+    <value>Bifați această casetă pentru a include textele biblice greacă și ebraică atunci când vă creați proiectul.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>Includeți texte biblice grecești din NT?</value>
