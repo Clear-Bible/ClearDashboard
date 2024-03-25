@@ -5,9 +5,9 @@
     <Nullable>enable</Nullable>
     <RootNamespace>ClearDashboard.DataAccessLayer.Data</RootNamespace>
     <Platforms>AnyCPU</Platforms>
-    <FileVersion>1.4.0.13</FileVersion>
-    <Version>1.4.0.13</Version>
-    <AssemblyVersion>1.4.0.13</AssemblyVersion>
+    <FileVersion>1.4.0.14</FileVersion>
+    <Version>1.4.0.14</Version>
+    <AssemblyVersion>1.4.0.14</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.4.0" />
