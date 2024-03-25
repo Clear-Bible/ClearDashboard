@@ -303,7 +303,16 @@ public class JotsEditorViewModel : ApplicationScreen
             if (noteStatus == NoteStatus.Archived)
             {
                 // archive the whole note and replies
-                var parentNote = NoteManager.CurrentNotes.FirstOrDefault(n => n.NoteId.Id == noteViewModel.ThreadId.Id);
+                NoteViewModel? parentNote;
+                if (noteViewModel.ThreadId is not null)
+                {
+                    parentNote = NoteManager.CurrentNotes.FirstOrDefault(n => n.NoteId.Id == noteViewModel.ThreadId.Id);
+                }
+                else
+                {
+                    parentNote = NoteManager.CurrentNotes.FirstOrDefault(n => n.NoteId.Id == noteViewModel.NoteId.Id);
+                }
+
                 if (parentNote != null) 
                 {
                     parentNote.NoteStatus = NoteStatus.Archived.ToString();
