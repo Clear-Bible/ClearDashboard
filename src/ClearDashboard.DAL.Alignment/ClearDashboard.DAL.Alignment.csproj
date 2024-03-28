@@ -7,9 +7,9 @@
     <RepositoryUrl>https://github.com/Clear-Bible/ClearEngine</RepositoryUrl>
     <Platforms>AnyCPU</Platforms>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>1.4.0.14</Version>
-    <FileVersion>1.4.0.14</FileVersion>
-    <AssemblyVersion>1.4.0.14</AssemblyVersion>
+    <Version>1.4.0.15</Version>
+    <FileVersion>1.4.0.15</FileVersion>
+    <AssemblyVersion>1.4.0.15</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ClearBible.Engine" Version="2.0.22" />
