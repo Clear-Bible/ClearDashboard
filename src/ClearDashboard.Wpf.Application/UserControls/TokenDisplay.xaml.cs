@@ -1220,11 +1220,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
                
                 if (AllSelectedTokens.SelectedUnassignedTranslationCount == 0 && (selectedTokenCount > 0 || AllSelectedTokens.SelectedAssignedTranslationCount > 0))
                 {
-                    CreateTranslationNoteMenuItem.Visibility = Visibility.Visible;
+                    //CreateTranslationNoteMenuItem.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    CreateTranslationNoteMenuItem.Visibility = Visibility.Collapsed;
+                    //CreateTranslationNoteMenuItem.Visibility = Visibility.Collapsed;
                 }
 
                 if (selectedTokenCount == 0 && AllSelectedTokens.CanTranslateToken)
