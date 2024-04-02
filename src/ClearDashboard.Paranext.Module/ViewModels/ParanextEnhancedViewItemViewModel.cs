@@ -48,7 +48,7 @@ namespace ClearDashboard.Paranext.Module.ViewModels
         }
 
 
-        private double height_ = 250;
+        private double height_ = 400;
         public double Height
         {
             get => height_;

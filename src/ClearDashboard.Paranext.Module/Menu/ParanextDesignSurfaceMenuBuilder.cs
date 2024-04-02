@@ -27,28 +27,20 @@ namespace ClearDashboard.Paranext.Module.Menu
             var paranextExtensionInfos = new List<(string menuId,  ParanextEnhancedViewItemMetadatum metadatum)>()
             {
                 (
-                    "Dashboard Webview",
+                    "AQuA Webview",
                     new ParanextEnhancedViewItemMetadatum()
                     {
-                        DisplayName = "Dashboard Webview",
-                        UrlString = "http://localhost:1212/verseaware_webview?assessment_id=211&version_id=71",
+                        DisplayName = "AQuA Webview",
+                        UrlString = "http://localhost:1212/aqua_webview?assessment_id=211&version_id=71",
                         IsNewWindow = false
                     }
                 ),
                 (
-                    "LotOfStuff", 
+                    "Corpus Webview", 
                     new ParanextEnhancedViewItemMetadatum()
                     {
-                        DisplayName = "Dashboard LotOfStuff Extension",
-                        UrlString = "http://localhost:1212/dashboardaquaanalysis_webview?assessment_id=211&version_id=71",
-                        IsNewWindow = false
-                    }
-                ),
-                (   "Lexicon", 
-                    new ParanextEnhancedViewItemMetadatum()
-                    {
-                        DisplayName = "Dashboard Lexicon Extension",
-                        UrlString = "http://localhost:1212/dashboardlexicon_webview",
+                        DisplayName = "Corpus Webview",
+                        UrlString = $"http://localhost:1212/corpusinsights_webview?tokenizedtextcorpus_id={tokenizedCorpusId.Id}&verseref=GEN%201%3A4&versesbeforenumber=0&versesafternumber=0",
                         IsNewWindow = false
                     }
                 )
