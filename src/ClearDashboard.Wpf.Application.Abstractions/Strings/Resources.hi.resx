@@ -143,7 +143,7 @@
     <value>Paratext उपयोगकर्ता नाम:</value>
   </data>
   <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
-    <value>आवेदन को पुनरारंभ करें</value>
+    <value>अनुप्रयोग को पुनरारंभ करें</value>
   </data>
   <data name="AccountInfo_SelectAccountLabel" xml:space="preserve">
     <value>स्विच करने के लिए एक खाता चुनें:</value>
@@ -167,7 +167,7 @@
     <value>USFM की जाँच करना</value>
   </data>
   <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
-    <value>क्लिपबोर्ड के लिए USFM त्रुटियों की प्रतिलिपि बनाएँ</value>
+    <value>क्लिपबोर्ड पर USFM त्रुटियों की प्रतिलिपि बनाएँ</value>
   </data>
   <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
     <value>त्रुटियों की संख्या:</value>
@@ -674,7 +674,7 @@
     <value>टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>भाषा की जोड़ी के लिए टोकन में शामिल हों</value>
+    <value>भाषा जोड़ी के लिए टोकन में शामिल हों</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>'अमान्य' के रूप में चिह्न संरेखण</value>
@@ -1121,7 +1121,7 @@
     <value>त्वरित नया</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Collab परिवर्तन उपलब्ध है</value>
+    <value>Collab परिवर्तन उपलब्ध हैं</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
     <value>समायोजन</value>
@@ -1256,7 +1256,7 @@
     <value>मर्ज पूर्ण ... पुनः लोडिंग इंटरफ़ेस</value>
   </data>
   <data name="MergeDialog_OperationCancelled" xml:space="preserve">
-    <value>अभियान रद्द किया गया</value>
+    <value>रद्द किया गया ऑपरेशन</value>
   </data>
   <data name="MergeDialog_OperationComplete" xml:space="preserve">
     <value>ऑपरेशन पूरा!</value>
@@ -1535,7 +1535,7 @@
     <value>कॉर्पोरा छंदों के समानांतरकरण करें</value>
   </data>
   <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
-    <value>Interlinear बनाएँ</value>
+    <value>Internear बनाएँ</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
     <value>ज्सन मेटाडेटा</value>
@@ -1702,6 +1702,9 @@
   <data name="Pds_Standard" xml:space="preserve">
     <value>मानक</value>
   </data>
+  <data name="Pds_StartParatextFirst" xml:space="preserve">
+    <value>पहले Paratext शुरू करें</value>
+  </data>
   <data name="Pds_StudyBible" xml:space="preserve">
     <value>अध्ययन योग्य</value>
   </data>
@@ -1823,7 +1826,7 @@
     <value>आरंभ करने के लिए अपना प्रोजेक्ट बनाएं।</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
-    <value>एक नया प्रोजेक्ट बनाएं</value>
+    <value>एक नई परियोजना बनाएं</value>
   </data>
   <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
     <value>त्वरित शुरुआत नई परियोजना</value>
@@ -1853,7 +1856,7 @@
     <value>शुरू हो जाओ</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>आयात सर्वर परियोजना</value>
+    <value>आयात सर्वर प्रोजेक्ट</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
     <value>अपनी परियोजना बनाते समय ग्रीक और हिब्रू बाइबिल ग्रंथों को शामिल करने के लिए इस बॉक्स को देखें।</value>
@@ -2108,7 +2111,7 @@
     <value>ओबद्याह</value>
   </data>
   <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>दाई</value>
+    <value>दामाद</value>
   </data>
   <data name="ProperCase_Philippians" xml:space="preserve">
     <value>फिलिप्पियों</value>
@@ -2468,7 +2471,7 @@
     <value>समझ:</value>
   </data>
   <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>सबडोमेन:</value>
+    <value>उपडोमेन:</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>हाँ</value>

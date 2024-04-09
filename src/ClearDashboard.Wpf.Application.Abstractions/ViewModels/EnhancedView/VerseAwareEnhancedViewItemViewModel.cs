@@ -51,6 +51,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             IHandle<AlignmentDeletedMessage>,
             IHandle<RefreshVerse>
     {
+        private readonly DashboardProjectManager? _projectManager;
         public IWindowManager WindowManager { get; }
         public NoteManager? NoteManager { get; }
      
@@ -180,6 +181,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 localizationService, 
                 editMode)
         {
+            _projectManager = projectManager;
             WindowManager = windowManager;
             NoteManager = noteManager;
         }
@@ -341,7 +343,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             try
             {
-                ParatextProjectMetadata metadata;
+                ParatextProjectMetadata metadata = new ParatextProjectMetadata
+                {
+                    AvailableBooks = BookInfo.GenerateScriptureBookList()
+                }; ;
 
                 if (metadatum.ParatextProjectId == ManuscriptIds.HebrewManuscriptId)
                 {
@@ -353,24 +358,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 }
                 else
                 {
-                    // regular Paratext corpus
-                    var result = await ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
-                    if (result.Success && result.HasData)
+                    if (_projectManager.IsParatextConnected)
                     {
-                        metadata = result.Data!.FirstOrDefault(b =>
-                            b.Id == metadatum.ParatextProjectId!.Replace("-", ""))!;
-                        if (metadata is null)
+                        // regular Paratext corpus
+                        var result = await ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
+                        if (result.Success && result.HasData)
                         {
-                            Logger?.LogWarning("The Paratext project's metadata is null.");
-                            metadata =  new ParatextProjectMetadata
+                            metadata = result.Data!.FirstOrDefault(b =>
+                                b.Id == metadatum.ParatextProjectId!.Replace("-", ""))!;
+                            if (metadata is null)
                             {
-                                AvailableBooks = BookInfo.GenerateScriptureBookList()
-                            };
+                                Logger?.LogWarning("The Paratext project's metadata is null.");
+                                metadata = new ParatextProjectMetadata
+                                {
+                                    AvailableBooks = BookInfo.GenerateScriptureBookList()
+                                };
+                            }
                         }
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException(result.Message);
                     }
                 }
 

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SetVersionInfo</name>
+    </assembly>
+    <members>
+        <member name="M:MyApp.Program.Main(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="inputVersionNumber"></param>
+        </member>
+    </members>
+</doc>

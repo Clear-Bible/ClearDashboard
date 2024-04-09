@@ -187,6 +187,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 var vm = Steps[1] as ProjectPickerViewModel;
                 vm.Connected = true;
+                await vm.GetProjectsVersion(); // load the projects
+                await vm.GetCollabProjects(); // load the collab projects
             }
 
             if (_runRegistration)

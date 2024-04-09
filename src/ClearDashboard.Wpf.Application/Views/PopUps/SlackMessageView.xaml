@@ -15,8 +15,8 @@
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     Title="SlackMessageView"
     Width="800"
-    Height="950"
-    MaxHeight="1000"
+    Height="908"
+    MaxHeight="910"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     FontFamily="{StaticResource ClearDashboardFont}"
     Loaded="Window_Loaded"
@@ -565,13 +565,13 @@
                     <!--  Row 0  -->
                     <StackPanel Grid.Row="0" Orientation="Vertical">
                         <!--  Row 0  -->
-                        <TextBlock
+                        <!--<TextBlock
                             Margin="10,2,0,2"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
-                            FontSize="18"
+                            FontSize="14"
                             Foreground="{StaticResource SecondaryHueMidBrush}"
-                            Text="{helpers:Localization SlackMessageView_SendUsfmFiles}" />
+                            Text="{helpers:Localization SlackMessageView_SendUsfmFiles}" />-->
 
                         <controls:AutoCompleteComboBox
                             Height="Auto"
@@ -622,6 +622,7 @@
                     <!--  Row 3  -->
                     <Button
                         Grid.Row="3"
+                        Height="40"
                         Margin="10,5,10,0"
                         cm:Message.Attach="SendUsfmBooks"
                         Content="{helpers:Localization Send}"
@@ -713,6 +714,7 @@
 
             <Button
                 Grid.Column="3"
+                Height="40"
                 Margin="10,5,10,5"
                 cm:Message.Attach="Close"
                 Content="{helpers:Localization Close}"

@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Caliburn.Micro;
-using CefSharp.DevTools.Network;
 using ClearDashboard.Collaboration.Features;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.Collaboration.Util;
@@ -35,19 +34,25 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using static ClearDashboard.DataAccessLayer.Features.DashboardProjects.GetProjectIdSlice;
 using static ClearDashboard.DataAccessLayer.Features.DashboardProjects.GetProjectVersionSlice;
+using static ClearDashboard.Wpf.Application.Helpers.Telemetry;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
     public class ProjectPickerViewModel : DashboardApplicationWorkflowStepViewModel<StartupDialogViewModel>,
-        IHandle<ParatextConnectedMessage>, IHandle<UserMessage>
+        IHandle<ParatextConnectedMessage>, IHandle<UserMessage>, IHandle<ReloadProjectPickerProjects>, IHandle<DeletedGitProject>
     {
         #region Member Variables
+        private System.Timers.Timer _timer;
+        private long _elapsedSeconds;
+        private double _timerInterval = 15000;
+
         private readonly ParatextProxy _paratextProxy;
         private readonly IMediator _mediator;
         private readonly GitLabHttpClientServices _gitLabHttpClientServices;
@@ -527,11 +532,51 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             base.OnViewLoaded(view);
 
             _initializationComplete = true;
+
+
+            StartTimer();
+        }
+
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            if (_timer is not null)
+            {
+                try
+                {
+                    _timer.Stop();
+                    _timer.Dispose();
+                }
+                catch (Exception e)
+                {
+                    Logger?.LogError(e, "Unable to stop timer");
+                }
+            }
+
+            return base.OnDeactivateAsync(close, cancellationToken);
         }
 
         #endregion Constructor
 
         #region Methods
+
+        private void StartTimer()
+        {
+            _timer = new System.Timers.Timer(15000);
+            _timer.Elapsed += OnTimedEvent;
+            _timer.Enabled = true;
+            _timer.AutoReset = true;
+        }
+
+        private async void OnTimedEvent(object? sender, ElapsedEventArgs e)
+        {
+            _ = Task.Run(async () =>
+            {
+                await SetGitLabUpdateNeeded(DashboardProjects);
+
+                _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, SearchText);
+                NotifyOfPropertyChange(() => DashboardProjectsDisplay);
+            });
+        }
 
         public async Task OpenSettings()
         {
@@ -805,7 +850,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private async Task GetProjectsVersion(bool afterMigration = false)
+        public async Task GetProjectsVersion(bool afterMigration = false)
         {
             DashboardProjects.Clear();
 
@@ -926,6 +971,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             string gitLabSha = string.Empty;
+            string userId = string.Empty;
             bool shaPresent = false;
             results = await ExecuteRequest(new GetProjectGitLabShaQuery(fileInfo.FullName), CancellationToken.None);
             if (results.Success && results.HasData)
@@ -934,15 +980,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 {
                     shaPresent = true;
                     gitLabSha = results.Data.ToString();
-                }
-            }
-
-            string userId = string.Empty;
-            results = await ExecuteRequest(new GetProjectGitLabShaQuery(fileInfo.FullName), CancellationToken.None);
-            if (results.Success && results.HasData)
-            {
-                if (results.Data.ToString() != "")
-                {
                     userId = results.Data.ToString();
                 }
             }
@@ -965,24 +1002,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         private async Task SetGitLabUpdateNeeded(List<DashboardProject> projects)
         {
-            if (!StartupDialogViewModel.ProjectAlreadyOpened)
+
+            // get the collab most recent Sha
+            foreach (var project in projects)
             {
-                // get the collab most recent Sha
-                foreach (var project in projects)
+                if (project.IsCollabProject)
                 {
-                    if (project.IsCollabProject)
+                    var results = await ExecuteRequest(new GetGitLabUpdatedNeededQuery(project), CancellationToken.None);
+                    if (results.Success && results.HasData)
                     {
-                        var results = await ExecuteRequest(new GetGitLabUpdatedNeededQuery(project), CancellationToken.None);
-                        if (results.Success && results.HasData)
+                        if (results.Data == true)
                         {
-                            if (results.Data == true)
-                            {
-                                project.GitLabUpdateNeeded = true;
-                            }
-                            else
-                            {
-                                project.GitLabUpdateNeeded = false;
-                            }
+                            project.GitLabUpdateNeeded = true;
+                        }
+                        else
+                        {
+                            project.GitLabUpdateNeeded = false;
                         }
                     }
                 }
@@ -1028,7 +1063,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             await GetProjectsVersion(afterMigration: true);
         }
 
-        private async Task GetCollabProjects()
+        public async Task GetCollabProjects()
         {
             DashboardCollabProjects.Clear();
 
@@ -1048,6 +1083,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                     if (gitLabProject is not null)
                     {
+                        dashboardProject.IsCollabProject = true;
                         dashboardProject.CollabOwner = gitLabProject.RemoteOwner.Name;
                         dashboardProject.PermissionLevel = gitLabProject.RemotePermissionLevel;
 
@@ -1059,6 +1095,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                         // remove from the available GitLab projects
                         projects.Remove(gitLabProject);
+                    }
+                    else
+                    {
+                        if (dashboardProject.IsCollabProject)
+                        {
+                            // project has been removed from GitLab so remove the SHA from the database
+                            var resultDelete = await ExecuteRequest(new ResetProjectGitLabShaQuery(dashboardProject.FullFilePath), CancellationToken.None);
+                            if (resultDelete.Success)
+                            {
+                                Logger!.LogDebug($"ResetProjectGitLabShaQuery: {dashboardProject.ProjectName} {dashboardProject.Id} SHA Removed from Project table");
+                            }
+
+                            dashboardProject.IsCollabProject = false;
+                        }
                     }
                 }
             }
@@ -1183,10 +1233,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 return;
             }
 
-            //if (CheckIfConnectedToParatext() == false)
-            //{
-            //    return;
-            //}
+            if (CheckIfConnectedToParatext() == false)
+            {
+                var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
+
+                if (confirmationViewPopupViewModel == null)
+                {
+                    throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+                }
+
+                confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.StartParatextFirst;
+
+                await _windowManager.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                    SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
+
+                return;
+            }
 
             if (ProjectLoadingProgressBarVisibility == Visibility.Visible)
             {
@@ -1256,6 +1318,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             if (CheckIfConnectedToParatext() == false)
             {
+                var confirmationViewPopupViewModel = LifetimeScope!.Resolve<ConfirmationPopupViewModel>();
+
+                if (confirmationViewPopupViewModel == null)
+                {
+                    throw new ArgumentNullException(nameof(confirmationViewPopupViewModel), "ConfirmationPopupViewModel needs to be registered with the DI container.");
+                }
+
+                confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.StartParatextFirst;
+
+                await _windowManager.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                    SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
+
                 return;
             }
 
@@ -1527,5 +1601,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             await Task.CompletedTask;
         }
 
+
+        /// <summary>
+        /// Reload the project picker projects/collab projecst
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task HandleAsync(ReloadProjectPickerProjects message, CancellationToken cancellationToken)
+        {
+            await GetProjectsVersion();
+
+            if (Pinger.PingHost())
+            {
+                await GetCollabProjects();
+            }
+        }
+
+        /// <summary>
+        /// Remove the project's SHA from the project table
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task HandleAsync(DeletedGitProject message, CancellationToken cancellationToken)
+        {
+            var project = _dashboardProjectsDisplay.FirstOrDefault(x => x.Id == message.Guid);
+
+            if (project is not null)
+            {
+                var results = await ExecuteRequest(new ResetProjectGitLabShaQuery(project.FullFilePath), CancellationToken.None);
+                if (results.Success)
+                {
+                    Logger!.LogDebug($"ResetProjectGitLabShaQuery: {project.ProjectName} {project.Id} SHA Removed from Project table");
+                }
+            }
+        }
     }
 }
