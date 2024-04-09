@@ -1085,6 +1085,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             settings.MinHeight = 500;
             settings.Title = $"{localizedString}";
 
+            // Keep the window on top
+            //settings.Topmost = true;
+            settings.Owner = System.Windows.Application.Current.MainWindow;
+
             var viewModel = IoC.Get<MigrateDatabaseViewModel>();
             viewModel.Project = null;
             viewModel.ProjectPickerViewModel = null;
@@ -1814,6 +1818,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 settings.MinWidth = 800;
                 settings.MinHeight = 600;
                 settings.Title = "Delete Alignments/Interlinears";
+
+
+                // Keep the window on top
+                //settings.Topmost = true;
+                settings.Owner = System.Windows.Application.Current.MainWindow;
 
                 var viewModel = IoC.Get<DeleteParallelizationLineViewModel>();
                 viewModel.AlignmentSetIds = alignmentSetIds;

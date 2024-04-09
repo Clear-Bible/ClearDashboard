@@ -31,6 +31,10 @@ namespace ClearDashboard.Wpf.Application.Views.Startup
             settings.MinHeight = 200;
             //settings.Title = $"{localizedString}";
 
+            // Keep the window on top
+            //settings.Topmost = true;
+            settings.Owner = System.Windows.Application.Current.MainWindow;
+
             var viewModel = IoC.Get<SendEmailViewModel>();
 
             IWindowManager manager = new WindowManager();

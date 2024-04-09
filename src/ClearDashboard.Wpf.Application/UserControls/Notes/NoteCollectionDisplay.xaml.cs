@@ -1,16 +1,24 @@
-﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Media;
-using ClearDashboard.DAL.Alignment.Corpora;
+﻿using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
+using System;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
+using ClearDashboard.Wpf.Application.ViewModels.Notes;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
+using System.Windows.Controls.Primitives;
+using ClearDashboard.Wpf.Application.Helpers;
+using Microsoft.Extensions.Logging;
+using SIL.EventsAndDelegates;
 
 namespace ClearDashboard.Wpf.Application.UserControls.Notes
 {
@@ -26,6 +34,17 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// </summary>
         public static readonly RoutedEvent CloseRequestedEvent = EventManager.RegisterRoutedEvent
             (nameof(CloseRequested), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+        /// <summary>
+        /// Identifies the AddPopupOpenedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent AddPopupOpenedEvent = EventManager.RegisterRoutedEvent
+            (nameof(AddPopupOpened), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+        /// <summary>
+        /// Identifies the AddPopupClosedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent AddPopupClosedEvent = EventManager.RegisterRoutedEvent
+            (nameof(AddPopupClosed), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
 
         /// <summary>
         /// Identifies the LabelAddedEvent routed event.
@@ -62,6 +81,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// </summary>
         public static readonly RoutedEvent LabelGroupLabelRemovedEvent = EventManager.RegisterRoutedEvent
             (nameof(LabelGroupLabelRemoved), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+        /// <summary>
+        /// Identifies the LabelGroupLabelRemovedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelGroupLabelsRemovedEvent = EventManager.RegisterRoutedEvent
+            (nameof(LabelGroupLabelsRemoved), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
 
         /// <summary>
         /// Identifies the LabelGroupRemovedEvent routed event.
@@ -164,6 +189,20 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// </summary>
         public static readonly RoutedEvent NoteEditorMouseLeaveEvent = EventManager.RegisterRoutedEvent
             (nameof(NoteEditorMouseLeave), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+
+        /// <summary>
+        /// Identifies the NoteEditorMouseEnter routed event.
+        /// </summary>
+        public static readonly RoutedEvent AddNoteEditorMouseEnterEvent = EventManager.RegisterRoutedEvent
+            (nameof(AddNoteEditorMouseEnter), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+        /// <summary>
+        /// Identifies the NoteEditorMouseLeave routed event.
+        /// </summary>
+        public static readonly RoutedEvent AddNoteEditorMouseLeaveEvent = EventManager.RegisterRoutedEvent
+            (nameof(AddNoteEditorMouseLeave), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
 
         /// <summary>
         /// Identifies the NoteSeen routed event.
@@ -332,6 +371,16 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         public static readonly DependencyProperty NotesProperty = DependencyProperty.Register(nameof(Notes), typeof(NoteViewModelCollection), typeof(NoteCollectionDisplay));
 
         /// <summary>
+        /// Identifies the SelectedNote dependency property
+        /// </summary>
+        public static readonly DependencyProperty SelectedNoteProperty = DependencyProperty.Register(nameof(SelectedNote), typeof(NoteViewModel), typeof(NoteCollectionDisplay));
+
+        /// <summary>
+        /// Identifies the NewNote dependency property
+        /// </summary>
+        public static readonly DependencyProperty NewNoteProperty = DependencyProperty.Register(nameof(NewNote), typeof(NoteViewModel), typeof(NoteCollectionDisplay));
+
+        /// <summary>
         /// Identifies the NoteTextFontFamily dependency property.
         /// </summary>
         public static readonly DependencyProperty NoteTextFontFamilyProperty = DependencyProperty.Register(nameof(NoteTextFontFamily), typeof(FontFamily), typeof(NoteCollectionDisplay),
@@ -497,6 +546,9 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         public static readonly DependencyProperty UserMarginProperty = DependencyProperty.Register(nameof(UserMargin), typeof(Thickness), typeof(NoteCollectionDisplay),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
+
+       // private bool _isAddJotOpen;
+
         #endregion
         #region Private event handlers
 
@@ -506,9 +558,13 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             {
                 RoutedEvent = routedEvent,
                 Note = e.Note,
-                EntityIds = e.EntityIds
+                EntityIds = e.EntityIds,
+                IsNewNote = e.IsNewNote
+                
             });
         }
+
+     
 
         private void RaiseLabelEvent(RoutedEvent routedEvent, LabelEventArgs e)
         {
@@ -519,6 +575,42 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 Label = e.Label,
                 LabelGroup = e.LabelGroup
             });
+        }
+
+        public double AddJotHorizontalOffset
+        {
+            get => _addJotHorizontalOffset;
+            set
+            {
+                if (value.Equals(_addJotHorizontalOffset)) return;
+                _addJotHorizontalOffset = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private void OpenAddJot(object sender, RoutedEventArgs e)
+        {
+            var dpi = VisualTreeHelper.GetDpi((Button)sender);
+            var jotEditViewModel = (JotsEditorViewModel)DataContext;
+
+            AddJotHorizontalOffset = 0;
+
+#if HIGHDPIDEBUG
+            const int nominalOffset = 160;
+            switch (dpi.DpiScaleX)
+            {
+                case >= 2.5:
+                    AddJotHorizontalOffset = nominalOffset * dpi.DpiScaleX;
+                    break;
+                default:
+                    AddJotHorizontalOffset = 0;
+                    break;
+            }
+#endif
+
+            jotEditViewModel.Logger.Log(LogLevel.Information, $"DPI ScaleX: {dpi.DpiScaleX}, DPI ScaleY: {dpi.DpiScaleY}");
+            jotEditViewModel.Logger.Log(LogLevel.Information, $"Horizontal Offset: {AddJotHorizontalOffset}");
+            jotEditViewModel.IsAddJotOpen = true;
         }
 
         private void RaiseLabelGroupAddedEvent(RoutedEvent routedEvent, LabelGroupAddedEventArgs args)
@@ -550,23 +642,23 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             });
         }
 
-        private void RaiseNoteSeenEvent(NoteSeenEventArgs args)
+        private void RaiseNoteSeenEvent(NoteSeenEventArgs? args)
         {
             RaiseEvent(new NoteSeenEventArgs
             {
                 RoutedEvent = NoteSeenEvent,
-                Seen = args.Seen,
-                NoteViewModel = args.NoteViewModel
+                Seen = args?.Seen,
+                NoteViewModel = args?.NoteViewModel
             });
         }
 
-        private void RaiseReplyAddedEvent(NoteReplyAddEventArgs args)
+        private void RaiseReplyAddedEvent(NoteReplyAddEventArgs? args)
         {
             RaiseEvent(new NoteReplyAddEventArgs
             {
                 RoutedEvent = NoteReplyAddedEvent,
-                Text = args.Text,
-                NoteViewModelWithReplies = args.NoteViewModelWithReplies
+                Text = args?.Text,
+                NoteViewModelWithReplies = args?.NoteViewModelWithReplies
             });
         }
 
@@ -591,11 +683,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             var args = e as NoteEventArgs;
             if (args?.Note != null)
             {
-                //Notes.Add(args.Note);
-                NewNote = new NoteViewModel();
 
-                OnPropertyChanged(nameof(Notes));
-                OnPropertyChanged(nameof(NewNote));
                 RaiseNoteEvent(NoteAddedEvent, args);
             }
         }
@@ -615,15 +703,14 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 RaiseNoteEvent(NoteUpdatedEvent, args);
             }
         }
-
+    
         private void OnNoteDeleted(object sender, RoutedEventArgs e)
         {
             var args = e as NoteEventArgs;
             if (args?.Note != null)
             {
-                Notes.Remove(args.Note);
-
                 RaiseNoteEvent(NoteDeletedEvent, args);
+                Notes.Remove(args.Note);
             }
         }
 
@@ -634,6 +721,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 RaiseNoteEvent(NoteEditorMouseEnterEvent, args);
             }
         }
+
         private void OnNoteEditorMouseLeave(object sender, RoutedEventArgs e)
         {
             if (e is NoteEventArgs args)
@@ -641,6 +729,89 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 RaiseNoteEvent(NoteEditorMouseLeaveEvent, args);
             }
         }
+        
+        private void OnAddNoteEditorMouseEnter(object sender, RoutedEventArgs e)
+        {
+            var noteDisplay = (AddNote)sender;
+            if (e is NoteEventArgs args)
+            {
+                args.EntityIds = noteDisplay.EntityIds;
+                args.IsNewNote = true;
+                args.Note = noteDisplay.Note;
+                RaiseNoteEvent(AddNoteEditorMouseEnterEvent, args);
+            }
+        }
+
+        private void OnAddNoteEditorMouseLeave(object sender, RoutedEventArgs e)
+        {
+            if (e is NoteEventArgs args)
+            {
+                args.IsNewNote = true;
+                RaiseNoteEvent(AddNoteEditorMouseLeaveEvent, args);
+            }
+        }
+
+        //private void OnAddPopupOpened(object sender, RoutedEventArgs e)
+        //{
+        //    var jotEditViewModel = (JotsEditorViewModel)DataContext;
+        //    jotEditViewModel.IsAddJotOpen = true;
+        //}
+
+        private void OnAddPopupClosed(object sender, RoutedEventArgs e)
+        {
+            var jotEditViewModel = (JotsEditorViewModel)DataContext;
+            jotEditViewModel.IsAddJotOpen = false;
+        }
+
+        private void OnTabHeaderMouseEnter(object sender, MouseEventArgs e)
+        {
+            var viewModel = (NoteViewModel)TabControl.SelectedContent;
+            var args = new NoteEventArgs
+            {
+                EntityIds = new EntityIdCollection(viewModel.Associations.
+                    Select(a=>a.AssociatedEntityId)),
+                Note = viewModel,
+                IsNewNote = false,
+            };
+            RaiseNoteEvent(AddNoteEditorMouseEnterEvent, args);
+
+        }
+
+        private void OnTabHeaderMouseLeave(object sender, MouseEventArgs e)
+        {
+            var viewModel = (NoteViewModel)TabControl.SelectedContent;
+            var args = new NoteEventArgs
+            {
+                EntityIds = new EntityIdCollection(viewModel.Associations.
+                    Select(a => a.AssociatedEntityId)),
+                IsNewNote = false,
+            };
+            RaiseNoteEvent(NoteEditorMouseLeaveEvent, args);
+        }
+
+        private void OnPopupMouseEnter(object sender, MouseEventArgs e)
+        {
+            var args = new NoteEventArgs
+            {
+                EntityIds = AddNoteControl.EntityIds,
+                Note = AddNoteControl.Note,
+                IsNewNote = true,
+            };
+            RaiseNoteEvent(AddNoteEditorMouseEnterEvent, args);
+            
+        }
+
+        private void OnPopupMouseLeave(object sender, MouseEventArgs e)
+        {
+            var args = new NoteEventArgs
+            {
+                EntityIds = AddNoteControl.EntityIds,
+                IsNewNote = true,
+            };
+            RaiseNoteEvent(NoteEditorMouseLeaveEvent, args);
+        }
+
+     
 
         private void RaiseNoteAssociationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
@@ -751,6 +922,27 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             RaiseLabelGroupLabelEvent(LabelGroupLabelAddedEvent, labelGroupLabelEventArgs!);
         }
 
+        private void OnLabelGroupLabelRemoved(object sender, RoutedEventArgs e)
+        {
+            var labelGroupLabelEventArgs = e as LabelGroupLabelEventArgs;
+
+            RaiseLabelGroupLabelEvent(LabelGroupLabelRemovedEvent, labelGroupLabelEventArgs!);
+        }
+
+        private void OnLabelGroupLabelsRemoved(object sender, RoutedEventArgs e)
+        {
+            var eventArgs = e as LabelGroupLabelsRemovedEventArgs;
+
+            RaiseEvent(new LabelGroupLabelsRemovedEventArgs
+            {
+                RoutedEvent = LabelGroupLabelsRemovedEvent,
+                LabelGroup = eventArgs.LabelGroup,
+                NoneLabelGroup = eventArgs.NoneLabelGroup,
+                Labels = eventArgs.Labels
+            });
+            
+        }
+
         private void OnLabelGroupRemoved(object sender, RoutedEventArgs e)
         {
             var labelGroupEventArgs = e as LabelGroupEventArgs;
@@ -771,7 +963,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #endregion
+#endregion
         #region Public Properties
 
         /// <summary>
@@ -1043,6 +1235,19 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             set => SetValue(NotesProperty, value);
         }
 
+
+        public NoteViewModel SelectedNote
+        {
+            get => (NoteViewModel)GetValue(SelectedNoteProperty); 
+            set => SetValue(SelectedNoteProperty, value);
+        }
+
+        public NoteViewModel NewNote
+        {
+            get => (NoteViewModel)GetValue(NewNoteProperty);
+            set => SetValue(NewNoteProperty, value);
+        }
+
         /// <summary>
         /// Gets or sets the subtitle of the notes editor.
         /// </summary>
@@ -1241,7 +1446,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             set => SetValue(UserMarginProperty, value);
         }
 
-        public NoteViewModel NewNote { get; set; } = new();
 
         #endregion
         #region Public Events
@@ -1306,6 +1510,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             add => AddHandler(LabelGroupLabelRemovedEvent, value);
             remove => RemoveHandler(LabelGroupLabelRemovedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when a label is removed from a label group.
+        /// </summary>
+        public event RoutedEventHandler LabelGroupLabelsRemoved
+        {
+            add => AddHandler(LabelGroupLabelsRemovedEvent, value);
+            remove => RemoveHandler(LabelGroupLabelsRemovedEvent, value);
         }
 
         /// <summary>
@@ -1426,6 +1639,24 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         }
 
         /// <summary>
+        /// Occurs when the JotPopup is opened.
+        /// </summary>
+        public event RoutedEventHandler AddPopupOpened
+        {
+            add => AddHandler(AddPopupOpenedEvent, value);
+            remove => RemoveHandler(AddPopupOpenedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the JotPopup is closed.
+        /// </summary>
+        public event RoutedEventHandler AddPopupClosed
+        {
+            add => AddHandler(AddPopupClosedEvent, value);
+            remove => RemoveHandler(AddPopupClosedEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when a note is deleted.
         /// </summary>
         public event RoutedEventHandler NoteDeleted
@@ -1450,6 +1681,24 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             add => AddHandler(NoteEditorMouseLeaveEvent, value);
             remove => RemoveHandler(NoteEditorMouseLeaveEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse enters one of the note editors.
+        /// </summary>
+        public event RoutedEventHandler AddNoteEditorMouseEnter
+        {
+            add => AddHandler(AddNoteEditorMouseEnterEvent, value);
+            remove => RemoveHandler(AddNoteEditorMouseEnterEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse leaves one of the note editors.
+        /// </summary>
+        public event RoutedEventHandler AddNoteEditorMouseLeave
+        {
+            add => AddHandler(AddNoteEditorMouseLeaveEvent, value);
+            remove => RemoveHandler(AddNoteEditorMouseLeaveEvent, value);
         }
 
         /// <summary>
@@ -1509,5 +1758,58 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             InitializeComponent();
         }
+
+        protected override void OnInitialized(EventArgs e)
+        {
+           
+            base.OnInitialized(e);
+        }
+
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+            
+           base.OnRender(drawingContext);
+        }
+
+       
+
+     
+
+
+        #region move popup with parent hack
+        private Window? _parentWindow;
+        private double _popupHorizontalOffset;
+        private double _addJotHorizontalOffset;
+
+        private void AddNewJotPopup_OnOpened(object? sender, EventArgs e)
+        {
+
+            _parentWindow = Window.GetWindow(this);
+            if (_parentWindow != null)
+            {
+                _parentWindow.LocationChanged += OnParentWindowLocationChanged;
+            }
+        }
+
+        private void OnParentWindowLocationChanged(object? sender, EventArgs e)
+        {
+            if (AddNewJotPopup.IsOpen)
+            {
+                var mi = typeof(Popup).GetMethod("UpdatePosition", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                mi.Invoke(AddNewJotPopup, null);
+            }
+        }
+
+        private void AddNewJotPopup_OnClosed(object? sender, EventArgs e)
+        {
+            if (_parentWindow != null)
+            {
+                _parentWindow.LocationChanged += OnParentWindowLocationChanged;
+            }
+        }
+        #endregion move popup with parent hack
+
+
+      
     }
 }

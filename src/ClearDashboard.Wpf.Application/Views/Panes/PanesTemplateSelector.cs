@@ -66,7 +66,7 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
             set;
         }
 
-        public DataTemplate NotesViewTemplate
+        public DataTemplate JotsPanelViewTemplate
         {
             get;
             set;
@@ -114,9 +114,9 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
                 return TextCollectionViewTemplate;
             }
 
-            if (item is NotesViewModel)
+            if (item is JotsPanelViewModel)
             {
-                return NotesViewTemplate;
+                return JotsPanelViewTemplate;
             }
 
             return base.SelectTemplate(item, container);

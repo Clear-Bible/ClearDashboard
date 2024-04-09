@@ -586,6 +586,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             settings.MinWidth = 500;
             settings.MinHeight = 500;
 
+            // Keep the window on top
+            //settings.Topmost = true;
+            settings.Owner = System.Windows.Application.Current.MainWindow;
+
             // get this applications position on the screen
             var window = App.Current.Windows.OfType<Window>().SingleOrDefault(w => w.DataContext == this.ParentViewModel);
             settings.Left = window.Left + 150;
@@ -641,6 +645,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             settings.MinHeight = 500;
             //settings.Title = $"{localizedString}";
 
+            // Keep the window on top
+            //settings.Topmost = true;
+            settings.Owner = System.Windows.Application.Current.MainWindow;
+
             var viewModel = IoC.Get<NewCollabUserViewModel>();
 
             IWindowManager manager = new WindowManager();
@@ -661,6 +669,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             settings.MinWidth = 500;
             settings.MinHeight = 500;
             settings.Title = $"{localizedString}";
+
+
+            // Keep the window on top
+            //settings.Topmost = true;
+            settings.Owner = System.Windows.Application.Current.MainWindow;
 
             var viewModel = IoC.Get<CollabProjectManagementViewModel>();
 
@@ -1050,6 +1063,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             settings.MinHeight = 500;
             settings.Title = $"{localizedString}";
 
+            // Keep the window on top
+            //settings.Topmost = true;
+            settings.Owner = System.Windows.Application.Current.MainWindow;
+
             var viewModel = IoC.Get<MigrateDatabaseViewModel>();
             viewModel.Project = project;
             viewModel.ProjectPickerViewModel = this;
@@ -1268,6 +1285,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 ProjectLoadingProgressBarVisibility = Visibility.Visible;
 
                 ProjectManager!.CurrentDashboardProject = project;
+
+                // fix any hyphenated label groups in the database
+                await Mediator.Send(new UpdateDatabaseHyphenQuery(ProjectManager.CurrentDashboardProject));
+                
                 await EventAggregator.PublishOnUIThreadAsync(
                     new DashboardProjectNameMessage(ProjectManager!.CurrentDashboardProject.ProjectName));
                 await EventAggregator.PublishOnUIThreadAsync(
@@ -1405,7 +1426,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         private bool CheckIfConnectedToParatext()
         {
-            if (ProjectManager?.HasCurrentParatextProject == false)
+
+            //if (IsParatextRunning)
+            //{
+            //    return true;
+            //}
+            if (ProjectManager?.HasCurrentParatextProject == false || !IsParatextRunning)
             {
                 AlertVisibility = Visibility.Visible;
                 return false;

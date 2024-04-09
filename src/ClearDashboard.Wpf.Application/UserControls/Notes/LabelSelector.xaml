@@ -31,10 +31,13 @@
                 MinWidth="100"
                 Margin="5,0,0,0"
                 FontSize="13"
+                GotFocus="OnLabelTextBoxGotFocus"
                 KeyUp="OnLabelTextBoxKeyUp"
-                LostFocus="LabelTextBox_OnLostFocus"
-                LostKeyboardFocus="LabelTextBox_OnLostKeyboardFocus"
-                TextChanged="OnLabelTextChanged" />
+                KeyDown="OnLabelTextBoxKeyDown"
+                LostFocus="OnLabelTextBoxLostFocus"
+                LostKeyboardFocus="OnLabelTextBoxLostKeyboardFocus"
+                TextChanged="OnLabelTextChanged"
+                PreviewTextInput="OnLabelTextBoxPreviewTextInput"/>
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="0"
@@ -62,7 +65,7 @@
                 Height="Auto"
                 Margin="5,0,0,0"
                 Placement="Bottom"
-                StaysOpen="False"
+                StaysOpen="{Binding ElementName=LabelTextBox,Path=IsKeyboardFocused}"
                 Visibility="Collapsed">
                 <ListBox
                     x:Name="LabelSuggestionListBox"
@@ -71,8 +74,8 @@
                     BorderThickness="0.5"
                     Foreground="{DynamicResource MaterialDesignBody}"
                     Grid.IsSharedSizeScope="True"
-                    ScrollViewer.CanContentScroll="False"
-                    ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                    ScrollViewer.CanContentScroll="True"
+                    ScrollViewer.VerticalScrollBarVisibility="Auto"
                     SelectionChanged="OnLabelListSelectionChanged"
                     Visibility="Collapsed">
                     <ListBox.ItemTemplate>
@@ -86,12 +89,12 @@
                                     <RowDefinition Height="20" />
                                 </Grid.RowDefinitions>
                                 <TextBlock Grid.Column="0" Text="{Binding Text}" />
-                                <Button
+                                <!--<Button
                                     x:Name="DeleteLabelButton"
                                     Grid.Column="1"
                                     Margin="20,-5,5,0"
                                     Padding="0,0,0,0"
-                                    Background="Transparent"
+                                    Background="Red"
                                     BorderThickness="0"
                                     Click="DeleteLabelClicked"
                                     FontWeight="SemiBold"
@@ -101,7 +104,7 @@
                                         Width="24"
                                         Height="14"
                                         Source="/Resources/close24.png" />
-                                </Button>
+                                </Button>-->
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

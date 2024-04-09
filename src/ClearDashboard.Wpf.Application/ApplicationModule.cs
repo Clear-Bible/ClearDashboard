@@ -21,6 +21,8 @@ using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using MediatR;
+using Autofac.Features.AttributeFilters;
+using ClearDashboard.Wpf.Application.ViewModels.Notes;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -59,8 +61,27 @@ namespace ClearDashboard.Wpf.Application
 
             builder.RegisterType<AlignmentManager>().AsSelf();
             builder.RegisterType<LexiconManager>().AsSelf();
+            //builder.RegisterType<NoteManager>().AsSelf().SingleInstance();
             builder.RegisterType<NoteManager>().AsSelf().SingleInstance();
+            builder.RegisterType<NoteManager>().AsSelf().Keyed<NoteManager>("JotsNoteManager").InstancePerDependency();
+
+            // This is the singleton instance used by the EnhancedViews
             builder.RegisterType<SelectionManager>().AsSelf().SingleInstance();
+            // This is the transient instance used by the registration below to get a cloned version of the SelectionManager 
+            builder.RegisterType<SelectionManager>().AsSelf().Keyed<SelectionManager>("TransientSelectionManager").InstancePerDependency(); ;
+
+            // This is the transient instance used by the JotsEditor
+            //builder.Register<SelectionManager>(c =>
+            //{
+            //    var ctx = c.Resolve<IComponentContext>();
+            //    var singleton = ctx.Resolve<SelectionManager>();
+            //    return singleton.Clone();
+            //}).Keyed<SelectionManager>("JotsSelectionManager");
+
+           
+
+            builder.RegisterType<JotsEditorViewModel>().AsSelf().WithAttributeFiltering().InstancePerDependency(); 
+
             builder.RegisterType<TranslationManager>().AsSelf();
             builder.RegisterType<VerseManager>().AsSelf().SingleInstance();
             builder.RegisterType<SelectedBookManager>().AsSelf();

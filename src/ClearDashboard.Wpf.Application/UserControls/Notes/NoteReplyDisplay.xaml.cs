@@ -1,4 +1,11 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using ClearBible.Engine.Utils;
+using ClearDashboard.DataAccessLayer.Annotations;
+using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.Wpf.Application.Events.Notes;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -7,13 +14,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Annotations;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.Events;
-using ClearDashboard.Wpf.Application.Events.Notes;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using ClearDashboard.Wpf.Application.Models;
 using TimeZoneNames;
 using FontFamily = System.Windows.Media.FontFamily;
 using FontStyle = System.Windows.FontStyle;
@@ -178,6 +179,18 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         public static readonly DependencyProperty TimestampPaddingProperty = DependencyProperty.Register(nameof(TimestampPadding), typeof(Thickness), typeof(NoteReplyDisplay),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
+        /// <summary>
+        /// Identifies the NoteSendToParatext routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteSendToParatextEvent = EventManager.RegisterRoutedEvent
+            (nameof(NoteSendToParatext), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteReplyDisplay));
+
+        /// <summary>
+        /// Identifies the EntityId dependency property.
+        /// </summary>
+        public static readonly DependencyProperty EntityIdsProperty = DependencyProperty.Register(nameof(EntityIds), typeof(EntityIdCollection), typeof(NoteReplyDisplay));
+
+
         #endregion
         #region Private Event Handlers
 
@@ -188,6 +201,16 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 RoutedEvent = NoteSeenEvent,
                 Seen = seen,
                 NoteViewModel = Reply
+            });
+        }
+
+        private void RaiseNoteEvent(RoutedEvent routedEvent)
+        {
+            RaiseEvent(new NoteEventArgs
+            {
+                RoutedEvent = routedEvent,
+                EntityIds = EntityIds,
+                Note = Reply
             });
         }
 
@@ -204,6 +227,22 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         private void OnSeenCheckBoxUnchecked(object sender, RoutedEventArgs e)
         {
             RaiseReplySeenEvent(false);
+        }
+
+        private void ConfirmParatextSend(object sender, RoutedEventArgs e)
+        {
+            ConfirmParatextSendPopup.IsOpen = true;
+        }
+
+        private void ParatextSendConfirmed(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteSendToParatextEvent);
+            ConfirmParatextSendPopup.IsOpen = false;
+        }
+
+        private void ParatextSendCancelled(object sender, RoutedEventArgs e)
+        {
+            ConfirmParatextSendPopup.IsOpen = false;
         }
 
         [NotifyPropertyChangedInvocator]
@@ -240,6 +279,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         public NoteViewModel? Reply => DataContext as NoteViewModel;
         public string ReplyText => Reply != null ? Reply.Text : string.Empty;
         public string ReplyAuthor => Reply != null ? Reply.ModifiedBy : string.Empty;
+
+        public ExternalSendNoteInformation ReplyParatextSendInformation => Reply != null ? Reply.ParatextSendNoteInformation : null;
 
         public string ReplyTimestamp
         {
@@ -452,6 +493,24 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             set => SetValue(SeenPaddingProperty, value);
         }
 
+        /// <summary>
+        /// Gets or sets the collection of <see cref="EntityId{T}"/> associated with the note.
+        /// </summary>
+        public EntityIdCollection EntityIds
+        {
+            get => (EntityIdCollection)GetValue(EntityIdsProperty);
+            set => SetValue(EntityIdsProperty, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user requests a note be sent to Paratext.
+        /// </summary>
+        public event RoutedEventHandler NoteSendToParatext
+        {
+            add => AddHandler(NoteSendToParatextEvent, value);
+            remove => RemoveHandler(NoteSendToParatextEvent, value);
+        }
+
         #endregion
         #region Public Events
 
@@ -480,7 +539,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         public async Task HandleAsync(NoteUpdatedMessage message, CancellationToken cancellationToken)
         {
-            if (message.NoteId == Reply?.NoteId)
+            if (message.Note.NoteId == Reply?.NoteId)
             {
                 //Reply.NoteSeenChanged();
             }
@@ -491,5 +550,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             EventAggregator?.Unsubscribe(this);
         }
+
+       
+        
+
+        
+
+        
     }
 }

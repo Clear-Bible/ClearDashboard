@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -11,6 +12,7 @@ using System.Windows.Media;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Annotations;
+using ClearDashboard.DataAccessLayer.Data.Migrations;
 using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
@@ -73,6 +75,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             (nameof(LabelGroupLabelRemoved), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelsEditor));
 
         /// <summary>
+        /// Identifies the LabelGroupLabelRemovedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelGroupLabelsRemovedEvent = EventManager.RegisterRoutedEvent
+            (nameof(LabelGroupLabelsRemoved), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelsEditor));
+
+        /// <summary>
         /// Identifies the LabelGroupRemovedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent LabelGroupRemovedEvent = EventManager.RegisterRoutedEvent
@@ -114,7 +122,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         private static void OnCurrentLabelGroupChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = d as LabelsEditor;
-            if (control != null)
+            if (control != null && control.CurrentLabelGroup != null)
             {
                 control.LabelSuggestions = control.CurrentLabelGroup.Labels;
             }
@@ -243,6 +251,17 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             });
         }
 
+        private void RaiseLabelGroupLabelsRemovedEvent(RoutedEvent routedEvent, LabelGroupViewModel labelGroup, List<NotesLabel> labels)
+        {
+            RaiseEvent(new LabelGroupLabelsRemovedEventArgs
+            {
+                RoutedEvent = routedEvent,
+                LabelGroup = labelGroup,
+                NoneLabelGroup = LabelGroups.FirstOrDefault(lg => lg.IsNoneLabelGroup),
+                Labels = labels
+            });
+        }
+
         #endregion
         #region Public Event Handlers
         
@@ -262,7 +281,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 CurrentLabel = labelEventArgs.Label;
                 CurrentLabelName = CurrentLabel?.Text;
 
-                if (CurrentLabelGroup.LabelGroupId == null)
+                if (CurrentLabelGroup == null || CurrentLabelGroup.LabelGroupId == null)
                 {
                     CurrentLabelName += " ?";
                 }
@@ -314,7 +333,16 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             CacheCurrentLabel(e);
             RaiseLabelEvent(LabelSelectedEvent);
-            //Execute.OnUIThread(AddCurrentLabel);
+         
+            // JOTS refactor
+            Execute.OnUIThread(() =>
+            {
+                if (Note.NoteId == null &&  e is LabelEventArgs labelEventArgs)
+                {
+                    Note.Labels.AddDistinct(labelEventArgs.Label);
+                }
+            });
+            
         }
 
         private void OnLabelDeleted(object sender, RoutedEventArgs e)
@@ -334,7 +362,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         private void OnLabelDeleteConfirmed(object sender, RoutedEventArgs e)
         {
             RaiseLabelEvent(LabelDeletedEvent);
-            //Execute.OnUIThread(RemoveCurrentLabel);
             ConfirmDeleteLabelPopup.IsOpen = false;
             LabelSelector.CloseSuggestionPopup();
             LabelSelector.CloseTextBox();
@@ -399,6 +426,24 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             }
         }
 
+        private void OnLabelGroupManageEscapePressed(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                OnLabelGroupManageCancelled(sender, e);
+            }
+        }
+
+
+        private void OnLabelGroupManageClicked(object sender, RoutedEventArgs e)
+        {
+            if (CurrentLabelGroup.Name != "<None>")
+            {
+                CurrentLabelGroup.InitializeSelectableLabels();
+                ManageLabelGroupPopup.IsOpen = true;
+            }
+        }
+
         private void OnLabelGroupAddNameChanged(object sender, TextChangedEventArgs e)
         {
             NewLabelGroupInitializationVisibility = NewLabelGroupTextBox.Text.Length > 0 ? Visibility.Visible : Visibility.Hidden;
@@ -427,15 +472,51 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             }
         }
 
+        private void OnLabelGroupManageConfirmed(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var selectedLabelsToDelete = CurrentLabelGroup.SelectableLabels.Where(l => l.Selected).Select(l => l.Entity).ToList();
+
+               
+                var noneLabelGroup = LabelGroups.FirstOrDefault(lg => lg.IsNoneLabelGroup);
+                if (noneLabelGroup != null)
+                {
+                    foreach (var label in selectedLabelsToDelete)
+                    {
+                        CurrentLabelGroup.Labels.RemoveIfExists(label);
+                        noneLabelGroup.Labels.AddDistinct(label);
+                    }
+                }
+                ManageLabelGroupPopup.IsOpen = false;
+
+                RaiseLabelGroupLabelsRemovedEvent(LabelGroupLabelsRemovedEvent, CurrentLabelGroup, selectedLabelsToDelete);
+            }
+            catch (Exception ex)
+            {
+                var s = ex.Message;
+                throw;
+            }
+        }
+
         private void OnLabelGroupAddCancelled(object sender, RoutedEventArgs e)
         {
             AddLabelGroupPopup.IsOpen = false;
         }
 
+        private void OnLabelGroupManageCancelled(object sender, RoutedEventArgs e)
+        {
+
+            ManageLabelGroupPopup.IsOpen = false;
+        }
+
         private void OnLabelGroupSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             RaiseLabelGroupEvent(LabelGroupSelectedEvent, CurrentLabelGroup);
-            CurrentLabelGroup ??= LabelGroups.FirstOrDefault();
+            if (LabelGroups != null)
+            {
+                CurrentLabelGroup ??= LabelGroups.FirstOrDefault();
+            }
             if (CurrentLabelGroup != null)
             {
                 LabelSuggestions = CurrentLabelGroup.Labels;
@@ -606,6 +687,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// Gets or sets the <see cref="EventAggregator"/> to be used for participating in the Caliburn Micro eventing system.
         /// </summary>
         public static IEventAggregator? EventAggregator { get; set; }
+
 
         /// <summary>
         /// Gets or sets the label group collection associated with the editor.
@@ -839,6 +921,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         }
 
         /// <summary>
+        /// Occurs when a set of labels is removed from a label group.
+        /// </summary>
+        public event RoutedEventHandler LabelGroupLabelsRemoved
+        {
+            add => AddHandler(LabelGroupLabelsRemovedEvent, value);
+            remove => RemoveHandler(LabelGroupLabelsRemovedEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when an existing label group is removed.
         /// </summary>
         public event RoutedEventHandler LabelGroupRemoved
@@ -897,5 +988,19 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             Unloaded += OnUnloaded;
             EventAggregator?.SubscribeOnUIThread(this);
         }
+
+      
+
+        private void OnNewLabelGroupTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // Prevent underscore characters in labels.
+            if (e.Text == "_")
+            {
+                e.Handled = true;
+            }
+        }
+
+
+     
     }
 }

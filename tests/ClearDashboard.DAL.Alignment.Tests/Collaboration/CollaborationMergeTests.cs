@@ -483,12 +483,16 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             var testNoteId3 = Guid.NewGuid();
             var testNoteId4 = Guid.NewGuid();
             var testNoteId5 = Guid.NewGuid();
+            var testNoteId6 = Guid.NewGuid();
 
             var testNoteId4Reply1 = Guid.NewGuid();
 
             _fixture.Notes.Add(CollaborationProjectFixture.BuildTestNote(testNoteId1, "boo boo", Models.NoteStatus.Open, testUser.Id));
             _fixture.Notes.Add(CollaborationProjectFixture.BuildTestNote(testNoteId2, "boo boo two", Models.NoteStatus.Resolved, testUser.Id));
             _fixture.Notes.Add(CollaborationProjectFixture.BuildTestNote(testNoteId3, "boo boo three", Models.NoteStatus.Open, testUser.Id));
+
+            // test for archived note
+            _fixture.Notes.Add(CollaborationProjectFixture.BuildTestNote(testNoteId6, "boo boo six", Models.NoteStatus.Archived, testUser.Id));
 
             var testNote4 = CollaborationProjectFixture.BuildTestNote(testNoteId4, "boo boo four", Models.NoteStatus.Open, testUser.Id);
             var testNote4Reply1 = CollaborationProjectFixture.BuildTestNote(testNoteId4Reply1, "boo boo four reply 1", Models.NoteStatus.Open, testUser.Id);
@@ -517,7 +521,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(6, _fixture.ProjectDbContext.Notes.Count());
+            Assert.Equal(7, _fixture.ProjectDbContext.Notes.Count());
             Assert.Equal(5, _fixture.ProjectDbContext.NoteDomainEntityAssociations.Count());
             Assert.Equal(1 + 1 + _fixture.Users.Count, _fixture.ProjectDbContext.NoteUserSeenAssociations.Count());
 
@@ -574,6 +578,10 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
                 .ToArray();
 
             Assert.Equal(2, associatedTokens3.Length);
+
+            // verify archived note
+            var archivedNote = _fixture.ProjectDbContext.Notes.FirstOrDefault(e => e.Id == testNoteId6);
+            Assert.Equal(NoteStatus.Archived, archivedNote.NoteStatus);
         }
 
         [Fact]

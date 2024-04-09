@@ -222,11 +222,11 @@
                                 <paratextViews:TextCollectionsView />
                             </DataTemplate>
                         </panes:PanesTemplateSelector.TextCollectionViewTemplate>
-                        <panes:PanesTemplateSelector.NotesViewTemplate>
+                        <panes:PanesTemplateSelector.JotsPanelViewTemplate>
                             <DataTemplate>
-                                <notes:NotesView />
+                                <notes:JotsPanelView />
                             </DataTemplate>
-                        </panes:PanesTemplateSelector.NotesViewTemplate>
+                        </panes:PanesTemplateSelector.JotsPanelViewTemplate>
 
                     </panes:PanesTemplateSelector>
                 </DockingManager.LayoutItemTemplateSelector>

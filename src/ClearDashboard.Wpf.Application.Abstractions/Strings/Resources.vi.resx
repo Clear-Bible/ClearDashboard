@@ -113,7 +113,7 @@
     <value>Phiên bản</value>
   </data>
   <data name="AccountInfo_ClearDashboardUserIdLabel" xml:space="preserve">
-    <value>ClearDashboard userID:</value>
+    <value>Id người dùng ClearDashboard:</value>
   </data>
   <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
     <value>Tên người dùng ClearDashboard:</value>
@@ -122,25 +122,25 @@
     <value>Email cộng tác:</value>
   </data>
   <data name="AccountInfo_CollaborationUserIdLabel" xml:space="preserve">
-    <value>Cộng tác userID:</value>
+    <value>Id người dùng cộng tác:</value>
   </data>
   <data name="AccountInfo_CollaborationUsernameLabel" xml:space="preserve">
-    <value>Tên người dùng hợp tác:</value>
+    <value>Tên người dùng cộng tác:</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
-    <value>-Các chi tiết tài khoản hiện tại-</value>
+    <value>-CHI TIẾT TÀI KHOẢN HIỆN TẠI-</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
     <value>Vô hiệu hóa giấy phép hiện tại</value>
   </data>
   <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
-    <value>-Tài khoản khác-</value>
+    <value>-TÀI KHOẢN KHÁC-</value>
   </data>
   <data name="AccountInfo_ParatextEmailLabel" xml:space="preserve">
-    <value>Email Paratext:</value>
+    <value>Email văn bản:</value>
   </data>
   <data name="AccountInfo_ParatextUsernameLabel" xml:space="preserve">
-    <value>Tên người dùng paratext:</value>
+    <value>Tên người dùng văn bản:</value>
   </data>
   <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
     <value>Khỏi động lại ưng dụng</value>
@@ -155,31 +155,31 @@
     <value>Thêm vào</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Chọn cách để mã hóa xác chết</value>
+    <value>Chọn cách mã hóa kho dữ liệu</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
-    <value>Liên kết</value>
+    <value>Căn chỉnh</value>
   </data>
   <data name="AddParatextCorpusDialog_CanAddLater" xml:space="preserve">
-    <value>Chọn (các) cuốn sách bạn đang làm việc cùng, bạn luôn có thể thêm nhiều sách sau này.</value>
+    <value>Chọn (các) sách bạn đang làm việc, bạn luôn có thể thêm nhiều sách hơn sau.</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
     <value>Kiểm tra USFM</value>
   </data>
   <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
-    <value>Sao chép lỗi USFM vào bảng tạm</value>
+    <value>Sao chép lỗi USFM vào Clipboard</value>
   </data>
   <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
     <value>Số lỗi:</value>
   </data>
   <data name="AddParatextCorpusDialog_Interlinear" xml:space="preserve">
-    <value>Xen kẽ</value>
+    <value>Liên tuyến</value>
   </data>
   <data name="AddParatextCorpusDialog_NoErrors" xml:space="preserve">
     <value>Không có lỗi</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
-    <value>Lưu lỗi USFM vào tệp</value>
+    <value>Lưu lỗi USFM vào tập tin</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
     <value>Chọn tất cả</value>
@@ -188,16 +188,19 @@
     <value>Chọn sách để xử lý</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectedBooks" xml:space="preserve">
-    <value>Sách được chọn</value>
+    <value>Sách chọn lọc</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectUsfmBooks" xml:space="preserve">
-    <value>Chọn Sách USFM để gửi</value>
+    <value>Chọn sách USFM để gửi</value>
   </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
-    <value>Chọn Dự án Paratext</value>
+    <value>Chọn dự án văn bản</value>
   </data>
   <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
     <value>Bỏ chọn tất cả</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Tất cả</value>
   </data>
   <data name="AMO" xml:space="preserve">
     <value>AMO</value>
@@ -206,13 +209,13 @@
     <value>Mặt sau</value>
   </data>
   <data name="BackgroundTasks_TaskCancelled" xml:space="preserve">
-    <value>Nhiệm vụ đã bị hủy bỏ</value>
+    <value>Nhiệm vụ đã bị hủy</value>
   </data>
   <data name="Bcv_Book" xml:space="preserve">
     <value>SÁCH</value>
   </data>
   <data name="Bcv_Chapter" xml:space="preserve">
-    <value>Chương</value>
+    <value>CHƯƠNG</value>
   </data>
   <data name="Bcv_NextBook" xml:space="preserve">
     <value>Cuốn sách tiếp theo</value>
@@ -221,13 +224,13 @@
     <value>Chương tiếp theo</value>
   </data>
   <data name="Bcv_NextVerse" xml:space="preserve">
-    <value>Câu thơ tiếp theo</value>
+    <value>Câu tiếp theo</value>
   </data>
   <data name="Bcv_Offset" xml:space="preserve">
     <value>BÙ LẠI</value>
   </data>
   <data name="Bcv_PreviousBook" xml:space="preserve">
-    <value>Cuốn sách trước</value>
+    <value>Sách trước</value>
   </data>
   <data name="Bcv_PreviousChapter" xml:space="preserve">
     <value>Chương trước</value>
@@ -248,7 +251,7 @@
     <value>Sách</value>
   </data>
   <data name="BiblicalTermsBcv_Chapter" xml:space="preserve">
-    <value>Chương</value>
+    <value>chương</value>
   </data>
   <data name="BiblicalTermsBcv_Verse" xml:space="preserve">
     <value>Thơ</value>
@@ -275,10 +278,10 @@
     <value>sự kết hợp</value>
   </data>
   <data name="BiblicalTermsDomains_ConstructionReligiousActivities" xml:space="preserve">
-    <value>sự thi công; các hoạt động tôn giáo</value>
+    <value>sự thi công; hoạt động tôn giáo</value>
   </data>
   <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>xây dựng; chăn nuôi</value>
+    <value>công trình xây dựng; chăn nuôi</value>
   </data>
   <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
     <value>hộp đựng; chăn nuôi</value>
@@ -290,10 +293,10 @@
     <value>trái cây</value>
   </data>
   <data name="BiblicalTermsDomains_Gemstones" xml:space="preserve">
-    <value>Đá quý</value>
+    <value>đá quý</value>
   </data>
   <data name="BiblicalTermsDomains_Grasses" xml:space="preserve">
-    <value>Cỏ</value>
+    <value>cỏ</value>
   </data>
   <data name="BiblicalTermsDomains_Group" xml:space="preserve">
     <value>nhóm</value>
@@ -305,7 +308,7 @@
     <value>danh dự, sự tôn trọng, địa vị</value>
   </data>
   <data name="BiblicalTermsDomains_Locale" xml:space="preserve">
-    <value>địa phương</value>
+    <value>ngôn ngữ</value>
   </data>
   <data name="BiblicalTermsDomains_MammalsDomesticAnimals" xml:space="preserve">
     <value>động vật có vú; vật nuôi</value>
@@ -326,7 +329,7 @@
     <value>thiên nhiên</value>
   </data>
   <data name="BiblicalTermsDomains_Paganism" xml:space="preserve">
-    <value>Paganism</value>
+    <value>ngoại giáo</value>
   </data>
   <data name="BiblicalTermsDomains_People" xml:space="preserve">
     <value>mọi người</value>
@@ -344,28 +347,28 @@
     <value>mục đích</value>
   </data>
   <data name="BiblicalTermsDomains_ReligiousActivities" xml:space="preserve">
-    <value>các hoạt động tôn giáo</value>
+    <value>hoạt động tôn giáo</value>
   </data>
   <data name="BiblicalTermsDomains_SacrificesAndOfferings" xml:space="preserve">
-    <value>hy sinh và lễ vật</value>
+    <value>sự hy sinh và lễ vật</value>
   </data>
   <data name="BiblicalTermsDomains_Settlement" xml:space="preserve">
     <value>giải quyết</value>
   </data>
   <data name="BiblicalTermsDomains_SignsAndWonders" xml:space="preserve">
-    <value>Dấu hiệu và kỳ quan</value>
+    <value>dấu hiệu và điều kỳ diệu</value>
   </data>
   <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowers" xml:space="preserve">
-    <value>Những sinh vật và sức mạnh siêu nhiên</value>
+    <value>sinh vật và sức mạnh siêu nhiên</value>
   </data>
   <data name="BiblicalTermsDomains_SupernaturalBeingsAndPowersTitles" xml:space="preserve">
-    <value>sinh vật siêu nhiên và sức mạnh; tiêu đề</value>
+    <value>sinh vật và sức mạnh siêu nhiên; danh hiệu</value>
   </data>
   <data name="BiblicalTermsDomains_Tools" xml:space="preserve">
     <value>công cụ</value>
   </data>
   <data name="BiblicalTermsDomains_ToolsChildbirth" xml:space="preserve">
-    <value>công cụ; Sinh con</value>
+    <value>công cụ; sinh con</value>
   </data>
   <data name="BiblicalTermsDomains_ToolsWeightCommerce" xml:space="preserve">
     <value>công cụ; cân nặng; thương mại</value>
@@ -377,7 +380,7 @@
     <value>cây; nước hoa và gia vị</value>
   </data>
   <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>Trí tuệ, sự hiểu biết</value>
+    <value>trí tuệ, sự hiểu biết</value>
   </data>
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>Tất cả</value>
@@ -392,10 +395,10 @@
     <value>Thành lập</value>
   </data>
   <data name="BiblicalTermsForm_Gloss" xml:space="preserve">
-    <value>Bóng</value>
+    <value>Độ bóng</value>
   </data>
   <data name="BiblicalTermsForm_GlossLower" xml:space="preserve">
-    <value>Bóng:</value>
+    <value>Độ bóng:</value>
   </data>
   <data name="BiblicalTermsForm_Note" xml:space="preserve">
     <value>Ghi chú</value>
@@ -428,7 +431,7 @@
     <value>Thiếu kết xuất</value>
   </data>
   <data name="BulkAlignmentReview_AlignedWords" xml:space="preserve">
-    <value>Từ ngữ phù hợp</value>
+    <value>căn chỉnh từ</value>
   </data>
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
     <value>Sắp xếp</value>
@@ -446,28 +449,28 @@
     <value>Phê duyệt đã chọn</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentEditor" xml:space="preserve">
-    <value>Biên tập viên căn chỉnh số lượng lớn</value>
+    <value>Trình chỉnh sửa căn chỉnh hàng loạt</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>Đánh giá căn chỉnh số lượng lớn</value>
+    <value>Đánh giá căn chỉnh hàng loạt</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>Đếm</value>
   </data>
   <data name="BulkAlignmentReview_CountBySurfaceText" xml:space="preserve">
-    <value>Đếm theo văn bản bề mặt</value>
+    <value>Đếm theo bề mặt văn bản</value>
   </data>
   <data name="BulkAlignmentReview_CountByTrainingText" xml:space="preserve">
-    <value>Đếm bằng văn bản đào tạo</value>
+    <value>Đếm theo văn bản đào tạo</value>
   </data>
   <data name="BulkAlignmentReview_Disapprove" xml:space="preserve">
     <value>Không chấp thuận</value>
   </data>
   <data name="BulkAlignmentReview_Disapproved" xml:space="preserve">
-    <value>Không chấp thuận</value>
+    <value>Bị từ chối</value>
   </data>
   <data name="BulkAlignmentReview_DisapproveSelected" xml:space="preserve">
-    <value>Không chấp thuận được chọn</value>
+    <value>Từ chối đã chọn</value>
   </data>
   <data name="BulkAlignmentReview_Invalid" xml:space="preserve">
     <value>Không hợp lệ</value>
@@ -476,22 +479,22 @@
     <value>Máy móc</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsInvalid" xml:space="preserve">
-    <value>Đánh dấu được chọn là 'không hợp lệ'</value>
+    <value>Đánh dấu đã chọn là 'Không hợp lệ'</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
-    <value>Đánh dấu được chọn là 'Đánh giá nhu cầu'</value>
+    <value>Đánh dấu đã chọn là 'Cần xem xét'</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
-    <value>Đánh dấu được chọn là 'hợp lệ'</value>
+    <value>Đánh dấu đã chọn là 'Hợp lệ'</value>
   </data>
   <data name="BulkAlignmentReview_NeedsReview" xml:space="preserve">
-    <value>Nhu cầu xem xét</value>
+    <value>Cần xem xét</value>
   </data>
   <data name="BulkAlignmentReview_Part" xml:space="preserve">
     <value>Phần</value>
   </data>
   <data name="BulkAlignmentReview_PivotedWords" xml:space="preserve">
-    <value>Các từ xoay tròn</value>
+    <value>từ xoay vòng</value>
   </data>
   <data name="BulkAlignmentReview_Source" xml:space="preserve">
     <value>Nguồn</value>
@@ -500,7 +503,7 @@
     <value>Phần nguồn</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Nguồn ref</value>
+    <value>Nguồn tham chiếu</value>
   </data>
   <data name="BulkAlignmentReview_Target" xml:space="preserve">
     <value>Mục tiêu</value>
@@ -515,7 +518,7 @@
     <value>Có hiệu lực</value>
   </data>
   <data name="BulkAlignmentReview_VerseText" xml:space="preserve">
-    <value>Văn bản câu thơ</value>
+    <value>văn bản câu thơ</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Hủy bỏ</value>
@@ -527,13 +530,13 @@
     <value>Xóa bỏ</value>
   </data>
   <data name="ClockUserControl_Include" xml:space="preserve">
-    <value>Bao gồm trong vòng quay hiển thị đồng hồ</value>
+    <value>Bao gồm trong vòng xoay hiển thị đồng hồ</value>
   </data>
   <data name="ClockUserControl_LocalTime" xml:space="preserve">
     <value>Giờ địa phương</value>
   </data>
   <data name="ClockUserControl_Name" xml:space="preserve">
-    <value>Đặt tên cho mục</value>
+    <value>Đặt tên cho mặt hàng</value>
   </data>
   <data name="ClockUserControl_NewGroup" xml:space="preserve">
     <value>nhóm mới</value>
@@ -542,7 +545,7 @@
     <value>cá nhân mới</value>
   </data>
   <data name="ClockUserControl_Select" xml:space="preserve">
-    <value>Chọn Timezone</value>
+    <value>Chọn múi giờ</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Đóng</value>
@@ -554,19 +557,19 @@
     <value>Người dùng cộng tác có sẵn:</value>
   </data>
   <data name="CollabProjectManagementView_CollaborationManagement" xml:space="preserve">
-    <value>Quản lý các dự án hợp tác</value>
+    <value>Quản lý dự án hợp tác</value>
   </data>
   <data name="CollabProjectManagementView_CurrentProjectUsers" xml:space="preserve">
     <value>Người dùng dự án hiện tại:</value>
   </data>
   <data name="CollabProjectManagementView_Delete" xml:space="preserve">
-    <value>Xóa hợp tác dự án</value>
+    <value>Xóa cộng tác dự án</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>Bạn có người dùng khác kết nối với dự án này. Dự án này cũng sẽ được gỡ bỏ cho họ. Có chắc chắn bạn muốn xóa dự án này?</value>
+    <value>Bạn có những người dùng khác được kết nối với dự án này. Dự án này cũng sẽ bị loại bỏ đối với họ. Bạn có chắc chắn muốn xóa dự án này?</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
-    <value>Bạn có chắc là bạn muốn xóa dự án này?</value>
+    <value>Bạn có chắc chắn muốn xóa dự án này?</value>
   </data>
   <data name="CollabProjectManagementView_Description" xml:space="preserve">
     <value>Sự miêu tả</value>
@@ -581,7 +584,7 @@
     <value>Dự án</value>
   </data>
   <data name="CollabProjectManagementView_SelectProject" xml:space="preserve">
-    <value>Chọn Dự án</value>
+    <value>Chọn dự án</value>
   </data>
   <data name="Copy" xml:space="preserve">
     <value>Sao chép</value>
@@ -602,7 +605,7 @@
     <value>DAN</value>
   </data>
   <data name="DashboardWindow_ClearNotes" xml:space="preserve">
-    <value>Ghi chú rõ ràng</value>
+    <value>Xóa ghi chú</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Xóa bỏ</value>
@@ -611,7 +614,7 @@
     <value>Xóa dự án</value>
   </data>
   <data name="Delete_Project_Confirmation" xml:space="preserve">
-    <value>Bạn có chắc là bạn muốn xóa dự án này?</value>
+    <value>Bạn có chắc chắn muốn xóa dự án này?</value>
   </data>
   <data name="DEU" xml:space="preserve">
     <value>DEU</value>
@@ -635,16 +638,16 @@
     <value>Căn chỉnh '{0}' với '{1}'?</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
-    <value>Liên kết</value>
+    <value>Căn chỉnh</value>
   </data>
   <data name="EnhancedView_ClosingEnhancedView" xml:space="preserve">
     <value>Xóa chế độ xem này?</value>
   </data>
   <data name="EnhancedView_CreateAlignment" xml:space="preserve">
-    <value>Tạo sự liên kết</value>
+    <value>Tạo căn chỉnh</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>Xem/Tạo ghi chú</value>
+    <value>Xem/Tạo Jot</value>
   </data>
   <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
     <value>Xóa căn chỉnh?</value>
@@ -656,34 +659,34 @@
     <value>Xóa căn chỉnh cho '{0}'?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
-    <value>Xóa tất cả các sắp xếp?</value>
+    <value>Xóa tất cả sự sắp xếp?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>Mã thông báo '{0}' có nhiều căn chỉnh được xác định. Nhấp vào '{1}' sẽ xóa tất cả các sắp xếp.</value>
+    <value>Mã thông báo '{0}' có nhiều cách sắp xếp được xác định. Nhấp vào '{1}' sẽ xóa tất cả sự sắp xếp.</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>Tìm kiếm thuật ngữ lọc</value>
+    <value>Lọc cụm từ tìm kiếm</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
     <value />
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
-    <value>Xen kẽ</value>
+    <value>Liên tuyến</value>
   </data>
   <data name="EnhancedView_JoinTokens" xml:space="preserve">
-    <value>Tham gia mã thông báo</value>
+    <value>Tham gia Token</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Tham gia mã thông báo cho cặp ngôn ngữ</value>
+    <value>Mã thông báo tham gia cho cặp ngôn ngữ</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
-    <value>Đánh dấu căn chỉnh là 'không hợp lệ'</value>
+    <value>Đánh dấu căn chỉnh là 'Không hợp lệ'</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsNeedsReview" xml:space="preserve">
-    <value>Đánh dấu căn chỉnh là 'cần xem xét' nhu cầu '</value>
+    <value>Đánh dấu sự điều chỉnh là 'Cần xem xét'</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
-    <value>Đánh dấu căn chỉnh là 'hợp lệ'</value>
+    <value>Đánh dấu căn chỉnh là 'Hợp lệ'</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
     <value>Mã thông báo mới: Văn bản đào tạo</value>
@@ -692,28 +695,28 @@
     <value>Ghi chú</value>
   </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
-    <value>Không có dữ liệu câu trong phạm vi câu này.</value>
+    <value>Không có dữ liệu câu thơ trong phạm vi câu thơ này.</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
-    <value>Loại bỏ kho văn bản</value>
+    <value>Xóa tập tin</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
-    <value>Hiển thị các điều khiển chế độ xem</value>
+    <value>Hiển thị các điều khiển xem</value>
   </data>
   <data name="EnhancedView_SplitToken" xml:space="preserve">
-    <value>Tách mã thông báo</value>
+    <value>Chia mã thông báo</value>
   </data>
   <data name="EnhancedView_SplitTokenApplyToAll" xml:space="preserve">
-    <value>Áp dụng chia tách cho các phiên bản mã thông báo khác</value>
+    <value>Áp dụng phân chia cho các phiên bản khác của mã thông báo</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>Chọn WHERE để chia mã thông báo:</value>
+    <value>Chọn nơi chia token:</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>Chia ba chiều</value>
   </data>
   <data name="EnhancedView_UnjoinTokens" xml:space="preserve">
-    <value>Mã thông báo tổng hợp không khớp</value>
+    <value>Mã thông báo tổng hợp hủy tham gia</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -746,7 +749,7 @@
     <value>Khoảng cách ngang:</value>
   </data>
   <data name="FontSettings_NoteIndicators" xml:space="preserve">
-    <value>LƯU Ý Các chỉ số:</value>
+    <value>Lưu ý Các chỉ số:</value>
   </data>
   <data name="FontSettings_ParagraphMode" xml:space="preserve">
     <value>Chế độ đoạn văn</value>
@@ -755,7 +758,7 @@
     <value>Hiển thị ghi chú bên ngoài</value>
   </data>
   <data name="FontSettings_Source" xml:space="preserve">
-    <value>Nguồn văn bản:</value>
+    <value>Văn bản nguồn:</value>
   </data>
   <data name="FontSettings_SourceFontSize" xml:space="preserve">
     <value>Kích thước phông chữ nguồn:</value>
@@ -770,13 +773,13 @@
     <value>Tiêu đề:</value>
   </data>
   <data name="FontSettings_TitleFontSize" xml:space="preserve">
-    <value>Kích thước phông chữ tiêu đề:</value>
+    <value>Cỡ chữ tiêu đề:</value>
   </data>
   <data name="FontSettings_Translations" xml:space="preserve">
     <value>Bản dịch:</value>
   </data>
   <data name="FontSettings_Vertical" xml:space="preserve">
-    <value>Khoảng cách thẳng đứng:</value>
+    <value>Khoảng cách dọc:</value>
   </data>
   <data name="GAL" xml:space="preserve">
     <value>GAL</value>
@@ -860,7 +863,7 @@
     <value>Thêm một miền ngữ nghĩa vào ý nghĩa này</value>
   </data>
   <data name="Lexicon_AddForm" xml:space="preserve">
-    <value>Thêm một hình thức từ vựng vào bổ đề này</value>
+    <value>Thêm một dạng từ vựng vào bổ đề này</value>
   </data>
   <data name="Lexicon_AddLexeme" xml:space="preserve">
     <value>Thêm từ vựng</value>
@@ -878,16 +881,16 @@
     <value>Thêm một miền ngữ nghĩa</value>
   </data>
   <data name="Lexicon_ApplyTranslation" xml:space="preserve">
-    <value>Áp dụng bóng</value>
+    <value>Áp dụng độ bóng</value>
   </data>
   <data name="Lexicon_CancelTranslation" xml:space="preserve">
-    <value>Hủy bóng</value>
+    <value>Hủy bỏ độ bóng</value>
   </data>
   <data name="Lexicon_ChangeAll" xml:space="preserve">
-    <value>Thay đổi tất cả các lần xuất hiện không được đặt</value>
+    <value>Thay đổi tất cả các lần xuất hiện chưa được đặt</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>Nếu được kiểm tra, điều này sẽ thay đổi tất cả các lần xuất hiện của từ này</value>
+    <value>Nếu được chọn, điều này sẽ thay đổi tất cả các lần xuất hiện chưa được đặt của từ này</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Sự phù hợp</value>
@@ -905,22 +908,22 @@
     <value>Xóa bản dịch này</value>
   </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
-    <value>Nhập một bản dịch mới cho</value>
+    <value>Nhập bản dịch mới cho</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
-    <value>Nhập một độ bóng mới</value>
+    <value>Nhập độ bóng mới</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
-    <value>Bổ đề</value>
+    <value>bổ đề</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
-    <value>Bổ đề/hình thức:</value>
+    <value>Bổ đề/Dạng:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Bổ đề cho Lexeme mới:</value>
+    <value>Bổ đề cho từ vựng mới:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
-    <value>Từ vựng</value>
+    <value>từ vựng</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Một từ vựng đã tồn tại cho bổ đề</value>
@@ -929,13 +932,13 @@
     <value>Ý nghĩa:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
-    <value>Bóng mới</value>
+    <value>Độ bóng mới</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>Loại bỏ miền ngữ nghĩa này khỏi ý nghĩa này</value>
+    <value>Xóa miền ngữ nghĩa này khỏi ý nghĩa này</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
-    <value>Loại bỏ hình thức từ vựng này khỏi bổ đề này</value>
+    <value>Loại bỏ dạng từ vựng này khỏi bổ đề này</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Đặt độ bóng cho</value>
@@ -953,10 +956,10 @@
     <value>Biên tập</value>
   </data>
   <data name="LexiconEdit_Edit_MatchOnTranslationTemplate" xml:space="preserve">
-    <value>Thêm '{0}' dưới dạng biểu mẫu</value>
+    <value>Thêm '{0}' làm biểu mẫu</value>
   </data>
   <data name="LexiconEdit_Edit_PartialMatchOnLemmaOrFormTemplate" xml:space="preserve">
-    <value>Thêm '{0}' như bản dịch sang ý nghĩa đầu tiên</value>
+    <value>Thêm '{0}' làm bản dịch sang nghĩa đầu tiên</value>
   </data>
   <data name="LexiconEdit_EditingDone" xml:space="preserve">
     <value>Xong</value>
@@ -971,28 +974,28 @@
     <value>Đầy đủ</value>
   </data>
   <data name="LexiconEdit_FullyMatching" xml:space="preserve">
-    <value>Phù hợp đầy đủ</value>
+    <value>Hoàn toàn phù hợp</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
-    <value>Từ vựng</value>
+    <value>từ vựng</value>
   </data>
   <data name="LexiconEdit_LoadingData" xml:space="preserve">
-    <value>Đang tải dữ liệu ...</value>
+    <value>Đang tải dữ liệu...</value>
   </data>
   <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
-    <value>Một lỗi bất ngờ xảy ra trong khi tải dữ liệu. {0}</value>
+    <value>Đã xảy ra lỗi không mong muốn khi tải dữ liệu. {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
-    <value>Phù hợp</value>
+    <value>Kết hợp</value>
   </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
-    <value>Ý nghĩa [Dịch]</value>
+    <value>Ý nghĩa [bản dịch]</value>
   </data>
   <data name="LexiconEdit_Or" xml:space="preserve">
     <value>Hoặc</value>
   </data>
   <data name="LexiconEdit_Partially" xml:space="preserve">
-    <value>Một phần</value>
+    <value>một phần</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
     <value>Lưu thay đổi</value>
@@ -1004,7 +1007,7 @@
     <value>Ngôn ngữ mục tiêu</value>
   </data>
   <data name="LexiconEdit_Title" xml:space="preserve">
-    <value>Chỉnh sửa từ vựng</value>
+    <value>Chỉnh sửa từ điển</value>
   </data>
   <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>Dịch</value>
@@ -1013,25 +1016,25 @@
     <value>Kiểu</value>
   </data>
   <data name="LexiconImport_AddFormButtonText" xml:space="preserve">
-    <value>Thêm dưới dạng hình thức cho ...</value>
+    <value>Thêm dưới dạng biểu mẫu cho...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Tìm các từ bỏ từ vựng đầy đủ hoặc một phần hoặc các hình thức cho nguồn</value>
+    <value>Tìm từ vựng đầy đủ hoặc một phần hoặc mẫu khớp với nguồn</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>Thêm mục tiêu làm dịch cho ...</value>
+    <value>Thêm mục tiêu làm bản dịch cho ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Tìm từ vựng có một hoặc nhiều bản dịch phù hợp với mục tiêu</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
-    <value>Nhập khẩu đã kiểm tra</value>
+    <value>Đã kiểm tra nhập</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
-    <value>Các kết quả phù hợp từ vựng hoặc hình thức</value>
+    <value>Lexeme hoặc mẫu phù hợp</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
-    <value>Không có nhiều hồ sơ để nhập khẩu.</value>
+    <value>Không còn bản ghi nào để nhập.</value>
   </data>
   <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
     <value>Vui lòng chọn một kho văn bản.</value>
@@ -1055,7 +1058,7 @@
     <value>Từ mục tiêu</value>
   </data>
   <data name="LexiconImport_Title" xml:space="preserve">
-    <value>Nhập khẩu từ vựng</value>
+    <value>Nhập từ vựng</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
     <value>Trận đấu dịch</value>
@@ -1064,10 +1067,10 @@
     <value>Bỏ chọn tất cả</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
-    <value>Tên đầu tiên được yêu cầu</value>
+    <value>Tên là bắt buộc</value>
   </data>
   <data name="LicenseValidator_LastMissing" xml:space="preserve">
-    <value>Họ được yêu cầu</value>
+    <value>Họ là bắt buộc</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>Cần có khóa cấp phép</value>
@@ -1112,16 +1115,16 @@
     <value>Lưu bố cục hiện tại</value>
   </data>
   <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
-    <value>Bố cục tiêu chuẩn</value>
+    <value>Bố cục chuẩn</value>
   </data>
   <data name="MainView_ProgramPreferences" xml:space="preserve">
     <value>Sở thích</value>
   </data>
   <data name="MainView_QuickNew" xml:space="preserve">
-    <value>Nhanh chóng mới</value>
+    <value>Nhanh chóng Mới</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
-    <value>Thay đổi cộng tác có sẵn</value>
+    <value>Có sẵn các thay đổi cộng tác</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
     <value>Cài đặt</value>
@@ -1154,7 +1157,7 @@
     <value>Xem mới</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>Danh sách ghi chú</value>
+    <value>Truyện ngắn</value>
   </data>
   <data name="MainView_WindowsPINS" xml:space="preserve">
     <value>PINS</value>
@@ -1163,7 +1166,7 @@
     <value>Bộ sưu tập văn bản</value>
   </data>
   <data name="MainView_WindowsWordMeanings" xml:space="preserve">
-    <value>Ý nghĩa từ</value>
+    <value>Ý nghĩa của từ</value>
   </data>
   <data name="MAL" xml:space="preserve">
     <value>MAL</value>
@@ -1175,7 +1178,7 @@
     <value>Sách</value>
   </data>
   <data name="Marble_Chapter" xml:space="preserve">
-    <value>Chương</value>
+    <value>chương</value>
   </data>
   <data name="Marble_Definition" xml:space="preserve">
     <value>Sự định nghĩa</value>
@@ -1184,31 +1187,31 @@
     <value>Định nghĩa dài:</value>
   </data>
   <data name="Marble_DefinitionShort" xml:space="preserve">
-    <value>Định nghĩa ngắn:</value>
+    <value>Định nghĩa ngắn gọn:</value>
   </data>
   <data name="Marble_DefinitionUnavailable" xml:space="preserve">
-    <value>Định nghĩa không có sẵn</value>
+    <value>định nghĩa không có sẵn</value>
   </data>
   <data name="Marble_Domains" xml:space="preserve">
-    <value>Miền:</value>
+    <value>Tên miền:</value>
   </data>
   <data name="Marble_DomainsTitle" xml:space="preserve">
-    <value>Miền</value>
+    <value>Tên miền</value>
   </data>
   <data name="Marble_FrequencyGraph" xml:space="preserve">
-    <value>Đồ thị tần số</value>
+    <value>Biểu đồ tần số</value>
   </data>
   <data name="Marble_GeneralInformation" xml:space="preserve">
     <value>Thông tin chung</value>
   </data>
   <data name="Marble_Glosses" xml:space="preserve">
-    <value>Glosses:</value>
+    <value>Bóng:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
     <value>Các phần của bài phát biểu</value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>Bổ số liên quan</value>
+    <value>Bổ đề liên quan</value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>Phạm vi:</value>
@@ -1217,10 +1220,10 @@
     <value>Tìm kiếm</value>
   </data>
   <data name="Marble_SearchEnglish" xml:space="preserve">
-    <value>Tìm kiếm bằng tiếng Anh bóng</value>
+    <value>Tìm kiếm theo tiếng Anh</value>
   </data>
   <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>Tìm kiếm bằng tiếng Do Thái/tiếng Hy Lạp</value>
+    <value>Tìm kiếm theo tiếng Do Thái/Hy Lạp</value>
   </data>
   <data name="Marble_Sense" xml:space="preserve">
     <value>Giác quan</value>
@@ -1232,7 +1235,7 @@
     <value>Mã mạnh</value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
-    <value>Miền phụ:</value>
+    <value>Tên miền phụ:</value>
   </data>
   <data name="Marble_Verse" xml:space="preserve">
     <value>Thơ</value>
@@ -1241,7 +1244,7 @@
     <value>Câu thơ</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Cảm giác câu thơ</value>
+    <value>Ý nghĩa câu thơ</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Tổng số câu</value>
@@ -1250,25 +1253,25 @@
     <value>MAT</value>
   </data>
   <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>Tạo cơ sở dữ liệu ...</value>
+    <value>Đang tạo cơ sở dữ liệu...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
-    <value>Hợp nhất hoàn thành ... Giao diện tải lại</value>
+    <value>Hợp nhất hoàn tất...Giao diện tải lại</value>
   </data>
   <data name="MergeDialog_OperationCancelled" xml:space="preserve">
-    <value>Hoạt động bị hủy bỏ</value>
+    <value>Đã hủy thao tác</value>
   </data>
   <data name="MergeDialog_OperationComplete" xml:space="preserve">
-    <value>Hoạt động Hoàn thành!</value>
+    <value>Hoạt động hoàn tất!</value>
   </data>
   <data name="MergeDialog_OperationErrored" xml:space="preserve">
-    <value>Lỗi gặp phải</value>
+    <value>Đã Gặp Lỗi</value>
   </data>
   <data name="MIC" xml:space="preserve">
     <value>MIC</value>
   </data>
   <data name="Migrate_Header" xml:space="preserve">
-    <value>Đặt lại ánh xạ câu thơ về sự đa dạng hóa mặc định</value>
+    <value>Đặt lại ánh xạ câu thơ về phiên bản mặc định</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>MRK</value>
@@ -1286,7 +1289,7 @@
     <value>Truy cập thẻ:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Kiểm tra email của bạn và nhập mã xác thực:</value>
+    <value>Kiểm tra email của bạn và nhập mã xác nhận:</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Kiểm tra tính khả dụng của người dùng</value>
@@ -1310,7 +1313,7 @@
     <value>Mã xác minh email:</value>
   </data>
   <data name="NewCollabUserView_ErrorCreatingUser" xml:space="preserve">
-    <value>Lỗi khi tạo người dùng trên máy chủ</value>
+    <value>Lỗi Tạo người dùng trên Server</value>
   </data>
   <data name="NewCollabUserView_FirstName" xml:space="preserve">
     <value>Tên đầu tiên</value>
@@ -1328,7 +1331,7 @@
     <value>Mật khẩu:</value>
   </data>
   <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
-    <value>Được lưu vào máy chủ từ xa</value>
+    <value>Đã lưu vào máy chủ từ xa</value>
   </data>
   <data name="NewCollabUserView_SelectOrganization" xml:space="preserve">
     <value>Chọn tổ chức</value>
@@ -1340,13 +1343,13 @@
     <value>Tên tài khoản:</value>
   </data>
   <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
-    <value>Người dùng đã có trên hệ thống!</value>
+    <value>Người dùng đã có mặt trên hệ thống!</value>
   </data>
   <data name="NewCollabUserView_ValidateEmailCode" xml:space="preserve">
     <value>Xác thực mã email</value>
   </data>
   <data name="NewProject_ProjectExistsTemplate" xml:space="preserve">
-    <value>Một dự án có tên '{0}' đã tồn tại. Vui lòng chọn một tên duy nhất. "</value>
+    <value>Dự án có tên '{0}' đã tồn tại. Hãy chọn một cái tên duy nhất."</value>
   </data>
   <data name="NewProjectDialog_Title" xml:space="preserve">
     <value>Tạo dự án mới</value>
@@ -1366,38 +1369,53 @@
   <data name="None" xml:space="preserve">
     <value>Không có</value>
   </data>
+  <data name="Notes_AddJot" xml:space="preserve">
+    <value>Thêm tin nhắn</value>
+  </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
     <value>Thêm một ghi chú mới</value>
   </data>
+  <data name="Notes_Body" xml:space="preserve">
+    <value>Thân hình</value>
+  </data>
+  <data name="Notes_Delete" xml:space="preserve">
+    <value>Xóa tin nhắn</value>
+  </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>Xóa ghi chú này?</value>
+    <value>Xóa tin nhắn này?</value>
+  </data>
+  <data name="Notes_DueToPermissions" xml:space="preserve">
+    <value>Do quyền của dự án Paratext của bạn,</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Bởi các hiệp hội</value>
+    <value>Lọc theo câu thơ</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Bộ lọc</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>Bằng nhãn</value>
+    <value>Lọc theo nhãn</value>
+  </data>
+  <data name="Notes_FilterNoteStatus" xml:space="preserve">
+    <value>Lọc theo trạng thái</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>Theo ghi chú văn bản</value>
+    <value>Lọc theo văn bản</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>Bất kì</value>
   </data>
   <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>Đóng</value>
+    <value>Đã giải quyết</value>
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>Mở</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>Bởi người dùng</value>
+    <value>Lọc theo tác giả</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
-    <value>Thêm một nhãn</value>
+    <value>Thêm nhãn</value>
   </data>
   <data name="Notes_LabelAddConfirm" xml:space="preserve">
     <value>Bạn có muốn tạo nhãn:</value>
@@ -1409,7 +1427,7 @@
     <value>Bạn có muốn xóa nhãn:</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>Bạn có muốn tháo rời nhãn:</value>
+    <value>Bạn có muốn tách nhãn:</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>từ nhóm nhãn:</value>
@@ -1418,7 +1436,7 @@
     <value>Thêm nhóm nhãn</value>
   </data>
   <data name="Notes_LabelGroupAddTooltip" xml:space="preserve">
-    <value>Thêm một nhóm nhãn</value>
+    <value>Thêm nhóm nhãn</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
     <value>Một nhóm nhãn đã tồn tại với tên</value>
@@ -1429,8 +1447,11 @@
   <data name="Notes_LabelGroupInitializeFrom" xml:space="preserve">
     <value>với nhãn từ:</value>
   </data>
+  <data name="Notes_LabelGroupManageTooltip" xml:space="preserve">
+    <value>Quản lý nhãn trong nhóm nhãn</value>
+  </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
-    <value>Tên nhóm</value>
+    <value>Tên nhóm nhãn</value>
   </data>
   <data name="Notes_LabelGroupRemovePrompt" xml:space="preserve">
     <value>Xóa nhóm nhãn này?</value>
@@ -1442,22 +1463,28 @@
     <value>Xóa nhãn này</value>
   </data>
   <data name="Notes_LabelTextAttached" xml:space="preserve">
-    <value>Văn bản gắn vào nhãn</value>
+    <value>Văn bản gắn liền với nhãn</value>
   </data>
   <data name="Notes_LabelTooltipDelete" xml:space="preserve">
     <value>Xóa nhãn</value>
   </data>
   <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
-    <value>Disleciate Nhãn</value>
+    <value>Tách nhãn</value>
+  </data>
+  <data name="Notes_MarkOpen" xml:space="preserve">
+    <value>Đánh dấu các ghi chú đã chọn là đang mở</value>
+  </data>
+  <data name="Notes_MarkResolved" xml:space="preserve">
+    <value>Đánh dấu các ghi chú đã chọn là đã giải quyết</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Tạo</value>
   </data>
   <data name="Notes_Note_Modified" xml:space="preserve">
-    <value>Sửa đổi</value>
+    <value>Đã sửa đổi</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>Người dùng</value>
+    <value>Tác giả</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>Trạng thái</value>
@@ -1466,7 +1493,10 @@
     <value>Mở</value>
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>Đóng</value>
+    <value>Đã giải quyết</value>
+  </data>
+  <data name="Notes_Note_Verse" xml:space="preserve">
+    <value>Thơ</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>Hiệp hội</value>
@@ -1475,7 +1505,7 @@
     <value>Nhóm</value>
   </data>
   <data name="Notes_NoteLabelGroups" xml:space="preserve">
-    <value>DANH SÁCH NHÓM</value>
+    <value>Nhóm nhãn</value>
   </data>
   <data name="Notes_NoteLabels" xml:space="preserve">
     <value>Nhãn</value>
@@ -1486,23 +1516,47 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>Đã xem</value>
   </data>
+  <data name="Notes_NotesNotSent" xml:space="preserve">
+    <value> các ghi chú đã chọn sẽ không được gửi đến Paratext.</value>
+  </data>
+  <data name="Notes_NoteStatus_Archived" xml:space="preserve">
+    <value>Đã lưu trữ</value>
+  </data>
   <data name="Notes_NoteText" xml:space="preserve">
     <value>Chữ</value>
   </data>
   <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>Đóng mở</value>
+    <value>Trạng thái</value>
+  </data>
+  <data name="Notes_OpenConfirmation" xml:space="preserve">
+    <value>Đánh dấu những ghi chú này là mở?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Phần</value>
   </data>
+  <data name="Notes_PleaseAddJot" xml:space="preserve">
+    <value>Vui lòng thêm ghi chú bằng hộp thoại bên dưới.</value>
+  </data>
+  <data name="Notes_ResolveConfirmation" xml:space="preserve">
+    <value>Đánh dấu những ghi chú này là đã được giải quyết?</value>
+  </data>
+  <data name="Notes_SelectLabelsToDeleteFromLabelGroup" xml:space="preserve">
+    <value>Chọn các nhãn cần xóa khỏi nhóm nhãn</value>
+  </data>
+  <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
+    <value>Lưu ý: các nhãn này sẽ xuất hiện trong nhóm nhãn: Không có</value>
+  </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>Gửi ghi chú này đến paratext?</value>
+    <value>Gửi những ghi chú này tới Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Gửi ghi chú này đến paratext</value>
+    <value>Gửi ghi chú tới Paratext</value>
+  </data>
+  <data name="Notes_TakeAction" xml:space="preserve">
+    <value />
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
-    <value>Tokenized Corpus</value>
+    <value>Corpus được mã hóa</value>
   </data>
   <data name="Notes_TranslationSet" xml:space="preserve">
     <value>Bộ dịch</value>
@@ -1511,7 +1565,10 @@
     <value>Trả lời chưa đọc</value>
   </data>
   <data name="Notes_UnreadRepliesPresent" xml:space="preserve">
-    <value>Trả lời chưa đọc hiện tại</value>
+    <value>Hiện có các câu trả lời chưa đọc</value>
+  </data>
+  <data name="Notes_UpdateJot" xml:space="preserve">
+    <value>Cập nhật tin nhắn</value>
   </data>
   <data name="Notes_Word" xml:space="preserve">
     <value>Từ</value>
@@ -1532,16 +1589,16 @@
     <value>Tạo căn chỉnh từ</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
-    <value>Tạo song song với các câu thơ Corpora</value>
+    <value>Tạo sự song song của các câu Corpora</value>
   </data>
   <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
-    <value>Tạo Interlinear</value>
+    <value>Tạo liên tuyến</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
     <value>Siêu dữ liệu JSON</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
-    <value>Song song hóa câu thơ</value>
+    <value>Song song hóa các câu Corpora</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
     <value>Thuật toán căn chỉnh từ máy</value>
@@ -1550,43 +1607,43 @@
     <value>Thuật toán căn chỉnh từ máy</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Mô hình đối xứng xe lửa?</value>
+    <value>Đào tạo mô hình đối xứng?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>Xe lửa</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Train Machine Word Aligner</value>
+    <value>Máy căn chỉnh chữ</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
-    <value>Đặt ánh xạ câu giữa các tập đoàn song song</value>
+    <value>Đặt bản đồ câu giữa các tập hợp song song</value>
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
-    <value>Corpus Paratext</value>
+    <value>Tập văn bản</value>
   </data>
   <data name="ParatextCorpusDialog_SelectSmt" xml:space="preserve">
-    <value>Chọn thuật toán SMT để đào tạo</value>
+    <value>Chọn thuật toán SMT để huấn luyện</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>Thêm phê duyệt số lượng lớn để xem</value>
+    <value>Thêm phê duyệt hàng loạt để xem</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
-    <value>Thêm để xem</value>
+    <value>Thêm vào xem</value>
   </data>
   <data name="Pds_AddConnectionToNewEnhancedViewMenu" xml:space="preserve">
     <value>Thêm vào chế độ xem mới</value>
   </data>
   <data name="Pds_AddCorpora" xml:space="preserve">
-    <value>Thêm Corpora</value>
+    <value>Thêm tập đoàn</value>
   </data>
   <data name="Pds_AddNewAlignmentSetMenu" xml:space="preserve">
     <value>Tạo căn chỉnh từ mới</value>
   </data>
   <data name="Pds_AddNewTokenizationMenu" xml:space="preserve">
-    <value>Tạo mã thông báo mới</value>
+    <value>Tạo mã thông báo Corpus mới</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>Thêm InterLinear mới</value>
+    <value>Thêm tuyến tính mới</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>Thêm văn bản để xem</value>
@@ -1595,28 +1652,28 @@
     <value>Thêm văn bản vào chế độ xem mới</value>
   </data>
   <data name="Pds_AddVerseViewToEnhancedViewMenu" xml:space="preserve">
-    <value>Thêm để xem</value>
+    <value>Thêm vào xem</value>
   </data>
   <data name="Pds_Auxiliary" xml:space="preserve">
     <value>Phụ trợ</value>
   </data>
   <data name="Pds_BackTranslation" xml:space="preserve">
-    <value>Backtranslation</value>
+    <value>Quay lạiDịch thuật</value>
   </data>
   <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
     <value>Tính toán mô hình dịch mới</value>
   </data>
   <data name="Pds_ChangeZoom" xml:space="preserve">
-    <value>Thay đổi mức độ zoom của nội dung</value>
+    <value>Thay đổi mức thu phóng của nội dung</value>
   </data>
   <data name="Pds_ConsultantNotes" xml:space="preserve">
-    <value>Chuyên gia tư vấn</value>
+    <value>Tư vấnGhi chú</value>
   </data>
   <data name="Pds_CreateNewAlignmentSetMenu" xml:space="preserve">
     <value>Tạo căn chỉnh từ mới</value>
   </data>
   <data name="Pds_CreateNewInterlinear" xml:space="preserve">
-    <value>Tạo InterLinear mới</value>
+    <value>Tạo tuyến tính mới</value>
   </data>
   <data name="Pds_Daughter" xml:space="preserve">
     <value>Con gái</value>
@@ -1625,52 +1682,52 @@
     <value>Xóa căn chỉnh</value>
   </data>
   <data name="Pds_DeleteParallelLine" xml:space="preserve">
-    <value>Bạn có chắc là bạn muốn xóa căn chỉnh này không? Tất cả các ghi chú, sắp xếp và xen kẽ liên quan đến sự liên kết này sẽ bị xóa và không thể được phục hồi.</value>
+    <value>Bạn có chắc chắn muốn xóa căn chỉnh này không? Tất cả các ghi chú, căn chỉnh và xen kẽ liên kết với căn chỉnh này sẽ bị xóa và không thể khôi phục được.</value>
   </data>
   <data name="Pds_DeleteTranaslationSet" xml:space="preserve">
-    <value>Xóa Interlinear</value>
+    <value>Xóa nội tuyến</value>
   </data>
   <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>Bạn có chắc là bạn muốn xóa kho văn bản này? Tất cả các ghi chú, sắp xếp và xen kẽ liên quan đến kho văn bản này sẽ bị xóa và không thể được phục hồi.</value>
+    <value>Bạn có chắc chắn muốn xóa kho văn bản này không? Tất cả các ghi chú, sắp xếp và liên tuyến được liên kết với kho văn bản này sẽ bị xóa và không thể khôi phục được.</value>
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Từ điển</value>
   </data>
   <data name="Pds_DisabledNotice" xml:space="preserve">
-    <value>Bị vô hiệu hóa trong khi các tác vụ nền đang hoạt động</value>
+    <value>Bị tắt khi tác vụ nền đang hoạt động</value>
   </data>
   <data name="Pds_ExistingProject" xml:space="preserve">
-    <value>Tên dự án đã tồn tại - không thể nhập</value>
+    <value>Tên dự án đã tồn tại - Không thể nhập</value>
   </data>
   <data name="Pds_ExistingProjectName" xml:space="preserve">
     <value>Tên dự án tồn tại</value>
   </data>
   <data name="Pds_ExternalNotesEditor" xml:space="preserve">
-    <value>Biên tập viên ghi chú bên ngoài</value>
+    <value>Trình chỉnh sửa ghi chú bên ngoài</value>
   </data>
   <data name="Pds_FitContentToViewport" xml:space="preserve">
-    <value>Lắp toàn bộ khu vực nội dung vào chế độ xem</value>
+    <value>Điều chỉnh toàn bộ khu vực nội dung cho vừa với khung nhìn</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>Phù hợp với tất cả các nút vào chế độ xem</value>
+    <value>Điều chỉnh tất cả các nút vào khung nhìn</value>
   </data>
   <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
-    <value>Nhận các ghi chú bên ngoài mới nhất</value>
+    <value>Nhận ghi chú bên ngoài mới nhất</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
-    <value>Nhận mới nhất từ ​​paratext</value>
+    <value>Nhận thông tin mới nhất từ ​​Paratext</value>
   </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
     <value>Hiển thị thông tin về dự án này</value>
   </data>
   <data name="Pds_ManuscriptGreek" xml:space="preserve">
-    <value>Macula Hy Lạp (NT)</value>
+    <value>Tiếng Hy Lạp (NT) MACULA</value>
   </data>
   <data name="Pds_ManuscriptHebrew" xml:space="preserve">
-    <value>Tiếng Do Thái (OT) macula</value>
+    <value>Tiếng Do Thái (OT) MACULA</value>
   </data>
   <data name="Pds_MARBLE Resource" xml:space="preserve">
-    <value>Tài nguyên đá cẩm thạch</value>
+    <value>Tài nguyên MARBLE</value>
   </data>
   <data name="Pds_NumberOfDifferentTokenizations" xml:space="preserve">
     <value>Số lượng mã thông báo khác nhau</value>
@@ -1682,13 +1739,13 @@
     <value>Của cải</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Đặt lại ánh xạ câu thơ về sự đa dạng hóa mặc định</value>
+    <value>Đặt lại ánh xạ câu thơ về phiên bản mặc định</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Nguồn</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
-    <value>Quy mô nội dung lên 100%</value>
+    <value>Chia tỷ lệ nội dung lên 100%</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
     <value>Thêm văn bản vào cửa sổ mới</value>
@@ -1697,46 +1754,46 @@
     <value>Nguồn</value>
   </data>
   <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>Language chua</value>
+    <value>Ngôn ngữ nguồn</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
     <value>Tiêu chuẩn</value>
   </data>
   <data name="Pds_StartParatextFirst" xml:space="preserve">
-    <value>Bắt đầu paratext đầu tiên</value>
+    <value>Bắt đầu đoạn văn bản đầu tiên</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
-    <value>Nghiên cứu</value>
+    <value>Nghiên CứuKinh Thánh</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
-    <value>Nghiên cứu</value>
+    <value>Nghiên CứuKinh ThánhBổ Sung</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Đi đến Paratext và chuyển đổi các dự án. Dự án Paratext hiện đang được kết nối với plugin ClearDashboard không giống với kho văn bản trong dự án ClearDashboard này.</value>
+    <value>Đi tới Paratext và chuyển đổi dự án. Dự án Paratext hiện được kết nối với plugin ClearDashboard không giống với kho văn bản trong dự án ClearDashboard này.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Mục tiêu</value>
   </data>
   <data name="Pds_TransliterationManual" xml:space="preserve">
-    <value>Phiên âm</value>
+    <value>Chuyển ngữHướng dẫn sử dụng</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Phiên dịchWithEncoder</value>
+    <value>Chuyển ngữVới bộ mã hóa</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>không xác định</value>
   </data>
   <data name="Pds_UpdateLabelsWithExternalLabels" xml:space="preserve">
-    <value>Cập nhật nhãn có ghi chú bên ngoài</value>
+    <value>Cập nhật nhãn bằng ghi chú bên ngoài</value>
   </data>
   <data name="Pds_Xml" xml:space="preserve">
-    <value>XML</value>
+    <value>Xml</value>
   </data>
   <data name="Pds_ZoomIn" xml:space="preserve">
     <value>Phóng to nội dung</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>Thu phóng từ nội dung</value>
+    <value>Thu nhỏ nội dung</value>
   </data>
   <data name="PHM" xml:space="preserve">
     <value>PHM</value>
@@ -1757,16 +1814,16 @@
     <value>Các hình thức</value>
   </data>
   <data name="Pins_Gloss" xml:space="preserve">
-    <value>Bóng</value>
+    <value>Độ bóng</value>
   </data>
   <data name="Pins_Language" xml:space="preserve">
     <value>Ngôn ngữ</value>
   </data>
   <data name="Pins_Lexeme" xml:space="preserve">
-    <value>Từ vựng</value>
+    <value>từ vựng</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
-    <value>Loại Lexeme</value>
+    <value>Loại từ vựng</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
     <value>Tải tài liệu tham khảo</value>
@@ -1778,19 +1835,19 @@
     <value>Ghi chú</value>
   </data>
   <data name="Pins_Occurences" xml:space="preserve">
-    <value>Xảy ra</value>
+    <value>Lần xuất hiện</value>
   </data>
   <data name="Pins_Origin" xml:space="preserve">
     <value>Nguồn gốc</value>
   </data>
   <data name="Pins_Phrase" xml:space="preserve">
-    <value>Cụm từ</value>
+    <value>cụm từ</value>
   </data>
   <data name="Pins_Prefix" xml:space="preserve">
     <value>Tiếp đầu ngữ</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>Hiển thị backtranslation</value>
+    <value>Hiển thị lạiBản dịch</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>Thân cây</value>
@@ -1799,7 +1856,7 @@
     <value>Hậu tố</value>
   </data>
   <data name="Pins_VerseReferences" xml:space="preserve">
-    <value>Tài liệu tham khảo câu</value>
+    <value>Tài liệu tham khảo câu thơ</value>
   </data>
   <data name="Pins_Word" xml:space="preserve">
     <value>Từ</value>
@@ -1811,16 +1868,16 @@
     <value>Thêm người dùng cộng tác mới</value>
   </data>
   <data name="ProjectPicker_AppName" xml:space="preserve">
-    <value>Bảng điều khiển</value>
+    <value>ClearDashboard</value>
   </data>
   <data name="ProjectPicker_BetaNotRunning" xml:space="preserve">
-    <value>Paratext beta không chạy</value>
+    <value>Paratext Beta không chạy</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
-    <value>Hủy bỏ ...</value>
+    <value>Đang hủy...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
-    <value>Các dự án hợp tác</value>
+    <value>Dự án hợp tác</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
     <value>Tạo dự án của bạn để bắt đầu.</value>
@@ -1829,46 +1886,46 @@
     <value>Tạo một dự án mới</value>
   </data>
   <data name="ProjectPicker_CreateNewProjectQuick" xml:space="preserve">
-    <value>Bắt đầu nhanh chóng dự án mới</value>
+    <value>Bắt đầu nhanh dự án mới</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
     <value>Tạo dự án:</value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
-    <value>Tạo dự án của bạn bằng cách sử dụng Trình hướng dẫn mẫu dự án.</value>
+    <value>Tạo dự án của bạn bằng trình hướng dẫn Mẫu dự án.</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
     <value>Cơ sở dữ liệu:</value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
-    <value>Bạn không thể xóa dự án đó, một ứng dụng khác vẫn đang sử dụng nó.</value>
+    <value>Bạn không thể xóa dự án đó, ứng dụng khác vẫn đang sử dụng nó.</value>
   </data>
   <data name="ProjectPicker_DeleteProject" xml:space="preserve">
     <value>Xóa dự án</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
-    <value>Cho phép lựa chọn sách</value>
+    <value>Bật lựa chọn sách</value>
   </data>
   <data name="ProjectPicker_EnableBookSelectionTooltip" xml:space="preserve">
-    <value>Nếu được kiểm tra, bạn sẽ có thể chọn những cuốn sách nào cần xử lý.</value>
+    <value>Nếu được chọn, bạn sẽ có thể chọn sách để xử lý.</value>
   </data>
   <data name="ProjectPicker_GetStarted" xml:space="preserve">
     <value>Bắt đầu</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
-    <value>Nhập dự án máy chủ</value>
+    <value>Dự án máy chủ nhập khẩu</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Kiểm tra hộp này để bao gồm các văn bản Kinh thánh Hy Lạp và tiếng Do Thái khi tạo dự án của bạn.</value>
+    <value>Chọn hộp này để bao gồm các văn bản Kinh thánh tiếng Hy Lạp và tiếng Do Thái khi tạo dự án của bạn.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
-    <value>Bao gồm các văn bản Kinh Thánh Hy Lạp NT?</value>
+    <value>Bao gồm các văn bản Kinh thánh Hy Lạp NT?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
-    <value>Bao gồm các văn bản Kinh thánh tiếng Do Thái OT?</value>
+    <value>Bao gồm các văn bản Kinh thánh tiếng Do Thái trong Cựu Ước?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
-    <value>Quản lý các dự án hợp tác</value>
+    <value>Quản lý dự án hợp tác</value>
   </data>
   <data name="ProjectPicker_NoMatches" xml:space="preserve">
     <value>Không có trận đấu.</value>
@@ -1877,7 +1934,7 @@
     <value>Ở đây thật là cô đơn. Vui lòng tạo một dự án mới.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Paratext không được cài đặt. Vui lòng cài đặt paratext và chạy lại ứng dụng ClearDashboard.</value>
+    <value>Paratext chưa được cài đặt. Vui lòng cài đặt Paratext và chạy lại ứng dụng ClearDashboard.</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>Paratext không chạy</value>
@@ -1886,19 +1943,19 @@
     <value>Mở gần đây</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
-    <value>Paratext</value>
+    <value>đoạn văn</value>
   </data>
   <data name="ProjectPicker_ParatextBackTranslation" xml:space="preserve">
-    <value>Paratext bản dịch trở lại</value>
+    <value>Dịch lại văn bản</value>
   </data>
   <data name="ProjectPicker_ParatextInterlinearBible" xml:space="preserve">
-    <value>Văn bản mô hình (LWC)</value>
+    <value>Văn bản mẫu (LWC)</value>
   </data>
   <data name="ProjectPicker_ParatextOnNotConnected" xml:space="preserve">
     <value>Paratext đang chạy nhưng không được kết nối.</value>
   </data>
   <data name="ProjectPicker_ParatextProject" xml:space="preserve">
-    <value>Dự án Paratext</value>
+    <value>Dự án văn bản</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
     <value>Dự án:</value>
@@ -1907,10 +1964,10 @@
     <value>Chúng ta gần đến rồi!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>Nhấn vào đây để xem video 'Bảng điều khiển bắt đầu'</value>
+    <value>Nhấp vào đây để xem video 'Bắt ​​đầu bảng điều khiển'</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
-    <value>Sau khi bạn nhấp vào nút 'Tạo' bên dưới, chúng tôi sẽ làm việc, căn chỉnh và chuẩn bị sẵn dự án. Tất cả các bước sẽ hiển thị ở đây khi chúng được xử lý. Trong khi bạn chờ đợi, hãy thoải mái nhấp vào liên kết bên dưới và xem một số video hữu ích để bắt đầu sử dụng ClearDashboard!</value>
+    <value>Sau khi bạn nhấp vào nút 'Tạo' bên dưới, chúng tôi sẽ mã hóa, căn chỉnh và chuẩn bị sẵn sàng cho dự án của bạn. Tất cả các bước sẽ hiển thị ở đây khi chúng được xử lý. Trong khi chờ đợi, vui lòng nhấp vào liên kết bên dưới và xem một số video hữu ích để bắt đầu sử dụng ClearDashboard!</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
     <value>Trình hướng dẫn mẫu dự án</value>
@@ -1919,13 +1976,13 @@
     <value>Trình hướng dẫn mẫu dự án: {0}</value>
   </data>
   <data name="ProjectPicker_RefreshCollaborationProjects" xml:space="preserve">
-    <value>Làm mới danh sách các dự án cộng tác</value>
+    <value>Làm mới danh sách dự án hợp tác</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
     <value>Tìm kiếm gần đây</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
-    <value>Bấm vào đây để bắt đầu paratext</value>
+    <value>Nhấn vào đây để bắt đầu Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
     <value>Phiên bản:</value>
@@ -1937,73 +1994,73 @@
     <value>Tạo dự án mới của bạn</value>
   </data>
   <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>Tên dự án đã cho chứa các ký tự bất hợp pháp. Các ký tự hợp lệ bao gồm 'a-z' (chữ thường và chữ hoa), số '0-9' và các ký tự '-' và '_'.</value>
+    <value>Tên dự án đã cho có chứa các ký tự không hợp lệ. Các ký tự hợp lệ bao gồm 'A-Z' (chữ thường và chữ hoa), số '0-9' và các ký tự '-' và '_'.</value>
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>Một dự án có cùng tên đã tồn tại. Vui lòng chọn một tên duy nhất.</value>
   </data>
   <data name="ProjectValidator_TooLong" xml:space="preserve">
-    <value>Tên dự án đã cho là quá dài.</value>
+    <value>Tên dự án đã cho quá dài.</value>
   </data>
   <data name="ProperCase_1_Chronicles" xml:space="preserve">
     <value>1 Biên niên sử</value>
   </data>
   <data name="ProperCase_1_Corinthians" xml:space="preserve">
-    <value>1 Cô -rinh -tô</value>
+    <value>1 Cô-rinh-tô</value>
   </data>
   <data name="ProperCase_1_John" xml:space="preserve">
-    <value>1 John</value>
+    <value>1 Giăng</value>
   </data>
   <data name="ProperCase_1_Kings" xml:space="preserve">
     <value>1 vị vua</value>
   </data>
   <data name="ProperCase_1_Peter" xml:space="preserve">
-    <value>1 Peter</value>
+    <value>1 Phi-e-rơ</value>
   </data>
   <data name="ProperCase_1_Samuel" xml:space="preserve">
-    <value>1 Samuel</value>
+    <value>1 Sa-mu-ên</value>
   </data>
   <data name="ProperCase_1_Thessalonians" xml:space="preserve">
-    <value>1 Tê -sa -lô -ni -ca</value>
+    <value>1 người Tê-sa-lô-ni-ca</value>
   </data>
   <data name="ProperCase_1_Timothy" xml:space="preserve">
-    <value>1 Ti -mô -thê</value>
+    <value>1 Ti-mô-thê</value>
   </data>
   <data name="ProperCase_2_Chronicles" xml:space="preserve">
     <value>2 Biên niên sử</value>
   </data>
   <data name="ProperCase_2_Corinthians" xml:space="preserve">
-    <value>2 Cô -rinh -tô</value>
+    <value>2 Cô-rinh-tô</value>
   </data>
   <data name="ProperCase_2_John" xml:space="preserve">
-    <value>2 John</value>
+    <value>2 Giăng</value>
   </data>
   <data name="ProperCase_2_Kings" xml:space="preserve">
-    <value>2 Kings</value>
+    <value>2 vị vua</value>
   </data>
   <data name="ProperCase_2_Peter" xml:space="preserve">
-    <value>2 Peter</value>
+    <value>2 Phi-e-rơ</value>
   </data>
   <data name="ProperCase_2_Samuel" xml:space="preserve">
-    <value>2 Samuel</value>
+    <value>2 Sa-mu-ên</value>
   </data>
   <data name="ProperCase_2_Thessalonians" xml:space="preserve">
-    <value>2 Tê -sa -lô -ni -ca</value>
+    <value>2 người Tê-sa-lô-ni-ca</value>
   </data>
   <data name="ProperCase_2_Timothy" xml:space="preserve">
-    <value>2 Timothy</value>
+    <value>2 Ti-mô-thê</value>
   </data>
   <data name="ProperCase_3_John" xml:space="preserve">
-    <value>3 John</value>
+    <value>3 Giăng</value>
   </data>
   <data name="ProperCase_Acts" xml:space="preserve">
     <value>Hành vi</value>
   </data>
   <data name="ProperCase_Amos" xml:space="preserve">
-    <value>Amos</value>
+    <value>A-mốt</value>
   </data>
   <data name="ProperCase_Colossians" xml:space="preserve">
-    <value>COLOSSIANS</value>
+    <value>Cô-lô-se</value>
   </data>
   <data name="ProperCase_Daniel" xml:space="preserve">
     <value>Daniel</value>
@@ -2012,10 +2069,10 @@
     <value>Phục truyền luật lệ ký</value>
   </data>
   <data name="ProperCase_Ecclesiastes" xml:space="preserve">
-    <value>Truyền đạo</value>
+    <value>truyền đạo</value>
   </data>
   <data name="ProperCase_Ephesians" xml:space="preserve">
-    <value>Ê -phê -sô</value>
+    <value>Ê-phê-sô</value>
   </data>
   <data name="ProperCase_Esther" xml:space="preserve">
     <value>Esther</value>
@@ -2024,37 +2081,37 @@
     <value>Cuộc di cư</value>
   </data>
   <data name="ProperCase_Ezekiel" xml:space="preserve">
-    <value>Ezekiel</value>
+    <value>Ê-xê-chi-ên</value>
   </data>
   <data name="ProperCase_Ezra" xml:space="preserve">
     <value>Ezra</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Galati</value>
+    <value>người Ga-la-ti</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
-    <value>Genesis</value>
+    <value>Sáng Thế Ký</value>
   </data>
   <data name="ProperCase_Habakkuk" xml:space="preserve">
-    <value>Habakkuk</value>
+    <value>Ha-ba-cúc</value>
   </data>
   <data name="ProperCase_Haggai" xml:space="preserve">
     <value>Haggai</value>
   </data>
   <data name="ProperCase_Hebrews" xml:space="preserve">
-    <value>Hê -bơ -rơ</value>
+    <value>tiếng Do Thái</value>
   </data>
   <data name="ProperCase_Hosea" xml:space="preserve">
-    <value>Ô -sê</value>
+    <value>Ô-sê</value>
   </data>
   <data name="ProperCase_Isaiah" xml:space="preserve">
-    <value>Ê -sai</value>
+    <value>Ê-sai</value>
   </data>
   <data name="ProperCase_James" xml:space="preserve">
     <value>James</value>
   </data>
   <data name="ProperCase_Jeremiah" xml:space="preserve">
-    <value>Giê -rê -mi</value>
+    <value>Giê-rê-mi</value>
   </data>
   <data name="ProperCase_Job" xml:space="preserve">
     <value>Công việc</value>
@@ -2066,22 +2123,22 @@
     <value>John</value>
   </data>
   <data name="ProperCase_Jonah" xml:space="preserve">
-    <value>Jonah</value>
+    <value>Giô-na</value>
   </data>
   <data name="ProperCase_Joshua" xml:space="preserve">
     <value>Joshua</value>
   </data>
   <data name="ProperCase_Jude" xml:space="preserve">
-    <value>Jude</value>
+    <value>Giuđa</value>
   </data>
   <data name="ProperCase_Judges" xml:space="preserve">
     <value>Ban giám khảo</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Than thở</value>
+    <value>Lời than thở</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
-    <value>Leviticus</value>
+    <value>Lê-vi Ký</value>
   </data>
   <data name="ProperCase_Luke" xml:space="preserve">
     <value>Luke</value>
@@ -2099,22 +2156,22 @@
     <value>Micah</value>
   </data>
   <data name="ProperCase_Nahum" xml:space="preserve">
-    <value>Nahum</value>
+    <value>Na-hum</value>
   </data>
   <data name="ProperCase_Nehemiah" xml:space="preserve">
-    <value>Nehemiah</value>
+    <value>Nê-hê-mi</value>
   </data>
   <data name="ProperCase_Numbers" xml:space="preserve">
-    <value>Số</value>
+    <value>số</value>
   </data>
   <data name="ProperCase_Obadiah" xml:space="preserve">
-    <value>Obadiah</value>
+    <value>Ápđia</value>
   </data>
   <data name="ProperCase_Philemon" xml:space="preserve">
-    <value>Philemon</value>
+    <value>Phi-lê-môn</value>
   </data>
   <data name="ProperCase_Philippians" xml:space="preserve">
-    <value>Phi -líp</value>
+    <value>người Phi-líp</value>
   </data>
   <data name="ProperCase_Proverbs" xml:space="preserve">
     <value>Tục ngữ</value>
@@ -2123,25 +2180,25 @@
     <value>Thánh vịnh</value>
   </data>
   <data name="ProperCase_Revelation" xml:space="preserve">
-    <value>Sự mặc khải</value>
+    <value>Khải huyền</value>
   </data>
   <data name="ProperCase_Romans" xml:space="preserve">
-    <value>Người La Mã</value>
+    <value>người La Mã</value>
   </data>
   <data name="ProperCase_Ruth" xml:space="preserve">
-    <value>Ruth</value>
+    <value>Ru-tơ</value>
   </data>
   <data name="ProperCase_Song of Songs" xml:space="preserve">
-    <value>Bài hát của các bài hát</value>
+    <value>Bài hát của bài hát</value>
   </data>
   <data name="ProperCase_Titus" xml:space="preserve">
-    <value>Titus</value>
+    <value>Tít</value>
   </data>
   <data name="ProperCase_Zechariah" xml:space="preserve">
-    <value>Zechariah</value>
+    <value>Xa-cha-ri</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
-    <value>Zephaniah</value>
+    <value>Sô-phô-ni</value>
   </data>
   <data name="PSA" xml:space="preserve">
     <value>PSA</value>
@@ -2156,16 +2213,16 @@
     <value>Đăng ký</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Chìa khóa được cung cấp là bị lỗi. Khi được giải mã, các yếu tố JSON nhất định không thể được tìm thấy.</value>
+    <value>Chìa khóa được cung cấp bị lỗi. Khi được giải mã, không thể tìm thấy một số phần tử json nhất định.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
-    <value>Nội dung của khóa cấp phép được giải mã không phù hợp với thông tin bạn cung cấp.</value>
+    <value>Nội dung của khóa cấp phép được giải mã không khớp với thông tin bạn cung cấp.</value>
   </data>
   <data name="RegistrationDialogViewModel_Missing" xml:space="preserve">
-    <value>Khóa giấy phép của bạn bị thiếu hoặc bị hỏng.</value>
+    <value>Khóa cấp phép của bạn bị thiếu hoặc bị hỏng.</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>Chào mừng bạn đến Cleardashboard! Vui lòng nhập thông tin đăng ký của bạn.</value>
+    <value>Chào mừng đến với ClearDashboard! Vui lòng nhập thông tin đăng ký của bạn.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Vui lòng nhập tên của bạn</value>
@@ -2177,7 +2234,7 @@
     <value>Nhập mã xác nhận của bạn</value>
   </data>
   <data name="ReleaseNotes_KnownIssues" xml:space="preserve">
-    <value>Các vấn đề đã biết</value>
+    <value>Sự cố đã biết</value>
   </data>
   <data name="REV" xml:space="preserve">
     <value>REV</value>
@@ -2195,10 +2252,10 @@
     <value>Gửi</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>Bật plugin Aqua thử nghiệm</value>
+    <value>Kích hoạt Plugin AQUA thử nghiệm</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Kiểm tra email của bạn và nhập mã xác thực:</value>
+    <value>Kiểm tra email của bạn và nhập mã xác nhận:</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Cài đặt cộng tác</value>
@@ -2213,7 +2270,7 @@
     <value>Địa chỉ email</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
-    <value>Email gửi lỗi</value>
+    <value>Lỗi gửi email</value>
   </data>
   <data name="Settings_EmailVerificationCode" xml:space="preserve">
     <value>Mã xác minh email</value>
@@ -2222,22 +2279,22 @@
     <value>Bật chỉnh sửa căn chỉnh</value>
   </data>
   <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
-    <value>Bật các ghi chú paratext bên ngoài trong nhóm thử nghiệm</value>
+    <value>Bật ghi chú văn bản bên ngoài trong nhóm thử nghiệm</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
-    <value>Bật ghi chú paratext bên ngoài</value>
+    <value>Bật ghi chú văn bản bên ngoài</value>
   </data>
   <data name="Settings_EnableLexiconImport" xml:space="preserve">
-    <value>Bật nhập từ Lexicon</value>
+    <value>Kích hoạt tính năng nhập từ điển</value>
   </data>
   <data name="Settings_EnableTokenSplitting" xml:space="preserve">
-    <value>Cho phép phân tách mã thông báo</value>
+    <value>Kích hoạt tính năng chia tách mã thông báo</value>
   </data>
   <data name="Settings_Experimental" xml:space="preserve">
     <value>Thực nghiệm</value>
   </data>
   <data name="Settings_ExportLabelGroups" xml:space="preserve">
-    <value>Xuất khẩu các nhóm nhãn</value>
+    <value>Xuất nhóm nhãn</value>
   </data>
   <data name="Settings_General" xml:space="preserve">
     <value>Tổng quan</value>
@@ -2249,13 +2306,13 @@
     <value>Nhóm</value>
   </data>
   <data name="Settings_ImportLabelGroups" xml:space="preserve">
-    <value>Nhập các nhóm nhãn</value>
+    <value>Nhập nhóm nhãn</value>
   </data>
   <data name="Settings_LabelGroupsExported" xml:space="preserve">
-    <value>Các nhóm nhãn được xuất sang:</value>
+    <value>Nhóm nhãn được xuất sang:</value>
   </data>
   <data name="Settings_LabelGroupsImported" xml:space="preserve">
-    <value>Các nhóm nhãn được nhập từ:</value>
+    <value>Nhóm nhãn được nhập từ:</value>
   </data>
   <data name="Settings_MultiMonitorSupport" xml:space="preserve">
     <value>Hỗ trợ đa màn hình</value>
@@ -2267,10 +2324,10 @@
     <value>bổ sung</value>
   </data>
   <data name="Settings_PowerModes" xml:space="preserve">
-    <value>Chế độ năng lượng</value>
+    <value>Chế độ nguồn</value>
   </data>
   <data name="Settings_PowerModesDescription" xml:space="preserve">
-    <value>Cho phép ClearDashboard thay đổi chế độ công suất trong các sự kiện tính toán cao</value>
+    <value>Cho phép ClearDashboard thay đổi chế độ nguồn trong các sự kiện tính toán cao</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
     <value>Kín đáo</value>
@@ -2282,10 +2339,10 @@
     <value>Khôi phục người dùng cộng tác</value>
   </data>
   <data name="Settings_SavedToRemoteServer" xml:space="preserve">
-    <value>Được lưu vào máy chủ từ xa</value>
+    <value>Đã lưu vào máy chủ từ xa</value>
   </data>
   <data name="Settings_SaveGitLabUserToServer" xml:space="preserve">
-    <value>Lưu người dùng Gitlab vào máy chủ</value>
+    <value>Lưu người dùng GitLab vào máy chủ</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
     <value>Lưu các thiết lập</value>
@@ -2297,10 +2354,10 @@
     <value>Cài đặt ClearDashboard</value>
   </data>
   <data name="Settings_ShowMirrorViewOnDifferentMonitor" xml:space="preserve">
-    <value>Hiển thị chế độ xem mở rộng trên một màn hình khác với bảng điều khiển</value>
+    <value>Hiển thị Chế độ xem mở rộng trên màn hình khác với Trang tổng quan</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Đối với các hệ thống có ba màn hình trở lên, hãy hiển thị chế độ xem mở rộng trên màn hình thứ ba</value>
+    <value>Đối với các hệ thống có ba màn hình trở lên, hãy hiển thị Chế độ xem mở rộng trên màn hình thứ ba</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Bộ sưu tập văn bản</value>
@@ -2315,31 +2372,31 @@
     <value>Xác thực mã email</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Bật hiển thị bộ sưu tập văn bản từng câu</value>
+    <value>Bật hiển thị Bộ sưu tập văn bản theo từng câu</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
-    <value>Hủy nhiệm vụ</value>
+    <value>Hủy tác vụ</value>
   </data>
   <data name="ShellView_Loading" xml:space="preserve">
     <value>Đang tải...</value>
   </data>
   <data name="ShellView_NoBackGroundTasks" xml:space="preserve">
-    <value>Không có tác vụ nền đang chạy</value>
+    <value>Không có tác vụ nền nào đang chạy</value>
   </data>
   <data name="ShellView_PowerModeEnabled" xml:space="preserve">
-    <value>Chế độ nguồn được bật</value>
+    <value>Đã bật chế độ nguồn</value>
   </data>
   <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
-    <value>Hiển thị các nhiệm vụ nền</value>
+    <value>Hiển thị tác vụ nền</value>
   </data>
   <data name="ShellView_ShowNotes" xml:space="preserve">
-    <value>Phát hành ghi chú</value>
+    <value>Ghi chú phát hành</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>Hiển thị trước khi phát hành</value>
+    <value>Hiển thị các bản phát hành trước</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
-    <value>Cập nhật phiên bản mới của ClearDashboard</value>
+    <value>Cập nhật lên phiên bản mới của ClearDashboard</value>
   </data>
   <data name="ShellView_User" xml:space="preserve">
     <value>Người dùng</value>
@@ -2348,16 +2405,16 @@
     <value>Báo cáo lỗi</value>
   </data>
   <data name="SlackMessageView_Combo1" xml:space="preserve">
-    <value>Tôi đã mất dữ liệu trong một dự án</value>
+    <value>Tôi bị mất dữ liệu trong một dự án</value>
   </data>
   <data name="SlackMessageView_Combo2" xml:space="preserve">
-    <value>Tôi không thể hoàn thành một nhiệm vụ</value>
+    <value>Tôi không thể hoàn thành nhiệm vụ</value>
   </data>
   <data name="SlackMessageView_Combo3" xml:space="preserve">
     <value>Tôi đã hoàn thành một nhiệm vụ nhưng nó rất khó</value>
   </data>
   <data name="SlackMessageView_Combo4" xml:space="preserve">
-    <value>Tôi muốn làm ...</value>
+    <value>Tôi muốn làm...</value>
   </data>
   <data name="SlackMessageView_Message" xml:space="preserve">
     <value>Tin nhắn:</value>
@@ -2372,7 +2429,7 @@
     <value>Gửi</value>
   </data>
   <data name="SlackMessageView_SendUsfmFiles" xml:space="preserve">
-    <value>Gửi các tập tin USFM</value>
+    <value>Gửi tập tin USFM</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
     <value>Gợi ý</value>
@@ -2381,7 +2438,7 @@
     <value>Biên tập viên</value>
   </data>
   <data name="SlackMessageView_SuggestionMarkdown" xml:space="preserve">
-    <value>Hỗ trợ định dạng Markdown</value>
+    <value>Hỗ trợ định dạng đánh dấu</value>
   </data>
   <data name="SlackMessageView_SuggestionPreview" xml:space="preserve">
     <value>Xem trước</value>
@@ -2405,10 +2462,10 @@
     <value>Trạng thái</value>
   </data>
   <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>Định dạng</value>
+    <value>Đã định dạng</value>
   </data>
   <data name="TargetContextView_Unformatted" xml:space="preserve">
-    <value>Không định dạng</value>
+    <value>Chưa được định dạng</value>
   </data>
   <data name="TargetContextView_ZoomIn" xml:space="preserve">
     <value>Phóng to</value>
@@ -2420,7 +2477,7 @@
     <value>TIT</value>
   </data>
   <data name="TokenDisplay_SetTranslation" xml:space="preserve">
-    <value>Đặt bóng</value>
+    <value>Đặt độ bóng</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Cập nhật</value>
@@ -2456,13 +2513,13 @@
     <value>Xem</value>
   </data>
   <data name="Windows_PINS" xml:space="preserve">
-    <value>Thuật ngữ tìm kiếm</value>
+    <value>Tìm kiếm thuật ngữ</value>
   </data>
   <data name="Windows_TextCollection" xml:space="preserve">
     <value>Bộ sưu tập văn bản</value>
   </data>
   <data name="Windows_WordMeanings" xml:space="preserve">
-    <value>Ý nghĩa từ</value>
+    <value>Ý nghĩa của từ</value>
   </data>
   <data name="WordMeaningsView_Domain" xml:space="preserve">
     <value>Lãnh địa:</value>

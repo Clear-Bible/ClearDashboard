@@ -1302,6 +1302,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             settings.SizeToContent = SizeToContent.Manual;
             settings.Title = "PINS Verse List";
 
+
+            // Keep the window on top
+            //settings.Topmost = true;
+            settings.Owner = System.Windows.Application.Current.MainWindow;
+
             var parameters = new List<Autofac.Core.Parameter>
             {
                 new NamedParameter("lastSelectedPinsDataTableSource", LastSelectedPinsDataTableSource),

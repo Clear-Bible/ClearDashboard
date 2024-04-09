@@ -1,4 +1,5 @@
-﻿using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
+﻿using System.Windows.Documents;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
 
 namespace ClearDashboard.Wpf.Application.Events.Notes
 {

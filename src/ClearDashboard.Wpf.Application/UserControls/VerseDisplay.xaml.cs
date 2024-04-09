@@ -1,22 +1,21 @@
 ﻿using Caliburn.Micro;
+using ClearApplicationFoundation.Framework.Input;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using SIL.Extensions;
 using System;
+using System.Dynamic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using ClearApplicationFoundation.Framework.Input;
-using System.Threading;
 using System.Windows.Input;
-using ClearDashboard.Wpf.Application.Events.Notes;
-using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.Wpf.Application.ViewModels.PopUps;
-using System.Dynamic;
+using System.Windows.Media;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -219,6 +218,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly RoutedEvent TranslationSetEvent = EventManager.RegisterRoutedEvent
             (nameof(TranslationSet), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
+        ///// <summary>
+        ///// Identifies the NoteIndicatorButtonDownEvent routed event.
+        ///// </summary>
+        //public static readonly RoutedEvent NoteIndicatorButtonDownEvent = EventManager.RegisterRoutedEvent
+        //    (nameof(NoteIndicatorButtonDown), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+
         /// <summary>
         /// Identifies the NoteIndicatorLeftButtonDownEvent routed event.
         /// </summary>
@@ -244,13 +250,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
             (nameof(NoteRightButtonUp), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
-        /// Identifies the NoteIndicatorMouseEnterEvent routed event.
+        /// Identifies the NoteMouseEnterEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteMouseEnterEvent = EventManager.RegisterRoutedEvent
             (nameof(NoteMouseEnter), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
-        /// Identifies the NoteIndicatorMouseLeaveEvent routed event.
+        /// Identifies the NoteMouseLeaveEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteMouseLeaveEvent = EventManager.RegisterRoutedEvent
             (nameof(NoteMouseLeave), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
@@ -574,6 +580,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void RaiseTokenEvent(RoutedEvent routedEvent, TokenEventArgs args)
         {
+            var control = args.Source as FrameworkElement;
+         
             RaiseEvent(new TokenEventArgs
             {
                 RoutedEvent = routedEvent,
@@ -582,7 +590,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 ModifierKeys = args.ModifierKeys,
                 MouseLeftButton = args.MouseLeftButton,
                 MouseMiddleButton = args.MouseMiddleButton,
-                MouseRightButton = args.MouseRightButton
+                MouseRightButton = args.MouseRightButton,
+                MousePosition = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(control))
             });
         }
 
@@ -793,6 +802,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
         
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
+            // 2
+
             if (e is not TokenEventArgs args || args is { TokenDisplay: null })
             {
                 return;
@@ -889,6 +900,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void RaiseTranslationEvent(RoutedEvent routedEvent, TranslationEventArgs args)
         {
+            var control = args.Source as FrameworkElement;
+
             RaiseEvent(new TranslationEventArgs
             {
                 RoutedEvent = routedEvent,
@@ -896,7 +909,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 SelectedTokens = VerseSelectedTokens,
                 InterlinearDisplay = VerseDisplayViewModel as InterlinearDisplayViewModel,
                 Translation = args.TokenDisplay!.Translation!,
-                ModifierKeys = args.ModifierKeys
+                ModifierKeys = args.ModifierKeys,
+                MousePosition = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(control))
             });
         }
 
@@ -967,18 +981,39 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
+
+           
             //4
             var control = e.Source as TokenDisplay;
+
+            // Fix for #1249
+            // Clear the VerseSelectedTokens collection and add 
+            // the token selected on the TokenDisplay control 
+            if (control != null)
+            {
+                if (!VerseSelectedTokens.Contains(control?.TokenDisplayViewModel!))
+                {
+                    VerseSelectedTokens.Clear();
+                    control.TokenDisplayViewModel.IsTokenSelected = true;
+                    VerseSelectedTokens.Add(control?.TokenDisplayViewModel!);
+                }
+            }
+
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,
+                Source = e.OriginalSource,
                 TokenDisplayViewModel = control?.TokenDisplayViewModel!,
                 SelectedTokens = VerseSelectedTokens,
+                
+                MousePosition = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(control))
             });
         }
 
         private void OnNoteLeftButtonDown(object sender, RoutedEventArgs e)
         {
+            // 2 
+           // RaiseTokenEvent(TokenLeftButtonDownEvent, e);
             RaiseNoteEvent(NoteLeftButtonDownEvent, e);
         }
 
@@ -1356,6 +1391,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
             add => AddHandler(TranslationSetEvent, value);
             remove => RemoveHandler(TranslationSetEvent, value);
         }
+
+        ///// <summary>
+        ///// Occurs when the left mouse button is pressed while the mouse pointer is over a note indicator.
+        ///// </summary>
+        //public event RoutedEventHandler NoteIndicatorButtonDown
+        //{
+        //    add => AddHandler(NoteIndicatorButtonDownEvent, value);
+        //    remove => RemoveHandler(NoteIndicatorButtonDownEvent, value);
+        //}
+
 
         /// <summary>
         /// Occurs when the left mouse button is pressed while the mouse pointer is over a note indicator.
@@ -1878,6 +1923,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
             settings.MaxHeight = 700;
             settings.Top = Mouse.GetPosition(this).Y + screenPoint.Y;
             settings.Left = Mouse.GetPosition(this).X + screenPoint.X;
+
+            // Keep the window on top
+            //settings.Topmost = true;
+            settings.Owner = System.Windows.Application.Current.MainWindow;
 
             var viewModel = IoC.Get<ExternalNoteViewModel>();
             await viewModel.Initialize(VerseDisplayViewModel.ExternalNotes);

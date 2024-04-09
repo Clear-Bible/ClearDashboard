@@ -1,5 +1,6 @@
 ﻿using ClearBible.Engine.Utils;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using MediatR;
 using System.Diagnostics;
 using System.Text;
 using System.Threading;
+using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Corpora;
 using Microsoft.Extensions.Logging;
@@ -20,6 +22,10 @@ using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DataAccessLayer.Models;
+using Label = ClearDashboard.DAL.Alignment.Notes.Label;
+using LabelGroup = ClearDashboard.DAL.Alignment.Notes.LabelGroup;
+using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -27,6 +33,11 @@ namespace ClearDashboard.Wpf.Application.Services
         IHandle<SelectionUpdatedMessage>, IHandle<LabelsUpdatedMessage>
     {
         private NoteViewModelCollection _currentNotes = new();
+
+        private NoteViewModel _newNote = new();
+
+        private NoteViewModel? _selectedNote;
+
         private IEventAggregator EventAggregator { get; }
         private ILogger<NoteManager>? Logger { get; }
         private IMediator Mediator { get; }
@@ -35,15 +46,49 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public ExternalNoteManager ExternalNoteManager { get; }
 
-        private Dictionary<Guid, NoteViewModel> NotesCache { get; } = new();
-        public void ClearNotesCache()
+        public EntityIdCollection SelectedEntityIds
         {
-            NotesCache.Clear();
+            get => _selectedEntityIds;
+            set => Set(ref _selectedEntityIds, value);
         }
+
+        public ILifetimeScope LifetimeScope { get; }
+
+        private ConcurrentDictionary<Guid, NoteViewModel> NotesCache { get; } = new();
+      
+
         private UserId? _currentUserId;
         private LabelCollection _labelSuggestions = new();
         private LabelGroupViewModelCollection _labelGroups = new();
+
         private LabelGroupViewModel? _defaultLabelGroup;
+        private bool _isBusy;
+        private EntityIdCollection _selectedEntityIds = new EntityIdCollection();
+        private bool _isBusyBackground;
+        private LabelGroupViewModelCollection _domainLabelGroups = new();
+
+
+        public NoteManager(IEventAggregator eventAggregator,
+            ILogger<NoteManager>? logger,
+            IMediator mediator,
+            IUserProvider userProvider,
+            ILocalizationService localizationService,
+            ILifetimeScope lifetimeScope)
+        {
+            LocalizationService = localizationService;
+            EventAggregator = eventAggregator;
+            Logger = logger;
+            Mediator = mediator;
+            UserProvider = userProvider;
+            ExternalNoteManager = new ExternalNoteManager(EventAggregator);
+
+            NoneLabelGroup.Name = $"<{LocalizationService["None"]}>";
+            AllLabelGroup.Name = $"<{LocalizationService["All"]}>";
+
+            LifetimeScope = lifetimeScope;
+
+            EventAggregator.SubscribeOnUIThread(this);
+        }
 
         /// <summary>
         /// Gets the <see cref="UserId"/> of the current user.
@@ -63,7 +108,14 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <summary>
         /// Gets the LabelGroup which contains all label suggestions.
         /// </summary>
+        public static LabelGroupViewModel AllLabelGroup { get; } = new LabelGroupViewModel();
+
+        /// <summary>
+        /// Gets the LabelGroup which contains label suggestions which are not part of a LabelGroup.
+        /// </summary>
         public static LabelGroupViewModel NoneLabelGroup { get; } = new LabelGroupViewModel() ;
+
+
 
         /// <summary>
         /// Gets the default <see cref="LabelGroupViewModel"/> for the current user, if any.
@@ -92,6 +144,12 @@ namespace ClearDashboard.Wpf.Application.Services
             private set => Set(ref _labelGroups, value);
         }
 
+        private LabelGroupViewModelCollection DomainLabelGroups
+        {
+            get => _domainLabelGroups;
+            set => Set(ref _domainLabelGroups, value);
+        }
+
         /// <summary>
         /// Gets the collection of notes associated with the current selection.
         /// </summary>
@@ -101,20 +159,52 @@ namespace ClearDashboard.Wpf.Application.Services
             private set => Set(ref _currentNotes, value);
         }
 
+      
+
+        public NoteViewModel? SelectedNote
+        {
+            get => _selectedNote;
+            set => Set(ref _selectedNote, value);
+        }
+
+        public NoteViewModel? NewNote
+        {
+            get => _newNote;
+            set => Set(ref _newNote, value);
+        }
+
+        public void ClearNotesCache()
+        {
+            NotesCache.Clear();
+        }
+
         private string GetNoteAssociationDescription(IId associatedEntityId, IReadOnlyDictionary<string, string> entityContext)
         {
             if (associatedEntityId is TokenId)
             {
                 var sb = new StringBuilder();
-                sb.Append($"{LocalizationService["Notes_TokenizedCorpus"]} {entityContext[EntityContextKeys.TokenizedCorpus.DisplayName]}");
+
+                // JOTS Refactor
+                //sb.Append($"{LocalizationService["Notes_TokenizedCorpus"]} {entityContext[EntityContextKeys.TokenizedCorpus.DisplayName]}");
+
+                sb.Append($" {entityContext[EntityContextKeys.TokenizedCorpus.DisplayName]}");
                 sb.Append($" {entityContext[EntityContextKeys.TokenId.BookId]} {entityContext[EntityContextKeys.TokenId.ChapterNumber]}:{entityContext[EntityContextKeys.TokenId.VerseNumber]}");
                 sb.Append($" {LocalizationService["Notes_Word"]} {entityContext[EntityContextKeys.TokenId.WordNumber]} {LocalizationService["Notes_Part"]} {entityContext[EntityContextKeys.TokenId.SubwordNumber]}");
+                if (entityContext.ContainsKey(EntityContextKeys.TokenId.SurfaceText))
+                {
+                    sb.Append($" ({entityContext[EntityContextKeys.TokenId.SurfaceText]})");
+                }
+                
                 return sb.ToString();
             }
             else if (associatedEntityId is TranslationId)
             {
                 var sb = new StringBuilder();
-                sb.Append($"{LocalizationService["Notes_TranslationSet"]} {entityContext[EntityContextKeys.TranslationSet.DisplayName]}");
+
+                // JOTS Refactor
+                //sb.Append($"{LocalizationService["Notes_TranslationSet"]} {entityContext[EntityContextKeys.TranslationSet.DisplayName]}");
+
+                sb.Append($" {entityContext[EntityContextKeys.TranslationSet.DisplayName]}");
                 sb.Append($" {entityContext[EntityContextKeys.TokenId.BookId]} {entityContext[EntityContextKeys.TokenId.ChapterNumber]}:{entityContext[EntityContextKeys.TokenId.VerseNumber]}");
                 sb.Append($" {LocalizationService["Notes_Word"]} {entityContext[EntityContextKeys.TokenId.WordNumber]} {LocalizationService["Notes_Part"]} {entityContext[EntityContextKeys.TokenId.SubwordNumber]}");
                 return sb.ToString();
@@ -123,10 +213,38 @@ namespace ClearDashboard.Wpf.Application.Services
             return string.Empty;
         }
 
+
+        private async Task SetIsBusy(bool isBusy)
+        {
+            await Task.Run(async () =>
+            {
+                await Execute.OnUIThreadAsync(async () =>
+                {
+                    IsBusy = isBusy;
+                    await Task.CompletedTask;
+                });
+            });
+          
+        }
+
+        private async Task SetIsBusyBackground(bool isBusy)
+        {
+            await Task.Run(async () =>
+            {
+                await Execute.OnUIThreadAsync(async () =>
+                {
+                    IsBusyBackground = isBusy;
+                    await Task.CompletedTask;
+                });
+            });
+
+        }
+
         private async Task<LabelCollection> GetLabelSuggestionsAsync()
         {
             try
             {
+                await SetIsBusy(true);
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
@@ -142,24 +260,35 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+            finally
+            {
+                await SetIsBusy(false);
+            }
         }
 
         private async Task<LabelGroupViewModelCollection> GetLabelGroupsAsync()
         {
             try
             {
+                await SetIsBusy(true);
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
+                //var result = new LabelGroupViewModelCollection { NoneLabelGroup, AllLabelGroup };
+
                 var result = new LabelGroupViewModelCollection { NoneLabelGroup };
+
+                DomainLabelGroups = new LabelGroupViewModelCollection();
 
                 var labelGroups = await LabelGroup.GetAll(Mediator);
                 foreach (var labelGroup in labelGroups.OrderBy(lg => lg.Name))
                 {
                     var labelIds = await labelGroup.GetLabelIds(Mediator);
                     var labels = new LabelCollection(LabelSuggestions.Where(ls => labelIds.Contains(ls.LabelId)));
-                    result.Add(new LabelGroupViewModel(labelGroup) { Labels = labels });
+                    DomainLabelGroups.Add(new LabelGroupViewModel(labelGroup) { Labels = labels });
                 }
+
+                result.AddRange(DomainLabelGroups);
 
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved label groups in {stopwatch.ElapsedMilliseconds}ms");
@@ -171,12 +300,17 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+            finally
+            {
+                await SetIsBusy(false);
+            }
         }
 
         public async Task<string> ExportLabelGroupsAsync()
         {
             try
             {
+                await SetIsBusy(true);
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
@@ -192,12 +326,17 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+            finally
+            {
+                await SetIsBusy(false);
+            }
         }
 
         public async Task ImportLabelGroupsAsync(string labelGroupJson)
         {
             try
             {
+                await SetIsBusy(true);
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
@@ -214,6 +353,10 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+            finally
+            {
+                await SetIsBusy(false); 
+            }
         }
 
         /// <summary>
@@ -224,6 +367,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
@@ -239,6 +383,10 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false); 
             }
         }
 
@@ -256,6 +404,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
@@ -270,6 +419,10 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 
@@ -288,21 +441,41 @@ namespace ClearDashboard.Wpf.Application.Services
             return dictionary.TryGetValue(entityId, out var noteIds) ? noteIds : new NoteIdCollection();
         }
 
+        public void UpdateNoteInCache(Note note)
+        {
+            if (NotesCache.ContainsKey(note.NoteId.Id))
+            {
+                var existing = NotesCache[note.NoteId.Id];
+                existing.Entity = note;
+                existing.Labels = new LabelCollection(note.Labels);
+            }
+        }
+
         /// <summary>
         /// Gets the note details for a specific note ID.
         /// </summary>
         /// <param name="noteId">A note ID for which to retrieve the note details.</param>
         /// <param name="doGetParatextSendNoteInformation">If true, also retrieve information needed for sending the note to Paratext.</param>
         /// <returns>A <see cref="NoteViewModel"/> containing the note details.</returns>
-        public async Task<NoteViewModel> GetNoteDetailsAsync(NoteId noteId, bool doGetParatextSendNoteInformation = true, bool collabUpdate = false)
+        public async Task<NoteViewModel> GetNoteDetailsAsync(NoteId noteId, bool doGetParatextSendNoteInformation = true, bool collabUpdate = false, bool setIsBusy = true)
         {
             try
             {
+                if (setIsBusy)
+                {
+                    await SetIsBusy(true);
+                }
+
                 if (!collabUpdate && NotesCache.TryGetValue(noteId.Id, out var noteDetails))
                 {
                     if (doGetParatextSendNoteInformation && noteDetails.ParatextSendNoteInformation == null)
-                    {
+                    { 
                         noteDetails.ParatextSendNoteInformation = await ExternalNoteManager.GetExternalSendNoteInformationAsync(Mediator, noteDetails.NoteId!, UserProvider, Logger);
+
+                        foreach (var reply in noteDetails.Replies)
+                        {
+                            reply.ParatextSendNoteInformation = await ExternalNoteManager.GetExternalSendNoteInformationAsync(Mediator, noteDetails.NoteId!, UserProvider, Logger);
+                        }
                     }
                     Logger?.LogInformation($"Returning cached details for note \"{noteDetails.Text}\" ({noteId.Id})");
                     return noteDetails;
@@ -316,24 +489,20 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 var associatedEntityIds = await note.GetFullDomainEntityIds(Mediator);
                 var domainEntityContexts = new EntityContextDictionary(await note.GetDomainEntityContexts(Mediator));
-                
-                foreach (var associatedEntityId in associatedEntityIds)
-                {
-                    var association = new NoteAssociationViewModel
-                    {
-                        AssociatedEntityId = associatedEntityId
-                    };
-                    if (domainEntityContexts.TryGetValue(associatedEntityId, out var entityContext))
-                    {
-                        association.Description = GetNoteAssociationDescription(associatedEntityId, entityContext);
-                    }
-                    noteViewModel.Associations.Add(association);
-                }
+
+                noteViewModel.Associations = GetNoteAssociations(associatedEntityIds, domainEntityContexts);
+
                 noteViewModel.Replies = new NoteViewModelCollection((await note.GetReplyNotes(Mediator)).Select(n => new NoteViewModel(n)));
 
                 if (doGetParatextSendNoteInformation)
+                {
                     noteViewModel.ParatextSendNoteInformation = await ExternalNoteManager.GetExternalSendNoteInformationAsync(Mediator, noteViewModel.NoteId!, UserProvider, Logger);
-
+                    
+                    foreach(var reply in noteViewModel.Replies)
+                    {
+                        reply.ParatextSendNoteInformation = await ExternalNoteManager.GetExternalSendNoteInformationAsync(Mediator, noteViewModel.NoteId!, UserProvider, Logger);
+                    }
+                }
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved details for note \"{note.Text}\" ({noteId.Id}) in {stopwatch.ElapsedMilliseconds}ms");
 
@@ -346,6 +515,131 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+            finally
+            {
+                if (setIsBusy)
+                {
+                    await SetIsBusy(false);
+                }
+            }
+        }
+
+        public async void ForceNotePropertyChangedAsync(NoteId noteId, bool doGetParatextSendNoteInformation = true, bool setIsBusy = true)
+        {
+            try
+            {
+                if (setIsBusy)
+                {
+                    await SetIsBusy(true);
+                }
+
+                if (NotesCache.TryGetValue(noteId.Id, out var noteDetails))
+                {
+                    noteDetails.ParatextSendNoteInformation = noteDetails.ParatextSendNoteInformation;
+
+                    foreach (var reply in noteDetails.Replies)
+                    {
+                        reply.ParatextSendNoteInformation = reply.ParatextSendNoteInformation;
+                    }
+                    
+                    Logger?.LogInformation($"Forced NotePropertyChanged to Run");
+                }
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+            finally
+            {
+                if (setIsBusy)
+                {
+                    await SetIsBusy(false);
+                }
+            }
+        }
+
+        private NoteAssociationViewModelCollection GetNoteAssociations(IEnumerable<IId> associatedEntityIds, EntityContextDictionary domainEntityContexts)
+        {
+            
+            var noteAssociationViewModelCollection = new NoteAssociationViewModelCollection();
+                
+            foreach (var associatedEntityId in associatedEntityIds)
+            {
+                var association = new NoteAssociationViewModel
+                {
+                    AssociatedEntityId = associatedEntityId
+                };
+                if (domainEntityContexts.TryGetValue(associatedEntityId, out var entityContext))
+                {
+                    association.CorpusName = entityContext[EntityContextKeys.TokenizedCorpus.DisplayName];
+                    association.Book = entityContext[EntityContextKeys.TokenId.BookId];
+                    association.Chapter = entityContext[EntityContextKeys.TokenId.ChapterNumber];
+                    association.Verse = entityContext[EntityContextKeys.TokenId.VerseNumber];
+                    association.Word = entityContext[EntityContextKeys.TokenId.WordNumber];
+                    association.Part = entityContext[EntityContextKeys.TokenId.SubwordNumber];
+                    association.Description = GetNoteAssociationDescription(associatedEntityId, entityContext);
+                }
+                noteAssociationViewModelCollection.Add(association);
+            }
+
+            var orderedList = noteAssociationViewModelCollection.
+                OrderBy(a=>a.CorpusName).
+                ThenBy(a=>a.Book).
+                ThenBy(a => a.SortOrder);
+
+            return new NoteAssociationViewModelCollection(orderedList);
+        }
+
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set => Set(ref _isBusy, value);
+        }
+
+        public bool IsBusyBackground
+        {
+            get => _isBusyBackground;
+            set => Set(ref _isBusyBackground, value);
+        }
+
+        
+
+        public async Task GetNotes(IEnumerable<IId> noteIds)
+        {
+            CurrentNotes = await GetNotesDetailsAsync(noteIds, doGetParatextSendNoteInformation:false);
+
+            // Get any paratext information in the background.
+                
+            var updatingParatextSendInfo = Task.Run(async () =>
+            {
+                try
+                {
+                    await SetIsBusyBackground(true);
+                    foreach (var note in CurrentNotes)
+                    {
+                        await GetNoteDetailsAsync(note.NoteId, doGetParatextSendNoteInformation: true,
+                            setIsBusy: false);
+                    }
+                }
+                finally
+                {
+                    SetIsBusyBackground(false);
+                }
+
+                
+
+            });
+
+            await updatingParatextSendInfo.ContinueWith((completedTask) =>
+            {
+                foreach (var note in CurrentNotes)
+                {
+                    ForceNotePropertyChangedAsync(note.NoteId, doGetParatextSendNoteInformation: true,
+                        setIsBusy: false);
+                }
+            });
+
         }
 
         /// <summary>
@@ -355,10 +649,11 @@ namespace ClearDashboard.Wpf.Application.Services
         /// Each note ID will be included in the resulting collection only once, for example in the case where two entities are associated to the same note.
         /// </remarks>
         /// <param name="noteIds">A collection of note IDs for which to retrieve the notes details.</param>
+        /// <param name="doGetParatextSendNoteInformation"></param>
         /// <returns>A <see cref="NoteViewModelCollection"/> containing the notes details.</returns>
-        public async Task<NoteViewModelCollection> GetNoteDetailsAsync(IEnumerable<IId> noteIds)
+        public async Task<NoteViewModelCollection> GetNotesDetailsAsync(IEnumerable<IId> noteIds, bool doGetParatextSendNoteInformation = true)
         {
-            var result = new NoteViewModelCollection();
+            var result = new List<NoteViewModel>();
 
             foreach (var id in noteIds)
             {
@@ -367,7 +662,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 {
                     if (!result.Any(n => n.NoteId != null && n.NoteId.Id == noteId.Id))
                     {
-                        result.Add(await GetNoteDetailsAsync(noteId));
+                        result.Add(await GetNoteDetailsAsync(noteId, doGetParatextSendNoteInformation, collabUpdate:false, setIsBusy:true));
                     }
                 }
                 else
@@ -376,7 +671,15 @@ namespace ClearDashboard.Wpf.Application.Services
                 }
             }
 
-            return result;
+            var orderedList = result.OrderByDescending(n => n.CreatedLocalTime).ToArray();
+
+            var index = 0;
+            foreach (var item in orderedList)
+            {
+                item.TabHeader = $"Jot{++index}";
+            }
+
+            return new NoteViewModelCollection(orderedList);
         }
 
         //public async Task SetCurrentNoteIds(NoteIdCollection noteIds)
@@ -394,14 +697,18 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
                 await note.Entity.CreateOrUpdate(Mediator);
 
                 stopwatch.Stop();
-                Logger?.LogInformation($"Added note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
+                Logger?.LogInformation(
+                    $"Added note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
 
+                // clear the existing domain entities so we can properly add them to the database.
+                note.Entity.ClearDomainEntityIds();
                 foreach (var entityId in entityIds)
                 {
                     stopwatch.Restart();
@@ -409,7 +716,8 @@ namespace ClearDashboard.Wpf.Application.Services
                     await note.Entity.AssociateDomainEntity(Mediator, entityId);
 
                     stopwatch.Stop();
-                    Logger?.LogInformation($"Associated note \"{note.Text}\" ({note.NoteId?.Id}) with entity {entityId} in {stopwatch.ElapsedMilliseconds} ms");
+                    Logger?.LogInformation(
+                        $"Associated note \"{note.Text}\" ({note.NoteId?.Id}) with entity {entityId} in {stopwatch.ElapsedMilliseconds} ms");
                 }
 
                 if (note.Labels.Any())
@@ -427,11 +735,14 @@ namespace ClearDashboard.Wpf.Application.Services
                     }
 
                     stopwatch.Stop();
-                    Logger?.LogInformation($"Associated labels with note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
+                    Logger?.LogInformation(
+                        $"Associated labels with note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
                 }
 
                 var newNoteDetail = await GetNoteDetailsAsync(note.NoteId!);
+                newNoteDetail.TabHeader = $"Jot{CurrentNotes.Count + 1}";
                 CurrentNotes.Add(newNoteDetail);
+                SelectedNote = CurrentNotes.Last();
                 NotifyOfPropertyChange(nameof(CurrentNotes));
                 await EventAggregator.PublishOnUIThreadAsync(new NoteAddedMessage(note, entityIds));
             }
@@ -440,12 +751,17 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+            finally
+            {
+               await SetIsBusy(false);
+            }
         }
 
         private async Task UpdateNoteAsync(Note note)
         {
             try
             {
+                await SetIsBusy(true);
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
@@ -454,16 +770,21 @@ namespace ClearDashboard.Wpf.Application.Services
                 await note.CreateOrUpdate(Mediator);
 
                 stopwatch.Stop();
-                Logger?.LogInformation($"Updated note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
+                Logger?.LogInformation(
+                    $"Updated note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
 
-                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.NoteId!, true));
+                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note, true));
 
             }
             catch (Exception e)
             {
                 Logger?.LogCritical(e.ToString());
-                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.NoteId!, false));
+                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note, false));
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 
@@ -480,10 +801,24 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task AddReplyToNoteAsync(NoteViewModel parentNote, string replyText)
         {
-            var replyNote = new Note(parentNote.Entity) { Text = replyText };
+            var replyNote = new Note(parentNote.Entity) { Text = replyText, NoteStatus = NoteStatus.Open.ToString()};
+
+
+            // FIX:  1267
+            replyNote.SetDomainEntityIds(parentNote.Entity.DomainEntityIds);
             await UpdateNoteAsync(replyNote);
 
-            parentNote.Replies.Add(new NoteViewModel(replyNote));
+
+            
+            var replyNoteViewModel = new NoteViewModel(replyNote)
+            {
+                // FIX:  1267
+                Associations = parentNote.Associations,
+                ParatextSendNoteInformation = parentNote.ParatextSendNoteInformation
+            };
+
+
+            parentNote.Replies.Add(replyNoteViewModel);
             NotesCache[parentNote.NoteId!.Id] = parentNote;
         }
 
@@ -497,13 +832,15 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
                 await note.Entity.Delete(Mediator);
 
                 stopwatch.Stop();
-                Logger?.LogInformation($"Deleted note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
+                Logger?.LogInformation(
+                    $"Deleted note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
 
                 await EventAggregator.PublishOnUIThreadAsync(new NoteDeletedMessage(note, entityIds));
             }
@@ -511,6 +848,10 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 
@@ -529,10 +870,11 @@ namespace ClearDashboard.Wpf.Application.Services
         /// </summary>
         /// <param name="note">The <see cref="Note"/> that was hovered.</param>
         /// <param name="entityIds">The entity IDs associated with the hovered note.</param>
+        /// <param name="isNewNote">Is this for a new note?</param>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task NoteMouseEnterAsync(NoteViewModel note, EntityIdCollection entityIds)
+        public async Task NoteMouseEnterAsync(NoteViewModel note, EntityIdCollection entityIds, bool isNewNote = false)
         {
-            await EventAggregator.PublishOnUIThreadAsync(new NoteMouseEnterMessage(note, entityIds));
+            await EventAggregator.PublishOnUIThreadAsync(new NoteMouseEnterMessage(note, entityIds, isNewNote));
         }
 
         /// <summary>
@@ -540,10 +882,11 @@ namespace ClearDashboard.Wpf.Application.Services
         /// </summary>
         /// <param name="note">The <see cref="Note"/> that was left.</param>
         /// <param name="entityIds">The entity IDs associated with the note that was left.</param>
+        /// <param name="isNewNote">Is this for a new note?</param>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task NoteMouseLeaveAsync(NoteViewModel note, EntityIdCollection entityIds)
+        public async Task NoteMouseLeaveAsync(NoteViewModel note, EntityIdCollection entityIds, bool isNewNote = false)
         {
-            await EventAggregator.PublishOnUIThreadAsync(new NoteMouseLeaveMessage(note, entityIds));
+            await EventAggregator.PublishOnUIThreadAsync(new NoteMouseLeaveMessage(note, entityIds, isNewNote));
         }
 
         /// <summary>
@@ -556,6 +899,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
                 var matchingLabel = note.Labels.GetMatchingLabel(labelText);
                 if (matchingLabel == null)
                 {
@@ -576,17 +920,26 @@ namespace ClearDashboard.Wpf.Application.Services
                     await System.Windows.Application.Current.Dispatcher.InvokeAsync(CreateAssociateLabel);
 #if DEBUG
                     stopwatch.Stop();
-                    Logger?.LogInformation($"Created label {labelText} and associated it with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+                    Logger?.LogInformation(
+                        $"Created label {labelText} and associated it with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+
 #endif
+                    await Task.Delay(100);
                     await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, newLabel!));
+                    await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.Entity, true));
                     return newLabel;
                 }
+
                 return matchingLabel;
             }
             catch (Exception e)
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 
@@ -600,7 +953,8 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
-                if (! note.Labels.ContainsMatchingLabel(label.Text))
+                await SetIsBusy(true);
+                if (!note.Labels.ContainsMatchingLabel(label.Text))
                 {
 #if DEBUG
                     var stopwatch = new Stopwatch();
@@ -611,18 +965,26 @@ namespace ClearDashboard.Wpf.Application.Services
                     {
                         await note.Entity.AssociateLabel(Mediator, label);
                     }
+
                     await System.Windows.Application.Current.Dispatcher.InvokeAsync(AssociateLabel);
 #if DEBUG
                     stopwatch.Stop();
-                    Logger?.LogInformation($"Associated label {label.Text} with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+                    Logger?.LogInformation(
+                        $"Associated label {label.Text} with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
 #endif
+                    await Task.Delay(100);
                     await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, label));
+                    await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.Entity, true));
                 }
             }
             catch (Exception e)
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 
@@ -636,6 +998,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
 #if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -644,19 +1007,28 @@ namespace ClearDashboard.Wpf.Application.Services
                 async void DetachLabel()
                 {
                     await note.Entity.DetachLabel(Mediator, label);
+                    await Task.Delay(100);
+                    await EventAggregator.PublishOnUIThreadAsync(new NoteLabelDetachedMessage(note.NoteId!, label));
+                    await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.Entity, true));
                 }
+
                 await System.Windows.Application.Current.Dispatcher.InvokeAsync(DetachLabel);
 #if DEBUG
                 stopwatch.Stop();
-                Logger?.LogInformation($"Detached label {label.Text} from note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+                Logger?.LogInformation(
+                    $"Detached label {label.Text} from note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
 
-                await EventAggregator.PublishOnUIThreadAsync(new NoteLabelDetachedMessage(note.NoteId!, label));
+               
 #endif
             }
             catch (Exception e)
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 
@@ -668,6 +1040,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                SetIsBusy(true);
 #if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -684,6 +1057,10 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+            finally
+            {
+                SetIsBusy(false);
+            }
         }
 
         /// <summary>
@@ -695,6 +1072,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
 #if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -703,6 +1081,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 {
                     await label.CreateOrUpdate(Mediator, cancellationToken);
                 }
+
                 await System.Windows.Application.Current.Dispatcher.InvokeAsync(UpdateLabel);
 #if DEBUG
                 stopwatch.Stop();
@@ -713,6 +1092,10 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 
@@ -727,6 +1110,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
 #if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -734,7 +1118,8 @@ namespace ClearDashboard.Wpf.Application.Services
                 // For thread safety, because LabelGroup.CreateOrUpdate() modifies an observable collection, we need to invoke the operation on the dispatcher.
                 async void CreateLabelGroupWithLabelsAsync()
                 {
-                    var newLabelGroup = new LabelGroupViewModel(await labelGroup.Entity.CreateOrUpdate(Mediator, cancellationToken));
+                    var newLabelGroup =
+                        new LabelGroupViewModel(await labelGroup.Entity.CreateOrUpdate(Mediator, cancellationToken));
 
                     if (sourceLabelGroup != null)
                     {
@@ -748,8 +1133,10 @@ namespace ClearDashboard.Wpf.Application.Services
                     LabelGroups.Add(newLabelGroup);
                     LabelGroups = new LabelGroupViewModelCollection(LabelGroups.OrderBy(l => l.Name));
 
-                    await EventAggregator.PublishOnUIThreadAsync(new LabelGroupAddedMessage(newLabelGroup), cancellationToken);
+                    await EventAggregator.PublishOnUIThreadAsync(new LabelGroupAddedMessage(newLabelGroup),
+                        cancellationToken);
                 }
+
                 await System.Windows.Application.Current.Dispatcher.InvokeAsync(CreateLabelGroupWithLabelsAsync);
 #if DEBUG
                 stopwatch.Stop();
@@ -762,6 +1149,10 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 
@@ -776,6 +1167,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
 #if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -787,6 +1179,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
                     labelGroup.Labels.Add(label);
                 }
+
                 await System.Windows.Application.Current.Dispatcher.InvokeAsync(AssociateLabel);
 #if DEBUG
                 stopwatch.Stop();
@@ -798,6 +1191,10 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 
@@ -812,6 +1209,15 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+
+
+                //TODO:  should we bail here?
+                if (labelGroup.Name == LocalizationService["All"])
+                {
+                    return;
+                }
+
+                await SetIsBusy(true);
 #if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -833,6 +1239,10 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+            finally
+            {
+                await SetIsBusy(false);
+            }
         }
 
         /// <summary>
@@ -845,6 +1255,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
 #if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -858,6 +1269,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
                     //await EventAggregator.PublishOnUIThreadAsync(new LabelGroupAddedMessage(newLabelGroup), cancellationToken);
                 }
+
                 await System.Windows.Application.Current.Dispatcher.InvokeAsync(RemoveLabelGroupViewModelAsync);
 #if DEBUG
                 stopwatch.Stop();
@@ -868,6 +1280,10 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 Logger?.LogCritical(e.ToString());
                 throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
             }
         }
 
@@ -882,6 +1298,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+               SetIsBusy(true);
 #if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -897,6 +1314,11 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+            finally
+            {
+                SetIsBusy(false);
+            }
+
         }
 
         /// <summary>
@@ -921,6 +1343,7 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
+                await SetIsBusy(true);
 #if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -936,6 +1359,10 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+            finally
+            {
+                await SetIsBusy(false);
+            }
         }
 
         /// <summary>
@@ -949,18 +1376,34 @@ namespace ClearDashboard.Wpf.Application.Services
             DefaultLabelGroup = NoneLabelGroup;
         }
 
-        private async Task PopulateLabelsAsync()
+        public async Task PopulateLabelsAsync()
         {
             LabelSuggestions = await GetLabelSuggestionsAsync();
-            NoneLabelGroup.Labels = LabelSuggestions;
+            AllLabelGroup.Labels = LabelSuggestions;
             LabelGroups = await GetLabelGroupsAsync();
+            NoneLabelGroup.Labels = GetNoneLabelGroupLabels();
 
             DefaultLabelGroup = await GetUserDefaultLabelGroupAsync();
         }
 
+        private LabelCollection GetNoneLabelGroupLabels()
+        {
+            var allGroupedLabels = DomainLabelGroups.SelectMany(lg => lg.Labels).Distinct().ToList();
+            return new LabelCollection(AllLabelGroup.Labels.Except(allGroupedLabels));
+        }
+
         public async Task InitializeAsync()
         {
-            await PopulateLabelsAsync();
+            try 
+            {
+                await PopulateLabelsAsync();
+
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
         }
 
         public async Task HandleAsync(LabelsUpdatedMessage message, CancellationToken cancellationToken = default)
@@ -970,21 +1413,40 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
         {
-            CurrentNotes = await GetNoteDetailsAsync(message.SelectedTokens.NoteIds);
+
+            // Jots refactor
+            //CurrentNotes = await GetNoteDetailsAsync(message.SelectedTokens.NoteIds);
         }
 
-        public NoteManager(IEventAggregator eventAggregator, ILogger<NoteManager>? logger, IMediator mediator, IUserProvider userProvider, ILocalizationService localizationService)
+
+        public async Task CreateNewNote()
         {
-            LocalizationService = localizationService;
-            EventAggregator = eventAggregator;
-            Logger = logger;
-            Mediator = mediator;
-            UserProvider = userProvider;
-            ExternalNoteManager = new ExternalNoteManager(EventAggregator);
+            try
+            {
+               
+                await Execute.OnUIThreadAsync(async () =>
+                {
+                    
+                    var newNote = new NoteViewModel();
 
-            NoneLabelGroup.Name = $"<{LocalizationService["None"]}>";
+                    newNote.Entity.SetDomainEntityIds( SelectedEntityIds);
+                    
+                    var domainEntityContexts =
+                        new EntityContextDictionary(
+                            await Note.GetDomainEntityContexts(Mediator,  SelectedEntityIds));
+                    newNote.Associations =
+                        GetNoteAssociations(SelectedEntityIds, domainEntityContexts);
 
-            EventAggregator.SubscribeOnUIThread(this);
+                    NewNote = newNote;
+                });
+
+            }
+            catch (Exception e)
+            {
+                var s = e.Message;
+                throw;
+            }
+          
         }
     }
 }

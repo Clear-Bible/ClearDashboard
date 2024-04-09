@@ -1,9 +1,8 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Input;
-using ClearDashboard.DAL.Alignment.Translation;
+﻿using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using System.Windows;
+using System.Windows.Input;
 
 namespace ClearDashboard.Wpf.Application.Events
 {
@@ -25,7 +24,7 @@ namespace ClearDashboard.Wpf.Application.Events
         /// <summary>
         /// The <see cref="Translation"/> to which this event pertains.
         /// </summary>
-        public Translation Translation { get; set; }
+        public Translation? Translation { get; set; }
 
         public string TranslationActionType { get; set; } = string.Empty;
 
@@ -48,5 +47,7 @@ namespace ClearDashboard.Wpf.Application.Events
         /// Gets whether the Alt key is pressed at the time of the event.
         /// </summary>
         public bool IsAltPressed => (ModifierKeys & ModifierKeys.Alt) > 0;
+
+        public Point MousePosition { get; set; }
     }
 }

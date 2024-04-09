@@ -199,6 +199,9 @@
   <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
     <value>Unselect All</value>
   </data>
+  <data name="All" xml:space="preserve">
+    <value>All</value>
+  </data>
   <data name="AMO" xml:space="preserve">
     <value>AMO</value>
   </data>
@@ -644,7 +647,7 @@
     <value>Create Alignment</value>
   </data>
   <data name="EnhancedView_CreateNote" xml:space="preserve">
-    <value>View/Create Notes</value>
+    <value>View/Create Jots</value>
   </data>
   <data name="EnhancedView_DeleteAlignment" xml:space="preserve">
     <value>Delete Alignment?</value>
@@ -1154,7 +1157,7 @@
     <value>New View</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
-    <value>Notes List</value>
+    <value>Jots</value>
   </data>
   <data name="MainView_WindowsPINS" xml:space="preserve">
     <value>Term Search</value>
@@ -1366,35 +1369,50 @@
   <data name="None" xml:space="preserve">
     <value>None</value>
   </data>
+  <data name="Notes_AddJot" xml:space="preserve">
+    <value>Add Jot</value>
+  </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Add a new note</value>
+    <value>Add a new jot </value>
+  </data>
+  <data name="Notes_Body" xml:space="preserve">
+    <value>Body</value>
+  </data>
+  <data name="Notes_Delete" xml:space="preserve">
+    <value>Delete Jot</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
-    <value>Delete this note?</value>
+    <value>Delete this jot?</value>
+  </data>
+  <data name="Notes_DueToPermissions" xml:space="preserve">
+    <value>Due to your Paratext project permissions, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>By associations</value>
+    <value>Filter by Verse</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filters</value>
   </data>
   <data name="Notes_FilterLabels" xml:space="preserve">
-    <value>By labels</value>
+    <value>Filter by Labels</value>
+  </data>
+  <data name="Notes_FilterNoteStatus" xml:space="preserve">
+    <value>Filter by Status</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>By note text</value>
+    <value>Filter by Text</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>Any</value>
   </data>
   <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>Closed</value>
+    <value>Resolved</value>
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>Open</value>
   </data>
   <data name="Notes_FilterUsers" xml:space="preserve">
-    <value>By users</value>
+    <value>Filter by Author</value>
   </data>
   <data name="Notes_LabelAdd" xml:space="preserve">
     <value>Add a label</value>
@@ -1429,6 +1447,9 @@
   <data name="Notes_LabelGroupInitializeFrom" xml:space="preserve">
     <value>with labels from:</value>
   </data>
+  <data name="Notes_LabelGroupManageTooltip" xml:space="preserve">
+    <value>Manage labels in a label group</value>
+  </data>
   <data name="Notes_LabelGroupName" xml:space="preserve">
     <value>Label Group Name</value>
   </data>
@@ -1450,6 +1471,12 @@
   <data name="Notes_LabelTooltipDisassociate" xml:space="preserve">
     <value>Disassociate label</value>
   </data>
+  <data name="Notes_MarkOpen" xml:space="preserve">
+    <value>Mark selected jots as open</value>
+  </data>
+  <data name="Notes_MarkResolved" xml:space="preserve">
+    <value>Mark selected jots as resolved</value>
+  </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Created</value>
   </data>
@@ -1457,7 +1484,7 @@
     <value>Modified</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
-    <value>User</value>
+    <value>Author</value>
   </data>
   <data name="Notes_Note_NoteStatus" xml:space="preserve">
     <value>Status</value>
@@ -1466,7 +1493,10 @@
     <value>Open</value>
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>Closed</value>
+    <value>Resolved</value>
+  </data>
+  <data name="Notes_Note_Verse" xml:space="preserve">
+    <value>Verse</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>Associations</value>
@@ -1486,20 +1516,44 @@
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>Seen</value>
   </data>
+  <data name="Notes_NotesNotSent" xml:space="preserve">
+    <value> selected jots will not be sent to Paratext.</value>
+  </data>
+  <data name="Notes_NoteStatus_Archived" xml:space="preserve">
+    <value>Archived</value>
+  </data>
   <data name="Notes_NoteText" xml:space="preserve">
     <value>Text</value>
   </data>
   <data name="Notes_OpenClosed" xml:space="preserve">
-    <value>Open/Closed</value>
+    <value>Status</value>
+  </data>
+  <data name="Notes_OpenConfirmation" xml:space="preserve">
+    <value>Mark these jots as open?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Part</value>
   </data>
+  <data name="Notes_PleaseAddJot" xml:space="preserve">
+    <value>Please add a jot using the dialog below.</value>
+  </data>
+  <data name="Notes_ResolveConfirmation" xml:space="preserve">
+    <value>Mark these jots as resolved?</value>
+  </data>
+  <data name="Notes_SelectLabelsToDeleteFromLabelGroup" xml:space="preserve">
+    <value>Select the labels to remove from the label group</value>
+  </data>
+  <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
+    <value>Note: these labels will appear under label group:  None</value>
+  </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
-    <value>Send this note to Paratext?</value>
+    <value>Send these jots to Paratext?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>Send this note to Paratext</value>
+    <value>Send jots to Paratext</value>
+  </data>
+  <data name="Notes_TakeAction" xml:space="preserve">
+    <value>Take Action</value>
   </data>
   <data name="Notes_TokenizedCorpus" xml:space="preserve">
     <value>Tokenized Corpus</value>
@@ -1512,6 +1566,9 @@
   </data>
   <data name="Notes_UnreadRepliesPresent" xml:space="preserve">
     <value>Unread replies present</value>
+  </data>
+  <data name="Notes_UpdateJot" xml:space="preserve">
+    <value>Update Jot</value>
   </data>
   <data name="Notes_Word" xml:space="preserve">
     <value>Word</value>

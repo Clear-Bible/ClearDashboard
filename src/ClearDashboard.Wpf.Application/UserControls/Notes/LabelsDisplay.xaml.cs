@@ -139,6 +139,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         private NotesLabel? _currentLabel;
         private string? _currentLabelText;
         private string? _currentLabelTemplate;
+        public static readonly DependencyProperty RemoveLabelButtonVisibilityProperty = DependencyProperty.Register("RemoveLabelButtonVisibility", typeof(Visibility), typeof(LabelsDisplay), new PropertyMetadata(default(Visibility)));
 
         /// <summary>
         /// Gets or sets the label being edited.
@@ -354,6 +355,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             get => (NoteViewModel)GetValue(NoteProperty);
             set => SetValue(NoteProperty, value);
+        }
+
+        public Visibility RemoveLabelButtonVisibility
+        {
+            get { return (Visibility)GetValue(RemoveLabelButtonVisibilityProperty); }
+            set { SetValue(RemoveLabelButtonVisibilityProperty, value); }
         }
 
         #endregion Public properties

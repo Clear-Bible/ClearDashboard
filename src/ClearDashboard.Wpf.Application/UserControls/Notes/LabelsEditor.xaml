@@ -8,6 +8,9 @@
     xmlns:notesControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Notes"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:strings="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:cm="http://caliburnmicro.com"
     x:Name="LabelsEditorControl"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -15,17 +18,49 @@
     FontFamily="{StaticResource ClearDashboardFont}"
     FontSize="16"
     mc:Ignorable="d">
+    <!--
+          Labels section first (and reorder within Labels section as follows)
+       - chosen label icons in the first row(s)
+       - Label +  selection next
+       - Group selection next 
+    -->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
 
+        <!--  Labels  -->
+        <WrapPanel Grid.Row="0" Margin="0,10,0,0">
+            <notesControls:LabelsDisplay
+                x:Name="LabelsDisplay"
+                LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
+                LabelCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}"
+                LabelFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"
+                LabelMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelMargin}"
+                LabelPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelPadding}"
+                LabelRemoved="OnLabelRemoved"
+                LabelUpdated="OnLabelUpdated"
+                Labels="{Binding ElementName=LabelsEditorControl, Path=Labels}"
+                Note="{Binding ElementName=LabelsEditorControl, Path=Note}" />
+            <notesControls:LabelSelector
+                x:Name="LabelSelector"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                VerticalContentAlignment="Center"
+                LabelAdded="OnLabelAdded"
+                LabelDeleted="OnLabelDeleted"
+                LabelGroup="{Binding ElementName=LabelsEditorControl, Path=CurrentLabelGroup}"
+                LabelSelected="OnLabelSelected"
+                LabelSuggestions="{Binding ElementName=LabelsEditorControl, Path=LabelSuggestions}" />
+        </WrapPanel>
+
+
         <!--  Label Groups  -->
-        <Grid Grid.Row="0" Margin="5,0,0,0">
+        <Grid Grid.Row="1" Margin="5,0,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
@@ -41,7 +76,7 @@
             <ComboBox
                 x:Name="LabelGroupComboBox"
                 Grid.Column="1"
-                Width="100"
+                Width="400"
                 Margin="10,0,0,0"
                 Padding="5"
                 HorizontalAlignment="Left"
@@ -82,10 +117,117 @@
                     ToolTip="{helpers:Localization Notes_LabelGroupAddTooltip}">
                     <Image Height="18" Source="/Resources/add24.png" />
                 </Button>
+                <Button
+                    Name="ManageLabelGroupButton"
+                    Margin="0,-5,0,0"
+                    Padding="0,0,0,0"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Click="OnLabelGroupManageClicked"
+                    FontSize="12"
+                    FontWeight="SemiBold"
+                    ToolTip="{helpers:Localization Notes_LabelGroupManageTooltip}"
+                    Visibility="{Binding ElementName=LabelsEditorControl, Path=LabelGroupDeleteVisibility}">
+                    <iconPacks:PackIconMaterial Kind="PencilCircleOutline" Margin="5, 0" />
+                 
+                </Button>
             </StackPanel>
 
-            <Popup
-                Name="AddLabelGroupPopup"
+            <userControls:NonTopmostPopup
+        x:Name="ManageLabelGroupPopup"
+        Grid.Column="2"
+        Width="450"
+        Placement="Center"
+        PreviewKeyDown="OnLabelGroupManageEscapePressed"
+        StaysOpen="True">
+                <Border
+            Padding="5"
+            Background="WhiteSmoke"
+            BorderThickness="2">
+                    <StackPanel
+                VerticalAlignment="Center"
+                Background="WhiteSmoke"
+                Orientation="Vertical">
+                        <TextBlock
+                    Padding="10"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    FontSize="14">
+                            <TextBlock.Inlines>
+                                <Run FontWeight="Bold" Text="{helpers:Localization Notes_SelectLabelsToDeleteFromLabelGroup}" />
+                                <Run Text=": " />
+                                <Run Text="{Binding ElementName=LabelsEditorControl, Path=CurrentLabelGroup.Name}" />
+                            </TextBlock.Inlines>
+                        </TextBlock>
+                        <TextBlock
+                            Padding="10"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            FontSize="14">
+                            <TextBlock.Inlines>
+                                <Run Text="{helpers:Localization Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage}" />
+                            </TextBlock.Inlines>
+                        </TextBlock>
+
+
+                        <ListView
+                            Height="150"
+                            Margin="5"
+                            BorderBrush="{StaticResource PrimaryHueMidBrush}"
+                            BorderThickness="1"
+                            ItemsSource="{Binding ElementName=LabelsEditorControl, Path=CurrentLabelGroup.SelectableLabels}"
+                            ScrollViewer.VerticalScrollBarVisibility="Visible">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="200" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+
+                                        </Grid.RowDefinitions>
+                                        <CheckBox
+                                            Grid.RowSpan="2"
+                                            Margin="0,0,5,0"
+                                            VerticalAlignment="Center"
+                                            IsChecked="{Binding Selected}" />
+                                        <TextBlock
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            HorizontalAlignment="Stretch"
+                                            FontSize="13.5"
+                                            FontWeight="Bold"
+                                            Text="{Binding Text}" />
+                                    </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                                    <StackPanel
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+                            <Button
+                        Margin="5"
+                        Click="OnLabelGroupManageConfirmed"
+                        Content="{helpers:Localization Ok}"
+                        IsDefault="True"
+                        Style="{StaticResource TransparentStyle}" />
+                            <Button
+                        Margin="5"
+                        Click="OnLabelGroupManageCancelled"
+                        Content="{helpers:Localization Cancel}"
+                        Style="{StaticResource AlternativeStyle}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </userControls:NonTopmostPopup>
+
+            <userControls:NonTopmostPopup
+                x:Name="AddLabelGroupPopup"
                 Grid.Column="2"
                 Width="400"
                 Placement="Left"
@@ -114,7 +256,8 @@
                             HorizontalAlignment="Center"
                             HorizontalContentAlignment="Center"
                             Text="{Binding ElementName=LabelsEditorControl, Path=NewLabelGroupName}"
-                            TextChanged="OnLabelGroupAddNameChanged" />
+                            TextChanged="OnLabelGroupAddNameChanged" 
+                            PreviewTextInput="OnNewLabelGroupTextInput"/>
                         <TextBlock
                             Margin="0,3,0,5"
                             HorizontalAlignment="Center"
@@ -173,7 +316,7 @@
                         </StackPanel>
                     </StackPanel>
                 </Border>
-            </Popup>
+            </userControls:NonTopmostPopup>
 
             <Popup
                 Name="ConfirmDeleteLabelGroupPopup"
@@ -209,31 +352,7 @@
             </Popup>
         </Grid>
 
-        <!--  Labels  -->
-        <WrapPanel Grid.Row="1" Margin="0,10,0,0">
-            <notesControls:LabelsDisplay
-                x:Name="LabelsDisplay"
-                LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
-                LabelCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}"
-                LabelFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"
-                LabelMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelMargin}"
-                LabelPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelPadding}"
-                LabelRemoved="OnLabelRemoved"
-                LabelUpdated="OnLabelUpdated"
-                Labels="{Binding ElementName=LabelsEditorControl, Path=Labels}"
-                Note="{Binding ElementName=LabelsEditorControl, Path=Note}" />
-            <notesControls:LabelSelector
-                x:Name="LabelSelector"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                VerticalContentAlignment="Center"
-                LabelAdded="OnLabelAdded"
-                LabelDeleted="OnLabelDeleted"
-                LabelGroup="{Binding ElementName=LabelsEditorControl, Path=CurrentLabelGroup}"
-                LabelSelected="OnLabelSelected"
-                LabelSuggestions="{Binding ElementName=LabelsEditorControl, Path=LabelSuggestions}" />
-        </WrapPanel>
-
+      
         <Popup
             Name="ConfirmAddLabelPopup"
             Grid.Row="1"

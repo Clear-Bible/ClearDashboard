@@ -102,13 +102,19 @@ public class TokenDisplayBase : UserControl, IHandle<AlignmentAddedMessage>, IHa
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
-        TokenDisplayViewModel.PropertyChanged += TokenDisplayViewModelPropertyChanged;
-        CalculateLayout();
+        if (TokenDisplayViewModel != null)
+        {
+            TokenDisplayViewModel.PropertyChanged += TokenDisplayViewModelPropertyChanged;
+            CalculateLayout();
+        }
     }
 
     private void OnUnloaded(object sender, RoutedEventArgs e)
     {
-        TokenDisplayViewModel.PropertyChanged -= TokenDisplayViewModelPropertyChanged;
+        if (TokenDisplayViewModel is not null)
+        {
+            TokenDisplayViewModel.PropertyChanged -= TokenDisplayViewModelPropertyChanged;
+        }
     }
 
     private void TokenDisplayViewModelPropertyChanged(object? sender,
@@ -210,7 +216,7 @@ public class TokenDisplayBase : UserControl, IHandle<AlignmentAddedMessage>, IHa
     /// <summary>
     /// Gets the strongly-typed <see cref="TokenDisplayViewModel"/> data source for this control.
     /// </summary>
-    public TokenDisplayViewModel TokenDisplayViewModel => (TokenDisplayViewModel)DataContext;
+    public TokenDisplayViewModel?TokenDisplayViewModel => (TokenDisplayViewModel)DataContext;
 
     /// <summary>
     /// Gets or sets the <see cref="FlowDirection"/> to use for displaying the tokens.
