@@ -7,12 +7,12 @@
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>Assets\ClearDashboard_Icon.ico</ApplicationIcon>
     <Copyright>Clear Bible, 2023</Copyright>
-    <AssemblyVersion>1.4.0.2</AssemblyVersion>
-    <FileVersion>1.4.0.2</FileVersion>
-    <Version>1.4.0.2</Version>
+    <AssemblyVersion>1.4.0.15</AssemblyVersion>
+    <FileVersion>1.4.0.15</FileVersion>
+    <Version>1.4.0.15</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <UserSecretsId>b02febcf-d7fc-48e1-abb1-f03647ca553c</UserSecretsId>
-    <Configurations>Debug;Release;Collab_Release;Collab_Debug</Configurations>
+    <Configurations>Debug;Release;Collab_Release;Collab_Debug;HighDPIDebug</Configurations>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Interfaces\**" />
@@ -279,6 +279,9 @@
     <Compile Update="UserControls\Lexicon\LabelEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControls\Notes\AddNote.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\Notes\NoteReplyDisplay.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -471,6 +474,9 @@
     <Page Update="UserControls\Lexicon\LabelEditor.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
+    <Page Update="UserControls\Notes\AddNote.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
     <Page Update="UserControls\Notes\NoteReplyDisplay.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
@@ -519,7 +525,11 @@
     <SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='GerfenDebug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);TRACE;GERFEN</DefineConstants>
     <DebugType>embedded</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Debug|AnyCPU'">
@@ -535,7 +545,11 @@
     <DebugType>embedded</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='GerfenDebug|x64'">
+    <DefineConstants>$(DefineConstants);TRACE;GERFEN</DefineConstants>
     <DebugType>embedded</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Collab_Debug|x64'">
@@ -550,6 +564,8 @@
     <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
     <DebugType>embedded</DebugType>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='HighDPIDebug|AnyCPU'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='HighDPIDebug|x64'" />
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="powershell -Command &quot;((Get-Date).ToUniversalTime()).ToString(\&quot;s\&quot;) | Out-File '$(ProjectDir)Resources\BuildDate.txt'&quot;" />
   </Target>

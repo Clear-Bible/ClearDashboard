@@ -352,6 +352,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _isNoteHovered, value);
         }
 
+        public SolidColorBrush NoteIndicatorBrush
+        {
+            get => _noteIndicatorBrush;
+            set => Set(ref _noteIndicatorBrush, value);
+        }
+
         public bool TokenHasNote => TokenNoteIds.Any();
         public bool TranslationHasNote => TranslationNoteIds.Any();
 
@@ -381,7 +387,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        private bool _isFirstJotsNoteToken = false;
+        public bool IsFirstJotsNoteToken
+        {
+            get => _isFirstJotsNoteToken;
+            set
+            {
+                _isFirstJotsNoteToken = value;
+                NotifyOfPropertyChange(nameof(IsFirstJotsNoteToken));
+                NotifyOfPropertyChange(nameof(TokenHasNote));
+            }
+        }
+
+
         private bool _multipleExternalNotes = false;
+        private SolidColorBrush _noteIndicatorBrush;
+
         public bool MultipleExternalNotes
         {
             get => _multipleExternalNotes && AbstractionsSettingsHelper.GetShowExternalNotes();
@@ -391,7 +412,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 NotifyOfPropertyChange(nameof(MultipleExternalNotes));
             }
         }
-
 
         public void OnToolTipOpening(ToolTipEventArgs e)
         {
@@ -425,6 +445,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public TokenDisplayViewModel(Token token)
         {
             Token = token;
+            NoteIndicatorBrush = Brushes.LightGray;
         }
     }
 }

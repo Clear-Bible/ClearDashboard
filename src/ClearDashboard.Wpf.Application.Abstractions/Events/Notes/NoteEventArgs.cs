@@ -1,6 +1,8 @@
-﻿using ClearDashboard.Wpf.Application.Collections;
+﻿using System.Drawing;
+using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using System.Windows;
+using Point = System.Windows.Point;
 
 namespace ClearDashboard.Wpf.Application.Events.Notes
 {
@@ -23,5 +25,11 @@ namespace ClearDashboard.Wpf.Application.Events.Notes
 
         public EntityIdCollection EntityIds { get; set; } = new();
 
+        /// <summary>
+        /// The position of the mouse relative to the control which fired the event.
+        /// </summary>
+        public Point MousePosition { get; set; }
+
+        public bool IsNewNote { get; set; } = false;
     }
 }

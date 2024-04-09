@@ -23,7 +23,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,7 +31,10 @@ using System.Windows.Data;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 {
-    public class NotesViewModel :
+
+
+
+    public class JotsPanelViewModel :
         ToolViewModel,
         IHandle<NoteAddedMessage>,
         IHandle<NoteDeletedMessage>,
@@ -42,7 +44,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         IHandle<NoteLabelDetachedMessage>,
         IHandle<TokenizedCorpusUpdatedMessage>, IHandle<ReloadNotesListMessage>
     {
+
         #region Member Variables   
+
+        private enum NoteAction
+        {
+            Open,
+            Resolved,
+            SendToParatext,
+        }
+
+        private NoteAction _noteAction = NoteAction.Open;
 
         private Guid Guid = Guid.NewGuid();
 
@@ -52,8 +64,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
         private readonly LongRunningTaskManager longRunningTaskManager_;
         private readonly NoteManager? noteManager_;
-        private NotesView view_;
+        private JotsPanelView view_;
+        private readonly EnhancedViewModel? _enhancedViewModel;
         private LongRunningTask? currentLongRunningTask_;
+
+
 
         #endregion //Member Variables
 
@@ -64,7 +79,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         {
             Any,
             Open,
-            Resolved
+            Resolved,
+            Archived
         }
 
         public Guid UserId => _currentUser?.Id
@@ -74,6 +90,40 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
 
         #region Observable Properties
+        
+        private bool _bulkCheckBoxIsChecked;
+        public bool BulkCheckBoxIsChecked
+        {
+            get => _bulkCheckBoxIsChecked;
+            set
+            {
+                _bulkCheckBoxIsChecked = value;
+                NotifyOfPropertyChange(() => BulkCheckBoxIsChecked);
+            }
+        }
+
+        private Visibility _confirmationDialog = Visibility.Collapsed;
+        public Visibility ConfirmationDialog
+        {
+            get => _confirmationDialog;
+            set 
+            { 
+                _confirmationDialog = value; 
+                NotifyOfPropertyChange(() => ConfirmationDialog);
+            }
+        }
+
+        private string _confirmationText = "";
+        public string ConfirmationText
+        {
+            get => _confirmationText;
+            set
+            {
+                _confirmationText = value;
+                NotifyOfPropertyChange(() => ConfirmationText);
+            }
+        }
+
 
         private Visibility _progressBarVisibility = Visibility.Visible;
         public Visibility ProgressBarVisibility
@@ -282,19 +332,42 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             }
         }
 
-        #endregion //Observable Properties
+        private int _jotsUnableToBeSentToParatextCount;
+        public int JotsUnableToBeSentToParatextCount
+        {
+            get => _jotsUnableToBeSentToParatextCount;
+            set
+            {
+                _jotsUnableToBeSentToParatextCount = value;
+                NotifyOfPropertyChange(() => JotsUnableToBeSentToParatextCount);
+            }
+        }
+
+        private Visibility _jotsUnableToBeSentToParatextVisibility;
+        public Visibility JotsUnableToBeSentToParatextVisibility
+        {
+            get => _jotsUnableToBeSentToParatextVisibility;
+            set
+            {
+                _jotsUnableToBeSentToParatextVisibility = value;
+                NotifyOfPropertyChange(() => JotsUnableToBeSentToParatextVisibility);
+            }
+        }
 
 
-        #region Constructor
+#endregion //Observable Properties
 
-        public NotesViewModel()
+
+#region Constructor
+
+public JotsPanelViewModel()
         {
             // used by Caliburn Micro for design time    
         }
 
-        public NotesViewModel(
+        public JotsPanelViewModel(
             INavigationService navigationService,
-            ILogger<NotesViewModel> logger,
+            ILogger<JotsPanelViewModel> logger,
             DashboardProjectManager? projectManager,
             IEventAggregator? eventAggregator,
             IMediator mediator,
@@ -302,12 +375,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             LongRunningTaskManager longRunningTaskManager,
             ILocalizationService localizationService,
             NoteManager noteManager,
+            EnhancedViewModel enhancedViewModel,
             IUserProvider userProvider)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             longRunningTaskManager_ = longRunningTaskManager;
             noteManager_ = noteManager;
             _currentUser = userProvider.CurrentUser;
+            _enhancedViewModel = enhancedViewModel;
 
             //FIXME: why is this here and in MainViewModel line 1113??
             Title = "⌺ " + LocalizationService!.Get("MainView_WindowsNotes");
@@ -328,7 +403,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         }
         protected override void OnViewAttached(object view, object context)
         {
-            view_ = (NotesView)view;
+            view_ = (JotsPanelView)view;
             Logger!.LogInformation("OnViewAttached");
             base.OnViewAttached(view, context);
         }
@@ -381,7 +456,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
-            LaunchMirrorView<NotesView>.Show(this, actualWidth, actualHeight, this.Title);
+            LaunchMirrorView<JotsPanelView>.Show(this, actualWidth, actualHeight, this.Title);
         }
 
 
@@ -408,7 +483,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await reportStatus(taskName, LongRunningTaskStatus.Running, cancellationToken, "Collecting note details for notes", null);
 
             return await noteIds
-                .Select(async nid => await noteManager.GetNoteDetailsAsync(nid, false, collabUpdate))
+                .Select(async nid => await noteManager.GetNoteDetailsAsync(nid, true, collabUpdate))
                 .WhenAll();
         }
         private void UpdateSelectedNote(NoteViewModel? selectedNoteViewModel)
@@ -453,48 +528,93 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
                     (cancellationToken) => AssembleNotes(noteManager_!, cancellationToken, taskName, SendBackgroundStatus, collabUpdate),
                     (noteVms) =>
                     {
-                        NoteViewModels.Clear();
-
-                        noteVms
-                            .Select(nvm =>
-                            {
-                                NoteViewModels.Add(nvm);
-                                return nvm;
-                            })
-                            .ToList();
-                        NoteViewModels.NotifyOfPropertyChange(NoteViewModels.GetType().Name);
-
-                        if (selectedNoteId != null)
+                        System.Windows.Application.Current.Dispatcher.Invoke(()=>
+                        //Execute.OnUIThread(() =>
                         {
-                            var selectedNote = NoteViewModels.Where(nvm => nvm.NoteId?.Id.Equals(selectedNoteId.Id) ?? false).FirstOrDefault();
-                            if (selectedNote != null)
-                                SelectedNoteViewModel = selectedNote;
-                        }
+                            NoteViewModels.Clear();
 
-                        FilterUsersChoices.Clear();
-                        noteVms
-                            .Select(nvm => nvm.ModifiedBy)
-                            .Distinct()
-                            .OrderBy(mb => mb)
-                            .Select(mb =>
-                            {
-                                FilterUsersChoices.Add(mb);
-                                return mb;
-                            })
-                            .ToList();
+                            var list = noteVms.ToList();
 
-                        FilterLabelsChoices.Clear();
-                        noteVms
-                            .SelectMany(nvm => nvm.Labels)
-                            .GroupBy(l=>l.Text)
-                            .Select(l=>l.First())
-                            .OrderBy(l => l.Text)
-                            .Select(l =>
+                            foreach (var note in list)
                             {
-                                FilterLabelsChoices.Add(l);
-                                return l;
-                            })
-                            .ToList();
+                                NoteViewModels.Add(note);
+                            }
+
+                            //noteVms
+                            //    .Select(nvm =>
+                            //    {
+                            //        NoteViewModels.Add(nvm);
+                            //        return nvm;
+                            //    })
+                            //    .ToList();
+                            //NoteViewModels.NotifyOfPropertyChange(NoteViewModels.GetType().Name);
+
+                            NoteViewModels.NotifyOfPropertyChange(nameof(NoteViewModels));
+
+                            if (selectedNoteId != null)
+                            {
+                                var selectedNote = NoteViewModels.FirstOrDefault(nvm => nvm.NoteId?.Id.Equals(selectedNoteId.Id) ?? false);
+                                if (selectedNote != null)
+                                    SelectedNoteViewModel = selectedNote;
+                            }
+
+                            FilterUsersChoices.Clear();
+
+
+                            //list
+                            //    .Select(nvm => nvm.ModifiedBy)
+                            //    .Distinct()
+                            //    .OrderBy(mb => string.IsNullOrEmpty(mb.Trim()))
+                            //    .ThenBy(mb => mb)
+                            //    .Select(mb =>
+                            //    {
+                            //        FilterUsersChoices.Add(mb);
+                            //        return mb;
+                            //    })
+                            //    .ToList();
+
+
+
+                            var modifiedByUsers = list
+                                .Select(nvm => nvm.ModifiedBy)
+                                .Distinct()
+                                .OrderBy(mb => string.IsNullOrEmpty(mb.Trim()))
+                                .ThenBy(mb => mb)
+                                .Select(mb => mb);
+
+                            foreach (var modifiedByUser in modifiedByUsers)
+                            {
+                                FilterUsersChoices.Add(modifiedByUser);
+                            }
+
+                            FilterLabelsChoices.Clear();
+
+                            //list
+                            //    .SelectMany(nvm => nvm.Labels)
+                            //    .GroupBy(l => l.Text)
+                            //    .Select(l => l.First())
+                            //    .OrderBy(l => l.Text)
+                            //    .Select(l =>
+                            //    {
+                            //        FilterLabelsChoices.Add(l);
+                            //        return l;
+                            //    })
+                            //    .ToList();
+
+                            var labels = list
+                                .SelectMany(nvm => nvm.Labels)
+                                .GroupBy(l => l.Text)
+                                .Select(l => l.First())
+                                .OrderBy(l => l.Text)
+                                .Select(l => l);
+
+                            foreach (var label in labels)
+                            {
+                                FilterLabelsChoices.Add(label);
+                            }
+                        });
+                
+                    
                     });
 
                 switch (processStatus)
@@ -650,6 +770,205 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             await noteManager_!.AddReplyToNoteAsync(parentNote, replyText);
         }
 
+        public async Task DisplayJotsEditor(Point? mousePosition, NoteViewModel note)
+        {
+            var noteIds = new List<NoteId>();
+
+            if (note.NoteId != null)
+            {
+                noteIds.Add(note.NoteId);
+            }
+
+            var entityIds = note.Associations.Select(a => a.AssociatedEntityId).ToList();
+            await _enhancedViewModel.DisplayJotsEditor(mousePosition, noteIds, entityIds);
+        }
+
+        public void ConfirmParatextSend()
+        {
+            JotsUnableToBeSentToParatextCount =0;
+            
+            foreach (NoteViewModel note in NotesCollectionView)
+            {
+                if (note.IsSelectedForBulkAction && note.EnableParatextSend)
+                {
+                    JotsUnableToBeSentToParatextCount++;
+                }
+            }
+
+            JotsUnableToBeSentToParatextVisibility = JotsUnableToBeSentToParatextCount > 0 ? Visibility.Visible : Visibility.Collapsed;
+
+            _noteAction = NoteAction.SendToParatext;
+            ConfirmationDialog = JotsUnableToBeSentToParatextCount > 0 ? Visibility.Visible : Visibility.Collapsed;
+            ConfirmationText = LocalizationService!["Notes_SendConfirmation"];
+        }
+
+        private void SendNotesToParatext()
+        {
+            foreach (NoteViewModel note in NotesCollectionView)
+            {
+                if (note.IsSelectedForBulkAction && note.EnableParatextSend)
+                {
+                    Task.Run(() => SendNotesToParatextAsync(note).GetAwaiter());
+                }
+            }
+
+            EventAggregator.PublishOnUIThreadAsync(new ReloadExternalNotesDataMessage(ReloadType.Refresh),CancellationToken.None);
+        }
+
+        public async Task SendNotesToParatextAsync(NoteViewModel note)
+        {
+            try
+            {
+                Message = $"Note '{note.Text}' sent to Paratext.";
+                await noteManager_.SendToParatextAsync(note);
+            }
+            catch (Exception ex)
+            {
+                Message = $"Could not send note to Paratext: {ex.Message}";
+
+                if (ex == null || ex.InnerException == null)
+                {
+                    //TODO although notes make it to Paratext, the result returns a failure so I'm keeping this stuff outside the try-catch
+                    Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.NotePushCount, 1);
+                    await UpdateNoteStatus(note, NoteStatus.Archived);
+                }
+            }
+        }
+
+        private int CountSelected()
+        {
+            int count = 0;
+
+            foreach (NoteViewModel note in NotesCollectionView)
+            {
+                if (note.IsSelectedForBulkAction)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+
+        public void ConfirmMarkNotesOpen()
+        {
+            if (CountSelected() == 0)
+            {
+                return;
+            }
+
+            _noteAction = NoteAction.Open;
+            ConfirmationDialog= Visibility.Visible;
+            ConfirmationText = LocalizationService!["Notes_OpenConfirmation"];
+        }
+
+        public void BulkAction()
+        {
+            ConfirmationDialog = Visibility.Collapsed;
+
+            switch (_noteAction)
+            {
+                case NoteAction.Open:
+                    MarkNotesOpen();
+                    break;
+                case NoteAction.Resolved:
+                    MarkNotesResolved();
+                    break;
+                case NoteAction.SendToParatext:
+                    SendNotesToParatext();
+                    break;
+            }
+
+            UncheckAllFilteredNoteViewModels();
+            BulkCheckBoxIsChecked = false;
+        }
+
+        public void BulkActionCancelled()
+        {
+            ConfirmationDialog = Visibility.Collapsed;
+        }
+
+        private void MarkNotesOpen()
+        {
+            foreach (NoteViewModel note in NotesCollectionView)
+            {
+                if (note.IsSelectedForBulkAction && note.NoteStatus != NoteStatus.Archived.ToString() && note.NoteStatus != NoteStatus.Open.ToString())
+                {
+                    Task.Run(() => MarkNotesOpenAsync(note).GetAwaiter());
+                }
+            }
+        }
+
+        public async Task MarkNotesOpenAsync(NoteViewModel note)
+        {
+            try
+            {
+                await UpdateNoteStatus(note, NoteStatus.Open);
+                Message = $"Note '{note.Text}' set as Open status.";
+            }
+            catch (Exception ex)
+            {
+                Message = $"Could not set note status to Open: {ex.Message}";
+            }
+        }
+
+        public void ConfirmMarkNotesResolved()
+        {
+            if (CountSelected() == 0)
+            {
+                return;
+            }
+
+
+            _noteAction = NoteAction.Resolved;
+            ConfirmationDialog = Visibility.Visible;
+            ConfirmationText = LocalizationService!["Notes_ResolveConfirmation"];
+        }
+
+        private void MarkNotesResolved()
+        {
+            foreach (NoteViewModel note in NotesCollectionView)
+            {
+                if (note.IsSelectedForBulkAction && note.NoteStatus != NoteStatus.Archived.ToString() && note.NoteStatus != NoteStatus.Resolved.ToString())
+                {
+                    Task.Run(() => MarkNotesResolvedAsync(note).GetAwaiter());
+                }
+            }
+        }
+
+        public async Task MarkNotesResolvedAsync(NoteViewModel note)
+        {
+            try
+            {
+                await UpdateNoteStatus(note, NoteStatus.Resolved);
+                Message = $"Note '{note.Text}' set as Resolved status.";
+            }
+            catch (Exception ex)
+            {
+                Message = $"Could not set note status to Resolved: {ex.Message}";
+            }
+        }
+
+        public void CheckAllFilteredNoteViewModels()
+        {
+            foreach (NoteViewModel note in NotesCollectionView)
+            {
+                if (note.NoteStatus != "Archived")
+                {
+                    note.IsSelectedForBulkAction = true;
+                }
+            }
+        }
+
+        public void UncheckAllFilteredNoteViewModels()
+        {
+            foreach (NoteViewModel note in NotesCollectionView)
+            {
+                note.IsSelectedForBulkAction = false;
+            }
+        }
+
         public async Task HandleAsync(NoteAddedMessage message, CancellationToken cancellationToken)
         {
             var noteViewModelWithDetails = await noteManager_!.GetNoteDetailsAsync(message.Note.NoteId!);
@@ -679,7 +998,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         public async Task HandleAsync(NoteUpdatedMessage message, CancellationToken cancellationToken)
         {
             if (message.succeeded)
+            {
+                noteManager_?.UpdateNoteInCache(message.Note);
                 await GetAllNotesAndSetNoteViewModelsAsync();
+            }
             else
                 ProgressBarVisibility = Visibility.Hidden;
         }
@@ -703,7 +1025,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
         #endregion // Methods
 
-
+        
 
     }
 

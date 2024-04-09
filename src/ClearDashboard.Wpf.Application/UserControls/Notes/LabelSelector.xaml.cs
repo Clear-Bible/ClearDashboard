@@ -12,6 +12,7 @@ using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.Wpf.Application.Events.Notes;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
+using static ICSharpCode.AvalonEdit.Document.TextDocumentWeakEventManager;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
 namespace ClearDashboard.Wpf.Application.UserControls.Notes
@@ -28,10 +29,11 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// </summary>
         public static readonly RoutedEvent LabelAddedEvent = EventManager.RegisterRoutedEvent
             (nameof(LabelAdded), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelSelector));
-        
+
         /// <summary>
         /// Identifies the LabelDeletedEvent routed event.
         /// </summary>
+        /// Dashboard 1.4 release - no longer used
         public static readonly RoutedEvent LabelDeletedEvent = EventManager.RegisterRoutedEvent
             (nameof(LabelDeleted), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelSelector));
 
@@ -42,19 +44,32 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             (nameof(LabelSelected), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelSelector));
 
         #endregion
+
         #region Static Dependency Properties
 
         /// <summary>
         /// Identifies the LabelGroup dependency property.
         /// </summary>
-        public static readonly DependencyProperty LabelGroupProperty = DependencyProperty.Register(nameof(LabelGroup), typeof(LabelGroupViewModel), typeof(LabelSelector));
-        
+        public static readonly DependencyProperty LabelGroupProperty =
+            DependencyProperty.Register(nameof(LabelGroup), typeof(LabelGroupViewModel), typeof(LabelSelector));
+
         /// <summary>
         /// Identifies the LabelSuggestions dependency property.
         /// </summary>
-        public static readonly DependencyProperty LabelSuggestionsProperty = DependencyProperty.Register(nameof(LabelSuggestions), typeof(LabelCollection), typeof(LabelSelector));
-        
+        public static readonly DependencyProperty LabelSuggestionsProperty =
+            DependencyProperty.Register(nameof(LabelSuggestions), typeof(LabelCollection), typeof(LabelSelector), new PropertyMetadata(OnLabelSuggestionsChanged));
+
+        private static void OnLabelSuggestionsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (LabelSelector)d;
+            control.PopulateSuggestionListBoxItemsSource();
+
+        }
+
+      
+
         #endregion
+
         #region Private event handlers
 
         private void RaiseLabelEvent(RoutedEvent routedEvent, NotesLabel label)
@@ -66,13 +81,32 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             });
         }
 
+        private void PopulateSuggestionListBoxItemsSource()
+        {
+            if (LabelSuggestions != null)
+            {
+                switch (LabelTextBox.Text.Length)
+                {
+                    case > 0:
+                    {
+                        LabelSuggestionListBox.ItemsSource = LabelSuggestions.Where(ls =>
+                            ls.Text.Contains(LabelTextBox.Text, StringComparison.InvariantCultureIgnoreCase));
+                            break;
+                    }
+
+                    default:
+                    {
+                        LabelSuggestionListBox.ItemsSource = LabelSuggestions;
+                        break;
+                    }
+                }
+            }
+        }
+
         private void OnLabelTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (LabelSuggestions != null && LabelTextBox.Text.Length > 0)
-            {
-                LabelSuggestionListBox.ItemsSource = LabelSuggestions.Where(ls => ls.Text.Contains(LabelTextBox.Text, StringComparison.InvariantCultureIgnoreCase));
-                OpenSuggestionPopup();
-            }
+            PopulateSuggestionListBoxItemsSource();
+            OpenSuggestionPopup();
         }
 
         private void OnLabelListSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -102,7 +136,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             {
                 if (!String.IsNullOrWhiteSpace(LabelTextBox.Text))
                 {
-                    var matchingLabel = LabelSuggestions?.FirstOrDefault(ls => ls.Text.Equals(LabelTextBox.Text, StringComparison.CurrentCultureIgnoreCase));
+                    var matchingLabel = LabelSuggestions?.FirstOrDefault(ls =>
+                        ls.Text.Equals(LabelTextBox.Text, StringComparison.CurrentCultureIgnoreCase));
                     if (matchingLabel != null)
                     {
                         RaiseLabelEvent(LabelSelectedEvent, matchingLabel);
@@ -130,6 +165,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             Keyboard.Focus(LabelTextBox);
         }
 
+
         private void AddLabelButtonClicked(object sender, RoutedEventArgs e)
         {
             TextBoxVisibility = Visibility.Visible;
@@ -140,14 +176,17 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             System.Windows.Application.Current.Dispatcher.Invoke(SetTextboxFocus, DispatcherPriority.Render);
         }
 
+        // Dashboard 1.4 release - no longer used.  
         private void DeleteLabelClicked(object sender, RoutedEventArgs e)
         {
             RaiseLabelEvent(LabelDeletedEvent, (sender as Button).DataContext as NotesLabel);
         }
 
+
+
         private void OnToolTipOpening(object sender, ToolTipEventArgs e)
         {
-            var button = (FrameworkElement) sender;
+            var button = (FrameworkElement)sender;
             var label = button.DataContext as NotesLabel;
 
             var tooltipText = LabelGroup.IsNoneLabelGroup
@@ -163,6 +202,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         }
 
         #endregion
+
         #region Public properties
 
         /// <summary>
@@ -207,6 +247,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// <summary>
         /// Occurs when the user asks to remove an existing label suggestion.
         /// </summary>
+        /// Dashboard 1.4 release - no longer used
         public event RoutedEventHandler LabelDeleted
         {
             add => AddHandler(LabelDeletedEvent, value);
@@ -247,11 +288,27 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             InitializeComponent();
         }
 
-        private void LabelTextBox_OnLostFocus(object sender, RoutedEventArgs e)
+        private void OnLabelTextBoxLostFocus(object sender, RoutedEventArgs e)
         {
+
+            if (!String.IsNullOrWhiteSpace(LabelTextBox.Text))
+            {
+                var matchingLabel = LabelSuggestions?.FirstOrDefault(ls =>
+                    ls.Text.Equals(LabelTextBox.Text, StringComparison.CurrentCultureIgnoreCase));
+                if (matchingLabel != null)
+                {
+                    RaiseLabelEvent(LabelSelectedEvent, matchingLabel);
+                }
+                else
+                {
+                    RaiseLabelEvent(LabelAddedEvent, new NotesLabel { Text = LabelTextBox.Text });
+                }
+            }
+            CloseTextBox();
+            CloseSuggestionPopup();
         }
 
-        private void LabelTextBox_OnLostKeyboardFocus(object sender, RoutedEventArgs e)
+        private void OnLabelTextBoxLostKeyboardFocus(object sender, RoutedEventArgs e)
         {
             var args = e as KeyboardFocusChangedEventArgs;
             if (args?.NewFocus?.GetType() == typeof(ScrollViewer))
@@ -259,5 +316,35 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
                 System.Windows.Application.Current.Dispatcher.Invoke(SetTextboxFocus, DispatcherPriority.Render);
             }
         }
+
+        private void OnLabelTextBoxGotFocus(object sender, RoutedEventArgs e)
+        {
+            //OpenSuggestionPopup();
+            //Execute.OnUIThread(OpenSuggestionPopup);
+            System.Windows.Application.Current.Dispatcher.Invoke(OpenSuggestionPopup, DispatcherPriority.Render);
+        }
+
+        private void OnLabelTextBoxKeyDown(object sender, KeyEventArgs e)
+        {
+            Console.WriteLine($"Key pressed - {e.Key}");
+            if (e.KeyboardDevice.Modifiers == ModifierKeys.Alt &&  e is { Key: Key.System, SystemKey: Key.Down })
+            {
+                //OpenSuggestionPopup();
+               // Execute.OnUIThread(OpenSuggestionPopup);
+                System.Windows.Application.Current.Dispatcher.Invoke(OpenSuggestionPopup, DispatcherPriority.Render);
+            }
+        }
+
+        private void OnLabelTextBoxPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+
+            // Prevent underscore characters in labels.
+            if (e.Text == "_")
+            {
+                e.Handled = true;
+            }
+        }
+
+       
     }
 }

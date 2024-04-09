@@ -155,7 +155,7 @@
             <ScrollViewer Grid.Row="3" MaxWidth="{Binding ActualWidth, ElementName=UserControl, Converter={converters:WidthSubtraction}, ConverterParameter='30'}">
                 <ListView
                     x:Name="InnerLv"
-                    MaxWidth="{Binding ActualWidth, ElementName=UserControl, Converter={converters:WidthSubtraction}, ConverterParameter='30'}"
+                    MaxWidth="{Binding ActualWidth, ElementName=UserControl, Converter={converters:WidthSubtraction}, ConverterParameter='60'}"
                     ItemsSource="{Binding SelectedTab.ExternalNoteMessages}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
@@ -252,7 +252,7 @@
                         Margin="5"
                         HorizontalAlignment="Left"
                         cm:Message.Attach="Ok($source)"
-                        Content="Ok"
+                        Content="{helpers:Localization Ok}"
                         Style="{StaticResource TransparentStyle}" />
 
                     <Button
@@ -260,7 +260,7 @@
                         Margin="5"
                         HorizontalAlignment="Left"
                         cm:Message.Attach="Close"
-                        Content="Close"
+                        Content="{helpers:Localization Close}"
                         Style="{StaticResource TransparentStyle}" />
                 </StackPanel>
             </Grid>

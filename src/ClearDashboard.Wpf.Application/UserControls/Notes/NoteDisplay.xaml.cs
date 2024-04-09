@@ -1,18 +1,20 @@
-﻿using System;
+﻿using ClearBible.Engine.Utils;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DataAccessLayer.Annotations;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.Wpf.Application.Collections.Notes;
+using ClearDashboard.Wpf.Application.Events.Notes;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearBible.Engine.Utils;
-using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DataAccessLayer.Annotations;
-using ClearDashboard.Wpf.Application.Collections;
-using ClearDashboard.Wpf.Application.Collections.Notes;
-using ClearDashboard.Wpf.Application.Events.Notes;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
+using Caliburn.Micro;
 using Brushes = System.Windows.Media.Brushes;
 using FontFamily = System.Windows.Media.FontFamily;
 using FontStyle = System.Windows.FontStyle;
@@ -62,6 +64,13 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         /// </summary>
         public static readonly RoutedEvent LabelGroupLabelRemovedEvent = EventManager.RegisterRoutedEvent
             (nameof(LabelGroupLabelRemoved), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the LabelGroupLabelRemovedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelGroupLabelsRemovedEvent = EventManager.RegisterRoutedEvent
+            (nameof(LabelGroupLabelsRemoved), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
 
         /// <summary>
         /// Identifies the LabelGroupRemovedEvent routed event.
@@ -434,7 +443,20 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             var control = (NoteDisplay)d;
             control.OnPropertyChanged(nameof(Labels));
             control.OnPropertyChanged(nameof(ParatextSendVisibility));
+            control.OnPropertyChanged(nameof(SelectedNoteStatus));
+
+            control.RaisePropertyChanged(nameof(ParatextSendVisibility));
         }
+
+        #region INotifyPropertyChanged implementation
+      
+
+        public void RaisePropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
 
         private static void OnAddModeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
@@ -545,6 +567,18 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             });
         }
 
+        public void RaiseNoteEvent(RoutedEvent routedEvent, NoteEventArgs e)
+        {
+            RaiseEvent(new NoteEventArgs
+            {
+                RoutedEvent = routedEvent,
+                Note = e.Note,
+                EntityIds = e.EntityIds,
+                IsNewNote = e.IsNewNote
+
+            });
+        }
+
         private void OnLabelAdded(object sender, RoutedEventArgs e)
         {
             if (e is LabelEventArgs labelEventArgs)
@@ -593,6 +627,27 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             var labelGroupLabelEventArgs = e as LabelGroupLabelEventArgs;
 
             RaiseLabelGroupLabelEvent(LabelGroupLabelAddedEvent, labelGroupLabelEventArgs!);
+        }
+
+        private void OnLabelGroupLabelRemoved(object sender, RoutedEventArgs e)
+        {
+            var labelGroupLabelEventArgs = e as LabelGroupLabelEventArgs;
+
+            RaiseLabelGroupLabelEvent(LabelGroupLabelRemovedEvent, labelGroupLabelEventArgs!);
+        }
+
+
+        private void OnLabelGroupLabelsRemoved(object sender, RoutedEventArgs e)
+        {
+            var eventArgs = e as LabelGroupLabelsRemovedEventArgs;
+
+            RaiseEvent(new LabelGroupLabelsRemovedEventArgs
+            {
+                RoutedEvent = LabelGroupLabelsRemovedEvent,
+                LabelGroup = eventArgs.LabelGroup,
+                NoneLabelGroup = eventArgs.NoneLabelGroup,
+                Labels = eventArgs.Labels
+            });
         }
 
         private void OnLabelGroupRemoved(object sender, RoutedEventArgs e)
@@ -777,6 +832,14 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             RaiseNoteEvent(NoteEditorMouseLeaveEvent);
         }
 
+        public void OnNoteSendToParatext(object sender, RoutedEventArgs e)
+        {
+            if (e is NoteEventArgs args)
+            {
+                RaiseNoteEvent(NoteSendToParatextEvent, args);
+            }
+        }
+
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
@@ -802,6 +865,26 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             }
         }
 
+        private void NoteDisplayBorder_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            NoteTextBox.Focus();
+        }
+
+        public NoteStatus SelectedNoteStatus
+        {
+            get => Note is { HasNoteStatus: true } ? (NoteStatus)Enum.Parse(typeof(NoteStatus),Note.NoteStatus) : NoteStatus.Open;
+            set
+            {
+                var noteStatus = value.ToString();
+                if (Note.NoteStatus != noteStatus)
+                {
+                    Note.NoteStatus = noteStatus;
+                    RaiseNoteEvent(NoteUpdatedEvent);
+                    OnPropertyChanged(nameof(SelectedNoteStatus));
+                }
+            }
+        }
+
         #endregion Private event handlers
         #region Public Properties
 
@@ -814,8 +897,9 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             set => SetValue(AddModeProperty, value);
         }
 
+
         // TODO: localize
-        public string ApplyLabel => AddMode ? "Add Note" : "Update Note";
+        public string ApplyLabel => AddMode ? "Add Jot" : "Update Jot";
 
         private string? OriginalNoteText { get; set; } = string.Empty;
 
@@ -851,9 +935,13 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         public Visibility NoteSaveCancelButtonVisibility => IsChanged ? Visibility.Visible : Visibility.Collapsed;
         public Visibility TimestampRowVisibility => AddMode || IsChanged ? Visibility.Collapsed : Visibility.Visible;
         public Visibility NotePropertiesVisibility => AddMode ? Visibility.Collapsed : Visibility.Visible;
+
+        public Visibility LabelPanelVisibility => Visibility.Visible;
+        public Visibility AssociationsPanelVisibility => Visibility.Visible;
         //public Visibility AssociationsVisibility => AddMode || !IsAssociationButtonClicked ? Visibility.Collapsed : Visibility.Visible;
         //public Visibility AssociationsButtonVisibility => IsAssociationButtonClicked ? Visibility.Hidden : Visibility.Visible;
-        public Visibility ParatextSendVisibility => !AddMode && Note != null && Note.EnableParatextSend ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility ParatextSendVisibility => (!AddMode && Note is { EnableParatextSend: true }) ? Visibility.Visible : Visibility.Collapsed;
+            // 
         //private bool IsAssociationButtonClicked { get; set; }
 
         /// <summary>
@@ -954,6 +1042,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             get => (NoteViewModel)GetValue(NoteProperty);
             set => SetValue(NoteProperty, value);
         }
+
 
         /// <summary>
         /// Gets or sets the font size for the note associations.
@@ -1272,6 +1361,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         }
 
         /// <summary>
+        /// Occurs when a set of labels is removed from a label group.
+        /// </summary>
+        public event RoutedEventHandler LabelGroupLabelsRemoved
+        {
+            add => AddHandler(LabelGroupLabelsRemovedEvent, value);
+            remove => RemoveHandler(LabelGroupLabelsRemovedEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when an existing label group is removed.
         /// </summary>
         public event RoutedEventHandler LabelGroupRemoved
@@ -1452,6 +1550,17 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             remove => RemoveHandler(NoteUpdatedEvent, value);
         }
 
+
+        // JOT refactor
+        ///// <summary>
+        ///// Occurs when a note is updated.
+        ///// </summary>
+        //public event RoutedEventHandler NoteStatusChanged
+        //{
+        //    add => AddHandler(NoteStatusChangedEvent, value);
+        //    remove => RemoveHandler(NoteStatusChangedEvent, value);
+        //}
+
         /// <summary>
         /// Occurs when a property value changes.
         /// </summary>
@@ -1466,9 +1575,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             Loaded += OnLoaded;
         }
 
-        private void NoteDisplayBorder_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            NoteTextBox.Focus();
-        }
+
     }
 }

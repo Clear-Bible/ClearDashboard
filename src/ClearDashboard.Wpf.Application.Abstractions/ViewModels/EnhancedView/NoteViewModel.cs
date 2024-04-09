@@ -36,7 +36,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 if (Equals(value, Entity.Text)) return;
                 Entity.Text = value;
                 NotifyOfPropertyChange();
+                NotifyOfPropertyChange(nameof(HasText));
             }
+        }
+
+        public bool HasText => !string.IsNullOrEmpty(Text);
+
+        public string TabHeader
+        {
+            get => _tabHeader;
+            set => Set(ref _tabHeader, value);
         }
 
         public string NoteStatus
@@ -48,10 +57,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     return;
                 Entity.NoteStatus = value;
                 NotifyOfPropertyChange();
+                NotifyOfPropertyChange(nameof(HasNoteStatus));
             }
         }
 
         private LabelCollection? _labels;
+        private string _tabHeader;
+
+
+        public bool HasLabels => Labels.Count > 0;
+
         public LabelCollection Labels
         {
             get => _labels ??= new LabelCollection(Entity.Labels);
@@ -59,14 +74,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 Entity.Labels = value;
                 _labels = new LabelCollection(Entity.Labels);
-                NotifyOfPropertyChange();
+                NotifyOfPropertyChange(nameof(Labels));
+                NotifyOfPropertyChange(nameof(HasLabels));
             }
         }
 
+
+        public bool HasAssociations => Associations.Count > 0;
         public NoteAssociationViewModelCollection Associations
         {
             get => _associations;
-            set => Set(ref _associations, value);
+            set
+            {
+                Set(ref _associations, value);
+                NotifyOfPropertyChange(nameof(HasAssociations));
+            }
         }
 
 
@@ -110,11 +132,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
 
+        
+
+        public bool HasReplies =>  Replies.Count > 0;
 
         public NoteViewModelCollection Replies
         {
             get => _replies;
-            set => Set(ref _replies, value);
+            set
+            { 
+                Set(ref _replies, value);
+                NotifyOfPropertyChange(nameof(HasReplies));
+               
+            }
         }
 
         public ICollection<Guid> SeenByUserIds
@@ -225,6 +255,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// 3) All of the tokens must be contiguous in the corpus.
         /// </remarks>
         public ExternalSendNoteInformation? ParatextSendNoteInformation { get; set; }
+        
+
+        private bool _isSelectedForBulkAction = false;
+        public bool IsSelectedForBulkAction
+        {
+            get => _isSelectedForBulkAction;
+            set
+            {
+                _isSelectedForBulkAction = value;
+                NotifyOfPropertyChange(() => IsSelectedForBulkAction);
+            }
+        }
+
+        public bool HasNoteStatus => !string.IsNullOrEmpty(NoteStatus);
 
         public void NoteSeenChanged()
         {

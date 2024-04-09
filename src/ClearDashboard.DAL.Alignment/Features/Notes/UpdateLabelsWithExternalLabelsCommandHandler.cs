@@ -22,12 +22,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
 
         protected override async Task<RequestResult<bool>> SaveDataAsync(UpdateLabelsWithExternalLabelsCommand request, CancellationToken cancellationToken)
         {
-            // 1.adds label $"External_{request.Data.ProjectName}" label group
+            // 1.adds label $"External-{request.Data.ProjectName}" label group
             // if it doesn't exist. If it does exist, removes all associations. 
 
             //unique label group names represented in external labels
             var labelGroupNamesInExternalLabels = request.Data.ExternalLabels
-                .Select(el => $"External_{el.ExternalProjectName}")
+                .Select(el => $"External-{(el.ExternalProjectName).Replace("_","-")}")
                 .Distinct()
                 .ToList();
 
@@ -84,14 +84,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             labelsToAdd.ForEach(l => labelsAlreadyInDb.Add(l.Text!, l));
 
             // 3. associates all Labels.Where(l => request.Data.ExternalLabelTexts.Contains(l.Text))
-            // with $"External_{request.Data.ProjectName}" label group
+            // with $"External-{request.Data.ProjectName}" label group
 
             await ProjectDbContext.LabelGroupAssociations.AddRangeAsync(request.Data.ExternalLabels
                 .Select(el => new Models.LabelGroupAssociation
                 {
                     Id = Guid.NewGuid(),
                     LabelId = labelsAlreadyInDb[el.ExternalText].Id,
-                    LabelGroupId = labelGroupsAlreadyInDb[$"External_{el.ExternalProjectName}"].Id
+                    LabelGroupId = labelGroupsAlreadyInDb[$"External-{(el.ExternalProjectName).Replace("_", "-")}"].Id
                 }), 
                 cancellationToken);
 

@@ -305,12 +305,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task NoteEditorMouseEnter(NoteEventArgs e)
         {
-            await NoteManager.NoteMouseEnterAsync(e.Note, e.EntityIds);
+            await NoteManager.NoteMouseEnterAsync(e.Note, e.EntityIds, e.IsNewNote);
         }
 
         public async Task NoteEditorMouseLeave(NoteEventArgs e)
         {
-            await NoteManager.NoteMouseLeaveAsync(e.Note, e.EntityIds);
+            await NoteManager.NoteMouseLeaveAsync(e.Note, e.EntityIds, e.IsNewNote);
         }
 
         public async Task NoteSendToParatext(NoteEventArgs e)

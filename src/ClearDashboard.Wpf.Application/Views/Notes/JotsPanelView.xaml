@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="ClearDashboard.Wpf.Application.Views.Notes.NotesView"
+    x:Class="ClearDashboard.Wpf.Application.Views.Notes.JotsPanelView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cm="http://caliburnmicro.com"
@@ -17,7 +17,7 @@
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     x:Name="NotesViewWindow"
-    d:DataContext="{d:DesignInstance Type=notes:NotesViewModel}"
+    d:DataContext="{d:DesignInstance Type=notes:JotsPanelViewModel}"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     FlowDirection="{Binding WindowFlowDirection}"
     FontFamily="{StaticResource ClearDashboardFont}"
@@ -55,8 +55,8 @@
                 MaxWidth="200" />
             <!--<ColumnDefinition Width="5" />-->
             <ColumnDefinition Width="7*" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="5*" />
+            <!--<ColumnDefinition Width="5" />-->
+            <!--<ColumnDefinition Width="5*" />-->
         </Grid.ColumnDefinitions>
 
         <controls:SidebarExpander
@@ -92,35 +92,6 @@
                 MaxWidth="176"
                 VerticalScrollBarVisibility="Auto">
                 <StackPanel Background="{DynamicResource MaterialDesignPaper}" Orientation="Vertical">
-                    <Button
-                        Width="20"
-                        Height="20"
-                        Margin="5,5,0,0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
-                        ToolTip="{helpers:Localization ExpandView}">
-                        <Button.Style>
-                            <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
-                                <Setter Property="Padding" Value="0" />
-                                <Setter Property="Background" Value="Transparent" />
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
-                                        <Setter Property="RenderTransform">
-                                            <Setter.Value>
-                                                <ScaleTransform ScaleX="2" ScaleY="2" />
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                        <materialDesign:PackIcon
-                            Background="Transparent"
-                            Foreground="{StaticResource AccentHueBrush}"
-                            Kind="ArrowExpandAll" />
-                    </Button>
 
                     <StackPanel
                         Margin="0,0,5,0"
@@ -131,13 +102,155 @@
                             Margin="5,5,0,2"
                             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                             BorderThickness="1"
-                            Header="Filter by Status">
+                            Header="{helpers:Localization Notes_TakeAction}">
+
+                            <StackPanel Orientation="Vertical">
+
+                                <StackPanel Margin="0,5,0,-5" Orientation="Horizontal">
+                                    <Button
+                                        Width="20"
+                                        Height="20"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top"
+                                        cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
+                                        ToolTip="{helpers:Localization ExpandView}">
+                                        <Button.Style>
+                                            <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
+                                                <Setter Property="Padding" Value="0" />
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
+                                                        <Setter Property="RenderTransform">
+                                                            <Setter.Value>
+                                                                <ScaleTransform ScaleX="2" ScaleY="2" />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                        <materialDesign:PackIcon
+                                            Background="Transparent"
+                                            Foreground="{StaticResource AccentHueBrush}"
+                                            Kind="ArrowExpandAll" />
+                                    </Button>
+
+                                    <!--  Mark Open  -->
+                                    <Button
+                                        Margin="10,-5,10,0"
+                                        Padding="0,0,0,0"
+                                        HorizontalAlignment="Right"
+                                        cm:Message.Attach="ConfirmMarkNotesOpen"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        FontSize="12"
+                                        FontWeight="SemiBold"
+                                        ToolTip="{helpers:Localization Notes_MarkOpen}">
+                                        <materialDesign:PackIcon
+                                            VerticalAlignment="Center"
+                                            Foreground="{StaticResource GreenDarkBrush}"
+                                            Kind="EmailOpenOutline" />
+                                    </Button>
+
+                                    <!--  Mark Resolved  -->
+                                    <Button
+                                        Margin="10,-5,10,0"
+                                        Padding="0,0,0,0"
+                                        HorizontalAlignment="Right"
+                                        cm:Message.Attach="ConfirmMarkNotesResolved"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        FontSize="12"
+                                        FontWeight="SemiBold"
+                                        ToolTip="{helpers:Localization Notes_MarkResolved}">
+                                        <materialDesign:PackIcon
+                                            VerticalAlignment="Center"
+                                            Foreground="{StaticResource PrimaryHueLightBrush}"
+                                            Kind="EmailOutline" />
+                                    </Button>
+
+                                    <!--  Send to Paratext  -->
+                                    <Button
+                                        x:Name="SendToParatextButton"
+                                        Margin="10,-5,10,0"
+                                        Padding="0,0,0,0"
+                                        HorizontalAlignment="Right"
+                                        cm:Message.Attach="ConfirmParatextSend"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        FontSize="12"
+                                        FontWeight="SemiBold"
+                                        ToolTip="{helpers:Localization Notes_SendToParatext}">
+                                        <Image Height="18" Source="/Resources/Paratext_Send32.png" />
+                                    </Button>
+                                </StackPanel>
+
+                                <!--  CONFIRMATION DIALOG  -->
+                                <Border
+                                    Margin="2,5,2,5"
+                                    Background="LightGreen"
+                                    BorderBrush="{StaticResource PrimaryHueMidBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="3"
+                                    Visibility="{Binding ConfirmationDialog}">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding ConfirmationText}" TextWrapping="Wrap" />
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Button
+                                                Margin="5"
+                                                Padding="-5"
+                                                cm:Message.Attach="BulkAction"
+                                                Background="{StaticResource MaterialDesignPaper}"
+                                                BorderThickness="2"
+                                                FontSize="12"
+                                                FontWeight="SemiBold">
+                                                <materialDesign:PackIcon
+                                                    Width="30"
+                                                    Height="30"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{StaticResource PrimaryHueMidBrush}"
+                                                    Kind="Check" />
+                                            </Button>
+                                            <Button
+                                                Grid.Column="1"
+                                                Margin="5"
+                                                Padding="-5"
+                                                cm:Message.Attach="BulkActionCancelled"
+                                                Background="{StaticResource MaterialDesignPaper}"
+                                                BorderThickness="2"
+                                                FontSize="12"
+                                                FontWeight="SemiBold">
+                                                <materialDesign:PackIcon
+                                                    Width="30"
+                                                    Height="30"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{StaticResource RedMidBrush}"
+                                                    Kind="Close" />
+                                            </Button>
+                                        </Grid>
+
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </GroupBox>
+
+                        <GroupBox
+                            Margin="5,5,0,2"
+                            BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                            BorderThickness="1"
+                            Header="{helpers:Localization Notes_FilterNoteStatus}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="25" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
                                     <RowDefinition Height="*" />
                                     <RowDefinition Height="*" />
                                     <RowDefinition Height="*" />
@@ -151,7 +264,8 @@
                                     VerticalAlignment="Center"
                                     FontSize="20"
                                     Foreground="{StaticResource GreenDarkBrush}"
-                                    Text="*" />
+                                    Text="*"
+                                    ToolTip="{helpers:Localization Notes_FilterStatus_Any}" />
                                 <RadioButton
                                     Grid.Row="0"
                                     Grid.Column="1"
@@ -169,7 +283,8 @@
                                     Grid.Column="0"
                                     VerticalAlignment="Center"
                                     Foreground="{StaticResource GreenDarkBrush}"
-                                    Kind="EmailOpenOutline" />
+                                    Kind="EmailOpenOutline"
+                                    ToolTip="{helpers:Localization Notes_FilterStatus_Open}" />
                                 <RadioButton
                                     Grid.Row="1"
                                     Grid.Column="1"
@@ -186,7 +301,8 @@
                                     Grid.Column="0"
                                     VerticalAlignment="Center"
                                     Foreground="{StaticResource PrimaryHueLightBrush}"
-                                    Kind="EmailOutline" />
+                                    Kind="EmailOutline"
+                                    ToolTip="{helpers:Localization Notes_FilterStatus_Closed}" />
                                 <RadioButton
                                     Grid.Row="2"
                                     Grid.Column="1"
@@ -197,57 +313,25 @@
                                     GroupName="radStatus"
                                     IsChecked="{Binding Path=FilterStatus, Mode=TwoWay, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Resolved}"
                                     Style="{StaticResource DashboardRadioButtonStyle}" />
+
+                                <materialDesign:PackIcon
+                                    Grid.Row="3"
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Foreground="Gray"
+                                    Kind="EmailOutline"
+                                    ToolTip="{helpers:Localization Notes_NoteStatus_Archived}" />
+                                <RadioButton
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    Background="{StaticResource PrimaryHueDarkBrush}"
+                                    Content="{helpers:Localization Notes_NoteStatus_Archived}"
+                                    Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                                    GroupName="radStatus"
+                                    IsChecked="{Binding Path=FilterStatus, Mode=TwoWay, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Archived}"
+                                    Style="{StaticResource DashboardRadioButtonStyle}" />
                             </Grid>
-                        </GroupBox>
-
-                        <GroupBox
-                            Margin="5,5,0,2"
-                            BorderBrush="{StaticResource PrimaryHueDarkBrush}"
-                            BorderThickness="1"
-                            Header="Filter by Label">
-                            <ListBox
-                                x:Name="LabelsFilter"
-                                MaxHeight="200"
-                                HorizontalAlignment="Stretch"
-                                IsEnabled="True"
-                                ItemsSource="{Binding FilterLabelsChoices}"
-                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                ScrollViewer.VerticalScrollBarVisibility="Visible"
-                                SelectionChanged="SelectionLabelsChanged"
-                                SelectionMode="Multiple"
-                                Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <ContentControl Content="{Binding Text}" />
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-                        </GroupBox>
-
-                        <GroupBox
-                            Margin="5,5,0,2"
-                            BorderBrush="{StaticResource PrimaryHueDarkBrush}"
-                            BorderThickness="1"
-                            Header="{helpers:Localization Notes_FilterUsers}">
-
-                            <ListBox
-                                x:Name="UsersFilter"
-                                MaxHeight="200"
-                                Margin="10,0,0,10"
-                                HorizontalAlignment="Stretch"
-                                BorderBrush="{DynamicResource PurpleDarkBrush}"
-                                IsEnabled="True"
-                                ItemsSource="{Binding FilterUsersChoices}"
-                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                SelectionChanged="SelectionUsersChanged"
-                                SelectionMode="Multiple">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <ContentControl Content="{Binding}" />
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
                         </GroupBox>
 
                         <GroupBox
@@ -280,6 +364,56 @@
                                 AcceptsReturn="False"
                                 Text="{Binding FilterAssociationsDescriptionText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </GroupBox>
+
+                        <GroupBox
+                            Margin="5,5,0,2"
+                            BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                            BorderThickness="1"
+                            Header="{helpers:Localization Notes_FilterUsers}">
+
+                            <ListBox
+                                x:Name="UsersFilter"
+                                MaxHeight="200"
+                                Margin="10,0,0,10"
+                                HorizontalAlignment="Stretch"
+                                BorderBrush="{DynamicResource PurpleDarkBrush}"
+                                IsEnabled="True"
+                                ItemsSource="{Binding FilterUsersChoices}"
+                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                SelectionChanged="SelectionUsersChanged"
+                                SelectionMode="Multiple">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <ContentControl Content="{Binding}" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </GroupBox>
+
+                        <GroupBox
+                            Margin="5,5,0,2"
+                            BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                            BorderThickness="1"
+                            Header="{helpers:Localization Notes_FilterLabels}">
+                            <ListBox
+                                x:Name="LabelsFilter"
+                                MaxHeight="200"
+                                HorizontalAlignment="Stretch"
+                                IsEnabled="True"
+                                ItemsSource="{Binding FilterLabelsChoices}"
+                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                SelectionChanged="SelectionLabelsChanged"
+                                SelectionMode="Multiple"
+                                Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <ContentControl Content="{Binding Text}" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </GroupBox>
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>
@@ -309,7 +443,8 @@
             SelectedItem="{Binding SelectedNoteViewModel}"
             SelectionMode="Single"
             SelectionUnit="FullRow"
-            VerticalGridLinesBrush="{StaticResource GridBrush}">
+            VerticalGridLinesBrush="{StaticResource GridBrush}"
+            VirtualizingStackPanel.IsVirtualizing="False">
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
@@ -320,32 +455,95 @@
 
             <DataGrid.Columns>
 
-
-                <DataGridTemplateColumn MinWidth="80" Header="{helpers:Localization Notes_OpenClosed}">
+                <DataGridTemplateColumn MinWidth="35">
+                    <DataGridTemplateColumn.Header>
+                        <CheckBox
+                            Margin="-7,0,-7,0"
+                            Checked="ToggleButton_OnCheckedAll"
+                            IsChecked="{Binding DataContext.BulkCheckBoxIsChecked, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                            Unchecked="ToggleButton_OnUncheckedAll">
+                            <CheckBox.Style>
+                                <Style TargetType="CheckBox">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=NoteStatus}" Value="Archived">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </CheckBox.Style>
+                        </CheckBox>
+                    </DataGridTemplateColumn.Header>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <materialDesign:PackIcon
-                                Width="30"
-                                Height="30"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center">
-                                <materialDesign:PackIcon.Style>
-                                    <Style TargetType="materialDesign:PackIcon">
-                                        <Setter Property="Kind" Value="EmailOutline" />
-                                        <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightBrush}" />
+                            <CheckBox
+                                Margin="-7,0,-7,0"
+                                VerticalAlignment="Center"
+                                Checked="ToggleButton_OnChecked"
+                                IsChecked="{Binding Path=IsSelectedForBulkAction, Mode=TwoWay}"
+                                Unchecked="ToggleButton_OnUnchecked">
+                                <CheckBox.Style>
+                                    <Style TargetType="CheckBox">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=NoteStatus}" Value="Open">
-                                                <Setter Property="Kind" Value="EmailOpenOutline" />
-                                                <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                            <DataTrigger Binding="{Binding Path=NoteStatus}" Value="Archived">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                                <Setter Property="IsChecked" Value="False" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </materialDesign:PackIcon.Style>
-                            </materialDesign:PackIcon>
+                                </CheckBox.Style>
+                            </CheckBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn MinWidth="90" Header="{helpers:Localization Notes_UnreadReplies}">
+
+                <DataGridTemplateColumn MinWidth="60" Header="{helpers:Localization Notes_Note_NoteStatus}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                                <materialDesign:PackIcon>
+                                    <materialDesign:PackIcon.Style>
+                                        <Style TargetType="materialDesign:PackIcon">
+                                            <Setter Property="Kind" Value="EmailOutline" />
+                                            <Setter Property="Foreground" Value="{StaticResource PrimaryHueLightBrush}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=NoteStatus}" Value="Open">
+                                                    <Setter Property="Kind" Value="EmailOpenOutline" />
+                                                    <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Path=NoteStatus}" Value="Archived">
+                                                    <Setter Property="Kind" Value="EmailOutline" />
+                                                    <Setter Property="Foreground" Value="Gray" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </materialDesign:PackIcon.Style>
+                                </materialDesign:PackIcon>
+                                <materialDesign:PackIcon Margin="-5,0,0,0">
+                                    <materialDesign:PackIcon.Style>
+                                        <Style TargetType="materialDesign:PackIcon">
+                                            <Setter Property="Kind" Value="ExclamationThick" />
+                                            <Setter Property="Foreground" Value="{StaticResource RedDarkBrush}" />
+                                        </Style>
+                                    </materialDesign:PackIcon.Style>
+                                    <materialDesign:PackIcon.Visibility>
+                                        <MultiBinding
+                                            Converter="{StaticResource GuidInGuidsToVisibilityConverter}"
+                                            ConverterParameter="{StaticResource True}"
+                                            Mode="OneWay">
+                                            <Binding Path="UserIdsSeenAllReplies" />
+                                            <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}" />
+                                        </MultiBinding>
+                                    </materialDesign:PackIcon.Visibility>
+                                </materialDesign:PackIcon>
+                            </StackPanel>
+
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--<DataGridTemplateColumn MinWidth="90" Header="{helpers:Localization Notes_UnreadReplies}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <materialDesign:PackIcon
@@ -366,20 +564,40 @@
                             </materialDesign:PackIcon>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
                 <DataGridTemplateColumn
                     Width="*"
                     MinWidth="250"
                     Header="{helpers:Localization Notes_NoteText}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock
-                                Width="Auto"
-                                Height="Auto"
-                                Margin="-8"
-                                VerticalAlignment="Center"
-                                Text="{Binding Text}"
-                                TextWrapping="Wrap" />
+                            <Button
+                                x:Name="NoteTextButton"
+                                HorizontalContentAlignment="Left"
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                Click="NoteTextButton_OnClick">
+                                <TextBlock
+                                    Width="Auto"
+                                    Height="Auto"
+                                    Margin="-8"
+                                    VerticalAlignment="Center"
+                                    FontWeight="Normal"
+                                    Text="{Binding Text}"
+                                    TextDecorations="Underline"
+                                    TextWrapping="Wrap">
+                                    <TextBlock.Style>
+                                        <Style>
+                                            <Setter Property="TextBlock.Foreground" Value="Blue" />
+                                            <Style.Triggers>
+                                                <Trigger Property="TextBlock.IsMouseOver" Value="True">
+                                                    <Setter Property="TextBlock.Foreground" Value="Purple" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -410,15 +628,18 @@
                 </DataGridTemplateColumn>-->
 
 
-                <DataGridTemplateColumn MinWidth="200" Header="Verse(s)">
+                <DataGridTemplateColumn MinWidth="200" Header="{helpers:Localization Notes_Note_Verse}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding AssociationVerse}" TextWrapping="Wrap" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Text="{Binding AssociationVerse}"
+                                TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn MinWidth="100" Header="{helpers:Localization Notes_Note_Created}">
+                <!--<DataGridTemplateColumn MinWidth="100" Header="{helpers:Localization Notes_Note_Created}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -430,8 +651,8 @@
                                 TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn MinWidth="100" Header="{helpers:Localization Notes_Note_Modified}">
+                </DataGridTemplateColumn>-->
+                <!--<DataGridTemplateColumn MinWidth="100" Header="{helpers:Localization Notes_Note_Modified}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -442,7 +663,7 @@
                                 TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
                 <DataGridTemplateColumn MinWidth="150" Header="{helpers:Localization Notes_Note_ModifiedBy}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -452,6 +673,26 @@
                                 VerticalAlignment="Center"
                                 Text="{Binding ModifiedBy}"
                                 TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn
+                    Width="*"
+                    MinWidth="250"
+                    Header="{helpers:Localization Notes_NoteLabels}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <notes1:LabelsDisplay
+                                x:Name="LabelsDisplay"
+                                LabelBackground="BlanchedAlmond"
+                                LabelCornerRadius="10"
+                                LabelFontSize="14"
+                                LabelMargin="0 0 2 2"
+                                LabelPadding="10,6,10,5"
+                                Labels="{Binding Labels}"
+                                Note="{Binding}"
+                                RemoveLabelButtonVisibility="Collapsed" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -470,12 +711,12 @@
             Visibility="{Binding ProgressBarVisibility}"
             Value="0" />
 
-        <GridSplitter
+        <!--<GridSplitter
             Grid.Column="2"
             Width="5"
-            HorizontalAlignment="Stretch" />
+            HorizontalAlignment="Stretch" />-->
 
-        <ScrollViewer
+        <!--<ScrollViewer
             Name="NoteEditorScrollView"
             Grid.Column="3"
             VerticalScrollBarVisibility="Auto">
@@ -632,6 +873,6 @@
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
-        </ScrollViewer>
+        </ScrollViewer>-->
     </Grid>
 </UserControl>

@@ -67,8 +67,8 @@
                         HorizontalSpacing="{Binding DataContext.SourceHorizontalValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
                         IsEnabled="True"
                         NoteIndicatorHeight="{Binding DataContext.NoteIndicatorsSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
+                        ShowNoteIndicators="{Binding DataContext.ShowNoteIndicatorsCheckbox, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
                         Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
-                        ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                         ShowTranslations="{Binding DataContext.ShowTranslation, RelativeSource={RelativeSource AncestorType=ListView}}"
                         SourceFontFamily="{Binding ElementName=InnerListView, Path=DataContext.SourceFontFamily}"
                         SourceFontSize="{Binding DataContext.SourceFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
@@ -116,6 +116,9 @@
                             </b:EventTrigger>
                             <b:EventTrigger EventName="NoteIndicatorMouseEnter">
                                 <b:CallMethodAction MethodName="NoteIndicatorMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                            </b:EventTrigger>
+                            <b:EventTrigger EventName="NoteLeftButtonDown">
+                                <b:CallMethodAction MethodName="NoteLeftButtonDown" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
                             </b:EventTrigger>
                             <b:EventTrigger EventName="NoteCreate">
                                 <b:CallMethodAction MethodName="NoteCreate" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />

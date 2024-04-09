@@ -26,7 +26,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Collections.ObjectModel;
 using SIL.Extensions;
 using System.Diagnostics;
+using System.Windows.Media;
+using System.Windows.Threading;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -74,7 +77,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <summary>
         /// Gets a collection of source <see cref="TokenDisplayViewModel"/>s to be rendered.
         /// </summary>
-        public TokenDisplayViewModelCollection SourceTokenDisplayViewModels { get; private set; } = new();
+        public TokenDisplayViewModelCollection SourceTokenDisplayViewModels = new();
+
 
         /// <summary>
         /// Gets a collection of target <see cref="TokenDisplayViewModel"/>s to be rendered.
@@ -196,6 +200,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             
             bool firstToken = true;
 
+            Dictionary<Guid,Guid> noteGuids = new();
+
             foreach (var (token, paddingBefore, paddingAfter) in tokenMap.PaddedTokens)
             {
                 // TODO808: 
@@ -216,6 +222,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     TokenNoteIds = await NoteManager.GetNoteIdsAsync(token.TokenId),
                     IsSource = isSource,
                 };
+
+                // check to see if this is the first jot note in a series of notes
+                if (tokenDisplayViewModel.TokenNoteIds.Count > 0)
+                {
+                    foreach (var noteId in tokenDisplayViewModel.TokenNoteIds)
+                    {
+                        if (!noteGuids.ContainsKey(noteId.Id))
+                        {
+                            noteGuids.Add(noteId.Id, Guid.NewGuid());
+                            tokenDisplayViewModel.IsFirstJotsNoteToken = true;
+                        }
+                    }
+                }
+
+                //Debug.WriteLine($"TokenDisplayViewModel: {tokenDisplayViewModel.SurfaceText} {tokenDisplayViewModel.TokenHasNote} {tokenDisplayViewModel.IsFirstJotsNoteToken}");
+
                 if (tokenDisplayViewModel.Translation?.TranslationId != null)
                 {
                     tokenDisplayViewModel.TranslationNoteIds = await NoteManager.GetNoteIdsAsync(tokenDisplayViewModel.Translation.TranslationId);
@@ -540,7 +562,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             MatchingTokenAction(message.EntityIds.Where(e => e.GetType() == typeof(TokenId)), t => t.TokenNoteAdded(message.Note));
             MatchingTokenAction(message.EntityIds.Where(e => e.GetType() == typeof(TranslationId)), t => t.TranslationNoteAdded(message.Note));
-            await Task.CompletedTask;
+
+            Dictionary<Guid, Guid> noteGuids = new();
+
+            foreach (var model in SourceTokenDisplayViewModels)
+            {
+                // check to see if this is the first jot note in a series of notes
+                if (model.TokenNoteIds.Count > 0)
+                {
+                    foreach (var noteId in model.TokenNoteIds)
+                    {
+                        if (!noteGuids.ContainsKey(noteId.Id))
+                        {
+                            noteGuids.Add(noteId.Id, Guid.NewGuid());
+                            model.IsFirstJotsNoteToken = true;
+                        }
+                    }
+                }
+            }
+
+            noteGuids = new();
+            foreach (var model in TargetTokenDisplayViewModels)
+            {
+                // check to see if this is the first jot note in a series of notes
+                if (model.TokenNoteIds.Count > 0)
+                {
+                    foreach (var noteId in model.TokenNoteIds)
+                    {
+                        if (!noteGuids.ContainsKey(noteId.Id))
+                        {
+                            noteGuids.Add(noteId.Id, Guid.NewGuid());
+                            model.IsFirstJotsNoteToken = true;
+                        }
+                    }
+                }
+            }
         }
 
         public async Task HandleAsync(NoteDeletedMessage message, CancellationToken cancellationToken)
@@ -552,13 +608,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task HandleAsync(NoteMouseEnterMessage message, CancellationToken cancellationToken)
         {
-            MatchingTokenAction(t => message.Note.Associations.Any(a => a.AssociatedEntityId.IdEquals(t.Token.TokenId) || a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t => t.IsNoteHovered = true);
+            if (message is { Note.Associations: not null })
+            {
+                MatchingTokenAction(
+                    t => message.Note.Associations.Any(a =>
+                        a.AssociatedEntityId.IdEquals(t.Token.TokenId) ||
+                        a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t =>
+                    {
+                        t.IsNoteHovered = true;
+                        t.NoteIndicatorBrush = message.NewNote ? Brushes.Orange : Brushes.MediumPurple;
+                    });
+            }
+
             await Task.CompletedTask;
         }
 
         public async Task HandleAsync(NoteMouseLeaveMessage message, CancellationToken cancellationToken)
         {
-            MatchingTokenAction(t => message.Note.Associations.Any(a => a.AssociatedEntityId.IdEquals(t.Token.TokenId) || a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t => t.IsNoteHovered = false);
+            if (message is { Note.Associations: not null })
+            {
+                MatchingTokenAction(
+                    t => message.Note.Associations.Any(a =>
+                        a.AssociatedEntityId.IdEquals(t.Token.TokenId) ||
+                        a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t => t.IsNoteHovered = false);
+
+            }
+
             await Task.CompletedTask;
         }
 

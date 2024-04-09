@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Dynamic;
 using System.Threading.Tasks;
 using System.Threading;
@@ -26,7 +27,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
     /// <summary>
     /// A control for displaying a single <see cref="Token"/> alongside a possible note indicator, <see cref="Translation"/>, and aligned token.
     /// </summary>
-    public partial class TokenDisplay : IHandle<SelectionUpdatedMessage>
+    public partial class TokenDisplay : IHandle<SelectionUpdatedMessage>,
+        IHandle<NoteMouseEnterMessage>,
+        IHandle<NoteMouseLeaveMessage>
     {
         #region Static DependencyProperties
 
@@ -223,14 +226,21 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty TokenNoteIndicatorVisibilityProperty = DependencyProperty.Register(
             nameof(TokenNoteIndicatorVisibility), typeof(Visibility), typeof(TokenDisplay),
-            new PropertyMetadata(Visibility.Visible));
+            new PropertyMetadata(Visibility.Collapsed));
+
+        /// <summary>
+        /// Identifies the TokenNoteIndicatorVisibility dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokenNoteFlagIndicatorVisibilityProperty = DependencyProperty.Register(
+            nameof(TokenNoteFlagIndicatorVisibility), typeof(Visibility), typeof(TokenDisplay),
+            new PropertyMetadata(Visibility.Collapsed));
 
         /// <summary>
         /// Identifies the TranslationNoteIndicatorVisibility dependency property.
         /// </summary>
         public static readonly DependencyProperty TranslationNoteIndicatorVisibilityProperty = DependencyProperty.Register(
             nameof(TranslationNoteIndicatorVisibility), typeof(Visibility), typeof(TokenDisplay),
-            new PropertyMetadata(Visibility.Visible));
+            new PropertyMetadata(Visibility.Collapsed));
 
         /// <summary>
         /// Identifies the Orientation dependency property.
@@ -1148,7 +1158,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 ModifierKeys = Keyboard.Modifiers,
                 MouseLeftButton = Mouse.LeftButton,
                 MouseMiddleButton = Mouse.MiddleButton,
-                MouseRightButton = Mouse.RightButton
+                MouseRightButton = Mouse.RightButton,
+                MousePosition = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(control))
             });
         }
 
@@ -1217,11 +1228,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
                
                 if (AllSelectedTokens.SelectedUnassignedTranslationCount == 0 && (selectedTokenCount > 0 || AllSelectedTokens.SelectedAssignedTranslationCount > 0))
                 {
-                    CreateTranslationNoteMenuItem.Visibility = Visibility.Visible;
+                    //CreateTranslationNoteMenuItem.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    CreateTranslationNoteMenuItem.Visibility = Visibility.Collapsed;
+                    //CreateTranslationNoteMenuItem.Visibility = Visibility.Collapsed;
                 }
 
                 if (selectedTokenCount == 0 && AllSelectedTokens.CanTranslateToken)
@@ -1258,6 +1269,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
+            // 1
+
             RaiseTokenEvent(TokenLeftButtonDownEvent, e);
 
             HighlightAlignedToken();
@@ -1382,7 +1395,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     RoutedEvent = routedEvent,
                     TokenDisplay = tokenDisplay!,
                     Translation = tokenDisplay!.Translation,
-                    ModifierKeys = Keyboard.Modifiers
+                    ModifierKeys = Keyboard.Modifiers,
+                    MousePosition = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(control))
                 });
             }
         }
@@ -1452,16 +1466,25 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             //2
             var control = e.Source as FrameworkElement;
+
+            //var p = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(control));
+            //Debug.WriteLine($"RaiseNoteEvent - 'e.Source': {p.X}, {p.Y}");
+            //p = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(this));
+            //
+            //Debug.WriteLine($"OnCreateNote - 'this': {p.X}, {p.Y}");
             var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplayViewModel = tokenDisplay!
+                TokenDisplayViewModel = tokenDisplay!,
+                MousePosition = this.PointToScreen(System.Windows.Input.Mouse.GetPosition(control))
             });
         }
 
         private void OnNoteLeftButtonDown(object sender, RoutedEventArgs e)
         {
+            // 1
+            //RaiseTokenEvent(TokenLeftButtonDownEvent, e);
             RaiseNoteEvent(NoteIndicatorLeftButtonDownEvent, e);
         }
 
@@ -1502,7 +1525,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnCreateNote(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteCreateEvent, e);
+           RaiseNoteEvent(NoteCreateEvent, e);
         }
 
         private void OnTokenJoin(object sender, RoutedEventArgs e)
@@ -1850,6 +1873,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             private set => SetValue(TokenNoteIndicatorVisibilityProperty, value);
         }
 
+        public Visibility TokenNoteFlagIndicatorVisibility
+        {
+            get => (Visibility)GetValue(TokenNoteFlagIndicatorVisibilityProperty);
+            private set => SetValue(TokenNoteFlagIndicatorVisibilityProperty, value);
+        }
+
         /// <summary>
         /// Gets or sets the <see cref="Visibility"/> of the note indicator on a translation/gloss.
         /// </summary>
@@ -2132,14 +2161,55 @@ namespace ClearDashboard.Wpf.Application.UserControls
             TokenForeground = TokenDisplayViewModel.VerseDisplay is AlignmentDisplayViewModel
                 ? TokenDisplayViewModel.IsAligned ? TokenColor : TokenAlternateColor
                 : TokenColor;
+
+            // add spacing for the external notes icon and the note indicator for LTR
+            if (TokenDisplayViewModel.HasExternalNotes == false && TokenDisplayViewModel.TokenHasNote && FlowDirection == FlowDirection.LeftToRight)
+            {
+                // only note indicator
+                tokenLeftMargin = tokenLeftMargin + 10;
+            }
+            else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote && FlowDirection == FlowDirection.LeftToRight)
+            {
+                // both external notes and note indicator
+                tokenLeftMargin = tokenLeftMargin + 25;
+            }
+            else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote == false && FlowDirection == FlowDirection.LeftToRight)
+            {
+                // only external notes
+                tokenLeftMargin = tokenLeftMargin;
+            }
+
+            // add spacing for the external notes icon and the note indicator for RTL
+            if (TokenDisplayViewModel.HasExternalNotes == false && TokenDisplayViewModel.TokenHasNote && FlowDirection == FlowDirection.RightToLeft)
+            {
+                // only note indicator
+                tokenLeftMargin = tokenLeftMargin + 20;
+            }
+            else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote && FlowDirection == FlowDirection.RightToLeft)
+            {
+                // both external notes and note indicator
+                tokenLeftMargin = tokenLeftMargin + 35;
+            }
+            else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote == false && FlowDirection == FlowDirection.RightToLeft)
+            {
+                // only external notes
+                tokenLeftMargin = tokenLeftMargin;
+            }
+
+
+
             TokenMargin = new Thickness(tokenLeftMargin, 0, tokenRightMargin, 0);
             SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.SurfaceText : TokenDisplayViewModel.SurfaceText.Trim();
             ExtendedProperties = TokenDisplayViewModel.ExtendedProperties;
 
             NoteIndicatorMargin = new Thickness(tokenLeftMargin, 1, 0, TokenVerticalSpacing);
+
             TokenNoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TokenHasNote) ? Visibility.Visible : Visibility.Hidden;
+            TokenNoteFlagIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TokenHasNote && TokenDisplayViewModel.IsFirstJotsNoteToken) ? Visibility.Visible : Visibility.Hidden;
             TranslationNoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TranslationHasNote) ? Visibility.Visible : Visibility.Hidden;
-            NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered ? Brushes.BlueViolet : NoteIndicatorColor;
+
+            // JOTS - highlighting
+            NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered ? TokenDisplayViewModel.NoteIndicatorBrush : NoteIndicatorColor;
 
             TranslationMargin = new Thickness(translationLeftMargin, 0, translationRightMargin, TranslationVerticalSpacing);
             TranslationVisibility = (ShowTranslation && TokenDisplayViewModel.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
@@ -2189,12 +2259,45 @@ namespace ClearDashboard.Wpf.Application.UserControls
             settings.Top = Mouse.GetPosition(this).Y + screenPoint.Y;
             settings.Left = Mouse.GetPosition(this).X + screenPoint.X;
 
+
+            // Keep the window on top
+            //settings.Topmost = true;
+            settings.Owner = System.Windows.Application.Current.MainWindow;
+
             var viewModel = IoC.Get<ExternalNoteViewModel>();
             await viewModel.Initialize(TokenDisplayViewModel.ExternalNotes);
 
             IWindowManager manager = new WindowManager();
             manager.ShowWindowAsync(viewModel, null, settings);
 
+        }
+
+      
+        public async Task HandleAsync(NoteMouseEnterMessage message, CancellationToken cancellationToken)
+        {
+            if (TokenDisplayViewModel != null)
+            {
+                if (message.Entities.ContainsId(TokenDisplayViewModel.Token.TokenId))
+                {
+                    TokenDisplayViewModel.IsNoteHovered = true;
+                    TokenDisplayViewModel.NoteIndicatorBrush = message.NewNote ? Brushes.Orange : Brushes.MediumPurple;
+                }
+            }
+
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(NoteMouseLeaveMessage message, CancellationToken cancellationToken)
+        {
+            if (TokenDisplayViewModel != null)
+            {
+                if (message.Entities.ContainsId(TokenDisplayViewModel.Token.TokenId))
+                {
+                    TokenDisplayViewModel.IsNoteHovered = false;
+                }
+            }
+
+            await Task.CompletedTask;
         }
     }
 }

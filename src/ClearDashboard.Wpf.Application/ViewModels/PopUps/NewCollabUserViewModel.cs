@@ -415,7 +415,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         /// Function to generate a user name from first & lastnames
         /// </summary>
         /// <returns></returns>
-        private string GetUserName() => (FirstName + "." + LastName).ToLower();
+        private string GetUserName() => (Regex.Replace(FirstName, @"\s|\p{P}|[']", "") + "." + Regex.Replace(LastName, @"\s|\p{P}|[']", "")).ToLower();
 
 
 
