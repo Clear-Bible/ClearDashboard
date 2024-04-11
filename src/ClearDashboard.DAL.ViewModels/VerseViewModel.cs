@@ -190,7 +190,7 @@ namespace ClearDashboard.DAL.ViewModels
 
         public bool Found { get; set; }
 
-        public ObservableCollection<Inline> Inlines { get; set; } = new ObservableCollection<Inline>();
+        public ObservableCollection<System.Windows.Documents.Inline> Inlines { get; set; } = new ObservableCollection<Inline>();
 
         public VerseViewModel SetVerseFromBBBCCCVVV(string bbbcccvvv)
         {

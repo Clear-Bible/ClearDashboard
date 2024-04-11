@@ -76,13 +76,12 @@ namespace ClearDashboard.WebApiParatextPlugin
             DisplayPluginVersion();
             Disposed += HandleWindowDisposed;
 
-            
-
-
+  
             // NB:  Use the following for debugging plug-in start up crashes.
             Application.ThreadException += ThreadExceptionEventHandler;
             AppDomain.CurrentDomain.FirstChanceException += FirstChanceExceptionEventHandler;
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionEventHandler;
+            AppDomain.CurrentDomain.AssemblyResolve += FailedAssemblyResolutionHandler;
 
         }
 
@@ -330,6 +329,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             AppendText(Color.Green, "StartWebApplication called");
 
             var currentDomain = AppDomain.CurrentDomain;
+            currentDomain.AssemblyResolve -= FailedAssemblyResolutionHandler;
             currentDomain.AssemblyResolve += FailedAssemblyResolutionHandler;
 
             try

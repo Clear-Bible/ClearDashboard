@@ -1,6 +1,6 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageProjectUrl>https://github.com/Clear-Bible/ClearEngine</PackageProjectUrl>
@@ -12,10 +12,10 @@
     <AssemblyVersion>1.4.0.15</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ClearBible.Engine" Version="2.0.22" />
+    <PackageReference Include="ClearBible.Engine" Version="3.0.0" />
     <PackageReference Include="Caliburn.Micro.Core" Version="4.0.212" />
     <PackageReference Include="MediatR" Version="9.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS.Features\ClearDashboard.DAL.CQRS.Features.csproj" />
@@ -27,7 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationFramework">
-      <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_MSIL\PresentationFramework\v4.0_4.0.0.0__31bf3856ad364e35\PresentationFramework.dll</HintPath>
+      <HintPath>C:\Program Files\dotnet\packs\Microsoft.WindowsDesktop.App.Ref\8.0.0\ref\net8.0\PresentationFramework.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
