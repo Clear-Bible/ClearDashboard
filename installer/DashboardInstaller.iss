@@ -135,18 +135,18 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}";
 
 [Files]
-Source: "windowsdesktop-runtime-7.0.15-win-x64.exe"; Flags: dontcopy noencryption
+Source: "windowsdesktop-runtime-8.0.4-win-x64.exe"; Flags: dontcopy noencryption
 Source: "VC_redist.x64.exe"; Flags: dontcopy noencryption
 
 ; Install PluginManager
-Source: "..\tools\PluginManager\bin\Release\net7.0-windows\publish\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\tools\PluginManager\bin\Release\net8.0-windows\publish\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; Install Dashboard
-Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\publish\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net8.0-windows\publish\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\help_docs\{#MyAppHelpDocsName}"; DestDir: "{app}"; Flags: noencryption
 
 ; Install ResetCurrentUser
-Source: "..\tools\ResetCurrentUser\bin\Release\net7.0-windows\publish\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\tools\ResetCurrentUser\bin\Release\net8.0-windows\publish\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
@@ -286,11 +286,11 @@ begin
     end;  
     
     // install the .NET Runtime
-     if not DirExists('C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\7.0.5\') then begin
-      if not FileExists(ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-7.0.15-win-x64.exe') then begin          
-        ExtractTemporaryFile('windowsdesktop-runtime-7.0.15-win-x64.exe');
+     if not DirExists('C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\8.0.4\') then begin
+      if not FileExists(ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-8.0.4-win-x64.exe') then begin          
+        ExtractTemporaryFile('windowsdesktop-runtime-8.0.4-win-x64.exe');
       end;
-     Result := ShellExec('', ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-7.0.15-win-x64.exe', '/passive', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
+     Result := ShellExec('', ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-8.0.4-win-x64.exe', '/passive', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
     end;
     Result := true;
   end;
