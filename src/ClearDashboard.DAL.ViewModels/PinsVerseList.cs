@@ -1,7 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Documents;
-
-namespace ClearDashboard.DAL.ViewModels
+﻿namespace ClearDashboard.DAL.ViewModels
 {
     public class PinsVerseListViewModel: VerseViewModel
     {

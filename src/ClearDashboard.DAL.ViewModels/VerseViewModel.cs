@@ -1,7 +1,6 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
+﻿using ClearDashboard.DataAccessLayer.Models;
+using System.Collections.ObjectModel;
 using System.Windows.Documents;
-using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.ViewModels
 {
@@ -190,7 +189,7 @@ namespace ClearDashboard.DAL.ViewModels
 
         public bool Found { get; set; }
 
-        public ObservableCollection<System.Windows.Documents.Inline> Inlines { get; set; } = new ObservableCollection<Inline>();
+        public ObservableCollection<Inline> Inlines { get; set; } = new ObservableCollection<Inline>();
 
         public VerseViewModel SetVerseFromBBBCCCVVV(string bbbcccvvv)
         {
