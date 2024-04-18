@@ -48,15 +48,15 @@ echo [101;93m  Build the Solution  [0m
 
 ::========== Copy over Missing Runtimes that somehow MSBuild misses ==============
 echo [101;93m  Copy over Missing Runtimes that somehow MSBuild misses  [0m
-copy "%CURRENTPATH%\..\installer\Runtimes\*.*" "%CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\runtimes\win-x64\native\"
+copy "%CURRENTPATH%\..\installer\Runtimes\*.*" "%CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net8.0-windows\runtimes\win-x64\native\"
 
 
 ::========== Copy and run SetVersion Program ===================
 echo [101;93m  Copy and run SetVersion Program  [0m
 cd ..\installer
 
-copy "%CURRENTPATH%\..\tools\SetVersionInfo\bin\Release\net7.0\SetVersionInfo.*" .
-copy "%CURRENTPATH%\..\tools\SetVersionInfo\bin\Release\net7.0\System.CommandLine.*" .
+copy "%CURRENTPATH%\..\tools\SetVersionInfo\bin\Release\net8.0\SetVersionInfo.*" .
+copy "%CURRENTPATH%\..\tools\SetVersionInfo\bin\Release\net8.0\System.CommandLine.*" .
 
 SetVersionInfo.exe --input-version-number %versionNumber%
 
@@ -74,7 +74,7 @@ echo [101;93m  Code Sign the WPF exe  [0m
  	sign /v /f %RETVAL% ^
  	/p "%PASSWORD%" ^
  	/t http://timestamp.comodoca.com/authenticode ^
-"%CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\publish\win-x64\ClearDashboard.Wpf.Application.dll"
+"%CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net8.0-windows\publish\win-x64\ClearDashboard.Wpf.Application.dll"
 
 
 ::========== PUBLISH and SIGN the PluginManager ==============
@@ -89,7 +89,7 @@ echo [101;93m  Code Sign the PluginManager.dll  [0m
  	sign /v /f %RETVAL% ^
  	/p "%PASSWORD%" ^
  	/t http://timestamp.comodoca.com/authenticode ^
-"%CURRENTPATH%\..\tools\PluginManager\bin\Release\net7.0-windows\publish\win-x64\PluginManager.dll"
+"%CURRENTPATH%\..\tools\PluginManager\bin\Release\net8.0-windows\publish\win-x64\PluginManager.dll"
 
 
 ::========== PUBLISH ResetCurrentUser ==============
@@ -101,9 +101,9 @@ dotnet publish ResetCurrentUser.csproj -p:PublishProfile=FolderProfile
 ::=================== PUBLISH AQuA Files <Check if there is any aqua stuff in the right places> =====================
 echo [101;93m  PUBLISH AQuA Files <Check if there is any aqua stuff in the right places>  [0m
 cd ..\..\installer
-robocopy %CURRENTPATH%\..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\ %CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\publish\win-x64\Aqua ClearDashboard.Aqua.Module.* /IS /IT ;
-robocopy %CURRENTPATH%\..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\en %CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\publish\win-x64\Aqua\en ClearDashboard.Aqua.Module.resources.dll /IS /IT ;
-robocopy %CURRENTPATH%\..\src\ClearDashboard.Aqua.Module\bin\Release\net7.0-windows\Services %CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\publish\win-x64\Aqua\Services vref.txt /IS /IT ;
+robocopy %CURRENTPATH%\..\src\ClearDashboard.Aqua.Module\bin\Release\net8.0-windows\ %CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net8.0-windows\publish\win-x64\Aqua ClearDashboard.Aqua.Module.* /IS /IT ;
+robocopy %CURRENTPATH%\..\src\ClearDashboard.Aqua.Module\bin\Release\net8.0-windows\en %CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net8.0-windows\publish\win-x64\Aqua\en ClearDashboard.Aqua.Module.resources.dll /IS /IT ;
+robocopy %CURRENTPATH%\..\src\ClearDashboard.Aqua.Module\bin\Release\net8.0-windows\Services %CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net8.0-windows\publish\win-x64\Aqua\Services vref.txt /IS /IT ;
 
 rem echo CompressXMLs in Resources folder
 rem ..\tools\CompressXML\CompressXML\bin\Release\net5.0\CompressTreeXML.exe

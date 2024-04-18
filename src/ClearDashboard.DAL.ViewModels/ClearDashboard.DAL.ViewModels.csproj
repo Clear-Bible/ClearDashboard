@@ -3,9 +3,9 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <FileVersion>1.4.0.15</FileVersion>
-    <Version>1.4.0.15</Version>
-    <AssemblyVersion>1.4.0.15</AssemblyVersion>
+    <FileVersion>1.5.0.0</FileVersion>
+    <Version>1.5.0.0</Version>
+    <AssemblyVersion>1.5.0.0</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Caliburn.Micro.Core" Version="4.0.212" />
@@ -15,7 +15,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationFramework">
-      <HintPath>C:\Program Files\dotnet\packs\Microsoft.WindowsDesktop.App.Ref\8.0.0\ref\net8.0\PresentationFramework.dll</HintPath>
+      <HintPath>C:\Program Files\dotnet\packs\Microsoft.WindowsDesktop.App.Ref\8.0.4\ref\net8.0\PresentationFramework.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
