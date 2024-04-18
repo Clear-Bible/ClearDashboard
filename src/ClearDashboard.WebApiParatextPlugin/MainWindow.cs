@@ -72,16 +72,19 @@ namespace ClearDashboard.WebApiParatextPlugin
         public MainWindow()
         {
             InitializeComponent();
-            ConfigureLogging();
-            DisplayPluginVersion();
-            Disposed += HandleWindowDisposed;
 
-  
             // NB:  Use the following for debugging plug-in start up crashes.
             Application.ThreadException += ThreadExceptionEventHandler;
             AppDomain.CurrentDomain.FirstChanceException += FirstChanceExceptionEventHandler;
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionEventHandler;
             AppDomain.CurrentDomain.AssemblyResolve += FailedAssemblyResolutionHandler;
+
+            ConfigureLogging();
+            DisplayPluginVersion();
+            Disposed += HandleWindowDisposed;
+
+  
+        
 
         }
 
@@ -89,17 +92,30 @@ namespace ClearDashboard.WebApiParatextPlugin
         #region Please leave these for debugging plug-in start up crashes
         private static void ThreadExceptionEventHandler(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
-            Log.Error($"ThreadExceptionEventHandler - Exception={e.Exception}");
+            if (LoggingEnabled)
+            {
+                Log.Error($"ThreadExceptionEventHandler - Exception={e.Exception}");
+            }
         }
         private static void UnhandledExceptionEventHandler(object sender, UnhandledExceptionEventArgs e)
         {
-            Log.Error($"UnhandledExceptionEventHandler - Exception={e.ExceptionObject}");
+            if (LoggingEnabled)
+            {
+                Log.Error($"UnhandledExceptionEventHandler - Exception={e.ExceptionObject}");
+            }
         }
 
         private static void FirstChanceExceptionEventHandler(object sender, FirstChanceExceptionEventArgs e)
         {
-            Log.Error($"FirstChanceExceptionEventHandler - Exception={e.Exception.ToString()}");
+            if (LoggingEnabled)
+            {
+                Log.Error($"FirstChanceExceptionEventHandler - Exception={e.Exception.ToString()}");
+            }
+            
         }
+
+        public static bool LoggingEnabled { get; set; }
+
         #endregion Please leave these for debugging plug-in start up crashes
 
         private async void HandleWindowDisposed(object sender, EventArgs e)
@@ -213,7 +229,10 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
             catch (Exception ex)
             {
-                Log.Logger.Error(ex, "An unexpected error occurred when the Verse reference changed.");
+                if (LoggingEnabled)
+                {
+                    Log.Logger.Error(ex, "An unexpected error occurred when the Verse reference changed.");
+                }
             }
 
         }
@@ -255,11 +274,15 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         #region WebServer Related
 
-        private List<string> ExpectedFailedToLoadAssemblies = new List<string> { "Microsoft.Owin", "Microsoft.Extensions.DependencyInjection.Abstractions" };
+        private List<string> ExpectedFailedToLoadAssemblies = new List<string> { "Microsoft.Owin", "Microsoft.Extensions.DependencyInjection.Abstractions", "System.Diagnostics.DiagnosticSource" };
         private Assembly FailedAssemblyResolutionHandler(object sender, ResolveEventArgs args)
         {
             // Get just the name of assembly without version and other metadata
             var truncatedName = new Regex(",.*").Replace(args.Name, string.Empty);
+            if (LoggingEnabled)
+            {
+                Log.Information($"Failed assembly resolution: {truncatedName}. ");
+            }
 
             if (!ExpectedFailedToLoadAssemblies.Contains(truncatedName))
             {
@@ -465,7 +488,11 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private void OnExceptionOccurred(Exception exception)
         {
-            Log.Error($"OnLoad {exception.Message}");
+            if (LoggingEnabled)
+            {
+                Log.Error($"OnLoad {exception.Message}");
+            }
+
             AppendText(Color.Red, $"OnLoad {exception.Message}");
         }
 
@@ -571,10 +598,17 @@ namespace ClearDashboard.WebApiParatextPlugin
             var log = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.Debug()
-                .WriteTo.File(fullPath, rollingInterval: RollingInterval.Day, fileSizeLimitBytes: 104857600, rollOnFileSizeLimit: true, retainedFileCountLimit: 15)
+                .WriteTo.File(fullPath, rollingInterval: RollingInterval.Day, fileSizeLimitBytes: 104857600, rollOnFileSizeLimit: true, retainedFileCountLimit: 15, flushToDiskInterval:TimeSpan.FromSeconds(1))
                 .CreateLogger();
             // set instance to global logger
             Log.Logger = log;
+
+            LoggingEnabled = true;
+
+            if (LoggingEnabled)
+            {
+                Log.Information("ClearDashboard plug-in logging configured.");
+            }
         }
 
         /// <summary>
@@ -700,7 +734,11 @@ namespace ClearDashboard.WebApiParatextPlugin
                                     }
                                     catch (Exception ex)
                                     {
-                                        Log.Error(ex, "There was an issue while parsing the USX for a text collection.  A text collection might not have been found.");
+                                        if (LoggingEnabled)
+                                        {
+                                            Log.Error(ex,
+                                                "There was an issue while parsing the USX for a text collection.  A text collection might not have been found.");
+                                        }
                                     }
                                 }
                                 else
@@ -987,7 +1025,10 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
             catch (Exception e)
             {
-                Log.Logger.Error(e, $"Cannot get USFM Tokens for {project.ShortName} : {e.Message}");
+                if (LoggingEnabled)
+                {
+                    Log.Logger.Error(e, $"Cannot get USFM Tokens for {project.ShortName} : {e.Message}");
+                }
             }
 
             if (tokens != null)
@@ -1060,7 +1101,10 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 message += $"{Environment.NewLine}";
                 this.rtb.AppendText(message, color);
-                Log.Information(message);
+                if (LoggingEnabled)
+                {
+                    Log.Information(message);
+                }
             }
         }
 
@@ -1096,7 +1140,11 @@ namespace ClearDashboard.WebApiParatextPlugin
                     }
                     catch (Exception ex)
                     {
-                        Log.Error(ex.Message);
+                        if (LoggingEnabled)
+                        {
+                            Log.Error(ex.Message);
+                        }
+
                         AppendText(Color.Red, ex.Message);
                     }
                 }
@@ -1592,7 +1640,11 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
             catch (Exception e)
             {
-                Log.Error(e.Message);
+                if (LoggingEnabled)
+                {
+                    Log.Error(e.Message);
+                }
+
                 AppendText(Color.Red, e.Message);
             }
 
@@ -1630,7 +1682,11 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
             catch (Exception e)
             {
-                Log.Error(e.Message);
+                if (LoggingEnabled)
+                {
+                    Log.Error(e.Message);
+                }
+
                 AppendText(Color.Red, e.Message);
             }
 
