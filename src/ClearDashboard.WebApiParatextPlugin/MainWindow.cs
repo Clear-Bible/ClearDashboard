@@ -502,43 +502,56 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private void GetSilConvertorsVersion()
         {
-            // get the path to the SIL Converters uninstaller
-            RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\SIL\SilEncConverters40\Installer");
-
-            //if it does exist, retrieve the stored values  
-            if (key != null)
+            RegistryKey key = null;
+            try
             {
-                // remove the trailing file name from the path
-                var path = Path.GetDirectoryName(key.GetValue("InstallerPath").ToString());
-                var filePath = Path.Combine(path, "Microsoft.Extensions.DependencyInjection.Abstractions.dll");
-                if (File.Exists(filePath))
+                key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\SIL\SilEncConverters40\Installer");
+
+                //if it does exist, retrieve the stored values  
+                if (key != null)
                 {
-                    // get the file version
-                    var versionInfo = FileVersionInfo.GetVersionInfo(filePath);
-
-                    AppendText(Color.SaddleBrown, "Microsoft.Extensions.DependencyInjection.Abstractions.dll");
-
-                    AppendText(Color.SaddleBrown, $"Version {versionInfo.FileMajorPart}.{versionInfo.FileMinorPart}.{versionInfo.FileBuildPart}.{versionInfo.FilePrivatePart}");
-
-                    if (versionInfo.FileMajorPart < 7)
+                    // remove the trailing file name from the path
+                    var path = Path.GetDirectoryName(key.GetValue("InstallerPath").ToString());
+                    var filePath = Path.Combine(path, "Microsoft.Extensions.DependencyInjection.Abstractions.dll");
+                    if (File.Exists(filePath))
                     {
-                        AppendText(Color.Red, $"Incompatible version of SIL Converters Detected - Please update to at least version 5.2 from https://software.sil.org/silconverters/");
-                    }
-                    else
-                    {
-                        AppendText(Color.SeaGreen, $"SIL Converters 5.2 or higher Detected");
+                        // get the file version
+                        var versionInfo = FileVersionInfo.GetVersionInfo(filePath);
+
+                        AppendText(Color.SaddleBrown, "Microsoft.Extensions.DependencyInjection.Abstractions.dll");
+
+                        AppendText(Color.SaddleBrown,
+                            $"Version {versionInfo.FileMajorPart}.{versionInfo.FileMinorPart}.{versionInfo.FileBuildPart}.{versionInfo.FilePrivatePart}");
+
+                        switch (versionInfo.FileMajorPart)
+                        {
+                            case 8:
+                                AppendText(Color.SeaGreen, $"SIL Converters 5.2.5 Detected.");
+                                break;
+                            case 7:
+                                AppendText(Color.Red,
+                                    $"SIL Converters 5.2 Detected - Please update to at least version 5.2.5 from https://software.sil.org/silconverters/.");
+                                break;
+                            case < 7:
+                                AppendText(Color.Red,
+                                    $"Incompatible version of SIL Converters Detected - Please update to at least version 5.2.5 from https://software.sil.org/silconverters/.");
+                                break;
+                        }
+
                     }
 
                     AppendText(Color.Black, $"");
                 }
             }
-
-            if (key is not null)
+            finally
             {
-                key.Close();
+                if (key is not null)
+                {
+                    key.Close();
+                }
             }
-            
         }
+
 
         /// <summary>
         /// Standard Paratext verse reference has been changed
