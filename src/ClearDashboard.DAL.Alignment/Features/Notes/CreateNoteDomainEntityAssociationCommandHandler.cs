@@ -29,7 +29,18 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
         protected override async Task<RequestResult<NoteDomainEntityAssociationId>> SaveDataAsync(CreateNoteDomainEntityAssociationCommand request,
             CancellationToken cancellationToken)
         {
-            var (name, guid) = request.DomainEntityId.GetNameAndId();
+            string name;
+            Guid guid;
+
+            try
+            {
+                (name, guid) = request.DomainEntityId.GetNameAndId();
+            }
+            catch
+            {
+                guid = request.DomainEntityId.Id;
+                name = request.DomainEntityId.GetType().ToString();
+            }
 
             var noteDomainEntityAssociation = ProjectDbContext!.NoteDomainEntityAssociations
                 .FirstOrDefault(
