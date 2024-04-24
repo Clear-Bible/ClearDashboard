@@ -492,7 +492,10 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 noteViewModel.Associations = GetNoteAssociations(associatedEntityIds, domainEntityContexts);
 
-                noteViewModel.Replies = new NoteViewModelCollection((await note.GetReplyNotes(Mediator)).Select(n => new NoteViewModel(n)));
+                if (!note.IsReply())
+                {
+                    noteViewModel.Replies = new NoteViewModelCollection((await note.GetReplyNotes(Mediator)).Select(n => new NoteViewModel(n)));
+                }
 
                 if (doGetParatextSendNoteInformation)
                 {
@@ -505,7 +508,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 }
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved details for note \"{note.Text}\" ({noteId.Id}) in {stopwatch.ElapsedMilliseconds}ms");
-
+                
                 NotesCache[noteId.Id] = noteViewModel;
 
                 return noteViewModel;
