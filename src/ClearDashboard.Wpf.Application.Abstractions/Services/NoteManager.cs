@@ -492,7 +492,10 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 noteViewModel.Associations = GetNoteAssociations(associatedEntityIds, domainEntityContexts);
 
-                noteViewModel.Replies = new NoteViewModelCollection((await note.GetReplyNotes(Mediator)).Select(n => new NoteViewModel(n)));
+                if (!note.IsReply())
+                {
+                    noteViewModel.Replies = new NoteViewModelCollection((await note.GetReplyNotes(Mediator)).Select(n => new NoteViewModel(n)));
+                }
 
                 if (doGetParatextSendNoteInformation)
                 {
@@ -505,7 +508,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 }
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved details for note \"{note.Text}\" ({noteId.Id}) in {stopwatch.ElapsedMilliseconds}ms");
-
+                
                 NotesCache[noteId.Id] = noteViewModel;
 
                 return noteViewModel;
@@ -801,25 +804,53 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task AddReplyToNoteAsync(NoteViewModel parentNote, string replyText)
         {
-            var replyNote = new Note(parentNote.Entity) { Text = replyText, NoteStatus = NoteStatus.Open.ToString()};
-
-
-            // FIX:  1267
-            replyNote.SetDomainEntityIds(parentNote.Entity.DomainEntityIds);
-            await UpdateNoteAsync(replyNote);
-
-
-            
-            var replyNoteViewModel = new NoteViewModel(replyNote)
+            try
             {
-                // FIX:  1267
-                Associations = parentNote.Associations,
-                ParatextSendNoteInformation = parentNote.ParatextSendNoteInformation
-            };
+                await SetIsBusy(true);
+                var stopwatch = new Stopwatch();
 
+                var replyNote = new Note(parentNote.Entity) { Text = replyText, NoteStatus = NoteStatus.Open.ToString() };
 
-            parentNote.Replies.Add(replyNoteViewModel);
-            NotesCache[parentNote.NoteId!.Id] = parentNote;
+                await replyNote.CreateOrUpdate(Mediator);
+
+                stopwatch.Start();
+
+                // clear the existing domain entities so we can properly add them to the database.
+                replyNote.ClearDomainEntityIds();
+                foreach (var entityId in parentNote.Entity.DomainEntityIds)
+                {
+                    stopwatch.Restart();
+                    
+                    await replyNote.AssociateDomainEntity(Mediator, entityId);
+                    
+                    stopwatch.Stop();
+                    Logger?.LogInformation(
+                        $"Associated note \"{replyNote.Text}\" ({replyNote.NoteId?.Id}) with entity {entityId} in {stopwatch.ElapsedMilliseconds} ms");
+                }
+
+                await UpdateNoteAsync(replyNote);
+
+                var replyNoteViewModel = new NoteViewModel(replyNote)
+                {
+                    // FIX:  1267
+                    Associations = parentNote.Associations,
+                    ParatextSendNoteInformation = parentNote.ParatextSendNoteInformation
+                };
+
+                parentNote.Replies.Add(replyNoteViewModel);
+                NotesCache[parentNote.NoteId!.Id] = parentNote;
+                
+                stopwatch.Stop();
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+            finally
+            {
+                await SetIsBusy(false);
+            }
         }
 
         /// <summary>

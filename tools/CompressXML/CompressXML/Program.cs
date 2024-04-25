@@ -14,7 +14,7 @@ namespace CompressXML
         {
             var currentDirectory = Directory.GetCurrentDirectory();
 
-            DirectoryPath = Path.Combine(currentDirectory, "..", @"src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\publish\win-x64\Resources");
+            DirectoryPath = Path.Combine(currentDirectory, "..", @"src\ClearDashboard.Wpf.Application\bin\Release\net8.0-windows\publish\win-x64\Resources");
 
             if (Decompress)
             {

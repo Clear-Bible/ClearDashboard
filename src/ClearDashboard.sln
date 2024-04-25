@@ -22,6 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		Build-Dashboard-Module-Project-Template.md = Build-Dashboard-Module-Project-Template.md
 		..\Caliburn-Micro-Cheat-Sheet.md = ..\Caliburn-Micro-Cheat-Sheet.md
 		..\CQRS-Cheat-Sheet.md = ..\CQRS-Cheat-Sheet.md
+		DotNet-Framework-Upgrade.md = DotNet-Framework-Upgrade.md
 		Generate Sematic Domain Lookup Sqlite.md = Generate Sematic Domain Lookup Sqlite.md
 		..\Localization-How-To.md = ..\Localization-How-To.md
 		Migration-How-To.md = Migration-How-To.md
@@ -110,6 +111,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3302EE7B-C5BC-4FCC-AE8C-A2ED0C98B89A}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{C04A676C-4AFC-4A03-961C-089CBA169193}"
+	ProjectSection(SolutionItems) = preProject
+		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
 Global
@@ -734,6 +740,7 @@ Global
 		{877AB7C9-8AE4-4C85-80F2-9ECE120D92A3} = {AA93D4BA-F38C-4446-BF88-90BDE0DC5F0B}
 		{B82B5AFC-27F1-40DC-8D34-714465D30761} = {AA93D4BA-F38C-4446-BF88-90BDE0DC5F0B}
 		{EAFA3ECB-41F1-442C-85EE-BA5C9A1953DA} = {AA93D4BA-F38C-4446-BF88-90BDE0DC5F0B}
+		{C04A676C-4AFC-4A03-961C-089CBA169193} = {AA93D4BA-F38C-4446-BF88-90BDE0DC5F0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BFF05FFA-E592-49AC-8796-A4E60A3D729F}

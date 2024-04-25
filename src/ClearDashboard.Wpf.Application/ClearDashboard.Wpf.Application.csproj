@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>Assets\ClearDashboard_Icon.ico</ApplicationIcon>
     <Copyright>Clear Bible, 2023</Copyright>
-    <AssemblyVersion>1.4.0.15</AssemblyVersion>
-    <FileVersion>1.4.0.15</FileVersion>
-    <Version>1.4.0.15</Version>
+    <AssemblyVersion>1.4.1.2</AssemblyVersion>
+    <FileVersion>1.4.1.2</FileVersion>
+    <Version>1.4.1.2</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <UserSecretsId>b02febcf-d7fc-48e1-abb1-f03647ca553c</UserSecretsId>
     <Configurations>Debug;Release;Collab_Release;Collab_Debug;HighDPIDebug</Configurations>
@@ -128,8 +128,8 @@
   <ItemGroup>
     <PackageReference Include="Autofac.Configuration" Version="6.0.0" />
     <PackageReference Include="CefSharp.Wpf.NETCore" Version="115.3.110" />
-    <PackageReference Include="ClearApplicationFoundation" Version="2.0.9" />
-    <PackageReference Include="ClearBible.Engine" Version="2.0.22" />
+    <PackageReference Include="ClearApplicationFoundation" Version="3.0.0" />
+    <PackageReference Include="ClearBible.Engine" Version="3.0.0" />
     <PackageReference Include="Dahomey.Json" Version="1.12.2" />
     <PackageReference Include="Dahomey.Json.Attributes" Version="1.0.1" />
     <PackageReference Include="Dirkster.AvalonDock" Version="4.70.12" />
@@ -149,16 +149,16 @@
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.21.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.21.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel" Version="2.21.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
     <PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
-    <PackageReference Include="System.DirectoryServices.AccountManagement" Version="7.0.0" />
-    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-    <PackageReference Include="System.Management" Version="7.0.2" />
     <PackageReference Include="TimeZoneNames" Version="6.0.0" />
     <PackageReference Include="wpfKeyBoard-clear" Version="1.0.5" />
     <PackageReference Include="WpfKeyboard.Resources" Version="1.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="System.DirectoryServices.AccountManagement" Version="8.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.4" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.Collaboration\ClearDashboard.Collaboration.csproj" />

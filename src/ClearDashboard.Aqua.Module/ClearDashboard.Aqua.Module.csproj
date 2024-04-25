@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <FileVersion>1.4.0.15</FileVersion>
-    <Version>1.4.0.15</Version>
-    <AssemblyVersion>1.4.0.15</AssemblyVersion>
+    <FileVersion>1.4.1.2</FileVersion>
+    <Version>1.4.1.2</Version>
+    <AssemblyVersion>1.4.1.2</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Caliburn.Micro" Version="4.0.212" />
@@ -13,7 +13,7 @@
     <PackageReference Include="Dahomey.Json.Attributes" Version="1.0.1" />
     <PackageReference Include="DotNetKit.Wpf.AutoCompleteComboBox" Version="1.6.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.Wpf.Application.Abstractions\ClearDashboard.Wpf.Application.Abstractions.csproj" />
@@ -46,6 +46,6 @@
     </None>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="robocopy $(TargetDir) $(SolutionDir)ClearDashboard.Wpf.Application\bin\$(Configuration)\net7.0-windows $(TargetName).* /IS /IT ;&#xD;&#xA;&#xD;&#xA;robocopy $(TargetDir)\en $(SolutionDir)ClearDashboard.Wpf.Application\bin\$(Configuration)\net7.0-windows\en $(TargetName).resources.dll /IS /IT ;&#xD;&#xA;&#xD;&#xA;robocopy $(TargetDir)\Services $(SolutionDir)ClearDashboard.Wpf.Application\bin\$(Configuration)\net7.0-windows\Services vref.txt /IS /IT ;&#xD;&#xA;&#xD;&#xA;if %25errorlevel%25 leq 1 exit 0 else exit %25errorlevel%25" />
+    <Exec Command="robocopy $(TargetDir) $(SolutionDir)ClearDashboard.Wpf.Application\bin\$(Configuration)\net8.0-windows $(TargetName).* /IS /IT ;&#xD;&#xA;&#xD;&#xA;robocopy $(TargetDir)\en $(SolutionDir)ClearDashboard.Wpf.Application\bin\$(Configuration)\net8.0-windows\en $(TargetName).resources.dll /IS /IT ;&#xD;&#xA;&#xD;&#xA;robocopy $(TargetDir)\Services $(SolutionDir)ClearDashboard.Wpf.Application\bin\$(Configuration)\net8.0-windows\Services vref.txt /IS /IT ;&#xD;&#xA;&#xD;&#xA;if %25errorlevel%25 leq 1 exit 0 else exit %25errorlevel%25" />
   </Target>
 </Project>
