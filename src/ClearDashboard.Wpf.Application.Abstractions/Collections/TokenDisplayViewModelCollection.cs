@@ -286,7 +286,7 @@ namespace ClearDashboard.Wpf.Application.Collections
                                      && SelectedTokenVersesCount == 1 
                                      && !SelectedTranslations.Any();
 
-        // TODO808:
+        // TODO808: Completed
         // 2. in a parallel view, allow the creating of a Composite(parallel) on top of a Composite(null) (but not other Composite(parallel))
         //
         // Currently the JoinTokens and JoinTokensLanguagePair menu items use the same visibility logic.  TokenDisplayViewModelCollection should get a 
@@ -299,6 +299,12 @@ namespace ClearDashboard.Wpf.Application.Collections
         // with:
         //
         //      && SelectedTokens.Count(t => t.IsParallelCompositeTokenMember) <= 1
+
+        public bool CanJoinTokensLanguagePair => SelectedTokens.Count() > 1
+                                                && SelectedTokens.All(t => t.IsSource)
+                                                && SelectedTokens.Count(t => t.IsParallelCompositeTokenMember) <= 1
+                                                && SelectedTokenVersesCount == 1
+                                                && !SelectedTranslations.Any();
 
         public bool CanUnjoinToken => SelectedTokens.All(t => t.IsCompositeTokenMember) && SelectedTokenCompositeTokenCount == 1;
 

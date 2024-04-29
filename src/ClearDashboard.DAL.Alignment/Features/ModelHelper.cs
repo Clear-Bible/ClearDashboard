@@ -21,12 +21,16 @@ namespace ClearDashboard.DAL.Alignment.Features
 
         public static CompositeToken BuildCompositeToken(Models.TokenComposite tokenComposite, IEnumerable<Models.Token> tokens, IEnumerable<Models.Token>? otherTokens = null)
         {
-            var ct = new CompositeToken(
-                tokens.Select(t => BuildToken(t)),
-                otherTokens?.Select(t => BuildToken(t))
-            );
-            ct.TokenId.Id = tokenComposite.Id;
-            ct.ExtendedProperties = tokenComposite.ExtendedProperties;
+            var ct = new CompositeToken(tokens.Select(BuildToken), otherTokens?.Select(BuildToken))
+            {
+                // CompositeToken: 808
+                Tag = tokenComposite.ParallelCorpusId?.ToString() ?? null,
+                TokenId =
+                {
+                    Id = tokenComposite.Id
+                },
+                ExtendedProperties = tokenComposite.ExtendedProperties
+            };
 
             return ct;
         }
@@ -42,9 +46,9 @@ namespace ClearDashboard.DAL.Alignment.Features
 
         public static Token BuildToken(Models.TokenComponent tokenComponent)
         {
-            if (tokenComponent is Models.TokenComposite)
+            if (tokenComponent is Models.TokenComposite composite)
             {
-                return BuildCompositeToken((Models.TokenComposite)tokenComponent);
+                return BuildCompositeToken(composite);
             }
             else
             {
@@ -60,12 +64,11 @@ namespace ClearDashboard.DAL.Alignment.Features
         }
         public static TokenId BuildTokenId(Models.TokenComponent tokenComponent)
         {
-            if (tokenComponent is Models.TokenComposite)
+            if (tokenComponent is Models.TokenComposite tokenComposite)
             {
-                var tokenComposite = (tokenComponent as Models.TokenComposite)!;
-                return new CompositeTokenId(tokenComposite.Tokens.Select(t => BuildToken(t)))
+                return new CompositeTokenId(tokenComposite.Tokens.Select(BuildToken))
                 {
-                    Id = tokenComponent.Id,
+                    Id = tokenComposite.Id,
                 };
             }
             else

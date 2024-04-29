@@ -98,13 +98,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <returns>The parent <see cref="CompositeToken"/>, if any; null otherwise.</returns>
         public CompositeToken? GetCompositeToken(Token token)
         {
-            // TODO808: 
+            // TODO808: Completed - reviewed with Andy
             // 1. a Composite(parallel) that overlaps with Composite(null) in parallel view will hide Composite(null) (but show its child tokens).
             //
             // The GetCompositeToken() call should prioritize Composite(parallel) over Composite(null).  Requires a property on CompositeToken to indicate whether
             // it is parallel or not.
 
-            return Tokens.Where(t => t is CompositeToken).Cast<CompositeToken>().FirstOrDefault(compositeToken => compositeToken.Tokens.Any(t => t.TokenId.IdEquals(token.TokenId)));
+            var parallelResult = Tokens.Where(t => t is CompositeToken).Cast<CompositeToken>().FirstOrDefault(compositeToken => compositeToken.Tokens.Any(t => t.TokenId.IdEquals(token.TokenId) && t.HasTag));
+
+            return parallelResult ?? Tokens.Where(t => t is CompositeToken).Cast<CompositeToken>().FirstOrDefault(compositeToken => compositeToken.Tokens.Any(t => t.TokenId.IdEquals(token.TokenId)));
+
+            //return Tokens.Where(t => t is CompositeToken).Cast<CompositeToken>().FirstOrDefault(compositeToken => compositeToken.Tokens.Any(t => t.TokenId.IdEquals(token.TokenId) && t.HasTag));
         }
 
         private void RebuildPaddedTokens()
@@ -117,7 +121,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// Adds a <see cref="CompositeToken"/> to the token map, replacing its child tokens.
         /// </summary>
         /// <param name="compositeToken">The <see cref="CompositeToken"/> to add.</param>
-        /// TODO808:  look at me
         public void AddCompositeToken(CompositeToken compositeToken)
         {
             var firstChild = compositeToken.Tokens.FirstOrDefault();

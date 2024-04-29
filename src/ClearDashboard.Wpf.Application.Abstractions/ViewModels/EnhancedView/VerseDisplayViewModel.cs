@@ -204,7 +204,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
             foreach (var (token, paddingBefore, paddingAfter) in tokenMap.PaddedTokens)
             {
-                // TODO808: 
+                // TODO808: Completed - reviewed with Andy
                 // 1. a Composite(parallel) that overlaps with Composite(null) in parallel view will hide Composite(null) (but show its child tokens).
                 //
                 // The GetCompositeToken() call should prioritize Composite(parallel) over Composite(null).  Requires a property on CompositeToken to indicate whether
@@ -637,7 +637,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await Task.CompletedTask;
         }
 
-        // TODO808:  look at this
         public async Task HandleAsync(TokensJoinedMessage message, CancellationToken cancellationToken)
         {
             MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = message.CompositeToken);
@@ -648,7 +647,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         
         public async Task HandleAsync(TokenSplitMessage message, CancellationToken cancellationToken)
         {
-            // TODO808:
+            // TODO808:  Need some input from Andy
             // 3. for token splitting api return value, for corpus view needs to look in the composite dict for a Composite(null),
             // and if none use the dict of individual non-composite tokens.
             //

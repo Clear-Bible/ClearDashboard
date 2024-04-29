@@ -358,8 +358,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     // change all (i) alignments, (ii) translations, (iii) notes, and (iv)
                     // TokenVerseAssoc(source or target) that reference T1 to reference C(parallel=null) instead.
 
-                    var compositeToken = new CompositeToken(replacementTokensById[tokenDb.Id]);
-                    compositeToken.TokenId.Id = Guid.NewGuid();
+                    var compositeToken = new CompositeToken(replacementTokensById[tokenDb.Id])
+                    {
+                        TokenId =
+                        {
+                            Id = Guid.NewGuid()
+                        }
+                        // NB:  Do not set Tag here, as it is not needed for non-parallel composites
+                    };
 
                     incomingTokenIdCompositePairs.Add((tokenDb.Id, compositeToken));
 
@@ -402,9 +408,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     bool isFirst = true;
                     foreach (var pc in tcParallelCorpora)
                     {
-                        var compositeToken = new CompositeToken(replacementTokensById[tokenDb.Id]);
-                        compositeToken.TokenId.Id = Guid.NewGuid();
+                        var compositeToken = new CompositeToken(replacementTokensById[tokenDb.Id])
+                        {
+                            TokenId =
+                            {
+                                Id = Guid.NewGuid()
+                            },
 
+                            // TODO808:  Review with Chris
+                            // Tag the composite token with the ParallelCorpus Id
+                            Tag = pc.Id.ToString()
+                        };
                         var tokenComposite = BuildModelTokenComposite(
                             compositeToken,
                             tokenDb.TokenizedCorpusId,

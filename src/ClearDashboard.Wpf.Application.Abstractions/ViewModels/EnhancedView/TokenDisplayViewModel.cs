@@ -23,13 +23,8 @@ using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
+ 
 
-    public class CompositeTokenEx : CompositeToken 
-    {
-        public CompositeTokenEx(IEnumerable<Token> tokens, IEnumerable<Token>? otherTokens = null) : base(tokens, otherTokens)
-        {
-        }
-    }
     /// <summary>
     /// A class containing the needed information to render a <see cref="Token"/> in the UI.
     /// </summary>
@@ -137,18 +132,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                               (a.AlignedTokenPair.SourceToken.TokenId.Id == AlignmentToken.TokenId.Id || a.AlignedTokenPair.TargetToken.TokenId.Id == AlignmentToken.TokenId.Id)
                                               && a.OriginatedFrom == "Assigned" && a.Verification == AlignmentVerificationStatus.Unverified);
 
-        private CompositeTokenEx? _compositeToken;
+        private CompositeToken? _compositeToken;
         /// <summary>
         /// Gets or sets the parent <see cref="CompositeToken"/> of this token, if any.
         /// </summary>
-        /// TODO808:  Added a decorator version of CompositeToken with the ParallelCorpusId? if (Composite(paraell))
-        public CompositeTokenEx? CompositeToken
+        public CompositeToken? CompositeToken
         {
             get => _compositeToken;
             set
             {
                 if (Set(ref _compositeToken, value))
                 {
+                   
                     CompositeTokenMembers = _compositeToken != null
                         ? new TokenCollection(_compositeToken.Tokens)
                         : new TokenCollection();
@@ -163,6 +158,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// Gets whether this is token is part of a composite token.
         /// </summary>
         public bool IsCompositeTokenMember => CompositeToken != null;
+
+        /// <summary>
+        /// Gets whether this is token is part of a 'parallel' composite token as determined by the HasTag property of the token.
+        /// </summary>
+        public bool IsParallelCompositeTokenMember => CompositeToken is { HasTag: true };
 
         /// <summary>
         /// Gets a collection of the composite token members.
