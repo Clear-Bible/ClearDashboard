@@ -1497,12 +1497,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnNoteMouseEnter(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteIndicatorMouseEnterEvent, e);
+            //RaiseNoteEvent(NoteIndicatorMouseEnterEvent, e);
         }
 
         private void OnNoteMouseLeave(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteIndicatorMouseLeaveEvent, e);
+            //RaiseNoteEvent(NoteIndicatorMouseLeaveEvent, e);
         }
 
         private void OnNoteMouseWheel(object sender, RoutedEventArgs e)
