@@ -674,6 +674,8 @@ namespace ClearDashboard.Wpf.Application.Services
                 }
             }
 
+            result.RemoveAll(x => x.Entity.IsReply());
+
             var orderedList = result.OrderByDescending(n => n.CreatedLocalTime).ToArray();
 
             var index = 0;
