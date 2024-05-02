@@ -32,15 +32,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             string name;
             Guid guid;
 
-            try
-            {
-                (name, guid) = request.DomainEntityId.GetNameAndId();
-            }
-            catch
-            {
-                guid = request.DomainEntityId.Id;
-                name = request.DomainEntityId.GetType().ToString();
-            }
+            //try
+            //{
+            //(name, guid) = request.DomainEntityId.GetNameAndId();
+            //}
+            //catch
+            //{
+            //    guid = request.DomainEntityId.Id;
+            //    name = request.DomainEntityId.GetType().ToString();
+            //}
+
+            (name, guid) = GetNameAndId(request.DomainEntityId);
 
             var noteDomainEntityAssociation = ProjectDbContext!.NoteDomainEntityAssociations
                 .FirstOrDefault(
@@ -67,6 +69,32 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             }
 
             return new RequestResult<NoteDomainEntityAssociationId>(new NoteDomainEntityAssociationId(noteDomainEntityAssociation.Id));
+        }
+
+        public static (string name, Guid id) GetNameAndId(IId iId)
+        {
+            Type? entityIdType = null;
+
+            Type? baseType = iId.GetType();
+            while (baseType != null)
+            {
+                if (baseType.IsGenericType)
+                {
+                    var genericTypeDefinition = baseType.GetGenericTypeDefinition();
+                    if (genericTypeDefinition == typeof(EntityId<>))
+                    {
+                        entityIdType = genericTypeDefinition.MakeGenericType(baseType.GenericTypeArguments); //t.GetType()
+                        break;
+                    }
+
+                }
+                baseType = baseType.BaseType;
+            }
+
+            if (entityIdType == null)
+                throw new InvalidParameterEngineException(name: "iId", value: iId.GetType().FullName ?? "GetType().FullName is null", message: "not a derivative of generic EntityId<>");
+
+            return (entityIdType.AssemblyQualifiedName ?? throw new InvalidStateEngineException(name: "AssemblyQualifiedName", value: iId.GetType().FullName ?? "", message: "is null"), iId.Id);
         }
     }
 }
