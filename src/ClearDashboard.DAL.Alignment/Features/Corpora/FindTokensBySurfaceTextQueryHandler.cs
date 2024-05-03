@@ -63,6 +63,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             {
                 switch (request.WordPart)
                 {
+                    // NB:  This is now not case-sensitive - due to upgrade to .net 8.  Do we need to fix? 
                     case WordPart.First:
                         findTokensQuery = findTokensQuery.Where(e => e.SurfaceText!.StartsWith(request.SearchString));
                         break;

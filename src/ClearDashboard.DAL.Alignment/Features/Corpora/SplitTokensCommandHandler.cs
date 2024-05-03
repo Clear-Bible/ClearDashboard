@@ -285,7 +285,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     .Intersect(tokensDb.Select(e => e.Id))
                     .ToList();
 
-                // Remove assocations from this composite that reference tokenIdsToReplace
+                // Remove associations from this composite that reference tokenIdsToReplace
                 ProjectDbContext.TokenCompositeTokenAssociations.RemoveRange(tokensDb
                     .SelectMany(e => e.TokenCompositeTokenAssociations
                         .Where(t =>

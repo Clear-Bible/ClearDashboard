@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
@@ -151,10 +152,40 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             var existing = Tokens.FirstOrDefault(t => t.TokenId.IdEquals(tokenId));
             if (existing != null)
             {
-                Tokens.Insert(Tokens.IndexOf(existing), replacementToken);
+                var index = Tokens.IndexOf(existing);
+                Tokens.Insert(index, replacementToken);
                 Tokens.Remove(existing);
 
                 RebuildPaddedTokens();
+            }
+        }
+
+
+        //TODO: 808 - review with Chris
+        // This method or the method below.
+        public void ReplaceTokensII(TokenId tokenId, IEnumerable<Token> replacementTokens)
+        {
+            var existing = Tokens.FirstOrDefault(t => t.TokenId.IdEquals(tokenId));
+            if (existing != null)
+            {
+                var existingTokenIndex = Tokens.IndexOf(existing);
+
+                Tokens.RemoveAt(existingTokenIndex);
+                foreach (var replacementToken in replacementTokens)
+                {
+                    Tokens.Insert(existingTokenIndex, replacementToken);
+                }
+                RebuildPaddedTokens();
+            }
+        }
+
+
+        // TODO808: review with Chris
+        public void ReplaceTokens(TokenId tokenId, IEnumerable<Token> childTokens)
+        {
+            foreach (var childToken in childTokens)
+            {
+               ReplaceToken(tokenId, childToken);
             }
         }
 
@@ -188,5 +219,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             Corpus = corpus;
             Tokens = new TokenCollection(tokens);
         }
+
+      
     }
 }

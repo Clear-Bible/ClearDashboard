@@ -211,7 +211,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests
 
                 Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "sO", WordPart.First, true)).Count());
                 Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "So", WordPart.First, false)).Count());
-                Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "sO", WordPart.First, false));
+                var sOTokens =
+                    await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "sO", WordPart.First, false);
+                Assert.Empty(sOTokens);
                 Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "SEGment", WordPart.First, true)).Count());
                 Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "segment", WordPart.First, false)).Count());
                 Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "SEGment", WordPart.First, false));

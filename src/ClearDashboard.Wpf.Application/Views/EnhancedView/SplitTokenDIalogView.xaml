@@ -295,7 +295,7 @@
             FontFamily="{DynamicResource MaterialDesignFont}"
             FontSize="18" />
 
-       <userControls:TokenCharactersDisplay
+       <userControls:SplittableTokenCharactersDisplay
             x:Name="CharactersDisplay"
             Grid.Row="3"
             HorizontalAlignment="Center"
