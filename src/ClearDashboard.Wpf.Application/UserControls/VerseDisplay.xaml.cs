@@ -951,15 +951,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
         private void OnTranslationRightButtonDown(object sender, RoutedEventArgs e)
         {
-            if (e is not TranslationEventArgs args || args is { TokenDisplay: null })
+            var control = e.Source as FrameworkElement;
+            if (control?.DataContext is TokenDisplayViewModel { IsTranslationSelected: false } tokenDisplay)
             {
-                return;
-            }
-
-            // If shift is pressed, then leave any selected tokens selected.
-            if (!args.IsShiftPressed)
-            {
-                UpdateVerseSelection(args.TokenDisplay, args.IsControlPressed, true);
+                UpdateVerseSelection(tokenDisplay, false, true);
             }
 
             RaiseTranslationEvent(TranslationRightButtonDownEvent, e);
