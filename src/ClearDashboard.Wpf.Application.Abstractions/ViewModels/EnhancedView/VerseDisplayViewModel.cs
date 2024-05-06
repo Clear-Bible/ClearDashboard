@@ -218,6 +218,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     IsSource = isSource,
                 };
 
+                //Debug.WriteLine($"TokenDisplayViewModel: {tokenDisplayViewModel.SurfaceText} {tokenDisplayViewModel.TokenHasNote} {tokenDisplayViewModel.IsFirstJotsNoteToken}");
+
+                if (tokenDisplayViewModel.Translation?.TranslationId != null)
+                {
+                    tokenDisplayViewModel.TranslationNoteIds = await NoteManager.GetNoteIdsAsync(tokenDisplayViewModel.Translation.TranslationId);
+                }
+
                 // check to see if this is the first jot note in a series of notes
                 if (tokenDisplayViewModel.TokenNoteIds.Count > 0 || tokenDisplayViewModel.TranslationNoteIds.Count > 0)
                 {
@@ -235,16 +242,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         if (!noteGuids.ContainsKey(noteId.Id))
                         {
                             noteGuids.Add(noteId.Id, Guid.NewGuid());
-                            tokenDisplayViewModel.IsFirstJotsNoteToken = true;
+                            tokenDisplayViewModel.IsFirstJotsNoteTranslation = true;
                         }
                     }
-                }
-
-                //Debug.WriteLine($"TokenDisplayViewModel: {tokenDisplayViewModel.SurfaceText} {tokenDisplayViewModel.TokenHasNote} {tokenDisplayViewModel.IsFirstJotsNoteToken}");
-
-                if (tokenDisplayViewModel.Translation?.TranslationId != null)
-                {
-                    tokenDisplayViewModel.TranslationNoteIds = await NoteManager.GetNoteIdsAsync(tokenDisplayViewModel.Translation.TranslationId);
                 }
 
                 // pad out extra space on the first token for the external notes flag
@@ -588,7 +588,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         if (!noteGuids.ContainsKey(noteId.Id))
                         {
                             noteGuids.Add(noteId.Id, Guid.NewGuid());
-                            model.IsFirstJotsNoteToken = true;
+                            model.IsFirstJotsNoteTranslation = true;
                         }
                     }
                 }
@@ -614,7 +614,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         if (!noteGuids.ContainsKey(noteId.Id))
                         {
                             noteGuids.Add(noteId.Id, Guid.NewGuid());
-                            model.IsFirstJotsNoteToken = true;
+                            model.IsFirstJotsNoteTranslation = true;
                         }
                     }
                 }

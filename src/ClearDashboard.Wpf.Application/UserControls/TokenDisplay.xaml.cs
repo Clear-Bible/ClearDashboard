@@ -2445,7 +2445,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             TokenNoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TokenHasNote) ? Visibility.Visible : Visibility.Hidden;
             TokenNoteFlagIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TokenHasNote && TokenDisplayViewModel.IsFirstJotsNoteToken) ? Visibility.Visible : Visibility.Hidden;
             TranslationNoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TranslationHasNote) ? Visibility.Visible : Visibility.Hidden;
-            TranslationNoteFlagIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TranslationHasNote) ? Visibility.Visible : Visibility.Hidden;
+            TranslationNoteFlagIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TranslationHasNote && TokenDisplayViewModel.IsFirstJotsNoteTranslation) ? Visibility.Visible : Visibility.Hidden;
 
             // JOTS - highlighting
             NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered ? TokenDisplayViewModel.NoteIndicatorBrush : NoteIndicatorColor;

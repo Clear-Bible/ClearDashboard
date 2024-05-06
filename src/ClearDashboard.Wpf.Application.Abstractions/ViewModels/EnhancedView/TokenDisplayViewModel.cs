@@ -390,6 +390,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        private bool _isFirstJotsNoteTranslation = false;
+        public bool IsFirstJotsNoteTranslation
+        {
+            get => _isFirstJotsNoteTranslation;
+            set
+            {
+                _isFirstJotsNoteTranslation = value;
+                NotifyOfPropertyChange(nameof(IsFirstJotsNoteTranslation));
+                NotifyOfPropertyChange(nameof(TranslationHasNote));
+            }
+        }
 
         private bool _multipleExternalNotes = false;
         private SolidColorBrush _noteIndicatorBrush;
