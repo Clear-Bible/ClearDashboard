@@ -458,6 +458,7 @@
             Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorHeight}"
             Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorMargin}"
             HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
+            Cursor="Hand"
             Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorComputedColor}"
             MouseEnter="OnNoteMouseEnter"
             MouseLeave="OnNoteMouseLeave"
