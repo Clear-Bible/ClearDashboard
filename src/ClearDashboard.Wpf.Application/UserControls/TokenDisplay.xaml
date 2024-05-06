@@ -349,56 +349,82 @@
             </Border.ToolTip>
         </Border>
 
-
-        <Button
-            x:Name="TranslationButton"
-            Height="Auto"
-            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationMargin}"
-            Padding="0"
-            HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
-            HorizontalContentAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
-            materialDesign:ShadowAssist.ShadowDepth="Depth0"
-            Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationBackground}"
-            BorderThickness="0"
-            Click="OnTranslationClicked"
-            ContextMenuOpening="OnTranslationContextMenuOpening"
-            FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFlowDirection}"
-            FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
-            FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
-            FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontStyle}"
-            FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontWeight}"
-            Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationColor}"
-            IsDefault="False"
-            KeyUp="OnTranslationButtonKeyUp"
-            MouseDoubleClick="OnTranslationDoubleClicked"
-            MouseEnter="OnTranslationMouseEnter"
-            MouseLeave="OnTranslationMouseLeave"
-            MouseLeftButtonUp="OnTranslationLeftButtonUp"
-            MouseRightButtonDown="OnTranslationRightButtonDown"
-            MouseRightButtonUp="OnTranslationRightButtonUp"
-            MouseWheel="OnTranslationMouseWheel"
-            PreviewMouseLeftButtonDown="OnTranslationLeftButtonDown"
-            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVisibility}">
-            <Button.ContextMenu>
-                <ContextMenu x:Name="TranslationDisplayContextMenu" FlowDirection="LeftToRight">
-                    <MenuItem
-                        x:Name="SetTranslationMenuItem"
-                        Click="OnSetTranslation"
-                        Header="{helpers:Localization TokenDisplay_SetTranslation}"
-                        Visibility="Collapsed" />
-                    <MenuItem
-                        x:Name="CreateTranslationNoteMenuItem"
-                        Click="OnCreateNote"
-                        Header="{helpers:Localization EnhancedView_CreateNote}"
-                        Visibility="Collapsed" />
-                    <MenuItem
-                        Click="OnFilterPinsTarget"
-                        Header="{helpers:Localization EnhancedView_FilterPins}"
-                        Visibility="Visible" />
-                </ContextMenu>
-            </Button.ContextMenu>
-            <TextBlock Margin="0" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationText}" />
-        </Button>
+        <StackPanel Orientation="Horizontal">
+            <!--  Jots Notes Indicator  -->
+            <iconPacks:PackIconBootstrapIcons
+                x:Name="TranslationJotsIcon"
+                Margin="3,0,0,0"
+                Background="White"
+                Cursor="Hand"
+                IsHitTestVisible="True"
+                MouseLeftButtonDown="OnTranslationNoteLeftButtonDown"
+                RenderTransformOrigin="0.5,0.5">
+                <iconPacks:PackIconBootstrapIcons.Style>
+                    <Style TargetType="iconPacks:PackIconBootstrapIcons">
+                        <Setter Property="Kind" Value="ChatRightDots" />
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Setter Property="Foreground" Value="Orange" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFlowDirection}" Value="RightToLeft">
+                                <Setter Property="Kind" Value="ChatLeftDots" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationNoteFlagIndicatorVisibility}" Value="Visible">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </iconPacks:PackIconBootstrapIcons.Style>
+            </iconPacks:PackIconBootstrapIcons>
+            <Button
+                x:Name="TranslationButton"
+                Height="Auto"
+                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationMargin}"
+                Padding="0"
+                HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
+                HorizontalContentAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
+                materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationBackground}"
+                BorderThickness="0"
+                Click="OnTranslationClicked"
+                ContextMenuOpening="OnTranslationContextMenuOpening"
+                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFlowDirection}"
+                FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
+                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
+                FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontStyle}"
+                FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontWeight}"
+                Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationColor}"
+                IsDefault="False"
+                KeyUp="OnTranslationButtonKeyUp"
+                MouseDoubleClick="OnTranslationDoubleClicked"
+                MouseEnter="OnTranslationMouseEnter"
+                MouseLeave="OnTranslationMouseLeave"
+                MouseLeftButtonUp="OnTranslationLeftButtonUp"
+                MouseRightButtonDown="OnTranslationRightButtonDown"
+                MouseRightButtonUp="OnTranslationRightButtonUp"
+                MouseWheel="OnTranslationMouseWheel"
+                PreviewMouseLeftButtonDown="OnTranslationLeftButtonDown"
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVisibility}">
+                <Button.ContextMenu>
+                    <ContextMenu x:Name="TranslationDisplayContextMenu" FlowDirection="LeftToRight">
+                        <MenuItem
+                            x:Name="SetTranslationMenuItem"
+                            Click="OnSetTranslation"
+                            Header="{helpers:Localization TokenDisplay_SetTranslation}"
+                            Visibility="Collapsed" />
+                        <MenuItem
+                            x:Name="CreateTranslationNoteMenuItem"
+                            Click="OnCreateNote"
+                            Header="{helpers:Localization EnhancedView_CreateNote}"
+                            Visibility="Collapsed" />
+                        <MenuItem
+                            Click="OnFilterPinsTarget"
+                            Header="{helpers:Localization EnhancedView_FilterPins}"
+                            Visibility="Visible" />
+                    </ContextMenu>
+                </Button.ContextMenu>
+                <TextBlock Margin="0" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationText}" />
+            </Button>
+        </StackPanel>
         <Button
             Height="Auto"
             Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenMargin}"

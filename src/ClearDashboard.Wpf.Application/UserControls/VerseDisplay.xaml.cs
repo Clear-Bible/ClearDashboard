@@ -985,7 +985,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTranslationEvent(TranslationSetEvent, e);
         }
 
-        private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e)
+        private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e, bool isTranslation = false)
         {
 
            
@@ -1000,7 +1000,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 if (!VerseSelectedTokens.Contains(control?.TokenDisplayViewModel!))
                 {
                     VerseSelectedTokens.Clear();
-                    control.TokenDisplayViewModel.IsTokenSelected = true;
+                    if (isTranslation)
+                    {
+                        control.TokenDisplayViewModel.IsTranslationSelected = true;
+                    }
+                    else 
+                    {
+                        control.TokenDisplayViewModel.IsTokenSelected = true;
+                    }
                     VerseSelectedTokens.Add(control?.TokenDisplayViewModel!);
                 }
             }
@@ -1016,7 +1023,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             });
         }
 
-        private void OnNoteLeftButtonDown(object sender, RoutedEventArgs e)
+        private void OnNoteLeftButtonDown(object sender, RoutedEventArgs e)//, bool isTranslation = false)
         {
             // 2 
            // RaiseTokenEvent(TokenLeftButtonDownEvent, e);
@@ -1053,6 +1060,45 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         private void OnNoteCreate(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteCreateEvent, e);
+        }
+
+        private void OnTranslationNoteLeftButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteLeftButtonDownEvent, e, true);
+        }
+
+        private void OnTranslationNoteLeftButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteRightButtonUpEvent, e);
+        }
+        private void OnTranslationNoteRightButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteRightButtonDownEvent, e);
+        }
+
+        private void OnTranslationNoteRightButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteRightButtonUpEvent, e);
+        }
+
+        private void OnTranslationNoteMouseEnter(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteMouseEnterEvent, e);
+        }
+
+        private void OnTranslationNoteMouseLeave(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteMouseLeaveEvent, e);
+        }
+
+        private void OnTranslationNoteMouseWheel(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteMouseWheelEvent, e);
+        }
+
+        private void OnTranslationNoteCreate(object sender, RoutedEventArgs e)
         {
             RaiseNoteEvent(NoteCreateEvent, e);
         }

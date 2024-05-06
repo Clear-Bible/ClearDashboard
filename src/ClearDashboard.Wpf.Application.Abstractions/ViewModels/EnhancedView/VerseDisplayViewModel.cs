@@ -219,9 +219,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 };
 
                 // check to see if this is the first jot note in a series of notes
-                if (tokenDisplayViewModel.TokenNoteIds.Count > 0)
+                if (tokenDisplayViewModel.TokenNoteIds.Count > 0 || tokenDisplayViewModel.TranslationNoteIds.Count > 0)
                 {
                     foreach (var noteId in tokenDisplayViewModel.TokenNoteIds)
+                    {
+                        if (!noteGuids.ContainsKey(noteId.Id))
+                        {
+                            noteGuids.Add(noteId.Id, Guid.NewGuid());
+                            tokenDisplayViewModel.IsFirstJotsNoteToken = true;
+                        }
+                    }
+
+                    foreach (var noteId in tokenDisplayViewModel.TranslationNoteIds)
                     {
                         if (!noteGuids.ContainsKey(noteId.Id))
                         {
@@ -563,9 +572,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             foreach (var model in SourceTokenDisplayViewModels)
             {
                 // check to see if this is the first jot note in a series of notes
-                if (model.TokenNoteIds.Count > 0)
+                if (model.TokenNoteIds.Count > 0 || model.TranslationNoteIds.Count > 0)
                 {
                     foreach (var noteId in model.TokenNoteIds)
+                    {
+                        if (!noteGuids.ContainsKey(noteId.Id))
+                        {
+                            noteGuids.Add(noteId.Id, Guid.NewGuid());
+                            model.IsFirstJotsNoteToken = true;
+                        }
+                    }
+
+                    foreach (var noteId in model.TranslationNoteIds)
                     {
                         if (!noteGuids.ContainsKey(noteId.Id))
                         {
@@ -580,9 +598,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             foreach (var model in TargetTokenDisplayViewModels)
             {
                 // check to see if this is the first jot note in a series of notes
-                if (model.TokenNoteIds.Count > 0)
+                if (model.TokenNoteIds.Count > 0 || model.TranslationNoteIds.Count > 0)
                 {
                     foreach (var noteId in model.TokenNoteIds)
+                    {
+                        if (!noteGuids.ContainsKey(noteId.Id))
+                        {
+                            noteGuids.Add(noteId.Id, Guid.NewGuid());
+                            model.IsFirstJotsNoteToken = true;
+                        }
+                    }
+
+                    foreach (var noteId in model.TranslationNoteIds)
                     {
                         if (!noteGuids.ContainsKey(noteId.Id))
                         {

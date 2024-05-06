@@ -932,7 +932,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             // select the attached token
             if (e.SelectedTokens.Count == 0)
             {
-                e.TokenDisplayViewModel.IsTokenSelected = true;
+                if (!e.TokenDisplayViewModel.IsTranslationSelected &&
+                    e.TokenDisplayViewModel.IsTokenSelected != true)
+                {
+                    e.TokenDisplayViewModel.IsTokenSelected = true;
+                }
                 e.SelectedTokens.Add(e.TokenDisplayViewModel);
             }
 
