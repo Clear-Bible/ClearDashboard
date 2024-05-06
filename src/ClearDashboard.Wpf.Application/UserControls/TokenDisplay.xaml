@@ -455,11 +455,11 @@
         </Button>
         <Rectangle
             Width="{Binding Path=ActualWidth, ElementName=TranslationButton}"
-            Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorHeight}"
-            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorMargin}"
+            Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationNoteIndicatorHeight}"
+            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationNoteIndicatorMargin}"
             HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
             Cursor="Hand"
-            Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorComputedColor}"
+            Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationNoteIndicatorComputedColor}"
             MouseEnter="OnNoteMouseEnter"
             MouseLeave="OnNoteMouseLeave"
             MouseLeftButtonDown="OnNoteLeftButtonDown"
