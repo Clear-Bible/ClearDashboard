@@ -133,7 +133,6 @@
             <iconPacks:PackIconBootstrapIcons
                 x:Name="MultipleJotsIcon"
                 Margin="3,10,0,0"
-                VerticalAlignment="Top"
                 Background="White"
                 Cursor="Hand"
                 IsHitTestVisible="True"
@@ -460,7 +459,7 @@
                 </Button>
                 <Rectangle
                     Width="{Binding Path=ActualWidth, ElementName=TranslationButton}"
-                    Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationNoteIndicatorHeight}"
+                    Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorHeight}"
                     Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationNoteIndicatorMargin}"
                     HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
                     Cursor="Hand"
