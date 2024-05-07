@@ -997,16 +997,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
             // the token selected on the TokenDisplay control 
             if (control != null)
             {
-                if (!VerseSelectedTokens.Contains(control?.TokenDisplayViewModel!))
+                if (!VerseSelectedTokens.Contains(control?.TokenDisplayViewModel!) || control?.TokenDisplayViewModel!.IsTranslationSelected != isTranslation)
                 {
                     VerseSelectedTokens.Clear();
                     if (isTranslation)
                     {
+                        control.TokenDisplayViewModel.IsTokenSelected = false;
                         control.TokenDisplayViewModel.IsTranslationSelected = true;
                     }
                     else 
                     {
                         control.TokenDisplayViewModel.IsTokenSelected = true;
+                        control.TokenDisplayViewModel.IsTranslationSelected = false;
                     }
                     VerseSelectedTokens.Add(control?.TokenDisplayViewModel!);
                 }
@@ -1100,7 +1102,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTranslationNoteCreate(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteCreateEvent, e);
+            RaiseNoteEvent(NoteCreateEvent, e, true);
         }
 
         private void OnFilterPins(object sender, RoutedEventArgs e)

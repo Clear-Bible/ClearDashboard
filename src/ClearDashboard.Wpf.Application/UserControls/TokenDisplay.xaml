@@ -415,7 +415,7 @@
                                 Visibility="Collapsed" />
                             <MenuItem
                                 x:Name="CreateTranslationNoteMenuItem"
-                                Click="OnCreateNote"
+                                Click="OnTranslationCreateNote"
                                 Header="{helpers:Localization EnhancedView_CreateNote}"
                                 Visibility="Collapsed" />
                             <MenuItem
@@ -466,7 +466,7 @@
                     Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationNoteIndicatorComputedColor}"
                     MouseEnter="OnNoteMouseEnter"
                     MouseLeave="OnNoteMouseLeave"
-                    MouseLeftButtonDown="OnNoteLeftButtonDown"
+                    MouseLeftButtonDown="OnTranslationNoteLeftButtonDown"
                     MouseLeftButtonUp="OnNoteLeftButtonUp"
                     MouseRightButtonDown="OnNoteRightButtonDown"
                     MouseRightButtonUp="OnNoteRightButtonUp"

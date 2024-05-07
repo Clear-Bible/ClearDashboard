@@ -742,6 +742,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("NoteCreate", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
+        /// Identifies the TranslationNoteCreateEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslationNoteCreateEvent = EventManager.RegisterRoutedEvent
+            ("TranslationNoteCreate", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
         /// Identifies the FilterPinsEvent routed event.
         /// </summary>
         public static readonly RoutedEvent FilterPinsEvent = EventManager.RegisterRoutedEvent
@@ -1217,6 +1223,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Occurs when the user requests to create a new note.
+        /// </summary>
+        public event RoutedEventHandler TranslationNoteCreate
+        {
+            add => AddHandler(TranslationNoteCreateEvent, value);
+            remove => RemoveHandler(TranslationNoteCreateEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when the user requests to filter pins.
         /// </summary>
         public event RoutedEventHandler FilterPins
@@ -1674,6 +1689,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnCreateNote(object sender, RoutedEventArgs e)
         {
            RaiseNoteEvent(NoteCreateEvent, e);
+        }
+        
+        private void OnTranslationCreateNote(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(TranslationNoteCreateEvent, e, true);
         }
 
         private void OnTokenJoin(object sender, RoutedEventArgs e)
