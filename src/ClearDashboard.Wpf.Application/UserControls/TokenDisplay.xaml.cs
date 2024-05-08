@@ -2551,7 +2551,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             if (TokenDisplayViewModel != null)
             {
-                if (message.Entities.ContainsId(TokenDisplayViewModel.Token.TokenId))
+
+                if (message.Entities.ContainsId(TokenDisplayViewModel.Token.TokenId) || message.Entities.ContainsId(TokenDisplayViewModel.Translation.TranslationId))
                 {
                     TokenDisplayViewModel.IsNoteHovered = false;
                 }

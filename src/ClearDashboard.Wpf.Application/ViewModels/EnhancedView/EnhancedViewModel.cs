@@ -940,6 +940,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 e.SelectedTokens.Add(e.TokenDisplayViewModel);
             }
 
+            SelectionManager.SelectedTokens = e.SelectedTokens;
             // 3
             if (SelectionManager.AnySelectedNotes)
             {
