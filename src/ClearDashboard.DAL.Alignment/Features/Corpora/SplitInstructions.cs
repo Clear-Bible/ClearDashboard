@@ -1,15 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿
+using System.Text.Json.Serialization;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora;
-
-//[JsonObject(MemberSerialization = MemberSerialization.Fields)]
 public class SplitInstructions 
 {
 
     [JsonIgnore]
     public int Count => Instructions.Count;
-
-   
 
     [JsonIgnore]
     public int? SurfaceTextLength => SurfaceText?.Length;
@@ -19,7 +16,7 @@ public class SplitInstructions
 
     public string? SurfaceText { get; set; }
 
-    public List<SplitInstruction> Instructions { get; private set; } = new List<SplitInstruction>();
+    public List<SplitInstruction> Instructions { get; set; } = [];
 
 
     public SplitInstruction this[int index]
@@ -58,13 +55,13 @@ public class SplitInstructions
             if (first)
             {
                 tokenText = surfaceText.Substring(0, splitIndex);
-                splitInstructions.Instructions.Add(new SplitInstruction(0, splitIndex, tokenText, trainingTexts[index]));
+                splitInstructions.Instructions.Add(new SplitInstruction(0, tokenText, trainingTexts[index]));
                 index++;
             }
 
             var length = last ? surfaceTextLength - splitIndex : splitIndexes[index] - splitIndex;
             tokenText = surfaceText.Substring(splitIndex, length);
-            splitInstructions.Instructions.Add(new SplitInstruction(splitIndex, length, tokenText, trainingTexts[index]));
+            splitInstructions.Instructions.Add(new SplitInstruction(splitIndex, tokenText, trainingTexts[index]));
             index++;
         }
 

@@ -4,26 +4,40 @@ using System.Text;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora;
 
-//public interface IPropertyGetter<in T, out TProperty>
-//{
-//    TProperty GetProperty(T item);
-//}
-
-//public class SplitInstructionIndexGetter : IPropertyGetter<SplitInstruction, int>
-//{
-//    public int GetProperty(SplitInstruction item) => item.Index;
-//}
-
 public static class SplitInstructionsExtensions
 {
     public static bool ValidateIndexesInAscendingOrder(this List<int> splitIndexes, out string? message)
     {
-        return splitIndexes.IsOrderedUsingSpanSort(out message, Comparer<int>.Create((a, b) => a.CompareTo(b)));
+       var valid = splitIndexes.IsOrderedUsingSpanSort(out message, Comparer<int>.Create((a, b) => a.CompareTo(b)));
+       if (!valid)
+       {
+           var builder = new StringBuilder(message);
+           builder.AppendLine();
+           for (var i = 0; i < splitIndexes.Count; i++)
+           {
+               builder.AppendLine($"Index: {i}, Value: {splitIndexes[i]}");
+           }
+           message = builder.ToString();
+       }
+
+       return valid;
     }
 
     public static bool ValidateIndexesInAscendingOrder(this List<SplitInstruction> splitIndexes, out string? message)
     {
-        return splitIndexes.IsOrderedUsingSpanSort(out message, Comparer<SplitInstruction>.Create((a, b) => a.Index.CompareTo(b.Index)));
+        var valid =  splitIndexes.IsOrderedUsingSpanSort(out message, Comparer<SplitInstruction>.Create((a, b) => a.Index.CompareTo(b.Index)));
+        if (!valid)
+        {
+            var builder = new StringBuilder(message);
+            builder.AppendLine();
+            for (var i = 0; i < splitIndexes.Count; i++)
+            {
+                builder.AppendLine($"Index: {i}, Value: {splitIndexes[i]}");
+            }
+            message = builder.ToString();
+        }
+
+        return valid;
     }
 
     public static bool ValidateTokenLengths(this List<SplitInstruction> splitInstructions, out string? message)
@@ -81,7 +95,7 @@ public static class SplitInstructionsExtensions
                     {
                         value = ((SplitInstruction)(object)listSpan[i]).Index;
                     }
-                    message = $"The list is not ordered in ascending order at  list index: '{i}', index value: '{value}'.";
+                    message = $"The list is not ordered in ascending order at list index: '{i}', index value: '{value}'.";
                     return false;
                 }
             }
