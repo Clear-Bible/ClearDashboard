@@ -280,10 +280,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
             (nameof(FilterPins), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
-        /// Identifies the FilterPinsTargetEvent routed event.
+        /// Identifies the FilterPinsTranslationEvent routed event.
         /// </summary>
-        public static readonly RoutedEvent FilterPinsTargetEvent = EventManager.RegisterRoutedEvent
-            (nameof(FilterPinsTarget), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+        public static readonly RoutedEvent FilterPinsTranslationEvent = EventManager.RegisterRoutedEvent
+            (nameof(FilterPinsTranslation), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the FilterPinsByBiblicalTermsEvent routed event.
@@ -1000,19 +1000,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 if (!VerseSelectedTokens.Contains(control?.TokenDisplayViewModel!) || control?.TokenDisplayViewModel!.IsTranslationSelected != isTranslation)
                 {
                     VerseSelectedTokens.Clear();
-                    if (control?.TokenDisplayViewModel.IsTokenSelected == false &&
-                        control?.TokenDisplayViewModel.IsTranslationSelected == false)
+                    if (isTranslation)
                     {
-                        if (isTranslation)
-                        {
-                            control.TokenDisplayViewModel.IsTokenSelected = false;
-                            control.TokenDisplayViewModel.IsTranslationSelected = true;
-                        }
-                        else
-                        {
-                            control.TokenDisplayViewModel.IsTokenSelected = true;
-                            control.TokenDisplayViewModel.IsTranslationSelected = false;
-                        }
+                        control.TokenDisplayViewModel.IsTokenSelected = false;
+                        control.TokenDisplayViewModel.IsTranslationSelected = true;
+                    }
+                    else
+                    {
+                        control.TokenDisplayViewModel.IsTokenSelected = true;
+                        control.TokenDisplayViewModel.IsTranslationSelected = false;
                     }
                     VerseSelectedTokens.Add(control?.TokenDisplayViewModel!);
                 }
@@ -1115,10 +1111,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseNoteEvent(FilterPinsEvent, e);
         }
 
-        private void OnFilterPinsTarget(object sender, RoutedEventArgs e)
+        private void OnFilterPinsTranslation(object sender, RoutedEventArgs e)
         {
             //3
-            RaiseNoteEvent(FilterPinsTargetEvent, e);
+            RaiseNoteEvent(FilterPinsTranslationEvent, e, true);
         }
 
         private void OnFilterPinsByBiblicalTerms(object sender, RoutedEventArgs e)
@@ -1545,10 +1541,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Occurs when the user requests to filter pins.
         /// </summary>
-        public event RoutedEventHandler FilterPinsTarget
+        public event RoutedEventHandler FilterPinsTranslation
         {
-            add => AddHandler(FilterPinsTargetEvent, value);
-            remove => RemoveHandler(FilterPinsTargetEvent, value);
+            add => AddHandler(FilterPinsTranslationEvent, value);
+            remove => RemoveHandler(FilterPinsTranslationEvent, value);
         }
 
         /// <summary>

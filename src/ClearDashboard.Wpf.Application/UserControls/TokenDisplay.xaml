@@ -419,7 +419,7 @@
                                 Header="{helpers:Localization EnhancedView_CreateNote}"
                                 Visibility="Collapsed" />
                             <MenuItem
-                                Click="OnFilterPinsTarget"
+                                Click="OnFilterPinsTranslation"
                                 Header="{helpers:Localization EnhancedView_FilterPins}"
                                 Visibility="Visible" />
                         </ContextMenu>

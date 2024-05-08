@@ -1179,7 +1179,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EventAggregator.PublishOnUIThreadAsync(new FilterPinsMessage(e.TokenDisplayViewModel.SurfaceText));
         }
 
-        public void FilterPinsTarget(object? sender, NoteEventArgs e)
+        public void FilterPinsTranslation(object? sender, NoteEventArgs e)
         {
             EventAggregator.PublishOnUIThreadAsync(new FilterPinsMessage(e.TokenDisplayViewModel.TargetTranslationText));
         }

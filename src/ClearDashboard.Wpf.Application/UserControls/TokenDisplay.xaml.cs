@@ -754,10 +754,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("FilterPins", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
-        /// Identifies the FilterPinsTargetEvent routed event.
+        /// Identifies the FilterPinsTranslationEvent routed event.
         /// </summary>
-        public static readonly RoutedEvent FilterPinsTargetEvent = EventManager.RegisterRoutedEvent
-            ("FilterPinsTarget", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+        public static readonly RoutedEvent FilterPinsTranslationEvent = EventManager.RegisterRoutedEvent
+            ("FilterPinsTranslation", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the FilterPinsByBiblicalTermsEvent routed event.
@@ -1243,10 +1243,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Occurs when the user requests to filter pins.
         /// </summary>
-        public event RoutedEventHandler FilterPinsTarget
+        public event RoutedEventHandler FilterPinsTranslation
         {
-            add => AddHandler(FilterPinsTargetEvent, value);
-            remove => RemoveHandler(FilterPinsTargetEvent, value);
+            add => AddHandler(FilterPinsTranslationEvent, value);
+            remove => RemoveHandler(FilterPinsTranslationEvent, value);
         }
 
         /// <summary>
@@ -1727,10 +1727,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseNoteEvent(FilterPinsEvent, e);
         }
 
-        private void OnFilterPinsTarget(object sender, RoutedEventArgs e)
+        private void OnFilterPinsTranslation(object sender, RoutedEventArgs e)
         {
             //1
-            RaiseNoteEvent(FilterPinsTargetEvent, e);
+            RaiseNoteEvent(FilterPinsTranslationEvent, e, true);
         }
 
         private void OnFilterPinsByBiblicalTerms(object sender, RoutedEventArgs e)
