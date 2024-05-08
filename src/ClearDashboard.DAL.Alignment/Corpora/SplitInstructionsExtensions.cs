@@ -1,9 +1,8 @@
 ﻿using System.Buffers;
 using System.Runtime.InteropServices;
 using System.Text;
-using ClearDashboard.DAL.Alignment.Corpora;
 
-namespace ClearDashboard.DAL.Alignment.Extensions;
+namespace ClearDashboard.DAL.Alignment.Corpora;
 
 public static class SplitInstructionsExtensions
 {
