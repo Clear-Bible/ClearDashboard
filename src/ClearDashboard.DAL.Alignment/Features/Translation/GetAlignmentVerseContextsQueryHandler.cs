@@ -1,15 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Windows.Documents;
-using ClearBible.Engine.Corpora;
-using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Translation;
+﻿using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
@@ -17,7 +6,10 @@ using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-
+using System.Data;
+using System.Data.Common;
+using System.Diagnostics;
+using System.Text;
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
 

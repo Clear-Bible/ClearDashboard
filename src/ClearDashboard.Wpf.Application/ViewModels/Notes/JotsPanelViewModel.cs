@@ -537,7 +537,10 @@ public JotsPanelViewModel()
 
                             foreach (var note in list)
                             {
-                                NoteViewModels.Add(note);
+                                if (!note.Entity.IsReply())
+                                {
+                                    NoteViewModels.Add(note);
+                                }
                             }
 
                             //noteVms

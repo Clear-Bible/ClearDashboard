@@ -1,7 +1,6 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
+﻿using ClearDashboard.DataAccessLayer.Models;
+using System.Collections.ObjectModel;
 using System.Windows.Documents;
-using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.ViewModels
 {
