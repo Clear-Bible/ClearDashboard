@@ -392,12 +392,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                 if (reloadType == ReloadType.Force)
                 {
-                    metadatum.TokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!,
+                    metadatum.TokenizedTextCorpus = await TokenizedTextCorpus.GetAsync(LifetimeScope!,
                         new TokenizedTextCorpusId(metadatum.TokenizedTextCorpusId!.Value),true, cancellationToken);
                 }
                 else
                 {
-                    metadatum.TokenizedTextCorpus ??= await TokenizedTextCorpus.Get(Mediator!,
+                    metadatum.TokenizedTextCorpus ??= await TokenizedTextCorpus.GetAsync(LifetimeScope!,
                         new TokenizedTextCorpusId(metadatum.TokenizedTextCorpusId!.Value), true, cancellationToken);
                 }
 
@@ -705,7 +705,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     var stopwatch = Stopwatch.StartNew();
                     try
                     {
-                        metadatum.ParallelCorpus = await ParallelCorpus.Get(Mediator!,
+                        metadatum.ParallelCorpus = await ParallelCorpus.GetAsync(LifetimeScope!,
                             new ParallelCorpusId(Guid.Parse(metadatum.ParallelCorpusId!)), useCache: true);
                     }
                     finally

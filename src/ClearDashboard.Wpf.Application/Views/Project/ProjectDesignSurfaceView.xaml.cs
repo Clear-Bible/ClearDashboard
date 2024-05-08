@@ -63,7 +63,9 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         private async void OnDeleteCorpusNodeExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             var node = (CorpusNodeViewModel)e.Parameter;
-            await ProjectDesignSurfaceViewModel!.DeleteCorpusNode(node, false);
+
+            // TODO:  need a real cancellation token!
+            await ProjectDesignSurfaceViewModel!.DeleteCorpusNode(node, false, System.Threading.CancellationToken.None);
         }
 
         /// <summary>

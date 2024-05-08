@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using ClearBible.Engine.Exceptions;
@@ -8,7 +9,17 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
 {
     internal class MediatorMock : IMediator
     {
-        public Task Publish(object notification, CancellationToken cancellationToken = default)
+		public IAsyncEnumerable<TResponse> CreateStream<TResponse>(IStreamRequest<TResponse> request, CancellationToken cancellationToken = default)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IAsyncEnumerable<object?> CreateStream(object request, CancellationToken cancellationToken = default)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task Publish(object notification, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
@@ -29,5 +40,10 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
         {
             throw new NotImplementedException();
         }
-    }
+
+		public Task Send<TRequest>(TRequest request, CancellationToken cancellationToken = default) where TRequest : IRequest
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

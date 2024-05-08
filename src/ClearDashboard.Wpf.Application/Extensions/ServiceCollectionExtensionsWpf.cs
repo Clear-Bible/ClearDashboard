@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace ClearDashboard.Wpf.Application.Extensions
 {
-    public static class ServiceCollectionExtensions
+    public static class ServiceCollectionExtensionsWpf
     {
 
         public static void AddLocalization(this IServiceCollection serviceCollection)

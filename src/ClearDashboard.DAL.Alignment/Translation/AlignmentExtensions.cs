@@ -1,4 +1,5 @@
-﻿using ClearBible.Engine.Corpora;
+﻿using Autofac;
+using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features;
@@ -33,8 +34,21 @@ namespace ClearDashboard.DAL.Alignment.Translation
         {
             return await AlignmentSet.Create(alignTokenPairs, displayName, smtModel, isSyntaxTreeAlignerRefined, isSymmetrized, metadata, parallelCorpusId, mediator, token);
         }
+		public static async Task<AlignmentSet> CreateAsync(
+			this IEnumerable<AlignedTokenPairs> alignTokenPairs,
+				string? displayName,
+				string smtModel,
+				bool isSyntaxTreeAlignerRefined,
+				bool isSymmetrized,
+				Dictionary<string, object> metadata,
+				ParallelCorpusId parallelCorpusId,
+				IComponentContext context,
+				CancellationToken token = default)
+		{
+			return await AlignmentSet.CreateAsync(alignTokenPairs, displayName, smtModel, isSyntaxTreeAlignerRefined, isSymmetrized, metadata, parallelCorpusId, context, token);
+		}
 
-        public static AlignmentTypes ToAlignmentType(this Alignment alignment, AlignmentTypes alignmentTypesUsedInQuery)
+		public static AlignmentTypes ToAlignmentType(this Alignment alignment, AlignmentTypes alignmentTypesUsedInQuery)
         {
             return AlignmentModelExtensions.ToAlignmentType(alignment.OriginatedFrom, alignment.Verification, alignmentTypesUsedInQuery);
         }

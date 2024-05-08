@@ -326,8 +326,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 }
 
 
-                await UpdateDesignSurfaceData();
-                await AddInterlinearEnhancedViewItems();
+                await UpdateDesignSurfaceData(cancellationToken ?? CancellationToken.None);
+                await AddInterlinearEnhancedViewItems(cancellationToken ?? CancellationToken.None);
 
                 _startupDialogViewModel!.Reset();
 
@@ -382,9 +382,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             }
         }
 
-        private async Task AddInterlinearEnhancedViewItems()
+        private async Task AddInterlinearEnhancedViewItems(CancellationToken cancellationToken)
         {
-            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIdsAsync(LifetimeScope!, cancellationToken);
             var enhancedViewLayouts = new List<EnhancedViewLayout>();
             var enhancedViewLayout = new EnhancedViewLayout
             {
@@ -432,7 +432,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             await ProjectManager.UpdateCurrentProject();
         }
 
-        private async Task UpdateDesignSurfaceData()
+        private async Task UpdateDesignSurfaceData(CancellationToken cancellationToken)
         {
 
             var projectDesignSurfaceData =
@@ -443,7 +443,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 return;
             }
 
-            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIdsAsync(LifetimeScope!, cancellationToken);
 
             foreach (var topLevelProjectId in topLevelProjectIds.CorpusIds)
             {

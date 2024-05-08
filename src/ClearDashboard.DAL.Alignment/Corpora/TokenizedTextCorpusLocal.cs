@@ -12,7 +12,7 @@ using ClearApi.Command.CQRS.Commands;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
-    public class TokenizedTextCorpus : ScriptureTextCorpus, ICache
+    public class TokenizedTextCorpusLocal : ScriptureTextCorpus, ICache
     {
         public readonly static Dictionary<Models.CorpusType, Guid> FixedTokenizedCorpusIdsByCorpusType = new() {
             { Models.CorpusType.ManuscriptHebrew, Guid.Parse("3D275D10-5374-4649-8D0D-9E69281E5B83") },
@@ -68,9 +68,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 });
         }
 
-        public TokenizedTextCorpus(
+        internal TokenizedTextCorpusLocal(
             TokenizedTextCorpusId tokenizedCorpusId, 
-            IComponentContext context, 
+            IMediator mediator, 
             IEnumerable<string> bookAbbreviations, 
             ScrVers versification, 
             bool useCache,
@@ -83,11 +83,11 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
             foreach (var bookAbbreviation in bookAbbreviations)
             {
-                AddText(new TokenizedText(TokenizedTextCorpusId, context, Versification, bookAbbreviation, useCache, NonTokenized));
+                AddText(new TokenizedTextLocal(TokenizedTextCorpusId, mediator, Versification, bookAbbreviation, useCache, NonTokenized));
             }
         }
 
-        public async Task UpdateOrAddVersesAsync(IComponentContext context, ITextCorpus textCorpus, CancellationToken token = default)
+        public async Task UpdateOrAddVerses(IMediator mediator, ITextCorpus textCorpus, CancellationToken token = default)
         {
             try
             {
@@ -98,39 +98,47 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 throw new InvalidTypeEngineException(message: $"Corpus must be tokenized and transformed into TokensTextRows, e.g. corpus.Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
             }
 
-            var bookIdInfo = await new GetBookIdsByTokenizedCorpusIdQuery(TokenizedTextCorpusId)
-                .ExecuteAsProjectCommandAsync(context, token);
+            var result = await mediator.Send(
+                new GetBookIdsByTokenizedCorpusIdQuery(TokenizedTextCorpusId), 
+                token);
+            result.ThrowIfCanceledOrFailed();
 
-            var bookAbbreviations = await new UpdateOrAddVersesInTokenizedCorpusCommand(TokenizedTextCorpusId, textCorpus, bookIdInfo.bookIds)
-                .ExecuteAsProjectCommandAsync(context, token);
+            var updateOrAddResult = await mediator.Send(
+                new UpdateOrAddVersesInTokenizedCorpusCommand(TokenizedTextCorpusId, textCorpus, result.Data.bookIds), 
+                token);
+            updateOrAddResult.ThrowIfCanceledOrFailed();
 
-            foreach (var bookAbbreviation in bookAbbreviations)
+            foreach (var bookAbbreviation in updateOrAddResult.Data!)
             {
-                AddText(new TokenizedText(TokenizedTextCorpusId, context, Versification, bookAbbreviation, UseCache, NonTokenized));
+                AddText(new TokenizedTextLocal(TokenizedTextCorpusId, mediator, Versification, bookAbbreviation, UseCache, NonTokenized));
             }
         }
 
-        public async Task DeleteVersesAsync(IComponentContext context, IEnumerable<VerseRef> verseRefs)
+        public async void DeleteVerses(IMediator mediator, IEnumerable<VerseRef> verseRefs)
         {
             await Task.FromException(new NotImplementedException());
         }
 
-        public async Task DeleteAsync(IComponentContext context, IEnumerable<string>? books = null)
+        public async void Delete(IMediator mediator, IEnumerable<string>? books = null)
         {
             await Task.FromException(new NotImplementedException());
         }
 
-        public async Task UpdateAsync(IComponentContext context, CancellationToken token = default)
+        public async Task Update(IMediator mediator, CancellationToken token = default)
         {
-            await new UpdateTokenizedCorpusCommand(TokenizedTextCorpusId)
-                .ExecuteAsProjectCommandAsync(context, token);
+            var command = new UpdateTokenizedCorpusCommand(TokenizedTextCorpusId);
+
+            var result = await mediator.Send(command, token);
+            result.ThrowIfCanceledOrFailed();
         }
 
-		public static async Task<IEnumerable<TokenizedTextCorpusId>> GetAllTokenizedCorpusIdsAsync(IComponentContext context, CorpusId? corpusId, CancellationToken cancellationToken)
-		{
-            return await new GetAllTokenizedCorpusIdsByCorpusIdQuery(corpusId)
-                .ExecuteAsProjectCommandAsync(context, cancellationToken);
-		}
+        public static async Task<IEnumerable<TokenizedTextCorpusId>> GetAllTokenizedCorpusIds(IMediator mediator, CorpusId? corpusId)
+        {
+            var result = await mediator.Send(new GetAllTokenizedCorpusIdsByCorpusIdQuery(corpusId));
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
+        }
 
 		public static async Task<TokenizedTextCorpusLocal> Get(
 			IMediator mediator,
@@ -146,31 +154,18 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             return new TokenizedTextCorpusLocal(result.Data.tokenizedTextCorpusId, mediator, result.Data.bookIds, result.Data.versification, useCache, false);
         }
 
-		public static async Task<TokenizedTextCorpus> GetAsync(
-			IComponentContext context,
-			TokenizedTextCorpusId tokenizedTextCorpusId,
-			bool useCache = false,
-			CancellationToken token = default)
-		{
-			var result = await new GetBookIdsByTokenizedCorpusIdQuery(tokenizedTextCorpusId)
-                .ExecuteAsProjectCommandAsync(context, token);
-
-			return new TokenizedTextCorpus(result.tokenizedTextCorpusId, context, result.bookIds, result.versification, useCache, false);
-		}
-
-		public static async Task<TokenizedTextCorpus> GetNonTokenizedAsync(
-			IComponentContext context,
+		public static async Task<TokenizedTextCorpusLocal> GetNonTokenized(
+			IMediator mediator,
             TokenizedTextCorpusId tokenizedTextCorpusId,
             bool useCache = false,
             bool nonTokenized = false)
         {
             var command = new GetBookIdsByTokenizedCorpusIdQuery(tokenizedTextCorpusId);
 
-			var mediator = context.Resolve<IMediator>();
 			var result = await mediator.Send(command);
             result.ThrowIfCanceledOrFailed(true);
 
-            return new TokenizedTextCorpus(result.Data.tokenizedTextCorpusId, context, result.Data.bookIds, result.Data.versification, useCache, true);
+            return new TokenizedTextCorpusLocal(result.Data.tokenizedTextCorpusId, mediator, result.Data.bookIds, result.Data.versification, useCache, true);
         }
 
         public static async Task<(IEnumerable<Token> TokenTrainingTextVerseTokens, uint TokenTrainingTextTokensIndex)> GetTokenVerseContext(ParallelCorpusId? parallelCorpusId, Token token, IMediator mediator, CancellationToken cancellationToken = default)
@@ -252,20 +247,22 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             return result.Data!;
         }
 
-        public async Task<IEnumerable<Token>> FindTokensBySurfaceTextAsync(
-            IComponentContext context, 
+        public async Task<IEnumerable<Token>> FindTokensBySurfaceText(
+            IMediator mediator, 
             string searchString,
             WordPart wordPart = WordPart.Full, // or regex find predicate?
             bool ignoreCase = true,
             CancellationToken cancellationToken = default
         )
         {
-            return await new FindTokensBySurfaceTextQuery(
-				TokenizedTextCorpusId,
-				searchString,
-				wordPart,
-				ignoreCase)
-            .ExecuteAsProjectCommandAsync(context, cancellationToken);
+            var result = await mediator.Send(new FindTokensBySurfaceTextQuery(
+                TokenizedTextCorpusId, 
+                searchString, 
+                wordPart,
+                ignoreCase), cancellationToken);
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
         }
     }
 }

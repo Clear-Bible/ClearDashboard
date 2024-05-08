@@ -126,7 +126,7 @@ public class CreateNotesCommandHandlerTests : TestBase
             sw.Restart();
             #endregion
 
-            var parallelCorpus = await parallelTextCorpus.Create("notes test pc", Mediator!);
+            var parallelCorpus = await parallelTextCorpus.CreateAsync("notes test pc", Container!);
 
             #region Stopwatch
             sw.Stop();
@@ -694,7 +694,7 @@ public class CreateNotesCommandHandlerTests : TestBase
                 new SourceTextIdToVerseMappingsFromVerseMappings(TestDataHelpers.GetSampleTextCorpusSourceTextIdToVerseMappings(
                     sourceTokenizedTextCorpus.Versification,
                     targetTokenizedTextCorpus.Versification)));
-            var parallelCorpus = await parallelTextCorpus.Create("notes test pc", Mediator!);
+            var parallelCorpus = await parallelTextCorpus.CreateAsync("notes test pc", Container!);
             using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
                 SmtModelType.FastAlign,
                 parallelTextCorpus,
@@ -777,7 +777,7 @@ public class CreateNotesCommandHandlerTests : TestBase
                 new SourceTextIdToVerseMappingsFromVerseMappings(TestDataHelpers.GetSampleTextCorpusSourceTextIdToVerseMappings(
                     sourceTokenizedTextCorpus.Versification,
                     targetTokenizedTextCorpus.Versification)));
-            var parallelCorpus = await parallelTextCorpus.Create("notes test pc", Mediator!);
+            var parallelCorpus = await parallelTextCorpus.CreateAsync("notes test pc", Container!);
             using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
                 SmtModelType.FastAlign,
                 parallelTextCorpus,

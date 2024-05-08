@@ -54,6 +54,9 @@ using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
 using ClearDashboard.Collaboration.Util;
+using ClearDashboard.DAL.Alignment.Features.Corpora;
+using ClearApi.Command.CQRS.Commands;
+using Microsoft.VisualStudio.Threading;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -194,7 +197,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await manager.ShowDialogAsync(viewModel, null, settings);
         }
 
-        private async Task ShowCollaborationInitialize()
+        private async Task ShowCollaborationInitialize(CancellationToken cancellationToken)
         {
             if (_collaborationManager.HasRemoteConfigured() && !_collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable())
             {
@@ -215,12 +218,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         // LastMergedCommitSha value should already be in database
                     }
 
-                    await RebuildMainMenu();
+                    await RebuildMainMenu(cancellationToken);
                 }
             }
         }
 
-        private async Task ShowCollaborationGetLatest()
+        private async Task ShowCollaborationGetLatest(CancellationToken cancellationToken)
         {
             if (_collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable())
             {
@@ -241,11 +244,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     }
                 }
 
-                await RebuildMainMenu();
+                await RebuildMainMenu(cancellationToken);
             }
         }
 
-        private async Task ShowCollaborationCommit()
+        private async Task ShowCollaborationCommit(CancellationToken cancellationToken)
         {
             if (_collaborationManager.IsCurrentProjectInRepository() && !_collaborationManager.AreUnmergedChanges() && InternetAvailability.IsInternetAvailable())
             {
@@ -267,7 +270,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
                     }
 
-                    await RebuildMainMenu();
+                    await RebuildMainMenu(cancellationToken);
                 }
             }
         }
@@ -447,7 +450,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await LoadProject();
             ProjectManager.CheckForCurrentUser();
             await NoteManager!.InitializeAsync();
-            await RebuildMainMenu();
+            await RebuildMainMenu(cancellationToken);
             await ActivateDockedWindowViewModels(cancellationToken);
             await LoadAvalonDockLayout();
             await LoadEnhancedViewTabs(cancellationToken);
@@ -475,7 +478,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             if (_lastLayout == "")
             {
                 SelectedLayoutText = "Last Saved";
-                await SaveAvalonDockLayout();
+                await SaveAvalonDockLayout(cancellationToken);
             }
 
             if (!ProjectManager.IsNewlySetFromTemplate)
@@ -872,14 +875,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             await ActivateItemAsync<JotsPanelViewModel>(cancellationToken);
 
-            _ = await Task.Factory.StartNew(async () =>
+    //        var taskFactory = new JoinableTaskFactory(new JoinableTaskContext());
+    //        await taskFactory.RunAsync(async delegate
+    //        {
+				//await TaskScheduler.Default;
+
+				//var corpusIds = await new GetAllCorpusIdsQuery().ExecuteAsProjectCommandAsync(LifetimeScope, cancellationToken);
+				//var corpusIds3 = await new GetAllCorpusIdsQuery().ExecuteAsProjectCommandAsync(LifetimeScope, cancellationToken);
+				//var tc1 = await new GetAllTokenizedCorpusIdsByCorpusIdQuery(null).ExecuteAsProjectCommandAsync(LifetimeScope, cancellationToken);
+				//var corpusIds2 = await new GetAllCorpusIdsQuery().ExecuteAsProjectCommandAsync(LifetimeScope, cancellationToken);
+				//var tc2 = await new GetAllTokenizedCorpusIdsByCorpusIdQuery(null).ExecuteAsProjectCommandAsync(LifetimeScope, cancellationToken);
+				
+    //            await taskFactory.SwitchToMainThreadAsync();
+    //        });
+
+			_ = await Task.Factory.StartNew(async () =>
             {
                 await Execute.OnUIThreadAsync(async () =>
                 {
-                    // Activate the ProjectDesignSurfaceViewModel - this will call the appropriate
-                    // Caliburn.Micro Screen lifecycle methods.  Also note that this will add ProjectDesignSurfaceViewModel 
-                    // as the last Screen managed by this conductor implementation.
-                    ProjectDesignSurfaceViewModel =
+					// Activate the ProjectDesignSurfaceViewModel - this will call the appropriate
+					// Caliburn.Micro Screen lifecycle methods.  Also note that this will add ProjectDesignSurfaceViewModel 
+					// as the last Screen managed by this conductor implementation.
+					ProjectDesignSurfaceViewModel =
                         await ActivateItemAsync<ProjectDesignSurfaceViewModel>(cancellationToken);
                     await ProjectDesignSurfaceViewModel.Initialize(cancellationToken);
 
@@ -1199,7 +1216,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             AccountWindow.ShowAccountInfoWindow(_localizationService, new NoExitWindowManager());
         }
 
-        private async Task AddNewEnhancedView()
+        private async Task AddNewEnhancedView(CancellationToken cancellationToken)
         {
             var enhancedViews = Items.Where(w => w is EnhancedViewModel).ToList();
             await DeactivateDockedWindows();
@@ -1221,7 +1238,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             };
             AddNewEnhancedViewTab(windowDockable);
             
-            await SaveAvalonDockLayout();
+            await SaveAvalonDockLayout(cancellationToken);
             await SaveProjectData();
         }
 
@@ -1281,33 +1298,33 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return fileLayouts;
         }
 
-        private async Task RebuildMainMenu()
+        private async Task RebuildMainMenu(CancellationToken cancellationToken)
         {
             FileLayouts = GetFileLayouts();
             BindableCollection<MenuItemViewModel> collaborationItems = new()
             {
                 // add in the standard menu items
-                new MenuItemViewModel
+                new MenuItemViewModel()
                 {
                     Header = "Manage Collaboration Projects", Id = MenuIds.CollaborationManageProjects,
                     ViewModel = this,
                     IsEnabled = _collaborationManager.HasRemoteConfigured() && _collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable()
                 },
                 // Save Current Layout
-                new MenuItemViewModel
-                {
+                new MenuItemViewModel()
+				{
                     Header = "Make Project Available for Collab", Id = MenuIds.CollaborationInitialize,
                     ViewModel = this,
                     IsEnabled = _collaborationManager.HasRemoteConfigured() && !_collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable()
                 },
-                new MenuItemViewModel
-                {
+                new MenuItemViewModel()
+				{
                     Header = "Get Latest Project Updates", Id = MenuIds.CollaborationGetLatest,
                     ViewModel = this,
                     IsEnabled = _collaborationManager.IsCurrentProjectInRepository() && InternetAvailability.IsInternetAvailable()
                 },
-                new MenuItemViewModel
-                {
+                new MenuItemViewModel()
+				{
                     Header = "Send Changes to Shared Project", Id = MenuIds.CollaborationCommit,
                     ViewModel = this,
                     IsEnabled = _collaborationManager.IsCurrentProjectInRepository() &&
@@ -1353,22 +1370,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // add in the standard menu items
 
                 // Save Current Layout
-                new MenuItemViewModel
-                {
+                new MenuItemViewModel()
+				{
                     Header = "🖫 " + _localizationService!.Get("MainView_LayoutsSave"), Id = MenuIds.Save,
                     ViewModel = this
                 },
                 
                 // Delete Saved Layout
-                new MenuItemViewModel
-                {
+                new MenuItemViewModel()
+				{
                     Header = "🗑 " +_localizationService!.Get("MainView_LayoutsDelete"), Id = MenuIds.Delete,
                     ViewModel = this,
                 },
 
                 // STANDARD LAYOUTS
-                new MenuItemViewModel
-                {
+                new MenuItemViewModel()
+				{
                     Header = "---- " + _localizationService!.Get("MainView_LayoutsStandardLayouts") + " ----",
                     Id = MenuIds.Separator, ViewModel = this,
                 }
@@ -1380,8 +1397,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // PROJECT LAYOUTS
                 if (fileLayout.LayoutID.StartsWith("ProjectLayout:") && bFound == false)
                 {
-                    layouts.Add(new MenuItemViewModel
-                    {
+                    layouts.Add(new MenuItemViewModel()
+					{
                         Header = "---- " + _localizationService!.Get("MainView_LayoutsProjectLayouts") + " ----",
                         Id = MenuIds.Separator,
                         ViewModel = this,
@@ -1390,8 +1407,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
 
 
-                layouts.Add(new MenuItemViewModel
-                {
+                layouts.Add(new MenuItemViewModel()
+				{
                     Header = "🝆 " + fileLayout.LayoutName,
                     Id = fileLayout.LayoutID,
                     ViewModel = this,
@@ -1405,7 +1422,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 // File
                 new()
-                {
+				{
                     Header =_localizationService!.Get("MainView_File"), Id = MenuIds.File, ViewModel = this, IsEnabled = tasksRunning,
                     MenuItems = new BindableCollection<MenuItemViewModel>
                     {
@@ -1417,13 +1434,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     }
                 },
                 new()
-                {
+				{
                     // Layouts
                     Header = _localizationService!.Get("MainView_Layouts"), Id = MenuIds.Layout, ViewModel = this,
                     MenuItems = layouts,
                 },
                 new()
-                {
+				{
                     // Windows
                     Header = _localizationService!.Get("MainView_Windows"), Id = MenuIds.Window, ViewModel = this,
                     MenuItems = new BindableCollection<MenuItemViewModel>
@@ -1460,7 +1477,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 
                 // SETTINGS
                 new()
-                {
+				{
                     Header = _localizationService!.Get("MainView_Settings"), Id =  MenuIds.Settings, ViewModel = this,
                     //MenuItems = new BindableCollection<MenuItemViewModel>
                     //{
@@ -1471,14 +1488,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                 // COLLABORATION
                 new()
-                {
+				{
                     Header = "Collaboration", Id = "CollaborationID", ViewModel = this,
                     MenuItems = collaborationItems,
                 },
 
                 // HELP
                 new()
-                {
+				{
                     Header = _localizationService!.Get("MainView_Help"), Id =  MenuIds.Help, ViewModel = this,
                     MenuItems = new BindableCollection<MenuItemViewModel>
                     {
@@ -1512,12 +1529,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// Save the layout
         /// </summary>
         // ReSharper disable once UnusedMember.Global
-        public async void OkSave()
+        public async void OkSave(CancellationToken cancellationToken)
         {
-            await SaveAvalonDockLayout();
+            await SaveAvalonDockLayout(cancellationToken);
         }
 
-        private async Task SaveAvalonDockLayout()
+        private async Task SaveAvalonDockLayout(CancellationToken cancellationToken)
         {
 
             var filePath = string.Empty;
@@ -1555,11 +1572,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 GridIsVisible = Visibility.Collapsed;
 
-                await RebuildMainMenu();
+                await RebuildMainMenu(cancellationToken);
             }
         }
 
-        public async void DeleteLayout(LayoutFile layoutFile)
+        public async void DeleteLayout(LayoutFile layoutFile, CancellationToken cancellationToken)
         {
             if (layoutFile.LayoutType == LayoutFile.eLayoutType.Standard)
             {
@@ -1577,7 +1594,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
             FileLayouts.Remove(layoutFile);
-            await RebuildMainMenu();
+            await RebuildMainMenu(cancellationToken);
             await SaveProjectData();
         }
 
@@ -1989,11 +2006,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                 AddNewEnhancedViewTab(metadatum.CreateLayoutDocument(viewModel));
             }
-            await SaveAvalonDockLayout();
+            await SaveAvalonDockLayout(cancellationToken);
             await SaveProjectData();
         }
 
-        public async Task ExecuteMenuCommand(MenuItemViewModel menuItem)
+        public async Task ExecuteMenuCommand(MenuItemViewModel menuItem, CancellationToken cancellationToken)
         {
             switch (menuItem.Id)
             {
@@ -2027,19 +2044,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                 case MenuIds.CollaborationInitialize:
                     {
-                        await ShowCollaborationInitialize();
+                        await ShowCollaborationInitialize(cancellationToken);
                         break;
                     }
 
                 case MenuIds.CollaborationGetLatest:
                     {
-                        await ShowCollaborationGetLatest();
+                        await ShowCollaborationGetLatest(cancellationToken);
                         break;
                     }
 
                 case MenuIds.CollaborationCommit:
                     {
-                        await ShowCollaborationCommit();
+                        await ShowCollaborationCommit(cancellationToken);
                         break;
                     }
 
@@ -2048,7 +2065,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         if (_collaborationManager.IsRepositoryInitialized() && InternetAvailability.IsInternetAvailable())
                         {
                             _collaborationManager.FetchMergeRemote();
-                            await RebuildMainMenu();
+                            await RebuildMainMenu(cancellationToken);
                         }
                         break;
                     }
@@ -2058,7 +2075,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
                         {
                             _collaborationManager.HardResetChanges();
-                            await RebuildMainMenu();
+                            await RebuildMainMenu(cancellationToken);
                         }
                         break;
                     }
@@ -2068,7 +2085,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
                         {
                             await _collaborationManager.CreateProjectBackupAsync(CancellationToken.None);
-                            await RebuildMainMenu();
+                            await RebuildMainMenu(cancellationToken);
                         }
                         break;
                     }
@@ -2078,7 +2095,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
                         {
                             _collaborationManager.DumpDifferencesBetweenLastMergedCommitAndHead();
-                            await RebuildMainMenu();
+                            await RebuildMainMenu(cancellationToken);
                         }
                         break;
                     }
@@ -2088,7 +2105,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         if (_collaborationManager.IsRepositoryInitialized() && _collaborationManager.IsCurrentProjectInRepository())
                         {
                             await _collaborationManager.DumpDifferencesBetweenHeadAndCurrentDatabaseAsync();
-                            await RebuildMainMenu();
+                            await RebuildMainMenu(cancellationToken);
                         }
                         break;
                     }
@@ -2173,7 +2190,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                     case MenuIds.NewEnhancedCorpus:
                         {
-                            await AddNewEnhancedView();
+                            await AddNewEnhancedView(cancellationToken);
                             break;
                         }
                     case MenuIds.BiblicalTerms:
@@ -2306,7 +2323,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public async Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
         {
             // rebuild the menu system with the new language
-            await RebuildMainMenu();
+            await RebuildMainMenu(cancellationToken);
 
             // redraw the corpus and parallel corpus menus 
             await EventAggregator.PublishOnUIThreadAsync(new RedrawParallelCorpusMenus(), cancellationToken);
@@ -2315,7 +2332,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public async Task HandleAsync(RebuildMainMenuMessage message, CancellationToken cancellationToken)
         {
-            await RebuildMainMenu();
+            await RebuildMainMenu(cancellationToken);
         }
 
 

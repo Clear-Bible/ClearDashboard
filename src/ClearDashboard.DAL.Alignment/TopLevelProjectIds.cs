@@ -1,4 +1,5 @@
-﻿using ClearDashboard.DAL.Alignment.Corpora;
+﻿using Autofac;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using MediatR;
 
@@ -35,12 +36,14 @@ namespace ClearDashboard.DAL.Alignment
             CorpusIds = corpusIds;
         }
 
-        public static async Task<TopLevelProjectIds> GetTopLevelProjectIds(IMediator mediator)
+        public static async Task<TopLevelProjectIds> GetTopLevelProjectIdsAsync(IComponentContext context, CancellationToken cancellationToken)
         {
-            var translationSetIds = await TranslationSet.GetAllTranslationSetIds(mediator);
-            var alignmentSetIds = await AlignmentSet.GetAllAlignmentSetIds(mediator);
+            var mediator = context.Resolve<IMediator>();
 
-            var allParallelCorpusIds = await ParallelCorpus.GetAllParallelCorpusIds(mediator);
+            var translationSetIds = await TranslationSet.GetAllTranslationSetIdsAsync(context, null, null, cancellationToken);
+            var alignmentSetIds = await AlignmentSet.GetAllAlignmentSetIdsAsync(context, null, null, cancellationToken);
+
+            var allParallelCorpusIds = await ParallelCorpus.GetAllParallelCorpusIdsAsync(context, cancellationToken);
             var containedParallelCorpusIds = 
                 translationSetIds
                     .Select(e => e.ParallelCorpusId!.Id)
@@ -51,7 +54,7 @@ namespace ClearDashboard.DAL.Alignment
             var parallelCorpusIds = allParallelCorpusIds
                 .Where(e => containedParallelCorpusIds.Contains(e.Id));
 
-            var allTokenizedTextCorpusIds = await TokenizedTextCorpus.GetAllTokenizedCorpusIds(mediator, null);
+            var allTokenizedTextCorpusIds = await TokenizedTextCorpus.GetAllTokenizedCorpusIdsAsync(context, null, cancellationToken);
             var containedTokenizedTextCorpusIds =
                 allParallelCorpusIds
                     .Select(e => e.SourceTokenizedCorpusId!.Id)
@@ -62,7 +65,7 @@ namespace ClearDashboard.DAL.Alignment
             var tokenizedTextCorpusIds = allTokenizedTextCorpusIds.Distinct();
                // .Where(e => containedTokenizedTextCorpusIds.Contains(e.Id));
 
-            var allCorpusIds = await Corpus.GetAllCorpusIds(mediator);
+            var allCorpusIds = await Corpus.GetAllCorpusIdsAsync(context, cancellationToken);
             var containedCorpusIds =
                 allTokenizedTextCorpusIds
                     .Select(e => e.CorpusId!.Id)

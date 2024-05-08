@@ -1,6 +1,21 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Autofac.Features.AttributeFilters;
+using MessagePack;
+using MessagePack.Resolvers;
 using Caliburn.Micro;
+using ClearApi.Command.Alignment.JsonRpc.DataTransfer.Converters;
+using ClearApi.Command.CQRS.CommandReceivers;
+using ClearApi.Command.CQRS.Commands;
+using ClearApi.Command.CQRS.JsonRpc.CommandReceiverProxy;
+using ClearApi.Command.CommandReceivers;
+using ClearApi.Command.Commands;
+using ClearApi.Command.JsonRpc.CommandReceiverProxy;
+using ClearApi.Command.JsonRpc.Network;
+using ClearApi.Command.JsonRpc.Serialization;
+using ClearApi.Command.Serialization;
+using ClearApi.DataTransfer.Utils;
+using ClearApi.Engine.Model;
 using ClearApplicationFoundation;
 using ClearApplicationFoundation.Extensions;
 using ClearDashboard.DAL.Alignment.BackgroundServices;
@@ -166,17 +181,6 @@ namespace ClearDashboard.Wpf.Application
             DependencyInjectionLogging = true;
 #endif
             base.PreInitialize();
-
-            // Set up DPI awareness
-            //if (Environment.OSVersion.Version >= new Version(6, 3, 0)) // win 8.1 added support for per monitor dpi
-            //{
-            //    if (Environment.OSVersion.Version >= new Version(10, 0, 15063)) // win 10 creators update added support for per monitor v2
-            //    {
-            //        NativeMethods.SetProcessDpiAwarenessContext((int)NativeMethods.DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-            //    }
-            //    else NativeMethods.SetProcessDpiAwareness(NativeMethods.PROCESS_DPI_AWARENESS.Process_Per_Monitor_DPI_Aware);
-            //}
-            //else NativeMethods.SetProcessDPIAware();
         }
 
         protected override void PostInitialize()
@@ -296,9 +300,139 @@ namespace ClearDashboard.Wpf.Application
             builder
                 .RegisterAssemblyTypes(typeof(GetProjectSnapshotQueryHandler).Assembly)
                 .AsClosedTypesOf(typeof(IRequestHandler<,>));
-            }
 
-        protected override async Task NavigateToMainWindow()
+            BootstrapCommandsLocalOnly.LoadModules(builder);
+            return;
+
+            builder.RegisterType<ClearEngineClientWebSocket>()
+                .WithParameter("host", "192.168.1.50:5173") // Home
+                                                            //.WithParameter("host", "172.20.10.5:5173")  // Cell hotspot
+                                                            //.WithParameter("host", "10.1.10.157:5173")  // TKD
+                .WithParameter("path", "/ws-ces")
+                .AsSelf();
+
+            builder.RegisterGeneric(typeof(JsonRpcProxy<>))
+                .WithParameter(
+                    (pi, ctx) => pi.ParameterType == typeof(MessagePackSerializerOptions) && pi.Name == "serializerOptions",
+                    (pi, ctx) => ContractlessStandardResolver.Options)
+                .As(typeof(IJsonRpcProxy<>))
+                .Keyed(nameof(ContractlessStandardResolver), typeof(IJsonRpcProxy<>))
+                .SingleInstance();
+
+            builder.RegisterGeneric(typeof(JsonRpcProxy<>))
+                .WithParameter(
+                    (pi, ctx) => pi.ParameterType == typeof(MessagePackSerializerOptions) && pi.Name == "serializerOptions",
+                    (pi, ctx) => MessagePackSerializerOptions.Standard)
+                .As(typeof(IJsonRpcProxy<>))
+                .Keyed(nameof(StandardResolver), typeof(IJsonRpcProxy<>))
+                .SingleInstance();
+
+            // Setting useCurrentProject to true will cause the dashboard project id to
+            // be passed in ProjectCommand execute calls.  Using false tells the server
+            // to use its own default project id (we're doing that for starters since we
+            // don't have any initial project creation/selection functionality integrated)
+            builder.RegisterType<CurrentProjectContextProvider>()
+                .WithParameter("useCurrentProject", false)
+                .As<IProjectCommandContextProvider>();
+
+            builder.RegisterType<DataTransferConverter>()
+                .WithParameter(
+                    (pi, ctx) => pi.ParameterType == typeof(Func<System.Type, bool>),
+                    (pi, ctx) => (Func<System.Type, bool>)((type) => !DynamicCommandSerializer.IsMessagePackSupportedType(type))
+                )
+                .WithParameter("dataTransferModelNamespace", typeof(ClearApi.DataTransfer.MessagePack.Model.DynamicRequest).Namespace!)
+                .WithParameter(
+                    (pi, ctx) => pi.ParameterType == typeof(string[]) && pi.Name == "extensionNamespaces",
+                    (pi, ctx) => new string[] {
+                        typeof(ClearApi.Command.DataTransfer.IAlignmentExtensions).Namespace!, 					// ToEngine extensions (data transfer interface to engine model)
+					    typeof(ClearApi.Command.Alignment.DataTransfer.IAlignmentSetExtensions).Namespace!,		// ToEngine extensions (data transfer interface to engine model)
+					    typeof(ClearApi.Command.JsonRpc.DataTransfer.NonGenericExtensions).Namespace!, 			// ToDataTransfer extensions (engine model to JsonRpc/MessagePack data transfer model)
+					    typeof(ClearApi.Command.Alignment.JsonRpc.DataTransfer.NonGenericExtensions).Namespace! // ToDataTransfer extensions (engine model to JsonRpc/MessagePack data transfer model)
+					})
+                .WithParameter(
+                    (pi, ctx) => pi.ParameterType == typeof(DataTransferConverter.AnonymousType) && pi.Name == "anonymousEngineType",
+                    (pi, ctx) => DataTransferConverter.AnonymousType.ExpandoObject
+                )
+                .AsSelf()
+                .SingleInstance();
+            builder.RegisterType<DataTransferTypeConstructor>().AsSelf().SingleInstance();
+            builder.RegisterType<DynamicCommandSerializer>().As<IDynamicCommandSerializer>();
+            builder.RegisterType<DynamicCommandReceiverProxy>()
+                .WithParameter(
+                    (pi, ctx) => pi.ParameterType == typeof(ICommandReceiver<DynamicCommand, DynamicCommandResult>) && pi.Name == "nextReceiver",
+                    (pi, ctx) => null)
+                .AsSelf()   // Required, if we are registering MediatorCommandReceiverProxy
+                .As<ICommandReceiver<DynamicCommand, DynamicCommandResult>>()
+                .WithAttributeFiltering();
+
+            builder.RegisterType<TokenizedTextCorpusDataTransferConverter>().As<IDataTransferConverter<ClearDashboard.DAL.Alignment.Corpora.TokenizedTextCorpus>>();
+            builder.RegisterType<ParallelCorpusDataTransferConverter>().As<IDataTransferConverter<ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus>>();
+            builder.RegisterType<AlignmentSetDataTransferConverter>().As<IDataTransferConverter<ClearDashboard.DAL.Alignment.Translation.AlignmentSet>>();
+            builder.RegisterType<TranslationSetDataTransferConverter>().As<IDataTransferConverter<ClearDashboard.DAL.Alignment.Translation.TranslationSet>>();
+
+            //// LOCAL GetVerseRangeTokensCommandReceiver:
+            //builder.RegisterType<GetVerseRangeTokensCommandReceiver>()
+            //	.Named<ICommandReceiver<GetVerseRangeTokensCommand, (IEnumerable<PaddedTokensTextRow> Rows, int IndexOfVerse)>>(serviceName: "LOCAL");
+
+            //         // REMOTE GetVerseRangeTokensCommandReceiver:
+            //         builder.RegisterType<ProjectCommandReceiverProxy<GetVerseRangeTokensCommand, (IEnumerable<PaddedTokensTextRow> Rows, int IndexOfVerse)>>()
+            //             .Named<ICommandReceiver<GetVerseRangeTokensCommand, (IEnumerable<PaddedTokensTextRow> Rows, int IndexOfVerse)>>("REMOTE")
+            //	.WithAttributeFiltering();
+
+            Func<ParameterInfo, IComponentContext, bool> nullNextReceiverParameterSelector =
+                (pi, ctx) => pi.ParameterType == typeof(ICommandReceiver<DynamicCommand, DynamicCommandResult>) && pi.Name == "nextReceiver";
+            Func<ParameterInfo, IComponentContext, object?> nullNextReceiverValueSelector = (pi, ctx) => null;
+
+            // Just for fun, focus on remote calls only:
+            builder.RegisterGeneric(typeof(MediatorCommandQueryReceiverProxy<,>))
+                .WithParameter(
+                    (pi, ctx) => pi.ParameterType.IsAssignableToGenericType(typeof(IMediatorCommandReceiver<,>)) && pi.Name == "nextReceiver",
+                    (pi, ctx) => null)  // If we don't explicitly set this, circular dependency error
+                .As(typeof(IMediatorCommandReceiver<,>));
+            builder.RegisterGeneric(typeof(MediatorCommandCommandReceiverProxy<,>))
+                .WithParameter(
+                    (pi, ctx) => pi.ParameterType.IsAssignableToGenericType(typeof(IMediatorCommandReceiver<,>)) && pi.Name == "nextReceiver",
+                    (pi, ctx) => null)  // If we don't explicitly set this, circular dependency error
+                .As(typeof(IMediatorCommandReceiver<,>));
+
+            builder.RegisterGeneric(typeof(ProjectMediatorCommandQueryReceiverProxy<,>))
+                .WithParameter(
+                    (pi, ctx) => pi.ParameterType.IsAssignableToGenericType(typeof(IProjectMediatorCommandReceiver<,>)) && pi.Name == "nextReceiver",
+                    (pi, ctx) => null)  // If we don't explicitly set this, circular dependency error
+                .As(typeof(IProjectMediatorCommandReceiver<,>))
+                .WithAttributeFiltering();
+            builder.RegisterGeneric(typeof(ProjectMediatorCommandCommandReceiverProxy<,>))
+                .WithParameter(
+                    (pi, ctx) => pi.ParameterType.IsAssignableToGenericType(typeof(IProjectMediatorCommandReceiver<,>)) && pi.Name == "nextReceiver",
+                    (pi, ctx) => null)  // If we don't explicitly set this, circular dependency error
+                .As(typeof(IProjectMediatorCommandReceiver<,>))
+                .WithAttributeFiltering();
+
+            builder.RegisterGeneric(typeof(ProjectCommandReceiverProxy<,>))
+                .WithParameter(
+                    (pi, ctx) => pi.ParameterType.IsAssignableToGenericType(typeof(IProjectCommandReceiver<,>)) && pi.Name == "nextReceiver",
+                    (pi, ctx) => null)  // If we don't explicitly set this, circular dependency error
+                .As(typeof(IProjectCommandReceiver<,>))
+                .WithAttributeFiltering();
+
+            builder.RegisterType<TokenizeTextCorpusCommandReceiver>();
+            builder.RegisterType<TokenizeTextCorpusCommandReceiverProxy>()
+                .WithParameter(
+                    (pi, ctx) => pi.ParameterType == typeof(ICommandReceiver<TokenizeTextCorpusCommand, TokensTextCorpus>) && pi.Name == "nextReceiver",
+                    (pi, ctx) => ctx.Resolve<TokenizeTextCorpusCommandReceiver>())
+                .As<ICommandReceiver<TokenizeTextCorpusCommand, TokensTextCorpus>>()
+                .WithAttributeFiltering();
+
+            builder.RegisterType<AlignTokenizedCorporaCommandReceiver>();
+            builder.RegisterType<AlignTokenizedCorporaCommandReceiverProxy>()
+                .WithParameter(
+                    (pi, ctx) => pi.ParameterType == typeof(ICommandReceiver<AlignTokenizedCorporaCommand, TokensAlignment>) && pi.Name == "nextReceiver",
+                    (pi, ctx) => ctx.Resolve<AlignTokenizedCorporaCommandReceiver>())
+                .As<ICommandReceiver<AlignTokenizedCorporaCommand, TokensAlignment>>()
+                .WithAttributeFiltering();
+        }
+
+		protected override async Task NavigateToMainWindow()
         {
             //EnsureApplicationMainWindowVisible();
             //NavigateToViewModel<EnhancedViewDemoViewModel>();

@@ -46,7 +46,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var parallelTextCorpus1 = await BuildSampleEngineParallelTextCorpus();
-            var parallelCorpus1 = await parallelTextCorpus1.Create("pc1", Mediator!);
+            var parallelCorpus1 = await parallelTextCorpus1.CreateAsync("pc1", Container!);
 
             var alignmentModel1 = await BuildSampleAlignmentModel(parallelTextCorpus1);
             var alignmentSet1 = await alignmentModel1.Create(
@@ -67,7 +67,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
 
             var parallelTextCorpus2 = await BuildSampleEngineParallelTextCorpus();
-            var parallelCorpus2 = await parallelTextCorpus2.Create("pc2", Mediator!);
+            var parallelCorpus2 = await parallelTextCorpus2.CreateAsync("pc2", Container!);
 
             //var translationModel2 = await BuildSampleTranslationModel(parallelTextCorpus2);
 
@@ -89,19 +89,19 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             ProjectDbContext!.ChangeTracker.Clear();
             var user = ProjectDbContext!.Users.First();
 
-            var allTranslationSetIds = await TranslationSet.GetAllTranslationSetIds(Mediator!);
+            var allTranslationSetIds = await TranslationSet.GetAllTranslationSetIdsAsync(Container!);
             Assert.Equal(2, allTranslationSetIds.Count());
 
-            var someTranslationSetIds = await TranslationSet.GetAllTranslationSetIds(Mediator!, parallelCorpus2.ParallelCorpusId);
+            var someTranslationSetIds = await TranslationSet.GetAllTranslationSetIdsAsync(Container!, parallelCorpus2.ParallelCorpusId);
             Assert.Single(someTranslationSetIds);
 
             Assert.Equal(translationSet2.TranslationSetId, someTranslationSetIds.First());
             Assert.Equal(parallelCorpus2.ParallelCorpusId, someTranslationSetIds.First().ParallelCorpusId);
 
-            var allTranslationSetIdsForUser = await TranslationSet.GetAllTranslationSetIds(Mediator!, null, new UserId(user.Id, user.FullName ?? string.Empty));
+            var allTranslationSetIdsForUser = await TranslationSet.GetAllTranslationSetIdsAsync(Container!, null, new UserId(user.Id, user.FullName ?? string.Empty));
             Assert.Equal(2, allTranslationSetIdsForUser.Count());
 
-            var allTranslationSetIdsForBogusUser = await TranslationSet.GetAllTranslationSetIds(Mediator!, null, new UserId(new Guid(), "User Boo"));
+            var allTranslationSetIdsForBogusUser = await TranslationSet.GetAllTranslationSetIdsAsync(Container!, null, new UserId(new Guid(), "User Boo"));
             Assert.Empty(allTranslationSetIdsForBogusUser);
         }
         finally
@@ -117,7 +117,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var parallelTextCorpus = await BuildSampleEngineParallelTextCorpusWithComposite();
-            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+            var parallelCorpus = await parallelTextCorpus.CreateAsync("test pc", Container!);
 
             var alignmentModel = await BuildSampleAlignmentModel(parallelTextCorpus);
             var alignmentSet = await alignmentModel.Create(
@@ -210,7 +210,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var parallelTextCorpus = await BuildSampleEngineParallelTextCorpusWithComposite();
-            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+            var parallelCorpus = await parallelTextCorpus.CreateAsync("test pc", Container!);
 
             sw.Start();
 
@@ -381,7 +381,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         { 
             var parallelTextCorpus = await BuildSampleEngineParallelTextCorpusWithComposite();
-            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+            var parallelCorpus = await parallelTextCorpus.CreateAsync("test pc", Container!);
 
             var alignmentModel = await BuildSampleAlignmentModel(parallelTextCorpus);
             var alignmentSet = await alignmentModel.Create(
@@ -493,7 +493,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var parallelTextCorpus = await BuildSampleEngineParallelTextCorpus();
-            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+            var parallelCorpus = await parallelTextCorpus.CreateAsync("test pc", Container!);
 
             //var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
@@ -547,7 +547,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var parallelTextCorpus = await BuildSampleEngineParallelTextCorpus();
-            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+            var parallelCorpus = await parallelTextCorpus.CreateAsync("test pc", Container!);
 
             //var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
@@ -745,7 +745,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var engineParallelTextCorpus = await BuildSampleManuscriptToZZSurEngineParallelTextCorpus();
-            var parallelCorpus = await engineParallelTextCorpus.Create("test pc", Mediator!);
+            var parallelCorpus = await engineParallelTextCorpus.CreateAsync("test pc", Container!);
 
             var translationCommandable = Container!.Resolve<TranslationCommands>();
 
@@ -795,7 +795,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var engineParallelTextCorpus = await BuildSampleManuscriptToZZSurEngineParallelTextCorpus();
-            var parallelCorpus = await engineParallelTextCorpus.Create("test pc", Mediator!);
+            var parallelCorpus = await engineParallelTextCorpus.CreateAsync("test pc", Container!);
 
             var alignmentModel = await BuildSampleAlignmentModel(parallelCorpus);
             var alignmentSet = await alignmentModel.Create(
@@ -822,7 +822,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var engineParallelTextCorpus = await BuildSampleEngineParallelTextCorpus();
-            var parallelCorpus = await engineParallelTextCorpus.Create("test pc", Mediator!);
+            var parallelCorpus = await engineParallelTextCorpus.CreateAsync("test pc", Container!);
 
             var alignmentModel = await BuildSampleAlignmentModel(parallelCorpus);
             var alignmentSet = await alignmentModel.Create(
@@ -935,7 +935,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var parallelTextCorpus = await BuildSampleEngineParallelTextCorpusWithComposite();
-            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+            var parallelCorpus = await parallelTextCorpus.CreateAsync("test pc", Container!);
 
             //var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
@@ -1033,7 +1033,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var parallelTextCorpus = await BuildSampleEngineParallelTextCorpusWithComposite();
-            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+            var parallelCorpus = await parallelTextCorpus.CreateAsync("test pc", Container!);
 
             //var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
@@ -1105,7 +1105,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         {
             // SETUP
             var parallelTextCorpus = await BuildSampleEngineParallelTextCorpusWithComposite();
-            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+            var parallelCorpus = await parallelTextCorpus.CreateAsync("test pc", Container!);
 
             var alignmentModel = await BuildSampleAlignmentModel(parallelTextCorpus);
             var alignmentSet = await alignmentModel.Create(
@@ -1314,7 +1314,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var leftoverCorpusIds = new List<Guid>() { parallelCorpusId.SourceTokenizedCorpusId!.CorpusId!.Id, parallelCorpusId.TargetTokenizedCorpusId!.CorpusId!.Id };
             var leftoverTokenizedCorpusIds = new List<Guid>() { parallelCorpusId.SourceTokenizedCorpusId!.Id, parallelCorpusId.TargetTokenizedCorpusId!.Id };
 
-            await ParallelCorpus.Delete(Mediator!, parallelCorpusId);
+            await ParallelCorpus.DeleteAsync(Container!, parallelCorpusId);
 
             Assert.Empty(ProjectDbContext!.ParallelCorpa);
             Assert.Empty(ProjectDbContext!.TranslationSets);
@@ -1346,7 +1346,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var parallelTextCorpus = await BuildSampleEngineParallelTextCorpus();
-            var parallelCorpus = await parallelTextCorpus.Create("pc1", Mediator!);
+            var parallelCorpus = await parallelTextCorpus.CreateAsync("pc1", Container!);
 
             var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
@@ -1373,7 +1373,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
     private async Task<ParallelCorpusId> BuildSampleCorpusAlignmentTranslationData()
     {
         var parallelTextCorpus = await BuildSampleEngineParallelTextCorpus();
-        var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+        var parallelCorpus = await parallelTextCorpus.CreateAsync("test pc", Container!);
 
         var alignmentModel = await BuildSampleAlignmentModel(parallelTextCorpus);
         var alignmentSet = await alignmentModel.Create(

@@ -120,7 +120,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                 var stopWatch = Stopwatch.StartNew();
                 try
                 {
-                    await GetParatextProjects(); 
+                    await GetParatextProjects(cancellationToken); 
                     await GetImportedLexiconViewModels(cancellationToken);
                 }
                 finally
@@ -157,9 +157,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         #region Methods
 
-        private async Task GetParatextProjects()
+        private async Task GetParatextProjects(CancellationToken cancellationToken)
         {
-            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIdsAsync(LifetimeScope!, cancellationToken);
             foreach (var corpusId in topLevelProjectIds.CorpusIds.Where(c=> c.CorpusType == CorpusType.Standard.ToString() || c.CorpusType == CorpusType.BackTranslation.ToString() || c.CorpusType == CorpusType.Resource.ToString()).OrderBy(c => c.Created))
             {
                 ProjectCorpora.Add(corpusId);

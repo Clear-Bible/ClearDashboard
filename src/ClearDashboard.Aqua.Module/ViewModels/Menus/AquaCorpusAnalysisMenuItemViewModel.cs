@@ -13,6 +13,7 @@ using MahApps.Metro.IconPacks;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ClearDashboard.Aqua.Module.ViewModels.Menus
@@ -97,7 +98,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels.Menus
 
         }
 
-        protected override async void Execute()
+        protected override async void Execute(CancellationToken cancellationToken)
         {
             switch (Id)
             {

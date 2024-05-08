@@ -4,6 +4,7 @@ using System.Data.SqlTypes;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using ClearBible.Engine.Corpora;
@@ -209,7 +210,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                 Assert.Single(corpusIds);
                 Assert.Equal(corpus.CorpusId, corpusIds.First());
 
-                var tokenizedCorpusIds = await TokenizedTextCorpus.GetAllTokenizedCorpusIds(Mediator!, corpusIds.First());
+                var tokenizedCorpusIds = await TokenizedTextCorpus.GetAllTokenizedCorpusIdsAsync(Container!, corpusIds.First(), CancellationToken.None);
                 Assert.Single(tokenizedCorpusIds);
                 Assert.Equal(tokenizedTextCorpus.TokenizedTextCorpusId.CorpusId, corpusIds.First());
                 Assert.Equal(tokenizedTextCorpus.TokenizedTextCorpusId, tokenizedCorpusIds.First());

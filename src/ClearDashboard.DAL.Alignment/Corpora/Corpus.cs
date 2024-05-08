@@ -2,6 +2,9 @@
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using MediatR;
+using Autofac;
+using ClearApi.Command.CQRS.Commands;
+using C = ClearApi.Command.Commands;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
@@ -45,7 +48,13 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             return result.Data!;
         }
 
-        public static async Task<Corpus> Create(
+		public static async Task<IEnumerable<CorpusId>> GetAllCorpusIdsAsync(IComponentContext context, CancellationToken cancellationToken)
+		{
+            var corpusIds = await new GetAllCorpusIdsQuery().ExecuteAsProjectCommandAsync(context, cancellationToken);
+			return corpusIds;
+		}
+
+		public static async Task<Corpus> Create(
             IMediator mediator,
             bool IsRtl,
             string Name,
@@ -63,7 +72,33 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             return await Corpus.Get(mediator, result.Data!);
         }
 
-        public static async Task<IEnumerable<Corpus>> GetAll(IMediator mediator)
+		public static async Task<Corpus> CreateAsync(
+			IComponentContext context,
+			bool IsRtl,
+			string Name,
+			string Language,
+			string CorpusType,
+			string ParatextId,
+			string FontFamily = DefaultFontFamily,
+			CancellationToken token = default)
+		{
+			var command = new C.CreateCorpusCommand
+            { 
+                IsRtl = IsRtl, 
+                FontFamily = FontFamily, 
+                Name = Name, 
+                Language = Language, 
+                CorpusType = CorpusType, 
+                ParatextId = ParatextId 
+            };
+
+            var id = await command.ExecuteAsProjectCommandAsync<C.CreateCorpusCommand, string>(context, token);
+            var corpusId = new CorpusId(Guid.Parse(id));
+
+			return await GetAsync(context, corpusId);
+		}
+
+		public static async Task<IEnumerable<Corpus>> GetAll(IMediator mediator)
         {
             var command = new GetAllCorporaQuery();
 
@@ -72,6 +107,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
             return result.Data!;
         }
+
         public static async Task<Corpus> Get(
             IMediator mediator,
             CorpusId corpusId)
@@ -83,7 +119,19 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
             return result.Data!;
         }
-        public static async Task Delete(
+
+		public static async Task<Corpus> GetAsync(
+			IComponentContext context,
+			CorpusId corpusId,
+			CancellationToken token = default)
+		{
+			var command = new GetCorpusByCorpusIdQuery(corpusId);
+            var corpus = await command.ExecuteAsProjectCommandAsync(context, token);
+
+			return corpus;
+		}
+
+		public static async Task Delete(
             IMediator mediator,
             CorpusId corpusId,
             CancellationToken token = default)

@@ -615,7 +615,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 AlignmentSetId = Guid.Parse(((AlignmentEnhancedViewItemMetadatum)EnhancedViewItemMetadatum)
                     .AlignmentSetId!);
                 AlignmentSet = await AlignmentSet.Get(new AlignmentSetId(AlignmentSetId), Mediator!);
-                ParallelCorpus = await ParallelCorpus.Get(Mediator!, AlignmentSet.ParallelCorpusId);
+                ParallelCorpus = await ParallelCorpus.GetAsync(LifetimeScope!, AlignmentSet.ParallelCorpusId);
             }
         }
 

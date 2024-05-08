@@ -1,4 +1,5 @@
-﻿using ClearDashboard.DAL.Alignment.Corpora;
+﻿using Autofac;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Common;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
@@ -22,14 +23,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         RequestResult<TokenizedTextCorpus>,
         TokenizedTextCorpus>
     {
-        private readonly IMediator _mediator;
+        private readonly IComponentContext _context;
 
-        public CreateTokenizedCorpusFromTextCorpusCommandHandler(IMediator mediator,
+        public CreateTokenizedCorpusFromTextCorpusCommandHandler(IComponentContext context,
             ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider,
             ILogger<CreateTokenizedCorpusFromTextCorpusCommandHandler> logger)
             : base(projectNameDbContextFactory, projectProvider, logger)
         {
-            _mediator = mediator;
+			_context = context;
         }
 
         protected override async Task<RequestResult<TokenizedTextCorpus>> SaveDataAsync(
@@ -159,7 +160,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     .First(tc => tc.Id == tokenizedCorpusId);
                 var tokenizedTextCorpus = new TokenizedTextCorpus(
                     ModelHelper.BuildTokenizedTextCorpusId(tokenizedCorpusDb),
-                    _mediator,
+                    _context,
                     bookIds,
                     versification,
                     false,

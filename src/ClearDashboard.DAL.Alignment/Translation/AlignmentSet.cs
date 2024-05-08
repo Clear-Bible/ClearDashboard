@@ -1,4 +1,6 @@
-﻿using ClearBible.Engine.Corpora;
+﻿using Autofac;
+using ClearApi.Command.CQRS.Commands;
+using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Common;
@@ -11,16 +13,26 @@ namespace ClearDashboard.DAL.Alignment.Translation
     public class AlignmentSet
     {
         private readonly IMediator mediator_;
+        private readonly IComponentContext? context_ = null;
 
         public AlignmentSetId AlignmentSetId { get; }
         public ParallelCorpusId ParallelCorpusId { get; }
 
         public async Task<IEnumerable<Alignment>> GetAlignments(IEnumerable<EngineParallelTextRow> engineParallelTextRows, AlignmentTypes alignmentTypes = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken token = default)
         {
-            var result = await mediator_.Send(new GetAlignmentsByAlignmentSetIdAndTokenIdsQuery(AlignmentSetId, engineParallelTextRows, alignmentTypes), token);
-            result.ThrowIfCanceledOrFailed(true);
-            
-            return result.Data!;
+            if (context_ is null)
+            {
+                var result = await mediator_.Send(new GetAlignmentsByAlignmentSetIdAndTokenIdsQuery(AlignmentSetId, engineParallelTextRows, alignmentTypes), token);
+                result.ThrowIfCanceledOrFailed(true);
+
+                return result.Data!;
+            }
+            else
+            {
+                return await new GetAlignmentsByAlignmentSetIdAndTokenIdsQuery(AlignmentSetId, engineParallelTextRows, alignmentTypes)
+                    .ExecuteAsProjectCommandAsync(context_, token);
+
+			}
         }
 
         public async Task PutAlignment(Alignment alignment, CancellationToken token = default)
@@ -55,10 +67,19 @@ namespace ClearDashboard.DAL.Alignment.Translation
 
         public async Task<IEnumerable<Token>> GetTargetTokensBySourceTrainingText(string sourceTrainingText, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded)
         {
-            var result = await mediator_.Send(new GetAlignmentSetTargetTokensBySourceTrainingTextQuery(AlignmentSetId, sourceTrainingText, alignmentTypesToInclude));
-            result.ThrowIfCanceledOrFailed(true);
- 
-            return result.Data!;
+            if (context_ is null)
+            {
+                var result = await mediator_.Send(new GetAlignmentSetTargetTokensBySourceTrainingTextQuery(AlignmentSetId, sourceTrainingText, alignmentTypesToInclude));
+                result.ThrowIfCanceledOrFailed(true);
+
+                return result.Data!;
+            }
+            else
+            {
+                return await new GetAlignmentSetTargetTokensBySourceTrainingTextQuery(AlignmentSetId, sourceTrainingText, alignmentTypesToInclude)
+                    .ExecuteAsProjectCommandAsync(context_, CancellationToken.None);
+
+			}
         }
 
         /// <summary>
@@ -71,10 +92,18 @@ namespace ClearDashboard.DAL.Alignment.Translation
         /// sourceToTarget == true, reverse 'sourceString' and 'targetString' if false</returns>
         public async Task<IDictionary<string, IDictionary<string, (IDictionary<string, uint> StatusCounts, string BookNumbers)>>> GetAlignmentCounts(bool sourceToTarget, bool totalsByTraining = true, bool includeBookNumbers = false, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken cancellationToken = default)
         {
-            var result = await mediator_.Send(new GetAlignmentCountsByTrainingOrSurfaceTextQuery(AlignmentSetId, sourceToTarget, totalsByTraining, includeBookNumbers, alignmentTypesToInclude), cancellationToken);
-            result.ThrowIfCanceledOrFailed(true);
+            if (context_ is null)
+            {
+                var result = await mediator_.Send(new GetAlignmentCountsByTrainingOrSurfaceTextQuery(AlignmentSetId, sourceToTarget, totalsByTraining, includeBookNumbers, alignmentTypesToInclude), cancellationToken);
+                result.ThrowIfCanceledOrFailed(true);
 
-            return result.Data!;
+                return result.Data!;
+            }
+            else
+            {
+                return await new GetAlignmentCountsByTrainingOrSurfaceTextQuery(AlignmentSetId, sourceToTarget, totalsByTraining, includeBookNumbers, alignmentTypesToInclude)
+                    .ExecuteAsProjectCommandAsync (context_, cancellationToken);
+			}
         }
 
         public async Task<(IEnumerable<(
@@ -85,18 +114,34 @@ namespace ClearDashboard.DAL.Alignment.Translation
             uint targetVerseTokensIndex
             )> VerseContexts, string Cursor, bool HasNextPage)> GetAlignmentVerseContexts(string sourceString, string targetString, bool stringsAreTraining = true, int? bookNumber = null, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, int? limit = null, string? cursor = null, CancellationToken cancellationToken = default)
         {
-            var result = await mediator_.Send(new GetAlignmentVerseContextsQuery(
-                AlignmentSetId,
-                sourceString,
-                targetString,
-                stringsAreTraining,
-                bookNumber,
-                alignmentTypesToInclude,
-                limit,
-                cursor), cancellationToken);
-            result.ThrowIfCanceledOrFailed(true);
+            if (context_ is null)
+            {
+                var result = await mediator_.Send(new GetAlignmentVerseContextsQuery(
+                    AlignmentSetId,
+                    sourceString,
+                    targetString,
+                    stringsAreTraining,
+                    bookNumber,
+                    alignmentTypesToInclude,
+                    limit,
+                    cursor), cancellationToken);
+                result.ThrowIfCanceledOrFailed(true);
 
-            return result.Data;
+                return result.Data;
+            }
+            else
+            {
+                return await new GetAlignmentVerseContextsQuery(
+                    AlignmentSetId,
+                    sourceString,
+                    targetString,
+                    stringsAreTraining,
+                    bookNumber,
+                    alignmentTypesToInclude,
+                    limit,
+                    cursor)
+                    .ExecuteAsProjectCommandAsync(context_, cancellationToken);
+			}
         }
 
         public async Task<IEnumerable<int>> GetBookNumbers(string sourceString, string targetString, bool stringsAreTraining = true, AlignmentTypes alignmentTypesToInclude = AlignmentTypeGroups.AssignedAndUnverifiedNotOtherwiseIncluded, CancellationToken cancellationToken = default)
@@ -138,12 +183,12 @@ namespace ClearDashboard.DAL.Alignment.Translation
         }
 
         public static async Task<IEnumerable<AlignmentSetId>> 
-            GetAllAlignmentSetIds(IMediator mediator, ParallelCorpusId? parallelCorpusId = null, UserId? userId = null)
+            GetAllAlignmentSetIdsAsync(IComponentContext context, ParallelCorpusId? parallelCorpusId = null, UserId? userId = null, CancellationToken cancellationToken = default)
         {
-            var result = await mediator.Send(new GetAllAlignmentSetIdsQuery(parallelCorpusId, userId));
-            result.ThrowIfCanceledOrFailed(true);
+            var result = await new GetAllAlignmentSetIdsQuery(parallelCorpusId, userId)
+                .ExecuteAsProjectCommandAsync(context, cancellationToken);
 
-            return result.Data!.Select(e => e.alignmentSetId);
+            return result.Select(e => e.alignmentSetId);
         }
 
         public static async Task<AlignmentSet> Get(
@@ -162,7 +207,21 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 mediator);
         }
 
-        public static async Task<AlignmentSet> Create(
+		public static async Task<AlignmentSet> GetAsync(
+			AlignmentSetId alignmentSetId,
+			IComponentContext context,
+            CancellationToken cancellationToken)
+		{
+			var data = await new GetAlignmentSetByAlignmentSetIdQuery(alignmentSetId)
+                .ExecuteAsProjectCommandAsync(context, cancellationToken);
+
+			return new AlignmentSet(
+				data.alignmentSetId,
+				data.parallelCorpusId,
+				context);
+		}
+
+		public static async Task<AlignmentSet> Create(
                 IEnumerable<AlignedTokenPairs> alignedTokenPairs,
                 string? displayName,
                 string smtModel,
@@ -187,7 +246,31 @@ namespace ClearDashboard.DAL.Alignment.Translation
             return createTranslationSetCommandResult.Data!;
         }
 
-        public static async Task Delete(
+		public static async Task<AlignmentSet> CreateAsync(
+				IEnumerable<AlignedTokenPairs> alignedTokenPairs,
+				string? displayName,
+				string smtModel,
+				bool isSyntaxTreeAlignerRefined,
+				bool isSymmetrized,
+				Dictionary<string, object> metadata,
+				ParallelCorpusId parallelCorpusId,
+				IComponentContext context,
+				CancellationToken token = default)
+		{
+			var createTranslationSetCommandResult = await new CreateAlignmentSetCommand(
+				alignedTokenPairs.Select(a => new Alignment(a, "Unverified", "FromAlignmentModel")),
+				displayName,
+				smtModel,
+				isSyntaxTreeAlignerRefined,
+				isSymmetrized,
+				metadata,
+			parallelCorpusId)
+                .ExecuteAsProjectCommandAsync(context, token);
+
+			return createTranslationSetCommandResult;
+		}
+
+		public static async Task Delete(
             IMediator mediator,
             AlignmentSetId alignmentSetId,
             CancellationToken token = default)
@@ -198,7 +281,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
             result.ThrowIfCanceledOrFailed(true);
         }
 
-        internal AlignmentSet(
+        public AlignmentSet(
             AlignmentSetId alignmentSetId,
             ParallelCorpusId parallelCorpusId,
             IMediator mediator)
@@ -208,5 +291,17 @@ namespace ClearDashboard.DAL.Alignment.Translation
             AlignmentSetId = alignmentSetId;
             ParallelCorpusId = parallelCorpusId;
         }
-    }
+
+		public AlignmentSet(
+			AlignmentSetId alignmentSetId,
+			ParallelCorpusId parallelCorpusId,
+			IComponentContext context)
+		{
+            context_ = context;
+			mediator_ = context.Resolve<IMediator>();
+
+			AlignmentSetId = alignmentSetId;
+			ParallelCorpusId = parallelCorpusId;
+		}
+	}
 }

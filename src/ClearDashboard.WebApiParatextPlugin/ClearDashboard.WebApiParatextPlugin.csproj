@@ -28,7 +28,6 @@
   </ItemGroup>
   <ItemGroup>
     <!--<PackageReference Include="Microsoft.AspNet.SignalR.SelfHost" Version="2.4.3" />-->
-    <PackageReference Include="Clear.SIL.Machine" Version="2.5.20" />
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.3" />
@@ -52,6 +51,10 @@
     <PackageReference Include="System.Text.Json" Version="7.0.3" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\ClearEngineMachine\machine\src\SIL.Machine.Morphology.HermitCrab.Tool\SIL.Machine.Morphology.HermitCrab.Tool.csproj" />
+    <ProjectReference Include="..\..\..\ClearEngineMachine\machine\src\SIL.Machine.Morphology.HermitCrab\SIL.Machine.Morphology.HermitCrab.csproj" />
+    <ProjectReference Include="..\..\..\ClearEngineMachine\machine\src\SIL.Machine.Translation.Thot\SIL.Machine.Translation.Thot.csproj" />
+    <ProjectReference Include="..\..\..\ClearEngineMachine\machine\src\SIL.Machine\SIL.Machine.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS\ClearDashboard.DAL.CQRS.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
     <ProjectReference Include="..\ClearDashboard.ParatextPlugin.CQRS\ClearDashboard.ParatextPlugin.CQRS.csproj" />

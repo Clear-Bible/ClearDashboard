@@ -476,7 +476,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         }
 
 
-        public async Task UpdateNodeTokenization(CorpusNodeViewModel node)
+        public async Task UpdateNodeTokenization(CorpusNodeViewModel node, CancellationToken cancellationToken)
         {
             // ReSharper disable once AsyncVoidLambda
             //await Execute.OnUIThreadAsync(async () =>
@@ -485,10 +485,10 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 //var corpusNode = CorpusNodes.FirstOrDefault(b => b.Id == node.Id);
                 //if (node is not null)
                 //{
-                var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator);
+                var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIdsAsync(LifetimeScope, cancellationToken);
                 var tokenizedCorpora =
                     topLevelProjectIds.TokenizedTextCorpusIds.Where(ttc => ttc.CorpusId!.Id == node.CorpusId);
-                await CreateCorpusNodeMenu(node, tokenizedCorpora);
+                await CreateCorpusNodeMenu(node, tokenizedCorpora, cancellationToken);
                 //}
             });
 
@@ -503,18 +503,18 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <param name="parallelCorpusConnection"></param>
         /// <param name="topLevelProjectIds"></param>
         /// <exception cref="NotImplementedException"></exception>
-        public void CreateParallelCorpusConnectionMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection, TopLevelProjectIds topLevelProjectIds)
+        public void CreateParallelCorpusConnectionMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection, TopLevelProjectIds topLevelProjectIds, CancellationToken cancellationToken)
         {
             // initiate the menu system
             parallelCorpusConnection.MenuItems.Clear();
 
             var connectionMenuItems = new BindableCollection<ParallelCorpusConnectionMenuItemViewModel>();
 
-            AddAlignmentSetMenu(parallelCorpusConnection, topLevelProjectIds, ProjectDesignSurfaceViewModel, connectionMenuItems);
-            AddMenuSeparator(connectionMenuItems);
-            AddInterlinearMenu(parallelCorpusConnection, topLevelProjectIds, ProjectDesignSurfaceViewModel, connectionMenuItems);
-            AddMenuSeparator(connectionMenuItems);
-            AddResetVerseMappings(parallelCorpusConnection, ProjectDesignSurfaceViewModel, connectionMenuItems);
+            AddAlignmentSetMenu(parallelCorpusConnection, topLevelProjectIds, ProjectDesignSurfaceViewModel, connectionMenuItems, cancellationToken);
+            AddMenuSeparator(connectionMenuItems, cancellationToken);
+            AddInterlinearMenu(parallelCorpusConnection, topLevelProjectIds, ProjectDesignSurfaceViewModel, connectionMenuItems, cancellationToken);
+            AddMenuSeparator(connectionMenuItems, cancellationToken);
+            AddResetVerseMappings(parallelCorpusConnection, ProjectDesignSurfaceViewModel, connectionMenuItems, cancellationToken);
 
 
             parallelCorpusConnection.MenuItems = connectionMenuItems;
@@ -535,9 +535,9 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             }
         }
 
-        private static void AddMenuSeparator(BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems)
+        private static void AddMenuSeparator(BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems, CancellationToken cancellationToken)
         {
-            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel()
             {
                 Header = "",
                 Id = "SeparatorId",
@@ -547,9 +547,10 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         private void AddResetVerseMappings(ParallelCorpusConnectionViewModel parallelCorpusConnection,
             IProjectDesignSurfaceViewModel projectDesignSurfaceViewModel,
-            BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems)
+            BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems,
+            CancellationToken cancellationToken)
         {
-            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel()
             {
                 Header = LocalizationService.Get("Pds_ResetVerseVersification"),
                 Id = DesignSurfaceMenuIds.ResetVerseVersifications,
@@ -563,18 +564,20 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         private async Task AddInterlinearMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection,
             TopLevelProjectIds topLevelProjectIds, IProjectDesignSurfaceViewModel projectDesignSurfaceViewModel,
-            BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems)
+            BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems,
+			CancellationToken cancellationToken)
         {
 
             // get all the existing alignment sets for this parallelcorpusid
-            var alignmentSets = (await AlignmentSet.GetAllAlignmentSetIds(
-                    Mediator!,
+            var alignmentSets = (await AlignmentSet.GetAllAlignmentSetIdsAsync(
+                    LifetimeScope!,
                     parallelCorpusConnection.ParallelCorpusId,
-                    new UserId(_projectManager!.CurrentUser.Id, _projectManager.CurrentUser.FullName!)))
+                    new UserId(_projectManager!.CurrentUser.Id, _projectManager.CurrentUser.FullName!),
+                    cancellationToken))
                 .ToList();
 
             // get all the existing translation sets for this parallelcorpusid
-            var translationSetsInModel = (await TranslationSet.GetAllTranslationSetIds(Mediator!, parallelCorpusConnection.ParallelCorpusId)).ToList();
+            var translationSetsInModel = (await TranslationSet.GetAllTranslationSetIdsAsync(LifetimeScope!, parallelCorpusConnection.ParallelCorpusId, null, cancellationToken)).ToList();
 
             //_topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
 
@@ -594,7 +597,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
                 var alignmentSetCount = topLevelProjectIds.AlignmentSetIds.Count(alignmentSet =>
                     alignmentSet.ParallelCorpusId!.IdEquals(parallelCorpusConnection.ParallelCorpusId!));
-                connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+                connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel()
                 {
                     Header = LocalizationService.Get("Pds_CreateNewInterlinear"),
                     Id = DesignSurfaceMenuIds.CreateNewInterlinear,
@@ -606,7 +609,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 });
 
 
-                AddMenuSeparator(connectionMenuItems);
+                AddMenuSeparator(connectionMenuItems, cancellationToken);
             }
 
             var parallelCorpusIds = topLevelProjectIds.ParallelCorpusIds.Where(x =>
@@ -629,7 +632,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                         header += $" [{alignmentSet.SmtModel}]";
                     }
 
-                    connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+                    connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel()
                     {
                         Header = header,
                         Id = translationSet.Id.ToString(),
@@ -695,14 +698,15 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         private async void AddAlignmentSetMenu(
             ParallelCorpusConnectionViewModel parallelCorpusConnection,
             TopLevelProjectIds topLevelProjectIds, IProjectDesignSurfaceViewModel projectDesignSurfaceViewModel,
-            BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems)
+            BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems,
+            CancellationToken cancellationToken)
         {
 
             var parallelCorpusIds = topLevelProjectIds.ParallelCorpusIds.Where(x =>
                 x.TargetTokenizedCorpusId.IdEquals(parallelCorpusConnection.ParallelCorpusId.TargetTokenizedCorpusId) &&
                 x.SourceTokenizedCorpusId.IdEquals(parallelCorpusConnection.ParallelCorpusId.SourceTokenizedCorpusId));
 
-            var connectionItem = new ParallelCorpusConnectionMenuItemViewModel
+            var connectionItem = new ParallelCorpusConnectionMenuItemViewModel()
             {
                 Header = LocalizationService.Get("Pds_CreateNewAlignmentSetMenu"),
                 Id = DesignSurfaceMenuIds.CreateNewAlignmentSet,
@@ -719,7 +723,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             if (await IsSmtAvailable(topLevelProjectIds, parallelCorpusIds.ToList()))
             {
                 connectionMenuItems.Add(connectionItem);
-                AddMenuSeparator(connectionMenuItems);
+                AddMenuSeparator(connectionMenuItems, cancellationToken);
             }
 
             var enableAlignmentEditing = Settings.Default.IsAlignmentEditingEnabled;
@@ -814,7 +818,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                     });
 
 
-                    connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+                    connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel()
                     {
                         Header = $"{alignmentSetInfo.DisplayName} [{alignmentSetInfo.SmtModel}]",
                         Id = alignmentSetInfo.Id.ToString(),
@@ -903,7 +907,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         }
 
 
-        public async Task CreateCorpusNodeMenu(CorpusNodeViewModel corpusNodeViewModel, IEnumerable<TokenizedTextCorpusId> tokenizedCorpora)
+        public async Task CreateCorpusNodeMenu(CorpusNodeViewModel corpusNodeViewModel, IEnumerable<TokenizedTextCorpusId> tokenizedCorpora, CancellationToken cancellationToken)
         {
             corpusNodeViewModel.MenuItems.Clear();
             corpusNodeViewModel.TokenizationCount = 0;
@@ -943,12 +947,12 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 {
                     if (addSeparator)
                     {
-                        AddSeparatorMenu(nodeMenuItems);
+                        AddSeparatorMenu(nodeMenuItems, cancellationToken);
                         addSeparator = false;
                     }
                     var tokenizer = (Tokenizers)Enum.Parse(typeof(Tokenizers), tokenizedCorpus.TokenizationFunction);
 
-                    var corpusNodeMenuViewModel = new CorpusNodeMenuItemViewModel
+                    var corpusNodeMenuViewModel = new CorpusNodeMenuItemViewModel()
                     {
                         Header = EnumHelper.GetDescription(tokenizer),
                         Id = tokenizedCorpus.Id.ToString(),
@@ -986,9 +990,9 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                     if ((corpusNodeViewModel.CorpusType == CorpusType.ManuscriptGreek ||
                          corpusNodeViewModel.CorpusType == CorpusType.ManuscriptHebrew) == false)
                     {
-                        AddSeparatorMenu(corpusNodeMenuViewModel.MenuItems);
+                        AddSeparatorMenu(corpusNodeMenuViewModel.MenuItems, cancellationToken);
 
-                        corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
+                        corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel()
                         {
                             // Show Verses in New Windows
                             Header = LocalizationService.Get("Pds_GetLatestFromParatext"),
@@ -1000,7 +1004,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                         });
 
                         //FIXME: EXTERNALNOTES uncomment following to add
-                        corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
+                        corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel()
                         {
                             Header = LocalizationService.Get("Pds_GetLatestExternalNotes"),
                             Id = DesignSurfaceMenuIds.GetLatestExternalNotes,
@@ -1010,7 +1014,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             Tokenizer = tokenizer.ToString(),
                         });
 
-                        corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
+                        corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel()
                         {
                             Header = LocalizationService.Get("Pds_UpdateLabelsWithExternalLabels"),
                             Id = DesignSurfaceMenuIds.UpdateLabelsWithExternalLabels,
@@ -1026,7 +1030,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                     if ((corpusNodeViewModel.CorpusType == CorpusType.Standard || corpusNodeViewModel.CorpusType == CorpusType.BackTranslation)
                         && Settings.Default.IsLexiconImportEnabled)
                     {
-                        corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
+                        corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel()
                         {
                             // Show the Lexicon Dialog
                             Header = "Import Lexicon",
@@ -1081,9 +1085,9 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             }
         }
 
-        private void AddSeparatorMenu(BindableCollection<CorpusNodeMenuItemViewModel> nodeMenuItems)
+        private void AddSeparatorMenu(BindableCollection<CorpusNodeMenuItemViewModel> nodeMenuItems, CancellationToken cancellationToken)
         {
-            nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
+            nodeMenuItems.Add(new CorpusNodeMenuItemViewModel()
             {
                 Header = "",
                 Id = "SeparatorId",
@@ -1606,7 +1610,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// </summary>
         public async void ConnectionDragCompleted(ParallelCorpusConnectionViewModel newParallelCorpusConnection,
             ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOut,
-            ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOver)
+            ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOver,
+			CancellationToken cancellationToken)
         {
             Debug.WriteLine("==== In ConnectionDragCompleted");
 
@@ -1652,7 +1657,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 return;
             }
 
-            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIdsAsync(LifetimeScope!, cancellationToken);
 
             // get this into the right order where source is always parallelCorpusConnectorDraggedOut
             if (parallelCorpusConnectorDraggedOut.Name == "Target")
@@ -1765,7 +1770,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                         newParallelCorpusConnection.SourceFontFamily = await GetFontFamily(newParallelCorpusConnection.SourceConnector.ParentNode.ParatextProjectId);
                         newParallelCorpusConnection.TargetFontFamily = await GetFontFamily(newParallelCorpusConnection.DestinationConnector.ParentNode.ParatextProjectId);
 
-                        await ProjectDesignSurfaceViewModel.AddParallelCorpus(newParallelCorpusConnection, Enums.ParallelProjectType.WholeProcess);
+                        await ProjectDesignSurfaceViewModel.AddParallelCorpus(newParallelCorpusConnection, Enums.ParallelProjectType.WholeProcess, cancellationToken);
                     }
                 }
             }
@@ -1863,7 +1868,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             else
             {
                 // is not running to complete the connection
-                ConnectionDragCompleted(message.NewConnection, message.ConnectorDraggedOut, message.ConnectorDraggedOver);
+                ConnectionDragCompleted(message.NewConnection, message.ConnectorDraggedOut, message.ConnectorDraggedOver, cancellationToken);
             }
 
             return Task.CompletedTask;

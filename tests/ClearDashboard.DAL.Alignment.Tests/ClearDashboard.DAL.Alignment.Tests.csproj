@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
 
     <IsPackable>false</IsPackable>
@@ -14,15 +14,14 @@
 	</PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="6.4.0" />
-    <PackageReference Include="ClearBible.Engine" Version="2.0.22" />
+    <PackageReference Include="Autofac" Version="8.0.0" />
     <PackageReference Include="Autofac.Configuration" Version="6.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
-	<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
-	<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+	<PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+	<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 	<PackageReference Include="Serilog.Extensions.Logging" Version="7.0.0" />
 	<PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
 	<PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
@@ -39,6 +38,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\ClearEngineMachine\ClearEngine\src\ClearBible.Engine.SyntaxTree.Aligner\ClearBible.Engine.SyntaxTree.Aligner.csproj" />
+    <ProjectReference Include="..\..\..\ClearEngineMachine\ClearEngine\src\ClearBible.Engine.SyntaxTree\ClearBible.Engine.SyntaxTree.csproj" />
+    <ProjectReference Include="..\..\..\ClearEngineMachine\ClearEngine\src\ClearBible.Engine\ClearBible.Engine.csproj" />
     <ProjectReference Include="..\..\src\ClearDashboard.Collaboration\ClearDashboard.Collaboration.csproj" />
     <ProjectReference Include="..\..\src\ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj" />
     <ProjectReference Include="..\..\src\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />

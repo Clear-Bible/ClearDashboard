@@ -1,8 +1,10 @@
-﻿using ClearBible.Engine.Exceptions;
+﻿using Autofac;
+using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Extensions;
 using MediatR;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -39,18 +41,19 @@ public class AquaTokenizedTextCorpusMetadata
             return new AquaTokenizedTextCorpusMetadata(); 
         }
     }
-    public async Task Save(TokenizedTextCorpusId tokenizedTextCorpusId, IMediator mediator)
+    public async Task SaveAsync(TokenizedTextCorpusId tokenizedTextCorpusId, IComponentContext context, CancellationToken cancellationToken)
     {
-        var tokenizedTextCorpus = await TokenizedTextCorpus.Get(
-            mediator,
+        var tokenizedTextCorpus = await TokenizedTextCorpus.GetAsync(
+            context,
             tokenizedTextCorpusId,
-            false);
+            false,
+            cancellationToken);
 
         if (tokenizedTextCorpus.TokenizedTextCorpusId.Metadata.ContainsKey(TokenizedCorpusMetadataKey))
             tokenizedTextCorpus.TokenizedTextCorpusId.Metadata[TokenizedCorpusMetadataKey] = this;
         else
             tokenizedTextCorpus.TokenizedTextCorpusId.Metadata.Add(TokenizedCorpusMetadataKey, this);
 
-        await tokenizedTextCorpus.Update(mediator);
+        await tokenizedTextCorpus.UpdateAsync(context, cancellationToken);
     }
 }

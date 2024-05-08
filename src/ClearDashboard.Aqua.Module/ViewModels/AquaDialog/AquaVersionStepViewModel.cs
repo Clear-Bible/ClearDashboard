@@ -235,8 +235,8 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
         {
             await LoadValidValues();
 
-            var tokenizedTextCorpus = await TokenizedTextCorpus.Get(
-                Mediator!,
+            var tokenizedTextCorpus = await TokenizedTextCorpus.GetAsync(
+                LifetimeScope!,
                 ParentViewModel!.TokenizedTextCorpusId
                     ?? throw new InvalidParameterEngineException(
                         name: "tokenizedTextCorpusId_",
@@ -362,7 +362,7 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
                 MachineTranslation = ParentViewModel!.AquaTokenizedTextCorpusMetadata.machineTranslation;
 
                 ParentViewModel!.AquaTokenizedTextCorpusMetadata!.abbreviation = Abbreviation;
-                await ParentViewModel!.AquaTokenizedTextCorpusMetadata!.Save(ParentViewModel!.TokenizedTextCorpusId!, Mediator!);
+                await ParentViewModel!.AquaTokenizedTextCorpusMetadata!.SaveAsync(ParentViewModel!.TokenizedTextCorpusId!, LifetimeScope!, CancellationToken.None); //TODO:  pass in a real cancellation token
                 DataLoadedForId = ParentViewModel!.AquaTokenizedTextCorpusMetadata!.id;
                 await GetRevisions();
             });
@@ -428,9 +428,9 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
                     BackTranslationToVersionId != null ? int.Parse(BackTranslationToVersionId) : null;
                 ParentViewModel!.AquaTokenizedTextCorpusMetadata.machineTranslation = MachineTranslation;
                 //ParentViewModel!.AquaTokenizedTextCorpusMetadata.language = version.language;
-                await ParentViewModel!.AquaTokenizedTextCorpusMetadata!.Save(ParentViewModel!.TokenizedTextCorpusId!, Mediator!);
+                await ParentViewModel!.AquaTokenizedTextCorpusMetadata!.SaveAsync(ParentViewModel!.TokenizedTextCorpusId!, LifetimeScope!, CancellationToken.None); //TODO:  pass in a real cancellation token
 
-                await Reload();
+				await Reload();
             });
 
         switch (processStatus)
@@ -477,9 +477,9 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
                 ParentViewModel!.AquaTokenizedTextCorpusMetadata.forwardTranslationToVersionId = null;
                 ParentViewModel!.AquaTokenizedTextCorpusMetadata.backTranslationToVersionId = null;
                 ParentViewModel!.AquaTokenizedTextCorpusMetadata.machineTranslation = MachineTranslation;
-                await ParentViewModel!.AquaTokenizedTextCorpusMetadata!.Save(ParentViewModel!.TokenizedTextCorpusId!, Mediator!);
+                await ParentViewModel!.AquaTokenizedTextCorpusMetadata!.SaveAsync(ParentViewModel!.TokenizedTextCorpusId!, LifetimeScope!, CancellationToken.None); //TODO:  pass in a real cancellation token
 
-                ClearIdData();
+				ClearIdData();
 
                 await Reload();
                 break;

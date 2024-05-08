@@ -17,7 +17,7 @@ namespace ClearDashboard.DAL.Tests
 
         protected override void SetupDependencyInjection()
         {
-            Services.AddMediatR(typeof(GetLanguageResourcesQuery));
+            Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(GetLanguageResourcesQuery).Assembly));
             Services.AddLogging();
         }
 

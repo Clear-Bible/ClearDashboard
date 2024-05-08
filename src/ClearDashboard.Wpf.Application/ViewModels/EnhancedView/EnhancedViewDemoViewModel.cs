@@ -49,10 +49,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 stopwatch.Start();
                 if (corpusId == null)
                 {
-                    var corpusIds = await ParallelCorpus.GetAllParallelCorpusIds(Mediator!);
+                    var corpusIds = await ParallelCorpus.GetAllParallelCorpusIdsAsync(LifetimeScope!, CancellationToken.None);
                     corpusId = corpusIds.First();
                 }
-                var corpus = await ParallelCorpus.Get(Mediator!, corpusId, useCache: true);
+                var corpus = await ParallelCorpus.GetAsync(LifetimeScope!, corpusId, useCache: true);
 
                 Detokenizer = corpus.Detokenizer;
                 stopwatch.Stop();
@@ -92,7 +92,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-                var translationSetIds = await TranslationSet.GetAllTranslationSetIds(Mediator!);
+                var translationSetIds = await TranslationSet.GetAllTranslationSetIdsAsync(LifetimeScope!);
                 var translationSet = await TranslationSet.Get(translationSetIds.First(), Mediator!);
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved first translation set {translationSet.TranslationSetId.Id} in {stopwatch.ElapsedMilliseconds} ms ({stopwatch.Elapsed.Seconds} seconds)");

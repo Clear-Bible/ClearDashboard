@@ -80,7 +80,7 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             Assert.Equal("Success", createResult.Message);
             Assert.NotNull(createResult.Data);
 
-            var returnedParallelCorpus = await ParallelCorpus.Get(Mediator, createResult.Data);
+            var returnedParallelCorpus = await ParallelCorpus.GetAsync(Container, createResult.Data);
             Assert.NotNull(returnedParallelCorpus);
 
             // Validate persisted ParallelCorpus data
@@ -253,7 +253,7 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             Assert.NotNull(verseMappingsReturned);
             Assert.True(verseMappingsReturned.Count() >= 5);
 
-            var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+            var parallelTokenizedCorpus = await parallelTextCorpus.CreateAsync("test pc", Container!);
 
             var sourceTextId = "MAT";
             var sourceBookNumber = ModelHelper.GetBookNumberForSILAbbreviation(sourceTextId);
@@ -295,9 +295,9 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             };
 
             parallelTokenizedCorpus.SourceTextIdToVerseMappings = new SourceTextIdToVerseMappingsFromVerseMappings(newVerseMappings);
-            await parallelTokenizedCorpus.Update(Mediator!);
+            await parallelTokenizedCorpus.UpdateAsync(Container!);
 
-            var updatedParallelCorpus = await ParallelCorpus.Get(Mediator!, parallelTokenizedCorpus.ParallelCorpusId);
+            var updatedParallelCorpus = await ParallelCorpus.GetAsync(Container!, parallelTokenizedCorpus.ParallelCorpusId);
             Assert.Equal("some other name!", updatedParallelCorpus.ParallelCorpusId.DisplayName);
             Assert.Single(updatedParallelCorpus.SourceTextIdToVerseMappings!.GetVerseMappings());
         }
@@ -392,7 +392,7 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             proc.Refresh();
             Output.WriteLine($"Private memory usage (BEFORE): {proc.PrivateMemorySize64}");
 
-            var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+            var parallelTokenizedCorpus = await parallelTextCorpus.CreateAsync("test pc", Container!);
 
             proc.Refresh();
             Output.WriteLine($"Private memory usage (AFTER):  {proc.PrivateMemorySize64}");
@@ -426,7 +426,7 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
                     sourceTokenizedTextCorpus.Versification, 
                     targetTokenizedTextCorpus.Versification));
 
-            var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+            var parallelTokenizedCorpus = await parallelTextCorpus.CreateAsync("test pc", Container!);
 
             Assert.NotNull(parallelTokenizedCorpus.SourceTextIdToVerseMappings);
             var verseMappingsReturned = parallelTokenizedCorpus.SourceTextIdToVerseMappings.GetVerseMappings();
@@ -498,7 +498,7 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus,
                 sourceTargetParallelVersesList: new SourceTextIdToVerseMappingsFromVerseMappings(verseMappingsForAllVerses));
 
-            var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+            var parallelTokenizedCorpus = await parallelTextCorpus.CreateAsync("test pc", Container!);
 
             ProjectDbContext.ChangeTracker.Clear();
 
@@ -650,7 +650,7 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus,
                 sourceTargetParallelVersesList: new SourceTextIdToVerseMappingsFromVerseMappings(verseMappingsForAllVerses));
 
-            var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+            var parallelTokenizedCorpus = await parallelTextCorpus.CreateAsync("test pc", Container!);
 
             // Two tokens in TokenVerseAssociations, and two additional ones:
             var composite1 = new CompositeToken(sourceTokensByGuid.Values.Take(4));
@@ -700,7 +700,7 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             await Assert.ThrowsAsync<MediatorErrorEngineException>(() => TokenizedTextCorpus.PutCompositeToken(Mediator!, composite3, parallelTokenizedCorpus.ParallelCorpusId));
 
             // Ok, since different parallel corpus id:
-            var parallelTokenizedCorpus2 = await parallelTextCorpus.Create("test pc", Mediator!);
+            var parallelTokenizedCorpus2 = await parallelTextCorpus.CreateAsync("test pc", Container!);
             await TokenizedTextCorpus.PutCompositeToken(Mediator!, composite3, parallelTokenizedCorpus2.ParallelCorpusId);
 
             sw.Stop();

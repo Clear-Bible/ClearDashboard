@@ -75,13 +75,14 @@ namespace ClearDashboard.WPF.Tests
             Services.AddSingleton<IEventAggregator, EventAggregator>();
             Services.AddSingleton<IUserProvider, UserProvider>();
             Services.AddSingleton<IProjectProvider, ProjectProvider>();
-            Services.AddMediatR(
-                typeof(IMediatorRegistrationMarker),
-                typeof(CreateParallelCorpusCommandHandler),
-                typeof(ClearDashboard.DataAccessLayer.Features.Versification.GetVersificationAndBookIdByDalParatextProjectIdQueryHandler),
-                typeof(MergeProjectSnapshotCommandHandler));
+			Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
+	            typeof(IMediatorRegistrationMarker).Assembly,
+	            typeof(CreateParallelCorpusCommandHandler).Assembly,
+				typeof(ClearDashboard.DataAccessLayer.Features.Versification.GetVersificationAndBookIdByDalParatextProjectIdQueryHandler).Assembly,
+				typeof(MergeProjectSnapshotCommandHandler).Assembly
+            ));
             Services.AddLogging();
-            Services.AddLocalization();
+            ServiceCollectionExtensionsWpf.AddLocalization(Services);
             Services.AddSingleton<TranslationCommands>();
             Services.AddTransient<SelectedBookManager>();
 

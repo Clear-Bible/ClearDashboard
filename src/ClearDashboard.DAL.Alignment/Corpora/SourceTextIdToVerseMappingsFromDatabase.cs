@@ -1,4 +1,6 @@
-﻿using ClearBible.Engine.Corpora;
+﻿using Autofac;
+using ClearApi.Command.CQRS.Commands;
+using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using MediatR;
@@ -7,14 +9,14 @@ namespace ClearDashboard.DAL.Alignment.Corpora;
 
 public class SourceTextIdToVerseMappingsFromDatabase : SourceTextIdToVerseMappings
 {
-    private readonly IMediator _mediator;
+    private readonly IComponentContext _context;
     private readonly ParallelCorpusId _parallelCorpusId;
     private Dictionary<string, IEnumerable<VerseMapping>>? _textIdToVerseMappings = null;
     private SourceTextIdToVerseMappingsFromVerseMappings? _sourceTextIdToVerseMappingsFromVerseMappings = null;
 
-    public SourceTextIdToVerseMappingsFromDatabase(IMediator mediator, ParallelCorpusId parallelCorpusId)
+    public SourceTextIdToVerseMappingsFromDatabase(IComponentContext context, ParallelCorpusId parallelCorpusId)
     {
-        _mediator = mediator;
+		_context = context;
         _parallelCorpusId = parallelCorpusId;
     }
 
@@ -22,13 +24,12 @@ public class SourceTextIdToVerseMappingsFromDatabase : SourceTextIdToVerseMappin
     {
         // Use SourceTextIdToVerseMappingsFromVerseMappings implementation as cache:
         if (_sourceTextIdToVerseMappingsFromVerseMappings is null)
-        {
-            var command = new GetVerseMappingsByParallelCorpusIdAndBookIdQuery(_parallelCorpusId, null);
+		{
+            // TODO:  Why isn't this method async or using JoinableTaskFactory?
+            var result = new GetVerseMappingsByParallelCorpusIdAndBookIdQuery(_parallelCorpusId, null)
+                .ExecuteAsProjectCommandAsync(_context, CancellationToken.None).Result;
 
-            var result = _mediator.Send(command, CancellationToken.None).Result;
-            result.ThrowIfCanceledOrFailed(true);
-
-            _sourceTextIdToVerseMappingsFromVerseMappings = new(result.Data!);
+            _sourceTextIdToVerseMappingsFromVerseMappings = new(result);
         }
 
         return _sourceTextIdToVerseMappingsFromVerseMappings.GetVerseMappings();
@@ -52,14 +53,13 @@ public class SourceTextIdToVerseMappingsFromDatabase : SourceTextIdToVerseMappin
             {
                 _textIdToVerseMappings ??= new();
 
-                var command = new GetVerseMappingsByParallelCorpusIdAndBookIdQuery(_parallelCorpusId, sourceTextId);
+				// TODO:  Why isn't this method async or using JoinableTaskFactory?
+				var result = new GetVerseMappingsByParallelCorpusIdAndBookIdQuery(_parallelCorpusId, sourceTextId)
+                    .ExecuteAsProjectCommandAsync(_context, CancellationToken.None).Result;
 
-                var result = _mediator.Send(command, CancellationToken.None).Result;
-                result.ThrowIfCanceledOrFailed(true);
+                _textIdToVerseMappings[sourceTextId] = result;
 
-                _textIdToVerseMappings[sourceTextId] = result.Data!;
-
-                return result.Data!;
+                return result;
             }
         }
     }

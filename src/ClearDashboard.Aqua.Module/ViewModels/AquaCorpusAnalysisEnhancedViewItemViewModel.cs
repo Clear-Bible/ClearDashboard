@@ -592,19 +592,21 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             List<TokenizedTextCorpusId> tokenizedCorpusIds = new();
             foreach (var corpusId in allCorpus)
             {
-                tokenizedCorpusIds.AddRange(await TokenizedTextCorpus.GetAllTokenizedCorpusIds(
-                    Mediator!,
-                    corpusId
+                tokenizedCorpusIds.AddRange(await TokenizedTextCorpus.GetAllTokenizedCorpusIdsAsync(
+                    LifetimeScope!,
+                    corpusId,
+                    cancellationToken
                 ));
             }
 
             BlockingCollection<Revision> revisionsInProject = new();
             await Parallel.ForEachAsync(tokenizedCorpusIds, new ParallelOptions(), async (tokenizedCorpusId, cancellationToken) =>
             {
-                var tokenizedTextCorpus = await TokenizedTextCorpus.Get(
-                    Mediator!,
+                var tokenizedTextCorpus = await TokenizedTextCorpus.GetAsync(
+                    LifetimeScope!,
                     tokenizedCorpusId,
-                    false);
+                    false,
+                    cancellationToken);
 
                 var aquaTokenizedTextCorpusMetadata = AquaTokenizedTextCorpusMetadata.Get(tokenizedTextCorpus);
 

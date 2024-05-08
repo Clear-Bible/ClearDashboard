@@ -1,4 +1,6 @@
-﻿using ClearBible.Engine.Corpora;
+﻿using Autofac;
+using ClearApi.Command.CQRS.Commands;
+using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Features;
@@ -7,6 +9,7 @@ using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
+using System.Threading;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
@@ -136,12 +139,10 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         }
 
         public static async Task<IEnumerable<ParallelCorpusId>> 
-            GetAllParallelCorpusIds( IMediator mediator)
+            GetAllParallelCorpusIdsAsync(IComponentContext context, CancellationToken cancellationToken)
         {
-            var result = await mediator.Send(new GetAllParallelCorpusIdsQuery());
-            result.ThrowIfCanceledOrFailed(true);
-
-            return result.Data!;
+			return await new GetAllParallelCorpusIdsQuery()
+				.ExecuteAsProjectCommandAsync(context, cancellationToken);
         }
 
         public EngineStringDetokenizer Detokenizer => ParallelCorpusId.SourceTokenizedCorpusId?.Detokenizer ?? new EngineStringDetokenizer(new LatinWordDetokenizer());
@@ -198,62 +199,57 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         /// <param name="mediator"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task Update(IMediator mediator, CancellationToken token = default)
+        public async Task UpdateAsync(IComponentContext context, CancellationToken token = default)
         {
             var verseMappingsToUpdate = (SourceTextIdToVerseMappings is not SourceTextIdToVerseMappingsFromDatabase)
                 ? SourceTextIdToVerseMappings?.GetVerseMappings() ?? Enumerable.Empty<VerseMapping>()
                 : Enumerable.Empty<VerseMapping>();
 
-            var command = new UpdateParallelCorpusCommand(
+            await new UpdateParallelCorpusCommand(
                 verseMappingsToUpdate,
-                ParallelCorpusId);
+                ParallelCorpusId)
+                .ExecuteAsProjectCommandAsync(context, token);
 
-            var result = await mediator.Send(command, token);
-            result.ThrowIfCanceledOrFailed();
-            SourceTextIdToVerseMappings = new SourceTextIdToVerseMappingsFromDatabase(mediator, ParallelCorpusId);
+            SourceTextIdToVerseMappings = new SourceTextIdToVerseMappingsFromDatabase(context, ParallelCorpusId);
         }
 
-        public async Task Delete(IMediator mediator, CancellationToken token = default)
+        public async Task DeleteAsync(IComponentContext context, CancellationToken token = default)
         {
             if (ParallelCorpusId == null)
             {
                 return;
             }
 
-            await Delete(mediator, ParallelCorpusId, token);
+            await DeleteAsync(context, ParallelCorpusId, token);
         }
 
-        public static async Task<ParallelCorpus> Get(
-            IMediator mediator,
+        public static async Task<ParallelCorpus> GetAsync(
+            IComponentContext context,
             ParallelCorpusId parallelCorpusId, 
             CancellationToken token = default,
             bool useCache = false)
         {
-            var command = new GetParallelCorpusByParallelCorpusIdQuery(parallelCorpusId);
+			var data = 
+                await new GetParallelCorpusByParallelCorpusIdQuery(parallelCorpusId)
+                    .ExecuteAsProjectCommandAsync(context, token);
 
-            var result = await mediator.Send(command, token);
-            result.ThrowIfCanceledOrFailed(true);
-
-            var data =  result.Data;
             return new ParallelCorpus(
-                await TokenizedTextCorpus.Get(mediator, data.sourceTokenizedCorpusId, useCache), 
-                await TokenizedTextCorpus.Get(mediator, data.targetTokenizedCorpusId, useCache), 
-                new SourceTextIdToVerseMappingsFromDatabase(mediator, data.parallelCorpusId), 
+                await TokenizedTextCorpus.GetAsync(context, data.sourceTokenizedCorpusId, useCache, token), 
+                await TokenizedTextCorpus.GetAsync(context, data.targetTokenizedCorpusId, useCache, token), 
+                new SourceTextIdToVerseMappingsFromDatabase(context, data.parallelCorpusId), 
                 data.parallelCorpusId,
                 useCache);
         }
 
-        public static async Task Delete(
-            IMediator mediator,
+        public static async Task DeleteAsync(
+            IComponentContext context,
             ParallelCorpusId parallelCorpusId,
             CancellationToken token = default)
         {
-            var command = new DeleteParallelCorpusByParallelCorpusIdCommand(parallelCorpusId);
-
-            var result = await mediator.Send(command, token);
-            result.ThrowIfCanceledOrFailed(true);
+            await new DeleteParallelCorpusByParallelCorpusIdCommand(parallelCorpusId)
+                .ExecuteAsProjectCommandAsync(context, token);
         }
-        internal ParallelCorpus(
+        public ParallelCorpus(
             TokenizedTextCorpus sourceTokenizedTextCorpus,
             TokenizedTextCorpus targetTokenizedTextCorpus,
             SourceTextIdToVerseMappings sourceTextIdToVerseMappings,

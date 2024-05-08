@@ -225,7 +225,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                 {
                     var projectDesignSurface = LifetimeScope.Resolve<ProjectDesignSurfaceViewModel>();
 
-                    var corpusIds = await DAL.Alignment.Corpora.Corpus.GetAllCorpusIds(Mediator);
+                    var corpusIds = await DAL.Alignment.Corpora.Corpus.GetAllCorpusIdsAsync(LifetimeScope!, cancellationToken);
 
                     List<string> currentNodeIds = new();
 

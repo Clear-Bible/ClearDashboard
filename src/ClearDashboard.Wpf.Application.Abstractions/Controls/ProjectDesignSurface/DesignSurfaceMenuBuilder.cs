@@ -2,6 +2,7 @@
 using ClearDashboard.DAL.Alignment;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
+using System.Threading;
 
 namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
@@ -33,7 +34,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         public CorpusNodeMenuItemViewModel CreateCorpusNodeSeparatorMenuItem()
         {
-            return new CorpusNodeMenuItemViewModel
+            return new CorpusNodeMenuItemViewModel()
             {
                 Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
                 IsSeparator = true
@@ -47,7 +48,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         public ParallelCorpusConnectionMenuItemViewModel CreateParallelCorpusConnectionSeparatorMenuItem()
         {
-            return new ParallelCorpusConnectionMenuItemViewModel
+            return new ParallelCorpusConnectionMenuItemViewModel()
             {
                 Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
                 IsSeparator = true

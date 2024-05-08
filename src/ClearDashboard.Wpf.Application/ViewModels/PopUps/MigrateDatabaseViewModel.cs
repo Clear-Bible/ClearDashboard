@@ -142,7 +142,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
             await Task.Run(async () =>
             {
-                _topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+                // TODO:  need real cancellation token!
+                _topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIdsAsync(LifetimeScope!, CancellationToken.None);
             });
 
             var parallelCorpusIds = _topLevelProjectIds.ParallelCorpusIds;
@@ -205,7 +206,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 )
             );
 
-            await parallelCorpus.Update(_mediator);
+            await parallelCorpus.UpdateAsync(LifetimeScope!);
         }
 
         public async void Start()
@@ -221,7 +222,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 parallelId.Status = ParallelIdList.JobStatus.Working;
                 NotifyOfPropertyChange(nameof(ParallelIdLists));
 
-                var parallelCorpus = await ParallelCorpus.Get(_mediator, parallelId.ParallelCorpusId);
+                var parallelCorpus = await ParallelCorpus.GetAsync(LifetimeScope!, parallelId.ParallelCorpusId);
                 await Task.Run(async () =>
                 {
                     try

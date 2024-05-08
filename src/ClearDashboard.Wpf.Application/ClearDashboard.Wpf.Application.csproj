@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x64</Platforms>
@@ -128,7 +128,6 @@
   <ItemGroup>
     <PackageReference Include="Autofac.Configuration" Version="6.0.0" />
     <PackageReference Include="CefSharp.Wpf.NETCore" Version="115.3.110" />
-    <PackageReference Include="ClearApplicationFoundation" Version="2.0.9" />
     <PackageReference Include="ClearBible.Engine" Version="2.0.22" />
     <PackageReference Include="Dahomey.Json" Version="1.12.2" />
     <PackageReference Include="Dahomey.Json.Attributes" Version="1.0.1" />
@@ -161,6 +160,11 @@
     <PackageReference Include="WpfKeyboard.Resources" Version="1.0.5" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\ClearEngineMachine\ClearApi\src\ClearApi.Command.Alignment.JsonRpc\ClearApi.Command.Alignment.JsonRpc.csproj" />
+    <ProjectReference Include="..\..\..\ClearEngineMachine\ClearApi\src\ClearApi.Command.Alignment\ClearApi.Command.Alignment.csproj" />
+    <ProjectReference Include="..\..\..\ClearEngineMachine\ClearApi\src\ClearApi.Command.CQRS.JsonRpc\ClearApi.Command.CQRS.JsonRpc.csproj" />
+    <ProjectReference Include="..\..\..\ClearEngineMachine\ClearApi\src\ClearApi.Command.CQRS\ClearApi.Command.CQRS.csproj" />
+    <ProjectReference Include="..\..\..\ClearEngineMachine\ClearApi\src\ClearApi.Command.JsonRpc\ClearApi.Command.JsonRpc.csproj" />
     <ProjectReference Include="..\ClearDashboard.Collaboration\ClearDashboard.Collaboration.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj" />
     <ProjectReference Include="..\ClearDashboard.Wpf.Application.Abstractions\ClearDashboard.Wpf.Application.Abstractions.csproj" />

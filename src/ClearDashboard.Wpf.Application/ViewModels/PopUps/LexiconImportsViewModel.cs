@@ -129,7 +129,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 var stopWatch = Stopwatch.StartNew();
                 try
                 {
-                    await GetParatextProjects();
+                    await GetParatextProjects(cancellationToken);
                     await GetToImportLexiconImportViewModels(cancellationToken);
 
                     if (LexiconToImport.Count == 0)
@@ -164,9 +164,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         #region Methods
 
-        private async Task GetParatextProjects()
+        private async Task GetParatextProjects(CancellationToken cancellationToken)
         {
-            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIdsAsync(LifetimeScope!, cancellationToken);
 
             // this really only is used for the dropdown so we don't really need this
             ProjectCorpora.Clear();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Autofac.Core.Lifetime;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
@@ -101,7 +102,7 @@ namespace ClearDashboard.DAL.Tests
             var parallelTextCorpus = manuscriptTokenizedTextCorpus.EngineAlignRows(zzSurTokenizedTextCorpus, new SourceTextIdToVerseMappingsFromVerseMappings(EngineParallelTextCorpus.VerseMappingsForAllVerses(
                     manuscriptTokenizedTextCorpus.Versification,
                     zzSurTokenizedTextCorpus.Versification)));
-            var parallelTokenizedCorpus = await parallelTextCorpus.Create("manuscript - ZZ_SUR", Mediator!);
+            var parallelTokenizedCorpus = await parallelTextCorpus.CreateAsync("manuscript - ZZ_SUR", Container!);
 
             ////var verseMappings = new List<VerseMapping>();
             //var command = new CreateParallelCorpusCommand(new TokenizedTextCorpusId(manuscriptCorpus.Id),
@@ -122,7 +123,7 @@ namespace ClearDashboard.DAL.Tests
             {
                 var parallelCorpus = ProjectDbContext.ParallelCorpa.FirstOrDefault();
 
-                var corpus = await ParallelCorpus.Get(Mediator, new ParallelCorpusId(parallelCorpus.Id));
+                var corpus = await ParallelCorpus.GetAsync(Container!, new ParallelCorpusId(parallelCorpus.Id));
 
             }
             catch (Exception e)

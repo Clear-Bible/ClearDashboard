@@ -1,18 +1,17 @@
-﻿using Autofac;
+﻿using MediatR;
 using SIL.Machine.Corpora;
-using SIL.Machine.Threading;
 using SIL.Scripture;
-using ClearApi.Command.CQRS.Commands;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
-    internal class TokenizedText : ScriptureText, ICache
+    internal class TokenizedTextLocal : ScriptureText, ICache
     {
         protected readonly TokenizedTextCorpusId tokenizedCorpusId_;
-        protected readonly IComponentContext context_;
+        protected readonly IMediator mediator_;
 
         protected List<TextRow>? TextRowsCache { get; set; }
         public bool UseCache { get; set; }
@@ -23,9 +22,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             TextRowsCache = null;
         }
 
-        public TokenizedText(
+        public TokenizedTextLocal(
             TokenizedTextCorpusId tokenizedCorpusId,
-			IComponentContext context, 
+			IMediator mediator, 
             ScrVers versification, 
             string bookId, 
             bool useCache,
@@ -33,7 +32,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             : base(bookId, versification)
         {
             tokenizedCorpusId_ = tokenizedCorpusId;
-            context_ = context;
+            mediator_ = mediator;
 
             UseCache = useCache;
             NonTokenized = nonTokenized;
@@ -45,7 +44,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             {
                 if (TextRowsCache == null)
                 {
-                    TextRowsCache = GetTextRowsAsProjectCommand(context_, tokenizedCorpusId_, Id)
+                    TextRowsCache = GetTextRows(mediator_, tokenizedCorpusId_, Id)
                         .ToList();
                 }
 
@@ -53,29 +52,25 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             }
             else
             {
-                return GetTextRowsAsProjectCommand(context_, tokenizedCorpusId_, Id);
+                return GetTextRows(mediator_, tokenizedCorpusId_, Id);
             }
         }
 
-        protected IEnumerable<TextRow> GetTextRowsAsProjectCommand(IComponentContext context, TokenizedTextCorpusId tokenizedTextCorpusId, string bookId)
+        protected IEnumerable<TextRow> GetTextRows(IMediator mediator,TokenizedTextCorpusId tokenizedTextCorpusId, string bookId)
         {
-			var task = Task.Run(async () => await GetTextRowsAsync(context, tokenizedTextCorpusId, bookId, CancellationToken.None));
-			var result = task.WaitAndUnwrapException();
+            var command = new GetTokensByTokenizedCorpusIdAndBookIdQuery(tokenizedTextCorpusId, bookId); //Note that in ScriptureText Id is the book abbreviation bookId.
 
-            return result;
-		}
+            var result = Task.Run(() => mediator.Send(command)).GetAwaiter().GetResult();
+            result.ThrowIfCanceledOrFailed();
 
-		protected async Task<IEnumerable<TextRow>> GetTextRowsAsync(IComponentContext context, TokenizedTextCorpusId tokenizedTextCorpusId, string bookId, CancellationToken cancellationToken)
-		{
-			var command = new GetTokensByTokenizedCorpusIdAndBookIdQuery(tokenizedTextCorpusId, bookId); //Note that in ScriptureText Id is the book abbreviation bookId.
-            var verses = await command.ExecuteAsProjectCommandAsync(context, cancellationToken);
+            var verses = result.Data;
 
-			if (verses == null)
-				throw new MediatorErrorEngineException("GetTokensByTokenizedCorpusIdAndBookIdQuery returned null data");
+            if (verses == null)
+                throw new MediatorErrorEngineException("GetTokensByTokenizedCorpusIdAndBookIdQuery returned null data");
 
-			return verses
-				.Select(CreateTokenTextRow);
-		}
+            return verses
+                .Select(CreateTokenTextRow);
+        }
 
 		protected TextRow CreateTokenTextRow(VerseTokens verseTokens)
         { 

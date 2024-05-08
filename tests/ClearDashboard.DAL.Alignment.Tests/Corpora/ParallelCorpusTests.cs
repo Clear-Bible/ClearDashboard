@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using Autofac;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers;
@@ -16,19 +18,24 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 	public class ParallelCorpusTests
     {
 		protected readonly ITestOutputHelper output_;
+		protected readonly IComponentContext context_;
 		protected readonly IMediator mediator_;
         protected readonly string projectName_ = "Test Project";
 		public ParallelCorpusTests(ITestOutputHelper output)
 		{
 			output_ = output;
 			mediator_ = new MediatorMock(); //FIXME: inject mediator
+
+			var containerBuilder = new ContainerBuilder();
+			containerBuilder.RegisterType<MediatorMock>().As<IMediator>();
+			context_ = containerBuilder.Build();
 		}
 
 		[Fact]
 		[Trait("Category", "Example")]
 		public async void ParallelCorpus__GetAllParallelCorpusIds()
 		{
-			var parallelCorpusIds = await ParallelCorpus.GetAllParallelCorpusIds(mediator_);
+			var parallelCorpusIds = await ParallelCorpus.GetAllParallelCorpusIdsAsync(context_, CancellationToken.None);
 			Assert.True(parallelCorpusIds.Count() > 0);
 		}
 
@@ -86,7 +93,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
             var parallelTextCorpusWithTokenizedTextCorpuses = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, 
 				new SourceTextIdToVerseMappingsFromVerseMappings(verseMappingList));
 
-			var parallelTokenizedCorpus = await parallelTextCorpusWithTokenizedTextCorpuses.Create("parallelTextCorpusWithTokenizedTextCorpuses", mediator_);
+			var parallelTokenizedCorpus = await parallelTextCorpusWithTokenizedTextCorpuses.CreateAsync("parallelTextCorpusWithTokenizedTextCorpuses", context_);
 
             Assert.Equal(16, verseMappingList.Count());
 			Assert.True(parallelTokenizedCorpus.SourceCorpus.Count() == 16);
@@ -98,7 +105,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		[Trait("Category", "Example")]
 		public async void ParallelCorpus_Get()
 		{
-			var parallelCorpus = await ParallelCorpus.Get( mediator_, new ParallelCorpusId(new Guid()));
+			var parallelCorpus = await ParallelCorpus.GetAsync( context_, new ParallelCorpusId(new Guid()));
 			Assert.NotNull(parallelCorpus.SourceTextIdToVerseMappings);
 			Assert.Equal(1, parallelCorpus.SourceTextIdToVerseMappings?.GetVerseMappings()?.Count() ?? 0); // should be 1 and not 16: EngineParallelTextCorpus should not have used sil versification to initialize.
 			Assert.True(parallelCorpus.SourceCorpus.Count() > 0);
@@ -131,7 +138,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		[Trait("Category", "Example")]
 		public async void ParallelCorpus_Get_ChangeVerseMappings_SaveNewParallelVersion()
 		{
-			var parallelCorpus = await ParallelCorpus.Get(mediator_, new ParallelCorpusId(new Guid()));
+			var parallelCorpus = await ParallelCorpus.GetAsync(context_, new ParallelCorpusId(new Guid()));
             Assert.NotNull(parallelCorpus.SourceTextIdToVerseMappings);
 
 			var verseMappingList = parallelCorpus.SourceTextIdToVerseMappings?.GetVerseMappings()?.ToList();
@@ -178,7 +185,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 		[Trait("Category", "Example")]
 		public async void ParallelCorpus_Get_ChangeTokenizedCorpuses_SaveNewParallelTokenizedCorpus()
 		{
-			var parallelCorpus = await ParallelCorpus.Get(mediator_, new ParallelCorpusId(new Guid()));
+			var parallelCorpus = await ParallelCorpus.GetAsync(context_, new ParallelCorpusId(new Guid()));
             Assert.NotNull(parallelCorpus.SourceTextIdToVerseMappings);
 			Assert.Equal(1, parallelCorpus.SourceTextIdToVerseMappings?.GetVerseMappings()?.Count() ?? 0); // should be 1 and not 16: EngineParallelTextCorpus should not have used sil versification to initialize.
             Assert.True(parallelCorpus.SourceCorpus.Count() > 0);

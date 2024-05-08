@@ -1,10 +1,12 @@
-﻿namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
+﻿using System.Threading;
+
+namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
     public class CorpusNodeMenuItemViewModel : MenuItemViewModel<CorpusNodeMenuItemViewModel>
     {
         private CorpusNodeViewModel? _corpusNodeViewModel;
 
-        public CorpusNodeViewModel? CorpusNodeViewModel
+		public CorpusNodeViewModel? CorpusNodeViewModel
         {
             get => _corpusNodeViewModel;
             set => Set(ref _corpusNodeViewModel, value);
@@ -12,16 +14,17 @@
         }
 
         private string? _tokenizer;
-        public string? Tokenizer
+
+		public string? Tokenizer
         {
             get => _tokenizer;
             set => Set(ref _tokenizer, value);
         }
 
-        protected override void Execute()
+        protected override void Execute(CancellationToken token)
         {
            
-            ProjectDesignSurfaceViewModel?.ExecuteCorpusNodeMenuCommand(this);
+            ProjectDesignSurfaceViewModel?.ExecuteCorpusNodeMenuCommand(this, token);
         }
 
         

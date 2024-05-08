@@ -169,14 +169,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
             // get all the existing alignment sets for this parallelcorpusid
-            AlignmentSets = (await AlignmentSet.GetAllAlignmentSetIds(
-                    Mediator!,
+            AlignmentSets = (await AlignmentSet.GetAllAlignmentSetIdsAsync(
+                    LifetimeScope!,
                     ParallelCorpusId,
-                    new UserId(ProjectManager!.CurrentUser.Id, ProjectManager.CurrentUser.FullName!)))
+                    new UserId(ProjectManager!.CurrentUser.Id, ProjectManager.CurrentUser.FullName!),
+                    cancellationToken))
                 .ToList();
 
             // get all the existing translation sets for this parallelcorpusid
-            var translationSets = (await TranslationSet.GetAllTranslationSetIds(Mediator!, ParallelCorpusId)).ToList();
+            var translationSets = (await TranslationSet.GetAllTranslationSetIdsAsync(LifetimeScope!, ParallelCorpusId, null, cancellationToken)).ToList();
 
             //_topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
 
@@ -293,7 +294,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
                 }
 
 
-                var parallelTextCorpus = await ParallelCorpus.Get(Mediator!, new ParallelCorpusId(SelectedAlignmentSet.ParallelCorpusId!.Id), useCache: true, token: cancellationToken);
+                var parallelTextCorpus = await ParallelCorpus.GetAsync(LifetimeScope!, new ParallelCorpusId(SelectedAlignmentSet.ParallelCorpusId!.Id), useCache: true, token: cancellationToken);
 
                 TranslationCommands translationCommandable = new TranslationCommands();
                 // ReSharper disable once NotAccessedVariable

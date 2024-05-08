@@ -10,6 +10,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
+using System.Reflection;
 
 
 namespace ClearDashboard.Wpf.Application.Extensions
@@ -21,8 +22,11 @@ namespace ClearDashboard.Wpf.Application.Extensions
         {
             serviceCollection.AddLogging();
 
-            serviceCollection.AddMediatR(typeof(IMediatorRegistrationMarker), typeof(CreateTokenizedCorpusFromTextCorpusCommandHandler));
-            
+            serviceCollection.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
+                typeof(IMediatorRegistrationMarker).Assembly,
+                typeof(CreateTokenizedCorpusFromTextCorpusCommandHandler).Assembly
+            ));
+
             serviceCollection.AddSingleton<DashboardProjectManager>();
             serviceCollection.AddSingleton<ProjectManager, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
             serviceCollection.AddSingleton<IUserProvider, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());

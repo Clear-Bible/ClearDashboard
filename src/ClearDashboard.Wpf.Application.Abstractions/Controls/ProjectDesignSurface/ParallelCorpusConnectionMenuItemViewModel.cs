@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
@@ -6,7 +7,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 public class ParallelCorpusConnectionMenuItemViewModel : MenuItemViewModel<ParallelCorpusConnectionMenuItemViewModel>
 {
     private ParallelCorpusConnectionViewModel? _connectionViewModel;
-    public ParallelCorpusConnectionViewModel? ConnectionViewModel
+	public ParallelCorpusConnectionViewModel? ConnectionViewModel
     {
         get => _connectionViewModel;
         set => Set(ref _connectionViewModel, value);
@@ -42,9 +43,8 @@ public class ParallelCorpusConnectionMenuItemViewModel : MenuItemViewModel<Paral
 
     public Visibility Visibility = Visibility.Visible;
 
-
-    protected override void Execute()
+	protected override void Execute(CancellationToken token)
     {
-        ProjectDesignSurfaceViewModel?.ExecuteConnectionMenuCommand(this);
+        ProjectDesignSurfaceViewModel?.ExecuteConnectionMenuCommand(this, token);
     }
 }

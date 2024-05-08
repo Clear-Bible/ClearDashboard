@@ -1,4 +1,6 @@
-﻿using Caliburn.Micro;
+﻿using Autofac;
+using Caliburn.Micro;
+using ClearApi.Command.CQRS.Commands;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Exceptions;
@@ -23,10 +25,10 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         /// <returns></returns>
         /// <exception cref="InvalidTypeEngineException"></exception>
         /// <exception cref="MediatorErrorEngineException"></exception>
-        public static async Task<ParallelCorpus> Create(
+        public static async Task<ParallelCorpus> CreateAsync(
             this EngineParallelTextCorpus engineParallelTextCorpus,
             string displayName,
-            IMediator mediator,
+            IComponentContext context,
             CancellationToken token = default,
             bool useCache = false)
         {
@@ -49,15 +51,14 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                     message: "both SourceCorpus and TargetCorpus of engineParallelTextCorpus must be from the database (of type TokenizedTextCorpus");
             }
 
-            var createParallelCorpusCommandResult = await mediator.Send(new CreateParallelCorpusCommand(
+            var createParallelCorpusCommandResult = await new CreateParallelCorpusCommand(
                 ((TokenizedTextCorpus)engineParallelTextCorpus.SourceCorpus).TokenizedTextCorpusId,
                 ((TokenizedTextCorpus)engineParallelTextCorpus.TargetCorpus).TokenizedTextCorpusId,
                 engineParallelTextCorpus.SourceTextIdToVerseMappings?.GetVerseMappings() ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.VerseMappingList", value: "null"),
-                displayName), token);
+                displayName)
+                .ExecuteAsProjectCommandAsync(context, token);
 
-            createParallelCorpusCommandResult.ThrowIfCanceledOrFailed(true);
-
-            return await ParallelCorpus.Get(mediator, createParallelCorpusCommandResult.Data!, token, useCache);
+            return await ParallelCorpus.GetAsync(context, createParallelCorpusCommandResult, token, useCache);
         }
     }
 }

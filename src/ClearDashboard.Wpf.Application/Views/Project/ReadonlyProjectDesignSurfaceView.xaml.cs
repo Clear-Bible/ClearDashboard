@@ -63,7 +63,9 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         private void OnDeleteCorpusNodeExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             var node = (CorpusNodeViewModel)e.Parameter;
-            ProjectDesignSurfaceViewModel!.DeleteCorpusNode(node);
+
+			// TODO:  need a real cancellation token!
+			ProjectDesignSurfaceViewModel!.DeleteCorpusNode(node, System.Threading.CancellationToken.None);
         }
 
         /// <summary>
@@ -72,7 +74,9 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         private void OnDeleteConnectionExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             var connection = (ParallelCorpusConnectionViewModel)e.Parameter;
-            ProjectDesignSurfaceViewModel!.DeleteParallelCorpusConnection(connection);
+
+			// TODO:  need a real cancellation token!
+			ProjectDesignSurfaceViewModel!.DeleteParallelCorpusConnection(connection, System.Threading.CancellationToken.None);
         }
 
      

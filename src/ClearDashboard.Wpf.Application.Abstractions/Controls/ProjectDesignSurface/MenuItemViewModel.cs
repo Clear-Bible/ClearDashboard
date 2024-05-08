@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Threading;
 using System.Windows.Input;
 using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.ViewModels.Menus;
@@ -70,12 +71,12 @@ public abstract class MenuItemViewModel : PropertyChangedBase
 
     public ICommand? Command { get; protected set; }
 
-    protected abstract void Execute();
+    protected abstract void Execute(CancellationToken token);
 }
 
 public abstract class MenuItemViewModel<TMenuItemViewModel> : MenuItemViewModel
 {
-    protected MenuItemViewModel()
+    protected MenuItemViewModel() : base()
     {
         MenuItems = new BindableCollection<TMenuItemViewModel>();
       

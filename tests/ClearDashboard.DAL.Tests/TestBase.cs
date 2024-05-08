@@ -57,7 +57,10 @@ namespace ClearDashboard.DAL.Tests
             Services.AddScoped<ProjectDbContext>();
             Services.AddScoped<ProjectDbContextFactory>();
             Services.AddScoped<DbContextOptionsBuilder<ProjectDbContext>, SqliteProjectDbContextOptionsBuilder<ProjectDbContext>>();
-            Services.AddMediatR(typeof(IMediatorRegistrationMarker), typeof(GetProjectInfoQueryHandler));
+            Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
+                typeof(IMediatorRegistrationMarker).Assembly, 
+                typeof(GetProjectInfoQueryHandler).Assembly
+            ));
             //Services.AddMediatR(typeof(CreateParallelCorpusCommandHandler), typeof(ClearDashboard.DataAccessLayer.Features.Versification.GetVersificationAndBookIdByDalParatextProjectIdQueryHandler));
             Services.AddLogging();
             Services.AddSingleton<IUserProvider, UserProvider>();

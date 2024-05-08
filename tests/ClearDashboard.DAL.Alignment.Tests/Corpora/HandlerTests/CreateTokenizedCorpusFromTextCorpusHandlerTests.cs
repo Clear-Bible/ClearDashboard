@@ -620,12 +620,12 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             tokenizedTextCorpus.TokenizedTextCorpusId.DisplayName = "DisplayNameV2";
             tokenizedTextCorpus.TokenizedTextCorpusId.Metadata.Add("m2", m2);
 
-            await tokenizedTextCorpus.Update(Mediator!);
+            await tokenizedTextCorpus.UpdateAsync(Container!);
             ProjectDbContext!.ChangeTracker.Clear();
 
             // Check "V2" values via API:
-            var tokenizedTextCorpus2 = await TokenizedTextCorpus.Get(
-                Mediator!,
+            var tokenizedTextCorpus2 = await TokenizedTextCorpus.GetAsync(
+                Container!,
                 tokenizedTextCorpus.TokenizedTextCorpusId,
                 false);
 
@@ -644,12 +644,12 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             tokenizedTextCorpus2.TokenizedTextCorpusId.Metadata.Add("ValueDateTimeOffset", currentTime);
             tokenizedTextCorpus2.TokenizedTextCorpusId.Metadata.Add("ValueEnum", Models.CorpusType.SourceLanguage);
 
-            await tokenizedTextCorpus2.Update(Mediator!);
+            await tokenizedTextCorpus2.UpdateAsync(Container!);
             ProjectDbContext!.ChangeTracker.Clear();
 
             // Check "V2" values via API:
-            var tokenizedTextCorpus3 = await TokenizedTextCorpus.Get(
-                Mediator!,
+            var tokenizedTextCorpus3 = await TokenizedTextCorpus.GetAsync(
+                Container!,
                 tokenizedTextCorpus2.TokenizedTextCorpusId,
                 false);
 
@@ -664,7 +664,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             // Set Metadata back to default and save:
             tokenizedTextCorpus3.TokenizedTextCorpusId.Metadata = new Dictionary<string, object>();
 
-            await tokenizedTextCorpus3.Update(Mediator!);
+            await tokenizedTextCorpus3.UpdateAsync(Container!);
             ProjectDbContext!.ChangeTracker.Clear();
 
             // Check "V3" values via API:

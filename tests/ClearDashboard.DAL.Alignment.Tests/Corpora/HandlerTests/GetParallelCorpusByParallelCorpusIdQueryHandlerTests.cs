@@ -95,7 +95,7 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
             parallelTextCorpus.SourceTextIdToVerseMappings = new SourceTextIdToVerseMappingsFromVerseMappings(verseMappingList);
 
             // Save:
-            var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+            var parallelTokenizedCorpus = await parallelTextCorpus.CreateAsync("test pc", Container!);
 
             var sourceTokensForComposite = ProjectDbContext.Tokens
                 .Where(t => t.TokenizedCorpusId == sourceTokenizedCorpus.Id)
@@ -276,7 +276,7 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
                     sourceTokenizedTextCorpus.Versification,
                     targetTokenizedTextCorpus.Versification)));
 
-            var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+            var parallelTokenizedCorpus = await parallelTextCorpus.CreateAsync("test pc", Container!);
 
             var parallelCorpusDB = ProjectDbContext!.ParallelCorpa.Include(pc => pc.SourceTokenizedCorpus).FirstOrDefault(pc => pc.Id == parallelTokenizedCorpus.ParallelCorpusId.Id);
             Assert.NotNull(parallelCorpusDB);

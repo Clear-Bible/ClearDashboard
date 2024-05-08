@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using ClearApi.Command.Utils;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.SyntaxTree.Corpora;
 using ClearBible.Engine.Tokenization;
@@ -34,6 +35,8 @@ using BookInfo = ClearDashboard.DataAccessLayer.Models.BookInfo;
 using CorpusType = ClearDashboard.DataAccessLayer.Models.CorpusType;
 using ParatextProjectMetadata = ClearDashboard.DataAccessLayer.Models.ParatextProjectMetadata;
 using ClearDashboard.DataAccessLayer;
+using Autofac;
+using Autofac.Core.Lifetime;
 
 namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 {
@@ -158,7 +161,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
         }
 
         private readonly List<BackgroundTask> backgroundTasksToRun = new();
-        private IMediator Mediator { get; init; }
+        private IComponentContext Context { get; init; }
 
         private ILogger Logger { get; init; }
         private IEventAggregator EventAggregator { get; init; }
@@ -194,14 +197,14 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 
         public ProjectTemplateProcessRunner(
             ILogger<ProjectTemplateProcessRunner> logger,
-            IMediator mediator,
+            IComponentContext context,
             IEventAggregator eventAggregator,
             TranslationCommands translationCommands,
             LongRunningTaskManager longRunningTaskManager,
             SystemPowerModes systemPowerModes)
         {
             Logger = logger;
-            Mediator = mediator;
+            Context = context;
             EventAggregator = eventAggregator;
             TranslationCommands = translationCommands;
             LongRunningTaskManager = longRunningTaskManager;
@@ -751,8 +754,8 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 description: $"Creating '{metadata.Name}' corpus.", cancellationToken: cancellationToken,
                 backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
-            var corpus = await Corpus.Create(
-                mediator: Mediator!,
+            var corpus = await Corpus.CreateAsync(
+                context: Context!,
                 IsRtl: metadata.IsRtl,
                 Name: metadata.Name!,
                 Language: metadata.LanguageId!,
@@ -769,7 +772,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 cancellationToken: cancellationToken, backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
             // ReSharper disable once UnusedVariable
-            var tokenizedTextCorpus = await sourceCorpus.Create(Mediator!, corpus.CorpusId,
+            var tokenizedTextCorpus = await sourceCorpus.CreateAsync(Context!, corpus.CorpusId,
                 metadata.Name!,
                 Tokenizers.WhitespaceTokenizer.ToString(),
                 ScrVers.Original,
@@ -797,11 +800,13 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 
         public async Task<TokenizedTextCorpus> AddParatextProjectCorpusAsync(string taskName, ParatextProjectMetadata metadata, Tokenizers tokenizer, IEnumerable<string> bookIds, CancellationToken cancellationToken)
         {
-            Logger!.LogInformation($"{nameof(AddParatextProjectCorpusAsync)} '{metadata.Name}' called.");
+            var mediator = Context.Resolve<Mediator>();
 
-            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator);
+			Logger!.LogInformation($"{nameof(AddParatextProjectCorpusAsync)} '{metadata.Name}' called.");
+
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIdsAsync(Context, cancellationToken);
             var corpusId = topLevelProjectIds.CorpusIds.FirstOrDefault(c => c.ParatextGuid == metadata.Id);
-            var corpus = corpusId != null ? await Corpus.Get(Mediator, corpusId) : null;
+            var corpus = corpusId != null ? await Corpus.GetAsync(Context, corpusId) : null;
 
             // first time for this corpus
             if (corpus is null)
@@ -810,8 +815,8 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                     description: $"Creating corpus '{metadata.Name}'.", cancellationToken: cancellationToken,
                     backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
-                corpus = await Corpus.Create(
-                    mediator: Mediator,
+                corpus = await Corpus.CreateAsync(
+                    context: Context,
                     IsRtl: metadata.IsRtl,
                     FontFamily: metadata.FontFamily,
                     Name: metadata.Name!,
@@ -831,35 +836,40 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 
             var textCorpus = tokenizer switch
             {
-                Tokenizers.LatinWordTokenizer =>
-                    (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, bookIds, cancellationToken))
-                    .Tokenize<LatinWordTokenizer>()
-                    .Transform<IntoTokensTextRowProcessor>()
-                    .Transform<SetTrainingBySurfaceLowercase>(),
+                Tokenizers.LatinWordTokenizer => await
+                    (await ParatextProjectTextCorpus.Get(mediator, metadata.Id!, bookIds, cancellationToken))
+                    .AddTokenizer<LatinWordTokenizer>()
+                    .AddTransformer<IntoTokensTextRowProcessor>()
+                    .AddTransformer<SetTrainingBySurfaceLowercase>()
+					.TokenizeTransformAsync(Context, cancellationToken),
 
-                Tokenizers.WhitespaceTokenizer =>
-                    (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, bookIds, cancellationToken))
-                    .Tokenize<WhitespaceTokenizer>()
-                    .Transform<IntoTokensTextRowProcessor>()
-                    .Transform<SetTrainingBySurfaceLowercase>(),
+                Tokenizers.WhitespaceTokenizer => await
+                    (await ParatextProjectTextCorpus.Get(mediator, metadata.Id!, bookIds, cancellationToken))
+                    .AddTokenizer<WhitespaceTokenizer>()
+                    .AddTransformer<IntoTokensTextRowProcessor>()
+                    .AddTransformer<SetTrainingBySurfaceLowercase>()
+					.TokenizeTransformAsync(Context, cancellationToken),
 
-                Tokenizers.ZwspWordTokenizer => 
-                    (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, bookIds, cancellationToken))
-                    .Tokenize<ZwspWordTokenizer>()
-                    .Transform<IntoTokensTextRowProcessor>()
-                    .Transform<SetTrainingBySurfaceLowercase>(),
+                Tokenizers.ZwspWordTokenizer => await
+                    (await ParatextProjectTextCorpus.Get(mediator, metadata.Id!, bookIds, cancellationToken))
+                    .AddTokenizer<ZwspWordTokenizer>()
+                    .AddTransformer<IntoTokensTextRowProcessor>()
+                    .AddTransformer<SetTrainingBySurfaceLowercase>()
+					.TokenizeTransformAsync(Context, cancellationToken),
 
-                Tokenizers.ChineseBibleWordTokenizer =>
-                    (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, bookIds, cancellationToken))
-                    .Tokenize<ChineseBibleWordTokenizer>()
-                    .Transform<IntoTokensTextRowProcessor>()
-                    .Transform<SetTrainingBySurfaceLowercase>(),
+                Tokenizers.ChineseBibleWordTokenizer => await
+                    (await ParatextProjectTextCorpus.Get(mediator, metadata.Id!, bookIds, cancellationToken))
+                    .AddTokenizer<ChineseBibleWordTokenizer>()
+                    .AddTransformer<IntoTokensTextRowProcessor>()
+                    .AddTransformer<SetTrainingBySurfaceLowercase>()
+					.TokenizeTransformAsync(Context, cancellationToken),
 
-                _ => (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, null, cancellationToken))
-                    .Tokenize<WhitespaceTokenizer>()
-                    .Transform<IntoTokensTextRowProcessor>()
-                    .Transform<SetTrainingBySurfaceLowercase>()
-            };
+                _ => await (await ParatextProjectTextCorpus.Get(mediator, metadata.Id!, null, cancellationToken))
+                    .AddTokenizer<WhitespaceTokenizer>()
+                    .AddTransformer<IntoTokensTextRowProcessor>()
+                    .AddTransformer<SetTrainingBySurfaceLowercase>()
+					.TokenizeTransformAsync(Context, cancellationToken)
+			};
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -868,7 +878,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 cancellationToken: cancellationToken, backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
             // ReSharper disable once UnusedVariable
-            var tokenizedTextCorpus = await textCorpus.Create(Mediator, corpus.CorpusId,
+            var tokenizedTextCorpus = await textCorpus.CreateAsync(Context, corpus.CorpusId,
                 metadata.Name!, tokenizer.ToString(), metadata.ScrVers, cancellationToken);
 
             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
@@ -887,8 +897,8 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 cancellationToken,
                 $"Retrieving tokenized source and target corpora for '{parallelCorpusDisplayName}'.");
 
-            var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, sourceTokenizedTextCorpusId);
-            var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, targetTokenizedTextCorpusId);
+            var sourceTokenizedTextCorpus = await TokenizedTextCorpus.GetAsync(Context, sourceTokenizedTextCorpusId);
+            var targetTokenizedTextCorpus = await TokenizedTextCorpus.GetAsync(Context, targetTokenizedTextCorpusId);
 
             await SendBackgroundStatus(taskName,
                 LongRunningTaskStatus.Running,
@@ -910,7 +920,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 cancellationToken,
                 $"Saving parallelization '{parallelCorpusDisplayName}'.");
 
-            var parallelCorpus = await engineParallelTextCorpus.Create(parallelCorpusDisplayName, Mediator!, cancellationToken);
+            var parallelCorpus = await engineParallelTextCorpus.CreateAsync(parallelCorpusDisplayName, Context, cancellationToken);
 
             await SendBackgroundStatus(taskName,
                 LongRunningTaskStatus.Completed,
@@ -992,7 +1002,9 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 
         public async Task<AlignmentSet> AddAlignmentSetAsync(string taskName, string displayName, bool isTrainedSymmetrizedModel, SmtModelType smtModelType, ParallelCorpus parallelCorpus, IWordAlignmentModel wordAlignmentModel, IEnumerable<AlignedTokenPairs>? alignedTokenPairs, CancellationToken cancellationToken)
         {
-            Logger!.LogInformation($"{nameof(AddAlignmentSetAsync)} '{displayName}' on '{parallelCorpus.ParallelCorpusId.DisplayName}' called.");
+            var mediator = Context.Resolve<Mediator>();
+
+			Logger!.LogInformation($"{nameof(AddAlignmentSetAsync)} '{displayName}' on '{parallelCorpus.ParallelCorpusId.DisplayName}' called.");
 
             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
                 cancellationToken, $"Aligning corpora and creating the AlignmentSet '{displayName}'.");
@@ -1032,7 +1044,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
                 isSymmetrized: isTrainedSymmetrizedModel,
                 metadata: new(),
                 parallelCorpusId: parallelCorpus.ParallelCorpusId,
-                Mediator,
+                mediator,
                 cancellationToken);
 
             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
@@ -1040,7 +1052,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            await Mediator.Send(
+            await mediator.Send(
                 new DenormalizeAlignmentTopTargetsCommand(
                     alignmentSet.AlignmentSetId.Id, 
                     new LongRunningProgressReporter(nameof(DenormalizeAlignmentTopTargetsCommand), this, cancellationToken)),
@@ -1068,7 +1080,7 @@ namespace ClearDashboard.Wpf.Application.ViewStartup.ProjectTemplate
             // RUSSELL - code review
             var translationSet = await TranslationSet.Create(null, alignmentSetId,//why put null rather than use the translationModel?
                 displayName, new Dictionary<string, object>(),
-                parallelCorpusId, Mediator, cancellationToken);
+                parallelCorpusId, Context.Resolve<Mediator>(), cancellationToken);
 
             await SendBackgroundStatus(taskName,
                 LongRunningTaskStatus.Completed,

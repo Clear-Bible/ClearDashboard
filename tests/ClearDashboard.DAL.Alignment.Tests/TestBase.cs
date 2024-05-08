@@ -2,6 +2,7 @@
 using Autofac.Configuration;
 using Autofac.Extensions.DependencyInjection;
 using Caliburn.Micro;
+using ClearBible.Engine.Corpora;
 using ClearDashboard.Collaboration.Features;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
@@ -10,6 +11,7 @@ using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Features;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +21,9 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -89,8 +93,8 @@ namespace ClearDashboard.DAL.Alignment.Tests
             builder.RegisterModule(configModule);
             builder.RegisterType<CollaborationManager>().AsSelf().SingleInstance();
 
-            // Register Paratext as our "External" lexicon provider / drafting tool:
-            builder.RegisterType<ParatextPlugin.CQRS.Features.Lexicon.GetLexiconQuery>()
+			// Register Paratext as our "External" lexicon provider / drafting tool:
+			builder.RegisterType<ParatextPlugin.CQRS.Features.Lexicon.GetLexiconQuery>()
                 .As<IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>>>()
                 .Keyed<IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>>>("External");
 
@@ -103,10 +107,11 @@ namespace ClearDashboard.DAL.Alignment.Tests
             services.AddScoped<ProjectDbContext>();
             services.AddScoped<ProjectDbContextFactory>();
             services.AddScoped<DbContextOptionsBuilder<ProjectDbContext>, SqliteProjectDbContextOptionsBuilder<ProjectDbContext>>();
-            services.AddMediatR(
-                typeof(CreateParallelCorpusCommandHandler), 
-                typeof(ClearDashboard.DataAccessLayer.Features.Versification.GetVersificationAndBookIdByDalParatextProjectIdQueryHandler),
-                typeof(MergeProjectSnapshotCommandHandler));
+			services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
+				typeof(CreateParallelCorpusCommandHandler).Assembly,
+				typeof(ClearDashboard.DataAccessLayer.Features.Versification.GetVersificationAndBookIdByDalParatextProjectIdQueryHandler).Assembly,
+				typeof(MergeProjectSnapshotCommandHandler).Assembly
+			));
             services.AddLogging();
             services.AddSingleton<IUserProvider, UserProvider>();
             services.AddSingleton<IProjectProvider, ProjectProvider>();

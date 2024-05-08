@@ -202,33 +202,33 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests
                 ProjectDbContext!.ChangeTracker.Clear();
 
                 // "Source" was split, so the original token should be soft deleted:
-                Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "Source", WordPart.Full, true));
-                Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "Source", WordPart.Full, false));
+                Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "Source", WordPart.Full, true));
+                Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "Source", WordPart.Full, false));
 
-                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "SEGment", WordPart.Full, true)).Count());
-                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "segment", WordPart.Full, false)).Count());
-                Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "SEGment", WordPart.Full, false));
+                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "SEGment", WordPart.Full, true)).Count());
+                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "segment", WordPart.Full, false)).Count());
+                Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "SEGment", WordPart.Full, false));
 
-                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "sO", WordPart.First, true)).Count());
-                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "So", WordPart.First, false)).Count());
-                Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "sO", WordPart.First, false));
-                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "SEGment", WordPart.First, true)).Count());
-                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "segment", WordPart.First, false)).Count());
-                Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "SEGment", WordPart.First, false));
+                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "sO", WordPart.First, true)).Count());
+                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "So", WordPart.First, false)).Count());
+                Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "sO", WordPart.First, false));
+                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "SEGment", WordPart.First, true)).Count());
+                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "segment", WordPart.First, false)).Count());
+                Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "SEGment", WordPart.First, false));
 
-                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "GME", WordPart.Middle, true)).Count());
-                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "gme", WordPart.Middle, false)).Count());
-                Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "GME", WordPart.Middle, false));
-                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "SEGment", WordPart.Middle, true)).Count());
-                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "segment", WordPart.Middle, false)).Count());
-                Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "SEGment", WordPart.Middle, false));
+                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "GME", WordPart.Middle, true)).Count());
+                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "gme", WordPart.Middle, false)).Count());
+                Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "GME", WordPart.Middle, false));
+                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "SEGment", WordPart.Middle, true)).Count());
+                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "segment", WordPart.Middle, false)).Count());
+                Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "SEGment", WordPart.Middle, false));
 
-                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "CE", WordPart.Last, true)).Count());
-                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "ce", WordPart.Last, false)).Count());
-                Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "CE", WordPart.Last, false));
-                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "SEGment", WordPart.Last, true)).Count());
-                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "segment", WordPart.Last, false)).Count());
-                Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceText(Mediator!, "SEGment", WordPart.Last, false));
+                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "CE", WordPart.Last, true)).Count());
+                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "ce", WordPart.Last, false)).Count());
+                Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "CE", WordPart.Last, false));
+                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "SEGment", WordPart.Last, true)).Count());
+                Assert.Equal(3, (await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "segment", WordPart.Last, false)).Count());
+                Assert.Empty(await tokenizedTextCorpus.FindTokensBySurfaceTextAsync(Container, "SEGment", WordPart.Last, false));
             }
             finally
             {

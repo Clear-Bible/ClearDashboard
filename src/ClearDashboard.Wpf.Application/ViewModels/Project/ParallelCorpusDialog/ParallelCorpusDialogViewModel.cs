@@ -1,5 +1,9 @@
 ﻿using Autofac;
 using Caliburn.Micro;
+using ClearApi.Command.Commands;
+using ClearApi.Command.CQRS.Commands;
+using DT = ClearApi.DataTransfer.Model;
+using EM = ClearApi.Engine.Model;
 using ClearApplicationFoundation.Exceptions;
 using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
@@ -30,6 +34,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
+using static ClearBible.Engine.Persistence.FileGetBookIds;
+using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 {
@@ -93,11 +99,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             set => Set(ref _parallelCorpusConnectionViewModel, value);
         }
 
-        public TranslationSet? TranslationSet { get; set; }
-        public IEnumerable<AlignedTokenPairs> AlignedTokenPairs { get; set; }
-        public AlignmentSet? AlignmentSet { get; set; }
+		public TranslationSet? TranslationSet { get; set; }
+		public IEnumerable<AlignedTokenPairs> AlignedTokenPairs { get; set; }
+		public IEnumerable<ClearBible.Engine.Corpora.VerseMapping>? VerseMappings { get; set; } = default;
+		public Dictionary<string, Dictionary<string, double>>? TranslationModel { get; set; } = default;
+		public AlignmentSet? AlignmentSet { get; set; }
 
-        public bool IsTrainedSymmetrizedModel { get; set; }
+		public bool IsTrainedSymmetrizedModel { get; set; }
 
         #endregion //Public Properties
 
@@ -191,7 +199,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             EnableControls = true;
             await ActivateItemAsync(Steps[0], cancellationToken);
 
-            TopLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+            TopLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIdsAsync(LifetimeScope!, cancellationToken);
 
             //var parallelCorpa = _topLevelProjectIds.ParallelCorpusIds.Where(x =>
             //    x.SourceTokenizedCorpusId.CorpusId.Id == SourceCorpusNodeViewModel.CorpusId
@@ -296,8 +304,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     cancellationToken,
                     $"Retrieving tokenized source and target corpora for '{parallelCorpusDisplayName}'...");
 
-                var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, sourceTokenizedTextCorpusId);
-                var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, targetTokenizedTextCorpusId);
+                var sourceTokenizedTextCorpus = await TokenizedTextCorpus.GetAsync(LifetimeScope!, sourceTokenizedTextCorpusId);
+                var targetTokenizedTextCorpus = await TokenizedTextCorpus.GetAsync(LifetimeScope!, targetTokenizedTextCorpusId);
 
                 Logger!.LogInformation($"Parallelizing source and target corpora");
                 await SendBackgroundStatus(taskName,
@@ -305,14 +313,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     cancellationToken,
                     $"Parallelizing source and target corpora for '{parallelCorpusDisplayName}'...");
 
-                ParallelTextCorpus =
-                    await Task.Run(() => sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus,
-                        new SourceTextIdToVerseMappingsFromVerseMappings(EngineParallelTextCorpus.VerseMappingsForAllVerses(
-                            sourceTokenizedTextCorpus.Versification,
-                            targetTokenizedTextCorpus.Versification))), 
-                        cancellationToken);
+				if (VerseMappings is null)
+				{
+					VerseMappings = EngineParallelTextCorpus.VerseMappingsForAllVerses(
+							sourceTokenizedTextCorpus.Versification,
+							targetTokenizedTextCorpus.Versification);
+				}
 
-                cancellationToken.ThrowIfCancellationRequested();
+				ParallelTextCorpus =
+					await Task.Run(() => sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus,
+						new SourceTextIdToVerseMappingsFromVerseMappings(VerseMappings)),
+						cancellationToken);
+
+				cancellationToken.ThrowIfCancellationRequested();
 
                 Logger!.LogInformation($"Saving parallelization '{parallelCorpusDisplayName}'");
                 await SendBackgroundStatus(taskName,
@@ -320,7 +333,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     cancellationToken,
                     $"Saving parallelization '{parallelCorpusDisplayName}'...");
 
-                ParallelTokenizedCorpus = await ParallelTextCorpus.Create(parallelCorpusDisplayName, Mediator!, cancellationToken);
+                ParallelTokenizedCorpus = await ParallelTextCorpus.CreateAsync(parallelCorpusDisplayName, LifetimeScope!, cancellationToken);
 
                 await SendBackgroundStatus(taskName,
                     LongRunningTaskStatus.Completed,
@@ -418,16 +431,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     cancellationToken,
                     $"Creating the TranslationSet '{translationSetDisplayName}'...");
 
-                var translationModel = WordAlignmentModel.GetTranslationTable();
-
                 cancellationToken.ThrowIfCancellationRequested();
 
-                // RUSSELL - code review
-                TranslationSet = await TranslationSet.Create(null, AlignmentSet.AlignmentSetId,
-                    translationSetDisplayName, new Dictionary<string, object>(),
-                    ParallelTokenizedCorpus.ParallelCorpusId, Mediator, cancellationToken);
+                // TODO:  super hacky and temporary
+                if (LifetimeScope!.Resolve<BootstrapConfiguration>().BootstrapConfigurationType != BootstrapConfigurationType.REMOTE)
+                {
 
+                    if (TranslationModel is null && WordAlignmentModel is not null)
+                    {
+                        TranslationModel = WordAlignmentModel.GetTranslationTable();
+                    }
 
+					// RUSSELL - code review
+					TranslationSet = await TranslationSet.CreateAsync(null, AlignmentSet.AlignmentSetId,
+                        translationSetDisplayName, new Dictionary<string, object>(),
+                        ParallelTokenizedCorpus.ParallelCorpusId, LifetimeScope!, cancellationToken);
+
+                }
 
                 await SendBackgroundStatus(taskName,
                     LongRunningTaskStatus.Completed,
@@ -519,36 +539,58 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     cancellationToken,
                     $"Aligning corpora and creating the AlignmentSet '{alignmentSetDisplayName}'...");
 
-                AlignedTokenPairs =
-                    TranslationCommandable.PredictAllAlignedTokenIdPairs(WordAlignmentModel, ParallelTextCorpus);
-
-                cancellationToken.ThrowIfCancellationRequested();
-
-
-                if (ProjectType == ParallelProjectType.WholeProcess)
+                // TODO:  super hacky and temporary
+                if (LifetimeScope!.Resolve<BootstrapConfiguration>().BootstrapConfigurationType == BootstrapConfigurationType.REMOTE)
                 {
-                    AlignmentSet = await AlignedTokenPairs.Create(displayName: alignmentSetDisplayName, 
-                        smtModel: SelectedSmtAlgorithm.SmtName,
-                        isSyntaxTreeAlignerRefined: false, 
-                        isSymmetrized: IsTrainedSymmetrizedModel, 
-                        metadata: new(), 
-                        parallelCorpusId:  ParallelTokenizedCorpus.ParallelCorpusId, 
-                        Mediator, 
-                        cancellationToken);
+                    var translationSetId = await new AlignTokenizedCorporaDbCommand
+                    {
+                        ParallelCorpusId = ParallelTokenizedCorpus.ParallelCorpusId.Id.ToString(),
+                        AlignmentSetDisplayName = alignmentSetDisplayName,
+                        TranslationSetDisplayName = alignmentSetDisplayName,
+                        IsTrainedSymmetrizedModel = IsTrainedSymmetrizedModel,
+                        SmtModelType = ClearApi.DataTransfer.Model.SmtModelType.FastAlign
+                    }
+                    .ExecuteAsProjectCommandAsync<AlignTokenizedCorporaDbCommand, string>(LifetimeScope!, cancellationToken);
 
+                    TranslationSet = await TranslationSet.GetAsync(new TranslationSetId(Guid.Parse(translationSetId)), LifetimeScope!, cancellationToken);
+                    AlignmentSet = await AlignmentSet.GetAsync(TranslationSet.AlignmentSetId, LifetimeScope!, cancellationToken);
                 }
                 else
                 {
-                    // alignment only
-                    var parallelCorpus = ParallelTextCorpus as ParallelCorpus;
-                    AlignmentSet = await AlignedTokenPairs.Create(displayName: alignmentSetDisplayName,
-                        smtModel: SelectedSmtAlgorithm.SmtName,
-                        isSyntaxTreeAlignerRefined: false,
-                        isSymmetrized: IsTrainedSymmetrizedModel,
-                        metadata: new(),
-                        parallelCorpusId: parallelCorpus!.ParallelCorpusId, 
-                        Mediator, 
-                        cancellationToken);
+                    if (AlignedTokenPairs is null || !AlignedTokenPairs.Any())
+                    {
+                        AlignedTokenPairs =
+                            TranslationCommandable.PredictAllAlignedTokenIdPairs(WordAlignmentModel, ParallelTextCorpus);
+                    }
+
+                    cancellationToken.ThrowIfCancellationRequested();
+
+
+                    if (ProjectType == ParallelProjectType.WholeProcess)
+                    {
+                        AlignmentSet = await AlignedTokenPairs.CreateAsync(displayName: alignmentSetDisplayName,
+                            smtModel: SelectedSmtAlgorithm.SmtName,
+                            isSyntaxTreeAlignerRefined: false,
+                            isSymmetrized: IsTrainedSymmetrizedModel,
+                            metadata: new(),
+                            parallelCorpusId: ParallelTokenizedCorpus.ParallelCorpusId,
+                            LifetimeScope!,
+                            cancellationToken);
+
+                    }
+                    else
+                    {
+                        // alignment only
+                        var parallelCorpus = ParallelTextCorpus as ParallelCorpus;
+                        AlignmentSet = await AlignedTokenPairs.CreateAsync(displayName: alignmentSetDisplayName,
+                            smtModel: SelectedSmtAlgorithm.SmtName,
+                            isSyntaxTreeAlignerRefined: false,
+                            isSymmetrized: IsTrainedSymmetrizedModel,
+                            metadata: new(),
+                            parallelCorpusId: parallelCorpus!.ParallelCorpusId,
+                            LifetimeScope!,
+                            cancellationToken);
+                    }
                 }
 
                 await SendBackgroundStatus(taskName,
@@ -696,8 +738,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     ParallelCorpusId = TopLevelProjectIds.ParallelCorpusIds.FirstOrDefault(x =>
                         x.SourceTokenizedCorpusId.IdEquals(sourceTokenizedTextCorpusId) && x.TargetTokenizedCorpusId.IdEquals(targetTokenizedTextCorpusId));
 
-                    ParallelTextCorpus = await ParallelCorpus.Get(Mediator!,
-                        new ParallelCorpusId(ParallelCorpusId.Id), useCache: true);
+                    ParallelTextCorpus = await ParallelCorpus.GetAsync(LifetimeScope!,
+                        new ParallelCorpusId(ParallelCorpusId.Id), useCache: true, token: cancellationToken);
                     //ParallelTokenizedCorpus = ParallelTextCorpus;
 
                     //ParallelTextCorpus =
@@ -718,20 +760,80 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     //    $"Completed saving parallelization '{parallelCorpusDisplayName}'.");
                 }
 
+                // TODO:  super hacky and temporary
+                if (LifetimeScope!.Resolve<BootstrapConfiguration>().BootstrapConfigurationType == BootstrapConfigurationType.LOCAL)
+                {
 
-                WordAlignmentModel = await TranslationCommandable.TrainSmtModel(
-                    modelType,
-                    ParallelTextCorpus,
-                    new DelegateProgress(async status =>
+                    WordAlignmentModel = await TranslationCommandable.TrainSmtModel(
+                        modelType,
+                        ParallelTextCorpus,
+                        new DelegateProgress(async status =>
+                        {
+                            var message =
+                                $"Training symmetrized {SelectedSmtAlgorithm.SmtName} model: {status.PercentCompleted:P}";
+                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running, cancellationToken,
+                                message);
+                            Logger!.LogInformation(message);
+
+                        }
+                        ), symmetrizationHeuristic);
+                }
+                else if (LifetimeScope!.Resolve<BootstrapConfiguration>().BootstrapConfigurationType == BootstrapConfigurationType.LOCAL_REMOTE_ENGINE_ONLY)
+                {
+                    EM.TokensTextCorpus? sourceTc = null;
+					EM.TokensTextCorpus? targetTc = null;
+					LanguageCodeEnum? sourceLc = null;
+					LanguageCodeEnum? targetLc = null;
+					if (((TokenizedTextCorpus)ParallelTextCorpus.SourceCorpus).TokenizedTextCorpusId.CorpusId.CorpusType == "ManuscriptHebrew")
                     {
-                        var message =
-                            $"Training symmetrized {SelectedSmtAlgorithm.SmtName} model: {status.PercentCompleted:P}";
-                        await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running, cancellationToken,
-                            message);
-                        Logger!.LogInformation(message);
-
+                        sourceLc = LanguageCodeEnum.H;
                     }
-                    ), symmetrizationHeuristic);
+                    else if (((TokenizedTextCorpus)ParallelTextCorpus.SourceCorpus).TokenizedTextCorpusId.CorpusId.CorpusType == "ManuscriptGreek")
+					{
+						sourceLc = LanguageCodeEnum.G;
+					}
+                    else
+                    {
+                        sourceTc = new EM.TokensTextCorpus(ParallelTextCorpus.SourceCorpus, null);
+					}
+
+					if (((TokenizedTextCorpus)ParallelTextCorpus.TargetCorpus).TokenizedTextCorpusId.CorpusId.CorpusType == "ManuscriptHebrew")
+					{
+						targetLc = LanguageCodeEnum.H;
+					}
+					else if (((TokenizedTextCorpus)ParallelTextCorpus.TargetCorpus).TokenizedTextCorpusId.CorpusId.CorpusType == "ManuscriptGreek")
+					{
+						targetLc = LanguageCodeEnum.G;
+					}
+                    else
+                    {
+						targetTc = new EM.TokensTextCorpus(ParallelTextCorpus.TargetCorpus, null);
+					}
+
+					var command = new AlignTokenizedCorporaCommand
+					{
+						SourceTokenizedTextCorpus = sourceTc,
+						SourceManuscriptLanguageCode = sourceLc,
+						TargetTokenizedTextCorpus = targetTc,
+						TargetManuscriptLanguageCode = targetLc,
+						IsTrainedSymmetrizedModel = IsTrainedSymmetrizedModel,
+						SmtModelType = modelType switch
+						{
+							SmtModelType.FastAlign => DT.SmtModelType.FastAlign,
+							SmtModelType.Hmm => DT.SmtModelType.Hmm,
+							SmtModelType.IBM4 => DT.SmtModelType.Ibm4,
+							_ => throw new NotSupportedException($"SmtModelType {modelType} not supported"),
+						},
+						VerseMappings = VerseMappings
+					};
+
+					await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running, cancellationToken,
+								"Remote alignment");
+					var result = await command.ExecuteAsync(LifetimeScope!, cancellationToken);
+
+					AlignedTokenPairs = result.AlignedTokenPairs;
+					TranslationModel = result.TranslationModel.ToDictionary();
+				}
 
                 await SendBackgroundStatus(taskName,
                     LongRunningTaskStatus.Completed,

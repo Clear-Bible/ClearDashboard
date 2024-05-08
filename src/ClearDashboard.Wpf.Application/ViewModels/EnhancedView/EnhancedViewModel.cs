@@ -447,7 +447,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 // check to see if it has not already been computed
                 if (!BcvDictionary.Any())
                 {
-                    BcvDictionary = await GenerateBcvFromDatabase();
+                    BcvDictionary = await GenerateBcvFromDatabase(cancellationToken);
                 }
             }
 
@@ -486,10 +486,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await Task.CompletedTask;
         }
 
-        private async Task<Dictionary<string, string>> GenerateBcvFromDatabase()
+        private async Task<Dictionary<string, string>> GenerateBcvFromDatabase(CancellationToken cancellationToken)
         {
             // This is a hack to get the BcvDictionary to be populated when there is no Paratext project loaded.
-            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator);
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIdsAsync(LifetimeScope!, cancellationToken);
 
             if (topLevelProjectIds.CorpusIds is null)
             {
@@ -632,7 +632,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             if (ProjectManager?.CurrentParatextProject is null)
             {
-                BcvDictionary = await GenerateBcvFromDatabase();
+                BcvDictionary = await GenerateBcvFromDatabase(CancellationToken.None);
             }
             else
             {
@@ -775,7 +775,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             else
             {
-                BcvDictionary = await GenerateBcvFromDatabase();
+                BcvDictionary = await GenerateBcvFromDatabase(cancellationToken);
             }
 
             await Task.CompletedTask;

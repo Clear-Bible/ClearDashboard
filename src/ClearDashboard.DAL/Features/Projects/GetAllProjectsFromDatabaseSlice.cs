@@ -1,38 +1,70 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Models;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DataAccessLayer.Features.Projects
 {
-    public record GetAllProjectsFromDatabaseQuery(string projectName) : ProjectRequestQuery<IEnumerable<Corpus>>;
+	/// <summary>
+	/// If ProjectName is an empty string, no ProjectName filtering is done.  
+	/// Otherwise, if ProjectNamePrefixMatch is true, any database project name
+	/// starting with (ignore case) request.ProjectName will match.  If
+	/// ProjectNamePrefixMatch is false, only exact project name matches (ignore 
+	/// case) will be returned.
+	/// </summary>
+	/// <param name="ProjectName"></param>
+	/// <param name="ProjectNamePrefixMatch"></param>
+	public record GetAllProjectsFromDatabaseQuery(string ProjectName = "", bool ProjectNamePrefixMatch = true) : ProjectRequestQuery<IEnumerable<Models.Project>>;
 
-    public class GetAllProjectsFromDatabaseQueryHandler : ProjectDbContextQueryHandler<GetAllProjectsFromDatabaseQuery,
-        RequestResult<IEnumerable<Corpus>>, IEnumerable<Corpus>>
-    {
-        private readonly IMediator _mediator;
-        public GetAllProjectsFromDatabaseQueryHandler(IMediator mediator, ProjectDbContextFactory? projectNameDbContextFactory,
-            IProjectProvider projectProvider, ILogger<GetAllProjectsFromDatabaseQueryHandler> logger)
-            : base(projectNameDbContextFactory, projectProvider, logger)
-        {
-            _mediator = mediator;
-        }
+	public class GetAllProjectsFromDatabaseQueryHandler : ProjectDbContextQueryHandler<GetAllProjectsFromDatabaseQuery,
+		RequestResult<IEnumerable<Models.Project>>, IEnumerable<Models.Project>>
+	{
+		public GetAllProjectsFromDatabaseQueryHandler(
+			ProjectDbContextFactory? projectNameDbContextFactory,
+			IProjectProvider projectProvider, 
+			ILogger<GetAllProjectsFromDatabaseQueryHandler> logger)
+			: base(projectNameDbContextFactory, projectProvider, logger)
+		{
+		}
 
-        protected override async Task<RequestResult<IEnumerable<Corpus>>> GetDataAsync(GetAllProjectsFromDatabaseQuery request, CancellationToken cancellationToken)
-        {
-            // need an await to get the compiler to be 'quiet'
-            await Task.CompletedTask;
+		protected override async Task<RequestResult<IEnumerable<Models.Project>>> GetDataAsync(GetAllProjectsFromDatabaseQuery request, CancellationToken cancellationToken)
+		{
+			await ProjectDbContext.Migrate();
 
-            return new RequestResult<IEnumerable<Corpus>>(ProjectDbContext.Corpa
-                .Include(corpus => corpus.TokenizedCorpora)
-                    /*.ThenInclude(tokenizedCorpus => tokenizedCorpus.Tokens)*/);
-        }
-    }
+			if (string.IsNullOrEmpty(request.ProjectName))
+			{
+				return new RequestResult<IEnumerable<Models.Project>>(
+					await ProjectDbContext.Projects.ToListAsync(cancellationToken: cancellationToken)
+				);
+			}
+			else
+			{
+				var queryable = ProjectDbContext.Projects 
+					.Where(p => !string.IsNullOrEmpty(p.ProjectName));
+
+				if (request.ProjectNamePrefixMatch)
+				{
+					queryable = queryable
+						.Where(e => e.ProjectName!.StartsWith(request.ProjectName));
+				}
+				else
+				{
+					queryable = queryable
+						.Where(e => string.Equals(e.ProjectName, request.ProjectName));
+				}
+
+				return new RequestResult<IEnumerable<Models.Project>>(
+					await queryable.ToListAsync(cancellationToken: cancellationToken)
+				);
+			}
+		}
+	}
 }

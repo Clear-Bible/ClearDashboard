@@ -103,8 +103,8 @@
         <StackPanel
             Grid.Row="0"
             Grid.Column="0"
-            Margin="0,0,0,0"
-            Orientation="Horizontal">
+            Margin="0,2,0,124"
+            Orientation="Horizontal" Grid.RowSpan="2">
             <Image
                 Width="50"
                 Height="50"

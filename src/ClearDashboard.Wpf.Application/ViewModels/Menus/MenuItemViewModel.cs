@@ -2,6 +2,7 @@
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Threading;
 using System.Windows.Input;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Menus
@@ -97,9 +98,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Menus
         public ICommand Command => _command;
 
 
-        private async void Execute()
+        private async void Execute(CancellationToken token)
         {
-            await ViewModel.ExecuteMenuCommand(this);
+            await ViewModel.ExecuteMenuCommand(this, token);
         }
     }
 }

@@ -3,9 +3,9 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <FileVersion>1.4.0.15</FileVersion>
-    <Version>1.4.0.15</Version>
-    <AssemblyVersion>1.4.0.15</AssemblyVersion>
+    <FileVersion>1.3.0.8</FileVersion>
+    <Version>1.3.0.8</Version>
+    <AssemblyVersion>1.3.0.8</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Caliburn.Micro" Version="4.0.212" />
@@ -18,7 +18,7 @@
     <ProjectReference Include="..\ClearDashboard.Wpf.Application.Abstractions\ClearDashboard.Wpf.Application.Abstractions.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Views\SampleCorpusAnalysisEnhancedViewItemView.xaml">
+    <Page Update="Views\ParanextEnhancedViewItemView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
   </ItemGroup>
@@ -44,7 +44,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Validators\" />
+  </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="robocopy $(TargetDir) $(SolutionDir)ClearDashboard.Wpf.Application\bin\Debug\net7.0-windows $(TargetName).* /IS /IT ;&#xD;&#xA;&#xD;&#xA;robocopy $(TargetDir)\en $(SolutionDir)ClearDashboard.Wpf.Application\bin\Debug\net7.0-windows\en $(TargetName).resources.dll /IS /IT ;&#xD;&#xA;&#xD;&#xA;if %25errorlevel%25 leq 1 exit 0 else exit %25errorlevel%25" />
+    <Exec Command="robocopy $(TargetDir) $(SolutionDir)ClearDashboard.Wpf.Application\bin\Debug\net8.0-windows $(TargetName).* /IS /IT ;&#xD;&#xA;&#xD;&#xA;robocopy $(TargetDir)\en $(SolutionDir)ClearDashboard.Wpf.Application\bin\Debug\net8.0-windows\en $(TargetName).resources.dll /IS /IT ;&#xD;&#xA;&#xD;&#xA;if %25errorlevel%25 leq 1 exit 0 else exit %25errorlevel%25" />
   </Target>
 </Project>
