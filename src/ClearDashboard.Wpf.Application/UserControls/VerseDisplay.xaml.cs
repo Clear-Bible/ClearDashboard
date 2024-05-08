@@ -1073,31 +1073,31 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTranslationNoteLeftButtonUp(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteRightButtonUpEvent, e);
+            RaiseNoteEvent(NoteRightButtonUpEvent, e, true);
         }
         private void OnTranslationNoteRightButtonDown(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteRightButtonDownEvent, e);
+            RaiseNoteEvent(NoteRightButtonDownEvent, e, true);
         }
 
         private void OnTranslationNoteRightButtonUp(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteRightButtonUpEvent, e);
+            RaiseNoteEvent(NoteRightButtonUpEvent, e, true);
         }
 
         private void OnTranslationNoteMouseEnter(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteMouseEnterEvent, e);
+            RaiseNoteEvent(NoteMouseEnterEvent, e, true);
         }
 
         private void OnTranslationNoteMouseLeave(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteMouseLeaveEvent, e);
+            RaiseNoteEvent(NoteMouseLeaveEvent, e, true);
         }
 
         private void OnTranslationNoteMouseWheel(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteMouseWheelEvent, e);
+            RaiseNoteEvent(NoteMouseWheelEvent, e, true);
         }
 
         private void OnTranslationNoteCreate(object sender, RoutedEventArgs e)

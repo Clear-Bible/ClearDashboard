@@ -467,7 +467,7 @@
                     MouseEnter="OnNoteMouseEnter"
                     MouseLeave="OnNoteMouseLeave"
                     MouseLeftButtonDown="OnTranslationNoteLeftButtonDown"
-                    MouseLeftButtonUp="OnNoteLeftButtonUp"
+                    MouseLeftButtonUp="OnTranslationNoteLeftButtonUp"
                     MouseRightButtonDown="OnNoteRightButtonDown"
                     MouseRightButtonUp="OnNoteRightButtonUp"
                     MouseWheel="OnNoteMouseWheel"

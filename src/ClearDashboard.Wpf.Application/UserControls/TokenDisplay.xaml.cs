@@ -1656,6 +1656,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseNoteEvent(NoteIndicatorRightButtonUpEvent, e);
         }
 
+        private void OnTranslationNoteLeftButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(TranslationNoteIndicatorRightButtonUpEvent, e, true);
+        }
+
         private void OnNoteRightButtonDown(object sender, RoutedEventArgs e)
         {
             RaiseNoteEvent(NoteIndicatorRightButtonDownEvent, e);
@@ -2468,8 +2473,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             TranslationNoteFlagIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TranslationHasNote && TokenDisplayViewModel.IsFirstJotsNoteTranslation) ? Visibility.Visible : Visibility.Hidden;
 
             // JOTS - highlighting
-            NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered ? TokenDisplayViewModel.NoteIndicatorBrush : NoteIndicatorColor;
-            TranslationNoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered ? TokenDisplayViewModel.NoteIndicatorBrush : NoteIndicatorColor;
+            NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered && TokenDisplayViewModel.IsTokenSelected ? TokenDisplayViewModel.NoteIndicatorBrush : NoteIndicatorColor;
+            TranslationNoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered && TokenDisplayViewModel.IsTranslationSelected ? TokenDisplayViewModel.NoteIndicatorBrush : NoteIndicatorColor;
 
             TranslationMargin = new Thickness(translationLeftMargin, 0, translationRightMargin, TranslationVerticalSpacing);
             TranslationVisibility = (ShowTranslation && TokenDisplayViewModel.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
