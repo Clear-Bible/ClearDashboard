@@ -2,7 +2,7 @@
 using ClearDashboard.DAL.Alignment.Exceptions;
 
 namespace ClearDashboard.DAL.Alignment.Corpora;
-public class SplitInstructions 
+public class SplitInstructions
 {
 
     [JsonIgnore]
@@ -87,6 +87,7 @@ public class SplitInstructions
             throw new SplitInstructionException($"The 'Length' of each split instruction must equal to the actual length of the instruction's 'TokenText'.", message2);
         }
 
+        // Validate the aggregated TokenText properties from the Instructions list are equal to the SurfaceText property.
         valid = Instructions.ValidateSurfaceText(SurfaceText, out var message3);
         if (!valid && throwIfNotValid)
         {
