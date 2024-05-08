@@ -1000,15 +1000,19 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 if (!VerseSelectedTokens.Contains(control?.TokenDisplayViewModel!) || control?.TokenDisplayViewModel!.IsTranslationSelected != isTranslation)
                 {
                     VerseSelectedTokens.Clear();
-                    if (isTranslation)
+                    if (control?.TokenDisplayViewModel.IsTokenSelected == false &&
+                        control?.TokenDisplayViewModel.IsTranslationSelected == false)
                     {
-                        control.TokenDisplayViewModel.IsTokenSelected = false;
-                        control.TokenDisplayViewModel.IsTranslationSelected = true;
-                    }
-                    else 
-                    {
-                        control.TokenDisplayViewModel.IsTokenSelected = true;
-                        control.TokenDisplayViewModel.IsTranslationSelected = false;
+                        if (isTranslation)
+                        {
+                            control.TokenDisplayViewModel.IsTokenSelected = false;
+                            control.TokenDisplayViewModel.IsTranslationSelected = true;
+                        }
+                        else
+                        {
+                            control.TokenDisplayViewModel.IsTokenSelected = true;
+                            control.TokenDisplayViewModel.IsTranslationSelected = false;
+                        }
                     }
                     VerseSelectedTokens.Add(control?.TokenDisplayViewModel!);
                 }
