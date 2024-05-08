@@ -2,9 +2,9 @@
 using System.Text.Json;
 using System.Threading.Tasks;
 using ClearBible.Engine.Corpora;
-using ClearDashboard.DAL.Alignment.Features.Corpora;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.Wpf.Application.Collections;
-//using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
 

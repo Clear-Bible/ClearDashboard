@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ClearDashboard.DAL.Alignment.Features.Corpora;
+namespace ClearDashboard.DAL.Alignment.Corpora;
 
 public record SplitInstruction(
     int Index,

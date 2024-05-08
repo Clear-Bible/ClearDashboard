@@ -1,7 +1,8 @@
-﻿
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Extensions;
 
-namespace ClearDashboard.DAL.Alignment.Features.Corpora;
+namespace ClearDashboard.DAL.Alignment.Corpora;
 public class SplitInstructions 
 {
 
@@ -87,13 +88,10 @@ public class SplitInstructions
             throw new SplitInstructionException($"The 'Length' of each split instruction must equal to the actual length of the instruction's 'TokenText'.", message2);
         }
 
-        // Validate that the aggregated 'TokenText' properties from the 'Instructions' list are equal to the 'SurfaceText' property of the 'SplitInstructions'.
-        var tokenTexts = Instructions.Select(i=>i.TokenText);
-        var combinedTokenTexts = string.Join(string.Empty, tokenTexts);
-        valid = combinedTokenTexts == SurfaceText;
+        valid = Instructions.ValidateSurfaceText(SurfaceText, out var message3);
         if (!valid && throwIfNotValid)
         {
-            throw new SplitInstructionException("The aggregated 'TokenText' properties from the 'Instructions' list must be equal to the 'SurfaceText' property of the 'SplitInstructions'.", $"SurfaceText: '{SurfaceText}', aggregated token text: '{combinedTokenTexts}'");
+            throw new SplitInstructionException("The aggregated 'TokenText' properties from the 'Instructions' list must be equal to the 'SurfaceText' property of the 'SplitInstructions'.", message3);
         }
         return valid;
     }

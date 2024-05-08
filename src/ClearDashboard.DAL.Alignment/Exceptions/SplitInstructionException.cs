@@ -1,4 +1,4 @@
-﻿namespace ClearDashboard.DAL.Alignment.Features.Corpora;
+﻿namespace ClearDashboard.DAL.Alignment.Exceptions;
 
 public class SplitInstructionException : Exception
 {

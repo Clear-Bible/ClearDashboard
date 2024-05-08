@@ -1,31 +1,15 @@
 ﻿using System.Buffers;
 using System.Runtime.InteropServices;
 using System.Text;
+using ClearDashboard.DAL.Alignment.Corpora;
 
-namespace ClearDashboard.DAL.Alignment.Features.Corpora;
+namespace ClearDashboard.DAL.Alignment.Extensions;
 
 public static class SplitInstructionsExtensions
 {
     public static bool ValidateIndexesInAscendingOrder(this List<int> splitIndexes, out string? message)
     {
-       var valid = splitIndexes.IsOrderedUsingSpanSort(out message, Comparer<int>.Create((a, b) => a.CompareTo(b)));
-       if (!valid)
-       {
-           var builder = new StringBuilder(message);
-           builder.AppendLine();
-           for (var i = 0; i < splitIndexes.Count; i++)
-           {
-               builder.AppendLine($"Index: {i}, Value: {splitIndexes[i]}");
-           }
-           message = builder.ToString();
-       }
-
-       return valid;
-    }
-
-    public static bool ValidateIndexesInAscendingOrder(this List<SplitInstruction> splitIndexes, out string? message)
-    {
-        var valid =  splitIndexes.IsOrderedUsingSpanSort(out message, Comparer<SplitInstruction>.Create((a, b) => a.Index.CompareTo(b.Index)));
+        var valid = splitIndexes.IsOrderedUsingSpanSort(out message, Comparer<int>.Create((a, b) => a.CompareTo(b)));
         if (!valid)
         {
             var builder = new StringBuilder(message);
@@ -35,6 +19,38 @@ public static class SplitInstructionsExtensions
                 builder.AppendLine($"Index: {i}, Value: {splitIndexes[i]}");
             }
             message = builder.ToString();
+        }
+
+        return valid;
+    }
+
+    public static bool ValidateIndexesInAscendingOrder(this List<SplitInstruction> splitIndexes, out string? message)
+    {
+        var valid = splitIndexes.IsOrderedUsingSpanSort(out message, Comparer<SplitInstruction>.Create((a, b) => a.Index.CompareTo(b.Index)));
+        if (!valid)
+        {
+            var builder = new StringBuilder(message);
+            builder.AppendLine();
+            for (var i = 0; i < splitIndexes.Count; i++)
+            {
+                builder.AppendLine($"Index: {i}, Value: {splitIndexes[i]}");
+            }
+            message = builder.ToString();
+        }
+
+        return valid;
+    }
+
+    public static bool ValidateSurfaceText(this List<SplitInstruction> splitInstructions, string? surfaceText, out string? message)
+    {
+        message = null;
+        var tokenTexts = splitInstructions.Select(i => i.TokenText);
+        var combinedTokenTexts = string.Join(string.Empty, tokenTexts);
+        var valid = combinedTokenTexts == surfaceText;
+
+        if (!valid)
+        {
+            message = $"SurfaceText: '{surfaceText}', aggregated token text: '{combinedTokenTexts}'";
         }
 
         return valid;
@@ -59,7 +75,7 @@ public static class SplitInstructionsExtensions
         return isValid;
     }
 
-    
+
 
     public static bool IsOrderedUsingSpanSort<T>(this List<T> list, out string? message, IComparer<T>? comparer = default)
     {
