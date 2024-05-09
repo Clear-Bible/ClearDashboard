@@ -1670,11 +1670,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnNoteMouseEnter(object sender, RoutedEventArgs e)
         {
+            //What is supposed to happen when this is hit?
             //RaiseNoteEvent(NoteIndicatorMouseEnterEvent, e);
         }
 
         private void OnNoteMouseLeave(object sender, RoutedEventArgs e)
         {
+            //What is supposed to happen when this is hit?
             //RaiseNoteEvent(NoteIndicatorMouseLeaveEvent, e);
         }
 
