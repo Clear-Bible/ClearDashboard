@@ -2,9 +2,9 @@
 
 namespace ClearDashboard.Wpf.Application.Views.EnhancedView
 {
-    public partial class SplitTokenDialogViewOrg
+    public partial class SplitTokenDialogViewNew
     {
-        public SplitTokenDialogViewOrg()
+        public SplitTokenDialogViewNew()
         {
             InitializeComponent();
         }

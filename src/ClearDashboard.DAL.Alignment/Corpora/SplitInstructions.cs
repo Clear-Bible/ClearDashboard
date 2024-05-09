@@ -31,7 +31,7 @@ public class SplitInstructions
     {
         if (splitIndexes.Count  != trainingTexts.Count - 1)
         {
-            throw new SplitInstructionException("The number of split indexes must be one less than the number of training texts.", $"'splitIndexes' count: {splitIndexes.Count}, 'trainingTexts' count: {trainingTexts.Count}");
+            throw new SplitInstructionException(SplitInstructionErrorMessages.SplitIndexesMustBeOneLessThanTrainingTexts, $"'splitIndexes' count: {splitIndexes.Count}, 'trainingTexts' count: {trainingTexts.Count}");
         }
 
         if (!splitIndexes.ValidateIndexesInAscendingOrder(out string? message))

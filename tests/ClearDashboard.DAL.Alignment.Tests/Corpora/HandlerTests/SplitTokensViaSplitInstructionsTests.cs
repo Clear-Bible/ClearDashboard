@@ -58,7 +58,7 @@ public class SplitTokensViaSplitInstructionsTests : TestBase
             var split1 = await tokenizedTextCorpus.SplitTokensViaSplitInstructions(
                 Mediator!,
                 tokenIdsWithCommonSurfaceText.Keys,
-              splitInstructions,
+                splitInstructions,
                 false,
                 SplitTokenPropagationScope.None
             );

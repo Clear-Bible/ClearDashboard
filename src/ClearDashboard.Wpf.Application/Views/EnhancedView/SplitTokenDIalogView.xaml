@@ -83,7 +83,7 @@
             </Setter>
         </Style>
 
-        <!--<ControlTemplate x:Key="TopLeftSliderTemplate" TargetType="Slider">
+        <ControlTemplate x:Key="TopLeftSliderTemplate" TargetType="Slider">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
@@ -241,7 +241,7 @@
                     </Track.IncreaseRepeatButton>
                 </Track>
             </Grid>
-        </ControlTemplate>-->
+        </ControlTemplate>
 
         <Style x:Key="TopLeftSlider" TargetType="Slider">
             <Setter Property="Focusable" Value="False" />
@@ -295,7 +295,31 @@
             FontFamily="{DynamicResource MaterialDesignFont}"
             FontSize="18" />
 
-       <userControls:SplittableTokenCharactersDisplay
+        <Slider
+            Grid.Row="1"
+            Width="{Binding ElementName=CharactersDisplay, Path=ActualWidth}"
+            Margin="0,0,0,0"
+            VerticalAlignment="Center"
+            IsSnapToTickEnabled="True"
+            Maximum="{Binding TokenCharacters.Count}"
+            Minimum="0"
+            Style="{StaticResource TopRightSlider}"
+            TickFrequency="1"
+            Visibility="{Binding ElementName=ThreeWaySplitCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"
+            Value="{Binding CharacterThreshold2}" />
+
+        <Slider
+            Grid.Row="2"
+            Width="{Binding ElementName=CharactersDisplay, Path=ActualWidth}"
+            VerticalAlignment="Center"
+            IsSnapToTickEnabled="True"
+            Maximum="{Binding TokenCharacters.Count}"
+            Minimum="0"
+            Style="{StaticResource TopLeftSlider}"
+            TickFrequency="1"
+            Value="{Binding CharacterThreshold1}" />
+
+        <userControls:TokenCharactersDisplay
             x:Name="CharactersDisplay"
             Grid.Row="3"
             HorizontalAlignment="Center"
@@ -308,6 +332,41 @@
             Threshold1="{Binding ElementName=LeftCharacterSlider, Path=Value}"
             Threshold2="{Binding ElementName=RightCharacterSlider, Path=Value}" />
 
+        <Slider
+            x:Name="LeftCharacterSlider"
+            Grid.Row="4"
+            Width="{Binding ElementName=CharactersDisplay, Path=ActualWidth}"
+            Margin="0,10,0,0"
+            VerticalAlignment="Center"
+            IsSnapToTickEnabled="True"
+            Maximum="{Binding TokenCharacters.Count}"
+            Minimum="0"
+            Style="{StaticResource BottomLeftSlider}"
+            TickFrequency="1"
+            Value="{Binding CharacterThreshold1}" />
+
+        <Slider
+            x:Name="RightCharacterSlider"
+            Grid.Row="5"
+            Width="{Binding ElementName=CharactersDisplay, Path=ActualWidth}"
+            Margin="0,10,0,0"
+            VerticalAlignment="Center"
+            IsSnapToTickEnabled="True"
+            Maximum="{Binding TokenCharacters.Count}"
+            Minimum="0"
+            Style="{StaticResource BottomRightSlider}"
+            TickFrequency="1"
+            Visibility="{Binding ElementName=ThreeWaySplitCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"
+            Value="{Binding CharacterThreshold2}" />
+
+        <CheckBox
+            x:Name="ThreeWaySplitCheckBox"
+            Grid.Row="6"
+            Margin="0,0,80,10"
+            HorizontalAlignment="Right"
+            cm:Message.Attach="[Event Unchecked] = [Action ThreeWaySplitUnchecked($this, $eventArgs)]"
+            Content="{helpers:Localization EnhancedView_SplitTokenThreeWay}"
+            IsChecked="{Binding ThreeWaySplit}" />
 
         <Grid Grid.Row="7" Margin="0,0,0,20">
             <Grid.RowDefinitions>

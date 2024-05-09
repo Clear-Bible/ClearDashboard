@@ -161,6 +161,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
             var splitInstruction = splitInstructions[i];
             childTextPairs[i] = (
                 surfaceText: splitInstruction.TokenText,
+                // NB:  What to here when TrainingText is null?  Ask Dirk.  Should this be set to the Token 'surface text'
                 trainingText: splitInstruction.TrainingText ?? string.Empty
             )!;
         }
