@@ -4,7 +4,7 @@ using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora;
 
-public record SplitTokensViaInstructionsCommand(
+public record SplitTokensViaSplitInstructionsCommand(
     TokenizedTextCorpusId TokenizedTextCorpusId,
     IEnumerable<TokenId> TokenIdsWithSameSurfaceText,
     SplitInstructions SplitInstructions,

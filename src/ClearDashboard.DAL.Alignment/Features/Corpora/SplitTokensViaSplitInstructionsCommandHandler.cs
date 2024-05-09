@@ -10,13 +10,13 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora;
 
-public class SplitTokensViaInstructionsCommandHandler : ProjectDbContextCommandHandler<SplitTokensViaInstructionsCommand,
+public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCommandHandler<SplitTokensViaSplitInstructionsCommand,
     RequestResult<(IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>)>,
     (IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>)>
 {
     private readonly IMediator _mediator;
 
-    public SplitTokensViaInstructionsCommandHandler(
+    public SplitTokensViaSplitInstructionsCommandHandler(
         IMediator mediator,
         ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider,
         ILogger<SplitTokensCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider,
@@ -26,18 +26,10 @@ public class SplitTokensViaInstructionsCommandHandler : ProjectDbContextCommandH
     }
 
     protected override async Task<RequestResult<(IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>)>> SaveDataAsync(
-        SplitTokensViaInstructionsCommand request,
+        SplitTokensViaSplitInstructionsCommand request,
         CancellationToken cancellationToken)
     {
-        //if (request.TrainingText3 is null && request.SurfaceTextIndex > 0)
-        //{
-        //    return new RequestResult<(IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>)>
-        //    (
-        //        success: false,
-        //        message: $"Request '{nameof(request.TrainingText3)}' can only be null if '{nameof(request.SurfaceTextIndex)}' == 0 (incoming value: [{request.SurfaceTextIndex}])"
-        //    );
-        //}
-
+        
         if (!request.SplitInstructions.Validate())
         {
             return new RequestResult<(IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>)>
@@ -157,10 +149,21 @@ public class SplitTokensViaInstructionsCommandHandler : ProjectDbContextCommandH
         var splitChildTokensByIncomingTokenId = new Dictionary<TokenId, IEnumerable<Token>>();
         var currentDateTime = DataAccessLayer.Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
 
+        var splitInstructions = request.SplitInstructions;
+
         var idx = 0;
         var childTextPairs = new (
             string surfaceText,
-            string trainingText)[ 2];
+            string trainingText)[splitInstructions.Count];
+
+        for (var i = 0; i < splitInstructions.Count; i++)
+        {
+            var splitInstruction = splitInstructions[i];
+            childTextPairs[i] = (
+                surfaceText: splitInstruction.TokenText,
+                trainingText: splitInstruction.TrainingText ?? string.Empty
+            )!;
+        }
 
         //if (request.SurfaceTextIndex > 0)
         //{
@@ -187,8 +190,8 @@ public class SplitTokensViaInstructionsCommandHandler : ProjectDbContextCommandH
             var newChildTokensDb = new List<DataAccessLayer.Models.Token>();
             var nextSubwordNumber = 0;
 
-            var length = 10;
-            for (int i = 0; i < length; i++)
+            var length = splitInstructions.Count;
+            for (var i = 0; i < length; i++)
             {
                 nextSubwordNumber = tokenDb.SubwordNumber + i;
 

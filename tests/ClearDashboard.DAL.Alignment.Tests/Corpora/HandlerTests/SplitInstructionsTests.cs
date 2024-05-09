@@ -10,11 +10,11 @@ using Xunit.Abstractions;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
-public class SplitTokensTest
+public class SplitInstructionsTests
 {
 
     private ITestOutputHelper Output { get; }
-    public SplitTokensTest(ITestOutputHelper output) 
+    public SplitInstructionsTests(ITestOutputHelper output) 
     {
         Output = output;
     }

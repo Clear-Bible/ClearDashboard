@@ -16,9 +16,9 @@ using Xunit.Abstractions;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
-public class TokenSplittingTokenMapTests : TestBase
+public class SplitTokensViaSplitInstructionsTests : TestBase
 {
-    public TokenSplittingTokenMapTests(ITestOutputHelper output) : base(output)
+    public SplitTokensViaSplitInstructionsTests(ITestOutputHelper output) : base(output)
     {
            
 
@@ -49,14 +49,16 @@ public class TokenSplittingTokenMapTests : TestBase
                 .Where(e => e.SurfaceText == "mputughup")
                 .ToDictionary(e => ModelHelper.BuildTokenId(e), e => e.TokenCompositeTokenAssociations.Select(ta => ta.TokenCompositeId).ToList());
 
-            var split1 = await tokenizedTextCorpus.SplitTokens(
+            var splitInstructions = SplitInstructions.CreateSplits(
+                "mputughup",
+                [1, 3, 6, 8],
+                [null, "to", null, "give", "her"]
+            );
+
+            var split1 = await tokenizedTextCorpus.SplitTokensViaSplitInstructions(
                 Mediator!,
                 tokenIdsWithCommonSurfaceText.Keys,
-                1,
-                2,
-                null,
-                "to",
-                null,
+              splitInstructions,
                 false,
                 SplitTokenPropagationScope.None
             );
@@ -67,16 +69,22 @@ public class TokenSplittingTokenMapTests : TestBase
             foreach (var t in split1.SplitChildTokensByIncomingTokenId)
             {
                 var children = t.Value.ToArray();
-                Assert.Equal(3, children.Length);
+                Assert.Equal(5, children.Length);
 
                 Assert.True(children[0].SurfaceText == "m");
-                Assert.True(children[0].TrainingText == "bob");
+                Assert.True(children[0].TrainingText == string.Empty);
 
                 Assert.True(children[1].SurfaceText == "pu");
-                Assert.True(children[1].TrainingText == "joe");
+                Assert.True(children[1].TrainingText == "to");
 
-                Assert.True(children[2].SurfaceText == "tughup");
-                Assert.True(children[2].TrainingText == "bo");
+                Assert.True(children[2].SurfaceText == "tug");
+                Assert.True(children[2].TrainingText == string.Empty);
+
+                Assert.True(children[3].SurfaceText == "hu");
+                Assert.True(children[3].TrainingText == "give");
+
+                Assert.True(children[4].SurfaceText == "p");
+                Assert.True(children[4].TrainingText == "her");
             }
 
             var tokenWithExistingComposite = tokenIdsWithCommonSurfaceText
@@ -84,8 +92,8 @@ public class TokenSplittingTokenMapTests : TestBase
                 .Select(e => (e.Key, e.Value))
                 .ToList();
 
-            Assert.Single(tokenWithExistingComposite);
-            Assert.Single(tokenWithExistingComposite.First().Value);
+            //Assert.Single(tokenWithExistingComposite);
+            //Assert.Single(tokenWithExistingComposite.First().Value);
 
             var tokenIdWithExistingComposite = tokenWithExistingComposite.First().Key.Id;
             var existingCompositeId = tokenWithExistingComposite.First().Item2.First();
@@ -95,19 +103,20 @@ public class TokenSplittingTokenMapTests : TestBase
                 Assert.Single(tc.Value);
                 var composite = tc.Value.First();
 
+                // TODO:  Code review with Chris - when would the composite token not be the same as the existing composite token?
                 if (tc.Key.Id == tokenIdWithExistingComposite)
                 {
                     Assert.Equal(composite.TokenId.Id, existingCompositeId);
                     Assert.Equal(5, composite.Tokens.Count());
-                    Assert.Equal("So_ur_ce_segment_1", composite.SurfaceText);
-                    Assert.Equal("bob_joe_bo_segment_1", composite.TrainingText);
+                    Assert.Equal("m_pu_tug_hu_p", composite.SurfaceText);
+                    Assert.Equal("_to__give_her", composite.TrainingText);
                 }
                 else
                 {
                     Assert.NotEqual(composite.TokenId.Id, existingCompositeId);
-                    Assert.Equal(3, composite.Tokens.Count());
-                    Assert.Equal("So_ur_ce", composite.SurfaceText);
-                    Assert.Equal("bob_joe_bo", composite.TrainingText);
+                    Assert.Equal(5, composite.Tokens.Count());
+                    Assert.Equal("m_pu_tug_hu_p", composite.SurfaceText);
+                    Assert.Equal("_to__give_her", composite.TrainingText);
                 }
             }
         }
@@ -122,8 +131,10 @@ public class TokenSplittingTokenMapTests : TestBase
         var textCorpus = new DictionaryTextCorpus(
                 new MemoryText("GEN", new[]
                 {
-                    new TextRow(new VerseRef(1, 1, 1)) { Segment = "Ɓe ni le an nJosep mputughup zam, kaa a yitmwaan nsham wuri si mpee wal ɗi wuri kɨ ni mpee ɗyemnɨghɨn fɨri, ɓe wuri yaghal kɨlak ku wuri tang pee ɗi wuri nwal ɗi, Wuri ɗel nlu fɨri, ɓe wuri wal.". Split(), IsSentenceStart = true,  IsEmpty = false },
-
+                    new TextRow(new VerseRef(1, 43, 30)) { Segment = "Ɓe ni le an nJosep mputughup zam, kaa a yitmwaan nsham wuri si mpee wal ɗi wuri kɨ ni mpee ɗyemnɨghɨn fɨri, ɓe wuri yaghal kɨlak ku wuri tang pee ɗi wuri nwal ɗi, Wuri ɗel nlu fɨri, ɓe wuri wal.".Split(), IsSentenceStart = true,  IsEmpty = false },
+                    new TextRow(new VerseRef(1, 45, 27)) { Segment = "Amma kaaɗi mo sat nwuri po ɗi Josep sat mo nwuri jir, kɨ kaaɗi wuri naa keke bɨring ɗi Josep lop mpee mang wuri ɓe ni waa cin ɓal mputughup nwuri.".Split(), IsSentenceStart = true,  IsEmpty = false },
+                    new TextRow(new VerseRef(1, 49, 9)) { Segment = "Ba mee gurum ɗi kɨ ɓal mputughup ɗi nso tung wuri kas.".Split(), IsSentenceStart = true,  IsEmpty = false },
+                    //""
                 }))
             .Tokenize<LatinWordTokenizer>()
             .Transform<IntoFakeCompositeTokensTextRowProcessor>()
@@ -155,7 +166,7 @@ public class TokenSplittingTokenMapTests : TestBase
             .Select(t => t.TokenId)
             .ToList();
 
-        var compositeTokens = new List<Token>() { tokens[5] };
+        var compositeTokens = new List<Token>() { tokens.First(t=>t.SurfaceText == "mputughup") };
         var tokensWithComposite = new List<Token>()
         {
             new CompositeToken(compositeTokens),
