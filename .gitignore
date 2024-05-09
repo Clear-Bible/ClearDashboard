@@ -355,3 +355,4 @@ nuget.config
 /src/ClearDashboard.Wpf.Application/Resources/BuildDate.txt
 code_signing_key/
 installer/Output/*
+/installer/old runtimes
