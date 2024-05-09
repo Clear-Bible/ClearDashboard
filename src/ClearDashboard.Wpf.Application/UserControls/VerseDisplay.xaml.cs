@@ -1025,7 +1025,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             });
         }
 
-        private void OnNoteLeftButtonDown(object sender, RoutedEventArgs e)//, bool isTranslation = false)
+        private void OnNoteLeftButtonDown(object sender, RoutedEventArgs e)
         {
             // 2 
            // RaiseTokenEvent(TokenLeftButtonDownEvent, e);

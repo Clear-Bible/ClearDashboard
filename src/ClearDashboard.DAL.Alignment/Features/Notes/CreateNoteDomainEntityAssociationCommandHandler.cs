@@ -32,16 +32,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             string name;
             Guid guid;
 
-            //try
-            //{
-            //(name, guid) = request.DomainEntityId.GetNameAndId();
-            //}
-            //catch
-            //{
-            //    guid = request.DomainEntityId.Id;
-            //    name = request.DomainEntityId.GetType().ToString();
-            //}
-
             (name, guid) = GetNameAndId(request.DomainEntityId);
 
             var noteDomainEntityAssociation = ProjectDbContext!.NoteDomainEntityAssociations
@@ -75,7 +65,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
         {
             Type? entityIdType = null;
 
-            Type? baseType = iId.GetType();
+            Type? baseType = iId.GetType();//.BaseType; //The issue is that replies do not have fully fledged Ids because their parents don't have fully fledged Ids
             while (baseType != null)
             {
                 if (baseType.IsGenericType)
