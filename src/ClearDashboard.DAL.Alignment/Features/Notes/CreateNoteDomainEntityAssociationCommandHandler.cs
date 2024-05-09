@@ -65,7 +65,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
         {
             Type? entityIdType = null;
 
-            Type? baseType = iId.GetType();//.BaseType; //The issue is that replies do not have fully fledged Ids because their parents don't have fully fledged Ids
+            Type? baseType = iId.GetType().BaseType; //The issue is that replies do not have fully fledged Ids because their parents don't have fully fledged Ids
+
+            if (baseType == null || baseType == typeof(System.Object))
+            {
+                baseType= iId.GetType();
+            }
+            
             while (baseType != null)
             {
                 if (baseType.IsGenericType)
