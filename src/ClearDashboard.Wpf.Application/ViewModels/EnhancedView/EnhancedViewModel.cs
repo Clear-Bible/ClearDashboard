@@ -1102,8 +1102,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 //SelectionManager.UpdateRightClickTranslationSelection(e.TokenDisplay);
                 //NoteControlVisibility = SelectionManager.AnySelectedTokenTranslationNotes ? Visibility.Visible : Visibility.Collapsed;
-
-                //SelectionManager.UpdateSelection(e.TokenDisplay!, e.SelectedTokens, e.IsControlPressed);
+                
                 SelectionManager.UpdateRightClickSelection(e.TokenDisplay);
             }
         }

@@ -218,8 +218,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     IsSource = isSource,
                 };
 
-                //Debug.WriteLine($"TokenDisplayViewModel: {tokenDisplayViewModel.SurfaceText} {tokenDisplayViewModel.TokenHasNote} {tokenDisplayViewModel.IsFirstJotsNoteToken}");
-
                 if (tokenDisplayViewModel.Translation?.TranslationId != null)
                 {
                     tokenDisplayViewModel.TranslationNoteIds = await NoteManager.GetNoteIdsAsync(tokenDisplayViewModel.Translation.TranslationId);

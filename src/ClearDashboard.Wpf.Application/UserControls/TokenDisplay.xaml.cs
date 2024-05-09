@@ -1628,11 +1628,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             //Debug.WriteLine($"OnCreateNote - 'this': {p.X}, {p.Y}");
             var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
 
-            //if (isTranslation)
-            //{
-            //    tokenDisplay.IsTranslationSelected = true;
-            //}
-
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,
@@ -1643,6 +1638,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnNoteLeftButtonDown(object sender, RoutedEventArgs e)
         {
+            // 1
+            //RaiseTokenEvent(TokenLeftButtonDownEvent, e);
             RaiseNoteEvent(NoteIndicatorLeftButtonDownEvent, e);
         }
 
@@ -2371,12 +2368,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         protected override void CalculateLayout()
         {
-            var tokenLeftMargin = 0;//Orientation == Orientation.Horizontal ? HorizontalSpacing : 0;
+            var tokenLeftMargin = 0;
             var tokenRightMargin = Orientation == Orientation.Horizontal ? HorizontalSpacing : 0;
-            var translationLeftMargin = 0;//Orientation == Orientation.Horizontal ? Math.Max(tokenLeftMargin, HorizontalSpacing / 2) : 0;
-            var translationRightMargin = 0;//Orientation == Orientation.Horizontal ? Math.Max(tokenRightMargin, HorizontalSpacing / 2) : 0;
-            var alignedTokenLeftMargin = 0;//Orientation == Orientation.Horizontal ? Math.Max(tokenLeftMargin, HorizontalSpacing / 2) : 0;
-            var alignedTokenRightMargin = 0;//Orientation == Orientation.Horizontal ? Math.Max(tokenRightMargin, HorizontalSpacing / 2) : 0;
+            var translationLeftMargin = 0;
+            var translationRightMargin = 0;
+            var alignedTokenLeftMargin = 0;
+            var alignedTokenRightMargin = 0;
 
             CompositeIndicatorMargin = new Thickness(tokenLeftMargin, 0, 0, 1);
             CompositeIndicatorVisibility = TokenDisplayViewModel.IsCompositeTokenMember ? Visibility.Visible : Visibility.Hidden;
@@ -2391,74 +2388,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             TokenForeground = TokenDisplayViewModel.VerseDisplay is AlignmentDisplayViewModel
                 ? TokenDisplayViewModel.IsAligned ? TokenColor : TokenAlternateColor
                 : TokenColor;
-
-            //// add spacing for the external notes icon and the note indicator for LTR
-            //if (TokenDisplayViewModel.HasExternalNotes == false && TokenDisplayViewModel.TokenHasNote && FlowDirection == FlowDirection.LeftToRight)
-            //{
-            //    // only note indicator
-            //    tokenLeftMargin = tokenLeftMargin + 10;
-            //}
-            //else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote && FlowDirection == FlowDirection.LeftToRight)
-            //{
-            //    // both external notes and note indicator
-            //    tokenLeftMargin = tokenLeftMargin + 25;
-            //}
-            //else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote == false && FlowDirection == FlowDirection.LeftToRight)
-            //{
-            //    // only external notes
-            //    tokenLeftMargin = tokenLeftMargin;
-            //}
-
-            //// add spacing for the external notes icon and the note indicator for RTL
-            //if (TokenDisplayViewModel.HasExternalNotes == false && TokenDisplayViewModel.TokenHasNote && FlowDirection == FlowDirection.RightToLeft)
-            //{
-            //    // only note indicator
-            //    tokenLeftMargin = tokenLeftMargin + 20;
-            //}
-            //else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote && FlowDirection == FlowDirection.RightToLeft)
-            //{
-            //    // both external notes and note indicator
-            //    tokenLeftMargin = tokenLeftMargin + 35;
-            //}
-            //else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote == false && FlowDirection == FlowDirection.RightToLeft)
-            //{
-            //    // only external notes
-            //    tokenLeftMargin = tokenLeftMargin;
-            //}
-
-            //// add spacing for the external notes icon and the note indicator for LTR
-            //if (TokenDisplayViewModel.HasExternalNotes == false && TokenDisplayViewModel.TranslationHasNote && FlowDirection == FlowDirection.LeftToRight)
-            //{
-            //    // only note indicator
-            //    translationLeftMargin = translationLeftMargin + 10;
-            //}
-            //else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TranslationHasNote && FlowDirection == FlowDirection.LeftToRight)
-            //{
-            //    // both external notes and note indicator
-            //    translationLeftMargin = translationLeftMargin + 25;
-            //}
-            //else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TranslationHasNote == false && FlowDirection == FlowDirection.LeftToRight)
-            //{
-            //    // only external notes
-            //    translationLeftMargin = translationLeftMargin;
-            //}
-
-            //// add spacing for the external notes icon and the note indicator for RTL
-            //if (TokenDisplayViewModel.HasExternalNotes == false && TokenDisplayViewModel.TranslationHasNote && FlowDirection == FlowDirection.RightToLeft)
-            //{
-            //    // only note indicator
-            //    translationLeftMargin = translationLeftMargin + 20;
-            //}
-            //else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TranslationHasNote && FlowDirection == FlowDirection.RightToLeft)
-            //{
-            //    // both external notes and note indicator
-            //    translationLeftMargin = translationLeftMargin + 35;
-            //}
-            //else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TranslationHasNote == false && FlowDirection == FlowDirection.RightToLeft)
-            //{
-            //    // only external notes
-            //    translationLeftMargin = translationLeftMargin;
-            //}
 
             TokenMargin = new Thickness(tokenLeftMargin, 0, tokenRightMargin, 0);
             SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.SurfaceText : TokenDisplayViewModel.SurfaceText.Trim();

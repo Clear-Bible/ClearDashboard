@@ -575,13 +575,13 @@ namespace ClearDashboard.Wpf.Application.Services
                 };
                 if (domainEntityContexts.TryGetValue(associatedEntityId, out var entityContext))
                 {
-                    try
+                    if(entityContext.ContainsKey(EntityContextKeys.TokenizedCorpus.DisplayName))
                     {
                         association.CorpusName = entityContext[EntityContextKeys.TokenizedCorpus.DisplayName];
                     }
-                    catch
+                    else if (entityContext.ContainsKey(EntityContextKeys.TranslationSet.DisplayName))
                     {
-                        association.CorpusName = entityContext[EntityContextKeys.TranslationSet.DisplayName];//.Split('-')[0].Trim();
+                        association.CorpusName = entityContext[EntityContextKeys.TranslationSet.DisplayName];
                     }
                     association.Book = entityContext[EntityContextKeys.TokenId.BookId];
                     association.Chapter = entityContext[EntityContextKeys.TokenId.ChapterNumber];
