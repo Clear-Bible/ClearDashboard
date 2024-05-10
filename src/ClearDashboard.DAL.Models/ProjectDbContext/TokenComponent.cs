@@ -22,6 +22,21 @@ namespace ClearDashboard.DataAccessLayer.Models
         /// Optional type analogous to Lexicon_Lexeme.Type (lemma, suffix, etc.)
         /// </summary>
         public string? Type { get; set; }
+        // TODO:  unremark this
+        // NB:  Should this be this specific?
+        //public string? CircumfixGroup { get; set; }
+
+
+        // NB:  Add Grammar type
+        //
+        // public class Grammar {
+        //    public Guid Id {get ;set;}
+        //    public string ShortName {get ;set;}
+        //    public string Description {get ;set;}
+        //    public string? Category {get ;set;}
+        //
+        // }
+        // public Guid? GrammarId { get; set; }
 
         public string? ExtendedProperties { get; set; }
 

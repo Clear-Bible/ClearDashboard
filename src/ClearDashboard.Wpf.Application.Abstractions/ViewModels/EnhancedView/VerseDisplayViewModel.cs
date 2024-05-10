@@ -204,6 +204,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
             foreach (var (token, paddingBefore, paddingAfter) in tokenMap.PaddedTokens)
             {
+                // TODO808: Completed - reviewed with Andy
+                // 1. a Composite(parallel) that overlaps with Composite(null) in parallel view will hide Composite(null) (but show its child tokens).
+                //
+                // The GetCompositeToken() call should prioritize Composite(parallel) over Composite(null).  Requires a property on CompositeToken to indicate whether
+                // it is parallel or not.
                 var compositeToken = tokenMap.GetCompositeToken(token);
 
                 var tokenDisplayViewModel = new TokenDisplayViewModel(token)
@@ -642,13 +647,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         
         public async Task HandleAsync(TokenSplitMessage message, CancellationToken cancellationToken)
         {
+            // TODO808:  Need some input from Andy/Chris
+            // 3. for token splitting api return value, for corpus view needs to look in the composite dict for a Composite(null),
+            // and if none use the dict of individual non-composite tokens.
+            //
+            // This method is currently replacing the token using the dictionary of composites; it needs to be updated with the above logic.
+
+            // 1. Composite where children are changing
+            // 2. Token where it becomes a composite
             foreach (var kvp in message.SplitCompositeTokensByIncomingTokenId)
             {
                 var compositeToken = kvp.Value.FirstOrDefault();    // For now, the user can only split one token at a time.
-                if (compositeToken != null)
+                if (compositeToken is { HasTag: false })
                 {
                     SourceTokenMap?.ReplaceToken(kvp.Key, compositeToken);
                     TargetTokenMap?.ReplaceToken(kvp.Key, compositeToken);
+                }
+                else if (compositeToken != null)
+                {
+                    // For Chris - this
+                    var childTokens  = message.SplitChildTokensByIncomingTokenId[kvp.Key].ToList();
+                  
+                    SourceTokenMap?.RemoveCompositeToken(compositeToken, new TokenCollection(childTokens));
+                    TargetTokenMap?.RemoveCompositeToken(compositeToken, new TokenCollection(childTokens));
                 }
             }
             await BuildTokenDisplayViewModelsAsync();

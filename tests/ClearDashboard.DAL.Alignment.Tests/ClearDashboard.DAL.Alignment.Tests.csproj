@@ -10,8 +10,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="8.0.0" />
-    <PackageReference Include="ClearBible.Engine" Version="3.0.0" />
     <PackageReference Include="Autofac.Configuration" Version="6.0.0" />
+    <PackageReference Include="ClearBible.Engine" Version="3.0.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="7.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
@@ -36,6 +36,7 @@
     <ProjectReference Include="..\..\src\ClearDashboard.Collaboration\ClearDashboard.Collaboration.csproj" />
     <ProjectReference Include="..\..\src\ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj" />
     <ProjectReference Include="..\..\src\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
+    <ProjectReference Include="..\..\src\ClearDashboard.Wpf.Application.Abstractions\ClearDashboard.Wpf.Application.Abstractions.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="appsettings.json">

@@ -245,6 +245,28 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             return result.Data!;
         }
 
+        public async Task<(IDictionary<TokenId, IEnumerable<CompositeToken>> SplitCompositeTokensByIncomingTokenId, IDictionary<TokenId, IEnumerable<Token>> SplitChildTokensByIncomingTokenId)> SplitTokensViaSplitInstructions(
+            IMediator mediator,
+            IEnumerable<TokenId> tokenIdsWithSameSurfaceText,
+           SplitInstructions splitInstructions,
+            bool createParallelComposite = true,
+            SplitTokenPropagationScope propagateTo = SplitTokenPropagationScope.None,
+            CancellationToken cancellationToken = default
+        )
+        {
+            var command = new SplitTokensViaSplitInstructionsCommand(
+                TokenizedTextCorpusId,
+                tokenIdsWithSameSurfaceText,
+                splitInstructions,
+                createParallelComposite,
+                propagateTo);
+
+            var result = await mediator.Send(command, cancellationToken);
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
+        }
+
         public async Task<IEnumerable<Token>> FindTokensBySurfaceText(
             IMediator mediator, 
             string searchString,
