@@ -32,7 +32,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             string name;
             Guid guid;
 
-            (name, guid) = GetNameAndId(request.DomainEntityId);
+            (name, guid) = request.DomainEntityId.GetNameAndId();
 
             var noteDomainEntityAssociation = ProjectDbContext!.NoteDomainEntityAssociations
                 .FirstOrDefault(
@@ -59,38 +59,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             }
 
             return new RequestResult<NoteDomainEntityAssociationId>(new NoteDomainEntityAssociationId(noteDomainEntityAssociation.Id));
-        }
-
-        public static (string name, Guid id) GetNameAndId(IId iId)
-        {
-            Type? entityIdType = null;
-
-            Type? baseType = iId.GetType().BaseType; //The issue is that replies do not have fully fledged Ids because their parents don't have fully fledged Ids
-
-            if (baseType == null || baseType == typeof(System.Object))
-            {
-                baseType= iId.GetType();
-            }
-            
-            while (baseType != null)
-            {
-                if (baseType.IsGenericType)
-                {
-                    var genericTypeDefinition = baseType.GetGenericTypeDefinition();
-                    if (genericTypeDefinition == typeof(EntityId<>))
-                    {
-                        entityIdType = genericTypeDefinition.MakeGenericType(baseType.GenericTypeArguments); //t.GetType()
-                        break;
-                    }
-
-                }
-                baseType = baseType.BaseType;
-            }
-
-            if (entityIdType == null)
-                throw new InvalidParameterEngineException(name: "iId", value: iId.GetType().FullName ?? "GetType().FullName is null", message: "not a derivative of generic EntityId<>");
-
-            return (entityIdType.AssemblyQualifiedName ?? throw new InvalidStateEngineException(name: "AssemblyQualifiedName", value: iId.GetType().FullName ?? "", message: "is null"), iId.Id);
         }
     }
 }
