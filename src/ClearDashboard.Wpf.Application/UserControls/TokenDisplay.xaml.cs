@@ -2485,9 +2485,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         public async Task HandleAsync(NoteMouseLeaveMessage message, CancellationToken cancellationToken)
         {
-            if (TokenDisplayViewModel != null)
+            if (TokenDisplayViewModel?.Translation != null)
             {
-
                 if (message.Entities.ContainsId(TokenDisplayViewModel.Token.TokenId) || message.Entities.ContainsId(TokenDisplayViewModel.Translation.TranslationId))
                 {
                     TokenDisplayViewModel.IsNoteHovered = false;
