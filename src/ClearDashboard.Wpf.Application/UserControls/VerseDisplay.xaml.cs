@@ -997,7 +997,22 @@ namespace ClearDashboard.Wpf.Application.UserControls
             // the token selected on the TokenDisplay control 
             if (control != null)
             {
-                if (!VerseSelectedTokens.Contains(control?.TokenDisplayViewModel!) || control?.TokenDisplayViewModel!.IsTranslationSelected != isTranslation)
+                var isTokenClickedWhileTranslationSelected = control?.TokenDisplayViewModel!.IsTranslationSelected != isTranslation;
+
+                var numberOfTokensSelected = 0;
+                foreach(var tokenDisplay in VerseSelectedTokens)
+                {
+                    if (tokenDisplay.IsTranslationSelected)
+                    {
+                        numberOfTokensSelected++;
+                    }
+                    if (tokenDisplay.IsTokenSelected)
+                    {
+                        numberOfTokensSelected++;
+                    }
+                }
+
+                if (!VerseSelectedTokens.Contains(control?.TokenDisplayViewModel!) ||  (isTokenClickedWhileTranslationSelected && numberOfTokensSelected <= 1))
                 {
                     VerseSelectedTokens.Clear();
                     if (isTranslation)
