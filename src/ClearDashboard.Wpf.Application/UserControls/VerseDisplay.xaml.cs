@@ -952,7 +952,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnTranslationRightButtonDown(object sender, RoutedEventArgs e)
         {
             var control = e.Source as FrameworkElement;
-            if (control?.DataContext is TokenDisplayViewModel tokenDisplay)
+            if (control?.DataContext is TokenDisplayViewModel { IsTranslationSelected: false } tokenDisplay)
             {
                 UpdateVerseSelection(tokenDisplay, false, true);
             }

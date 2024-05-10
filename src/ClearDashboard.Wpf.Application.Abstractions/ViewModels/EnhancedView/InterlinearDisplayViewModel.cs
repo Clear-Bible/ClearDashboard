@@ -107,7 +107,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             await BuildTokenDisplayViewModelsAsync();
             await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage());
-            await EventAggregator.PublishOnUIThreadAsync(new ReloadExternalNotesDataMessage(ReloadType.Refresh));
+            await EventAggregator.PublishOnUIThreadAsync(new RefreshVerse());
         }
 
         public TViewModel Resolve<TViewModel>() where TViewModel : notnull
