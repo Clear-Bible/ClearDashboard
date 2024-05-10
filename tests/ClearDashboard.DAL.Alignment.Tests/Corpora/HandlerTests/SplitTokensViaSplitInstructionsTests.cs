@@ -72,13 +72,13 @@ public class SplitTokensViaSplitInstructionsTests : TestBase
                 Assert.Equal(5, children.Length);
 
                 Assert.True(children[0].SurfaceText == "m");
-                Assert.True(children[0].TrainingText == string.Empty);
+                Assert.True(children[0].TrainingText == "m");
 
                 Assert.True(children[1].SurfaceText == "pu");
                 Assert.True(children[1].TrainingText == "to");
 
                 Assert.True(children[2].SurfaceText == "tug");
-                Assert.True(children[2].TrainingText == string.Empty);
+                Assert.True(children[2].TrainingText == "tug");
 
                 Assert.True(children[3].SurfaceText == "hu");
                 Assert.True(children[3].TrainingText == "give");
@@ -109,14 +109,14 @@ public class SplitTokensViaSplitInstructionsTests : TestBase
                     Assert.Equal(composite.TokenId.Id, existingCompositeId);
                     Assert.Equal(5, composite.Tokens.Count());
                     Assert.Equal("m_pu_tug_hu_p", composite.SurfaceText);
-                    Assert.Equal("_to__give_her", composite.TrainingText);
+                    Assert.Equal("m_to_tug_give_her", composite.TrainingText);
                 }
                 else
                 {
                     Assert.NotEqual(composite.TokenId.Id, existingCompositeId);
                     Assert.Equal(5, composite.Tokens.Count());
                     Assert.Equal("m_pu_tug_hu_p", composite.SurfaceText);
-                    Assert.Equal("_to__give_her", composite.TrainingText);
+                    Assert.Equal("m_to_tug_give_her", composite.TrainingText);
                 }
             }
         }

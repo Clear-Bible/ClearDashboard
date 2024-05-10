@@ -35,6 +35,20 @@ public class SplitInstructionsTests
     }
 
     [Fact]
+    public void IndexesNotInRangeThrowsException()
+    {
+        var result = Assert.Throws<SplitInstructionException>(() => SplitInstructions.CreateSplits(
+            "mputughup",
+            [0, 3, 6, 10],
+            [null, "to", null, "give", "her"]));
+
+        Assert.Equal("The first and last split indexes must be within the range of the 'SurfaceText' length: '9'.",  result.Message);
+        Assert.NotNull(result.Details);
+
+        LogException(result);
+    }
+
+    [Fact]
     public void TrainingTextsListMustBeOneGreaterThanSplitIndexesListThrowException()
     {
         var result = Assert.Throws<SplitInstructionException>(() => SplitInstructions.CreateSplits(
@@ -47,29 +61,32 @@ public class SplitInstructionsTests
     }
 
     [Fact]
-    public  async Task CreateSplitInstructions()
+    public void SplitInstructionNullTrainingText()
     {
-        try {
-            var splitInstructions = SplitInstructions.CreateSplits(
-                "mputughup",
-                [1, 3, 6, 8],
-                [null, "to", null, "give", "her"]
-            );
+        var splitInstruction = new SplitInstruction(1, "pu");
 
-            TestSplitInstructions(splitInstructions);
+        Assert.Equal("pu", splitInstruction.TrainingText);
+    }
 
-            var json = JsonSerializer.Serialize(splitInstructions);
-         
-            Output.WriteLine(string.Empty);
-            Output.WriteLine("JSON:");
-            Output.WriteLine(json);
-        }
-        finally
-        {
-            
-        }
+    [Fact]
+    public void CreateSplitInstructions()
+    {
+        var splitInstructions = SplitInstructions.CreateSplits(
+            "mputughup",
+            [1, 3, 6, 8],
+            [string.Empty, "to", null, "give", "her"]
+        );
+
+        TestSplitInstructions(splitInstructions);
+
+        var json = JsonSerializer.Serialize(splitInstructions);
+     
+        Output.WriteLine(string.Empty);
+        Output.WriteLine("JSON:");
+        Output.WriteLine(json);
 
     }
+
 
     private void TestSplitInstructions(SplitInstructions splitInstructions)
     {
@@ -82,7 +99,8 @@ public class SplitInstructionsTests
         Assert.Equal(0, splitInstructions[0].Index);
         Assert.Equal(1, splitInstructions[0].Length);
         Assert.Equal("m", splitInstructions[0].TokenText);
-        Assert.Null(splitInstructions[0].TrainingText);
+        Assert.Equal("m", splitInstructions[0].TrainingText);
+      
 
         Assert.Equal(1, splitInstructions[1].Index);
         Assert.Equal(2, splitInstructions[1].Length);
@@ -92,7 +110,8 @@ public class SplitInstructionsTests
         Assert.Equal(3, splitInstructions[2].Index);
         Assert.Equal(3, splitInstructions[2].Length);
         Assert.Equal("tug", splitInstructions[2].TokenText);
-        Assert.Null(splitInstructions[0].TrainingText);
+        Assert.Equal("tug", splitInstructions[2].TrainingText);
+        
 
         Assert.Equal(6, splitInstructions[3].Index);
         Assert.Equal(2, splitInstructions[3].Length);
@@ -103,6 +122,23 @@ public class SplitInstructionsTests
         Assert.Equal(1, splitInstructions[4].Length);
         Assert.Equal("p", splitInstructions[4].TokenText);
         Assert.Equal("her", splitInstructions[4].TrainingText);
+    }
+
+
+    [Fact]
+    public void DesrializedJosnIndexesNotInRangeThrowsException()
+    {
+        var json =
+            @"{""SurfaceText"":""mputughup"",""Instructions"":[{""Index"":0,""Length"":1,""TokenText"":""m"",""TrainingText"":null},{""Index"":1,""Length"":2,""TokenText"":""pu"",""TrainingText"":""to""},{""Index"":3,""Length"":3,""TokenText"":""tug"",""TrainingText"":null},{""Index"":6,""Length"":2,""TokenText"":""hu"",""TrainingText"":""give""},{""Index"":11,""Length"":1,""TokenText"":""p"",""TrainingText"":""her""}]}";
+
+        var splitInstructions = JsonSerializer.Deserialize<SplitInstructions>(json);
+
+        var result = Assert.Throws<SplitInstructionException>(() => splitInstructions.Validate());
+
+        Assert.Equal("The first and last split indexes must be within the range of the 'SurfaceText' length: '9'.", result.Message);
+        Assert.NotNull(result.Details);
+
+        LogException(result);
     }
 
 

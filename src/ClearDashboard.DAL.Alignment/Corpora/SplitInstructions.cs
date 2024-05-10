@@ -36,13 +36,20 @@ public class SplitInstructions
 
         if (!splitIndexes.ValidateIndexesInAscendingOrder(out string? message))
         {
-            throw new SplitInstructionException($"The split indexes must be in ascending order.", message);
+            throw new SplitInstructionException(SplitInstructionErrorMessages.SplitIndexesMustBeInAscendingOrder, message);
+        }
+
+        if (!splitIndexes.ValidateFirstAndLastIndexes(surfaceText.Length, out string? message2))
+        {
+            throw new SplitInstructionException(string.Format(SplitInstructionErrorMessages.SplitIndexesMustBeWithinRange, surfaceText.Length), message2);
         }
 
         var splitInstructions = new SplitInstructions
         {
             SurfaceText = surfaceText
         };
+
+
 
         var index = 0;
         var surfaceTextLength = surfaceText.Length;
@@ -56,13 +63,13 @@ public class SplitInstructions
             if (first)
             {
                 tokenText = surfaceText.Substring(0, splitIndex);
-                splitInstructions.Instructions.Add(new SplitInstruction(0, tokenText, trainingTexts[index]));
+                splitInstructions.Instructions.Add(new SplitInstruction(0, tokenText) { TrainingText = trainingTexts[index] ?? tokenText });
                 index++;
             }
 
             var length = last ? surfaceTextLength - splitIndex : splitIndexes[index] - splitIndex;
             tokenText = surfaceText.Substring(splitIndex, length);
-            splitInstructions.Instructions.Add(new SplitInstruction(splitIndex, tokenText, trainingTexts[index]));
+            splitInstructions.Instructions.Add(new SplitInstruction(splitIndex, tokenText) { TrainingText = trainingTexts[index] ?? tokenText });
             index++;
         }
 
@@ -75,6 +82,7 @@ public class SplitInstructions
         public static string SplitIndexesMustBeOneLessThanTrainingTexts = "The number of split indexes must be one less than the number of training texts.";
         public static string TokenTextLengthMustEqualLength = "The 'Length' of each split instruction must equal to the actual length of the instruction's 'TokenText'.";
         public static string AggregatedTokenTextMustEqualSurfaceText = "The aggregated 'TokenText' properties from the 'Instructions' list must be equal to the 'SurfaceText' property of the 'SplitInstructions'.";
+        public static string SplitIndexesMustBeWithinRange = "The first and last split indexes must be within the range of the 'SurfaceText' length: '{0}'.";
     }
     public bool Validate(bool throwIfNotValid = true)
     {
@@ -110,8 +118,10 @@ public class SplitInstructions
             errorMessage.AppendLine(message2);
         }
 
+     
+
         // Validate the aggregated TokenText properties from the Instructions list are equal to the SurfaceText property.
-            var surfaceTextValid = Instructions.ValidateSurfaceText(SurfaceText, out var message3);
+        var surfaceTextValid = Instructions.ValidateSurfaceText(SurfaceText, out var message3);
         if (!surfaceTextValid && throwIfNotValid)
         {
             throw new SplitInstructionException(SplitInstructionErrorMessages.AggregatedTokenTextMustEqualSurfaceText, message3);
@@ -121,6 +131,19 @@ public class SplitInstructions
         {
             errorMessage.AppendLine(SplitInstructionErrorMessages.AggregatedTokenTextMustEqualSurfaceText);
             errorMessage.AppendLine(message3);
+        }
+
+
+        var tokenIndexesWithinRangeValid = Instructions.ValidateFirstAndLastIndexes(SurfaceTextLength, out string? message4);
+        if (!tokenIndexesWithinRangeValid && throwIfNotValid)
+        {
+            throw new SplitInstructionException(string.Format(SplitInstructionErrorMessages.SplitIndexesMustBeWithinRange, SurfaceTextLength), message4);
+        }
+
+        if (!tokenIndexesWithinRangeValid && !throwIfNotValid)
+        {
+            errorMessage.AppendLine(SplitInstructionErrorMessages.SplitIndexesMustBeWithinRange);
+            errorMessage.AppendLine(message4);
         }
 
         ErrorMessage = errorMessage.ToString();

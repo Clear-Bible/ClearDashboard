@@ -6,6 +6,64 @@ namespace ClearDashboard.DAL.Alignment.Corpora;
 
 public static class SplitInstructionsExtensions
 {
+
+    public static bool ValidateFirstAndLastIndexes(this List<int> splitIndexes, int surfaceTextLength, out string? message)
+    {
+       
+        var firstIndexIsValid = true;
+        var lastIndexIsValid = true;
+        message = null;
+
+        var builder = new StringBuilder();
+        if (splitIndexes[0] < 1)
+        {
+            firstIndexIsValid = false;
+            builder.AppendLine($"The first split index must be greater than or equal to 1. First split index: '{splitIndexes[0]}'");
+        }
+
+        if (splitIndexes[^1] >= surfaceTextLength)
+        {
+            lastIndexIsValid = false;
+            builder.AppendLine($"The last split index must be less than the 'SurfaceText' length. Last split index: '{splitIndexes[^1]}'");
+        }
+
+        if (!firstIndexIsValid || !lastIndexIsValid)
+        {
+            message = builder.ToString();
+        }
+
+        return firstIndexIsValid && lastIndexIsValid;
+    }
+
+    public static bool ValidateFirstAndLastIndexes(this List<SplitInstruction> splitInstructions, int? surfaceTextLength, out string? message)
+    {
+
+        var firstIndexIsValid = true;
+        var lastIndexIsValid = true;
+        message = null;
+
+        var builder = new StringBuilder();
+        if (splitInstructions[0].Index < 0)
+        {
+            firstIndexIsValid = false;
+            builder.AppendLine($"The first split index must be greater than or equal to 0. First split index: '{splitInstructions[0].Index}'");
+        }
+
+        if (splitInstructions[^1].Index >= surfaceTextLength)
+        {
+            lastIndexIsValid = false;
+            builder.AppendLine($"The last split index must be less than the 'SurfaceText' length. Last split index: '{splitInstructions[^1].Index}'");
+        }
+
+        if (!firstIndexIsValid || !lastIndexIsValid)
+        {
+            message = builder.ToString();
+        }
+
+        return firstIndexIsValid && lastIndexIsValid;
+    }
+
+
     public static bool ValidateIndexesInAscendingOrder(this List<int> splitIndexes, out string? message)
     {
         var valid = splitIndexes.IsOrderedUsingSpanSort(out message, Comparer<int>.Create((a, b) => a.CompareTo(b)));
