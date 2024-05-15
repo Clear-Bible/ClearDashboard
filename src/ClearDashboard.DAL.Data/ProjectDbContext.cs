@@ -44,6 +44,7 @@ namespace ClearDashboard.DataAccessLayer.Data
 
         public virtual DbSet<Corpus> Corpa => Set<Corpus>();
         public virtual DbSet<CorpusHistory> CorpaHistory => Set<CorpusHistory>();
+        public virtual DbSet<Grammar> Grammars => Set<Grammar>();
         public virtual DbSet<NoteAssociation> NoteAssociations => Set<NoteAssociation>();
         public virtual DbSet<Note> Notes => Set<Note>();
         public virtual DbSet<Label> Labels => Set<Label>();
@@ -180,6 +181,10 @@ namespace ClearDashboard.DataAccessLayer.Data
                         c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
                         c => c));
 
+            modelBuilder.Entity<Grammar>().HasAlternateKey(e => e.ShortName);
+            modelBuilder.Entity<Grammar>().HasIndex(e => e.ShortName).IsUnique();
+            
+
             modelBuilder.Entity<ParallelCorpus>()
                .Property(e => e.Metadata)
                .HasConversion(
@@ -280,6 +285,8 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.TokenizedCorpusId);
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.TrainingText);
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.SurfaceText);
+            modelBuilder.Entity<TokenComponent>().HasIndex(e => e.GrammarId);
+            modelBuilder.Entity<TokenComponent>().HasIndex(e => e.CircumfixGroup);
 
             modelBuilder.Entity<Token>().HasIndex(e => e.OriginTokenLocation);
             modelBuilder.Entity<Token>().HasIndex(e => e.BookNumber);
