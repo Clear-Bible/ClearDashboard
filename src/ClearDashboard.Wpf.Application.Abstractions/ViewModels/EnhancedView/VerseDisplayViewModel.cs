@@ -658,7 +658,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             foreach (var kvp in message.SplitCompositeTokensByIncomingTokenId)
             {
                 var compositeToken = kvp.Value.FirstOrDefault();    // For now, the user can only split one token at a time.
-                if (compositeToken is { HasTag: false })
+                var isParallel = compositeToken?.HasMetadatum("IsParallelCompositeToken");
+                if (compositeToken != null && isParallel != null && compositeToken.GetMetadatum<bool>("IsParallelCompositeToken"))
                 {
                     SourceTokenMap?.ReplaceToken(kvp.Key, compositeToken);
                     TargetTokenMap?.ReplaceToken(kvp.Key, compositeToken);

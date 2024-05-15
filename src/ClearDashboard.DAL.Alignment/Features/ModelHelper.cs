@@ -23,8 +23,7 @@ namespace ClearDashboard.DAL.Alignment.Features
         {
             var ct = new CompositeToken(tokens.Select(BuildToken), otherTokens?.Select(BuildToken))
             {
-                // CompositeToken: 808
-                Tag = tokenComposite.ParallelCorpusId?.ToString() ?? null,
+  
                 TokenId =
                 {
                     Id = tokenComposite.Id
@@ -32,6 +31,13 @@ namespace ClearDashboard.DAL.Alignment.Features
                 ExtendedProperties = tokenComposite.ExtendedProperties
             };
 
+
+            // CompositeToken: 808
+            if (tokenComposite.ParallelCorpusId != null)
+            {
+                ct.Metadata["IsParallelCorpusToken"] = true;
+            }
+           
             return ct;
         }
         public static CompositeToken BuildCompositeToken(Models.TokenComposite tokenComposite)

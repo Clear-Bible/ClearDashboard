@@ -105,7 +105,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             // The GetCompositeToken() call should prioritize Composite(parallel) over Composite(null).  Requires a property on CompositeToken to indicate whether
             // it is parallel or not.
 
-            var parallelResult = Tokens.Where(t => t is CompositeToken).Cast<CompositeToken>().FirstOrDefault(compositeToken => compositeToken.Tokens.Any(t => t.TokenId.IdEquals(token.TokenId) && t.HasTag));
+            var parallelResult = Tokens.Where(t => t is CompositeToken).Cast<CompositeToken>().FirstOrDefault(compositeToken => compositeToken.Tokens.Any(t => t.TokenId.IdEquals(token.TokenId) && t.HasMetadatum("IsParallelCorpusToken") && t.GetMetadatum<bool>("IsParallelCorpusToken")));
 
             return parallelResult ?? Tokens.Where(t => t is CompositeToken).Cast<CompositeToken>().FirstOrDefault(compositeToken => compositeToken.Tokens.Any(t => t.TokenId.IdEquals(token.TokenId)));
 
