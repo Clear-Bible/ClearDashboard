@@ -23,7 +23,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using ClearDashboard.Wpf.Application.Models;
 using Item = ClearDashboard.DataAccessLayer.Models.Item;
-
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
     public class LexiconImportsViewModel: DashboardApplicationScreen
