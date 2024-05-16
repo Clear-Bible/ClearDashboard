@@ -75,7 +75,7 @@ jobs:
   
     - name: Checkout
       env: 
-        GIT_CLONE_PROTECTION_ACTIVE = false
+        GIT_CLONE_PROTECTION_ACTIVE: false
       run: |
         mkdir C:/ClearDashboard.git
         git clone https://${{secrets.GH_PACKAGES_USER}}:${{ secrets.GH_PACKAGES_PAT}}@github.com/Clear-Bible/ClearDashboard.git C:/ClearDashboard.git --depth 1
