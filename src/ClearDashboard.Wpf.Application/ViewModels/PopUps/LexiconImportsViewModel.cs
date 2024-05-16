@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using ClearDashboard.Wpf.Application.Models;
 using Item = ClearDashboard.DataAccessLayer.Models.Item;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
@@ -490,22 +491,5 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         }
 
         #endregion // Methods
-    }
-
-    public class LanguageMapping
-    {
-        public string SourceLanguage;
-        public string TargetLanguage;
-
-        public LanguageMapping(string sourceLanguage, string targetLanguage)
-        {
-            SourceLanguage = sourceLanguage;
-            TargetLanguage = targetLanguage;
-        }
-        
-        public override string ToString()
-        {
-            return SourceLanguage + "-->" + TargetLanguage;
-        }
     }
 }
