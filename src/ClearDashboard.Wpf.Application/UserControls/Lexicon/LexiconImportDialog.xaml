@@ -130,14 +130,11 @@
             Grid.Row="0"
             Grid.Column="1"
             Orientation="Vertical">
-            <Label
-                Margin="10,0,0,0"
-                Content="Language:"
-                FontSize="14" />
+            <Label Content="Language:" FontSize="14" />
             <ComboBox
                 FontSize="14"
                 ItemsSource="{Binding LanguageMappingsList}"
-                SelectedItem="{Binding SelectedLanguageMapping}" />
+                SelectedItem="{Binding SelectedLanguageMapping, Mode=TwoWay}" />
         </StackPanel>
 
         <StackPanel

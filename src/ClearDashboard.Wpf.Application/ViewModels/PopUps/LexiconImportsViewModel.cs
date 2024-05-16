@@ -15,11 +15,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices.JavaScript;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Item = ClearDashboard.DataAccessLayer.Models.Item;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -43,8 +45,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         public BindableCollection<LexiconImportViewModel> LexiconToImport { get; private set; } = new BindableCollection<LexiconImportViewModel>();
 
         public bool HasLexiconToImport => LexiconToImport.Any();
-
-        //public BindableCollection<LexiconImportViewModel> ImportedLexicon { get; private set; } = new BindableCollection<LexiconImportViewModel>();
 
         public List<CorpusId> ProjectCorpora { get; } = new List<CorpusId>();
 
@@ -86,18 +86,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             set => Set(ref _progressBarVisibility, value);
         }
 
-        private bool _languageMappingsList;
-        public bool LanguageMappingsList
+        private List<LanguageMapping> _languageMappingsList = new List<LanguageMapping>();
+        public List<LanguageMapping> LanguageMappingsList
         {
             get => _languageMappingsList;
             set => Set(ref _languageMappingsList, value);
         }
 
-        private bool _selectedLanguageMapping;
-        public bool SelectedLanguageMapping
+        private LanguageMapping _selectedLanguageMapping = new LanguageMapping(string.Empty, string.Empty);
+        public LanguageMapping SelectedLanguageMapping
         {
             get => _selectedLanguageMapping;
-            set => Set(ref _selectedLanguageMapping, value);
+            set
+            {
+                Set(ref _selectedLanguageMapping, value);
+                LexiconCollectionView.Refresh();
+            } 
         }
 
         private bool _allItemsSelected;
@@ -212,6 +216,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     Execute.OnUIThread(() =>
                     {
                         ProgressBarVisibility = Visibility.Hidden;
+
+                        if (LanguageMappingsList.Count > 0)
+                        {
+                            SelectedLanguageMapping = LanguageMappingsList.First();
+                        }
                     });
                 }
             }, cancellationToken);
@@ -230,8 +239,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             if (obj is LexiconImportViewModel lexiconViewModel)
             {
-                return lexiconViewModel.SourceWord.Contains(FilterString, StringComparison.CurrentCultureIgnoreCase) ||
-                       lexiconViewModel.TargetWord.Contains(FilterString, StringComparison.CurrentCultureIgnoreCase);
+                var hasFilterString =
+                    lexiconViewModel.SourceWord != null && 
+                    lexiconViewModel.TargetWord != null && 
+                    (lexiconViewModel.SourceWord.Contains(FilterString, StringComparison.CurrentCultureIgnoreCase) || 
+                     lexiconViewModel.TargetWord.Contains(FilterString, StringComparison.CurrentCultureIgnoreCase));
+
+                var hasLanguageMapping = (SelectedLanguageMapping.SourceLanguage == string.Empty || 
+                                          SelectedLanguageMapping.TargetLanguage == string.Empty) || 
+                                         (lexiconViewModel.SourceLanguage == SelectedLanguageMapping.SourceLanguage && 
+                                          lexiconViewModel.TargetLanguage == SelectedLanguageMapping.TargetLanguage);
+
+                return hasFilterString && hasLanguageMapping;
             }
             throw new Exception($"object provided to FilterLexiconCollectionView is type {obj.GetType().FullName} and not type LexiconImportViewModel");
         }
@@ -283,6 +302,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
                 var projectId = SelectedProjectCorpus?.ParatextGuid;
                 var lexiconImports = await LexiconManager.GetLexiconImportViewModels(projectId, cancellationToken);
+
+                foreach (var item in lexiconImports)
+                {
+                    var languageMapping = new LanguageMapping(item.SourceLanguage, item.TargetLanguage);
+                    if (!LanguageMappingsList.Any(mapping =>
+                            mapping.SourceLanguage == languageMapping.SourceLanguage &&
+                            mapping.TargetLanguage == languageMapping.TargetLanguage))
+                    {
+                        LanguageMappingsList.Add(languageMapping);
+                    }
+                }
+
                 Execute.OnUIThread(() => { LexiconToImport.AddRange(lexiconImports); });
                 NotifyOfPropertyChange(() => HasLexiconToImport);
                 NotifyOfPropertyChange(() => ShowNoRecordsToManageMessage);
@@ -294,7 +325,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     ProgressBarVisibility = Visibility.Hidden;
                 });
             }
-
         }
 
         //public async Task ProjectCorpusSelected(SelectionChangedEventArgs args)
@@ -432,5 +462,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         }
 
         #endregion // Methods
+    }
+
+    public class LanguageMapping
+    {
+        public string SourceLanguage;
+        public string TargetLanguage;
+
+        public LanguageMapping(string sourceLanguage, string targetLanguage)
+        {
+            SourceLanguage = sourceLanguage;
+            TargetLanguage = targetLanguage;
+        }
+        
+        public override string ToString()
+        {
+            return SourceLanguage + "-->" + TargetLanguage;
+        }
     }
 }
