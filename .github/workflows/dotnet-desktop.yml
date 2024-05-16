@@ -66,7 +66,6 @@ jobs:
       Wpf_Project_Path: src\ClearDashboard.WPF\ClearDashboard.WPF.csproj
       Wap_Project_Directory: ClearDashboard.WPF.Package    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
       Wap_Project_Path: ClearDashboard.App.Package\ClearDashboard.Package.wapproj                   # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
-      GIT_CLONE_PROTECTION_ACTIVE: false
 
     steps:
     #- name: Always Fail # For testing the CI notifier.
@@ -75,6 +74,8 @@ jobs:
     - run: Get-PSDrive
   
     - name: Checkout
+      env: 
+        GIT_CLONE_PROTECTION_ACTIVE: false
       run: |
         mkdir C:/ClearDashboard.git
         git clone https://${{secrets.GH_PACKAGES_USER}}:${{ secrets.GH_PACKAGES_PAT}}@github.com/Clear-Bible/ClearDashboard.git C:/ClearDashboard.git --depth 1
