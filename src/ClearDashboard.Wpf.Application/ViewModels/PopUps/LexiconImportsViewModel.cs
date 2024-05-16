@@ -104,25 +104,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             } 
         }
 
-        private bool _allItemsSelected;
+        private bool _allItemsSelected = true;
         public bool AllItemsSelected
         {
             get => _allItemsSelected;
-            set => Set(ref _allItemsSelected, value);
+            set
+            {
+                Set(ref _allItemsSelected, value);
+                LexiconCollectionView.Refresh();
+            }
         }
 
-        private bool _noConflictItemsSelected;
+        private bool _noConflictItemsSelected = false;
         public bool NoConflictItemsSelected
         {
             get => _noConflictItemsSelected;
-            set => Set(ref _noConflictItemsSelected, value);
+            set
+            {
+                Set(ref _noConflictItemsSelected, value);
+                LexiconCollectionView.Refresh();
+            }
         }
 
-        private bool _conflictItemsSelected;
+        private bool _conflictItemsSelected = false;
         public bool ConflictItemsSelected
         {
             get => _conflictItemsSelected;
-            set => Set(ref _conflictItemsSelected, value);
+            set
+            {
+                Set(ref _conflictItemsSelected, value);
+                LexiconCollectionView.Refresh();
+            }
         }
 
         private string _filterString = string.Empty;
@@ -250,7 +262,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                                          (lexiconViewModel.SourceLanguage == SelectedLanguageMapping.SourceLanguage && 
                                           lexiconViewModel.TargetLanguage == SelectedLanguageMapping.TargetLanguage);
 
-                return hasFilterString && hasLanguageMapping;
+                var inSelectedRadioGroup = false;
+                if (_allItemsSelected)
+                {
+                    inSelectedRadioGroup = true;
+                }
+                else if (_noConflictItemsSelected)
+                {
+                    inSelectedRadioGroup = !lexiconViewModel.HasConflictingMatch;
+                }
+                else if (_conflictItemsSelected)
+                {
+                    inSelectedRadioGroup = lexiconViewModel.HasConflictingMatch;
+                }
+
+                lexiconViewModel.IsSelected = hasFilterString && hasLanguageMapping && inSelectedRadioGroup;
+
+                return lexiconViewModel.IsSelected;
             }
             throw new Exception($"object provided to FilterLexiconCollectionView is type {obj.GetType().FullName} and not type LexiconImportViewModel");
         }
