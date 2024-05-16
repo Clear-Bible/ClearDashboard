@@ -12,12 +12,14 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -84,6 +86,63 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             set => Set(ref _progressBarVisibility, value);
         }
 
+        private bool _languageMappingsList;
+        public bool LanguageMappingsList
+        {
+            get => _languageMappingsList;
+            set => Set(ref _languageMappingsList, value);
+        }
+
+        private bool _selectedLanguageMapping;
+        public bool SelectedLanguageMapping
+        {
+            get => _selectedLanguageMapping;
+            set => Set(ref _selectedLanguageMapping, value);
+        }
+
+        private bool _allItemsSelected;
+        public bool AllItemsSelected
+        {
+            get => _allItemsSelected;
+            set => Set(ref _allItemsSelected, value);
+        }
+
+        private bool _noConflictItemsSelected;
+        public bool NoConflictItemsSelected
+        {
+            get => _noConflictItemsSelected;
+            set => Set(ref _noConflictItemsSelected, value);
+        }
+
+        private bool _conflictItemsSelected;
+        public bool ConflictItemsSelected
+        {
+            get => _conflictItemsSelected;
+            set => Set(ref _conflictItemsSelected, value);
+        }
+
+        private string _filterString = string.Empty;
+        public string FilterString
+        {
+            get => _filterString;
+            set
+            {
+                value ??= string.Empty;
+                _filterString = value;
+                LexiconCollectionView.Refresh();
+            }
+        }
+
+        private ICollectionView _lexiconCollectionView;
+        public ICollectionView LexiconCollectionView
+        {
+            get => _lexiconCollectionView;
+            set
+            {
+                _lexiconCollectionView = value;
+            }
+        }
+
         #endregion //Observable Properties
 
 
@@ -108,6 +167,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             LexiconManager = lexiconManager;
             WindowManager = windowManager;
             Message = LocalizationService.Get("LexiconEdit_LoadingData");
+
+            LexiconCollectionView = CollectionViewSource.GetDefaultView(LexiconToImport);
+            LexiconCollectionView.Filter = FilterLexiconCollectionView;
         }
 
         #endregion //Constructor
@@ -163,6 +225,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         }
 
         #region Methods
+
+        private bool FilterLexiconCollectionView(object obj)
+        {
+            if (obj is LexiconImportViewModel lexiconViewModel)
+            {
+                return lexiconViewModel.SourceWord.Contains(FilterString, StringComparison.CurrentCultureIgnoreCase) ||
+                       lexiconViewModel.TargetWord.Contains(FilterString, StringComparison.CurrentCultureIgnoreCase);
+            }
+            throw new Exception($"object provided to FilterLexiconCollectionView is type {obj.GetType().FullName} and not type LexiconImportViewModel");
+        }
 
         private async Task GetParatextProjects()
         {

@@ -82,32 +82,22 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="40" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Button
-            x:Name="ProcessLexiconToImport"
-            Width="100"
-            Height="30"
-            Margin="10,0"
-            HorizontalAlignment="Left"
-            cm:Message.Attach="ProcessLexiconToImport"
-            Content="{helpers:Localization LexiconImport_ImportChecked}"
-            Foreground="{DynamicResource MaterialDesignBody}"
-            IsEnabled="{Binding HasLexiconToImport}"
-            Style="{StaticResource SmallTransparentStyle}" />
-
-
         <StackPanel
             Grid.Row="0"
-            Grid.Column="1"
+            Grid.Column="0"
             Margin="10,5,5,5"
             Orientation="Horizontal">
             <Label
@@ -119,41 +109,89 @@
                 Content="{Binding SelectedProjectCorpus.Name}"
                 FontSize="14" />
             <!--<ComboBox
-                    x:Name="ParatextProjectsComboBox"
-                    MinWidth="150"
-                    Margin="10,0,5,0"
-                    cm:Message.Attach="ProjectCorpusSelected"
-                    IsEditable="False"
-                    ItemsSource="{Binding ProjectCorpora}"
-                    SelectedItem="{Binding SelectedProjectCorpus, Mode=TwoWay}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock FontSize="16" Text="{Binding Name}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>-->
+            x:Name="ParatextProjectsComboBox"
+            MinWidth="150"
+            Margin="10,0,5,0"
+            cm:Message.Attach="ProjectCorpusSelected"
+            IsEditable="False"
+            ItemsSource="{Binding ProjectCorpora}"
+            SelectedItem="{Binding SelectedProjectCorpus, Mode=TwoWay}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontSize="16" Text="{Binding Name}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>-->
         </StackPanel>
 
-        <Button
-            x:Name="Close"
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="1"
+            Orientation="Vertical">
+            <Label
+                Margin="10,0,0,0"
+                Content="Language:"
+                FontSize="14" />
+            <ComboBox
+                FontSize="14"
+                ItemsSource="{Binding LanguageMappingsList}"
+                SelectedItem="{Binding SelectedLanguageMapping}" />
+        </StackPanel>
+
+        <StackPanel
             Grid.Row="0"
             Grid.Column="2"
-            Width="100"
-            Height="30"
-            Margin="10,0"
-            HorizontalAlignment="Right"
-            cm:Message.Attach="Close"
-            Content="{helpers:Localization Close}"
-            Foreground="{DynamicResource MaterialDesignBody}"
-            Style="{StaticResource SmallAlternativeStyle}" />
+            HorizontalAlignment="Center"
+            Orientation="Vertical">
+            <RadioButton Content="All" IsChecked="{Binding AllItemsSelected}" />
+            <RadioButton Content="No Conflict" IsChecked="{Binding NoConflictItemsSelected}" />
+            <RadioButton Content="Conflict" IsChecked="{Binding ConflictItemsSelected}" />
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="3"
+            Orientation="Vertical">
+            <Label Content="Word:" />
+            <TextBox materialDesign:TextFieldAssist.HasClearButton="True" Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="2"
+            Grid.Column="4"
+            Orientation="Horizontal">
+            <Button
+                x:Name="ProcessLexiconToImport"
+                Width="100"
+                Height="30"
+                Margin="10,0"
+                HorizontalAlignment="Left"
+                cm:Message.Attach="ProcessLexiconToImport"
+                Content="{helpers:Localization LexiconImport_ImportChecked}"
+                Foreground="{DynamicResource MaterialDesignBody}"
+                IsEnabled="{Binding HasLexiconToImport}"
+                Style="{StaticResource SmallTransparentStyle}" />
+
+            <Button
+                x:Name="Close"
+                Width="100"
+                Height="30"
+                Margin="10,0"
+                HorizontalAlignment="Right"
+                cm:Message.Attach="Close"
+                Content="{helpers:Localization Close}"
+                Foreground="{DynamicResource MaterialDesignBody}"
+                Style="{StaticResource SmallAlternativeStyle}" />
+        </StackPanel>
+
 
 
         <materialDesign:Card
-            Grid.Row="1"
+            Grid.Row="0"
             Grid.Column="0"
-            Grid.ColumnSpan="3"
+            Grid.ColumnSpan="5"
             Visibility="{Binding HasSelectedProjectCorpus, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
             <StackPanel>
                 <TextBlock
@@ -163,9 +201,9 @@
             </StackPanel>
         </materialDesign:Card>
         <materialDesign:Card
-            Grid.Row="1"
+            Grid.Row="0"
             Grid.Column="0"
-            Grid.ColumnSpan="3"
+            Grid.ColumnSpan="5"
             Visibility="{Binding ShowNoRecordsToManageMessage, Converter={StaticResource BooleanToVisibilityConverter}}">
             <StackPanel>
                 <TextBlock
@@ -178,12 +216,12 @@
             x:Name="LexiconSelectionDataGrid"
             Grid.Row="1"
             Grid.Column="0"
-            Grid.ColumnSpan="3"
+            Grid.ColumnSpan="5"
             Margin="5"
             HorizontalAlignment="Stretch"
             AutoGenerateColumns="False"
             IsReadOnly="True"
-            ItemsSource="{Binding LexiconToImport}"
+            ItemsSource="{Binding LexiconCollectionView}"
             ScrollViewer.CanContentScroll="True"
             ScrollViewer.VerticalScrollBarVisibility="Visible"
             SelectionMode="Single"
