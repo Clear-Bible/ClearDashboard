@@ -655,12 +655,12 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             // Two tokens in TokenVerseAssociations, and two additional ones:
             var composite1 = new CompositeToken(sourceTokensByGuid.Values.Take(4))
             {
-                Tag = parallelTokenizedCorpus.ParallelCorpusId.Id.ToString(),
                 TokenId =
                 {
                     Id = Guid.NewGuid()
                 }
             };
+            composite1.Metadata["IsParallelCorpusToken"] = true;
 
             var sw = new Stopwatch();
             sw.Start();

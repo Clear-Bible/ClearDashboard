@@ -3,6 +3,7 @@ using System;
 using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,12 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    partial class ProjectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240510200839_Grammar-UpdateTokenComponent")]
+    partial class GrammarUpdateTokenComponent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.5");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Adornment", b =>
                 {
@@ -1782,34 +1785,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .WithMany("TokenComponents")
                         .HasForeignKey("VerseRowId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.OwnsMany("ClearDashboard.DataAccessLayer.Models.Metadatum", "Metadata", b1 =>
-                        {
-                            b1.Property<Guid>("TokenComponentId")
-                                .HasColumnType("TEXT");
-
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<string>("Key")
-                                .IsRequired()
-                                .HasColumnType("TEXT");
-
-                            b1.Property<string>("Value")
-                                .HasColumnType("TEXT");
-
-                            b1.HasKey("TokenComponentId", "Id");
-
-                            b1.ToTable("TokenComponent");
-
-                            b1.ToJson("Metadata");
-
-                            b1.WithOwner()
-                                .HasForeignKey("TokenComponentId");
-                        });
-
-                    b.Navigation("Metadata");
 
                     b.Navigation("TokenizedCorpus");
 

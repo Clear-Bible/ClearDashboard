@@ -13,10 +13,9 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Caliburn.Micro.Core" Version="4.0.212" />
-    <PackageReference Include="ClearBible.Engine" Version="3.0.2" />
+    <PackageReference Include="ClearBible.Engine" Version="3.0.6" />
     <PackageReference Include="MediatR" Version="9.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
-  </ItemGroup>
+   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS.Features\ClearDashboard.DAL.CQRS.Features.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS\ClearDashboard.DAL.CQRS.csproj" />

@@ -424,11 +424,11 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
                         {
                             Id = Guid.NewGuid()
                         },
-
-                        // TODO808:  Review with Chris
-                        // Tag the composite token with the ParallelCorpus Id
-                        Tag = pc.Id.ToString()
                     };
+
+                    // TODO808:  Review with Chris
+                    // Tag the composite token as being a parallel composite token
+                    compositeToken.Metadata["IsParallelCompositeToken"] = true;
                     var tokenComposite = BuildModelTokenComposite(
                         compositeToken,
                         tokenDb.TokenizedCorpusId,

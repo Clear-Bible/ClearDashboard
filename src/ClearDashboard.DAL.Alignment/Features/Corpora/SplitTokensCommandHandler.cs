@@ -413,12 +413,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             TokenId =
                             {
                                 Id = Guid.NewGuid()
-                            },
-
-                            // TODO808:  Review with Chris
-                            // Tag the composite token with the ParallelCorpus Id
-                            Tag = pc.Id.ToString()
+                            }
                         };
+
+                        // TODO808:  Review with Chris
+                        // Tag the composite token with the ParallelCorpus Id
+                        compositeToken.Metadata["IsParallelCorpusToken"] = true;
                         var tokenComposite = BuildModelTokenComposite(
                             compositeToken,
                             tokenDb.TokenizedCorpusId,

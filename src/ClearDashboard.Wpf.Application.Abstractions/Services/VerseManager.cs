@@ -35,11 +35,13 @@ namespace ClearDashboard.Wpf.Application.Services
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                var compositeToken = new CompositeToken(tokens)
+                var compositeToken = new CompositeToken(tokens);
+                // IsParallelCorpusToken so we can tell if this is CompositeToken(parallel) or CompositeToken(null)
+                if (parallelCorpusId != null)
                 {
-                    // Set the Tag property so we can tell if this is CompositeToken(parallel) or CompositeToken(null)
-                    Tag = parallelCorpusId?.Id.ToString() ?? null
-                };
+                    compositeToken.Metadata["IsParallelCorpusToken"] = true;
+                }
+           
                 await TokenizedTextCorpus.PutCompositeToken(Mediator, compositeToken, parallelCorpusId);
 
                 stopwatch.Stop();
