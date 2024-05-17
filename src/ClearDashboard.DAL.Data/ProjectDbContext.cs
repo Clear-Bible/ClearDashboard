@@ -28,6 +28,8 @@ namespace ClearDashboard.DataAccessLayer.Data
             UserProvider = userProvider;
             DatabaseName = databaseName;
             OptionsBuilder = optionsBuilder;
+
+
         }
         internal ProjectDbContext(string databaseName, DbContextOptionsBuilder<ProjectDbContext> optionsBuilder)
             : base(optionsBuilder.Options)
@@ -35,6 +37,8 @@ namespace ClearDashboard.DataAccessLayer.Data
             // This constructor is only for initial migration / design time usage
             DatabaseName = databaseName;
             OptionsBuilder = optionsBuilder;
+
+        
         }
 
         public virtual DbSet<Adornment> Adornments => Set<Adornment>();
@@ -135,6 +139,27 @@ namespace ClearDashboard.DataAccessLayer.Data
             }
         }
 
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+
+        //    optionsBuilder.EnableSensitiveDataLogging();
+
+        //    if (_logger != null)
+        //    {
+        //        optionsBuilder.LogTo(
+        //            s =>
+        //            {
+        //                //if (LoggingEnabled)
+        //                //{
+        //                _logger.LogInformation(s);
+        //                Console.WriteLine(s);
+        //                //}
+        //            }, LogLevel.Information);
+        //    }
+
+        //    base.OnConfiguring(optionsBuilder);
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -288,12 +313,28 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.GrammarId);
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.CircumfixGroup);
 
+            //modelBuilder.Entity<TokenComponent>().OwnsOne(tokenComponent => tokenComponent.Metadata, builder =>
+            //{
+            //    builder.ToJson();
+            //    builder.OwnsMany(metadata=>metadata.Tags);
+
+            //});
+
+            modelBuilder.Entity<TokenComponent>().OwnsMany(p => p.Metadata, t =>
+            {
+                //t.Property<string>("Metadatum").HasColumnName("Metadata");
+                t.ToJson(); // Store the tags as JSON
+            });
+
+
             modelBuilder.Entity<Token>().HasIndex(e => e.OriginTokenLocation);
             modelBuilder.Entity<Token>().HasIndex(e => e.BookNumber);
             modelBuilder.Entity<Token>().HasIndex(e => e.ChapterNumber);
             modelBuilder.Entity<Token>().HasIndex(e => e.VerseNumber);
             //modelBuilder.Entity<Token>().HasIndex(e => e.WordNumber);
             //modelBuilder.Entity<Token>().HasIndex(e => e.SubwordNumber);
+
+          
 
             modelBuilder.Entity<TokenCompositeTokenAssociation>().HasIndex(e => e.TokenId);
             modelBuilder.Entity<TokenCompositeTokenAssociation>().HasIndex(e => e.TokenCompositeId);

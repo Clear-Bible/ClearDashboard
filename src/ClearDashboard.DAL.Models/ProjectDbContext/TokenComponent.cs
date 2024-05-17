@@ -1,4 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
@@ -45,5 +49,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public virtual ICollection<Translation> Translations { get; set; }
 
         public DateTimeOffset? Deleted { get; set; }
+
+        public virtual List<Metadatum> Metadata { get; set; } = new();
     }
 }
