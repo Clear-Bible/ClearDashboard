@@ -8,7 +8,6 @@ using ClearDashboard.DataAccessLayer.Models;
 using Xunit;
 using Xunit.Abstractions;
 using Corpus = ClearDashboard.DataAccessLayer.Models.Corpus;
-using Newtonsoft.Json.Linq;
 
 namespace ClearDashboard.DAL.Tests
 {
@@ -19,7 +18,7 @@ namespace ClearDashboard.DAL.Tests
         }
 
         [Fact]
-        public async Task Test()
+        public async Task QueryByMetadatumTests()
         {
             const string projectName = "TokenComponentMetadataTest";
             SetupProjectDatabase(projectName, false);
@@ -40,7 +39,7 @@ namespace ClearDashboard.DAL.Tests
                     TokenizedCorpusId = tokenizedCorpus.Id,
                 };
                 token.Metadata.Add(new Metadatum { Key = "IsParallelCorpusToken", Value = true.ToString() });
-                ProjectDbContext.Tokens.Add(token);
+                ProjectDbContext!.Tokens.Add(token);
 
                 var token2 = new Token
                  {
@@ -96,12 +95,12 @@ namespace ClearDashboard.DAL.Tests
         {
             var tokenizedCorpus = new TokenizedCorpus
             {
-                UserId = userProvider.CurrentUser.Id,
+                UserId = userProvider.CurrentUser!.Id,
                 CorpusId = corpus.Id,
 
             };
 
-            await ProjectDbContext.TokenizedCorpora.AddAsync(tokenizedCorpus);
+            await ProjectDbContext!.TokenizedCorpora.AddAsync(tokenizedCorpus);
             return tokenizedCorpus;
         }
 
@@ -109,12 +108,12 @@ namespace ClearDashboard.DAL.Tests
         {
             var corpus = new Corpus
             {
-                UserId = userProvider.CurrentUser.Id,
+                UserId = userProvider.CurrentUser!.Id,
                 Name = "Test Corpus",
                    
             };
 
-            await ProjectDbContext.Corpa.AddAsync(corpus);
+            await ProjectDbContext!.Corpa.AddAsync(corpus);
             return corpus;
         }
     }
