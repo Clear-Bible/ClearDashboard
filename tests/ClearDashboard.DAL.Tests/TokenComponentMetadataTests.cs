@@ -54,13 +54,34 @@ namespace ClearDashboard.DAL.Tests
 
                 var token3 = new Token
                 {
-                    BookNumber = 2,
-                    ChapterNumber = 2,
-                    VerseNumber = 2,
+                    BookNumber = 3,
+                    ChapterNumber = 3,
+                    VerseNumber = 3,
                     TokenizedCorpusId = tokenizedCorpus.Id,
                 };
-                token3.Metadata.Add(new Metadatum { Key = "SoloKey", Value = "There's only on of me!" });
+                token3.Metadata.Add(new Metadatum { Key = "SoloKey", Value = "There's only one of me!" });
                 ProjectDbContext.Tokens.Add(token3);
+
+
+                var token4 = new Token
+                {
+                    BookNumber = 4,
+                    ChapterNumber = 4,
+                    VerseNumber = 4,
+                    TokenizedCorpusId = tokenizedCorpus.Id,
+                };
+                token4.Metadata.Add(new Metadatum { Key = "DuopolyKey", Value = "There's two of me!" });
+                ProjectDbContext.Tokens.Add(token4);
+
+                var token5 = new Token
+                {
+                    BookNumber = 5,
+                    ChapterNumber = 5,
+                    VerseNumber = 5,
+                    TokenizedCorpusId = tokenizedCorpus.Id,
+                };
+                token5.Metadata.Add(new Metadatum { Key = "DuopolyKey", Value = "There's two of me!" });
+                ProjectDbContext.Tokens.Add(token5);
 
                 await ProjectDbContext.SaveChangesAsync();
 
@@ -77,7 +98,11 @@ namespace ClearDashboard.DAL.Tests
                     .FirstOrDefaultAsync(t => t.Metadata.Any(m => m.Key == "SoloKey"));
 
                 Assert.NotNull(soloToken);
-                Assert.Equal("There's only on of me!", soloToken.Metadata.First(m => m.Key == "SoloKey").Value);
+                Assert.Equal("There's only one of me!", soloToken.Metadata.First(m => m.Key == "SoloKey").Value);
+
+                var duopolyTokens = await ProjectDbContext.Tokens
+                    .Where(t => t.Metadata.Any(m => m.Key=="DuopolyKey")).ToListAsync();
+                Assert.Equal(2, duopolyTokens.Count);
             }
             catch (Exception e)
             {
