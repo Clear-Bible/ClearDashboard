@@ -12,6 +12,7 @@ using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Reflection;
 using Module = Autofac.Module;
 using ShellViewModel = ClearDashboard.Wpf.Application.ViewModels.Shell.ShellViewModel;
@@ -59,7 +60,11 @@ namespace ClearDashboard.Wpf.Application
                 .As<IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>>>()
                 .Keyed<IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>>>("External");
 
-            builder.RegisterType<AlignmentManager>().AsSelf();
+			builder.RegisterType<ParatextPlugin.CQRS.Features.Lexicon.GetWordAnalysesQuery>()
+				.As<IRequest<RequestResult<IEnumerable<DataAccessLayer.Models.Lexicon_WordAnalysis>>>>()
+				.Keyed<IRequest<RequestResult<IEnumerable<DataAccessLayer.Models.Lexicon_WordAnalysis>>>>("External");
+
+			builder.RegisterType<AlignmentManager>().AsSelf();
             builder.RegisterType<LexiconManager>().AsSelf();
             //builder.RegisterType<NoteManager>().AsSelf().SingleInstance();
             builder.RegisterType<NoteManager>().AsSelf().SingleInstance();

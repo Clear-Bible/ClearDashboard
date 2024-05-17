@@ -534,7 +534,22 @@ namespace ClearDashboard.DAL.Alignment.Features
                     )).ToList());
         }
 
-        private static I BuildSimpleSynchronizableTimestampedEntityId<T, I>(T entity, bool inMemoryOnly) 
+		public static Alignment.Lexicon.WordAnalysisId BuildWordAnalysisId(Models.Lexicon_WordAnalysis wordAnalysis)
+		{
+			return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_WordAnalysis, Alignment.Lexicon.WordAnalysisId>(wordAnalysis, false);
+		}
+
+		public static Alignment.Lexicon.WordAnalysis BuildWordAnalysis(Models.Lexicon_WordAnalysis wordAnalysis, bool inMemoryOnly)
+		{
+			return new WordAnalysis(
+				BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_WordAnalysis, Alignment.Lexicon.WordAnalysisId>(wordAnalysis, inMemoryOnly),
+				wordAnalysis.Language,
+				wordAnalysis.Word,
+				wordAnalysis.Lexemes
+					.Select(m => BuildLexeme(m, null, inMemoryOnly)).ToList());
+		}
+
+		private static I BuildSimpleSynchronizableTimestampedEntityId<T, I>(T entity, bool inMemoryOnly) 
             where T : Models.SynchronizableTimestampedEntity 
             where I : SimpleSynchronizableTimestampedEntityId<I>, new()
         {
