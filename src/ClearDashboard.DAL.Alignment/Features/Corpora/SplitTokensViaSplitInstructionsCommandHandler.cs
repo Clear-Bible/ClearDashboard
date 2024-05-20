@@ -4,9 +4,11 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Token = ClearBible.Engine.Corpora.Token;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora;
 
@@ -161,7 +163,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
             var splitInstruction = splitInstructions[i];
             childTextPairs[i] = (
                 surfaceText: splitInstruction.TokenText,
-                // NB:  What to here when TrainingText is null?  Ask Dirk.  Should this be set to the Token 'surface text'
+                // NB:  What to do here when TrainingText is null?  Ask Dirk.  Should this be set to the Token 'surface text'
                 trainingText: splitInstruction.TrainingText // ?? string.Empty
             )!;
         }
@@ -428,7 +430,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 
                     // TODO808:  Review with Chris
                     // Tag the composite token as being a parallel composite token
-                    compositeToken.Metadata["IsParallelCompositeToken"] = true;
+                    compositeToken.Metadata[DataAccessLayer.Models.MetadatumKeys.IsParallelCorpusToken] = true;
                     var tokenComposite = BuildModelTokenComposite(
                         compositeToken,
                         tokenDb.TokenizedCorpusId,
@@ -596,7 +598,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 
     private static DataAccessLayer.Models.Token BuildModelToken(Token token, Guid tokenizedCorpusId, Guid? verseRowId)
     {
-        return new DataAccessLayer.Models.Token
+        var modelToken = new DataAccessLayer.Models.Token
         {
             Id = token.TokenId.Id,
             TokenizedCorpusId = tokenizedCorpusId,
@@ -609,7 +611,15 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
             SubwordNumber = token.TokenId.SubWordNumber,
             SurfaceText = token.SurfaceText,
             TrainingText = token.TrainingText,
-            ExtendedProperties = token.ExtendedProperties
+            ExtendedProperties = token.ExtendedProperties,
+            
         };
+
+        if (token.HasMetadatum(MetadatumKeys.ModelTokenMetadata))
+        {
+            modelToken.Metadata = token.GetMetadatum<List<Metadatum>>(MetadatumKeys.ModelTokenMetadata).ToList();
+        }
+
+        return modelToken;
     }
 }

@@ -4,6 +4,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
@@ -313,17 +314,10 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.GrammarId);
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.CircumfixGroup);
 
-            //modelBuilder.Entity<TokenComponent>().OwnsOne(tokenComponent => tokenComponent.Metadata, builder =>
-            //{
-            //    builder.ToJson();
-            //    builder.OwnsMany(metadata=>metadata.Tags);
-
-            //});
-
-            modelBuilder.Entity<TokenComponent>().OwnsMany(p => p.Metadata, t =>
+            // Configure the TokenComponent.Metadata property as a JSON column
+            modelBuilder.Entity<TokenComponent>().OwnsMany(tokenComponent => tokenComponent.Metadata, ownedNavigationBuilder =>
             {
-                //t.Property<string>("Metadatum").HasColumnName("Metadata");
-                t.ToJson(); // Store the tags as JSON
+                ownedNavigationBuilder.ToJson(); // Store as JSON
             });
 
 

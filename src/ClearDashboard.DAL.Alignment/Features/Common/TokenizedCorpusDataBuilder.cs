@@ -97,7 +97,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
                                             .Select(childToken =>
                                             {
                                                 tokenCount++;
-                                                return new Models.Token
+                                                var modelToken =  new Models.Token
                                                 {
                                                     Id = childToken.TokenId.Id,
                                                     VerseRowId = verseRowId,
@@ -112,13 +112,20 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
                                                     SurfaceText = childToken.SurfaceText,
                                                     ExtendedProperties = childToken.ExtendedProperties
                                                 };
+
+                                                if (childToken.HasMetadatum(Models.MetadatumKeys.ModelTokenMetadata))
+                                                {
+                                                    modelToken.Metadata = childToken.GetMetadatum<List<Models.Metadatum>>(Models.MetadatumKeys.ModelTokenMetadata).ToList();
+                                                }
+
+                                                return modelToken;
                                             }).ToList()
                                     };
                                 }
                                 else
                                 {
                                     tokenCount++;
-                                    return new Models.Token
+                                    var modelToken  = new Models.Token
                                     {
                                         Id = token.TokenId.Id,
                                         VerseRowId = verseRowId,
@@ -133,6 +140,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
                                         SurfaceText = token.SurfaceText,
                                         ExtendedProperties = token.ExtendedProperties
                                     } as Models.TokenComponent;
+
+                                    if (token.HasMetadatum(Models.MetadatumKeys.ModelTokenMetadata))
+                                    {
+                                        modelToken.Metadata = token.GetMetadatum<List<Models.Metadatum>>(Models.MetadatumKeys.ModelTokenMetadata).ToList();
+                                    }
+
+                                    return modelToken;
                                 }
                             })
                         .ToList()

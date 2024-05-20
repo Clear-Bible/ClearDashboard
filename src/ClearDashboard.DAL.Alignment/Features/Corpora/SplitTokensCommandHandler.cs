@@ -4,13 +4,13 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Data.Migrations;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
+using Metadatum = ClearDashboard.DataAccessLayer.Models.Metadatum;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
@@ -418,7 +418,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                         // TODO808:  Review with Chris
                         // Tag the composite token with the ParallelCorpus Id
-                        compositeToken.Metadata["IsParallelCorpusToken"] = true;
+                        compositeToken.Metadata[Models.MetadatumKeys.IsParallelCorpusToken] = true;
                         var tokenComposite = BuildModelTokenComposite(
                             compositeToken,
                             tokenDb.TokenizedCorpusId,
@@ -586,7 +586,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
         private static Models.Token BuildModelToken(Token token, Guid tokenizedCorpusId, Guid? verseRowId)
         {
-            return new Models.Token
+            var modelToken =  new Models.Token
             {
                 Id = token.TokenId.Id,
                 TokenizedCorpusId = tokenizedCorpusId,
@@ -601,6 +601,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 TrainingText = token.TrainingText,
                 ExtendedProperties = token.ExtendedProperties
             };
+
+            if (token.HasMetadatum(Models.MetadatumKeys.ModelTokenMetadata))
+            {
+                modelToken.Metadata = token.GetMetadatum<List<Metadatum>>(Models.MetadatumKeys.ModelTokenMetadata).ToList();
+            }
+
+            return modelToken;
         }
     }
 }

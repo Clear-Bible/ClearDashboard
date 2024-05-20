@@ -1,4 +1,5 @@
-﻿using ClearBible.Engine.Corpora;
+﻿using System.Reflection.Metadata.Ecma335;
+using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Persistence;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
@@ -7,8 +8,10 @@ using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer.Data;
+
 using Microsoft.EntityFrameworkCore;
 using Models = ClearDashboard.DataAccessLayer.Models;
+using MetadatumKeys = ClearDashboard.DataAccessLayer.Models.MetadatumKeys;
 
 namespace ClearDashboard.DAL.Alignment.Features
 {
@@ -35,9 +38,13 @@ namespace ClearDashboard.DAL.Alignment.Features
             // CompositeToken: 808
             if (tokenComposite.ParallelCorpusId != null)
             {
-                ct.Metadata["IsParallelCorpusToken"] = true;
+                ct.Metadata[MetadatumKeys.IsParallelCorpusToken] = true;
+                ct.Metadata[MetadatumKeys.ParallelCorpusId] = tokenComposite.ParallelCorpusId;
             }
-           
+
+            ct.Metadata[MetadatumKeys.ModelTokenMetadata] = tokenComposite.Metadata.ToList();
+
+
             return ct;
         }
         public static CompositeToken BuildCompositeToken(Models.TokenComposite tokenComposite)
@@ -57,15 +64,20 @@ namespace ClearDashboard.DAL.Alignment.Features
                 return BuildCompositeToken(composite);
             }
             else
-            {
-                var token = (tokenComponent as Models.Token)!;
+            { 
+                var modelToken = (tokenComponent as Models.Token)!;
                 return new Token(
-                    ModelHelper.BuildTokenId(token),
-                    token.SurfaceText ?? string.Empty,
-                    token.TrainingText ?? string.Empty)
+                    ModelHelper.BuildTokenId(modelToken),
+                    modelToken.SurfaceText ?? string.Empty,
+                    modelToken.TrainingText ?? string.Empty)
                 {
-                    ExtendedProperties = token.ExtendedProperties
+                    ExtendedProperties = modelToken.ExtendedProperties,
+                    Metadata =
+                    {
+                        [MetadatumKeys.ModelTokenMetadata] = modelToken.Metadata.ToList()
+                    }
                 };
+
             }
         }
         public static TokenId BuildTokenId(Models.TokenComponent tokenComponent)
