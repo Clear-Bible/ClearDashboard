@@ -1030,11 +1030,17 @@
   <data name="LexiconImport_Checked" xml:space="preserve">
     <value>التحقق</value>
   </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>جسم:</value>
+  </data>
   <data name="LexiconImport_Import" xml:space="preserve">
     <value>يستورد</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>تم فحص الاستيراد</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>لغة:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>المفردات أو تطابقات النموذج</value>
@@ -1071,6 +1077,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>إلغاء تحديد الكل</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>كلمة:</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>الإسم الأول مطلوب</value>

@@ -1030,11 +1030,17 @@
   <data name="LexiconImport_Checked" xml:space="preserve">
     <value>चेक किए गए</value>
   </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>कॉर्पस:</value>
+  </data>
   <data name="LexiconImport_Import" xml:space="preserve">
     <value>आयात</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>आयात की जाँच की गई</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>भाषा:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>लेक्समी या फॉर्म मैच</value>
@@ -1071,6 +1077,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>सभी को अचयनित करें</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>शब्द:</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>पहला नाम आवश्यक है</value>

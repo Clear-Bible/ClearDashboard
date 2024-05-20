@@ -1030,11 +1030,17 @@
   <data name="LexiconImport_Checked" xml:space="preserve">
     <value>Verificat</value>
   </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>Corpus:</value>
+  </data>
   <data name="LexiconImport_Import" xml:space="preserve">
     <value>Import</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Import verificat</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>Limba:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexemul sau potrivirile de formă</value>
@@ -1071,6 +1077,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Deselectează tot</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>Cuvânt:</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>Prenumele este obligatoriu</value>

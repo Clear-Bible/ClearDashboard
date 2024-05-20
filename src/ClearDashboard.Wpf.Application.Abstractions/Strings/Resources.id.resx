@@ -1030,11 +1030,17 @@
   <data name="LexiconImport_Checked" xml:space="preserve">
     <value>Diperiksa</value>
   </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>Korpus:</value>
+  </data>
   <data name="LexiconImport_Import" xml:space="preserve">
     <value>Impor</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Impor Diperiksa</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>Bahasa:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Leksem atau bentuk yang cocok</value>
@@ -1071,6 +1077,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Batalkan pilihan Semua</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>Kata:</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>Nama Depan wajib diisi</value>

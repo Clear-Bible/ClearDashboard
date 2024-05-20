@@ -1030,11 +1030,17 @@
   <data name="LexiconImport_Checked" xml:space="preserve">
     <value>已檢查</value>
   </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>語料庫：</value>
+  </data>
   <data name="LexiconImport_Import" xml:space="preserve">
     <value>進口</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>導入檢查</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>語言：</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>詞位或形式匹配</value>
@@ -1071,6 +1077,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>全部取消選擇</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>單字：</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>名字為必填項</value>

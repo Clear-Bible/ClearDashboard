@@ -102,7 +102,7 @@
             Orientation="Horizontal">
             <Label
                 Margin="10,0,0,0"
-                Content="Corpus:"
+                Content="{helpers:Localization LexiconImport_Corpus}"
                 FontSize="14" />
             <Label
                 Margin="0,0,0,0"
@@ -130,7 +130,7 @@
             Grid.Row="0"
             Grid.Column="1"
             Orientation="Vertical">
-            <Label Content="Language:" FontSize="14" />
+            <Label Content="{helpers:Localization LexiconImport_Language}" FontSize="14" />
             <ComboBox
                 FontSize="14"
                 ItemsSource="{Binding LanguageMappingsList}"
@@ -151,7 +151,7 @@
             Grid.Row="0"
             Grid.Column="3"
             Orientation="Vertical">
-            <Label Content="Word:" />
+            <Label Content="{helpers:Localization LexiconImport_Word}" />
             <TextBox materialDesign:TextFieldAssist.HasClearButton="True" Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
 

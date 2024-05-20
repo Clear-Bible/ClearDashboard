@@ -1030,11 +1030,17 @@
   <data name="LexiconImport_Checked" xml:space="preserve">
     <value>ተረጋግጧል</value>
   </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>ኮርፐስ፡</value>
+  </data>
   <data name="LexiconImport_Import" xml:space="preserve">
     <value>አስመጣ</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>ማስመጣት ተረጋግጧል</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>ቋንቋ፡</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexeme ወይም ቅጽ ግጥሚያዎች</value>
@@ -1071,6 +1077,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>ሁሉንም አይምረጡ</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>ቃል፡-</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>የመጀመሪያ ስም ያስፈልጋል</value>

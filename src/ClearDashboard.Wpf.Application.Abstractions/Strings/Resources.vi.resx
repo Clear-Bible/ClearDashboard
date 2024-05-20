@@ -1030,11 +1030,17 @@
   <data name="LexiconImport_Checked" xml:space="preserve">
     <value>Đã kiểm tra</value>
   </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>Tập văn bản:</value>
+  </data>
   <data name="LexiconImport_Import" xml:space="preserve">
     <value>Nhập khẩu</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Đã kiểm tra nhập</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>Ngôn ngữ:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexeme hoặc mẫu phù hợp</value>
@@ -1071,6 +1077,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Bỏ chọn tất cả</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>Từ:</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>Tên là bắt buộc</value>
@@ -2186,7 +2195,7 @@
     <value>Thánh vịnh</value>
   </data>
   <data name="ProperCase_Revelation" xml:space="preserve">
-    <value>Khải huyền</value>
+    <value>Khải Huyền</value>
   </data>
   <data name="ProperCase_Romans" xml:space="preserve">
     <value>người La Mã</value>

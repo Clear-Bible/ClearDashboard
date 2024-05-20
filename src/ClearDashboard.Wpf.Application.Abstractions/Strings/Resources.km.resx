@@ -1030,11 +1030,17 @@
   <data name="LexiconImport_Checked" xml:space="preserve">
     <value>បានពិនិត្យ</value>
   </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>សាកសព៖</value>
+  </data>
   <data name="LexiconImport_Import" xml:space="preserve">
     <value>នាំចូល</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>បានពិនិត្យការនាំចូល</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>ភាសា៖</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Leexeme ឬ​ទម្រង់​ប្រកួត</value>
@@ -1071,6 +1077,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>ឈប់ជ្រើសរើសទាំងអស់។</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>ពាក្យ៖</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>ឈ្មោះដំបូងគឺចាំបាច់</value>

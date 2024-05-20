@@ -1030,11 +1030,17 @@
   <data name="LexiconImport_Checked" xml:space="preserve">
     <value>Geprüft</value>
   </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>Korpus:</value>
+  </data>
   <data name="LexiconImport_Import" xml:space="preserve">
     <value>Importieren</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Import geprüft</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>Sprache:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexem- oder Formübereinstimmungen</value>
@@ -1071,6 +1077,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Alles wiederufen</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>Wort:</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>Vorname ist erforderlich</value>
