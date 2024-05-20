@@ -660,7 +660,7 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
                     Id = Guid.NewGuid()
                 }
             };
-            composite1.Metadata["IsParallelCorpusToken"] = true;
+            composite1.Metadata[Models.MetadatumKeys.IsParallelCorpusToken] = true;
 
             var sw = new Stopwatch();
             sw.Start();

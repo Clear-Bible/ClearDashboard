@@ -216,6 +216,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             existingTokenComposite.EngineTokenId = request.CompositeToken.TokenId.ToString();
             existingTokenComposite.Deleted = null;
 
+            if (request.CompositeToken.HasMetadatum(Models.MetadatumKeys.ModelTokenMetadata))
+            {
+                existingTokenComposite.Metadata = request.CompositeToken.GetMetadatum<List<Models.Metadatum>>(Models.MetadatumKeys.ModelTokenMetadata).ToList();
+            }
+
             if (request.ParallelCorpusId == null && compositeCandidatesDb.GroupBy(e => e.Value.VerseRowId).Count() == 1)
             {
                 existingTokenComposite.VerseRowId = compositeCandidatesDb.Values.First().VerseRowId;
