@@ -1027,6 +1027,12 @@
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Find lexemes that have one or more translation that matches target</value>
   </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>Checked</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Import Checked</value>
   </data>

@@ -193,6 +193,7 @@
                     <Border>
                         <Border.Style>
                             <Style TargetType="{x:Type Border}">
+                                <Setter Property="Padding" Value="3,0" />
                                 <Setter Property="BorderThickness" Value="1" />
                                 <Setter Property="BorderBrush" Value="Gray" />
                                 <Setter Property="CornerRadius" Value="5" />

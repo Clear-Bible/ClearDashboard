@@ -1027,6 +1027,12 @@
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Найдите лексемы, у которых есть один или несколько переводов, соответствующих целевому значению.</value>
   </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>Проверено</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>Импортировать</value>
+  </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Импорт проверен</value>
   </data>
@@ -1388,7 +1394,7 @@
     <value>В соответствии с вашими разрешениями на проект Paratext,</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Фильтровать по стиху</value>
+    <value>Фильтровать по стихам</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Фильтры</value>
@@ -1475,7 +1481,7 @@
     <value>Отметить выбранные записи как открытые</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>Отметить выбранные заметки как решенные</value>
+    <value>Отметить выбранные записи как решенные</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Созданный</value>
@@ -1769,7 +1775,7 @@
     <value>ИсследованиеБиблияДополнения</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Перейдите в Паратекст и переключите проекты. Проект Paratext, подключенный в настоящее время к плагину ClearDashboard, отличается от корпуса в этом проекте ClearDashboard.</value>
+    <value>Перейдите в Паратекст и переключите проекты. Проект Paratext, подключенный в настоящее время к плагину ClearDashboard, не совпадает с корпусом в этом проекте ClearDashboard.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Цель</value>
@@ -1835,7 +1841,7 @@
     <value>Примечания</value>
   </data>
   <data name="Pins_Occurences" xml:space="preserve">
-    <value>Случаи</value>
+    <value>События</value>
   </data>
   <data name="Pins_Origin" xml:space="preserve">
     <value>Источник</value>
@@ -2213,7 +2219,7 @@
     <value>регистр</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Предоставленный ключ неисправен. При расшифровке не удалось найти некоторые элементы json.</value>
+    <value>Предоставленный ключ неисправен. При расшифровке некоторые элементы json не удалось найти.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>Содержимое расшифрованного лицензионного ключа не соответствует предоставленной вами информации.</value>
@@ -2495,7 +2501,7 @@
     <value>Обновить и добавить новое</value>
   </data>
   <data name="UseDefaults" xml:space="preserve">
-    <value>Создать, используя значения по умолчанию</value>
+    <value>Создать, используя настройки по умолчанию</value>
   </data>
   <data name="Windows_AlignmentTool" xml:space="preserve">
     <value>Инструмент выравнивания</value>

@@ -896,7 +896,7 @@
     <value>فهرس أبجدي</value>
   </data>
   <data name="Lexicon_DeleteLexeme" xml:space="preserve">
-    <value>احذف هذا المعجم</value>
+    <value>احذف هذا المفردات</value>
   </data>
   <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
     <value>حذف هذا المعجم؟</value>
@@ -923,7 +923,7 @@
     <value>Lemma للمفردات الجديدة:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
-    <value>معجم</value>
+    <value>المعجم</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>معجم لـ موجود بالفعل لـ lemma</value>
@@ -977,7 +977,7 @@
     <value>مطابقة كاملة</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
-    <value>معجم</value>
+    <value>المعجم</value>
   </data>
   <data name="LexiconEdit_LoadingData" xml:space="preserve">
     <value>تحميل البيانات...</value>
@@ -1026,6 +1026,12 @@
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>ابحث عن المعاجم التي تحتوي على ترجمة واحدة أو أكثر تطابق الهدف</value>
+  </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>التحقق</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>يستورد</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>تم فحص الاستيراد</value>
@@ -1235,7 +1241,7 @@
     <value>رموز قوية</value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
-    <value>المجالات الفرعية:</value>
+    <value>النطاقات الفرعية:</value>
   </data>
   <data name="Marble_Verse" xml:space="preserve">
     <value>بيت شعر</value>
@@ -1745,7 +1751,7 @@
     <value>الموارد</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
-    <value>قم بتوسيع المحتوى إلى 100%</value>
+    <value>قم بتوسيع المحتوى إلى 100٪</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
     <value>إضافة نص إلى نافذة جديدة</value>
@@ -1820,10 +1826,10 @@
     <value>لغة</value>
   </data>
   <data name="Pins_Lexeme" xml:space="preserve">
-    <value>معجم</value>
+    <value>المعجم</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
-    <value>نوع المفردات</value>
+    <value>نوع المعجم</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
     <value>تحميل المراجع</value>

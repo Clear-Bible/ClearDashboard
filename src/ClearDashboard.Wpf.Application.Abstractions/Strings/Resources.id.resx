@@ -128,13 +128,13 @@
     <value>Nama Pengguna Kolaborasi:</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
-    <value>-DETAIL REKENING SAAT INI-</value>
+    <value>-DETAIL AKUN SAAT INI-</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
     <value>Nonaktifkan Lisensi Saat Ini</value>
   </data>
   <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
-    <value>-AKUN LAIN-</value>
+    <value>-AKUN LAINNYA-</value>
   </data>
   <data name="AccountInfo_ParatextEmailLabel" xml:space="preserve">
     <value>Email Parateks:</value>
@@ -155,7 +155,7 @@
     <value>Menambahkan</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Pilih Cara Tokenisasi Corpus</value>
+    <value>Pilih Cara Membuat Tokenisasi Corpus</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Penyelarasan</value>
@@ -1019,13 +1019,19 @@
     <value>Tambahkan sebagai formulir untuk...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Temukan leksem lengkap atau sebagian atau kecocokan bentuk dengan sumbernya</value>
+    <value>Temukan leksem atau bentuk yang lengkap atau sebagian yang cocok dengan sumbernya</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Tambahkan target sebagai terjemahan untuk ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Temukan leksem yang mempunyai satu atau lebih terjemahan yang sesuai dengan sasaran</value>
+  </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>Diperiksa</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>Impor</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Impor Diperiksa</value>
@@ -1388,7 +1394,7 @@
     <value>Karena izin proyek Paratext Anda,</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Saring berdasarkan Ayat</value>
+    <value>Filter berdasarkan Ayat</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filter</value>
@@ -1709,7 +1715,7 @@
     <value>Paskan seluruh area konten ke area pandang</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>Paskan semua node ke viewport</value>
+    <value>Pasangkan semua node ke viewport</value>
   </data>
   <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
     <value>Dapatkan Catatan Eksternal Terbaru</value>
@@ -2372,7 +2378,7 @@
     <value>Validasi Kode Email</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Aktifkan tampilan Koleksi Teks ayat demi ayat</value>
+    <value>Aktifkan tampilan Kumpulan Teks ayat demi ayat</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>Batalkan Tugas</value>

@@ -22,6 +22,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using ClearDashboard.Wpf.Application.Models;
+using SIL.Linq;
 using Item = ClearDashboard.DataAccessLayer.Models.Item;
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -100,7 +101,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             set
             {
                 Set(ref _selectedLanguageMapping, value);
+                LexiconToImport.ForEach(l=>l.IsSelected=true);
                 LexiconCollectionView.Refresh();
+                NotifyOfPropertyChange(() => SelectedItemsCount);
             } 
         }
 
@@ -112,6 +115,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 Set(ref _allItemsSelected, value);
                 LexiconCollectionView.Refresh();
+                NotifyOfPropertyChange(() => SelectedItemsCount);
             }
         }
 
@@ -123,6 +127,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 Set(ref _noConflictItemsSelected, value);
                 LexiconCollectionView.Refresh();
+                NotifyOfPropertyChange(() => SelectedItemsCount);
             }
         }
 
@@ -134,6 +139,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 Set(ref _conflictItemsSelected, value);
                 LexiconCollectionView.Refresh();
+                NotifyOfPropertyChange(() => SelectedItemsCount);
             }
         }
 
@@ -146,16 +152,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 value ??= string.Empty;
                 _filterString = value;
                 LexiconCollectionView.Refresh();
+                NotifyOfPropertyChange(() => SelectedItemsCount);
             }
         }
 
         private ICollectionView _lexiconCollectionView;
         public ICollectionView LexiconCollectionView
         {
-            get => _lexiconCollectionView;
+            get
+            {
+                return _lexiconCollectionView;
+            }
             set
             {
                 _lexiconCollectionView = value;
+            }
+        }
+
+        private int _selectedItemsCount = 0;
+        public int SelectedItemsCount
+        {
+            get
+            {
+                return LexiconToImport.Count(l => l.IsSelected);
             }
         }
 
@@ -233,6 +252,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                         {
                             SelectedLanguageMapping = LanguageMappingsList.First();
                         }
+
+                        NotifyOfPropertyChange(() => SelectedItemsCount);
                     });
                 }
             }, cancellationToken);
@@ -262,6 +283,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                                          (lexiconViewModel.SourceLanguage == SelectedLanguageMapping.SourceLanguage && 
                                           lexiconViewModel.TargetLanguage == SelectedLanguageMapping.TargetLanguage);
 
+                if (!hasLanguageMapping)
+                {
+                    lexiconViewModel.IsSelected = false;
+                }
+
                 var inSelectedRadioGroup = false;
                 if (_allItemsSelected)
                 {
@@ -276,9 +302,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                     inSelectedRadioGroup = lexiconViewModel.HasConflictingMatch;
                 }
 
-                lexiconViewModel.IsSelected = hasFilterString && hasLanguageMapping && inSelectedRadioGroup;
-
-                return lexiconViewModel.IsSelected;
+                return hasFilterString && hasLanguageMapping && inSelectedRadioGroup;;
             }
             throw new Exception($"object provided to FilterLexiconCollectionView is type {obj.GetType().FullName} and not type LexiconImportViewModel");
         }
@@ -447,11 +471,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         {
             if (checkBox != null && LexiconToImport is { Count: > 0 })
             {
-                foreach (var lexicon in LexiconToImport)
+                
+                foreach (LexiconImportViewModel lexicon in LexiconCollectionView)
                 {
                     lexicon.IsSelected = checkBox.IsChecked ?? false;
                 }
+                NotifyOfPropertyChange(() => SelectedItemsCount);
             }
+        }
+
+        public void OnChecked(CheckBox? checkBox)
+        {
+            NotifyOfPropertyChange(() => SelectedItemsCount);
         }
 
 

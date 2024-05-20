@@ -158,18 +158,25 @@
         <StackPanel
             Grid.Row="2"
             Grid.Column="4"
+            HorizontalAlignment="Right"
             Orientation="Horizontal">
             <Button
                 x:Name="ProcessLexiconToImport"
-                Width="100"
                 Height="30"
                 Margin="10,0"
                 HorizontalAlignment="Left"
                 cm:Message.Attach="ProcessLexiconToImport"
-                Content="{helpers:Localization LexiconImport_ImportChecked}"
                 Foreground="{DynamicResource MaterialDesignBody}"
                 IsEnabled="{Binding HasLexiconToImport}"
-                Style="{StaticResource SmallTransparentStyle}" />
+                Style="{StaticResource SmallTransparentStyle}">
+                <Button.Content>
+                    <TextBlock>
+                        <Run Text="{helpers:Localization LexiconImport_Import}" />
+                        <Run Text="{Binding SelectedItemsCount, Mode=OneWay}" />
+                        <Run Text="{helpers:Localization LexiconImport_Checked}" />
+                    </TextBlock>
+                </Button.Content>
+            </Button>
 
             <Button
                 x:Name="Close"
@@ -264,6 +271,7 @@
                             <CheckBox
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
+                                cm:Message.Attach="[Event Checked] = [Action OnChecked($source)];[Event Unchecked] = [Action OnChecked($source)]"
                                 Focusable="False"
                                 IsChecked="{Binding Path=IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>

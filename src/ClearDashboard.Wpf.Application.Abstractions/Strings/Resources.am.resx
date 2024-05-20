@@ -740,7 +740,7 @@
     <value>EZR</value>
   </data>
   <data name="FontSettings_FontSize" xml:space="preserve">
-    <value>የፊደል መጠን፡-</value>
+    <value>የፊደል መጠን፡</value>
   </data>
   <data name="FontSettings_Height" xml:space="preserve">
     <value>ቁመት፡</value>
@@ -923,7 +923,7 @@
     <value>ለማ ለአዲስ ሌክስሜ፡-</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
-    <value>ሌክሰሜ</value>
+    <value>ሌክስሜ</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>ለለማ አስቀድሞ ሌክስሜ አለ።</value>
@@ -977,7 +977,7 @@
     <value>ሙሉ በሙሉ ተዛማጅ</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
-    <value>ሌክሰሜ</value>
+    <value>ሌክስሜ</value>
   </data>
   <data name="LexiconEdit_LoadingData" xml:space="preserve">
     <value>ውሂብ በመጫን ላይ...</value>
@@ -1026,6 +1026,12 @@
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>ከዒላማው ጋር የሚዛመድ አንድ ወይም ከዚያ በላይ ትርጉም ያላቸውን መዝገበ ቃላት ያግኙ</value>
+  </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>ተረጋግጧል</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>አስመጣ</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>ማስመጣት ተረጋግጧል</value>
@@ -1205,7 +1211,7 @@
     <value>አጠቃላይ መረጃ</value>
   </data>
   <data name="Marble_Glosses" xml:space="preserve">
-    <value>አንጸባራቂዎች፡</value>
+    <value>አንጸባራቂዎች</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
     <value>የንግግር ክፍሎች</value>
@@ -1406,7 +1412,7 @@
     <value>ማንኛውም</value>
   </data>
   <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>ተፈቷል።</value>
+    <value>ተፈትቷል</value>
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>ክፈት</value>
@@ -1493,7 +1499,7 @@
     <value>ክፈት</value>
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>ተፈቷል።</value>
+    <value>ተፈትቷል</value>
   </data>
   <data name="Notes_Note_Verse" xml:space="preserve">
     <value>ቁጥር</value>
@@ -1550,7 +1556,7 @@
     <value>እነዚህ ጆቶች ወደ Paratext ይላኩ?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>ጆቶችን ወደ ፓራቴክስት ላክ</value>
+    <value>ጆቶችን ወደ Paratext ይላኩ።</value>
   </data>
   <data name="Notes_TakeAction" xml:space="preserve">
     <value />
@@ -1595,7 +1601,7 @@
     <value>ኢንተርሊንየር ፍጠር</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
-    <value>JSON ሜታዳታ</value>
+    <value>JSON ዲበ ውሂብ</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
     <value>የ Corpora ጥቅሶችን ትይዩ ያድርጉ</value>
@@ -1820,7 +1826,7 @@
     <value>ቋንቋ</value>
   </data>
   <data name="Pins_Lexeme" xml:space="preserve">
-    <value>ሌክሰሜ</value>
+    <value>ሌክስሜ</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
     <value>Lexeme አይነት</value>
@@ -2228,7 +2234,7 @@
     <value>እባክህ የመጀመሪያ ስምህን አስገባ</value>
   </data>
   <data name="RegistrationView_LastName" xml:space="preserve">
-    <value>እባክህ የመጨረሻ ስምህን አስገባ</value>
+    <value>እባክህ የአያት ስምህን አስገባ</value>
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
     <value>እባክዎ የፍቃድ ቁልፍዎን ያስገቡ</value>
@@ -2381,13 +2387,13 @@
     <value>በመጫን ላይ...</value>
   </data>
   <data name="ShellView_NoBackGroundTasks" xml:space="preserve">
-    <value>ምንም የበስተጀርባ ተግባራት አይሰሩም።</value>
+    <value>ምንም የበስተጀርባ ስራዎች አይሰሩም።</value>
   </data>
   <data name="ShellView_PowerModeEnabled" xml:space="preserve">
     <value>የኃይል ሁነታ ነቅቷል።</value>
   </data>
   <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
-    <value>የበስተጀርባ ተግባሮችን አሳይ</value>
+    <value>የበስተጀርባ ተግባራትን አሳይ</value>
   </data>
   <data name="ShellView_ShowNotes" xml:space="preserve">
     <value>የመልቀቂያ ማስታወሻዎች</value>
@@ -2462,7 +2468,7 @@
     <value>ሁኔታ</value>
   </data>
   <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>የተቀረፀው</value>
+    <value>የተቀረጸ</value>
   </data>
   <data name="TargetContextView_Unformatted" xml:space="preserve">
     <value>ቅርጸት ያልተሰራ</value>

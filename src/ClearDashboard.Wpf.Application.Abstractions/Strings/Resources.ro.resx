@@ -611,7 +611,7 @@
     <value>Șterge</value>
   </data>
   <data name="Delete_Project" xml:space="preserve">
-    <value>Ștergeți proiectul</value>
+    <value>Șterge proiectul</value>
   </data>
   <data name="Delete_Project_Confirmation" xml:space="preserve">
     <value>Sigur doriți să ștergeți acest proiect?</value>
@@ -767,7 +767,7 @@
     <value>Textul țintă:</value>
   </data>
   <data name="FontSettings_TargetFontSize" xml:space="preserve">
-    <value>Dimensiunea țintă a fontului:</value>
+    <value>Dimensiunea vizată a fontului:</value>
   </data>
   <data name="FontSettings_Title" xml:space="preserve">
     <value>Titlu:</value>
@@ -908,7 +908,7 @@
     <value>Ștergeți această traducere</value>
   </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
-    <value>Introdu o nouă traducere pentru</value>
+    <value>Introduceți o nouă traducere pentru</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Introduceți un nou luciu</value>
@@ -920,7 +920,7 @@
     <value>Lema/Forme:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Lema pentru noul lexem:</value>
+    <value>Lema pentru lexemul nou:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>Lexem</value>
@@ -1025,7 +1025,13 @@
     <value>Adăugați ținta ca traducere pentru...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Găsiți lexeme care au una sau mai multe traduceri care se potrivesc țintei</value>
+    <value>Găsiți lexeme care au una sau mai multe traduceri care se potrivesc cu destinația</value>
+  </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>Verificat</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>Import</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Import verificat</value>
@@ -1544,7 +1550,7 @@
     <value>Selectați etichetele de eliminat din grupul de etichete</value>
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
-    <value>Notă: aceste etichete vor apărea sub grupul de etichete: Niciuna</value>
+    <value>Notă: aceste etichete vor apărea sub grupul de etichete: Nici unul</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>Trimiți aceste note către Paratext?</value>
@@ -1589,7 +1595,7 @@
     <value>Creați alinierea cuvintelor</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
-    <value>Creați o paralelă a versurilor corpurilor</value>
+    <value>Creați paralelizarea versurilor corpurilor</value>
   </data>
   <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
     <value>Creați interliniar</value>
@@ -1607,7 +1613,7 @@
     <value>Algoritmul de aliniere a cuvintelor mașinii</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Tren model simetrizat?</value>
+    <value>Modelul simetric al trenului?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>Tren</value>
@@ -1688,7 +1694,7 @@
     <value>Ștergeți Interlinear</value>
   </data>
   <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>Sigur doriți să ștergeți acest corpus? Toate notele, aliniamentele și interliniarele asociate cu acest corpus vor fi șterse și nu pot fi recuperate.</value>
+    <value>Sigur doriți să ștergeți acest corpus? Toate notele, aliniamentele și elementele interliniare asociate cu acest corpus vor fi șterse și nu pot fi recuperate.</value>
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Dicţionar</value>
@@ -1802,7 +1808,7 @@
     <value>PHP</value>
   </data>
   <data name="Pins_ClearFilter" xml:space="preserve">
-    <value>Șterge filtrul</value>
+    <value>Ștergeți filtrul</value>
   </data>
   <data name="Pins_Code" xml:space="preserve">
     <value>Cod</value>
@@ -1901,7 +1907,7 @@
     <value>Nu puteți șterge acel proiect, o altă aplicație încă îl folosește.</value>
   </data>
   <data name="ProjectPicker_DeleteProject" xml:space="preserve">
-    <value>Ștergeți proiectul</value>
+    <value>Șterge proiectul</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
     <value>Activați selecția cărților</value>
@@ -2225,7 +2231,7 @@
     <value>Bun venit la ClearDashboard! Vă rugăm să introduceți informațiile de înregistrare.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
-    <value>Vă rugăm să introduceți prenumele</value>
+    <value>Vă rugăm să introduceți prenumele dvs</value>
   </data>
   <data name="RegistrationView_LastName" xml:space="preserve">
     <value>Vă rugăm să introduceți numele dvs. de familie</value>
@@ -2327,7 +2333,7 @@
     <value>Moduri de putere</value>
   </data>
   <data name="Settings_PowerModesDescription" xml:space="preserve">
-    <value>Permiteți ClearDashboard să schimbe modurile de alimentare în timpul evenimentelor de calcul ridicat</value>
+    <value>Permiteți ClearDashboard-ului să schimbe modurile de alimentare în timpul evenimentelor de calcul ridicat</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
     <value>Rezervat</value>

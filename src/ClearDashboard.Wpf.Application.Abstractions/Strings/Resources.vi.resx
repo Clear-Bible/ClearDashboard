@@ -113,7 +113,7 @@
     <value>Phiên bản</value>
   </data>
   <data name="AccountInfo_ClearDashboardUserIdLabel" xml:space="preserve">
-    <value>Id người dùng ClearDashboard:</value>
+    <value>ClearDashboard UserId:</value>
   </data>
   <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
     <value>Tên người dùng ClearDashboard:</value>
@@ -677,7 +677,7 @@
     <value>Tham gia Token</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Mã thông báo tham gia cho cặp ngôn ngữ</value>
+    <value>Tham gia Token cho cặp ngôn ngữ</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>Đánh dấu căn chỉnh là 'Không hợp lệ'</value>
@@ -1027,6 +1027,12 @@
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Tìm từ vựng có một hoặc nhiều bản dịch phù hợp với mục tiêu</value>
   </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>Đã kiểm tra</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>Nhập khẩu</value>
+  </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Đã kiểm tra nhập</value>
   </data>
@@ -1139,7 +1145,7 @@
     <value>Công cụ căn chỉnh</value>
   </data>
   <data name="MainView_WindowsBiblicalTerms" xml:space="preserve">
-    <value>Điều khoản Kinh Thánh</value>
+    <value>Điều khoản Kinh thánh</value>
   </data>
   <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
     <value>Mã thông báo Corpus</value>
@@ -1769,7 +1775,7 @@
     <value>Nghiên CứuKinh ThánhBổ Sung</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Đi tới Paratext và chuyển đổi dự án. Dự án Paratext hiện được kết nối với plugin ClearDashboard không giống với kho văn bản trong dự án ClearDashboard này.</value>
+    <value>Đi đến Paratext và chuyển đổi dự án. Dự án Paratext hiện được kết nối với plugin ClearDashboard không giống với kho văn bản trong dự án ClearDashboard này.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Mục tiêu</value>
@@ -1778,7 +1784,7 @@
     <value>Chuyển ngữHướng dẫn sử dụng</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Chuyển ngữVới bộ mã hóa</value>
+    <value>Chuyển ngữVới Bộ mã hóa</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>không xác định</value>
@@ -2357,7 +2363,7 @@
     <value>Hiển thị Chế độ xem mở rộng trên màn hình khác với Trang tổng quan</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Đối với các hệ thống có ba màn hình trở lên, hãy hiển thị Chế độ xem mở rộng trên màn hình thứ ba</value>
+    <value>Đối với hệ thống có ba màn hình trở lên, hãy hiển thị Chế độ xem mở rộng trên màn hình thứ ba</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Bộ sưu tập văn bản</value>
@@ -2393,7 +2399,7 @@
     <value>Ghi chú phát hành</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>Hiển thị các bản phát hành trước</value>
+    <value>Hiển thị bản phát hành trước</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
     <value>Cập nhật lên phiên bản mới của ClearDashboard</value>
@@ -2501,7 +2507,7 @@
     <value>Công cụ căn chỉnh</value>
   </data>
   <data name="Windows_BiblicalTerms" xml:space="preserve">
-    <value>Điều khoản Kinh Thánh</value>
+    <value>Điều khoản Kinh thánh</value>
   </data>
   <data name="Windows_CorpusTokens" xml:space="preserve">
     <value>Mã thông báo Corpus</value>
