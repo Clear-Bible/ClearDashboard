@@ -9,6 +9,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using SIL.IO.FileLock;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DAL.WpfViewModels;
 using ClearDashboard.Wpf.Application.Helpers;
 
 namespace ClearDashboard.Wpf.Application.Views.ParatextViews
