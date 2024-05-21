@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
@@ -129,6 +130,19 @@ namespace ClearDashboard.Wpf.Application.UserControls
             });
         }
 
+
+        private void RaiseTokenCharacterEvent(RoutedEvent routedEvent, RoutedEventArgs e)
+        {
+            var control = e.Source as FrameworkElement;
+            var tokenCharacter = control?.DataContext as TokenCharacterViewModel;
+            RaiseEvent(new TokenCharacterEventArgs
+            {
+                RoutedEvent = routedEvent,
+                TokenCharacter = tokenCharacter!,
+                ModifierKeys = Keyboard.Modifiers
+            });
+        }
+
         private void OnCharacterClicked(object sender, RoutedEventArgs args)
         {
             RaiseTokenCharacterEvent(CharacterClickedEvent, args as TokenCharacterEventArgs);
@@ -142,6 +156,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public SplittableTokenCharactersDisplay()
         {
             InitializeComponent();
+        }
+
+        private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            RaiseTokenCharacterEvent(CharacterClickedEvent, e);
         }
     }
 }

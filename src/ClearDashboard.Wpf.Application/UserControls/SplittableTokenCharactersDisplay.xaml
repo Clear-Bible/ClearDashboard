@@ -24,7 +24,19 @@
                     FontSize="{Binding ElementName=TokenCharactersDisplayControl, Path=FontSize}"
                     Threshold1="{Binding ElementName=TokenCharactersDisplayControl, Path=Threshold1}"
                     Threshold2="{Binding ElementName=TokenCharactersDisplayControl, Path=Threshold2}" />
-                  <Button Width="4" Height="20"></Button>
+                <Rectangle Width="6" Height="40" Fill="Gray" MouseLeftButtonDown="OnMouseLeftButtonDown" >
+                    <Rectangle.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="0"/>
+                        </Style>
+                    </Rectangle.Resources>
+                    <Rectangle.Visibility>
+                        <MultiBinding Converter="{StaticResource IsLastItemVisibilityConverter}">
+                            <Binding ElementName="TokensItemsControl" Path="DataContext.Count" />
+                            <Binding Path="Index" />
+                        </MultiBinding>
+                    </Rectangle.Visibility>
+                </Rectangle>
             </StackPanel>
             
         </DataTemplate>
@@ -33,7 +45,7 @@
         </ItemsPanelTemplate>
     </UserControl.Resources>
     <Grid>
-        <ItemsControl
+        <ItemsControl x:Name="TokensItemsControl"
             FlowDirection="{Binding ElementName=TokenCharactersDisplayControl, Path=FlowDirection}"
             ItemTemplate="{StaticResource TokenCharacterDisplay}"
             ItemsPanel="{StaticResource WrapPanelTemplate}"
