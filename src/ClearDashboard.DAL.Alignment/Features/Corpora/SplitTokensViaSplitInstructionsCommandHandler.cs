@@ -584,6 +584,11 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
         tokenComposite.ExtendedProperties = null;
         tokenComposite.Deleted = null;
 
+        if (compositeToken.HasMetadatum(MetadatumKeys.ModelTokenMetadata))
+        {
+            tokenComposite.Metadata = compositeToken.GetMetadatum<List<Metadatum>>(MetadatumKeys.ModelTokenMetadata);
+        }
+
         if (modelTokens.GroupBy(e => e.VerseRowId).Count() == 1)
         {
             tokenComposite.VerseRowId = verseRowId;
