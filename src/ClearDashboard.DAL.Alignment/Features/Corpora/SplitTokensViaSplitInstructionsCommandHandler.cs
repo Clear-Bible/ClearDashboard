@@ -586,7 +586,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 
         if (compositeToken.HasMetadatum(MetadatumKeys.ModelTokenMetadata))
         {
-            tokenComposite.Metadata = compositeToken.GetMetadatum<List<Metadatum>>(MetadatumKeys.ModelTokenMetadata);
+            tokenComposite.Metadata = compositeToken.GetMetadatum<List<Metadatum>>(MetadatumKeys.ModelTokenMetadata).ToList();
         }
 
         if (modelTokens.GroupBy(e => e.VerseRowId).Count() == 1)
