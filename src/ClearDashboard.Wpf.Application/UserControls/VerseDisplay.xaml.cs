@@ -280,10 +280,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
             (nameof(FilterPins), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
-        /// Identifies the FilterPinsTargetEvent routed event.
+        /// Identifies the FilterPinsTranslationEvent routed event.
         /// </summary>
-        public static readonly RoutedEvent FilterPinsTargetEvent = EventManager.RegisterRoutedEvent
-            (nameof(FilterPinsTarget), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+        public static readonly RoutedEvent FilterPinsTranslationEvent = EventManager.RegisterRoutedEvent
+            (nameof(FilterPinsTranslation), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the FilterPinsByBiblicalTermsEvent routed event.
@@ -951,6 +951,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
         private void OnTranslationRightButtonDown(object sender, RoutedEventArgs e)
         {
+            var control = e.Source as FrameworkElement;
+            if (control?.DataContext is TokenDisplayViewModel { IsTranslationSelected: false } tokenDisplay)
+            {
+                UpdateVerseSelection(tokenDisplay, false, true);
+            }
+
             RaiseTranslationEvent(TranslationRightButtonDownEvent, e);
         }
 
@@ -979,7 +985,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTranslationEvent(TranslationSetEvent, e);
         }
 
-        private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e)
+        private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e, bool isTranslation = false)
         {
 
            
@@ -991,10 +997,34 @@ namespace ClearDashboard.Wpf.Application.UserControls
             // the token selected on the TokenDisplay control 
             if (control != null)
             {
-                if (!VerseSelectedTokens.Contains(control?.TokenDisplayViewModel!))
+                var isTokenClickedWhileTranslationSelected = control?.TokenDisplayViewModel!.IsTranslationSelected != isTranslation;
+
+                var numberOfTokensSelected = 0;
+                foreach(var tokenDisplay in VerseSelectedTokens)
+                {
+                    if (tokenDisplay.IsTranslationSelected)
+                    {
+                        numberOfTokensSelected++;
+                    }
+                    if (tokenDisplay.IsTokenSelected)
+                    {
+                        numberOfTokensSelected++;
+                    }
+                }
+
+                if (!VerseSelectedTokens.Contains(control?.TokenDisplayViewModel!) ||  (isTokenClickedWhileTranslationSelected && numberOfTokensSelected <= 1))
                 {
                     VerseSelectedTokens.Clear();
-                    control.TokenDisplayViewModel.IsTokenSelected = true;
+                    if (isTranslation)
+                    {
+                        control.TokenDisplayViewModel.IsTokenSelected = false;
+                        control.TokenDisplayViewModel.IsTranslationSelected = true;
+                    }
+                    else
+                    {
+                        control.TokenDisplayViewModel.IsTokenSelected = true;
+                        control.TokenDisplayViewModel.IsTranslationSelected = false;
+                    }
                     VerseSelectedTokens.Add(control?.TokenDisplayViewModel!);
                 }
             }
@@ -1051,16 +1081,55 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseNoteEvent(NoteCreateEvent, e);
         }
 
+        private void OnTranslationNoteLeftButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteLeftButtonDownEvent, e, true);
+        }
+
+        private void OnTranslationNoteLeftButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteRightButtonUpEvent, e, true);
+        }
+        private void OnTranslationNoteRightButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteRightButtonDownEvent, e, true);
+        }
+
+        private void OnTranslationNoteRightButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteRightButtonUpEvent, e, true);
+        }
+
+        private void OnTranslationNoteMouseEnter(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteMouseEnterEvent, e, true);
+        }
+
+        private void OnTranslationNoteMouseLeave(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteMouseLeaveEvent, e, true);
+        }
+
+        private void OnTranslationNoteMouseWheel(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteMouseWheelEvent, e, true);
+        }
+
+        private void OnTranslationNoteCreate(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteCreateEvent, e, true);
+        }
+
         private void OnFilterPins(object sender, RoutedEventArgs e)
         {
             //3
             RaiseNoteEvent(FilterPinsEvent, e);
         }
 
-        private void OnFilterPinsTarget(object sender, RoutedEventArgs e)
+        private void OnFilterPinsTranslation(object sender, RoutedEventArgs e)
         {
             //3
-            RaiseNoteEvent(FilterPinsTargetEvent, e);
+            RaiseNoteEvent(FilterPinsTranslationEvent, e, true);
         }
 
         private void OnFilterPinsByBiblicalTerms(object sender, RoutedEventArgs e)
@@ -1487,10 +1556,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Occurs when the user requests to filter pins.
         /// </summary>
-        public event RoutedEventHandler FilterPinsTarget
+        public event RoutedEventHandler FilterPinsTranslation
         {
-            add => AddHandler(FilterPinsTargetEvent, value);
-            remove => RemoveHandler(FilterPinsTargetEvent, value);
+            add => AddHandler(FilterPinsTranslationEvent, value);
+            remove => RemoveHandler(FilterPinsTranslationEvent, value);
         }
 
         /// <summary>

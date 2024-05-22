@@ -343,6 +343,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _isNoteHovered, value);
         }
 
+        private bool _isTranslationNoteHovered;
+        public bool IsTranslationNoteHovered
+        {
+            get => _isTranslationNoteHovered;
+            set => Set(ref _isTranslationNoteHovered, value);
+        }
+
         public SolidColorBrush NoteIndicatorBrush
         {
             get => _noteIndicatorBrush;
@@ -390,6 +397,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        private bool _isFirstJotsNoteTranslation = false;
+        public bool IsFirstJotsNoteTranslation
+        {
+            get => _isFirstJotsNoteTranslation;
+            set
+            {
+                _isFirstJotsNoteTranslation = value;
+                NotifyOfPropertyChange(nameof(IsFirstJotsNoteTranslation));
+                NotifyOfPropertyChange(nameof(TranslationHasNote));
+            }
+        }
 
         private bool _multipleExternalNotes = false;
         private SolidColorBrush _noteIndicatorBrush;

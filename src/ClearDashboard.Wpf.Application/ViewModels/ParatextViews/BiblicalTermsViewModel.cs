@@ -30,6 +30,7 @@ using ClearApplicationFoundation.Framework.Input;
 using ClearDashboard.DAL.WpfViewModels;
 using Point = System.Windows.Point;
 using ClearDashboard.Wpf.Application.Messages;
+using ClearDashboard.DAL.WpfViewModels;
 
 // ReSharper disable InconsistentNaming
 

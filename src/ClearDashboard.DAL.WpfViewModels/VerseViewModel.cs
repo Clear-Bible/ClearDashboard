@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Windows.Documents;
 using ClearDashboard.DAL.ViewModels;
 
-
 namespace ClearDashboard.DAL.WpfViewModels
 {
     public class VerseViewModel : ViewModelBase<VerseObject>
