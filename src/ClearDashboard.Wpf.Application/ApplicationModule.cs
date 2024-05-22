@@ -65,10 +65,10 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterType<NoteManager>().AsSelf().SingleInstance();
             builder.RegisterType<NoteManager>().AsSelf().Keyed<NoteManager>("JotsNoteManager").InstancePerDependency();
 
+            // This is the transient instance used by the registration below to get a cloned version of the SelectionManager 
+            builder.RegisterType<SelectionManager>().AsSelf().Keyed<SelectionManager>("TransientSelectionManager").InstancePerDependency();
             // This is the singleton instance used by the EnhancedViews
             builder.RegisterType<SelectionManager>().AsSelf().SingleInstance();
-            // This is the transient instance used by the registration below to get a cloned version of the SelectionManager 
-            builder.RegisterType<SelectionManager>().AsSelf().Keyed<SelectionManager>("TransientSelectionManager").InstancePerDependency(); ;
 
             // This is the transient instance used by the JotsEditor
             //builder.Register<SelectionManager>(c =>
