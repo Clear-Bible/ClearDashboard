@@ -32,15 +32,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             string name;
             Guid guid;
 
-            try
-            {
-                (name, guid) = request.DomainEntityId.GetNameAndId();
-            }
-            catch
-            {
-                guid = request.DomainEntityId.Id;
-                name = request.DomainEntityId.GetType().ToString();
-            }
+            (name, guid) = request.DomainEntityId.GetNameAndId();
 
             var noteDomainEntityAssociation = ProjectDbContext!.NoteDomainEntityAssociations
                 .FirstOrDefault(

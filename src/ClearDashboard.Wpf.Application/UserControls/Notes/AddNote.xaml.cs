@@ -520,9 +520,18 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         private void OnNoteTextBoxChanged(object sender, TextChangedEventArgs e)
         {
-            if (NoteTextBoxVisibility == Visibility.Visible)
+            if (sender is TextBox textBox)
+            {
+                Note.Text = textBox.Text;
+            }
+
+            if (NoteTextBoxVisibility == Visibility.Visible && Note.Text != string.Empty)
             {
                 IsChanged = true;
+            }
+            else
+            {
+                IsChanged = false;
             }
         }
 

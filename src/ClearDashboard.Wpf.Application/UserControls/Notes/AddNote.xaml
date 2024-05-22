@@ -247,6 +247,7 @@
                 Style="{StaticResource AlternativeStyle}" />
             <Button x:Name="OkButton"
                 Height="40"
+                IsDefault="True"
                 Margin="3,5,0,0"
                 Click="ApplyNote"
                 Content="{helpers:Localization Notes_AddJot}"
