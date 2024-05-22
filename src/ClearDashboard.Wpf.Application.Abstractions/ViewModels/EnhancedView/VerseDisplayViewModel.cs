@@ -632,10 +632,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 MatchingTokenAction(
                     t => message.Note.Associations.Any(a =>
-                        a.AssociatedEntityId.IdEquals(t.Token.TokenId) ||
-                        a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t =>
+                        a.AssociatedEntityId.IdEquals(t.Token.TokenId)), t =>
                     {
                         t.IsNoteHovered = true;
+                        t.NoteIndicatorBrush = message.NewNote ? Brushes.Orange : Brushes.MediumPurple;
+                    });
+
+                MatchingTokenAction(
+                    t => message.Note.Associations.Any(a =>
+                        a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t =>
+                    {
                         t.IsTranslationNoteHovered = true;
                         t.NoteIndicatorBrush = message.NewNote ? Brushes.Orange : Brushes.MediumPurple;
                     });

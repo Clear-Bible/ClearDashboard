@@ -2476,6 +2476,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 if (message.Entities.ContainsId(TokenDisplayViewModel.Token.TokenId))
                 {
                     TokenDisplayViewModel.IsNoteHovered = true;
+                    TokenDisplayViewModel.NoteIndicatorBrush = message.NewNote ? Brushes.Orange : Brushes.MediumPurple;
+                }
+
+                if (message.Entities.ContainsId(TokenDisplayViewModel.Translation.TranslationId))
+                {
                     TokenDisplayViewModel.IsTranslationNoteHovered = true;
                     TokenDisplayViewModel.NoteIndicatorBrush = message.NewNote ? Brushes.Orange : Brushes.MediumPurple;
                 }
