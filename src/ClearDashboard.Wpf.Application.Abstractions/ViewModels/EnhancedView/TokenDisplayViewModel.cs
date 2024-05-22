@@ -343,6 +343,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _isNoteHovered, value);
         }
 
+        private bool _isTranslationNoteHovered;
+        public bool IsTranslationNoteHovered
+        {
+            get => _isTranslationNoteHovered;
+            set => Set(ref _isTranslationNoteHovered, value);
+        }
+
         public SolidColorBrush NoteIndicatorBrush
         {
             get => _noteIndicatorBrush;

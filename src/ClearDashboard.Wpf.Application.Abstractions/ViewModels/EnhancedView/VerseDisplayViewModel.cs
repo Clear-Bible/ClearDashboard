@@ -636,6 +636,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t =>
                     {
                         t.IsNoteHovered = true;
+                        t.IsTranslationNoteHovered = true;
                         t.NoteIndicatorBrush = message.NewNote ? Brushes.Orange : Brushes.MediumPurple;
                     });
             }
@@ -650,7 +651,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 MatchingTokenAction(
                     t => message.Note.Associations.Any(a =>
                         a.AssociatedEntityId.IdEquals(t.Token.TokenId) ||
-                        a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t => t.IsNoteHovered = false);
+                        a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t =>
+                    {
+                        t.IsNoteHovered = false;
+                        t.IsTranslationNoteHovered = false;
+                    });
 
             }
 

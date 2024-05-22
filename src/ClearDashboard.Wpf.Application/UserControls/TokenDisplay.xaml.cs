@@ -2404,8 +2404,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             TranslationNoteFlagIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TranslationHasNote && TokenDisplayViewModel.IsFirstJotsNoteTranslation) ? Visibility.Visible : Visibility.Hidden;
 
             // JOTS - highlighting
-            NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered && TokenDisplayViewModel.IsTokenSelected ? TokenDisplayViewModel.NoteIndicatorBrush : NoteIndicatorColor;
-            TranslationNoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered && TokenDisplayViewModel.IsTranslationSelected ? TokenDisplayViewModel.NoteIndicatorBrush : NoteIndicatorColor;
+            NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered ? TokenDisplayViewModel.NoteIndicatorBrush : NoteIndicatorColor;
+            TranslationNoteIndicatorComputedColor = TokenDisplayViewModel.IsTranslationNoteHovered ? TokenDisplayViewModel.NoteIndicatorBrush : NoteIndicatorColor;
 
             TranslationMargin = new Thickness(translationLeftMargin, 0, translationRightMargin, TranslationVerticalSpacing);
             TranslationVisibility = (ShowTranslation && TokenDisplayViewModel.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
@@ -2476,6 +2476,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 if (message.Entities.ContainsId(TokenDisplayViewModel.Token.TokenId))
                 {
                     TokenDisplayViewModel.IsNoteHovered = true;
+                    TokenDisplayViewModel.IsTranslationNoteHovered = true;
                     TokenDisplayViewModel.NoteIndicatorBrush = message.NewNote ? Brushes.Orange : Brushes.MediumPurple;
                 }
             }
@@ -2490,6 +2491,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 if (message.Entities.ContainsId(TokenDisplayViewModel.Token.TokenId) || message.Entities.ContainsId(TokenDisplayViewModel.Translation.TranslationId))
                 {
                     TokenDisplayViewModel.IsNoteHovered = false;
+                    TokenDisplayViewModel.IsTranslationNoteHovered = false;
                 }
             }
 
