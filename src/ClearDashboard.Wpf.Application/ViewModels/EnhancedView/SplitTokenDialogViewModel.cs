@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using Autofac;
 using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
@@ -21,9 +23,41 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
+
+    public class SplitInstructionViewModel : PropertyChangedBase
+    {
+        private string? _trainingText;
+        private int _index;
+        private string? _tokenText;
+
+        public string? TrainingText
+        {
+            get => _trainingText;
+            set => Set(ref _trainingText, value);
+        }
+
+        public int Index
+        {
+            get => _index;
+            set => Set(ref _index, value);
+        }
+
+        public string? TokenText
+        {
+            get => _tokenText;
+            set => Set(ref _tokenText, value);
+        }
+    }
+
     public class SplitTokenDialogViewModel : DashboardApplicationScreen
     {
         public VerseManager VerseManager { get; }
+
+
+        public BindableCollection<SplitInstructionViewModel> SplitInstructionsViewModels { get; } = new();
+
+        private SplitInstructions? _splitInstructions;
+
         public List<KeyValuePair<SplitTokenPropagationScope, string>> PropagationOptions { get; } = new();
         public SplitTokenPropagationScope SelectedPropagationOption { get; set; } = SplitTokenPropagationScope.None;
 
@@ -49,6 +83,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set
             {
                 _tokenDisplay = value;
+                _splitInstructions ??= SplitInstructions.CreateSplits(_tokenDisplay.SurfaceText, new List<int>());
                 CharacterThreshold2 = TokenLength;
                 NotifyOfPropertyChange(nameof(TokenCharacters));
             } 
@@ -212,19 +247,51 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             private set => Set(ref _isLoaded, value);
         }
 
+
+
         public void CharacterClicked(object source, RoutedEventArgs args)
         {
             var tokenCharacterArgs = args as TokenCharacterEventArgs;
-            if (tokenCharacterArgs!.IsShiftPressed)
-            {
-                CharacterThreshold2 = tokenCharacterArgs!.TokenCharacter.Index;
-                ThreeWaySplit = true;
 
+            var tokenCharacter = tokenCharacterArgs!.TokenCharacter;
+            var splitIndex = tokenCharacter.Index + 1;
+
+            if (tokenCharacter.IsSelected)
+            {
+
+                if (!_splitInstructions.SplitIndexes.Contains(splitIndex))
+                {
+                    _splitInstructions.SplitIndexes.Add(splitIndex);
+                    var indexes = _splitInstructions.SplitIndexes.OrderBy(i => i).ToList();
+
+                    _splitInstructions = SplitInstructions.CreateSplits(TokenDisplay.SurfaceText, indexes);
+                    SplitInstructionsViewModels.Clear();
+
+                    foreach (var instruction in _splitInstructions.Instructions)
+                    {
+                        SplitInstructionsViewModels.Add(new SplitInstructionViewModel { Index = instruction.Index, TokenText = instruction.TokenText, TrainingText = instruction.TrainingText });
+                    }
+
+                }
             }
             else
             {
-                CharacterThreshold1 = tokenCharacterArgs!.TokenCharacter.Index + 1;
+
+                if (_splitInstructions.SplitIndexes.Contains(splitIndex))
+                {
+                    _splitInstructions.SplitIndexes.Remove(splitIndex);
+                    var indexes = _splitInstructions.SplitIndexes.OrderBy(i => i).ToList();
+                    _splitInstructions = SplitInstructions.CreateSplits(TokenDisplay.SurfaceText, indexes);
+
+                    SplitInstructionsViewModels.Clear();
+                    foreach (var instruction in _splitInstructions.Instructions)
+                    {
+                        SplitInstructionsViewModels.Add(new SplitInstructionViewModel { Index = instruction.Index, TokenText = instruction.TokenText, TrainingText = instruction.TrainingText });
+                    }
+                }
+              
             }
+         
         }
 
         public void ThreeWaySplitUnchecked(object source, RoutedEventArgs args)

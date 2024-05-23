@@ -17,14 +17,11 @@
                     HorizontalAlignment="Center"
                     HorizontalContentAlignment="Center"
                     BackgroundColor1="{Binding ElementName=TokenCharactersDisplayControl, Path=BackgroundColor1}"
-                    BackgroundColor2="{Binding ElementName=TokenCharactersDisplayControl, Path=BackgroundColor2}"
-                    CharacterClicked="OnCharacterClicked"
                     FlowDirection="{Binding ElementName=TokenCharactersDisplayControl, Path=FlowDirection}"
                     FontFamily="{Binding ElementName=TokenCharactersDisplayControl, Path=FontFamily}"
                     FontSize="{Binding ElementName=TokenCharactersDisplayControl, Path=FontSize}"
-                    Threshold1="{Binding ElementName=TokenCharactersDisplayControl, Path=Threshold1}"
-                    Threshold2="{Binding ElementName=TokenCharactersDisplayControl, Path=Threshold2}" />
-                <Rectangle Width="6" Height="40" Fill="Gray" MouseLeftButtonDown="OnMouseLeftButtonDown" >
+                  />
+                  <Rectangle Width="6" Height="40" Fill="Gray" MouseLeftButtonDown="OnMouseLeftButtonDown" Cursor="Hand">
                     <Rectangle.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="0"/>

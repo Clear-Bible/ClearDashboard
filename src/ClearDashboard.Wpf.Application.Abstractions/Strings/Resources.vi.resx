@@ -113,7 +113,7 @@
     <value>Phiên bản</value>
   </data>
   <data name="AccountInfo_ClearDashboardUserIdLabel" xml:space="preserve">
-    <value>Id người dùng ClearDashboard:</value>
+    <value>ClearDashboard UserId:</value>
   </data>
   <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
     <value>Tên người dùng ClearDashboard:</value>
@@ -677,7 +677,7 @@
     <value>Tham gia Token</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Mã thông báo tham gia cho cặp ngôn ngữ</value>
+    <value>Tham gia Token cho cặp ngôn ngữ</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>Đánh dấu căn chỉnh là 'Không hợp lệ'</value>
@@ -786,6 +786,12 @@
   </data>
   <data name="GEN" xml:space="preserve">
     <value>GEN</value>
+  </data>
+  <data name="GrammarTagList_Description" xml:space="preserve">
+    <value>Sự miêu tả</value>
+  </data>
+  <data name="GrammarTagList_Short" xml:space="preserve">
+    <value>Ngắn</value>
   </data>
   <data name="HAB" xml:space="preserve">
     <value>HAB</value>
@@ -917,7 +923,7 @@
     <value>bổ đề</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
-    <value>Bổ đề/Dạng:</value>
+    <value>Bổ đề/Dạng thức:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
     <value>Bổ đề cho từ vựng mới:</value>
@@ -1027,11 +1033,23 @@
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Tìm từ vựng có một hoặc nhiều bản dịch phù hợp với mục tiêu</value>
   </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>Đã kiểm tra</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>Tập văn bản:</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>Nhập khẩu</value>
+  </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Đã kiểm tra nhập</value>
   </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>Ngôn ngữ:</value>
+  </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
-    <value>Lexeme hoặc mẫu phù hợp</value>
+    <value>Từ vựng hoặc mẫu phù hợp</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
     <value>Không còn bản ghi nào để nhập.</value>
@@ -1058,13 +1076,16 @@
     <value>Từ mục tiêu</value>
   </data>
   <data name="LexiconImport_Title" xml:space="preserve">
-    <value>Nhập từ vựng</value>
+    <value>Nhập từ điển</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
     <value>Trận đấu dịch</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Bỏ chọn tất cả</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>Từ:</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>Tên là bắt buộc</value>
@@ -1121,7 +1142,7 @@
     <value>Sở thích</value>
   </data>
   <data name="MainView_QuickNew" xml:space="preserve">
-    <value>Nhanh chóng Mới</value>
+    <value>Mới nhanh</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Có sẵn các thay đổi cộng tác</value>
@@ -1760,7 +1781,7 @@
     <value>Tiêu chuẩn</value>
   </data>
   <data name="Pds_StartParatextFirst" xml:space="preserve">
-    <value>Bắt đầu đoạn văn bản đầu tiên</value>
+    <value>Bắt đầu đoạn văn đầu tiên</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
     <value>Nghiên CứuKinh Thánh</value>
@@ -1769,7 +1790,7 @@
     <value>Nghiên CứuKinh ThánhBổ Sung</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Đi tới Paratext và chuyển đổi dự án. Dự án Paratext hiện được kết nối với plugin ClearDashboard không giống với kho văn bản trong dự án ClearDashboard này.</value>
+    <value>Đi đến Paratext và chuyển đổi dự án. Dự án Paratext hiện được kết nối với plugin ClearDashboard không giống với kho văn bản trong dự án ClearDashboard này.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Mục tiêu</value>
@@ -1793,7 +1814,7 @@
     <value>Phóng to nội dung</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>Thu nhỏ nội dung</value>
+    <value>Thu nhỏ khỏi nội dung</value>
   </data>
   <data name="PHM" xml:space="preserve">
     <value>PHM</value>
@@ -2393,7 +2414,7 @@
     <value>Ghi chú phát hành</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>Hiển thị các bản phát hành trước</value>
+    <value>Hiển thị bản phát hành trước</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
     <value>Cập nhật lên phiên bản mới của ClearDashboard</value>
@@ -2478,6 +2499,24 @@
   </data>
   <data name="TokenDisplay_SetTranslation" xml:space="preserve">
     <value>Đặt độ bóng</value>
+  </data>
+  <data name="TokenSplitting_ClickWhere" xml:space="preserve">
+    <value>Bấm vào nơi muốn chia từ thành token</value>
+  </data>
+  <data name="TokenSplitting_Gloss" xml:space="preserve">
+    <value>Độ bóng</value>
+  </data>
+  <data name="TokenSplitting_Grammar" xml:space="preserve">
+    <value>Ngữ pháp</value>
+  </data>
+  <data name="TokenSplitting_TrainingText" xml:space="preserve">
+    <value>Văn bản đào tạo</value>
+  </data>
+  <data name="TokenSplitting_Type" xml:space="preserve">
+    <value>Kiểu</value>
+  </data>
+  <data name="TokenSplitting_WordGloss" xml:space="preserve">
+    <value>từ bóng</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Cập nhật</value>

@@ -380,7 +380,7 @@
     <value>树木；香水和香料</value>
   </data>
   <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>智慧、理解力</value>
+    <value>智慧、理解</value>
   </data>
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>全部</value>
@@ -787,6 +787,12 @@
   <data name="GEN" xml:space="preserve">
     <value>GEN</value>
   </data>
+  <data name="GrammarTagList_Description" xml:space="preserve">
+    <value>描述</value>
+  </data>
+  <data name="GrammarTagList_Short" xml:space="preserve">
+    <value>短的</value>
+  </data>
   <data name="HAB" xml:space="preserve">
     <value>HAB</value>
   </data>
@@ -1027,8 +1033,20 @@
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>查找具有与目标匹配的一个或多个翻译的词素</value>
   </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>已检查</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>语料库：</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>进口</value>
+  </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>导入检查</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>语言：</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>词位或形式匹配</value>
@@ -1065,6 +1083,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>全部取消选择</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>单词：</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>名字为必填项</value>
@@ -2478,6 +2499,24 @@
   </data>
   <data name="TokenDisplay_SetTranslation" xml:space="preserve">
     <value>设置光泽度</value>
+  </data>
+  <data name="TokenSplitting_ClickWhere" xml:space="preserve">
+    <value>单击将单词拆分为标记的位置</value>
+  </data>
+  <data name="TokenSplitting_Gloss" xml:space="preserve">
+    <value>光泽度</value>
+  </data>
+  <data name="TokenSplitting_Grammar" xml:space="preserve">
+    <value>语法</value>
+  </data>
+  <data name="TokenSplitting_TrainingText" xml:space="preserve">
+    <value>培训文本</value>
+  </data>
+  <data name="TokenSplitting_Type" xml:space="preserve">
+    <value>类型</value>
+  </data>
+  <data name="TokenSplitting_WordGloss" xml:space="preserve">
+    <value>字光泽</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>更新</value>

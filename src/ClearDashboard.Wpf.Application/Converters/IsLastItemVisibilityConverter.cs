@@ -12,14 +12,14 @@ public class IsLastItemVisibilityConverter : IMultiValueConverter
     {
         if (values == null || values.Count() < 2)
         {
-            return Visibility.Hidden;
+            return Visibility.Collapsed;
         }
 
         if (values[0] is int count && values[1] is int index)
         {
             return index < count - 1 ? Visibility.Visible : Visibility.Hidden;
         }
-        return Visibility.Hidden;
+        return Visibility.Collapsed;
     }
 
     public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

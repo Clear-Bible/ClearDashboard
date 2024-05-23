@@ -291,7 +291,7 @@
             Grid.Row="0"
             Margin="0,10,0,10"
             HorizontalContentAlignment="Center"
-            Content="{helpers:Localization EnhancedView_SplitTokenLocation}"
+            Content="{helpers:Localization TokenSplitting_ClickWhere}"
             FontFamily="{DynamicResource MaterialDesignFont}"
             FontSize="18" />
 
@@ -304,12 +304,78 @@
             CharacterWidth="50"
             DataContext="{Binding TokenCharacters}"
             FontFamily="{Binding ElementName=SplitTokenDialog, Path=DataContext.TokenFontFamily}"
-            FontSize="40"
-            Threshold1="{Binding ElementName=LeftCharacterSlider, Path=Value}"
-            Threshold2="{Binding ElementName=RightCharacterSlider, Path=Value}" />
+            FontSize="40"/>
+        
 
+        <ListView Grid.Row="7">
 
-        <Grid Grid.Row="7" Margin="0,0,0,20">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="{helpers:Localization TokenSplitting_TrainingText}" Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontFamily="{DynamicResource MaterialDesignFont}"
+                                    FontSize="18"
+                                    Text="{Binding TrainingText}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="{helpers:Localization TokenSplitting_Type}" Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontFamily="{DynamicResource MaterialDesignFont}"
+                                    FontSize="18"
+                                    Text="{Binding Type}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontFamily="{DynamicResource MaterialDesignFont}"
+                                    FontSize="18"
+                                    Text="{Binding Circumfix}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="{helpers:Localization TokenSplitting_Gloss}" Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontFamily="{DynamicResource MaterialDesignFont}"
+                                    FontSize="18"
+                                    Text="{Binding Gloss}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="{helpers:Localization TokenSplitting_Grammar}" Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontFamily="{DynamicResource MaterialDesignFont}"
+                                    FontSize="18"
+                                    Text="{Binding Grammar}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <ListView.ItemsSource>
+                <Binding Path="SplitInstructionsViewModels" />
+            </ListView.ItemsSource>
+        </ListView>
+   
+        <!--<Grid Grid.Row="7" Margin="0,0,0,20">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition />
@@ -383,7 +449,7 @@
                 FontWeight="SemiBold"
                 Text="{Binding Subtoken3, UpdateSourceTrigger=PropertyChanged}"
                 Visibility="{Binding Subtoken3Enabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-        </Grid>
+        </Grid>-->
 
         <StackPanel
             Grid.Row="8"

@@ -14,6 +14,11 @@ public static class SplitInstructionsExtensions
         var lastIndexIsValid = true;
         message = null;
 
+        if (splitIndexes.Count == 0)
+        {
+            return true;
+        }
+
         var builder = new StringBuilder();
         if (splitIndexes[0] < 1)
         {
@@ -66,6 +71,12 @@ public static class SplitInstructionsExtensions
 
     public static bool ValidateIndexesInAscendingOrder(this List<int> splitIndexes, out string? message)
     {
+        if (splitIndexes.Count == 0)
+        {
+            message = null;
+            return true;
+        }
+
         var valid = splitIndexes.IsOrderedUsingSpanSort(out message, Comparer<int>.Create((a, b) => a.CompareTo(b)));
         if (!valid)
         {

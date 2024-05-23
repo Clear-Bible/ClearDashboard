@@ -4,5 +4,6 @@
     {
         public char Character { get; set; }
         public int Index { get; set; }
+        public bool IsSelected { get; set; }
     }
 }

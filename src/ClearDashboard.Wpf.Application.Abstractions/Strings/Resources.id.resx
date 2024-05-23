@@ -134,7 +134,7 @@
     <value>Nonaktifkan Lisensi Saat Ini</value>
   </data>
   <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
-    <value>-AKUN LAIN-</value>
+    <value>-AKUN LAINNYA-</value>
   </data>
   <data name="AccountInfo_ParatextEmailLabel" xml:space="preserve">
     <value>Email Parateks:</value>
@@ -155,7 +155,7 @@
     <value>Menambahkan</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Pilih Cara Tokenisasi Corpus</value>
+    <value>Pilih Cara Membuat Tokenisasi Corpus</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Penyelarasan</value>
@@ -787,6 +787,12 @@
   <data name="GEN" xml:space="preserve">
     <value>GEN</value>
   </data>
+  <data name="GrammarTagList_Description" xml:space="preserve">
+    <value>Keterangan</value>
+  </data>
+  <data name="GrammarTagList_Short" xml:space="preserve">
+    <value>Pendek</value>
+  </data>
   <data name="HAB" xml:space="preserve">
     <value>HAB</value>
   </data>
@@ -1019,7 +1025,7 @@
     <value>Tambahkan sebagai formulir untuk...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Temukan leksem lengkap atau sebagian atau kecocokan bentuk dengan sumbernya</value>
+    <value>Temukan leksem atau bentuk yang lengkap atau sebagian yang cocok dengan sumbernya</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Tambahkan target sebagai terjemahan untuk ...</value>
@@ -1027,8 +1033,20 @@
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Temukan leksem yang mempunyai satu atau lebih terjemahan yang sesuai dengan sasaran</value>
   </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>Diperiksa</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>Korpus:</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>Impor</value>
+  </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Impor Diperiksa</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>Bahasa:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Leksem atau bentuk yang cocok</value>
@@ -1065,6 +1083,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Batalkan pilihan Semua</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>Kata:</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>Nama Depan wajib diisi</value>
@@ -1271,7 +1292,7 @@
     <value>MIC</value>
   </data>
   <data name="Migrate_Header" xml:space="preserve">
-    <value>Reset pemetaan ayat ke versi default</value>
+    <value>Reset pemetaan ayat ke versifikasi default</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>MRK</value>
@@ -1388,7 +1409,7 @@
     <value>Karena izin proyek Paratext Anda,</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Saring berdasarkan Ayat</value>
+    <value>Filter berdasarkan Ayat</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filter</value>
@@ -1709,7 +1730,7 @@
     <value>Paskan seluruh area konten ke area pandang</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>Paskan semua node ke viewport</value>
+    <value>Pasangkan semua node ke viewport</value>
   </data>
   <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
     <value>Dapatkan Catatan Eksternal Terbaru</value>
@@ -1739,7 +1760,7 @@
     <value>Properti</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Reset pemetaan ayat ke versi default</value>
+    <value>Reset pemetaan ayat ke versifikasi default</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Sumber</value>
@@ -2372,7 +2393,7 @@
     <value>Validasi Kode Email</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Aktifkan tampilan Koleksi Teks ayat demi ayat</value>
+    <value>Aktifkan tampilan Kumpulan Teks ayat demi ayat</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>Batalkan Tugas</value>
@@ -2478,6 +2499,24 @@
   </data>
   <data name="TokenDisplay_SetTranslation" xml:space="preserve">
     <value>Atur Kilau</value>
+  </data>
+  <data name="TokenSplitting_ClickWhere" xml:space="preserve">
+    <value>Klik di mana untuk membagi kata menjadi token</value>
+  </data>
+  <data name="TokenSplitting_Gloss" xml:space="preserve">
+    <value>Kilap</value>
+  </data>
+  <data name="TokenSplitting_Grammar" xml:space="preserve">
+    <value>Tata bahasa</value>
+  </data>
+  <data name="TokenSplitting_TrainingText" xml:space="preserve">
+    <value>Teks Pelatihan</value>
+  </data>
+  <data name="TokenSplitting_Type" xml:space="preserve">
+    <value>Jenis</value>
+  </data>
+  <data name="TokenSplitting_WordGloss" xml:space="preserve">
+    <value>Kata Gloss</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Memperbarui</value>

@@ -5,6 +5,8 @@ using ClearDashboard.DAL.Alignment.Exceptions;
 namespace ClearDashboard.DAL.Alignment.Corpora;
 public class SplitInstructions
 {
+    [JsonIgnore] 
+    public List<int> SplitIndexes { get; set; } = [];
 
     [JsonIgnore]
     public int Count => Instructions.Count;
@@ -46,7 +48,8 @@ public class SplitInstructions
 
         var splitInstructions = new SplitInstructions
         {
-            SurfaceText = surfaceText
+            SurfaceText = surfaceText,
+            SplitIndexes = splitIndexes
         };
 
 
@@ -70,6 +73,51 @@ public class SplitInstructions
             var length = last ? surfaceTextLength - splitIndex : splitIndexes[index] - splitIndex;
             tokenText = surfaceText.Substring(splitIndex, length);
             splitInstructions.Instructions.Add(new SplitInstruction(splitIndex, tokenText) { TrainingText = trainingTexts[index] ?? tokenText });
+            index++;
+        }
+
+        return splitInstructions;
+    }
+
+    public static SplitInstructions CreateSplits(string surfaceText, List<int> splitIndexes)
+    {
+        
+
+        if (!splitIndexes.ValidateIndexesInAscendingOrder(out string? message))
+        {
+            throw new SplitInstructionException(SplitInstructionErrorMessages.SplitIndexesMustBeInAscendingOrder, message);
+        }
+
+        if (!splitIndexes.ValidateFirstAndLastIndexes(surfaceText.Length, out string? message2))
+        {
+            throw new SplitInstructionException(string.Format(SplitInstructionErrorMessages.SplitIndexesMustBeWithinRange, surfaceText.Length), message2);
+        }
+
+        var splitInstructions = new SplitInstructions
+        {
+            SurfaceText = surfaceText,
+            SplitIndexes = splitIndexes
+        };
+
+        var index = 0;
+        var surfaceTextLength = surfaceText.Length;
+        foreach (var splitIndex in splitIndexes)
+        {
+            var last = splitIndexes.Last() == splitIndex;
+            var first = splitIndexes.First() == splitIndex;
+
+            string tokenText;
+
+            if (first)
+            {
+                tokenText = surfaceText.Substring(0, splitIndex);
+                splitInstructions.Instructions.Add(new SplitInstruction(0, tokenText) { TrainingText =  tokenText });
+                index++;
+            }
+
+            var length = last ? surfaceTextLength - splitIndex : splitIndexes[index] - splitIndex;
+            tokenText = surfaceText.Substring(splitIndex, length);
+            splitInstructions.Instructions.Add(new SplitInstruction(splitIndex, tokenText) { TrainingText =  tokenText });
             index++;
         }
 

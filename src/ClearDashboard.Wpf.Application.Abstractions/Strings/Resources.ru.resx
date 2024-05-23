@@ -389,7 +389,7 @@
     <value>Категория</value>
   </data>
   <data name="BiblicalTermsForm_Counts" xml:space="preserve">
-    <value>имеет значение</value>
+    <value>Считает</value>
   </data>
   <data name="BiblicalTermsForm_Found" xml:space="preserve">
     <value>Найденный</value>
@@ -668,7 +668,7 @@
     <value>Фильтровать поиск по терминам</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>Фильтрация поиска по ключевым словам</value>
+    <value>Фильтровать поиск по ключевым словам</value>
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
     <value>Подстрочный</value>
@@ -786,6 +786,12 @@
   </data>
   <data name="GEN" xml:space="preserve">
     <value>Быт.</value>
+  </data>
+  <data name="GrammarTagList_Description" xml:space="preserve">
+    <value>Описание</value>
+  </data>
+  <data name="GrammarTagList_Short" xml:space="preserve">
+    <value>Короткий</value>
   </data>
   <data name="HAB" xml:space="preserve">
     <value>Авв.</value>
@@ -1027,8 +1033,20 @@
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Найдите лексемы, у которых есть один или несколько переводов, соответствующих целевому значению.</value>
   </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>Проверено</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>Корпус:</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>Импортировать</value>
+  </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Импорт проверен</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>Язык:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Лексема или совпадение форм</value>
@@ -1065,6 +1083,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Снять все</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>Слово:</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>Требуется имя</value>
@@ -1373,7 +1394,7 @@
     <value>Добавить Джот</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Добавить новый джот</value>
+    <value>Добавить новую запись</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Тело</value>
@@ -1475,7 +1496,7 @@
     <value>Отметить выбранные записи как открытые</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>Отметить выбранные заметки как решенные</value>
+    <value>Отметить выбранные записи как решенные</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Созданный</value>
@@ -1688,7 +1709,7 @@
     <value>Удалить подстрочный текст</value>
   </data>
   <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить этот корпус? Все примечания, выравнивания и подстрочные знаки, связанные с этим корпусом, будут удалены без возможности восстановления.</value>
+    <value>Вы уверены, что хотите удалить этот корпус? Все примечания, выравнивания и подстрочные строки, связанные с этим корпусом, будут удалены без возможности восстановления.</value>
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Словарь</value>
@@ -1769,7 +1790,7 @@
     <value>ИсследованиеБиблияДополнения</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Перейдите в Паратекст и переключите проекты. Проект Paratext, подключенный в настоящее время к плагину ClearDashboard, отличается от корпуса в этом проекте ClearDashboard.</value>
+    <value>Перейдите в Паратекст и переключите проекты. Проект Paratext, подключенный в настоящее время к плагину ClearDashboard, не совпадает с корпусом в этом проекте ClearDashboard.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Цель</value>
@@ -2479,6 +2500,24 @@
   <data name="TokenDisplay_SetTranslation" xml:space="preserve">
     <value>Установить блеск</value>
   </data>
+  <data name="TokenSplitting_ClickWhere" xml:space="preserve">
+    <value>Нажмите, где разделить слово на токены</value>
+  </data>
+  <data name="TokenSplitting_Gloss" xml:space="preserve">
+    <value>Блеск</value>
+  </data>
+  <data name="TokenSplitting_Grammar" xml:space="preserve">
+    <value>Грамматика</value>
+  </data>
+  <data name="TokenSplitting_TrainingText" xml:space="preserve">
+    <value>Текст обучения</value>
+  </data>
+  <data name="TokenSplitting_Type" xml:space="preserve">
+    <value>Тип</value>
+  </data>
+  <data name="TokenSplitting_WordGloss" xml:space="preserve">
+    <value>Слово блеск</value>
+  </data>
   <data name="Update" xml:space="preserve">
     <value>Обновлять</value>
   </data>
@@ -2495,7 +2534,7 @@
     <value>Обновить и добавить новое</value>
   </data>
   <data name="UseDefaults" xml:space="preserve">
-    <value>Создать, используя значения по умолчанию</value>
+    <value>Создать, используя настройки по умолчанию</value>
   </data>
   <data name="Windows_AlignmentTool" xml:space="preserve">
     <value>Инструмент выравнивания</value>
@@ -2528,7 +2567,7 @@
     <value>Смысл:</value>
   </data>
   <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>Поддомен:</value>
+    <value>Субдомен:</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Да</value>

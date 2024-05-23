@@ -1,11 +1,9 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.Wpf.Application.Collections;
-using ClearDashboard.Wpf.Application.Events;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -17,26 +15,27 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly RoutedEvent CharacterClickedEvent = EventManager.RegisterRoutedEvent
             (nameof(CharacterClicked), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(SplittableTokenCharactersDisplay));
 
+       
         /// <summary>
         /// Identifies the BackgroundColor1 dependency property.
         /// </summary>
         public static readonly DependencyProperty BackgroundColor1Property = DependencyProperty.Register(
             nameof(BackgroundColor1), typeof(Brush), typeof(SplittableTokenCharactersDisplay),
-            new PropertyMetadata(Brushes.LightGray));
-        
-        /// <summary>
-        /// Identifies the BackgroundColor2 dependency property.
-        /// </summary>
-        public static readonly DependencyProperty BackgroundColor2Property = DependencyProperty.Register(
-            nameof(BackgroundColor2), typeof(Brush), typeof(SplittableTokenCharactersDisplay),
             new PropertyMetadata(Brushes.Transparent));
+        
+        ///// <summary>
+        ///// Identifies the BackgroundColor2 dependency property.
+        ///// </summary>
+        //public static readonly DependencyProperty BackgroundColor2Property = DependencyProperty.Register(
+        //    nameof(BackgroundColor2), typeof(Brush), typeof(SplittableTokenCharactersDisplay),
+        //    new PropertyMetadata(Brushes.Transparent));
 
-        /// <summary>
-        /// Identifies the BackgroundColor3 dependency property.
-        /// </summary>
-        public static readonly DependencyProperty BackgroundColor3Property = DependencyProperty.Register(
-            nameof(BackgroundColor3), typeof(Brush), typeof(SplittableTokenCharactersDisplay),
-            new PropertyMetadata(Brushes.SkyBlue));
+        ///// <summary>
+        ///// Identifies the BackgroundColor3 dependency property.
+        ///// </summary>
+        //public static readonly DependencyProperty BackgroundColor3Property = DependencyProperty.Register(
+        //    nameof(BackgroundColor3), typeof(Brush), typeof(SplittableTokenCharactersDisplay),
+        //    new PropertyMetadata(Brushes.SkyBlue));
 
         /// <summary>
         /// Identifies the CharacterWidth dependency property.
@@ -45,17 +44,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             nameof(CharacterWidth), typeof(double), typeof(SplittableTokenCharactersDisplay),
             new PropertyMetadata(16d));
 
-        /// <summary>
-        /// Identifies the Threshold1 dependency property.
-        /// </summary>
-        public static readonly DependencyProperty Threshold1Property = DependencyProperty.Register(
-            nameof(Threshold1), typeof(int), typeof(SplittableTokenCharactersDisplay), new PropertyMetadata(0));
-
-        /// <summary>
-        /// Identifies the Threshold2 dependency property.
-        /// </summary>
-        public static readonly DependencyProperty Threshold2Property = DependencyProperty.Register(
-            nameof(Threshold2), typeof(int), typeof(SplittableTokenCharactersDisplay), new PropertyMetadata(int.MaxValue));
+     
 
         /// <summary>
         /// Gets or sets the <see cref="Brush"/> used to draw the background when it is less than threshold 1.
@@ -66,23 +55,23 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(BackgroundColor1Property, value);
         }
 
-        /// <summary>
-        /// Gets or sets the <see cref="Brush"/> used to draw the background when it is between thresholds 1 and 2.
-        /// </summary>
-        public Brush BackgroundColor2
-        {
-            get => (Brush)GetValue(BackgroundColor2Property);
-            set => SetValue(BackgroundColor2Property, value);
-        }
+        ///// <summary>
+        ///// Gets or sets the <see cref="Brush"/> used to draw the background when it is between thresholds 1 and 2.
+        ///// </summary>
+        //public Brush BackgroundColor2
+        //{
+        //    get => (Brush)GetValue(BackgroundColor2Property);
+        //    set => SetValue(BackgroundColor2Property, value);
+        //}
 
-        /// <summary>
-        /// Gets or sets the <see cref="Brush"/> used to draw the background when it is greater than or equal to threshold 2.
-        /// </summary>
-        public Brush BackgroundColor3
-        {
-            get => (Brush)GetValue(BackgroundColor3Property);
-            set => SetValue(BackgroundColor3Property, value);
-        }
+        ///// <summary>
+        ///// Gets or sets the <see cref="Brush"/> used to draw the background when it is greater than or equal to threshold 2.
+        ///// </summary>
+        //public Brush BackgroundColor3
+        //{
+        //    get => (Brush)GetValue(BackgroundColor3Property);
+        //    set => SetValue(BackgroundColor3Property, value);
+        //}
 
         /// <summary>
         /// Gets or sets the width of each character.
@@ -93,23 +82,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(CharacterWidthProperty, value);
         }
 
-        /// <summary>
-        /// Gets or sets the first threshold used to determine the background color.
-        /// </summary>
-        public int Threshold1
-        {
-            get => (int)GetValue(Threshold1Property);
-            set => SetValue(Threshold1Property, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the second threshold used to determine the background color.
-        /// </summary>
-        public int Threshold2
-        {
-            get => (int)GetValue(Threshold2Property);
-            set => SetValue(Threshold2Property, value);
-        }
+       
 
         /// <summary>
         /// Occurs when an individual character is clicked.
@@ -120,6 +93,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             remove => RemoveHandler(CharacterClickedEvent, value);
         }
 
+     
         private void RaiseTokenCharacterEvent(RoutedEvent routedEvent, TokenCharacterEventArgs e)
         {
             RaiseEvent(new TokenCharacterEventArgs
@@ -135,6 +109,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             var control = e.Source as FrameworkElement;
             var tokenCharacter = control?.DataContext as TokenCharacterViewModel;
+            tokenCharacter.IsSelected = !tokenCharacter.IsSelected;
             RaiseEvent(new TokenCharacterEventArgs
             {
                 RoutedEvent = routedEvent,
@@ -147,6 +122,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             RaiseTokenCharacterEvent(CharacterClickedEvent, args as TokenCharacterEventArgs);
         }
+
 
         /// <summary>
         /// Gets the collection <see cref="TokenCharacterViewModel"/> to display.

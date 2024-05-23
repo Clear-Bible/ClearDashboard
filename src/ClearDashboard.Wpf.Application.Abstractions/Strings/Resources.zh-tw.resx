@@ -140,7 +140,7 @@
     <value>副文字電子郵件：</value>
   </data>
   <data name="AccountInfo_ParatextUsernameLabel" xml:space="preserve">
-    <value>副文本使用者名稱：</value>
+    <value>副文字使用者名稱：</value>
   </data>
   <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
     <value>重新啟動應用程式</value>
@@ -380,7 +380,7 @@
     <value>樹木；香水和香料</value>
   </data>
   <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>智慧、理解力</value>
+    <value>智慧、理解</value>
   </data>
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>全部</value>
@@ -787,6 +787,12 @@
   <data name="GEN" xml:space="preserve">
     <value>GEN</value>
   </data>
+  <data name="GrammarTagList_Description" xml:space="preserve">
+    <value>描述</value>
+  </data>
+  <data name="GrammarTagList_Short" xml:space="preserve">
+    <value>短的</value>
+  </data>
   <data name="HAB" xml:space="preserve">
     <value>HAB</value>
   </data>
@@ -1027,8 +1033,20 @@
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>尋找具有與目標相符的一個或多個翻譯的詞素</value>
   </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>已檢查</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>語料庫：</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>進口</value>
+  </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>導入檢查</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>語言：</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>詞位或形式匹配</value>
@@ -1065,6 +1083,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>全部取消選擇</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>單字：</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>名字為必填項</value>
@@ -1295,10 +1316,10 @@
     <value>檢查使用者可用性</value>
   </data>
   <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
-    <value>創建協作用戶</value>
+    <value>創造協作用戶</value>
   </data>
   <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
-    <value>創建協作用戶</value>
+    <value>創造協作用戶</value>
   </data>
   <data name="NewCollabUserView_DashboardEmailValidationCode" xml:space="preserve">
     <value>ClearDashboard 電子郵件驗證碼</value>
@@ -1349,10 +1370,10 @@
     <value>驗證電子郵件程式碼</value>
   </data>
   <data name="NewProject_ProjectExistsTemplate" xml:space="preserve">
-    <value>名為「{0}」的項目已存在。請選擇一個獨特的名稱。”</value>
+    <value>名為「{0}」的項目已存在。請選擇一個獨特的名稱。</value>
   </data>
   <data name="NewProjectDialog_Title" xml:space="preserve">
-    <value>建立新項目</value>
+    <value>建立新專案</value>
   </data>
   <data name="NewProjectDialogView_EnterName" xml:space="preserve">
     <value>請輸入您的項目的名稱。</value>
@@ -1625,7 +1646,7 @@
     <value>選擇要訓練的 SMT 演算法</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>新增批次批准查看</value>
+    <value>新增批量批准查看</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>新增到視圖</value>
@@ -1643,7 +1664,7 @@
     <value>建立新的語料庫標記化</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>新增的行間</value>
+    <value>新增新的行間</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>新增文字到視圖</value>
@@ -2478,6 +2499,24 @@
   </data>
   <data name="TokenDisplay_SetTranslation" xml:space="preserve">
     <value>設定光澤度</value>
+  </data>
+  <data name="TokenSplitting_ClickWhere" xml:space="preserve">
+    <value>點擊將單字拆分為標記的位置</value>
+  </data>
+  <data name="TokenSplitting_Gloss" xml:space="preserve">
+    <value>光澤度</value>
+  </data>
+  <data name="TokenSplitting_Grammar" xml:space="preserve">
+    <value>文法</value>
+  </data>
+  <data name="TokenSplitting_TrainingText" xml:space="preserve">
+    <value>培訓文本</value>
+  </data>
+  <data name="TokenSplitting_Type" xml:space="preserve">
+    <value>類型</value>
+  </data>
+  <data name="TokenSplitting_WordGloss" xml:space="preserve">
+    <value>文字光澤</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>更新</value>
