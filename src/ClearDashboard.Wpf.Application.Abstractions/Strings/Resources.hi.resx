@@ -305,7 +305,7 @@
     <value>समूह; क्षेत्र</value>
   </data>
   <data name="BiblicalTermsDomains_HonorRespectStatus" xml:space="preserve">
-    <value>आदर, आदर, रुतबा</value>
+    <value>आदर, सम्मान, रुतबा</value>
   </data>
   <data name="BiblicalTermsDomains_Locale" xml:space="preserve">
     <value>स्थान</value>
@@ -338,7 +338,7 @@
     <value>लोग; अधिकार</value>
   </data>
   <data name="BiblicalTermsDomains_PeopleHonorRespectStatus" xml:space="preserve">
-    <value>लोग; आदर, आदर, रुतबा</value>
+    <value>लोग; आदर, सम्मान, रुतबा</value>
   </data>
   <data name="BiblicalTermsDomains_Person" xml:space="preserve">
     <value>व्यक्ति</value>
@@ -941,7 +941,7 @@
     <value>इस लेम्मा से इस शाब्दिक रूप को हटा दें</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>के लिए ग्लॉस सेट करें</value>
+    <value>के लिए एक चमक सेट करें</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>और</value>
@@ -1025,10 +1025,22 @@
     <value>लक्ष्य को अनुवाद के रूप में जोड़ें...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>ऐसे शब्द ढूंढें जिनका एक या अधिक अनुवाद लक्ष्य से मेल खाता हो</value>
+    <value>ऐसे शब्द खोजें जिनका एक या अधिक अनुवाद लक्ष्य से मेल खाता हो</value>
+  </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>चेक किए गए</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>कॉर्पस:</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>आयात</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>आयात की जाँच की गई</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>भाषा:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>लेक्समी या फॉर्म मैच</value>
@@ -1065,6 +1077,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>सभी को अचयनित करें</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>शब्द:</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>पहला नाम आवश्यक है</value>
@@ -1379,7 +1394,7 @@
     <value>शरीर</value>
   </data>
   <data name="Notes_Delete" xml:space="preserve">
-    <value>जोट हटाएं</value>
+    <value>जोत हटाएं</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>यह जोत हटाएं?</value>
@@ -1388,7 +1403,7 @@
     <value>आपके पैराटेक्स्ट प्रोजेक्ट अनुमतियों के कारण,</value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>श्लोक द्वारा फ़िल्टर करें</value>
+    <value>छंद द्वारा फ़िल्टर करें</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>फिल्टर</value>
@@ -1400,7 +1415,7 @@
     <value>स्थिति के अनुसार फ़िल्टर करें</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>पाठ के अनुसार फ़िल्टर करें</value>
+    <value>पाठ द्वारा फ़िल्टर करें</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>कोई</value>
@@ -1607,7 +1622,7 @@
     <value>मशीन वर्ड संरेखण एल्गोरिदम</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>ट्रेन सममिति मॉडल?</value>
+    <value>ट्रेन सममितिकृत मॉडल?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>रेलगाड़ी</value>
@@ -1769,7 +1784,7 @@
     <value>अध्ययन बाइबिल परिवर्धन</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>पैराटेक्स्ट पर जाएँ और प्रोजेक्ट स्विच करें। वर्तमान में क्लियरडैशबोर्ड प्लगइन से जुड़ा पैराटेक्स्ट प्रोजेक्ट इस क्लियरडैशबोर्ड प्रोजेक्ट के कॉर्पस के समान नहीं है।</value>
+    <value>पैराटेक्स्ट पर जाएं और प्रोजेक्ट स्विच करें। वर्तमान में क्लियरडैशबोर्ड प्लगइन से जुड़ा पैराटेक्स्ट प्रोजेक्ट इस क्लियरडैशबोर्ड प्रोजेक्ट के कॉर्पस के समान नहीं है।</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>लक्ष्य</value>
@@ -1967,7 +1982,7 @@
     <value>'डैशबोर्ड प्रारंभ करना' वीडियो देखने के लिए यहां क्लिक करें</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
-    <value>आपके द्वारा नीचे दिए गए 'बनाएं' बटन पर क्लिक करने के बाद, हम आपके प्रोजेक्ट को टोकनाइज़, संरेखित और तैयार करेंगे। संसाधित होते ही सभी चरण यहां दिखाई देंगे. जब आप प्रतीक्षा कर रहे हों तो बेझिझक नीचे दिए गए लिंक पर क्लिक करें और ClearDashboard का उपयोग शुरू करने के लिए कुछ उपयोगी वीडियो देखें!</value>
+    <value>आपके द्वारा नीचे दिए गए 'बनाएं' बटन पर क्लिक करने के बाद, हम आपके प्रोजेक्ट को टोकनाइज़, संरेखित और तैयार करेंगे। जैसे ही वे संसाधित होंगे सभी चरण यहां दिखाई देंगे। जब आप प्रतीक्षा कर रहे हों तो बेझिझक नीचे दिए गए लिंक पर क्लिक करें और ClearDashboard का उपयोग शुरू करने के लिए कुछ उपयोगी वीडियो देखें!</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
     <value>प्रोजेक्ट टेम्पलेट विज़ार्ड</value>

@@ -1027,8 +1027,20 @@
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Find lexemes that have one or more translation that matches target</value>
   </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>Checked</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>Corpus:</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Import Checked</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>Language:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexeme or form matches</value>
@@ -1065,6 +1077,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Unselect All</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>Word:</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>First Name is required</value>

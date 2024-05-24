@@ -503,7 +503,7 @@
     <value>Parte fuente</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Fuente de referencia</value>
+    <value>Referencia de fuente</value>
   </data>
   <data name="BulkAlignmentReview_Target" xml:space="preserve">
     <value>Objetivo</value>
@@ -1027,8 +1027,20 @@
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Encuentre lexemas que tengan una o más traducciones que coincidan con el objetivo</value>
   </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>Comprobado</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>Cuerpo:</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>Importar</value>
+  </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Importación marcada</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>Idioma:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Coincidencias de lexema o forma</value>
@@ -1065,6 +1077,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Deselecciona todo</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>Palabra:</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>Se requiere el primer nombre</value>
@@ -2087,7 +2102,7 @@
     <value>Esdras</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Gálatas</value>
+    <value>gálatas</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>Génesis</value>
