@@ -92,7 +92,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
 
-        public string AssociationVerse
+        public string ShortAssociationVerse
         {
             get
             {
@@ -131,8 +131,47 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        public string LongAssociationVerse
+        {
+            get
+            {
+                string verses = String.Empty;
+                foreach (var association in Associations)
+                {
+                    try
+                    {
+                        var verseId = string.Empty;
+                        if (association.AssociatedEntityId is TranslationId translationId)
+                        {
+                            verseId = translationId.SourceTokenId.ToString().Substring(0, 9);
+                        }
+                        else
+                        {
+                            verseId = association.AssociatedEntityId.ToString().Substring(0, 9);
+                        }
 
-        
+                        if (verseId.Length > 0)
+                        {
+                            verses += DAL.ViewModels.BookChapterVerseViewModel.GetVerseStrLongFromBBBCCCVVV(verseId) + ", ";
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+
+                }
+
+                if (verses.Length > 2)
+                {
+                    verses = verses.Substring(0, verses.Length - 2);
+                }
+
+                return verses;
+            }
+        }
+
+
+
 
         public bool HasReplies =>  Replies.Count > 0;
 

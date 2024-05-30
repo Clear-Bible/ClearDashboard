@@ -436,14 +436,14 @@ public JotsPanelViewModel()
         {
             if (obj is NoteViewModel noteViewModel)
             {
-                var associationDescriptions = noteViewModel.AssociationVerse;
+                var associationDescriptions = noteViewModel.LongAssociationVerse + ", " + noteViewModel.ShortAssociationVerse;
 
                 if (
                     (FilterStatus.Equals(FilterNoteStatusEnum.Any) || FilterStatus.ToString().Equals(noteViewModel.NoteStatus.ToString())) &&
                     (FilterUsers.Count() == 0 || FilterUsers.Contains(noteViewModel.ModifiedBy)) &&
                     (FilterLabels.Count() == 0 || FilterLabels.Intersect(noteViewModel.Labels).Any()) &&
-                    associationDescriptions.ToUpper().ContainsFuzzy(FilterAssociationsDescriptionText.ToUpper(), ToleranceContainsFuzzyAssociationsDescriptions, 7) &&
-                    noteViewModel.Text.ContainsFuzzy(FilterNoteText, ToleranceContainsFuzzyNoteText, 3)
+                    associationDescriptions.ToUpperInvariant().Contains(FilterAssociationsDescriptionText.ToUpperInvariant()) &&
+                    noteViewModel.Text.ToUpperInvariant().Contains(FilterNoteText.ToUpperInvariant())
                 )
                 {
                     return true;
@@ -1034,25 +1034,25 @@ public JotsPanelViewModel()
 
     public static class Extensions
     {
-        public static bool ContainsFuzzy(this string? str, string input, int tolerance, int minCharsNeededForFuzzy)
-        {
-            if (str == null)
-                throw new InvalidParameterEngineException(name: "str", value: "null");
+        //public static bool ContainsFuzzy(this string? str, string input, int tolerance, int minCharsNeededForFuzzy)
+        //{
+        //    if (str == null)
+        //        throw new InvalidParameterEngineException(name: "str", value: "null");
 
-            if (input.Length == 0)
-                return true;
-            if (input.Length > minCharsNeededForFuzzy)
-            {
-                //see https://github.com/kdjones/fuzzystring
-                return str.LongestCommonSubsequence(input).Length
-                       >=
-                       input.Length - tolerance;
+        //    if (input.Length == 0)
+        //        return true;
+        //    if (input.Length > minCharsNeededForFuzzy)
+        //    {
+        //        //see https://github.com/kdjones/fuzzystring
+        //        return str.LongestCommonSubsequence(input).Length
+        //               >=
+        //               input.Length - tolerance;
 
-            }
-            if (str.ToUpperInvariant().Contains(input.ToUpperInvariant()))
-                return true;
+        //    }
+        //    if (str.ToUpperInvariant().Contains(input.ToUpperInvariant()))
+        //        return true;
 
-            return false;
-        }
+        //    return false;
+        //}
     }
 }
