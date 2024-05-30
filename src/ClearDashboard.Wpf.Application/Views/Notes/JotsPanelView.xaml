@@ -341,7 +341,6 @@
                             Header="{helpers:Localization Notes_FilterNoteText}">
                             <TextBox
                                 x:Name="FilterNotesText"
-                                MinWidth="125"
                                 Margin="5,0,5,5"
                                 VerticalAlignment="Center"
                                 materialDesign:TextFieldAssist.HasClearButton="True"
@@ -357,7 +356,6 @@
                             Header="{helpers:Localization Notes_FilterAssociationsDescriptionText}">
                             <TextBox
                                 x:Name="FilterAssociationsText"
-                                MinWidth="125"
                                 Margin="5,0,5,5"
                                 VerticalAlignment="Center"
                                 materialDesign:TextFieldAssist.HasClearButton="True"
@@ -437,11 +435,11 @@
             HorizontalGridLinesBrush="{StaticResource GridBrush}"
             IsReadOnly="True"
             ItemsSource="{Binding NotesCollectionView}"
+            PreviewMouseWheel="GridNotes_OnPreviewMouseWheel"
             ScrollViewer.CanContentScroll="True"
             ScrollViewer.HorizontalScrollBarVisibility="Auto"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
             SelectedItem="{Binding SelectedNoteViewModel}"
-            PreviewMouseWheel="GridNotes_OnPreviewMouseWheel"
             SelectionMode="Single"
             SelectionUnit="FullRow"
             VerticalGridLinesBrush="{StaticResource GridBrush}"
