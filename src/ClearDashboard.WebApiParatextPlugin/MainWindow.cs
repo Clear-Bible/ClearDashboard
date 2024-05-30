@@ -1272,6 +1272,12 @@ namespace ClearDashboard.WebApiParatextPlugin
 
                     metaData.FontFamily = project.Language.Font.FontFamily;
 
+                    if (metaData.FontFamily == "Awami Nastaliq")
+                    {
+                        metaData.FontFamily = "Scheherazade New";
+                    }
+
+
                     try
                     {
                         // check to see if this font is installed locally
