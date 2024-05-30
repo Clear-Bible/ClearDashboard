@@ -28,7 +28,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
     /// A control for displaying a single <see cref="Token"/> alongside a possible note indicator, <see cref="Translation"/>, and aligned token.
     /// </summary>
     public partial class TokenDisplay : IHandle<SelectionUpdatedMessage>,
-        IHandle<NoteMouseEnterMessage>,
         IHandle<NoteMouseLeaveMessage>
     {
         #region Static DependencyProperties
@@ -2467,28 +2466,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             manager.ShowWindowAsync(viewModel, null, settings);
 
         }
-
-      
-        public async Task HandleAsync(NoteMouseEnterMessage message, CancellationToken cancellationToken)
-        {
-            if (TokenDisplayViewModel != null)
-            {
-                if (message.Entities.ContainsId(TokenDisplayViewModel.Token.TokenId))
-                {
-                    TokenDisplayViewModel.IsNoteHovered = true;
-                    TokenDisplayViewModel.NoteIndicatorBrush = message.NewNote ? Brushes.Orange : Brushes.MediumPurple;
-                }
-
-                if (message.Entities.ContainsId(TokenDisplayViewModel.Translation?.TranslationId))
-                {
-                    TokenDisplayViewModel.IsTranslationNoteHovered = true;
-                    TokenDisplayViewModel.NoteIndicatorBrush = message.NewNote ? Brushes.Orange : Brushes.MediumPurple;
-                }
-            }
-
-            await Task.CompletedTask;
-        }
-
+        
         public async Task HandleAsync(NoteMouseLeaveMessage message, CancellationToken cancellationToken)
         {
             if (TokenDisplayViewModel?.Translation != null)
