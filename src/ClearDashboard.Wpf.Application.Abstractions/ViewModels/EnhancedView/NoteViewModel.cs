@@ -96,38 +96,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             get
             {
-                string verses = String.Empty;
-                foreach (var association in Associations)
-                {
-                    try
-                    {
-                        var verseId = string.Empty;
-                        if (association.AssociatedEntityId is TranslationId translationId)
-                        {
-                            verseId = translationId.SourceTokenId.ToString().Substring(0, 9);
-                        }
-                        else
-                        {
-                            verseId = association.AssociatedEntityId.ToString().Substring(0, 9);
-                        }
-
-                        if (verseId.Length > 0)
-                        {
-                            verses += DAL.ViewModels.BookChapterVerseViewModel.GetVerseStrShortFromBBBCCCVVV(verseId) + ", ";
-                        }
-                    }
-                    catch (Exception)
-                    {
-                    }
-                    
-                }
-
-                if (verses.Length > 2)
-                {
-                    verses = verses.Substring(0, verses.Length - 2);
-                }
-
-                return verses;
+                return GetAssociationVerses(true);
             }
         }
 
@@ -135,42 +104,51 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             get
             {
-                string verses = String.Empty;
-                foreach (var association in Associations)
+                return GetAssociationVerses(false);
+            }
+        }
+
+        public string GetAssociationVerses(bool isShort)
+        {
+            string verses = String.Empty;
+            foreach (var association in Associations.DistinctBy(a => $"{a.Book+a.Chapter+a.Verse}"))
+            {
+                try
                 {
-                    try
+                    var verseId = string.Empty;
+                    if (association.AssociatedEntityId is TranslationId translationId)
                     {
-                        var verseId = string.Empty;
-                        if (association.AssociatedEntityId is TranslationId translationId)
+                        verseId = translationId.SourceTokenId.ToString().Substring(0, 9);
+                    }
+                    else
+                    {
+                        verseId = association.AssociatedEntityId.ToString().Substring(0, 9);
+                    }
+
+                    if (verseId.Length > 0)
+                    {
+                        if (isShort)
                         {
-                            verseId = translationId.SourceTokenId.ToString().Substring(0, 9);
+                            verses += DAL.ViewModels.BookChapterVerseViewModel.GetVerseStrShortFromBBBCCCVVV(verseId) + ", ";
                         }
                         else
-                        {
-                            verseId = association.AssociatedEntityId.ToString().Substring(0, 9);
-                        }
-
-                        if (verseId.Length > 0)
                         {
                             verses += DAL.ViewModels.BookChapterVerseViewModel.GetVerseStrLongFromBBBCCCVVV(verseId) + ", ";
                         }
                     }
-                    catch (Exception)
-                    {
-                    }
-
                 }
-
-                if (verses.Length > 2)
+                catch (Exception)
                 {
-                    verses = verses.Substring(0, verses.Length - 2);
                 }
-
-                return verses;
             }
+
+            if (verses.Length > 2)
+            {
+                verses = verses.Substring(0, verses.Length - 2);
+            }
+
+            return verses;
         }
-
-
 
 
         public bool HasReplies =>  Replies.Count > 0;

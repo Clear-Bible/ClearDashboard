@@ -632,7 +632,7 @@
                         <DataTemplate>
                             <TextBlock
                                 VerticalAlignment="Center"
-                                Text="{Binding FullAssociationVerse}"
+                                Text="{Binding LongAssociationVerse}"
                                 TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
