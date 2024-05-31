@@ -48,7 +48,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<NoteMouseLeaveMessage>,
         IHandle<TokensJoinedMessage>,
         IHandle<TokenUnjoinedMessage>,
-        IHandle<TokenSplitMessage>
+        IHandle<TokenSplitMessage>, IDisposable
     {
 
         #region Member Variables   
@@ -141,6 +141,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         private bool _multipleExternalNotes = false;
+        private bool disposedValue;
+
         public bool MultipleExternalNotes
         {
             get => _multipleExternalNotes && AbstractionsSettingsHelper.GetShowExternalNotes() && AbstractionsSettingsHelper.GetExternalNotesEnabled();
@@ -730,6 +732,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
 
             public int GetHashCode([DisallowNull] TokenId obj) => obj.BookNumber ^ obj.ChapterNumber ^ obj.VerseNumber;
+        }
+
+        public void Dispose()
+        {
+            EventAggregator.Unsubscribe(this);
         }
     }
 }
