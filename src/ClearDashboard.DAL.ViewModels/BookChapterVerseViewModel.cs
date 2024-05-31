@@ -533,7 +533,7 @@ namespace ClearDashboard.DAL.ViewModels
             return bibleBooks;
         }
 
-        public static string GetFullBookNameFromBookNum(string value)
+        public static Dictionary<string, string> GetFullBookNameFromBookNum()
         {
             var lookup = new Dictionary<string, string>
             {
@@ -606,18 +606,7 @@ namespace ClearDashboard.DAL.ViewModels
 
             };
 
-            var bookName = string.Empty;
-            try
-            {
-                bookName = lookup[value];
-            }
-            catch (Exception)
-            {
-                // no-op
-                // TODO:  How to report?
-            }
-
-            return bookName;
+            return lookup;
         }
 
         public static string GetShortBookNameFromBookNum(string value)
@@ -1037,6 +1026,55 @@ namespace ClearDashboard.DAL.ViewModels
 
             // get the book lookup values
             var lookup = GetBookIdDictionary();
+
+            // get the short book name
+            if (lookup.ContainsKey(BBBCCCVVV.Substring(0, 3)))
+            {
+                verseStr = lookup[BBBCCCVVV.Substring(0, 3)];
+            }
+            else
+            {
+                verseStr = "UNK";
+            }
+
+            // parse out the verse number
+            try
+            {
+                int numVal = Int32.Parse(BBBCCCVVV.Substring(3, 3));
+                verseStr += $" {numVal}:";
+            }
+            catch (FormatException)
+            {
+                verseStr += " 00:";
+            }
+
+            // parse out the chapter
+            try
+            {
+                int numVal = Int32.Parse(BBBCCCVVV.Substring(6, 3));
+                verseStr += $"{numVal}";
+            }
+            catch (FormatException)
+            {
+                verseStr += "00";
+            }
+
+            return verseStr;
+
+        }
+
+        public static string GetVerseStrLongFromBBBCCCVVV(string BBBCCCVVV)
+        {
+            string verseStr = "";
+
+            // ensure that we are dealing with a full 9 character string
+            if (BBBCCCVVV.Length < 9)
+            {
+                BBBCCCVVV = BBBCCCVVV.PadLeft(9, '0');
+            }
+
+            // get the book lookup values
+            var lookup = GetFullBookNameFromBookNum();
 
             // get the short book name
             if (lookup.ContainsKey(BBBCCCVVV.Substring(0, 3)))
