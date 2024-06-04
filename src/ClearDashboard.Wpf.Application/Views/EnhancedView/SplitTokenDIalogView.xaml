@@ -83,7 +83,7 @@
             </Setter>
         </Style>
 
-        <ControlTemplate x:Key="TopLeftSliderTemplate" TargetType="Slider">
+        <!--<ControlTemplate x:Key="TopLeftSliderTemplate" TargetType="Slider">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
@@ -241,7 +241,7 @@
                     </Track.IncreaseRepeatButton>
                 </Track>
             </Grid>
-        </ControlTemplate>
+        </ControlTemplate>-->
 
         <Style x:Key="TopLeftSlider" TargetType="Slider">
             <Setter Property="Focusable" Value="False" />
@@ -291,35 +291,11 @@
             Grid.Row="0"
             Margin="0,10,0,10"
             HorizontalContentAlignment="Center"
-            Content="{helpers:Localization EnhancedView_SplitTokenLocation}"
+            Content="{helpers:Localization TokenSplitting_ClickWhere}"
             FontFamily="{DynamicResource MaterialDesignFont}"
             FontSize="18" />
 
-        <Slider
-            Grid.Row="1"
-            Width="{Binding ElementName=CharactersDisplay, Path=ActualWidth}"
-            Margin="0,0,0,0"
-            VerticalAlignment="Center"
-            IsSnapToTickEnabled="True"
-            Maximum="{Binding TokenCharacters.Count}"
-            Minimum="0"
-            Style="{StaticResource TopRightSlider}"
-            TickFrequency="1"
-            Visibility="{Binding ElementName=ThreeWaySplitCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"
-            Value="{Binding CharacterThreshold2}" />
-
-        <Slider
-            Grid.Row="2"
-            Width="{Binding ElementName=CharactersDisplay, Path=ActualWidth}"
-            VerticalAlignment="Center"
-            IsSnapToTickEnabled="True"
-            Maximum="{Binding TokenCharacters.Count}"
-            Minimum="0"
-            Style="{StaticResource TopLeftSlider}"
-            TickFrequency="1"
-            Value="{Binding CharacterThreshold1}" />
-
-        <userControls:TokenCharactersDisplay
+       <userControls:SplittableTokenCharactersDisplay
             x:Name="CharactersDisplay"
             Grid.Row="3"
             HorizontalAlignment="Center"
@@ -328,47 +304,78 @@
             CharacterWidth="50"
             DataContext="{Binding TokenCharacters}"
             FontFamily="{Binding ElementName=SplitTokenDialog, Path=DataContext.TokenFontFamily}"
-            FontSize="40"
-            Threshold1="{Binding ElementName=LeftCharacterSlider, Path=Value}"
-            Threshold2="{Binding ElementName=RightCharacterSlider, Path=Value}" />
+            FontSize="40"/>
+        
 
-        <Slider
-            x:Name="LeftCharacterSlider"
-            Grid.Row="4"
-            Width="{Binding ElementName=CharactersDisplay, Path=ActualWidth}"
-            Margin="0,10,0,0"
-            VerticalAlignment="Center"
-            IsSnapToTickEnabled="True"
-            Maximum="{Binding TokenCharacters.Count}"
-            Minimum="0"
-            Style="{StaticResource BottomLeftSlider}"
-            TickFrequency="1"
-            Value="{Binding CharacterThreshold1}" />
+        <ListView Grid.Row="7">
 
-        <Slider
-            x:Name="RightCharacterSlider"
-            Grid.Row="5"
-            Width="{Binding ElementName=CharactersDisplay, Path=ActualWidth}"
-            Margin="0,10,0,0"
-            VerticalAlignment="Center"
-            IsSnapToTickEnabled="True"
-            Maximum="{Binding TokenCharacters.Count}"
-            Minimum="0"
-            Style="{StaticResource BottomRightSlider}"
-            TickFrequency="1"
-            Visibility="{Binding ElementName=ThreeWaySplitCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"
-            Value="{Binding CharacterThreshold2}" />
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="{helpers:Localization TokenSplitting_TrainingText}" Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontFamily="{DynamicResource MaterialDesignFont}"
+                                    FontSize="18"
+                                    Text="{Binding TrainingText}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="{helpers:Localization TokenSplitting_Type}" Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontFamily="{DynamicResource MaterialDesignFont}"
+                                    FontSize="18"
+                                    Text="{Binding Type}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontFamily="{DynamicResource MaterialDesignFont}"
+                                    FontSize="18"
+                                    Text="{Binding Circumfix}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="{helpers:Localization TokenSplitting_Gloss}" Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontFamily="{DynamicResource MaterialDesignFont}"
+                                    FontSize="18"
+                                    Text="{Binding Gloss}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="{helpers:Localization TokenSplitting_Grammar}" Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontFamily="{DynamicResource MaterialDesignFont}"
+                                    FontSize="18"
+                                    Text="{Binding Grammar}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
 
-        <CheckBox
-            x:Name="ThreeWaySplitCheckBox"
-            Grid.Row="6"
-            Margin="0,0,80,10"
-            HorizontalAlignment="Right"
-            cm:Message.Attach="[Event Unchecked] = [Action ThreeWaySplitUnchecked($this, $eventArgs)]"
-            Content="{helpers:Localization EnhancedView_SplitTokenThreeWay}"
-            IsChecked="{Binding ThreeWaySplit}" />
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                </Style>
+            </ListView.ItemContainerStyle>
 
-        <Grid Grid.Row="7" Margin="0,0,0,20">
+            <ListView.ItemsSource>
+                <Binding Path="SplitInstructionsViewModels" />
+            </ListView.ItemsSource>
+        </ListView>
+   
+        <!--<Grid Grid.Row="7" Margin="0,0,0,20">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition />
@@ -442,7 +449,7 @@
                 FontWeight="SemiBold"
                 Text="{Binding Subtoken3, UpdateSourceTrigger=PropertyChanged}"
                 Visibility="{Binding Subtoken3Enabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-        </Grid>
+        </Grid>-->
 
         <StackPanel
             Grid.Row="8"

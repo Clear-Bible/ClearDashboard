@@ -452,7 +452,7 @@
     <value>Éditeur d'alignement en masse</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>Examen de l'alignement en bloc</value>
+    <value>Examen de l'alignement en masse</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>Compter</value>
@@ -787,6 +787,12 @@
   <data name="GEN" xml:space="preserve">
     <value>GEN</value>
   </data>
+  <data name="GrammarTagList_Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="GrammarTagList_Short" xml:space="preserve">
+    <value>Court</value>
+  </data>
   <data name="HAB" xml:space="preserve">
     <value>HAB</value>
   </data>
@@ -860,7 +866,7 @@
     <value>LEV</value>
   </data>
   <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>Ajoutez un domaine sémantique à cette signification</value>
+    <value>Ajouter un domaine sémantique à cette signification</value>
   </data>
   <data name="Lexicon_AddForm" xml:space="preserve">
     <value>Ajouter une forme lexicale à ce lemme</value>
@@ -1027,8 +1033,20 @@
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Rechercher des lexèmes ayant une ou plusieurs traductions correspondant à la cible</value>
   </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>Vérifié</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>Corpus:</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>Importer</value>
+  </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Importation vérifiée</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>Langue:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Correspondances de lexèmes ou de formes</value>
@@ -1065,6 +1083,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Tout déselectionner</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>Mot:</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>Le prénom est requis</value>
@@ -1601,10 +1622,10 @@
     <value>Paralléliser les versets de corpus</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Algorithme d’alignement de mots machine</value>
+    <value>Algorithme d’alignement des mots machine</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Algorithme d’alignement de mots machine</value>
+    <value>Algorithme d’alignement des mots machine</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Former un modèle symétrique ?</value>
@@ -1688,7 +1709,7 @@
     <value>Supprimer l'interlinéaire</value>
   </data>
   <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir supprimer ce corpus ? Toutes les notes, alignements et interlinéaires associés à ce corpus seront supprimés et ne pourront pas être récupérés.</value>
+    <value>Etes-vous sûr de vouloir supprimer ce corpus ? Toutes les notes, alignements et interlinéaires associés à ce corpus seront supprimés et ne pourront pas être récupérés.</value>
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Dictionnaire</value>
@@ -1892,7 +1913,7 @@
     <value>Créer un projet :</value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
-    <value>Créez votre projet à l'aide de l'assistant Modèle de projet.</value>
+    <value>Créez votre projet à l'aide de l'assistant de modèle de projet.</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
     <value>Base de données:</value>
@@ -2252,7 +2273,7 @@
     <value>Envoyer</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>Activer le plugin expérimental AQUA</value>
+    <value>Activer le plugin AQUA expérimental</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
     <value>Vérifiez votre email et entrez le code de validation :</value>
@@ -2478,6 +2499,24 @@
   </data>
   <data name="TokenDisplay_SetTranslation" xml:space="preserve">
     <value>Définir le brillant</value>
+  </data>
+  <data name="TokenSplitting_ClickWhere" xml:space="preserve">
+    <value>Cliquez où diviser le mot en jetons</value>
+  </data>
+  <data name="TokenSplitting_Gloss" xml:space="preserve">
+    <value>Brillant</value>
+  </data>
+  <data name="TokenSplitting_Grammar" xml:space="preserve">
+    <value>Grammaire</value>
+  </data>
+  <data name="TokenSplitting_TrainingText" xml:space="preserve">
+    <value>Texte de formation</value>
+  </data>
+  <data name="TokenSplitting_Type" xml:space="preserve">
+    <value>Taper</value>
+  </data>
+  <data name="TokenSplitting_WordGloss" xml:space="preserve">
+    <value>Glossaire des mots</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Mise à jour</value>

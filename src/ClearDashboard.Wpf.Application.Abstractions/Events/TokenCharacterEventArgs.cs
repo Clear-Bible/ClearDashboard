@@ -30,5 +30,6 @@ namespace ClearDashboard.Wpf.Application.Events
         /// Gets whether the Alt key is pressed at the time of the event.
         /// </summary>
         public bool IsAltPressed => (ModifierKeys & ModifierKeys.Alt) > 0;
+
     }
 }

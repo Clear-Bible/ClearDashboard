@@ -787,6 +787,12 @@
   <data name="GEN" xml:space="preserve">
     <value>GEN</value>
   </data>
+  <data name="GrammarTagList_Description" xml:space="preserve">
+    <value>Descripción</value>
+  </data>
+  <data name="GrammarTagList_Short" xml:space="preserve">
+    <value>Corto</value>
+  </data>
   <data name="HAB" xml:space="preserve">
     <value>HAB</value>
   </data>
@@ -860,7 +866,7 @@
     <value>LEV</value>
   </data>
   <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>Añade un dominio semántico a este significado.</value>
+    <value>Agregue un dominio semántico a este significado.</value>
   </data>
   <data name="Lexicon_AddForm" xml:space="preserve">
     <value>Añade una forma léxica a este lema.</value>
@@ -1027,8 +1033,20 @@
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Encuentre lexemas que tengan una o más traducciones que coincidan con el objetivo</value>
   </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>Comprobado</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>Cuerpo:</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>Importar</value>
+  </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Importación marcada</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>Idioma:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Coincidencias de lexema o forma</value>
@@ -1065,6 +1083,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Deselecciona todo</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>Palabra:</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>Se requiere el primer nombre</value>
@@ -2478,6 +2499,24 @@
   </data>
   <data name="TokenDisplay_SetTranslation" xml:space="preserve">
     <value>Establecer brillo</value>
+  </data>
+  <data name="TokenSplitting_ClickWhere" xml:space="preserve">
+    <value>Haga clic donde dividir la palabra en tokens</value>
+  </data>
+  <data name="TokenSplitting_Gloss" xml:space="preserve">
+    <value>Brillo</value>
+  </data>
+  <data name="TokenSplitting_Grammar" xml:space="preserve">
+    <value>Gramática</value>
+  </data>
+  <data name="TokenSplitting_TrainingText" xml:space="preserve">
+    <value>Texto de entrenamiento</value>
+  </data>
+  <data name="TokenSplitting_Type" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="TokenSplitting_WordGloss" xml:space="preserve">
+    <value>Brillo de palabras</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Actualizar</value>
