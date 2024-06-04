@@ -4,11 +4,9 @@ using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System.Text.Json;
-using System.Xml.Serialization;
+// ReSharper disable InconsistentNaming
 
 namespace ClearDashboard.DataAccessLayer.Data
 {
@@ -313,6 +311,7 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.SurfaceText);
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.GrammarId);
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.CircumfixGroup);
+            modelBuilder.Entity<TokenComponent>().HasIndex(e => e.Type);
 
             // Configure the TokenComponent.Metadata property as a JSON column
             modelBuilder.Entity<TokenComponent>().OwnsMany(tokenComponent => tokenComponent.Metadata, ownedNavigationBuilder =>
