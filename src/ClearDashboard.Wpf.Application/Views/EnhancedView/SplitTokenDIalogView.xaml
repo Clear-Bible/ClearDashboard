@@ -10,6 +10,8 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     x:Name="SplitTokenDialog"
     d:DataContext="{d:DesignInstance Type=viewModels:SplitTokenDialogViewModel}"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -17,260 +19,16 @@
     <UserControl.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters:BoolToVisibilityCollapsedConverter x:Key="BoolToVisibilityCollapsedConverter" />
+     
+         <Style x:Key="ListViewTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{DynamicResource MaterialDesignFont}" />
+            <Setter Property="FontSize" Value="16" />
+         </Style>
 
-        <Style x:Key="SliderRepeatLeft" TargetType="RepeatButton">
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="RepeatButton">
-                        <Border
-                            Height="5"
-                            Background="{DynamicResource PrimaryHueMidBrush}"
-                            BorderBrush="{DynamicResource PrimaryHueMidBrush}"
-                            BorderThickness="1"
-                            SnapsToDevicePixels="True" />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+        <Style x:Key="ListViewTextBoxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
+            <Setter Property="FontFamily" Value="{DynamicResource MaterialDesignFont}" />
+            <Setter Property="FontSize" Value="16" />
         </Style>
-
-        <Style x:Key="SliderRepeatRight" TargetType="RepeatButton">
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="IsTabStop" Value="false" />
-            <Setter Property="Focusable" Value="false" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="RepeatButton">
-                        <Border Background="Transparent" />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="SliderThumbTop" TargetType="Thumb">
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Thumb">
-                        <Path
-                            Margin="0,0,-2,0"
-                            Data="M 0 0 L 16 0 L 8 16 Z"
-                            Fill="{DynamicResource PrimaryHueMidBrush}"
-                            Stroke="{DynamicResource PrimaryHueMidBrush}"
-                            StrokeThickness="2" />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="SliderThumbBottom" TargetType="Thumb">
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Thumb">
-                        <Path
-                            Margin="0,0,-2,-1"
-                            Data="M 0 16 L 16 16 L 8 0 Z"
-                            Fill="{DynamicResource PrimaryHueMidBrush}"
-                            Stroke="{DynamicResource PrimaryHueMidBrush}"
-                            StrokeThickness="2" />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!--<ControlTemplate x:Key="TopLeftSliderTemplate" TargetType="Slider">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Border
-                    x:Name="TrackBackground"
-                    Grid.Row="0"
-                    Height="3"
-                    Margin="0,-10,0,0"
-                    VerticalAlignment="Center"
-                    Background="{DynamicResource PrimaryHueLightBrush}"
-                    BorderBrush="{DynamicResource PrimaryHueLightBrush}"
-                    BorderThickness="1" />
-                <Track
-                    x:Name="PART_Track"
-                    Grid.Row="0"
-                    Margin="0,-10,0,0">
-                    <Track.DecreaseRepeatButton>
-                        <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource SliderRepeatLeft}" />
-                    </Track.DecreaseRepeatButton>
-                    <Track.Thumb>
-                        <Thumb Margin="0,15,0,0" Style="{StaticResource SliderThumbTop}" />
-                    </Track.Thumb>
-                    <Track.IncreaseRepeatButton>
-                        <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource SliderRepeatRight}" />
-                    </Track.IncreaseRepeatButton>
-                </Track>
-                <TickBar
-                    x:Name="Top"
-                    Grid.Row="1"
-                    Height="4"
-                    Fill="{DynamicResource PrimaryHueLightBrush}"
-                    Placement="Bottom"
-                    SnapsToDevicePixels="True"
-                    Visibility="Collapsed" />
-            </Grid>
-        </ControlTemplate>
-
-        <ControlTemplate x:Key="TopRightSliderTemplate" TargetType="Slider">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Border
-                    x:Name="TrackBackground"
-                    Grid.Row="0"
-                    Height="3"
-                    Margin="0,-10,0,0"
-                    VerticalAlignment="Center"
-                    Background="{DynamicResource PrimaryHueLightBrush}"
-                    BorderBrush="{DynamicResource PrimaryHueLightBrush}"
-                    BorderThickness="1" />
-                <Track
-                    x:Name="PART_Track"
-                    Grid.Row="0"
-                    Margin="0,-10,0,0">
-                    <Track.DecreaseRepeatButton>
-                        <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource SliderRepeatRight}" />
-                    </Track.DecreaseRepeatButton>
-                    <Track.Thumb>
-                        <Thumb Margin="0,15,0,0" Style="{StaticResource SliderThumbTop}" />
-                    </Track.Thumb>
-                    <Track.IncreaseRepeatButton>
-                        <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource SliderRepeatLeft}" />
-                    </Track.IncreaseRepeatButton>
-                </Track>
-                <TickBar
-                    x:Name="Top"
-                    Grid.Row="1"
-                    Height="4"
-                    Fill="{DynamicResource PrimaryHueLightBrush}"
-                    Placement="Bottom"
-                    SnapsToDevicePixels="True"
-                    Visibility="Collapsed" />
-            </Grid>
-        </ControlTemplate>
-
-        <ControlTemplate x:Key="BottomLeftSliderTemplate" TargetType="Slider">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
-                </Grid.RowDefinitions>
-                <TickBar
-                    x:Name="BottomTick"
-                    Grid.Row="0"
-                    Height="4"
-                    Fill="{DynamicResource PrimaryHueLightBrush}"
-                    Placement="Bottom"
-                    SnapsToDevicePixels="True"
-                    Visibility="Collapsed" />
-                <Border
-                    x:Name="TrackBackground"
-                    Grid.Row="1"
-                    Height="3"
-                    Margin="0,-10,0,0"
-                    VerticalAlignment="Center"
-                    Background="{DynamicResource PrimaryHueLightBrush}"
-                    BorderBrush="{DynamicResource PrimaryHueLightBrush}"
-                    BorderThickness="1" />
-                <Track
-                    x:Name="PART_Track"
-                    Grid.Row="1"
-                    Margin="0,-10,0,0">
-                    <Track.DecreaseRepeatButton>
-                        <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource SliderRepeatLeft}" />
-                    </Track.DecreaseRepeatButton>
-                    <Track.Thumb>
-                        <Thumb Margin="0,0,0,13" Style="{StaticResource SliderThumbBottom}" />
-                    </Track.Thumb>
-                    <Track.IncreaseRepeatButton>
-                        <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource SliderRepeatRight}" />
-                    </Track.IncreaseRepeatButton>
-                </Track>
-            </Grid>
-        </ControlTemplate>
-
-        <ControlTemplate x:Key="BottomRightSliderTemplate" TargetType="Slider">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
-                </Grid.RowDefinitions>
-                <TickBar
-                    x:Name="BottomTick"
-                    Grid.Row="0"
-                    Height="4"
-                    Fill="{DynamicResource PrimaryHueLightBrush}"
-                    Placement="Bottom"
-                    SnapsToDevicePixels="True"
-                    Visibility="Collapsed" />
-                <Border
-                    x:Name="TrackBackground"
-                    Grid.Row="1"
-                    Height="3"
-                    Margin="0,-10,0,0"
-                    VerticalAlignment="Center"
-                    Background="{DynamicResource PrimaryHueLightBrush}"
-                    BorderBrush="{DynamicResource PrimaryHueLightBrush}"
-                    BorderThickness="1" />
-                <Track
-                    x:Name="PART_Track"
-                    Grid.Row="1"
-                    Margin="0,-10,0,0">
-                    <Track.DecreaseRepeatButton>
-                        <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource SliderRepeatRight}" />
-                    </Track.DecreaseRepeatButton>
-                    <Track.Thumb>
-                        <Thumb Margin="0,0,0,13" Style="{StaticResource SliderThumbBottom}" />
-                    </Track.Thumb>
-                    <Track.IncreaseRepeatButton>
-                        <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource SliderRepeatLeft}" />
-                    </Track.IncreaseRepeatButton>
-                </Track>
-            </Grid>
-        </ControlTemplate>-->
-
-        <Style x:Key="TopLeftSlider" TargetType="Slider">
-            <Setter Property="Focusable" Value="False" />
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="Template" Value="{StaticResource TopLeftSliderTemplate}" />
-        </Style>
-
-        <Style x:Key="TopRightSlider" TargetType="Slider">
-            <Setter Property="Focusable" Value="False" />
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="Template" Value="{StaticResource TopRightSliderTemplate}" />
-        </Style>
-
-        <Style x:Key="BottomLeftSlider" TargetType="Slider">
-            <Setter Property="Focusable" Value="False" />
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="Template" Value="{StaticResource BottomLeftSliderTemplate}" />
-        </Style>
-
-        <Style x:Key="BottomRightSlider" TargetType="Slider">
-            <Setter Property="Focusable" Value="False" />
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="Template" Value="{StaticResource BottomRightSliderTemplate}" />
-        </Style>
-
     </UserControl.Resources>
 
     <Grid MinWidth="500">
@@ -297,7 +55,7 @@
 
        <userControls:SplittableTokenCharactersDisplay
             x:Name="CharactersDisplay"
-            Grid.Row="3"
+            Grid.Row="1"
             HorizontalAlignment="Center"
             HorizontalContentAlignment="Center"
             cm:Message.Attach="[Event CharacterClicked] = [Action CharacterClicked($this, $eventArgs)]"
@@ -305,59 +63,77 @@
             DataContext="{Binding TokenCharacters}"
             FontFamily="{Binding ElementName=SplitTokenDialog, Path=DataContext.TokenFontFamily}"
             FontSize="40"/>
-        
+        <StackPanel Grid.Row="2" Orientation="Horizontal"   HorizontalAlignment="Center">
+            <TextBlock  Margin="0,2,0,0"
+                        VerticalAlignment="Center"
+                        FontFamily="{DynamicResource MaterialDesignFont}"
+                        FontSize="14"
+                        FontWeight="Normal"
+                        Text="{helpers:Localization TokenSplitting_WordGloss}" />
+            <TextBox 
+                Width="250"
+                HorizontalContentAlignment="Center"
+                cm:Message.Attach="[Event TextChanged] = [Action TrainingTextChanged($this, $eventArgs)]"
+                FontFamily="{Binding ElementName=SplitTokenDialog, Path=DataContext.TokenFontFamily}"
+                FontSize="18"
+                FontWeight="SemiBold"
+                Text="{Binding WordGloss}" />
+        </StackPanel>
 
-        <ListView Grid.Row="7">
+        <materialDesign:Card Grid.Row="3" Margin="20, 10">
+            <ListView Margin="5" >
 
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="{helpers:Localization TokenSplitting_TrainingText}" Width="Auto">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock
-                                    FontFamily="{DynamicResource MaterialDesignFont}"
-                                    FontSize="18"
-                                    Text="{Binding TrainingText}" />
+                                <TextBox Style="{StaticResource ListViewTextBoxStyle}"
+                                    Text="{Binding TrainingText, Mode=TwoWay}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="{helpers:Localization TokenSplitting_Type}" Width="Auto">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock
-                                    FontFamily="{DynamicResource MaterialDesignFont}"
-                                    FontSize="18"
-                                    Text="{Binding Type}" />
-                            </DataTemplate>
+                                <ComboBox
+                                    x:Name="TokenTypeComboBox"
+                                    MinWidth="60"
+                                    Margin="5,0,5,3"
+                                    ItemsSource="{x:Static models:TokenTypes.All}"
+                                    SelectedItem="{Binding TokenType, Mode=TwoWay}"
+                                   />
+                                </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Width="Auto">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock
-                                    FontFamily="{DynamicResource MaterialDesignFont}"
-                                    FontSize="18"
-                                    Text="{Binding Circumfix}" />
+                                <TextBox
+                                    Style="{StaticResource ListViewTextBoxStyle}"
+                                    MinWidth="60"
+                                    Text="{Binding CircumfixGroup, Mode=TwoWay}"
+                                    Visibility="{Binding TokenType, Mode=TwoWay,  Converter={StaticResource TokenTypeToVisibilityConverter}}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="{helpers:Localization TokenSplitting_Gloss}" Width="Auto">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock
-                                    FontFamily="{DynamicResource MaterialDesignFont}"
-                                    FontSize="18"
-                                    Text="{Binding Gloss}" />
+                                <TextBox
+                                    Style="{StaticResource ListViewTextBoxStyle}"
+                                    Text="{Binding Gloss}" 
+                                    MinWidth="60"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="{helpers:Localization TokenSplitting_Grammar}" Width="Auto">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock
-                                    FontFamily="{DynamicResource MaterialDesignFont}"
-                                    FontSize="18"
-                                    Text="{Binding Grammar}" />
+                                <TextBox
+                                    Style="{StaticResource ListViewTextBoxStyle}"
+                                    Text="{Binding Grammar}" 
+                                    MinWidth="60"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -371,85 +147,11 @@
             </ListView.ItemContainerStyle>
 
             <ListView.ItemsSource>
-                <Binding Path="SplitInstructionsViewModels" />
+                <Binding Path="SplitInstructionsViewModel.Instructions" />
             </ListView.ItemsSource>
         </ListView>
-   
-        <!--<Grid Grid.Row="7" Margin="0,0,0,20">
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-
-            <Label
-                Grid.Row="0"
-                Grid.Column="0"
-                Margin="0,0,10,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Content="{helpers:Localization EnhancedView_NewToken}"
-                FontFamily="{DynamicResource MaterialDesignFont}"
-                FontSize="18"
-                Visibility="{Binding Subtoken1Enabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-            <TextBox
-                Grid.Row="0"
-                Grid.Column="1"
-                Width="125"
-                HorizontalContentAlignment="Center"
-                cm:Message.Attach="[Event TextChanged] = [Action TrainingTextChanged($this, $eventArgs)]"
-                FontFamily="{Binding ElementName=SplitTokenDialog, Path=DataContext.TokenFontFamily}"
-                FontSize="18"
-                FontWeight="SemiBold"
-                Text="{Binding Subtoken1, UpdateSourceTrigger=PropertyChanged}"
-                Visibility="{Binding Subtoken1Enabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-            <Label
-                Grid.Row="1"
-                Grid.Column="0"
-                Margin="0,0,10,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Content="{helpers:Localization EnhancedView_NewToken}"
-                FontFamily="{DynamicResource MaterialDesignFont}"
-                FontSize="18"
-                Visibility="{Binding Subtoken2Enabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-            <TextBox
-                Grid.Row="1"
-                Grid.Column="1"
-                Width="125"
-                HorizontalContentAlignment="Center"
-                cm:Message.Attach="[Event TextChanged] = [Action TrainingTextChanged($this, $eventArgs)]"
-                FontFamily="{Binding ElementName=SplitTokenDialog, Path=DataContext.TokenFontFamily}"
-                FontSize="18"
-                FontWeight="SemiBold"
-                Text="{Binding Subtoken2, UpdateSourceTrigger=PropertyChanged}"
-                Visibility="{Binding Subtoken2Enabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-            <Label
-                Grid.Row="2"
-                Grid.Column="0"
-                Margin="0,0,10,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Content="{helpers:Localization EnhancedView_NewToken}"
-                FontFamily="{DynamicResource MaterialDesignFont}"
-                FontSize="18"
-                Visibility="{Binding Subtoken3Enabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-            <TextBox
-                Grid.Row="2"
-                Grid.Column="1"
-                Width="125"
-                HorizontalContentAlignment="Center"
-                cm:Message.Attach="[Event TextChanged] = [Action TrainingTextChanged($this, $eventArgs)]"
-                FontFamily="{Binding ElementName=SplitTokenDialog, Path=DataContext.TokenFontFamily}"
-                FontSize="18"
-                FontWeight="SemiBold"
-                Text="{Binding Subtoken3, UpdateSourceTrigger=PropertyChanged}"
-                Visibility="{Binding Subtoken3Enabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-        </Grid>-->
+        </materialDesign:Card>
+     
 
         <StackPanel
             Grid.Row="8"

@@ -2,13 +2,9 @@
 
 namespace ClearDashboard.DAL.Alignment.Corpora;
 
-public record SplitInstruction(
-    int Index,
-    string TokenText
-)
+public record SplitInstruction(int Index, string TokenText)
 {
    
-
     [JsonIgnore]
     public int Length => TokenText.Length;
 
