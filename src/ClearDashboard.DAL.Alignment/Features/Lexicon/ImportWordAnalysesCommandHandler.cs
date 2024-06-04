@@ -45,6 +45,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 
             try
             {
+				using var splitTokenDbCommands = await SplitTokenDbCommands.CreateAsync(ProjectDbContext, cancellationToken);
+
 				// Query matching no-association tokens having matching TokenizedCorpusId
 				var supersetTokens = ProjectDbContext.Tokens
 					.Include(t => t.TokenCompositeTokenAssociations)
@@ -94,7 +96,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                         {
                             t.Type = replacementTokenInfos[0].tokenType;
                         }
-						_ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+						splitTokenDbCommands.AddTokenComponentsToUpdateType(standaloneTokens);
 						waCount++;
 						continue;
                     }
@@ -118,7 +120,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 						standaloneTokens,
 						replacementTokenInfos,
 						false, // CreateParallelComposite
-						ProjectDbContext,
+						splitTokenDbCommands,
 						cancellationToken
 					);
 
@@ -134,26 +136,28 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                     //    }
                     //}
 
-					// Query composites by TokenizedCorpusId and ParallelCorpusId (which may be null) that have a SPLIT_SOURCE
-					// For each, check its SPLIT_INITIAL...value against split instructions, to see if it needs to be re-split
+                    // Query composites by TokenizedCorpusId and ParallelCorpusId (which may be null) that have a SPLIT_SOURCE
+                    // For each, check its SPLIT_INITIAL...value against split instructions, to see if it needs to be re-split
 
 					// Update alignment denormalization data:
-					if (sourceTrainingTextsByAlignmentSetId.Any())
-					{
-						using (var transaction = ProjectDbContext.Database.BeginTransaction())
-						{
-							await _mediator.Publish(new AlignmentSetSourceTrainingTextsUpdatingEvent(sourceTrainingTextsByAlignmentSetId, ProjectDbContext));
-							_ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
-							await transaction.CommitAsync(cancellationToken);
-						}
+                    // TODO:  
+					//if (sourceTrainingTextsByAlignmentSetId.Any())
+					//{
+					//	using (var transaction = ProjectDbContext.Database.BeginTransaction())
+					//	{
+					//		await _mediator.Publish(new AlignmentSetSourceTrainingTextsUpdatingEvent(sourceTrainingTextsByAlignmentSetId, ProjectDbContext));
+					//		_ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
-						await _mediator.Publish(new AlignmentSetSourceTrainingTextsUpdatedEvent(sourceTrainingTextsByAlignmentSetId), cancellationToken);
-					}
-					else
-					{
-						_ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
-					}
+					//		await transaction.CommitAsync(cancellationToken);
+					//	}
+
+					//	await _mediator.Publish(new AlignmentSetSourceTrainingTextsUpdatedEvent(sourceTrainingTextsByAlignmentSetId), cancellationToken);
+					//}
+					//else
+					//{
+					//	_ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+					//}
 
 					if (standaloneTokens.Count > 100)
 					{
@@ -170,6 +174,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                         Logger.LogInformation($"\tWord analyses processed: {waCount} during elapsed time {sw.Elapsed}.  Child tokens created: {childTokensCreatedCount}, composite tokens created: {compositeTokensCreatedCount}");
                     }
 				}
+
+                await splitTokenDbCommands.ExecuteBulkOperationsAsync(cancellationToken);
+				await splitTokenDbCommands.CommitTransactionAsync(cancellationToken);
 
 				Logger.LogInformation($"Total word analyses processed: {waCount} during elapsed time {sw.Elapsed}.  Child tokens created: {childTokensCreatedCount}, composite tokens created: {compositeTokensCreatedCount}");
 

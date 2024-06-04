@@ -1,15 +1,29 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Features.Common;
 using ClearDashboard.DAL.Alignment.Features.Events;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Data.Migrations;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualBasic;
+using SIL.Scripture;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Common;
+using System.Reflection;
+using System.Threading;
+using static ClearDashboard.DAL.Alignment.Features.Common.DataUtil;
+using static SIL.Spelling.WordTokenizer;
 using Token = ClearBible.Engine.Corpora.Token;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora;
@@ -133,6 +147,8 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
             tokensDb.AddRange(await tokensDbPropagateQueryable.ToListAsync(cancellationToken));
         }
 
+		using var splitTokenDbCommands = await SplitTokenDbCommands.CreateAsync(ProjectDbContext, cancellationToken);
+
 		var replacementTokenInfos = new (
 			string surfaceText,
 			string trainingText,
@@ -158,10 +174,13 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 			tokensDb,
 			replacementTokenInfos,
 			request.CreateParallelComposite,
-			ProjectDbContext,
+			splitTokenDbCommands,
 			cancellationToken
 		);
 
+		await splitTokenDbCommands.CommitTransactionAsync(cancellationToken);
+
+		// TODO:  convert to bulk inserts?
 		// Update alignment denormalization data:
         if (sourceTrainingTextsByAlignmentSetId.Any())
         {
@@ -190,7 +209,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 		List<DataAccessLayer.Models.Token> tokensDb,
 		(string surfaceText, string trainingText, string? tokenType)[] replacementTokenInfos, 
 		bool createParallelComposite,
-		ProjectDbContext projectDbContext, 
+		SplitTokenDbCommands splitTokenDbCommands, 
 		CancellationToken cancellationToken
 	)
 	{
@@ -198,14 +217,14 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 			CreateTokenReplacements(
 				tokensDb,
 				replacementTokenInfos,
-				projectDbContext,
+				splitTokenDbCommands,
 				cancellationToken
 			);
 
 		var (incomingTokenIdCompositePairs, sourceTrainingTextsByAlignmentSetId) = AttachToComposites(
 			replacementsBySourceId,
 			createParallelComposite,
-			projectDbContext,
+			splitTokenDbCommands,
 			cancellationToken
 		);
 
@@ -234,7 +253,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 		return (splitCompositeTokensByIncomingTokenId, splitChildTokensByIncomingTokenId, sourceTrainingTextsByAlignmentSetId);
 	}
 
-	private static Dictionary<Guid, (DataAccessLayer.Models.Token SourceModelToken, List<Token> ReplacementTokens, List<DataAccessLayer.Models.Token> ReplacementModelTokens)> CreateTokenReplacements(List<DataAccessLayer.Models.Token> tokensDb, (string surfaceText, string trainingText, string? tokenType)[] replacementTokenInfos, ProjectDbContext projectDbContext, CancellationToken cancellationToken)
+	private static Dictionary<Guid, (DataAccessLayer.Models.Token SourceModelToken, List<Token> ReplacementTokens, List<DataAccessLayer.Models.Token> ReplacementModelTokens)> CreateTokenReplacements(List<DataAccessLayer.Models.Token> tokensDb, (string surfaceText, string trainingText, string? tokenType)[] replacementTokenInfos, SplitTokenDbCommands splitTokenDbCommands, CancellationToken cancellationToken)
     {
 		var currentDateTime = DataAccessLayer.Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
 
@@ -245,7 +264,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
                 List<DataAccessLayer.Models.Token> ReplacementModelTokens
             )>();
 
-		var noteAssociationsDb = projectDbContext.NoteDomainEntityAssociations
+		var noteAssociationsDb = splitTokenDbCommands.ProjectDbContext.NoteDomainEntityAssociations
 			.Where(dea => dea.DomainEntityIdGuid != null)
 			.Where(dea => tokensDb.Select(e => e.Id).Contains((Guid)dea.DomainEntityIdGuid!))
 			.ToList();
@@ -292,13 +311,13 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 
 				if (i == 0)
 				{
-					tokenDbNoteAssociations.ForEach(e => e.DomainEntityIdGuid = newToken.TokenId.Id);
+					splitTokenDbCommands.AddTokenComponentNoteAssociationsToSet(newModelToken, tokenDbNoteAssociations);
 				}
 				else
 				{
 					tokenDbNoteAssociations.ForEach(e =>
 					{
-						projectDbContext.NoteDomainEntityAssociations.Add(new DataAccessLayer.Models.NoteDomainEntityAssociation
+						splitTokenDbCommands.AddNoteAssociationToInsert(new DataAccessLayer.Models.NoteDomainEntityAssociation
 						{
 							NoteId = e.NoteId,
 							DomainEntityIdName = e.DomainEntityIdName,
@@ -310,17 +329,14 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 
             replacementsBySourceId.Add(tokenDb.Id, (tokenDb, newChildTokens, newChildTokensDb));
 
-			// Put the new child tokens into the "splitChild' return value structure:
-			//splitChildTokensByIncomingTokenId.Add(ModelHelper.BuildTokenId(tokenDb), newChildTokens);
-
-			projectDbContext.TokenComponents.AddRange(newChildTokensDb);
+			splitTokenDbCommands.AddTokenComponentsToInsert(newChildTokensDb);
 			tokenDb.Deleted = currentDateTime;
 
 			// Find any tokens with a BCVW that matches the current tokenDb and
 			// with a SubwordNumber that is greater than the token that was split,
 			// and do a Subword renumbering
 			nextSubwordNumber++;
-			var tokensHavingSubwordsToRenumberDb = projectDbContext.Tokens
+			var tokensHavingSubwordsToRenumberDb = splitTokenDbCommands.ProjectDbContext.Tokens
 				.Where(t =>
 					t.BookNumber == tokenDb.BookNumber &&
 					t.ChapterNumber == tokenDb.ChapterNumber &&
@@ -333,6 +349,8 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 			{
 				tokensHavingSubwordsToRenumberDb[i].OriginTokenLocation ??= tokenDb.OriginTokenLocation ?? tokenDb.EngineTokenId;
 				tokensHavingSubwordsToRenumberDb[i].SubwordNumber = nextSubwordNumber + i;
+
+				splitTokenDbCommands.AddTokenToSubwordRenumber(tokensHavingSubwordsToRenumberDb[i]);
 			}
 		}
 
@@ -342,7 +360,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 	private static (List<(Guid, CompositeToken)>, Dictionary<Guid, List<string>>) AttachToComposites(
 		Dictionary<Guid, (DataAccessLayer.Models.Token SourceModelToken, List<Token> ReplacementTokens, List<DataAccessLayer.Models.Token> ReplacementModelTokens)> replacementsBySourceId,
 		bool createParallelComposite,
-		ProjectDbContext projectDbContext, 
+		SplitTokenDbCommands splitTokenDbCommands, 
 		CancellationToken cancellationToken)
 	{
 		var replacementTokensById = new Dictionary<Guid, List<Token>>();
@@ -361,7 +379,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 			tokensDb,
 			replacementTokensById,
 			sourceTrainingTextsByAlignmentSetId,
-			projectDbContext,
+			splitTokenDbCommands,
 			cancellationToken
 		);
 
@@ -388,10 +406,10 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 					null,
 					replacementTokensById[tokenDb.Id],
 					replacementModelTokensById[tokenDb.Id],
-					projectDbContext);
+					splitTokenDbCommands);
 
 				incomingTokenIdCompositePairs.Add((tokenDb.Id, compositeToken));
-				TransferAssociations(tokenDb, tokenComposite, sourceTrainingTextsByAlignmentSetId, projectDbContext, true);
+				TransferAssociations(tokenDb, tokenComposite, sourceTrainingTextsByAlignmentSetId, splitTokenDbCommands, true);
 			}
 			else
 			{
@@ -408,10 +426,10 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 						pc.Id,
 						replacementTokensById[tokenDb.Id],
 						replacementModelTokensById[tokenDb.Id],
-						projectDbContext);
+						splitTokenDbCommands);
 
 					incomingTokenIdCompositePairs.Add((tokenDb.Id, compositeToken));
-					TransferAssociations(tokenDb, tokenComposite, sourceTrainingTextsByAlignmentSetId, projectDbContext, isFirst);
+					TransferAssociations(tokenDb, tokenComposite, sourceTrainingTextsByAlignmentSetId, splitTokenDbCommands, isFirst);
 
 					isFirst = false;
 				}
@@ -425,7 +443,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
         List<DataAccessLayer.Models.Token> tokensDb, 
         Dictionary<Guid, List<Token>> replacementTokensById,
 		Dictionary<Guid, List<string>> sourceTrainingTextsByAlignmentSetId,
-		ProjectDbContext projectDbContext, 
+		SplitTokenDbCommands splitTokenDbCommands, 
         CancellationToken cancellationToken)
     {
 		var incomingTokenIdCompositePairs = new List<(Guid, CompositeToken)>();
@@ -435,7 +453,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 		        .Select(t => t.TokenCompositeId))
 	        .Distinct();
 
-		var tokensDbTokenComposites = projectDbContext.TokenComposites
+		var tokensDbTokenComposites = splitTokenDbCommands.ProjectDbContext.TokenComposites
 			.Include(e => e.Tokens)
 			.Include(e => e.SourceAlignments)
 			.Where(e => existingCompositeIds.Contains(e.Id))
@@ -455,7 +473,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 				.ToList();
 
 			// Remove associations from this composite that reference tokenIdsToReplace
-			projectDbContext.TokenCompositeTokenAssociations.RemoveRange(tokensDb
+			splitTokenDbCommands.AddTokenCompositeTokenAssociationsToRemove(tokensDb
 				.SelectMany(e => e.TokenCompositeTokenAssociations
 					.Where(t =>
 						t.TokenCompositeId == tokenComposite.Id &&
@@ -474,7 +492,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 				compositeChildTokens.AddRange(replacementTokensById[tokenIdToReplace]);
 
 				// Add new associations from this composites to replacement child token ids:
-				projectDbContext.TokenCompositeTokenAssociations.AddRange(replacementTokensById[tokenIdToReplace]
+				splitTokenDbCommands.AddTokenCompositeTokenAssociationsToInsert(replacementTokensById[tokenIdToReplace]
 					.Select(e => new DataAccessLayer.Models.TokenCompositeTokenAssociation
 					{
 						Id = Guid.NewGuid(),
@@ -492,6 +510,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 
 			tokenComposite.SurfaceText = compositeToken.SurfaceText;
 			tokenComposite.TrainingText = compositeToken.TrainingText;
+			splitTokenDbCommands.AddTokenComponentToUpdateSurfaceTrainingText(tokenComposite);
 
 			foreach (var e in tokenComposite.SourceAlignments)
 			{
@@ -519,7 +538,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 		Guid? parallelCorpusId,
 		List<Token> replacementTokens,
 		List<DataAccessLayer.Models.Token> replacementModelTokens,
-		ProjectDbContext projectDbContext)
+		SplitTokenDbCommands splitTokenDbCommands)
 	{
 		var compositeToken = new CompositeToken(replacementTokens)
 		{
@@ -546,7 +565,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 			replacementModelTokens);
 		tokenComposite.ParallelCorpusId = parallelCorpusId;
 
-		projectDbContext.TokenComposites.Add(tokenComposite);
+		splitTokenDbCommands.AddTokenComponentToInsert(tokenComposite);
 
 		return (tokenDb.Id, tokenComposite, compositeToken);
 	}
@@ -555,7 +574,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 		DataAccessLayer.Models.Token tokenDb,
 		DataAccessLayer.Models.TokenComposite tokenComposite,
 		Dictionary<Guid, List<string>> sourceTrainingTextsByAlignmentSetId,
-		ProjectDbContext projectDbContext,
+		SplitTokenDbCommands splitTokenDbCommands,
 		bool isFirstForTokenDb)
 	{
 		if (isFirstForTokenDb)
@@ -577,64 +596,69 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 					});
 				}
 			}
-			foreach (var e in tokenDb.TargetAlignments) { e.TargetTokenComponentId = tokenComposite.Id; }
-			foreach (var e in tokenDb.Translations) { e.SourceTokenComponentId = tokenComposite.Id; }
-			foreach (var e in tokenDb.TokenVerseAssociations) { e.TokenComponentId = tokenComposite.Id; }
+			// TODO:
+			//foreach (var e in tokenDb.TargetAlignments) { e.TargetTokenComponentId = tokenComposite.Id; }
+			//foreach (var e in tokenDb.Translations) { e.SourceTokenComponentId = tokenComposite.Id; }
+			//foreach (var e in tokenDb.TokenVerseAssociations) { e.TokenComponentId = tokenComposite.Id; }
 		}
 		else
 		{
 			foreach (var e in tokenDb.SourceAlignments)
 			{
-				projectDbContext.Alignments.Add(new DataAccessLayer.Models.Alignment
-				{
-					AlignmentSetId = e.AlignmentSetId,
-					SourceTokenComponentId = tokenComposite.Id,
-					TargetTokenComponentId = e.TargetTokenComponentId,
-					AlignmentOriginatedFrom = e.AlignmentOriginatedFrom,
-					AlignmentVerification = e.AlignmentVerification,
-					Score = e.Score
-				});
-				if (sourceTrainingTextsByAlignmentSetId.TryGetValue(e.AlignmentSetId, out var sourceTrainingTexts))
-				{
-					sourceTrainingTexts.Add(tokenComposite.TrainingText!);
-				}
-				else
-				{
-					sourceTrainingTextsByAlignmentSetId.Add(e.AlignmentSetId, new List<string> { tokenComposite.TrainingText! });
-				}
+				// TODO:
+				//projectDbContext.Alignments.Add(new DataAccessLayer.Models.Alignment
+				//{
+				//	AlignmentSetId = e.AlignmentSetId,
+				//	SourceTokenComponentId = tokenComposite.Id,
+				//	TargetTokenComponentId = e.TargetTokenComponentId,
+				//	AlignmentOriginatedFrom = e.AlignmentOriginatedFrom,
+				//	AlignmentVerification = e.AlignmentVerification,
+				//	Score = e.Score
+				//});
+				//if (sourceTrainingTextsByAlignmentSetId.TryGetValue(e.AlignmentSetId, out var sourceTrainingTexts))
+				//{
+				//	sourceTrainingTexts.Add(tokenComposite.TrainingText!);
+				//}
+				//else
+				//{
+				//	sourceTrainingTextsByAlignmentSetId.Add(e.AlignmentSetId, new List<string> { tokenComposite.TrainingText! });
+				//}
 			}
 			foreach (var e in tokenDb.TargetAlignments)
 			{
-				projectDbContext.Alignments.Add(new DataAccessLayer.Models.Alignment
-				{
-					AlignmentSetId = e.AlignmentSetId,
-					SourceTokenComponentId = e.SourceTokenComponentId,
-					TargetTokenComponentId = tokenComposite.Id,
-					AlignmentOriginatedFrom = e.AlignmentOriginatedFrom,
-					AlignmentVerification = e.AlignmentVerification,
-					Score = e.Score
-				});
+				// TODO: 
+				//projectDbContext.Alignments.Add(new DataAccessLayer.Models.Alignment
+				//{
+				//	AlignmentSetId = e.AlignmentSetId,
+				//	SourceTokenComponentId = e.SourceTokenComponentId,
+				//	TargetTokenComponentId = tokenComposite.Id,
+				//	AlignmentOriginatedFrom = e.AlignmentOriginatedFrom,
+				//	AlignmentVerification = e.AlignmentVerification,
+				//	Score = e.Score
+				//});
 			}
 			foreach (var e in tokenDb.Translations)
 			{
-				projectDbContext.Translations.Add(new DataAccessLayer.Models.Translation
-				{
-					TranslationSetId = e.TranslationSetId,
-					SourceTokenComponentId = tokenComposite.Id,
-					TargetText = e.TargetText,
-					TranslationState = e.TranslationState,
-					LexiconTranslationId = e.LexiconTranslationId,
-					Modified = e.Modified
-				});
+				// TODO:  
+				//projectDbContext.Translations.Add(new DataAccessLayer.Models.Translation
+				//{
+				//	TranslationSetId = e.TranslationSetId,
+				//	SourceTokenComponentId = tokenComposite.Id,
+				//	TargetText = e.TargetText,
+				//	TranslationState = e.TranslationState,
+				//	LexiconTranslationId = e.LexiconTranslationId,
+				//	Modified = e.Modified
+				//});
 			}
 			foreach (var e in tokenDb.TokenVerseAssociations)
 			{
-				projectDbContext.TokenVerseAssociations.Add(new DataAccessLayer.Models.TokenVerseAssociation
-				{
-					TokenComponentId = tokenComposite.Id,
-					Position = e.Position,
-					VerseId = e.VerseId
-				});
+				// TODO:  
+				//projectDbContext.TokenVerseAssociations.Add(new DataAccessLayer.Models.TokenVerseAssociation
+				//{
+				//	TokenComponentId = tokenComposite.Id,
+				//	Position = e.Position,
+				//	VerseId = e.VerseId
+				//});
 			}
 		}
 	}
@@ -702,4 +726,367 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 
         return modelToken;
     }
+}
+
+
+public class SplitTokenDbCommands : IDisposable
+{
+	private bool disposedValue;
+
+	public ProjectDbContext ProjectDbContext { get; init; }
+	public DbConnection Connection { get; init; }
+	public DbTransaction Transaction { get; init; }
+
+	private DbCommand _tokenComponentInsertCommand;
+	private DbCommand _tokenComponentUpdateSurfaceTrainingTextCommand;
+	private DbCommand _tokenCompositeTokenAssociationInsertCommand;
+	private DbCommand _tokenComponentSoftDeleteCommand;
+	private DbCommand _tokenComponentUpdateTypeCommand;
+	private DbCommand _tokenSubwordRenumberCommand;
+	private DbCommand _noteAssociationInsertCommand;
+	private DbCommand _noteAssociationDomainEntityIdSetCommand;
+
+	private List<TokenComponent> _tokenComponentsToInsert = new();
+	private List<TokenComponent> _tokenComponentsToUpdateSurfaceTrainingText = new();
+	private List<TokenComponent> _tokenComponentsToSoftDelete = new();
+	private List<TokenComponent> _tokenComponentsToUpdateType = new();
+	private List<DataAccessLayer.Models.Token> _tokensToSubwordRenumber = new();
+	private List<NoteDomainEntityAssociation> _noteAssociationsToInsert = new();
+	private List<(TokenComponent TokenComponent, IEnumerable<NoteDomainEntityAssociation> NoteAssociations)> _tokenComponentNoteAssociationsToSet = new();
+	private List<TokenCompositeTokenAssociation> _tokenCompositeTokenAssociationsToInsert = new();
+	private List<TokenCompositeTokenAssociation> _tokenCompositeTokenAssociationsToRemove = new();
+
+	public static async Task<SplitTokenDbCommands> CreateAsync(ProjectDbContext projectDbContext, CancellationToken cancellationToken)
+	{
+		projectDbContext.Database.OpenConnection();
+
+		var connection = projectDbContext.Database.GetDbConnection();
+		var transaction = await connection.BeginTransactionAsync(cancellationToken);
+
+		return new SplitTokenDbCommands(projectDbContext, connection, transaction);
+	}
+
+	private SplitTokenDbCommands(ProjectDbContext projectDbContext, DbConnection connection, DbTransaction transaction)
+	{
+		ProjectDbContext = projectDbContext;
+		Connection = connection;
+		Transaction = transaction;
+
+		_tokenComponentInsertCommand = TokenizedCorpusDataBuilder.CreateTokenComponentInsertCommand(connection);
+		_tokenComponentUpdateSurfaceTrainingTextCommand = CreateTokenComponentUpdateSurfaceTrainingTextCommand(connection);
+		_tokenCompositeTokenAssociationInsertCommand = TokenizedCorpusDataBuilder.CreateTokenCompositeTokenAssociationInsertCommand(connection);
+		_tokenComponentSoftDeleteCommand = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(TokenComponent));
+		_tokenComponentUpdateTypeCommand = CreateTokenComponentTypeUpdateCommand(connection);
+		_tokenSubwordRenumberCommand = CreateTokenSubwordRenumberCommand(connection);
+		_noteAssociationInsertCommand = CreateNoteAssociationInsertCommand(connection);
+		_noteAssociationDomainEntityIdSetCommand = CreateNoteAssociationDomainEntityIdSetCommand(connection);
+	}
+
+	public async Task CommitTransactionAsync(CancellationToken cancellationToken)
+	{
+		await Transaction.CommitAsync(cancellationToken);
+	}
+
+	public async Task ExecuteBulkOperationsAsync(CancellationToken cancellationToken)
+	{
+		foreach (var tokenComponent in _tokenComponentsToInsert)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			if (tokenComponent is TokenComposite)
+			{
+				await TokenizedCorpusDataBuilder.InsertTokenCompositeAsync((tokenComponent as TokenComposite)!, _tokenComponentInsertCommand, cancellationToken);
+			}
+			else
+			{
+				await TokenizedCorpusDataBuilder.InsertTokenAsync((tokenComponent as DataAccessLayer.Models.Token)!, null, _tokenComponentInsertCommand, cancellationToken);
+			}
+
+		}
+
+		foreach (var tc in _tokenComponentsToUpdateSurfaceTrainingText)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+			await UpdateTokenComponentSurfaceTrainingTextAsync(tc, _tokenComponentUpdateSurfaceTrainingTextCommand, cancellationToken);
+		}
+
+		foreach (var tc in _tokenComponentsToSoftDelete)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+			await SoftDeleteTokenComponentAsync(tc, _tokenComponentSoftDeleteCommand, cancellationToken);
+		}
+
+		foreach (var tc in _tokenComponentsToUpdateType)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+			await UpdateTypeTokenComponentAsync(tc, _tokenComponentUpdateTypeCommand, cancellationToken);
+		}
+
+		foreach (var t in _tokensToSubwordRenumber)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+			await SubwordRenumberTokenAsync(t, _tokenSubwordRenumberCommand, cancellationToken);
+		}
+
+		foreach (var na in _noteAssociationsToInsert)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+			await InsertNoteDomainEntityAssociationAsync(na, _noteAssociationInsertCommand, cancellationToken);
+		}
+
+		foreach (var tcn in _tokenComponentNoteAssociationsToSet)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+			await SetNoteAssociationsDomainEntityIdAsync(tcn.TokenComponent, tcn.NoteAssociations, _noteAssociationDomainEntityIdSetCommand, cancellationToken);
+		}
+
+		if (_tokenCompositeTokenAssociationsToRemove.Count != 0)
+		{
+			await DataUtil.DeleteIdentifiableEntityAsync(
+				Connection,
+				typeof(TokenCompositeTokenAssociation),
+				_tokenCompositeTokenAssociationsToRemove.Select(e => e.Id).ToArray(),
+				cancellationToken);
+		}
+
+		foreach (var t in _tokenCompositeTokenAssociationsToInsert)
+		{
+			t.Id = await TokenizedCorpusDataBuilder.InsertTokenCompositeTokenAssociationAsync(t.TokenId, t.TokenCompositeId, _tokenCompositeTokenAssociationInsertCommand, cancellationToken);
+		}
+
+		_tokenComponentsToInsert.Clear();
+		_tokenComponentsToSoftDelete.Clear();
+		_tokenComponentsToUpdateType.Clear();
+		_tokensToSubwordRenumber.Clear();
+		_noteAssociationsToInsert.Clear();
+		_tokenComponentNoteAssociationsToSet.Clear();
+		_tokenCompositeTokenAssociationsToRemove.Clear();
+		_tokenCompositeTokenAssociationsToInsert.Clear();
+	}
+
+	public void AddTokenComponentToInsert(TokenComponent tokenComponent)
+	{
+		_tokenComponentsToInsert.Add(tokenComponent);
+	}
+
+	public void AddTokenComponentsToInsert(IEnumerable<TokenComponent> tokenComponents)
+	{
+		_tokenComponentsToInsert.AddRange(tokenComponents);
+	}
+
+	public void AddTokenComponentToUpdateSurfaceTrainingText(TokenComponent tokenComponent)
+	{
+		_tokenComponentsToUpdateSurfaceTrainingText.Add(tokenComponent);
+	}
+
+	public void AddTokenComponentToSoftDelete(IEnumerable<TokenComponent> tokenComponents)
+	{
+		_tokenComponentsToSoftDelete.AddRange(tokenComponents);
+	}
+
+	public void AddTokenComponentsToUpdateType(IEnumerable<TokenComponent> tokenComponents)
+	{
+		_tokenComponentsToUpdateType.AddRange(tokenComponents);
+	}
+
+	public void AddTokenToSubwordRenumber(DataAccessLayer.Models.Token token)
+	{
+		_tokensToSubwordRenumber.Add(token);
+	}
+
+	public void AddNoteAssociationToInsert(NoteDomainEntityAssociation noteAssociation)
+	{
+		_noteAssociationsToInsert.Add(noteAssociation);
+	}
+
+	public void AddTokenComponentNoteAssociationsToSet(TokenComponent tokenComponent, IEnumerable<NoteDomainEntityAssociation> noteAssociations)
+	{
+		_tokenComponentNoteAssociationsToSet.Add((tokenComponent, noteAssociations));
+	}
+
+	public void AddTokenCompositeTokenAssociationsToInsert(IEnumerable<TokenCompositeTokenAssociation> tokenAssociations)
+	{
+		_tokenCompositeTokenAssociationsToInsert.AddRange(tokenAssociations);
+	}
+
+	public void AddTokenCompositeTokenAssociationsToRemove(IEnumerable<TokenCompositeTokenAssociation> tokenAssociations)
+	{
+		_tokenCompositeTokenAssociationsToRemove.AddRange(tokenAssociations);
+	}
+
+	private static async Task UpdateTokenComponentSurfaceTrainingTextAsync(TokenComponent tokenComponent, DbCommand command, CancellationToken cancellationToken)
+	{
+		command.Parameters[$"@{nameof(TokenComponent.SurfaceText)}"].Value = tokenComponent.SurfaceText;
+		command.Parameters[$"@{nameof(TokenComponent.TrainingText)}"].Value = tokenComponent.TrainingText;
+		command.Parameters[$"@{nameof(IdentifiableEntity.Id)}"].Value = tokenComponent.Id;
+
+		_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+	}
+
+	private static async Task SoftDeleteTokenComponentAsync(TokenComponent tokenComponent, DbCommand command, CancellationToken cancellationToken)
+	{
+		// Keep DbContext model in sync:
+		tokenComponent.Deleted ??= DateTimeOffset.UtcNow;
+
+		await DataUtil.SoftDeleteByIdAsync((DateTimeOffset)tokenComponent.Deleted, tokenComponent.Id, command, cancellationToken);
+	}
+
+	public static async Task UpdateTypeTokenComponentAsync(TokenComponent tokenComponent, DbCommand command, CancellationToken cancellationToken)
+	{
+		command.Parameters[$"@{nameof(TokenComponent.Type)}"].Value = tokenComponent.Type;
+		command.Parameters[$"@{nameof(IdentifiableEntity.Id)}"].Value = tokenComponent.Id;
+		_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+	}
+
+	private static async Task SubwordRenumberTokenAsync(DataAccessLayer.Models.Token token, DbCommand command, CancellationToken cancellationToken)
+	{
+		command.Parameters[$"@{nameof(DataAccessLayer.Models.Token.OriginTokenLocation)}"].Value = token.OriginTokenLocation;
+		command.Parameters[$"@{nameof(DataAccessLayer.Models.Token.SubwordNumber)}"].Value = token.SubwordNumber;
+		command.Parameters[$"@{nameof(IdentifiableEntity.Id)}"].Value = token.Id;
+
+		_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+	}
+
+	private static async Task InsertNoteDomainEntityAssociationAsync(NoteDomainEntityAssociation noteAssociation, DbCommand command, CancellationToken cancellationToken)
+	{
+		command.Parameters["@Id"].Value = noteAssociation.Id;
+		command.Parameters["@NoteId"].Value = noteAssociation.NoteId;
+		command.Parameters["@DomainEntityIdGuid"].Value = noteAssociation.DomainEntityIdGuid;
+		command.Parameters["@DomainEntityIdName"].Value = noteAssociation.DomainEntityIdName;
+		_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+	}
+
+	private async Task SetNoteAssociationsDomainEntityIdAsync(TokenComponent tokenComponent, IEnumerable<NoteDomainEntityAssociation> noteAssociations, DbCommand command, CancellationToken cancellationToken)
+	{
+		foreach (var noteAssociation in noteAssociations)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			// Keep DbContext model in sync:
+			noteAssociation.DomainEntityIdGuid = tokenComponent.Id;
+
+			command.Parameters[$"@{nameof(IdentifiableEntity.Id)}"].Value = noteAssociation.Id;
+			command.Parameters[$"@{nameof(NoteDomainEntityAssociation.DomainEntityIdGuid)}"].Value = tokenComponent.Id;
+
+			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+		}
+	}
+
+	private static DbCommand CreateNoteAssociationInsertCommand(DbConnection connection)
+	{
+		var command = connection.CreateCommand();
+		var columns = new string[] { "Id", "NoteId", "DomainEntityIdGuid", "DomainEntityIdName" };
+
+		DataUtil.ApplyColumnsToInsertCommand(command, typeof(NoteDomainEntityAssociation), columns);
+
+		command.Prepare();
+
+		return command;
+	}
+
+	public static DbCommand CreateTokenComponentUpdateSurfaceTrainingTextCommand(DbConnection connection)
+	{
+		var command = connection.CreateCommand();
+		var columns = new string[] { nameof(TokenComponent.SurfaceText), nameof(TokenComponent.TrainingText) };
+		var whereColumns = new (string, WhereEquality)[] { (nameof(IdentifiableEntity.Id), WhereEquality.Equals) };
+
+		DataUtil.ApplyColumnsToUpdateCommand(
+			command,
+			typeof(TokenComponent),
+			columns,
+			whereColumns,
+			Array.Empty<(string, int)>());
+
+		command.Prepare();
+
+		return command;
+	}
+
+	public static DbCommand CreateTokenComponentTypeUpdateCommand(DbConnection connection)
+	{
+		var command = connection.CreateCommand();
+		var columns = new string[] { nameof(TokenComponent.Type) };
+		var whereColumns = new (string, WhereEquality)[] { (nameof(IdentifiableEntity.Id), WhereEquality.Equals) };
+
+		DataUtil.ApplyColumnsToUpdateCommand(
+			command,
+			typeof(TokenComponent),
+			columns,
+			whereColumns,
+			Array.Empty<(string, int)>());
+
+		command.Prepare();
+
+		return command;
+	}
+
+	public static DbCommand CreateTokenSubwordRenumberCommand(DbConnection connection)
+	{
+		var command = connection.CreateCommand();
+		var columns = new string[] { nameof(DataAccessLayer.Models.Token.OriginTokenLocation), nameof(DataAccessLayer.Models.Token.SubwordNumber) };
+		var whereColumns = new (string, WhereEquality)[] { (nameof(IdentifiableEntity.Id), WhereEquality.Equals) };
+
+		DataUtil.ApplyColumnsToUpdateCommand(
+			command,
+			typeof(TokenComponent),
+			columns,
+			whereColumns,
+			Array.Empty<(string, int)>());
+
+		command.Prepare();
+
+		return command;
+	}
+
+	private static DbCommand CreateNoteAssociationDomainEntityIdSetCommand(DbConnection connection)
+	{
+		var command = connection.CreateCommand();
+		var columns = new string[] { nameof(NoteDomainEntityAssociation.DomainEntityIdGuid) };
+		var whereColumns = new (string, WhereEquality)[] { (nameof(IdentifiableEntity.Id), WhereEquality.Equals) };
+
+		DataUtil.ApplyColumnsToUpdateCommand(
+			command,
+			typeof(NoteDomainEntityAssociation),
+			columns,
+			whereColumns,
+			Array.Empty<(string, int)>());
+
+		command.Prepare();
+
+		return command;
+	}
+
+	protected virtual void Dispose(bool disposing)
+	{
+		if (!disposedValue)
+		{
+			if (disposing)
+			{
+				_tokenComponentInsertCommand.Dispose();
+				_tokenComponentUpdateSurfaceTrainingTextCommand.Dispose();
+				_tokenCompositeTokenAssociationInsertCommand.Dispose();
+				_tokenComponentSoftDeleteCommand.Dispose();
+				_tokenComponentUpdateTypeCommand.Dispose();
+				_tokenSubwordRenumberCommand.Dispose();
+				_noteAssociationInsertCommand.Dispose();
+				_noteAssociationDomainEntityIdSetCommand.Dispose();
+
+				Transaction.Dispose();
+
+				ProjectDbContext.Database.CloseConnection();
+				Connection.Dispose();
+			}
+
+			// TODO: free unmanaged resources (unmanaged objects) and override finalizer
+			// TODO: set large fields to null
+			disposedValue = true;
+		}
+	}
+
+	public void Dispose()
+	{
+		// Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+		Dispose(disposing: true);
+		GC.SuppressFinalize(this);
+	}
 }

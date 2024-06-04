@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 {
@@ -53,14 +54,29 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
             return new SyntaxTreeFileTextCorpus(syntaxTree);
         }
 
-        public static ITextCorpus GetZZSurCorpus()
+        public static ITextCorpus GetZZSurCorpus(IEnumerable<string>? bookIds = null)
         {
-            return new ParatextTextCorpus("C:\\My Paratext 9 Projects\\zz_SUR")
-                 .Tokenize<LatinWordTokenizer>()
-                 .Transform<IntoTokensTextRowProcessor>();
+            if (bookIds != null && bookIds.Any())
+            {
+				return new ParatextTextCorpus("C:\\My Paratext 9 Projects\\zz_SUR")
+					.FilterTexts(bookIds)
+					.Tokenize<LatinWordTokenizer>()
+					.Transform<IntoTokensTextRowProcessor>();
+			}
+			else
+            {
+                return new ParatextTextCorpus("C:\\My Paratext 9 Projects\\zz_SUR")
+                    .Tokenize<LatinWordTokenizer>()
+                    .Transform<IntoTokensTextRowProcessor>();
+            }
         }
 
-        public static SourceTextIdToVerseMappings GetSampleTextCorpusSourceTextIdToVerseMappings(ScrVers sourceVersification, ScrVers targetVersification)
+		public static ITextCorpus FilterTexts(this ScriptureTextCorpus corpus, IEnumerable<string> bookIds)
+		{
+			return new ScriptureTextCorpus(corpus.Versification, corpus.Texts.Where(e => bookIds.Contains(e.Id)));
+		}
+
+		public static SourceTextIdToVerseMappings GetSampleTextCorpusSourceTextIdToVerseMappings(ScrVers sourceVersification, ScrVers targetVersification)
         {
             var verseMappings = EngineParallelTextCorpus.VerseMappingsForAllVerses(
                 sourceVersification,
@@ -92,5 +108,15 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 
             return new SourceTextIdToVerseMappingsFromVerseMappings(verseMappingsFiltered);
         }
-    }
+
+		public interface IRowFilter<T> where T : TextRow
+		{
+			bool ShouldIncludeRow(T textRow);
+		}
+
+		public interface ITextFilter<T> where T : IText
+		{
+			bool ShouldIncludeText(T text);
+		}
+	}
 }
