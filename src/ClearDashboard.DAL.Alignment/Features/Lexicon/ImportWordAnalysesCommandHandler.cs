@@ -45,7 +45,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 
             try
             {
-				using var splitTokenDbCommands = await SplitTokenDbCommands.CreateAsync(ProjectDbContext, cancellationToken);
+				using var splitTokenDbCommands = await SplitTokenDbCommands.CreateAsync(ProjectDbContext, _userProvider, cancellationToken);
 
 				// Query matching no-association tokens having matching TokenizedCorpusId
 				var supersetTokens = ProjectDbContext.Tokens
@@ -95,20 +95,20 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                         foreach (var t in standaloneTokens)
                         {
                             t.Type = replacementTokenInfos[0].tokenType;
-                        }
-						splitTokenDbCommands.AddTokenComponentsToUpdateType(standaloneTokens);
+							splitTokenDbCommands.AddTokenComponentToUpdateType(t);
+						}
 						waCount++;
 						continue;
                     }
                     else if (replacementTokenInfos.Count() > 2)
                     {
-                        Logger.LogWarning($"\tWord anaylsis for {wordAnalysis.Word} breaks up word into {replacementTokenInfos.Count()} parts");
+                        Logger.LogInformation($"\tWord anaylsis for {wordAnalysis.Word} breaks up word into {replacementTokenInfos.Count()} parts");
 					}
 
 					Stopwatch? frequentWordStopwatch = null;
 					if (standaloneTokens.Count > 500)
 					{
-						Logger.LogInformation($"\tToken matches for word {wordAnalysis.Word}:  {standaloneTokens.Count}");
+						Logger.LogInformation($"\tLarge number of Token matches for word {wordAnalysis.Word}:  {standaloneTokens.Count}");
 						frequentWordStopwatch = Stopwatch.StartNew();
 					}
 
@@ -159,10 +159,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 					//	_ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 					//}
 
-					if (standaloneTokens.Count > 100)
+					if (standaloneTokens.Count > 500)
 					{
                         frequentWordStopwatch?.Stop();
-						Logger.LogInformation($"\tElapsed time for word {wordAnalysis.Word}:  {frequentWordStopwatch?.Elapsed}");
+						Logger.LogInformation($"\tElapsed time for word {wordAnalysis.Word} with large number of Token matches:  {frequentWordStopwatch?.Elapsed}");
 					}
 
 					waCount++;

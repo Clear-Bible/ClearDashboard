@@ -9,6 +9,7 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Text.Json;
 using static ClearBible.Engine.Persistence.FileGetBookIds;
+using static ClearDashboard.DAL.Alignment.Features.Common.DataUtil;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Common
@@ -357,5 +358,91 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 
-    }
+		public static DbCommand CreateTokenComponentUpdateSurfaceTrainingTextCommand(DbConnection connection)
+		{
+			var command = connection.CreateCommand();
+			var columns = new string[] { nameof(Models.TokenComponent.SurfaceText), nameof(Models.TokenComponent.TrainingText) };
+			var whereColumns = new (string, WhereEquality)[] { (nameof(Models.IdentifiableEntity.Id), WhereEquality.Equals) };
+
+			DataUtil.ApplyColumnsToUpdateCommand(
+				command,
+				typeof(Models.TokenComponent),
+				columns,
+				whereColumns,
+				Array.Empty<(string, int)>());
+
+			command.Prepare();
+
+			return command;
+		}
+
+		public static async Task UpdateTokenComponentSurfaceTrainingTextAsync(Models.TokenComponent tokenComponent, DbCommand command, CancellationToken cancellationToken)
+		{
+			command.Parameters[$"@{nameof(Models.TokenComponent.SurfaceText)}"].Value = tokenComponent.SurfaceText;
+			command.Parameters[$"@{nameof(Models.TokenComponent.TrainingText)}"].Value = tokenComponent.TrainingText;
+			command.Parameters[$"@{nameof(Models.IdentifiableEntity.Id)}"].Value = tokenComponent.Id;
+
+			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+		}
+
+		public static async Task SoftDeleteTokenComponentAsync(Models.TokenComponent tokenComponent, DbCommand command, CancellationToken cancellationToken)
+		{
+			// Keep DbContext model in sync:
+			tokenComponent.Deleted ??= DateTimeOffset.UtcNow;
+
+			await DataUtil.SoftDeleteByIdAsync((DateTimeOffset)tokenComponent.Deleted, tokenComponent.Id, command, cancellationToken);
+		}
+
+		public static DbCommand CreateTokenComponentTypeUpdateCommand(DbConnection connection)
+		{
+			var command = connection.CreateCommand();
+			var columns = new string[] { nameof(Models.TokenComponent.Type) };
+			var whereColumns = new (string, WhereEquality)[] { (nameof(Models.IdentifiableEntity.Id), WhereEquality.Equals) };
+
+			DataUtil.ApplyColumnsToUpdateCommand(
+				command,
+				typeof(Models.TokenComponent),
+				columns,
+				whereColumns,
+				Array.Empty<(string, int)>());
+
+			command.Prepare();
+
+			return command;
+		}
+
+		public static async Task UpdateTypeTokenComponentAsync(Models.TokenComponent tokenComponent, DbCommand command, CancellationToken cancellationToken)
+		{
+			command.Parameters[$"@{nameof(Models.TokenComponent.Type)}"].Value = tokenComponent.Type;
+			command.Parameters[$"@{nameof(Models.IdentifiableEntity.Id)}"].Value = tokenComponent.Id;
+			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+		}
+
+		public static DbCommand CreateTokenSubwordRenumberCommand(DbConnection connection)
+		{
+			var command = connection.CreateCommand();
+			var columns = new string[] { nameof(Models.Token.OriginTokenLocation), nameof(Models.Token.SubwordNumber) };
+			var whereColumns = new (string, WhereEquality)[] { (nameof(Models.IdentifiableEntity.Id), WhereEquality.Equals) };
+
+			DataUtil.ApplyColumnsToUpdateCommand(
+				command,
+				typeof(Models.TokenComponent),
+				columns,
+				whereColumns,
+				Array.Empty<(string, int)>());
+
+			command.Prepare();
+
+			return command;
+		}
+
+		public static async Task SubwordRenumberTokenAsync(DataAccessLayer.Models.Token token, DbCommand command, CancellationToken cancellationToken)
+		{
+			command.Parameters[$"@{nameof(Models.Token.OriginTokenLocation)}"].Value = token.OriginTokenLocation;
+			command.Parameters[$"@{nameof(Models.Token.SubwordNumber)}"].Value = token.SubwordNumber;
+			command.Parameters[$"@{nameof(Models.IdentifiableEntity.Id)}"].Value = token.Id;
+
+			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+		}
+	}
 }
