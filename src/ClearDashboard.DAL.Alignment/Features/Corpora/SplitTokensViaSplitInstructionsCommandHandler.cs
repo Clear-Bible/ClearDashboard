@@ -961,7 +961,7 @@ public class SplitTokenDbCommands : IDisposable
 		_tvasToInsert.Clear();
 }
 
-public void AddTokenComponentToInsert(TokenComponent tokenComponent)
+	public void AddTokenComponentToInsert(TokenComponent tokenComponent)
 	{
 		_tokenComponentsToInsert.Add(tokenComponent);
 	}

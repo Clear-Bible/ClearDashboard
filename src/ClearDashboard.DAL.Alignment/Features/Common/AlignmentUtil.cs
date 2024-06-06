@@ -13,6 +13,7 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models;
 using SIL.Machine.SequenceAlignment;
 using static ClearDashboard.DAL.Alignment.Features.Common.DataUtil;
+using ClearDashboard.DAL.Interfaces;
 
 namespace ClearDashboard.DAL.Alignment.Features.Common
 {
@@ -270,6 +271,31 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 			command.Parameters[$"@{nameof(IdentifiableEntity.Id)}"].Value = tvaId;
 
 			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+		}
+
+		public static DbCommand CreateAlignmentDenormalizationTaskInsertCommand(DbConnection connection)
+		{
+			var command = connection.CreateCommand();
+			var columns = new string[] { "Id", "AlignmentSetId", "SourceText" };
+
+			DataUtil.ApplyColumnsToInsertCommand(command, typeof(Models.VerseRow), columns);
+
+			command.Prepare();
+
+			return command;
+		}
+
+		public static async Task<Guid> InsertAlignmentDenormalizationTaskAsync(Models.AlignmentSetDenormalizationTask denormalizationTask, DbCommand command, CancellationToken cancellationToken)
+		{
+            var id = Guid.NewGuid();
+
+			command.Parameters["@Id"].Value = id;
+			command.Parameters["@AlignmentSetId"].Value = denormalizationTask.AlignmentSetId;
+			command.Parameters["@SourceText"].Value = !string.IsNullOrEmpty(denormalizationTask.SourceText) ? denormalizationTask.SourceText : DBNull.Value;
+
+			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+
+            return id;
 		}
 
 		//Same as ProjectTemplateProcessRunner, how do we do background tasks?
