@@ -437,7 +437,7 @@
     <value>Alinhamentos</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>Tipo de alinhamento:</value>
+    <value>Tipo de alinhamento: </value>
   </data>
   <data name="BulkAlignmentReview_Approve" xml:space="preserve">
     <value>Aprovar</value>
@@ -566,7 +566,7 @@
     <value>Excluir colaboração do projeto</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>Você tem outros usuários conectados a este projeto. Este projeto também será removido para eles. Tem certeza de que deseja excluir este projeto?</value>
+    <value>Você tem outros usuários conectados a este projeto.  Este projeto também será removido para eles. Tem certeza de que deseja excluir este projeto?</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
     <value>Tem certeza de que deseja excluir este projeto?</value>
@@ -896,7 +896,7 @@
     <value>Alterar todas as ocorrências não definidas</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>Se marcada, isso mudará todas as ocorrências não definidas desta palavra</value>
+    <value>Se marcado, isso mudará todas as ocorrências não definidas desta palavra</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Concordância</value>
@@ -1229,10 +1229,10 @@
     <value>Glosas:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Partes do discurso</value>
+    <value>Partes do discurso   </value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>Lemas Relacionados</value>
+    <value>Lemas Relacionados   </value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>Escopo:</value>
@@ -1253,7 +1253,7 @@
     <value>Sentidos</value>
   </data>
   <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>Códigos Fortes</value>
+    <value>Códigos Fortes   </value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>Subdomínios:</value>
@@ -1265,7 +1265,7 @@
     <value>Versículos</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Sentido do verso</value>
+    <value>Sentido do Verso</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Versículo Total</value>
@@ -1394,7 +1394,7 @@
     <value>Adicionar Jota</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Adicione um novo jot</value>
+    <value>Adicione um novo jot </value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Corpo</value>
@@ -1406,7 +1406,7 @@
     <value>Excluir este jot?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
-    <value>Devido às permissões do seu projeto Paratext,</value>
+    <value>Devido às permissões do seu projeto Paratext, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>Filtrar por versículo</value>
@@ -1610,7 +1610,7 @@
     <value>Criar alinhamento de palavras</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
-    <value>Criar Paralelização de Versos Corpora</value>
+    <value>Criar Paralelização de Corpora Versos</value>
   </data>
   <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
     <value>Criar interlinear</value>
@@ -1637,7 +1637,7 @@
     <value>Alinhador de palavras da máquina de trem</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
-    <value>Defina o mapeamento de versos entre corpora paralelizados</value>
+    <value>Defina o mapeamento de versículos entre corpora paralelizados</value>
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Corpus Paratextual</value>
@@ -1679,7 +1679,7 @@
     <value>Auxiliar</value>
   </data>
   <data name="Pds_BackTranslation" xml:space="preserve">
-    <value>Retrotradução</value>
+    <value>Tradução reversa</value>
   </data>
   <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
     <value>Calcular novo modelo de tradução</value>
@@ -1790,7 +1790,7 @@
     <value>EstudoBíbliaAdições</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Vá para o Paratext e troque de projeto. O projeto Paratext atualmente conectado ao plugin ClearDashboard não é o mesmo que o corpus deste projeto ClearDashboard.</value>
+    <value>Vá para o Paratext e troque de projeto.  O projeto Paratext atualmente conectado ao plugin ClearDashboard não é o mesmo que o corpus deste projeto ClearDashboard.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Alvo</value>
@@ -1910,13 +1910,13 @@
     <value>Início rápido de novo projeto</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>Criar projeto:</value>
+    <value>Criar projeto: </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
     <value>Crie seu projeto usando o assistente de modelo de projeto.</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>Base de dados:</value>
+    <value>Base de dados: </value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
     <value>Você não pode excluir esse projeto, outro aplicativo ainda o está usando.</value>
@@ -1952,10 +1952,10 @@
     <value>Sem combinações.</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>É solitário aqui. Por favor, crie um novo projeto.</value>
+    <value>É solitário aqui.  Por favor, crie um novo projeto.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>O paratexto não está instalado. Instale o Paratext e execute novamente o aplicativo ClearDashboard.</value>
+    <value>O paratexto não está instalado.  Instale o Paratext e execute novamente o aplicativo ClearDashboard.</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>O paratexto não está funcionando</value>
@@ -1979,7 +1979,7 @@
     <value>Projeto Paratexto</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Projeto:</value>
+    <value>Projeto: </value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>Estamos quase lá!</value>
@@ -2006,7 +2006,7 @@
     <value>Clique aqui para iniciar o Paratexto</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Versão:</value>
+    <value>Versão: </value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>Por favor insira um nome para o seu projeto</value>
@@ -2015,7 +2015,7 @@
     <value>Crie seu novo projeto</value>
   </data>
   <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>O nome do projeto fornecido contém caracteres ilegais. Os caracteres válidos incluem 'A-Z' (minúsculas e maiúsculas), números '0-9' e os caracteres '-' e '_'.</value>
+    <value>O nome do projeto fornecido contém caracteres ilegais.  Os caracteres válidos incluem 'A-Z' (minúsculas e maiúsculas), números '0-9' e os caracteres '-' e '_'.</value>
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>Já existe um projeto com o mesmo nome. Escolha um nome exclusivo.</value>
@@ -2234,7 +2234,7 @@
     <value>Registro</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>A chave fornecida está com defeito. Quando descriptografado, determinados elementos JSON não foram encontrados.</value>
+    <value>A chave fornecida está com defeito.  Quando descriptografado, determinados elementos JSON não foram encontrados.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>O conteúdo da chave de licença descriptografada não corresponde às informações fornecidas.</value>
@@ -2243,7 +2243,7 @@
     <value>Sua chave de licença está faltando ou quebrada.</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>Bem-vindo ao ClearDashboard! Por favor, insira suas informações de registro.</value>
+    <value>Bem-vindo ao ClearDashboard!  Por favor, insira suas informações de registro.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>por favor entre com seu primeiro nome</value>
@@ -2497,8 +2497,11 @@
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
   </data>
-  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+  <data name="TokenDisplay_SetGloss" xml:space="preserve">
     <value>Definir brilho</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>Adicionar Lexeme</value>
   </data>
   <data name="TokenSplitting_ClickWhere" xml:space="preserve">
     <value>Clique onde dividir a palavra em tokens</value>

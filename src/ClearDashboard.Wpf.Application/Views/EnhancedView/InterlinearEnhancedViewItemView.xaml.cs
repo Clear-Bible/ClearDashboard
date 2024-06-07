@@ -67,5 +67,32 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
             }
         }
 
+
+        public void GlossSet(object sender, RoutedEventArgs routedEventArgs)
+        {
+            Task.Run(() => GlossSetAsync(routedEventArgs as TranslationEventArgs ?? throw new InvalidOperationException()).GetAwaiter());
+        }
+
+
+        // Token Splitting - 1.5 release - stopped here...
+        // Need to wire up new glossing dialog.
+        public async Task GlossSetAsync(TranslationEventArgs args)
+        {
+            if (args.SelectedTokens.CanTranslateToken &&
+                !args.SelectedTokens.Any(t => t.IsTokenSelected))
+            {
+                async Task ShowTranslationSelectionDialog()
+                {
+                    if (args.InterlinearDisplay != null)
+                    {
+                        var dialogViewModel = args.InterlinearDisplay.Resolve<LexiconDialogViewModel>();
+                        dialogViewModel.TokenDisplay = args.TokenDisplay!;
+                        dialogViewModel.InterlinearDisplay = args.InterlinearDisplay;
+                        _ = await args.InterlinearDisplay.WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
+                    }
+                }
+                await System.Windows.Application.Current.Dispatcher.InvokeAsync(ShowTranslationSelectionDialog);
+            }
+        }
     }
 }

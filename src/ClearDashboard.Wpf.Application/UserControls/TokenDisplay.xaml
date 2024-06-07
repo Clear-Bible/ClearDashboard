@@ -382,6 +382,11 @@
             <Button.ContextMenu>
                 <ContextMenu x:Name="TranslationDisplayContextMenu" FlowDirection="LeftToRight">
                     <MenuItem
+                        x:Name="SetGlossMenuItem"
+                        Click="OnSetGloss"
+                        Header="{helpers:Localization TokenDisplay_SetGloss}"
+                        Visibility="Collapsed" />
+                    <MenuItem
                         x:Name="SetTranslationMenuItem"
                         Click="OnSetTranslation"
                         Header="{helpers:Localization TokenDisplay_SetTranslation}"

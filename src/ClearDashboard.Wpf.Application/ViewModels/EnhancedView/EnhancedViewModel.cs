@@ -1069,6 +1069,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 var dialogViewModel = LifetimeScope!.Resolve<SplitTokenDialogViewModel>();
                 dialogViewModel.TokenDisplay = args.TokenDisplay;
                 dialogViewModel.TokenFontFamily = item.SourceFontFamily;
+                dialogViewModel.Translation = args.Translation;
+                dialogViewModel.InterlinearDisplay = args.InterlinearDisplay;
+                dialogViewModel.TranslationActionType = args.TranslationActionType;
                 _ = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
             }
             await System.Windows.Application.Current.Dispatcher.InvokeAsync(ShowSplitTokenDialog);

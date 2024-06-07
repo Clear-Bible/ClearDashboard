@@ -63,6 +63,7 @@
                     <userControls:VerseDisplay
                         x:Name="VerseDisplay"
                         Title=""
+                        GlossSet="GlossSet"
                         HorizontalAlignment="Stretch"
                         HorizontalSpacing="{Binding DataContext.SourceHorizontalValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
                         IsEnabled="True"

@@ -652,6 +652,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("TranslationSet", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
+        /// Identifies the GlossSetEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent GlossSetEvent = EventManager.RegisterRoutedEvent
+            ("GlossSet", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
         /// Identifies the NoteCreateEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteCreateEvent = EventManager.RegisterRoutedEvent
@@ -1061,6 +1067,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Occurs when the user requests to create or modify a gloss.
+        /// </summary>
+        public event RoutedEventHandler GlossSet
+        {
+            add => AddHandler(GlossSetEvent, value);
+            remove => RemoveHandler(GlossSetEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when the user requests to create a new note.
         /// </summary>
         public event RoutedEventHandler NoteCreate
@@ -1155,6 +1170,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 RoutedEvent = routedEvent,
                 TokenDisplay = tokenDisplay!,
+                //InterlinearDisplay = VerseDisplayViewModel as InterlinearDisplayViewModel,
+                Translation = tokenDisplay!.Translation!,
                 ModifierKeys = Keyboard.Modifiers,
                 MouseLeftButton = Mouse.LeftButton,
                 MouseMiddleButton = Mouse.MiddleButton,
@@ -1242,6 +1259,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 else
                 {
                     SetTranslationMenuItem.Visibility = Visibility.Collapsed;
+                }
+
+                if (selectedTokenCount == 0 && AllSelectedTokens.CanTranslateToken)
+                {
+                    SetGlossMenuItem.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    SetGlossMenuItem.Visibility = Visibility.Collapsed;
                 }
             }
         }
@@ -1521,6 +1547,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnSetTranslation(object sender, RoutedEventArgs e)
         {
             RaiseTranslationEvent(TranslationSetEvent, e);
+        }
+
+        private void OnSetGloss(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(GlossSetEvent, e);
         }
 
         private void OnCreateNote(object sender, RoutedEventArgs e)

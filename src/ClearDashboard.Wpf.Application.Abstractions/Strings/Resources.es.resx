@@ -437,7 +437,7 @@
     <value>Alineaciones</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>Tipo de alineación:</value>
+    <value>Tipo de alineación: </value>
   </data>
   <data name="BulkAlignmentReview_Approve" xml:space="preserve">
     <value>Aprobar</value>
@@ -566,7 +566,7 @@
     <value>Eliminar colaboración en proyectos</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>Tienes otros usuarios conectados a este proyecto. Este proyecto también se eliminará para ellos. ¿Estás seguro de que deseas eliminar este proyecto?</value>
+    <value>Tienes otros usuarios conectados a este proyecto.  Este proyecto también se eliminará para ellos. ¿Estás seguro de que deseas eliminar este proyecto?</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
     <value>¿Estás seguro de que deseas eliminar este proyecto?</value>
@@ -1229,10 +1229,10 @@
     <value>Glosas:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Partes de la oración</value>
+    <value>Partes de la oración   </value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>Lemas relacionados</value>
+    <value>Lemas relacionados   </value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>Alcance:</value>
@@ -1253,7 +1253,7 @@
     <value>Sentidos</value>
   </data>
   <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>Códigos fuertes</value>
+    <value>Códigos fuertes   </value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>Subdominios:</value>
@@ -1394,7 +1394,7 @@
     <value>Añadir jota</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Agregar una nueva jota</value>
+    <value>Agregar una nueva jota </value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Cuerpo</value>
@@ -1406,7 +1406,7 @@
     <value>¿Eliminar esta jota?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
-    <value>Debido a los permisos de su proyecto Paratext,</value>
+    <value>Debido a los permisos de su proyecto Paratext, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>Filtrar por Verso</value>
@@ -1790,7 +1790,7 @@
     <value>EstudioBibliaAdiciones</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Vaya a Paratext y cambie de proyecto. El proyecto Paratext actualmente conectado al complemento ClearDashboard no es el mismo que el corpus de este proyecto ClearDashboard.</value>
+    <value>Vaya a Paratext y cambie de proyecto.  El proyecto Paratext actualmente conectado al complemento ClearDashboard no es el mismo que el corpus de este proyecto ClearDashboard.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Objetivo</value>
@@ -1910,13 +1910,13 @@
     <value>Inicio rápido Nuevo proyecto</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>Crear proyecto:</value>
+    <value>Crear proyecto: </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
     <value>Cree su proyecto utilizando el asistente de plantilla de proyecto.</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>Base de datos:</value>
+    <value>Base de datos: </value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
     <value>No puedes eliminar ese proyecto, otra aplicación todavía lo está usando.</value>
@@ -1952,10 +1952,10 @@
     <value>No hay coincidencias.</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>Es un lugar solitario aquí. Por favor crea un nuevo proyecto.</value>
+    <value>Es un lugar solitario aquí.  Por favor crea un nuevo proyecto.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Paratext no está instalado. Instale Paratext y vuelva a ejecutar la aplicación ClearDashboard.</value>
+    <value>Paratext no está instalado.  Instale Paratext y vuelva a ejecutar la aplicación ClearDashboard.</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>El paratexto no se está ejecutando</value>
@@ -1979,7 +1979,7 @@
     <value>Proyecto Paratexto</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Proyecto:</value>
+    <value>Proyecto: </value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>¡Casi estámos allí!</value>
@@ -2006,7 +2006,7 @@
     <value>Haga clic aquí para iniciar Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Versión:</value>
+    <value>Versión: </value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>Por favor ingresa un nombre para tu proyecto</value>
@@ -2015,7 +2015,7 @@
     <value>Crea tu nuevo proyecto</value>
   </data>
   <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>El nombre del proyecto dado contiene caracteres ilegales. Los caracteres válidos incluyen 'A-Z' (minúsculas y mayúsculas), números '0-9' y los caracteres '-' y '_'.</value>
+    <value>El nombre del proyecto dado contiene caracteres ilegales.  Los caracteres válidos incluyen 'A-Z' (minúsculas y mayúsculas), números '0-9' y los caracteres '-' y '_'.</value>
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>Ya existe un proyecto con el mismo nombre. Elija un nombre único.</value>
@@ -2108,7 +2108,7 @@
     <value>Esdras</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>Gálatas</value>
+    <value>gálatas</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>Génesis</value>
@@ -2234,7 +2234,7 @@
     <value>Registro</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>La llave proporcionada está defectuosa. Cuando se descifró, no se pudieron encontrar ciertos elementos json.</value>
+    <value>La llave proporcionada está defectuosa.  Cuando se descifró, no se pudieron encontrar ciertos elementos json.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>El contenido de la clave de licencia descifrada no coincide con la información que proporcionó.</value>
@@ -2243,7 +2243,7 @@
     <value>Su clave de licencia falta o está rota.</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>¡Bienvenido a ClearDashboard! Por favor ingrese su información de registro.</value>
+    <value>¡Bienvenido a ClearDashboard!  Por favor ingrese su información de registro.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Por favor, introduzca su nombre de pila</value>
@@ -2348,7 +2348,7 @@
     <value>Modos de energía</value>
   </data>
   <data name="Settings_PowerModesDescription" xml:space="preserve">
-    <value>Permita que ClearDashboard cambie los modos de energía durante eventos computacionales elevados</value>
+    <value>Permita que ClearDashboard cambie los modos de energía durante eventos computacionales intensos</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
     <value>Reservado</value>
@@ -2497,8 +2497,11 @@
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
   </data>
-  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+  <data name="TokenDisplay_SetGloss" xml:space="preserve">
     <value>Establecer brillo</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>Agregar lexema</value>
   </data>
   <data name="TokenSplitting_ClickWhere" xml:space="preserve">
     <value>Haga clic donde dividir la palabra en tokens</value>

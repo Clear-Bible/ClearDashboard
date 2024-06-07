@@ -395,7 +395,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             await base.OnActivateAsync(cancellationToken);
             //await PopulateData();
-            PopulateLexicon();
+            //PopulateLexicon();
 
         }
 

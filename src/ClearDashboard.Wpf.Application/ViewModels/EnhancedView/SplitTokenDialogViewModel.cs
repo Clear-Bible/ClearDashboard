@@ -10,6 +10,7 @@ using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
+using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Infrastructure;
@@ -76,6 +77,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 return _tokenCharacters ??= new TokenCharacterViewModelCollection(TokenDisplay.SurfaceText);
             }
         }
+
+        /// <summary>
+        /// The <see cref="InterlinearDisplayViewModel"/> .
+        /// </summary>
+        public InterlinearDisplayViewModel? InterlinearDisplay { get; set; }
+
+        /// <summary>
+        /// The <see cref="Translation"/> to which this event pertains.
+        /// </summary>
+        public Translation? Translation { get; set; }
+
+        public string TranslationActionType { get; set; } = string.Empty;
 
 
         private string _wordGloss = string.Empty;
@@ -236,7 +249,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             DashboardProjectManager? projectManager,
             VerseManager verseManager,
             INavigationService navigationService,
-            ILogger<LexiconDialogViewModel> logger,
+            ILogger<SplitTokenDialogViewModel> logger,
             IEventAggregator eventAggregator,
             IMediator mediator,
             ILifetimeScope? lifetimeScope, 

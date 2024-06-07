@@ -1,19 +1,5 @@
 ﻿//#define DEMO
 
-using Autofac;
-using Caliburn.Micro;
-using ClearDashboard.DAL.Alignment.Translation;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
-using ClearDashboard.Wpf.Application.Collections.Lexicon;
-using ClearDashboard.Wpf.Application.Events.Lexicon;
-using ClearDashboard.Wpf.Application.Infrastructure;
-using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.Wpf.Application.UserControls.Lexicon;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
-using MediatR;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Dynamic;
 using System.Linq;
@@ -21,14 +7,28 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using Autofac;
+using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
+using ClearDashboard.Wpf.Application.Collections.Lexicon;
+using ClearDashboard.Wpf.Application.Events.Lexicon;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.UserControls.Lexicon;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
+using MediatR;
+using Microsoft.Extensions.Logging;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 // ReSharper disable UnusedMember.Global
 
-namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
+namespace ClearDashboard.Wpf.Application.ViewModels.Gloss
 {
-    public class LexiconDialogViewModel : DashboardApplicationScreen
+    public class GlossViewModel : DashboardApplicationScreen
     {
         private string _sourceFontFamily = FontNames.DefaultFontFamily;
         public string SourceFontFamily
@@ -449,16 +449,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             return settings;
         }
 
-        public LexiconDialogViewModel()
+        public GlossViewModel()
         {
             // Required for designer support.
         }
 
-        public LexiconDialogViewModel(
+        public GlossViewModel(
             LexiconManager lexiconManager,
             DashboardProjectManager? projectManager, 
             INavigationService navigationService,
-            ILogger<LexiconDialogViewModel> logger,
+            ILogger<GlossViewModel> logger,
             IEventAggregator eventAggregator,
             IMediator mediator,
             ILifetimeScope? lifetimeScope, 
