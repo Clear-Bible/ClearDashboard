@@ -12,6 +12,8 @@ using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using MetadatumKeys = ClearDashboard.DataAccessLayer.Models.MetadatumKeys;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace ClearDashboard.DAL.Alignment.Features
 {
@@ -552,7 +554,22 @@ namespace ClearDashboard.DAL.Alignment.Features
                     )).ToList());
         }
 
-        private static I BuildSimpleSynchronizableTimestampedEntityId<T, I>(T entity, bool inMemoryOnly) 
+		public static Alignment.Lexicon.WordAnalysisId BuildWordAnalysisId(Models.Lexicon_WordAnalysis wordAnalysis)
+		{
+			return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_WordAnalysis, Alignment.Lexicon.WordAnalysisId>(wordAnalysis, false);
+		}
+
+		public static Alignment.Lexicon.WordAnalysis BuildWordAnalysis(Models.Lexicon_WordAnalysis wordAnalysis, bool inMemoryOnly)
+		{
+			return new WordAnalysis(
+				BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_WordAnalysis, Alignment.Lexicon.WordAnalysisId>(wordAnalysis, inMemoryOnly),
+				wordAnalysis.Language,
+				wordAnalysis.Word,
+				wordAnalysis.Lexemes
+					.Select(m => BuildLexeme(m, null, inMemoryOnly)).ToList());
+		}
+
+		private static I BuildSimpleSynchronizableTimestampedEntityId<T, I>(T entity, bool inMemoryOnly) 
             where T : Models.SynchronizableTimestampedEntity 
             where I : SimpleSynchronizableTimestampedEntityId<I>, new()
         {
@@ -580,5 +597,100 @@ namespace ClearDashboard.DAL.Alignment.Features
             return baseType.FindEntityIdGenericType();
         }
 
-    }
+        public static void SetSplitSource(this CompositeToken compositeToken, Guid splitSourceId)
+        {
+			compositeToken.EnsureModelTokenMetadatum(MetadatumKeys.SplitTokenSource, splitSourceId.ToString());
+		}
+
+        public static void SetSplitInitialChildren(this CompositeToken compositeToken, List<ClearBible.Engine.Corpora.Token> childTokens)
+        {
+            compositeToken.EnsureModelTokenMetadatum(MetadatumKeys.SplitTokenInitialChildren, childTokens.GetSplitMatchInfoAsHash());
+		}
+
+        public static void EnsureModelTokenMetadatum(this ClearBible.Engine.Corpora.Token token, string key, string? value)
+        {
+			var modelTokenMetadata = token.EnsureGetModelTokenMetadata();
+
+			var existingMetadatum = modelTokenMetadata.Where(e => e.Key == key).FirstOrDefault();
+			if (existingMetadatum is null)
+			{
+				modelTokenMetadata.Add(new Models.Metadatum { Key = key, Value = value });
+			}
+			else
+			{
+				existingMetadatum.Value = value;
+			}
+
+		}
+
+		public static List<Models.Metadatum> EnsureGetModelTokenMetadata(this ClearBible.Engine.Corpora.Token token)
+		{
+			List<Models.Metadatum> modelTokenMetadata;
+			if (token.HasMetadatum(MetadatumKeys.ModelTokenMetadata))
+			{
+				modelTokenMetadata = token.GetMetadatum<List<Models.Metadatum>>(MetadatumKeys.ModelTokenMetadata);
+			}
+			else
+			{
+				modelTokenMetadata = new();
+				token.Metadata.Add(MetadatumKeys.ModelTokenMetadata, modelTokenMetadata);
+			}
+
+			return modelTokenMetadata;
+		}
+
+		public static bool TryGetSplitSourceId(this CompositeToken compositeToken, out Guid splitSourceId)
+        {
+            if (compositeToken.HasMetadatum(MetadatumKeys.ModelTokenMetadata))
+            {
+                var metadatum = compositeToken.GetMetadatum<List<Models.Metadatum>>(MetadatumKeys.ModelTokenMetadata);
+                var splitTokenSource = metadatum.Where(e => e.Key == MetadatumKeys.SplitTokenSource).FirstOrDefault();
+
+                if (splitTokenSource != null && splitTokenSource.Value is not null)
+                {
+                    splitSourceId = Guid.Parse(splitTokenSource.Value);
+                    return true;
+                }    
+            }
+
+            splitSourceId = Guid.Empty;
+            return false;
+        }
+
+		public static bool HasSplitTokenInitialChildrenMatch(this CompositeToken compositeToken, IEnumerable<ClearBible.Engine.Corpora.Token> childTokens)
+		{
+			if (compositeToken.HasMetadatum(MetadatumKeys.ModelTokenMetadata))
+			{
+				var metadatum = compositeToken.GetMetadatum<List<Models.Metadatum>>(MetadatumKeys.ModelTokenMetadata);
+				var splitTokenInitialChildren = metadatum.Where(e => e.Key == MetadatumKeys.SplitTokenInitialChildren).FirstOrDefault();
+
+				if (splitTokenInitialChildren != null && splitTokenInitialChildren.Value is not null)
+				{
+                    return (childTokens.GetSplitMatchInfoAsHash() == splitTokenInitialChildren.Value);
+				}
+			}
+
+			return false;
+		}
+
+		private static string GetSplitMatchInfoAsHash(this IEnumerable<ClearBible.Engine.Corpora.Token> childTokens)
+		{
+			return string.Join('|', childTokens.Select(e => $"{e.TokenType}:{e.SurfaceText}")).ToMD5String();
+		}
+
+		public static string ToMD5String(this string sourceString)
+		{
+			var bytes = ASCIIEncoding.ASCII.GetBytes(sourceString);
+			var hashBytes = MD5.HashData(bytes);
+
+			int i;
+			StringBuilder sOutput = new StringBuilder(hashBytes.Length);
+			for (i = 0; i < hashBytes.Length; i++)
+			{
+				sOutput.Append(hashBytes[i].ToString("X2"));
+			}
+			return sOutput.ToString();
+		}
+
+	}
 }

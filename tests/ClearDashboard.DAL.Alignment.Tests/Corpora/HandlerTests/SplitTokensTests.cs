@@ -12,6 +12,8 @@ using Xunit;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features;
 using Microsoft.EntityFrameworkCore;
+using ClearDashboard.DAL.Alignment.Features.Lexicon;
+using SIL.Machine.Corpora;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests
 {
@@ -22,7 +24,41 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests
         {
         }
 
-        [Fact]
+		[Fact]
+		[Trait("Category", "Handlers")]
+		public async void WordAnalysesImport()
+        {
+            try
+            {
+			    var externalWordAnalysesCommand = new GetExternalWordAnalysesQuery("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f" /* zzSUR */);
+			    var externalWordAnalysesResult = await Mediator.Send(externalWordAnalysesCommand);
+
+			    var textCorpus = TestDataHelpers.GetZZSurCorpus(new string[] { "GEN", "EXO" });
+
+			    // Create the corpus in the database:
+			    var corpus = await Corpus.Create(Mediator!, false, "SUR", "SUR", "Standard", Guid.NewGuid().ToString());
+
+			    // Create the TokenizedCorpus + Tokens in the database:
+			    var tokenizedTextCorpus = await textCorpus.Create(
+				    Mediator!,
+				    corpus.CorpusId,
+				    "SURWordAnalysesTest",
+				    "LatinWordTokenizer");
+
+			    // Check initial save values:
+			    Assert.NotNull(tokenizedTextCorpus);
+
+                var importWordAnalysesCommand = new ImportWordAnalysesCommand(externalWordAnalysesResult.Data!, tokenizedTextCorpus.TokenizedTextCorpusId);
+                var importWordAnalysesResult = await Mediator.Send(importWordAnalysesCommand);
+			}
+			finally
+			{
+//				await DeleteDatabaseContext();
+			}
+		}
+
+
+		[Fact]
         [Trait("Category", "Handlers")]
         public async void SplitTokens1()
         {

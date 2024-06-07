@@ -268,10 +268,10 @@ public class JotsEditorViewModel : ApplicationScreen
         }
     }
 
-    public void NoteSendToParatext(object sender, NoteEventArgs e)
+    public async void NoteSendToParatext(object sender, NoteEventArgs e)
     {
-        Task.Run(() => NoteSendToParatextAsync(e).GetAwaiter());
-        EventAggregator.PublishOnUIThreadAsync(new ReloadExternalNotesDataMessage(ReloadType.Refresh), CancellationToken.None);
+        await NoteSendToParatextAsync(e);
+        await EventAggregator.PublishOnUIThreadAsync(new ReloadExternalNotesDataMessage(ReloadType.Refresh), CancellationToken.None);
     }
     
     public async Task NoteSendToParatextAsync(NoteEventArgs e)
