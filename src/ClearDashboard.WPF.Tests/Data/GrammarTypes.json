@@ -1,0 +1,614 @@
+[
+  {
+    "ShortName": "[1st]",
+    "Description": "1st Person"
+  },
+  {
+    "ShortName": "[2nd]",
+    "Description": "2nd Person"
+  },
+  {
+    "ShortName": "[3rd]",
+    "Description": "3rd Person"
+  },
+  {
+    "ShortName": "[ABIL]",
+    "Description": "Abilitave mood"
+  },
+  {
+    "ShortName": "[ABL]",
+    "Description": "Ablative"
+  },
+  {
+    "ShortName": "[ABS]",
+    "Description": "Absolutive"
+  },
+  {
+    "ShortName": "[ACC]",
+    "Description": "Accusative"
+  },
+  {
+    "ShortName": "[ACCOMP]",
+    "Description": "Accompaniment"
+  },
+  {
+    "ShortName": "[ACT]",
+    "Description": "Active"
+  },
+  {
+    "ShortName": "[ACTR]",
+    "Description": "Actor, transitive agent"
+  },
+  {
+    "ShortName": "[ADJ]",
+    "Description": "Adjective"
+  },
+  {
+    "ShortName": "[ADV]",
+    "Description": "Adverb"
+  },
+  {
+    "ShortName": "[ADVBL]",
+    "Description": "Adverbializer"
+  },
+  {
+    "ShortName": "[ADVRS]",
+    "Description": "Adversative"
+  },
+  {
+    "ShortName": "[AGR]",
+    "Description": "Agreement"
+  },
+  {
+    "ShortName": "[AGT]",
+    "Description": "Agent"
+  },
+  {
+    "ShortName": "[ALTV]",
+    "Description": "Allative"
+  },
+  {
+    "ShortName": "[ANA]",
+    "Description": "Anaphora"
+  },
+  {
+    "ShortName": "[APOS]",
+    "Description": "Apposition"
+  },
+  {
+    "ShortName": "[APPL]",
+    "Description": "Applicative"
+  },
+  {
+    "ShortName": "[ART]",
+    "Description": "Article"
+  },
+  {
+    "ShortName": "[ASP]",
+    "Description": "Aspect"
+  },
+  {
+    "ShortName": "[ASSOC]",
+    "Description": "Associative"
+  },
+  {
+    "ShortName": "[ATRB]",
+    "Description": "Attributive "
+  },
+  {
+    "ShortName": "[AUX]",
+    "Description": "Auxiliary"
+  },
+  {
+    "ShortName": "[BEN]",
+    "Description": "Beneficiary, benefactive"
+  },
+  {
+    "ShortName": "[BIAS]",
+    "Description": "Biased word, to discrimiate or injure"
+  },
+  {
+    "ShortName": "[CAT]",
+    "Description": "Category"
+  },
+  {
+    "ShortName": "[CAUS]",
+    "Description": "Causative"
+  },
+  {
+    "ShortName": "[CAUSEE]",
+    "Description": "Causee"
+  },
+  {
+    "ShortName": "[CLASS]",
+    "Description": "Classifier"
+  },
+  {
+    "ShortName": "[CLAUS]",
+    "Description": "Clause"
+  },
+  {
+    "ShortName": "[COMPL]",
+    "Description": "Completive"
+  },
+  {
+    "ShortName": "[COMPR]",
+    "Description": "Comparative"
+  },
+  {
+    "ShortName": "[COMPTZR]",
+    "Description": "Complementizer"
+  },
+  {
+    "ShortName": "[CONCESS]",
+    "Description": "Concessive"
+  },
+  {
+    "ShortName": "[CONJ]",
+    "Description": "Conjuction"
+  },
+  {
+    "ShortName": "[CONT]",
+    "Description": "Continuous"
+  },
+  {
+    "ShortName": "[COP]",
+    "Description": "Copula"
+  },
+  {
+    "ShortName": "[DAT]",
+    "Description": "Dative"
+  },
+  {
+    "ShortName": "[DEB]",
+    "Description": "Debative"
+  },
+  {
+    "ShortName": "[DEC-M]",
+    "Description": "Declarative mood"
+  },
+  {
+    "ShortName": "[DEIC]",
+    "Description": "Deictic"
+  },
+  {
+    "ShortName": "[DEM]",
+    "Description": "Demonstrative"
+  },
+  {
+    "ShortName": "[DEON]",
+    "Description": "Deontic"
+  },
+  {
+    "ShortName": "[DESID]",
+    "Description": "Desiderative"
+  },
+  {
+    "ShortName": "[DET]",
+    "Description": "Determiner"
+  },
+  {
+    "ShortName": "[DETRANS]",
+    "Description": "Detransitivizer"
+  },
+  {
+    "ShortName": "[DEVERB]",
+    "Description": "Deverbalizer into noun"
+  },
+  {
+    "ShortName": "[DIMIN]",
+    "Description": "Diminutive"
+  },
+  {
+    "ShortName": "[DIR]",
+    "Description": "Directional"
+  },
+  {
+    "ShortName": "[DIRECT]",
+    "Description": "Direct Knowledge Marker"
+  },
+  {
+    "ShortName": "[DIRSPCH]",
+    "Description": "Direct speech act"
+  },
+  {
+    "ShortName": "[DO]",
+    "Description": "Direct Object"
+  },
+  {
+    "ShortName": "[DUAL]",
+    "Description": "Dual"
+  },
+  {
+    "ShortName": "[DUB]",
+    "Description": "Dubitative"
+  },
+  {
+    "ShortName": "[EPIS]",
+    "Description": "Epistemic"
+  },
+  {
+    "ShortName": "[EQUAT]",
+    "Description": "Equative (comparator stating equality)"
+  },
+  {
+    "ShortName": "[ERG]",
+    "Description": "Ergative"
+  },
+  {
+    "ShortName": "[EXCL]",
+    "Description": "Exclusive"
+  },
+  {
+    "ShortName": "[EXIST]",
+    "Description": "Existential"
+  },
+  {
+    "ShortName": "[EXPR]",
+    "Description": "Experiencer"
+  },
+  {
+    "ShortName": "[FEM]",
+    "Description": "Feminine"
+  },
+  {
+    "ShortName": "[FINIT]",
+    "Description": "Finite"
+  },
+  {
+    "ShortName": "[FOC]",
+    "Description": "Focus"
+  },
+  {
+    "ShortName": "[GEN]",
+    "Description": "Genitive"
+  },
+  {
+    "ShortName": "[HABIT]",
+    "Description": "Habitual"
+  },
+  {
+    "ShortName": "[HORT]",
+    "Description": "Hortative"
+  },
+  {
+    "ShortName": "[IDEO]",
+    "Description": "Ideophone"
+  },
+  {
+    "ShortName": "[IMPERF]",
+    "Description": "Imperfective"
+  },
+  {
+    "ShortName": "[IMPERS]",
+    "Description": "Impersonal"
+  },
+  {
+    "ShortName": "[IMPERV]",
+    "Description": "Imperative"
+  },
+  {
+    "ShortName": "[INALIEN]",
+    "Description": "Inalienable"
+  },
+  {
+    "ShortName": "[INCEPT]",
+    "Description": "Inceptive"
+  },
+  {
+    "ShortName": "[INCHOA]",
+    "Description": "Inchoative"
+  },
+  {
+    "ShortName": "[INCL]",
+    "Description": "Inclusive"
+  },
+  {
+    "ShortName": "[INDIRSP]",
+    "Description": "Indirect speech marker"
+  },
+  {
+    "ShortName": "[INF]",
+    "Description": "Infinitive"
+  },
+  {
+    "ShortName": "[INSTR]",
+    "Description": "Instrumental case"
+  },
+  {
+    "ShortName": "[INTENS]",
+    "Description": "Intensifier"
+  },
+  {
+    "ShortName": "[INTERROG]",
+    "Description": "Interrogative"
+  },
+  {
+    "ShortName": "[INTRANS]",
+    "Description": "Intransitive"
+  },
+  {
+    "ShortName": "[IO]",
+    "Description": "Indirect object marker"
+  },
+  {
+    "ShortName": "[IRREAL]",
+    "Description": "Irrealis"
+  },
+  {
+    "ShortName": "[ITER]",
+    "Description": "Iterative"
+  },
+  {
+    "ShortName": "[LOC]",
+    "Description": "Locative"
+  },
+  {
+    "ShortName": "[MASC]",
+    "Description": "Masculine"
+  },
+  {
+    "ShortName": "[MEAS]",
+    "Description": "Measure word"
+  },
+  {
+    "ShortName": "[METEOR]",
+    "Description": "Meteorological "
+  },
+  {
+    "ShortName": "[N-CNT]",
+    "Description": "Count noun"
+  },
+  {
+    "ShortName": "[N-MASS]",
+    "Description": "Mass noun"
+  },
+  {
+    "ShortName": "[N]",
+    "Description": "Noun"
+  },
+  {
+    "ShortName": "[NEG]",
+    "Description": "Negative"
+  },
+  {
+    "ShortName": "[NEUT]",
+    "Description": "Neuter"
+  },
+  {
+    "ShortName": "[NOM]",
+    "Description": "Nominative"
+  },
+  {
+    "ShortName": "[NOMIZR]",
+    "Description": "Nominalizer"
+  },
+  {
+    "ShortName": "[NONFIN]",
+    "Description": "Nonfinite"
+  },
+  {
+    "ShortName": "[NONNEG]",
+    "Description": "Non-negative marker"
+  },
+  {
+    "ShortName": "[NONPAST]",
+    "Description": "Nonpast tense"
+  },
+  {
+    "ShortName": "[OBJ]",
+    "Description": "Object"
+  },
+  {
+    "ShortName": "[OBJ2]",
+    "Description": "Secondary object"
+  },
+  {
+    "ShortName": "[OBLIG]",
+    "Description": "obligatory"
+  },
+  {
+    "ShortName": "[OPT]",
+    "Description": "Optative"
+  },
+  {
+    "ShortName": "[OV]",
+    "Description": "Objective voice"
+  },
+  {
+    "ShortName": "[PART]",
+    "Description": "Participle"
+  },
+  {
+    "ShortName": "[PASS]",
+    "Description": "Passive"
+  },
+  {
+    "ShortName": "[PAST.HIST]Historical past marker",
+    "Description": null
+  },
+  {
+    "ShortName": "[Past.Rec]",
+    "Description": "Recent Past"
+  },
+  {
+    "ShortName": "[PAST]",
+    "Description": "past tense"
+  },
+  {
+    "ShortName": "[PAT]",
+    "Description": "Patient"
+  },
+  {
+    "ShortName": "[PAUC]",
+    "Description": "Paucal"
+  },
+  {
+    "ShortName": "[PERF]",
+    "Description": "Perfect"
+  },
+  {
+    "ShortName": "[PERFV]",
+    "Description": "Perfective"
+  },
+  {
+    "ShortName": "[PERMIS]",
+    "Description": "permissive"
+  },
+  {
+    "ShortName": "[PERS]",
+    "Description": "personal name"
+  },
+  {
+    "ShortName": "[PL]",
+    "Description": "Plural"
+  },
+  {
+    "ShortName": "[POSS]",
+    "Description": "Possessor"
+  },
+  {
+    "ShortName": "[POST]",
+    "Description": "Post-position"
+  },
+  {
+    "ShortName": "[PREP]",
+    "Description": "preposition"
+  },
+  {
+    "ShortName": "[PROG]",
+    "Description": "Progressive"
+  },
+  {
+    "ShortName": "[PRON]",
+    "Description": "Pronoun"
+  },
+  {
+    "ShortName": "[Q-CLS]",
+    "Description": "Closed question"
+  },
+  {
+    "ShortName": "[Q-CNT]",
+    "Description": "Content question"
+  },
+  {
+    "ShortName": "[Q-OPN]",
+    "Description": "Open question"
+  },
+  {
+    "ShortName": "[Q-RET]",
+    "Description": "Rhetorical question"
+  },
+  {
+    "ShortName": "[Q-TAG]",
+    "Description": "Tag question"
+  },
+  {
+    "ShortName": "[Q-YN]",
+    "Description": "Yes\u2013no question"
+  },
+  {
+    "ShortName": "[Q]",
+    "Description": "Question marker"
+  },
+  {
+    "ShortName": "[QUANT]",
+    "Description": "Quantifier"
+  },
+  {
+    "ShortName": "[REAL]",
+    "Description": "Realis"
+  },
+  {
+    "ShortName": "[RECIP]",
+    "Description": "Recipient"
+  },
+  {
+    "ShortName": "[RECIPR]",
+    "Description": "Reciprocal"
+  },
+  {
+    "ShortName": "[REDUP]",
+    "Description": "Reduplication"
+  },
+  {
+    "ShortName": "[REFLEX]",
+    "Description": "Reflexive"
+  },
+  {
+    "ShortName": "[REL]",
+    "Description": "Relative tense"
+  },
+  {
+    "ShortName": "[RELZR]",
+    "Description": "Relativizer"
+  },
+  {
+    "ShortName": "[REPORT]",
+    "Description": "Reportative"
+  },
+  {
+    "ShortName": "[RESUM}",
+    "Description": "Resumptive"
+  },
+  {
+    "ShortName": "[SING]",
+    "Description": "Singular"
+  },
+  {
+    "ShortName": "[STAT]",
+    "Description": "Stative"
+  },
+  {
+    "ShortName": "[STIM]",
+    "Description": "Stimulus"
+  },
+  {
+    "ShortName": "[SUB]",
+    "Description": "Subject"
+  },
+  {
+    "ShortName": "[SUBJ]",
+    "Description": "Subjunctive"
+  },
+  {
+    "ShortName": "[SUPER]",
+    "Description": "Superlative"
+  },
+  {
+    "ShortName": "[TELIC]",
+    "Description": "Telic"
+  },
+  {
+    "ShortName": "[THEME]",
+    "Description": "Theme"
+  },
+  {
+    "ShortName": "[TOPIC]",
+    "Description": "Topic"
+  },
+  {
+    "ShortName": "[TRANS]",
+    "Description": "Transitive"
+  },
+  {
+    "ShortName": "[UNIQ]",
+    "Description": "Uniqueness"
+  },
+  {
+    "ShortName": "[V]",
+    "Description": "Verb "
+  },
+  {
+    "ShortName": "[VALEN-]",
+    "Description": "Valence decreasing"
+  },
+  {
+    "ShortName": "[VALEN\u002B]",
+    "Description": "Valence increasing"
+  },
+  {
+    "ShortName": "[VERBLZR]",
+    "Description": "Verbalizer"
+  }
+]
