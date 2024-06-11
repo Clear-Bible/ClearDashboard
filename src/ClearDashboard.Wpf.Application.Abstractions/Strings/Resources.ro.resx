@@ -437,7 +437,7 @@
     <value>Aliniamente</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>Tip de aliniere:</value>
+    <value>Tip de aliniere: </value>
   </data>
   <data name="BulkAlignmentReview_Approve" xml:space="preserve">
     <value>Aproba</value>
@@ -566,7 +566,7 @@
     <value>Ștergeți colaborarea la proiect</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>Aveți alți utilizatori conectați la acest proiect. Acest proiect va fi eliminat și pentru ei. Sigur doriți să ștergeți acest proiect?</value>
+    <value>Aveți alți utilizatori conectați la acest proiect.  Acest proiect va fi eliminat și pentru ei. Sigur doriți să ștergeți acest proiect?</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
     <value>Sigur doriți să ștergeți acest proiect?</value>
@@ -611,7 +611,7 @@
     <value>Șterge</value>
   </data>
   <data name="Delete_Project" xml:space="preserve">
-    <value>Șterge proiectul</value>
+    <value>Ștergeți proiectul</value>
   </data>
   <data name="Delete_Project_Confirmation" xml:space="preserve">
     <value>Sigur doriți să ștergeți acest proiect?</value>
@@ -908,7 +908,7 @@
     <value>Ștergeți acest lexem?</value>
   </data>
   <data name="Lexicon_DeleteMeaning" xml:space="preserve">
-    <value>Ștergeți acest sens</value>
+    <value>Șterge acest sens</value>
   </data>
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Ștergeți această traducere</value>
@@ -1229,10 +1229,10 @@
     <value>Glosuri:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Fragmente din discurs</value>
+    <value>Fragmente din discurs   </value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>Leme înrudite</value>
+    <value>Leme înrudite   </value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>Domeniu de aplicare:</value>
@@ -1253,7 +1253,7 @@
     <value>Simțurile</value>
   </data>
   <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>Coduri puternice</value>
+    <value>Coduri puternice   </value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>Subdomenii:</value>
@@ -1394,7 +1394,7 @@
     <value>Adăugați Jot</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Adăugați o notă nouă</value>
+    <value>Adăugați o notă nouă </value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Corp</value>
@@ -1406,7 +1406,7 @@
     <value>Ștergeți această notă?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
-    <value>Datorită permisiunilor dvs. de proiect Paratext,</value>
+    <value>Datorită permisiunilor dvs. de proiect Paratext, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>Filtrați după vers</value>
@@ -1790,7 +1790,7 @@
     <value>StudiazăBibliaAdăugiri</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Accesați Paratext și comutați proiecte. Proiectul Paratext conectat în prezent la pluginul ClearDashboard nu este același cu corpus din acest proiect ClearDashboard.</value>
+    <value>Accesați Paratext și comutați proiecte.  Proiectul Paratext conectat în prezent la pluginul ClearDashboard nu este același cu corpus din acest proiect ClearDashboard.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Ţintă</value>
@@ -1910,19 +1910,19 @@
     <value>Pornire rapidă Proiect nou</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>Creați proiect:</value>
+    <value>Creați proiect: </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
     <value>Creați-vă proiectul utilizând expertul pentru șablon de proiect.</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>Bază de date:</value>
+    <value>Bază de date: </value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
     <value>Nu puteți șterge acel proiect, o altă aplicație încă îl folosește.</value>
   </data>
   <data name="ProjectPicker_DeleteProject" xml:space="preserve">
-    <value>Șterge proiectul</value>
+    <value>Ștergeți proiectul</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
     <value>Activați selecția cărților</value>
@@ -1937,7 +1937,7 @@
     <value>Import Server Project</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Bifați această casetă pentru a include textele biblice grecești și ebraice atunci când vă creați proiectul.</value>
+    <value>Bifați această casetă pentru a include textele biblice greacă și ebraică atunci când vă creați proiectul.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>Includeți texte biblice grecești din NT?</value>
@@ -1952,10 +1952,10 @@
     <value>Nici-o potrivire.</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>Este singuratic aici. Vă rugăm să creați un proiect nou.</value>
+    <value>Este singuratic aici.  Vă rugăm să creați un proiect nou.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Paratext nu este instalat. Instalați Paratext și rulați din nou aplicația ClearDashboard.</value>
+    <value>Paratext nu este instalat.  Instalați Paratext și rulați din nou aplicația ClearDashboard.</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>Paratextul nu rulează</value>
@@ -1979,7 +1979,7 @@
     <value>Proiect Paratext</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Proiect:</value>
+    <value>Proiect: </value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>Suntem aproape acolo!</value>
@@ -2006,7 +2006,7 @@
     <value>Faceți clic aici pentru a porni Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Versiune:</value>
+    <value>Versiune: </value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>Vă rugăm să introduceți un nume pentru proiectul dvs</value>
@@ -2015,7 +2015,7 @@
     <value>Creați-vă noul proiect</value>
   </data>
   <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>Numele proiectului dat conține caractere ilegale. Caracterele valide includ „A-Z” (minuscule și majuscule), numerele „0-9” și caracterele „-” și „_”.</value>
+    <value>Numele proiectului dat conține caractere ilegale.  Caracterele valide includ „A-Z” (minuscule și majuscule), numerele „0-9” și caracterele „-” și „_”.</value>
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>Un proiect cu același nume există deja. Vă rugăm să alegeți un nume unic.</value>
@@ -2234,7 +2234,7 @@
     <value>Inregistreaza-te</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Cheia furnizată este defectă. Când au fost decriptate, anumite elemente json nu au putut fi găsite.</value>
+    <value>Cheia furnizată este defectă.  Când au fost decriptate, anumite elemente json nu au putut fi găsite.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>Conținutul cheii de licență decriptate nu se potrivește cu informațiile furnizate de dvs.</value>
@@ -2243,7 +2243,7 @@
     <value>Cheia de licență fie lipsește, fie este ruptă.</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>Bun venit la ClearDashboard! Vă rugăm să introduceți informațiile de înregistrare.</value>
+    <value>Bun venit la ClearDashboard!  Vă rugăm să introduceți informațiile de înregistrare.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Vă rugăm să introduceți prenumele dvs</value>
@@ -2497,8 +2497,11 @@
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
   </data>
-  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+  <data name="TokenDisplay_SetGloss" xml:space="preserve">
     <value>Setați luciu</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>Adăugați Lexeme</value>
   </data>
   <data name="TokenSplitting_ClickWhere" xml:space="preserve">
     <value>Faceți clic unde pentru a împărți cuvântul în jetoane</value>

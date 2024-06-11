@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +10,7 @@ using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
+using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Infrastructure;
@@ -23,46 +23,26 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
-
-    public class SplitInstructionViewModel : PropertyChangedBase
-    {
-        private string? _trainingText;
-        private int _index;
-        private string? _tokenText;
-
-        public string? TrainingText
-        {
-            get => _trainingText;
-            set => Set(ref _trainingText, value);
-        }
-
-        public int Index
-        {
-            get => _index;
-            set => Set(ref _index, value);
-        }
-
-        public string? TokenText
-        {
-            get => _tokenText;
-            set => Set(ref _tokenText, value);
-        }
-    }
-
     public class SplitTokenDialogViewModel : DashboardApplicationScreen
     {
-        public VerseManager VerseManager { get; }
+        public VerseManager? VerseManager { get; }
 
 
-        public BindableCollection<SplitInstructionViewModel> SplitInstructionsViewModels { get; } = new();
+        public BindableCollection<SplitInstructionViewModel> SplitInstructionsViewModels { get; private set; } = new();
 
-        private SplitInstructions? _splitInstructions;
+        //private SplitInstructions? _splitInstructions;
+
+        public SplitInstructionsViewModel SplitInstructionsViewModel
+        {
+            get => _splitInstructionsViewModel;
+            private set => Set(ref _splitInstructionsViewModel, value);
+        }
 
         public List<KeyValuePair<SplitTokenPropagationScope, string>> PropagationOptions { get; } = new();
         public SplitTokenPropagationScope SelectedPropagationOption { get; set; } = SplitTokenPropagationScope.None;
 
-        private FontFamily _tokenFontFamily;
-        public FontFamily TokenFontFamily
+        private FontFamily? _tokenFontFamily;
+        public FontFamily? TokenFontFamily
         {
             get => _tokenFontFamily;
             set
@@ -83,13 +63,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set
             {
                 _tokenDisplay = value;
-                _splitInstructions ??= SplitInstructions.CreateSplits(_tokenDisplay.SurfaceText, new List<int>());
-                CharacterThreshold2 = TokenLength;
+                //_splitInstructions ??= SplitInstructions.CreateSplits(_tokenDisplay.SurfaceText, []);
+                SplitInstructionsViewModel = SplitInstructionViewModelFactory.CreateSplits(_tokenDisplay.SurfaceText, []);
                 NotifyOfPropertyChange(nameof(TokenCharacters));
             } 
         }
-
-        private int TokenLength => _tokenDisplay != null ? _tokenDisplay.SurfaceText.Length : 0;
 
         private TokenCharacterViewModelCollection? _tokenCharacters;
         public TokenCharacterViewModelCollection TokenCharacters
@@ -100,103 +78,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private int _characterThreshold1 = 0;
-        public int CharacterThreshold1
-        {
-            get => _characterThreshold1;
-            set
-            {
-                _characterThreshold1 = Math.Min(value, CharacterThreshold2);
-                NotifyOfPropertyChange();
-                CalculateSubtokens();
-            }
-        }
+        /// <summary>
+        /// The <see cref="InterlinearDisplayViewModel"/> .
+        /// </summary>
+        public InterlinearDisplayViewModel? InterlinearDisplay { get; set; }
 
-        private int _characterThreshold2 = int.MaxValue;
-        public int CharacterThreshold2
-        {
-            get => _characterThreshold2;
-            set
-            {
-                _characterThreshold2 = Math.Max(value, CharacterThreshold1);
-                NotifyOfPropertyChange();
-                CalculateSubtokens();
-            }
-        }
+        /// <summary>
+        /// The <see cref="Translation"/> to which this event pertains.
+        /// </summary>
+        public Translation? Translation { get; set; }
 
-        private bool _threeWaySplit;
-        public bool ThreeWaySplit
+        public string TranslationActionType { get; set; } = string.Empty;
+
+
+        private string _wordGloss = string.Empty;
+        public string WordGloss
         {
-            get => _threeWaySplit;
+            get => _wordGloss;
             set
             {
-                _threeWaySplit = value;
+                _wordGloss = value;
                 NotifyOfPropertyChange();
             }
         }
-
-        private void CalculateSubtokens()
-        {
-            Subtoken1 = TokenDisplay.SurfaceText[..CharacterThreshold1];
-
-            if (CharacterThreshold2 < TokenLength)
-            {
-                Subtoken2 = TokenDisplay.SurfaceText[CharacterThreshold1..CharacterThreshold2];
-                Subtoken3 = TokenDisplay.SurfaceText[CharacterThreshold2..];
-            }
-            else
-            {
-                Subtoken2 = TokenDisplay.SurfaceText[CharacterThreshold1..];
-                Subtoken3 = string.Empty;
-            }
-
-            NotifyOfPropertyChange(nameof(Subtoken1));
-            NotifyOfPropertyChange(nameof(Subtoken2));
-            NotifyOfPropertyChange(nameof(Subtoken3));
-
-            NotifyOfPropertyChange(nameof(Subtoken1Enabled));
-            NotifyOfPropertyChange(nameof(Subtoken2Enabled));
-            NotifyOfPropertyChange(nameof(Subtoken3Enabled));
-
-            NotifyOfPropertyChange(nameof(ApplyEnabled));
-        }
-
-        private string _subtoken1 = string.Empty;
-        public string Subtoken1
-        {
-            get => _subtoken1;
-            set
-            {
-                _subtoken1 = value;
-                NotifyOfPropertyChange();
-            }
-        }
-
-        private string _subtoken2 = string.Empty;
-        public string Subtoken2
-        {
-            get => _subtoken2;
-            set
-            {
-                _subtoken2 = value;
-                NotifyOfPropertyChange();
-            }
-        }
-
-        private string _subtoken3 = string.Empty;
-        public string Subtoken3
-        {
-            get => _subtoken3;
-            set
-            {
-                _subtoken3 = value;
-                NotifyOfPropertyChange();
-            }
-        }
-
-        public bool Subtoken1Enabled => CharacterThreshold1 > 0 && CharacterThreshold1 < TokenLength;
-        public bool Subtoken2Enabled => CharacterThreshold1 != CharacterThreshold2 && (CharacterThreshold1 > 0 || CharacterThreshold2 < TokenLength);
-        public bool Subtoken3Enabled => CharacterThreshold2 > 0 && CharacterThreshold2 < TokenLength;
 
         public string DialogTitle => $"{LocalizationService!["EnhancedView_SplitToken"]}: {TokenDisplay.SurfaceText}";
 
@@ -212,40 +116,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             get
             {
                 var enabled = true;
-                var enabledCount = 0;
-                if (Subtoken1Enabled)
-                {
-                    enabledCount++;
-                    enabled &= !string.IsNullOrWhiteSpace(Subtoken1);
-                }
-                if (Subtoken2Enabled)
-                {
-                    enabledCount++;
-                    enabled &= !string.IsNullOrWhiteSpace(Subtoken2);
-                }
-                if (Subtoken3Enabled)
-                {
-                    enabledCount++;
-                    enabled &= !string.IsNullOrWhiteSpace(Subtoken3);
-                }
+            
 
-                return enabledCount >= 2 && enabled;
+                return  enabled;
             }
         }
 
         private bool _cancelEnabled = true;
+        private SplitInstructionsViewModel _splitInstructionsViewModel;
+
         public bool CancelEnabled
         {
             get => _cancelEnabled;
             private set => Set(ref _cancelEnabled, value);
         }
 
-        private bool _isLoaded = false;
-        public bool IsLoaded
-        {
-            get => _isLoaded;
-            private set => Set(ref _isLoaded, value);
-        }
+        //private bool _isLoaded;
+        //public bool IsLoaded
+        //{
+        //    get => _isLoaded;
+        //    private set => Set(ref _isLoaded, value);
+        //}
 
 
 
@@ -256,53 +147,36 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             var tokenCharacter = tokenCharacterArgs!.TokenCharacter;
             var splitIndex = tokenCharacter.Index + 1;
 
+            //SplitInstructionsViewModel.UpdateInstructions(tokenCharacter.Index, tokenCharacter.IsSelected);
+
             if (tokenCharacter.IsSelected)
             {
 
-                if (!_splitInstructions.SplitIndexes.Contains(splitIndex))
+                if (!SplitInstructionsViewModel!.SplitIndexes.Contains(splitIndex))
                 {
-                    _splitInstructions.SplitIndexes.Add(splitIndex);
-                    var indexes = _splitInstructions.SplitIndexes.OrderBy(i => i).ToList();
+                    SplitInstructionsViewModel.SplitIndexes.Add(splitIndex);
+                    var indexes = SplitInstructionsViewModel.SplitIndexes.OrderBy(i => i).ToList();
 
-                    _splitInstructions = SplitInstructions.CreateSplits(TokenDisplay.SurfaceText, indexes);
-                    SplitInstructionsViewModels.Clear();
-
-                    foreach (var instruction in _splitInstructions.Instructions)
-                    {
-                        SplitInstructionsViewModels.Add(new SplitInstructionViewModel { Index = instruction.Index, TokenText = instruction.TokenText, TrainingText = instruction.TrainingText });
-                    }
-
+                    SplitInstructionsViewModel = SplitInstructionViewModelFactory.CreateSplits(TokenDisplay.SurfaceText, indexes);
+                    NotifyOfPropertyChange(nameof(ApplyEnabled));
                 }
             }
             else
             {
 
-                if (_splitInstructions.SplitIndexes.Contains(splitIndex))
+                if (SplitInstructionsViewModel!.SplitIndexes.Contains(splitIndex))
                 {
-                    _splitInstructions.SplitIndexes.Remove(splitIndex);
-                    var indexes = _splitInstructions.SplitIndexes.OrderBy(i => i).ToList();
-                    _splitInstructions = SplitInstructions.CreateSplits(TokenDisplay.SurfaceText, indexes);
-
-                    SplitInstructionsViewModels.Clear();
-                    foreach (var instruction in _splitInstructions.Instructions)
-                    {
-                        SplitInstructionsViewModels.Add(new SplitInstructionViewModel { Index = instruction.Index, TokenText = instruction.TokenText, TrainingText = instruction.TrainingText });
-                    }
+                    SplitInstructionsViewModel.SplitIndexes.Remove(splitIndex);
+                    var indexes = SplitInstructionsViewModel.SplitIndexes.OrderBy(i => i).ToList();
+                    SplitInstructionsViewModel = SplitInstructionViewModelFactory.CreateSplits(TokenDisplay.SurfaceText, indexes);
+                    NotifyOfPropertyChange(nameof(ApplyEnabled));
                 }
-              
+
             }
-         
+
         }
 
-        public void ThreeWaySplitUnchecked(object source, RoutedEventArgs args)
-        {
-            CharacterThreshold2 = TokenDisplay.SurfaceText.Length;
-        }
-
-        public void TrainingTextChanged(object source, RoutedEventArgs args)
-        {
-            NotifyOfPropertyChange(nameof(ApplyEnabled));
-        }
+      
 
         public async void ApplySplit()
         {
@@ -316,15 +190,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                 async Task SaveSplitToken()
                 {
-                    await VerseManager.SplitToken(TokenDisplay.Corpus!,
-                        TokenDisplay.Token.TokenId,
-                        Subtoken3Enabled ? CharacterThreshold1 : 0,
-                        Subtoken3Enabled ? CharacterThreshold2 : CharacterThreshold1,
-                        Subtoken1,
-                        Subtoken2,
-                        Subtoken3,
-                        !TokenDisplay.IsCorpusView,
-                        SelectedPropagationOption);
+                    // TODO: Implement this method
+
+                    //await VerseManager.SplitToken(TokenDisplay.Corpus!,
+                    //    TokenDisplay.Token.TokenId,
+                    //    Subtoken3Enabled ? CharacterThreshold1 : 0,
+                    //    Subtoken3Enabled ? CharacterThreshold2 : CharacterThreshold1,
+                    //    Subtoken1,
+                    //    Subtoken2,
+                    //    Subtoken3,
+                    //    !TokenDisplay.IsCorpusView,
+                    //    SelectedPropagationOption);
+                    await Task.CompletedTask;
                 }
                 await Task.Run(async () => await SaveSplitToken());
             }
@@ -351,7 +228,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             settings.PopupAnimation = PopupAnimation.Fade;
             settings.WindowStartupLocation = WindowStartupLocation.Manual;
             //settings.Top = 0;
-            settings.Left = App.Current.MainWindow.ActualWidth/2 - 258;
+            settings.Left = System.Windows.Application.Current.MainWindow!.ActualWidth/2 - 258;
             settings.Width = 1000;
             settings.Height = 800;
             settings.Title = DialogTitle;
@@ -372,7 +249,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             DashboardProjectManager? projectManager,
             VerseManager verseManager,
             INavigationService navigationService,
-            ILogger<LexiconDialogViewModel> logger,
+            ILogger<SplitTokenDialogViewModel> logger,
             IEventAggregator eventAggregator,
             IMediator mediator,
             ILifetimeScope? lifetimeScope, 

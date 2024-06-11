@@ -437,7 +437,7 @@
     <value>តម្រឹម</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>ប្រភេទតម្រឹម៖</value>
+    <value>ប្រភេទតម្រឹម៖ </value>
   </data>
   <data name="BulkAlignmentReview_Approve" xml:space="preserve">
     <value>យល់ព្រម</value>
@@ -566,7 +566,7 @@
     <value>លុបការសហការគម្រោង</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>អ្នកមានអ្នកប្រើប្រាស់ផ្សេងទៀតបានភ្ជាប់ទៅគម្រោងនេះ។ គម្រោងនេះនឹងត្រូវដកចេញសម្រាប់ពួកគេផងដែរ។ តើអ្នកប្រាកដថាចង់លុបគម្រោងនេះទេ?</value>
+    <value>អ្នកមានអ្នកប្រើប្រាស់ផ្សេងទៀតបានភ្ជាប់ទៅគម្រោងនេះ។  គម្រោងនេះនឹងត្រូវដកចេញសម្រាប់ពួកគេផងដែរ។ តើអ្នកប្រាកដថាចង់លុបគម្រោងនេះទេ?</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
     <value>តើអ្នកប្រាកដថាចង់លុបគម្រោងនេះទេ?</value>
@@ -1229,10 +1229,10 @@
     <value>រលោង៖</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>ផ្នែកនៃការនិយាយ</value>
+    <value>ផ្នែកនៃការនិយាយ   </value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>លេមម៉ាដែលពាក់ព័ន្ធ</value>
+    <value>លេមម៉ាដែលពាក់ព័ន្ធ   </value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>វិសាលភាព៖</value>
@@ -1253,7 +1253,7 @@
     <value>អារម្មណ៍</value>
   </data>
   <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>កូដខ្លាំង</value>
+    <value>កូដខ្លាំង   </value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>ដែនរង៖</value>
@@ -1394,7 +1394,7 @@
     <value>បន្ថែម Jot</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>បន្ថែម​រឿង​ថ្មី</value>
+    <value>បន្ថែម​រឿង​ថ្មី </value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>រាងកាយ</value>
@@ -1406,7 +1406,7 @@
     <value>លុប​រឿង​នេះ​ឬ?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
-    <value>ដោយសារការអនុញ្ញាតគម្រោង Paratext របស់អ្នក</value>
+    <value>ដោយសារការអនុញ្ញាតគម្រោង Paratext របស់អ្នក </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>ត្រងតាមខ</value>
@@ -1790,7 +1790,7 @@
     <value>សិក្សាព្រះគម្ពីរបន្ថែម</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>ចូលទៅកាន់ Paratext ហើយប្តូរគម្រោង។ គម្រោង Paratext បច្ចុប្បន្នបានភ្ជាប់ទៅកម្មវិធីជំនួយ ClearDashboard គឺមិនដូចគ្នាទៅនឹង corpus នៅក្នុងគម្រោង ClearDashboard នេះទេ។</value>
+    <value>ចូលទៅកាន់ Paratext ហើយប្តូរគម្រោង។  គម្រោង Paratext បច្ចុប្បន្នបានភ្ជាប់ទៅកម្មវិធីជំនួយ ClearDashboard គឺមិនដូចគ្នាទៅនឹង corpus នៅក្នុងគម្រោង ClearDashboard នេះទេ។</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>គោលដៅ</value>
@@ -1910,13 +1910,13 @@
     <value>ចាប់ផ្តើមគម្រោងថ្មីរហ័ស</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>បង្កើតគម្រោង៖</value>
+    <value>បង្កើតគម្រោង៖ </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
     <value>បង្កើតគម្រោងរបស់អ្នកដោយប្រើអ្នកជំនួយការគំរូគម្រោង។</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>មូលដ្ឋានទិន្នន័យ៖</value>
+    <value>មូលដ្ឋានទិន្នន័យ៖ </value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
     <value>អ្នកមិនអាចលុបគម្រោងនោះបានទេ កម្មវិធីផ្សេងទៀតនៅតែប្រើវា។</value>
@@ -1952,10 +1952,10 @@
     <value>គ្មានការប្រកួត។</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>វាឯកោនៅទីនេះ។ សូមបង្កើតគម្រោងថ្មីមួយ។</value>
+    <value>វាឯកោនៅទីនេះ។  សូមបង្កើតគម្រោងថ្មីមួយ។</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Paratext មិនត្រូវបានដំឡើងទេ។ សូមដំឡើង Paratext ហើយដំណើរការកម្មវិធី ClearDashboard ឡើងវិញ។</value>
+    <value>Paratext មិនត្រូវបានដំឡើងទេ។  សូមដំឡើង Paratext ហើយដំណើរការកម្មវិធី ClearDashboard ឡើងវិញ។</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>Paratext មិនដំណើរការទេ។</value>
@@ -1979,7 +1979,7 @@
     <value>គម្រោង Paratext</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>គម្រោង៖</value>
+    <value>គម្រោង៖ </value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>យើងជិតដល់ហើយ!</value>
@@ -2006,7 +2006,7 @@
     <value>ចុចទីនេះដើម្បីចាប់ផ្តើម Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>កំណែ៖</value>
+    <value>កំណែ៖ </value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>សូមបញ្ចូលឈ្មោះសម្រាប់គម្រោងរបស់អ្នក។</value>
@@ -2015,7 +2015,7 @@
     <value>បង្កើតគម្រោងថ្មីរបស់អ្នក។</value>
   </data>
   <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>ឈ្មោះគម្រោងដែលបានផ្តល់ឱ្យមានតួអក្សរខុសច្បាប់។ តួអក្សរដែលមានសុពលភាពរួមមាន 'A-Z' (អក្សរតូច និងអក្សរធំ) លេខ '0-9' និងតួអក្សរ '-' និង '_'។</value>
+    <value>ឈ្មោះគម្រោងដែលបានផ្តល់ឱ្យមានតួអក្សរខុសច្បាប់។  តួអក្សរដែលមានសុពលភាពរួមមាន 'A-Z' (អក្សរតូច និងអក្សរធំ) លេខ '0-9' និងតួអក្សរ '-' និង '_'។</value>
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>គម្រោងដែលមានឈ្មោះដូចគ្នាមានរួចហើយ។ សូមជ្រើសរើសឈ្មោះតែមួយគត់។</value>
@@ -2234,7 +2234,7 @@
     <value>ចុះឈ្មោះ</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>កូនសោដែលបានផ្តល់គឺមានបញ្ហា។ នៅពេលឌិគ្រីប ធាតុ json ជាក់លាក់មិនអាចត្រូវបានរកឃើញទេ។</value>
+    <value>កូនសោដែលបានផ្តល់គឺមានបញ្ហា។  នៅពេលឌិគ្រីប ធាតុ json ជាក់លាក់មិនអាចត្រូវបានរកឃើញទេ។</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>ខ្លឹមសារនៃលេខកូដអាជ្ញាប័ណ្ណដែលបានឌិគ្រីបមិនត្រូវគ្នានឹងព័ត៌មានដែលអ្នកបានផ្តល់នោះទេ។</value>
@@ -2243,7 +2243,7 @@
     <value>សោអាជ្ញាប័ណ្ណរបស់អ្នកបាត់ ឬខូច។</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>សូមស្វាគមន៍មកកាន់ ClearDashboard! សូមបញ្ចូលព័ត៌មានចុះឈ្មោះរបស់អ្នក។</value>
+    <value>សូមស្វាគមន៍មកកាន់ ClearDashboard!  សូមបញ្ចូលព័ត៌មានចុះឈ្មោះរបស់អ្នក។</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>សូមបញ្ចូលឈ្មោះរបស់អ្នក។</value>
@@ -2497,8 +2497,11 @@
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
   </data>
-  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+  <data name="TokenDisplay_SetGloss" xml:space="preserve">
     <value>កំណត់ភាពរលោង</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>បន្ថែម Lexeme</value>
   </data>
   <data name="TokenSplitting_ClickWhere" xml:space="preserve">
     <value>ចុចកន្លែងដែលត្រូវបំបែកពាក្យទៅជាសញ្ញាសម្ងាត់</value>

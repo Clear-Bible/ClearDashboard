@@ -437,7 +437,7 @@
     <value>Ausrichtungen</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>Ausrichtungstyp:</value>
+    <value>Ausrichtungstyp: </value>
   </data>
   <data name="BulkAlignmentReview_Approve" xml:space="preserve">
     <value>Genehmigen</value>
@@ -566,7 +566,7 @@
     <value>Projektzusammenarbeit löschen</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>Sie haben andere Benutzer mit diesem Projekt verbunden. Auch für sie wird dieses Projekt entfernt. Möchten Sie dieses Projekt wirklich löschen?</value>
+    <value>Sie haben andere Benutzer mit diesem Projekt verbunden.  Auch für sie wird dieses Projekt entfernt. Möchten Sie dieses Projekt wirklich löschen?</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
     <value>Möchten Sie dieses Projekt wirklich löschen?</value>
@@ -677,7 +677,7 @@
     <value>Treten Sie Token bei</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Join-Tokens für Sprachpaar</value>
+    <value>Join-Token für Sprachpaar</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>Ausrichtung als „Ungültig“ markieren</value>
@@ -1229,10 +1229,10 @@
     <value>Glossen:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Teile der Rede</value>
+    <value>Teile der Rede   </value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>Verwandte Lemmas</value>
+    <value>Verwandte Lemmas   </value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>Umfang:</value>
@@ -1253,7 +1253,7 @@
     <value>Sinne</value>
   </data>
   <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>Starke Codes</value>
+    <value>Starke Codes   </value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>Subdomains:</value>
@@ -1394,7 +1394,7 @@
     <value>Jot hinzufügen</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Fügen Sie ein neues Protokoll hinzu</value>
+    <value>Fügen Sie ein neues Protokoll hinzu </value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Körper</value>
@@ -1406,7 +1406,7 @@
     <value>Dieses Dokument löschen?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
-    <value>Aufgrund Ihrer Paratext-Projektberechtigungen</value>
+    <value>Aufgrund Ihrer Paratext-Projektberechtigungen </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>Nach Vers filtern</value>
@@ -1790,7 +1790,7 @@
     <value>StudyBibleAdditions</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Gehen Sie zu Paratext und wechseln Sie die Projekte. Das derzeit mit dem ClearDashboard-Plugin verbundene Paratext-Projekt ist nicht dasselbe wie das Korpus in diesem ClearDashboard-Projekt.</value>
+    <value>Gehen Sie zu Paratext und wechseln Sie die Projekte.  Das derzeit mit dem ClearDashboard-Plugin verbundene Paratext-Projekt ist nicht dasselbe wie das Korpus in diesem ClearDashboard-Projekt.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Ziel</value>
@@ -1910,13 +1910,13 @@
     <value>Schnellstart eines neuen Projekts</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>Projekt erstellen:</value>
+    <value>Projekt erstellen: </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
     <value>Erstellen Sie Ihr Projekt mit dem Projektvorlagen-Assistenten.</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>Datenbank:</value>
+    <value>Datenbank: </value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
     <value>Sie können dieses Projekt nicht löschen, da es noch von einer anderen Anwendung verwendet wird.</value>
@@ -1952,10 +1952,10 @@
     <value>Keine Treffer.</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>Es ist einsam hier. Bitte erstellen Sie ein neues Projekt.</value>
+    <value>Es ist einsam hier.  Bitte erstellen Sie ein neues Projekt.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Paratext ist nicht installiert. Bitte installieren Sie Paratext und führen Sie die ClearDashboard-Anwendung erneut aus.</value>
+    <value>Paratext ist nicht installiert.  Bitte installieren Sie Paratext und führen Sie die ClearDashboard-Anwendung erneut aus.</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>Paratext läuft nicht</value>
@@ -1979,7 +1979,7 @@
     <value>Paratext-Projekt</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Projekt:</value>
+    <value>Projekt: </value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>Wir sind fast da!</value>
@@ -2006,7 +2006,7 @@
     <value>Klicken Sie hier, um Paratext zu starten</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Ausführung:</value>
+    <value>Ausführung: </value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>Bitte geben Sie einen Namen für Ihr Projekt ein</value>
@@ -2015,7 +2015,7 @@
     <value>Erstellen Sie Ihr neues Projekt</value>
   </data>
   <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>Der angegebene Projektname enthält ungültige Zeichen. Zu den gültigen Zeichen gehören „A-Z“ (Klein- und Großbuchstaben), Zahlen „0-9“ und die Zeichen „-“ und „_“.</value>
+    <value>Der angegebene Projektname enthält ungültige Zeichen.  Zu den gültigen Zeichen gehören „A-Z“ (Klein- und Großbuchstaben), Zahlen „0-9“ und die Zeichen „-“ und „_“.</value>
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>Ein Projekt mit demselben Namen existiert bereits. Bitte wählen Sie einen eindeutigen Namen.</value>
@@ -2234,7 +2234,7 @@
     <value>Registrieren</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Der mitgelieferte Schlüssel ist fehlerhaft. Beim Entschlüsseln konnten bestimmte JSON-Elemente nicht gefunden werden.</value>
+    <value>Der mitgelieferte Schlüssel ist fehlerhaft.  Beim Entschlüsseln konnten bestimmte JSON-Elemente nicht gefunden werden.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>Der Inhalt des entschlüsselten Lizenzschlüssels stimmt nicht mit den von Ihnen angegebenen Informationen überein.</value>
@@ -2243,7 +2243,7 @@
     <value>Ihr Lizenzschlüssel fehlt oder ist defekt.</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>Willkommen bei ClearDashboard! Bitte geben Sie Ihre Registrierungsdaten ein.</value>
+    <value>Willkommen bei ClearDashboard!  Bitte geben Sie Ihre Registrierungsdaten ein.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Bitte geben Sie Ihren Vornamen ein</value>
@@ -2348,7 +2348,7 @@
     <value>Leistungsmodi</value>
   </data>
   <data name="Settings_PowerModesDescription" xml:space="preserve">
-    <value>Erlauben Sie ClearDashboard, den Energiemodus bei Ereignissen mit hohem Rechenaufwand zu ändern</value>
+    <value>Erlauben Sie ClearDashboard, den Energiemodus bei Ereignissen mit hoher Rechenleistung zu ändern</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
     <value>Reserviert</value>
@@ -2497,8 +2497,11 @@
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
   </data>
-  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+  <data name="TokenDisplay_SetGloss" xml:space="preserve">
     <value>Glanz einstellen</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>Lexem hinzufügen</value>
   </data>
   <data name="TokenSplitting_ClickWhere" xml:space="preserve">
     <value>Klicken Sie auf die Stelle, an der das Wort in Token aufgeteilt werden soll</value>
