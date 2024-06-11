@@ -52,6 +52,17 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
+    <UserControl.InputBindings>
+        <KeyBinding
+            Key="C"
+            Command="Copy"
+            Modifiers="Control" />
+    </UserControl.InputBindings>
+
+    <UserControl.CommandBindings>
+        <CommandBinding Command="Copy" Executed="OnCopy" />
+    </UserControl.CommandBindings>
+
     <StackPanel
         Width="Auto"
         HorizontalAlignment="Left"
