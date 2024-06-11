@@ -7,9 +7,11 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
@@ -46,10 +48,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 
             try
             {
-				using var splitTokenDbCommands = await SplitTokenDbCommands.CreateAsync(ProjectDbContext, _userProvider, cancellationToken);
+				using var splitTokenDbCommands = await SplitTokenDbCommands.CreateAsync(ProjectDbContext, _userProvider, Logger, cancellationToken);
 
 				// Query matching no-association tokens having matching TokenizedCorpusId
-				var supersetTokens = ProjectDbContext.Tokens
+				var supersetTokens = await ProjectDbContext.Tokens
 					.Include(t => t.TokenCompositeTokenAssociations)
 					.Include(t => t.TokenizedCorpus)
 					.ThenInclude(tc => tc!.SourceParallelCorpora)
@@ -59,9 +61,44 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 					.Include(t => t.SourceAlignments.Where(a => a.Deleted == null))
 					.Include(t => t.TargetAlignments.Where(a => a.Deleted == null))
 					.Include(t => t.TokenVerseAssociations.Where(a => a.Deleted == null))
-					.Where(e => e.TokenCompositeTokenAssociations.Count == 0)
-					.Where(e => e.TokenizedCorpusId == request.TokenizedTextCorpusId.Id)
-					.ToList();
+					.Where(t => t.TokenizedCorpusId == request.TokenizedTextCorpusId.Id)
+					.Where(t => t.Deleted == null)
+					.ToListAsync(cancellationToken: cancellationToken);
+
+                var previouslySplitTokensById = await ProjectDbContext.Tokens
+                    .Where(t => t.TokenizedCorpusId == request.TokenizedTextCorpusId.Id)
+                    .Where(t => t.Deleted != null)
+                    .Where(t => t.Metadata.Any(m => m.Key == MetadatumKeys.WasSplit && m.Value == true.ToString()))
+                    .ToDictionaryAsync(t => t.Id, t => t, cancellationToken: cancellationToken);
+
+                var compositesFormedViaWordAnalysisImport = await ProjectDbContext.TokenComposites
+					.Include(t => t.TokenCompositeTokenAssociations)
+                        .ThenInclude(t => t.Token)
+					.Include(t => t.Translations.Where(a => a.Deleted == null))
+					.Include(t => t.SourceAlignments.Where(a => a.Deleted == null))
+					.Include(t => t.TargetAlignments.Where(a => a.Deleted == null))
+					.Include(t => t.TokenVerseAssociations.Where(a => a.Deleted == null))
+					.Where(t => t.TokenizedCorpusId == request.TokenizedTextCorpusId.Id)
+                    .Where(t => t.Deleted == null)
+					.Where(t => t.Metadata.Any(m => m.Key == MetadatumKeys.SplitTokenSourceId && m.Value != null))
+                    .ToListAsync(cancellationToken: cancellationToken);
+
+                var unchangedSplitComposites = new List<(Guid SourceId, string SourceSurfaceText, string SplitMatchInfoAsHash, TokenComposite TokenComposite)>();
+                foreach (var tokenComposite in compositesFormedViaWordAnalysisImport)
+                {
+					var sourceId = Guid.Parse(tokenComposite.Metadata.Single(e => e.Key == MetadatumKeys.SplitTokenSourceId).Value!);
+					var sourceSurfaceText = tokenComposite.Metadata.SingleOrDefault(e => e.Key == MetadatumKeys.SplitTokenSourceSurfaceText)?.Value;
+					var initialSplitMatchInfo = tokenComposite.Metadata.SingleOrDefault(e => e.Key == MetadatumKeys.SplitTokenInitialChildren)?.Value;
+                    if (sourceSurfaceText is null || initialSplitMatchInfo is null)
+                    {
+                        Logger.LogInformation($"Token composite '{tokenComposite.Id}' has a {nameof(MetadatumKeys.SplitTokenSourceId)} but is missing either {nameof(MetadatumKeys.SplitTokenSourceSurfaceText)} or {nameof(MetadatumKeys.SplitTokenInitialChildren)} from Metadatum...skipping");
+                        continue;
+                    }
+                    if (initialSplitMatchInfo == tokenComposite.GetSplitMatchInfoAsHash())
+                    {
+                        unchangedSplitComposites.Add((sourceId, sourceSurfaceText, initialSplitMatchInfo, tokenComposite));
+                    }
+                }
 
                 Logger.LogInformation($"Superset token count: {supersetTokens.Count}");
 				Logger.LogInformation($"Word analysis count: {request.WordAnalyses.Count()}");
@@ -84,7 +121,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 
                     var standaloneTokens = supersetTokens.Where(e => e.SurfaceText == wordAnalysis.Word).ToList();
 
-                    if (replacementTokenInfos.Count() == 1)
+                    if (replacementTokenInfos.Length == 1)
                     {
                         if (replacementTokenInfos[0].surfaceText != wordAnalysis.Word)
                         {
@@ -137,10 +174,36 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                         }
                     }
 
-                    // Query composites by TokenizedCorpusId and ParallelCorpusId (which may be null) that have a SPLIT_SOURCE
-                    // For each, check its SPLIT_INITIAL...value against split instructions, to see if it needs to be re-split
+					// Select from previous WordAnalysis import composites where its source surface text matches the current word
+					// and its child token 'split match info' hash is different from the incoming one (meaning it needs to be resplit)
+					var wordAnalysisLexemeHash = replacementTokenInfos.GetSplitMatchInfoAsHash();
+                    var tokensToResplit = new Dictionary<Guid, (DataAccessLayer.Models.Token OriginalToken, TokenComposite TokenComposite)>();
+					foreach (var tc in unchangedSplitComposites
+                        .Where(e => e.SourceSurfaceText == wordAnalysis.Word)
+                        .Where(e => e.SplitMatchInfoAsHash != wordAnalysisLexemeHash)
+                        .Select(e => (e.SourceId, e.TokenComposite)))
+                    {
+                        if (!previouslySplitTokensById.TryGetValue(tc.SourceId, out var previousSplitTokenSource))
+                        {
+                            Logger.LogWarning($"Composite token '{tc.TokenComposite.Id}' has a split source id of '{tc.SourceId}' that does not exist in previously split tokens list.  Skipping...");
+                            continue;
+                        }
 
-                    if (standaloneTokens.Count > 500)
+                        splitTokenDbCommands.AddTokenCompositeChildrenToDelete(tc.TokenComposite);
+                        tokensToResplit.Add(tc.SourceId, (previousSplitTokenSource, tc.TokenComposite));
+					}
+
+					var replacementsBySourceId =
+						SplitTokensViaSplitInstructionsCommandHandler.CreateTokenReplacements(
+							tokensToResplit.Select(e => e.Value.OriginalToken).ToList(),
+							replacementTokenInfos,
+							splitTokenDbCommands,
+							cancellationToken
+						);
+
+                    // TODO:  transfer notes?
+
+					if (standaloneTokens.Count > 500)
 					{
                         frequentWordStopwatch?.Stop();
 						Logger.LogInformation($"\tElapsed time for word {wordAnalysis.Word} with large number of Token matches:  {frequentWordStopwatch?.Elapsed}");

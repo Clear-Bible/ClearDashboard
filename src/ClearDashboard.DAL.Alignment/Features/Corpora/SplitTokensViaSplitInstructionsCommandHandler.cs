@@ -6,22 +6,11 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Data.Migrations;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
-using SIL.Scripture;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Common;
-using System.Reflection;
-using System.Threading;
 using static ClearDashboard.DAL.Alignment.Features.Common.DataUtil;
 using Token = ClearBible.Engine.Corpora.Token;
 
@@ -150,7 +139,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
             tokensDb.AddRange(await tokensDbPropagateQueryable.ToListAsync(cancellationToken));
         }
 
-		using var splitTokenDbCommands = await SplitTokenDbCommands.CreateAsync(ProjectDbContext, _userProvider, cancellationToken);
+		using var splitTokenDbCommands = await SplitTokenDbCommands.CreateAsync(ProjectDbContext, _userProvider, Logger, cancellationToken);
 
 		var replacementTokenInfos = new (
 			string surfaceText,
@@ -231,6 +220,8 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 			cancellationToken
 		);
 
+		TransferNoteAssociationsToReplacementChildren(replacementsBySourceId, splitTokenDbCommands, cancellationToken);
+
 		// Generate output variables (split child tokens):
 		var splitChildTokensByIncomingTokenId = replacementsBySourceId.ToDictionary(
 			 e => ModelHelper.BuildTokenId(e.Value.SourceModelToken),
@@ -256,21 +247,16 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 		return (splitCompositeTokensByIncomingTokenId, splitChildTokensByIncomingTokenId, sourceTrainingTextsByAlignmentSetId);
 	}
 
-	private static Dictionary<Guid, (DataAccessLayer.Models.Token SourceModelToken, List<Token> ReplacementTokens, List<DataAccessLayer.Models.Token> ReplacementModelTokens)> CreateTokenReplacements(List<DataAccessLayer.Models.Token> tokensDb, (string surfaceText, string trainingText, string? tokenType)[] replacementTokenInfos, SplitTokenDbCommands splitTokenDbCommands, CancellationToken cancellationToken)
-    {
+	public static Dictionary<Guid, (DataAccessLayer.Models.Token SourceModelToken, List<Token> ReplacementTokens, List<DataAccessLayer.Models.Token> ReplacementModelTokens)> CreateTokenReplacements(List<DataAccessLayer.Models.Token> tokensDb, (string surfaceText, string trainingText, string? tokenType)[] replacementTokenInfos, SplitTokenDbCommands splitTokenDbCommands, CancellationToken cancellationToken)
+	{
 		var currentDateTime = DataAccessLayer.Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
 
-        var replacementsBySourceId = 
-            new Dictionary<Guid, (
-                DataAccessLayer.Models.Token SourceModelToken, 
-                List<Token> ReplacementTokens, 
-                List<DataAccessLayer.Models.Token> ReplacementModelTokens
-            )>();
-
-		var noteAssociationsDb = splitTokenDbCommands.ProjectDbContext.NoteDomainEntityAssociations
-			.Where(dea => dea.DomainEntityIdGuid != null)
-			.Where(dea => tokensDb.Select(e => e.Id).Contains((Guid)dea.DomainEntityIdGuid!))
-			.ToList();
+		var replacementsBySourceId =
+			new Dictionary<Guid, (
+				DataAccessLayer.Models.Token SourceModelToken,
+				List<Token> ReplacementTokens,
+				List<DataAccessLayer.Models.Token> ReplacementModelTokens
+			)>();
 
 		foreach (var tokenDb in tokensDb)
 		{
@@ -307,33 +293,15 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 
 				newChildTokens.Add(newToken);
 				newChildTokensDb.Add(newModelToken);
-
-				var tokenDbNoteAssociations = noteAssociationsDb
-					.Where(e => e.DomainEntityIdGuid == tokenDb.Id)
-					.ToList();
-
-				if (i == 0)
-				{
-					splitTokenDbCommands.AddTokenComponentNoteAssociationsToSet(newModelToken, tokenDbNoteAssociations);
-				}
-				else
-				{
-					tokenDbNoteAssociations.ForEach(e =>
-					{
-						splitTokenDbCommands.AddNoteAssociationToInsert(new DataAccessLayer.Models.NoteDomainEntityAssociation
-						{
-							NoteId = e.NoteId,
-							DomainEntityIdName = e.DomainEntityIdName,
-							DomainEntityIdGuid = newToken.TokenId.Id
-						});
-					});
-				}
 			}
 
-            replacementsBySourceId.Add(tokenDb.Id, (tokenDb, newChildTokens, newChildTokensDb));
+			replacementsBySourceId.Add(tokenDb.Id, (tokenDb, newChildTokens, newChildTokensDb));
 
 			splitTokenDbCommands.AddTokenComponentsToInsert(newChildTokensDb);
+
 			tokenDb.Deleted = currentDateTime;
+			tokenDb.SetWasSplit();
+			splitTokenDbCommands.AddTokenComponentToSplitSoftDelete(tokenDb);
 
 			// Find any tokens with a BCVW that matches the current tokenDb and
 			// with a SubwordNumber that is greater than the token that was split,
@@ -357,7 +325,44 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 			}
 		}
 
-        return replacementsBySourceId;
+		return replacementsBySourceId;
+	}
+
+	public static void TransferNoteAssociationsToReplacementChildren(Dictionary<Guid, (DataAccessLayer.Models.Token SourceModelToken, List<Token> ReplacementTokens, List<DataAccessLayer.Models.Token> ReplacementModelTokens)> replacementsBySourceId, SplitTokenDbCommands splitTokenDbCommands, CancellationToken cancellationToken)
+	{
+		var noteAssociationsDb = splitTokenDbCommands.ProjectDbContext.NoteDomainEntityAssociations
+			.Where(dea => dea.DomainEntityIdGuid != null)
+			.Where(dea => replacementsBySourceId.Keys.Contains((Guid)dea.DomainEntityIdGuid!))
+			.ToList();
+
+		foreach (var kvp in replacementsBySourceId)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			var tokenDbNoteAssociations = noteAssociationsDb
+				.Where(e => e.DomainEntityIdGuid == kvp.Key)
+				.ToList();
+
+			for (int i = 0; i < kvp.Value.ReplacementModelTokens.Count; i++)
+			{
+				if (i == 0)
+				{
+					splitTokenDbCommands.AddTokenComponentNoteAssociationsToSet(kvp.Value.ReplacementModelTokens[i], tokenDbNoteAssociations);
+				}
+				else
+				{
+					tokenDbNoteAssociations.ForEach(e =>
+					{
+						splitTokenDbCommands.AddNoteAssociationToInsert(new DataAccessLayer.Models.NoteDomainEntityAssociation
+						{
+							NoteId = e.NoteId,
+							DomainEntityIdName = e.DomainEntityIdName,
+							DomainEntityIdGuid = kvp.Value.ReplacementModelTokens[i].Id
+						});
+					});
+				}
+			}
+		}
 	}
 
 	private static (List<(Guid, CompositeToken)>, Dictionary<Guid, List<string>>) AttachToComposites(
@@ -458,7 +463,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 
 		var tokensDbTokenComposites = splitTokenDbCommands.ProjectDbContext.TokenComposites
 			.Include(e => e.Tokens)
-			.Include(e => e.SourceAlignments)
+			.Include(e => e.SourceAlignments.Where(a => a.Deleted == null))
 			.Where(e => existingCompositeIds.Contains(e.Id))
 			.ToList();
 
@@ -513,7 +518,8 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 
 			tokenComposite.SurfaceText = compositeToken.SurfaceText;
 			tokenComposite.TrainingText = compositeToken.TrainingText;
-			splitTokenDbCommands.AddTokenComponentToUpdateSurfaceTrainingText(tokenComposite);
+			tokenComposite.EngineTokenId = compositeToken.TokenId.ToString(); 
+			splitTokenDbCommands.AddTokenComponentToUpdateSurfaceTrainingEngineTokenId(tokenComposite);
 
 			foreach (var e in tokenComposite.SourceAlignments)
 			{
@@ -534,6 +540,35 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 		}
 
         return incomingTokenIdCompositePairs;
+	}
+
+	public static CompositeToken AssignChildTokensToTokenComposite(
+		DataAccessLayer.Models.TokenComposite tokenComposite, 
+		List<Token> newChildTokens, 
+		SplitTokenDbCommands splitTokenDbCommands)
+	{
+		// Add new associations from this composite to new child token ids:
+		splitTokenDbCommands.AddTokenCompositeTokenAssociationsToInsert(newChildTokens
+			.Select(e => new DataAccessLayer.Models.TokenCompositeTokenAssociation
+			{
+				Id = Guid.NewGuid(),
+				TokenCompositeId = tokenComposite.Id,
+				TokenId = e.TokenId.Id
+			}));
+
+		// Using the higher level CompositeToken structure here (instead 
+		// of Models.TokenComposite) should reset the Surface and Training
+		// text using the new split child tokens:
+		var compositeToken = ModelHelper.BuildCompositeToken(tokenComposite);
+		compositeToken.Tokens = newChildTokens;
+
+		// Update the token composite's surface and training text
+		tokenComposite.SurfaceText = compositeToken.SurfaceText;
+		tokenComposite.TrainingText = compositeToken.TrainingText;
+		tokenComposite.EngineTokenId = compositeToken.TokenId.ToString(); 
+		splitTokenDbCommands.AddTokenComponentToUpdateSurfaceTrainingEngineTokenId(tokenComposite);
+
+		return compositeToken;
 	}
 
 	private static (Guid, TokenComposite, CompositeToken) CreateComposite(
@@ -558,7 +593,8 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 			compositeToken.Metadata[DataAccessLayer.Models.MetadatumKeys.IsParallelCorpusToken] = true;
 		}
 
-		compositeToken.SetSplitSource(tokenDb.Id);
+		compositeToken.SetSplitSourceId(tokenDb.Id);
+		compositeToken.SetSplitSourceSurfaceText(tokenDb.SurfaceText!);
 		compositeToken.SetSplitInitialChildren(replacementTokens);
 
 		var tokenComposite = BuildModelTokenComposite(
@@ -734,11 +770,13 @@ public class SplitTokenDbCommands : IDisposable
 
 	public ProjectDbContext ProjectDbContext { get; init; }
 	public IUserProvider UserProvider { get; init; }
+	public ILogger Logger { get; init; }
 	public DbConnection Connection { get; init; }
 	public DbTransaction Transaction { get; init; }
 
 	private readonly DbCommand _tokenComponentInsertCommand;
-	private readonly DbCommand _tokenComponentUpdateSurfaceTrainingTextCommand;
+	private readonly DbCommand _tokenComponentDeleteCommand;
+	private readonly DbCommand _tokenComponentUpdateSurfaceTrainingEngineTokenIdCommand;
 	private readonly DbCommand _tokenCompositeTokenAssociationInsertCommand;
 	private readonly DbCommand _tokenComponentSoftDeleteCommand;
 	private readonly DbCommand _tokenComponentUpdateTypeCommand;
@@ -754,10 +792,11 @@ public class SplitTokenDbCommands : IDisposable
 	private readonly DbCommand _tvaInsertCommand;
 
 	private readonly List<TokenComponent> _tokenComponentsToInsert = new();
-	private readonly List<TokenComponent> _tokenComponentsToUpdateSurfaceTrainingText = new();
+	private readonly List<TokenComponent> _tokenComponentsToDelete = new();
+	private readonly List<TokenComponent> _tokenComponentsToUpdateSurfaceTrainingEngineTokenId = new();
 	private readonly List<TokenCompositeTokenAssociation> _tokenCompositeTokenAssociationsToInsert = new();
 	private readonly List<TokenCompositeTokenAssociation> _tokenCompositeTokenAssociationsToRemove = new();
-	private readonly List<TokenComponent> _tokenComponentsToSoftDelete = new();
+	private readonly List<TokenComponent> _tokenComponentsToSplitSoftDelete = new();
 	private readonly List<TokenComponent> _tokenComponentsToUpdateType = new();
 	private readonly List<DataAccessLayer.Models.Token> _tokensToSubwordRenumber = new();
 	private readonly List<NoteDomainEntityAssociation> _noteAssociationsToInsert = new();
@@ -770,27 +809,29 @@ public class SplitTokenDbCommands : IDisposable
 	private readonly List<DataAccessLayer.Models.Translation> _translationsToInsert = new();
 	private readonly List<TokenVerseAssociation> _tvasToInsert = new();
 
-	public static async Task<SplitTokenDbCommands> CreateAsync(ProjectDbContext projectDbContext, IUserProvider userProvider, CancellationToken cancellationToken)
+	public static async Task<SplitTokenDbCommands> CreateAsync(ProjectDbContext projectDbContext, IUserProvider userProvider, ILogger logger, CancellationToken cancellationToken)
 	{
 		projectDbContext.Database.OpenConnection();
 
 		var connection = projectDbContext.Database.GetDbConnection();
 		var transaction = await connection.BeginTransactionAsync(cancellationToken);
 
-		return new SplitTokenDbCommands(projectDbContext, userProvider, connection, transaction);
+		return new SplitTokenDbCommands(projectDbContext, userProvider, logger, connection, transaction);
 	}
 
-	private SplitTokenDbCommands(ProjectDbContext projectDbContext, IUserProvider userProvider, DbConnection connection, DbTransaction transaction)
+	private SplitTokenDbCommands(ProjectDbContext projectDbContext, IUserProvider userProvider, ILogger logger, DbConnection connection, DbTransaction transaction)
 	{
 		ProjectDbContext = projectDbContext;
 		UserProvider = userProvider;
+		Logger = logger;
 		Connection = connection;
 		Transaction = transaction;
 
 		_tokenComponentInsertCommand = TokenizedCorpusDataBuilder.CreateTokenComponentInsertCommand(connection);
-		_tokenComponentUpdateSurfaceTrainingTextCommand = TokenizedCorpusDataBuilder.CreateTokenComponentUpdateSurfaceTrainingTextCommand(connection);
+		_tokenComponentDeleteCommand = TokenizedCorpusDataBuilder.CreateTokenComponentDeleteCommand(connection);
+		_tokenComponentUpdateSurfaceTrainingEngineTokenIdCommand = TokenizedCorpusDataBuilder.CreateTokenComponentUpdateSurfaceTrainingEngineTokenIdCommand(connection);
 		_tokenCompositeTokenAssociationInsertCommand = TokenizedCorpusDataBuilder.CreateTokenCompositeTokenAssociationInsertCommand(connection);
-		_tokenComponentSoftDeleteCommand = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(TokenComponent));
+		_tokenComponentSoftDeleteCommand = TokenizedCorpusDataBuilder.CreateSoftDeleteMetadataUpdateByIdCommand(connection);
 		_tokenComponentUpdateTypeCommand = TokenizedCorpusDataBuilder.CreateTokenComponentTypeUpdateCommand(connection);
 		_tokenSubwordRenumberCommand = TokenizedCorpusDataBuilder.CreateTokenSubwordRenumberCommand(connection);
 		_noteAssociationInsertCommand = CreateNoteAssociationInsertCommand(connection);
@@ -811,6 +852,7 @@ public class SplitTokenDbCommands : IDisposable
 
 	public async Task ExecuteBulkOperationsAsync(CancellationToken cancellationToken)
 	{
+		Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - inserting {_tokenComponentsToInsert.Count} token components");
 		foreach (var tokenComponent in _tokenComponentsToInsert)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
@@ -826,42 +868,56 @@ public class SplitTokenDbCommands : IDisposable
 
 		}
 
-		foreach (var tc in _tokenComponentsToUpdateSurfaceTrainingText)
+		Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - deleting {_tokenComponentsToDelete.Count} token components");
+		foreach (var tokenComponent in _tokenComponentsToDelete)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
-			await TokenizedCorpusDataBuilder.UpdateTokenComponentSurfaceTrainingTextAsync(tc, _tokenComponentUpdateSurfaceTrainingTextCommand, cancellationToken);
+			await TokenizedCorpusDataBuilder.DeleteTokenComponentAsync(tokenComponent, _tokenComponentDeleteCommand, cancellationToken);
 		}
 
-		foreach (var tc in _tokenComponentsToSoftDelete)
+		Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - soft deleting {_tokenComponentsToSplitSoftDelete.Count} token components");
+		foreach (var tc in _tokenComponentsToSplitSoftDelete)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
-			await TokenizedCorpusDataBuilder.SoftDeleteTokenComponentAsync(tc, _tokenComponentSoftDeleteCommand, cancellationToken);
+			await TokenizedCorpusDataBuilder.SoftDeleteMetadataUpdateTokenComponentAsync(tc, _tokenComponentSoftDeleteCommand, cancellationToken);
 		}
 
+		Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - updating surface / training text and engine token id for {_tokenComponentsToUpdateSurfaceTrainingEngineTokenId.Count} token components");
+		foreach (var tc in _tokenComponentsToUpdateSurfaceTrainingEngineTokenId)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+			await TokenizedCorpusDataBuilder.UpdateTokenComponentSurfaceTrainingTextAsync(tc, _tokenComponentUpdateSurfaceTrainingEngineTokenIdCommand, cancellationToken);
+		}
+
+		Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - updating token type for {_tokenComponentsToUpdateType.Count} token components");
 		foreach (var tc in _tokenComponentsToUpdateType)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 			await TokenizedCorpusDataBuilder.UpdateTypeTokenComponentAsync(tc, _tokenComponentUpdateTypeCommand, cancellationToken);
 		}
 
+		Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - updating subword numbering for {_tokensToSubwordRenumber.Count} token components");
 		foreach (var t in _tokensToSubwordRenumber)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 			await TokenizedCorpusDataBuilder.SubwordRenumberTokenAsync(t, _tokenSubwordRenumberCommand, cancellationToken);
 		}
 
+		Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - inserting {_noteAssociationsToInsert.Count} note associations");
 		foreach (var na in _noteAssociationsToInsert)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 			await InsertNoteDomainEntityAssociationAsync(na, _noteAssociationInsertCommand, cancellationToken);
 		}
 
+		Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - setting {_tokenComponentNoteAssociationsToSet.Count} token component + note associations");
 		foreach (var tcn in _tokenComponentNoteAssociationsToSet)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 			await SetNoteAssociationsDomainEntityIdAsync(tcn.TokenComponent, tcn.NoteAssociations, _noteAssociationDomainEntityIdSetCommand, cancellationToken);
 		}
 
+		Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - deleting {_tokenCompositeTokenAssociationsToRemove.Count} token component + token associations");
 		if (_tokenCompositeTokenAssociationsToRemove.Count != 0)
 		{
 			await DataUtil.DeleteIdentifiableEntityAsync(
@@ -871,11 +927,13 @@ public class SplitTokenDbCommands : IDisposable
 				cancellationToken);
 		}
 
+		Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - inserting {_tokenCompositeTokenAssociationsToInsert.Count} token component + token associations");
 		foreach (var t in _tokenCompositeTokenAssociationsToInsert)
 		{
 			t.Id = await TokenizedCorpusDataBuilder.InsertTokenCompositeTokenAssociationAsync(t.TokenId, t.TokenCompositeId, _tokenCompositeTokenAssociationInsertCommand, cancellationToken);
 		}
 
+		Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - setting {_alignmentSourceIdsToSet.Count} alignment source ids");
 		foreach (var (AlignmentIds, TokenComponentId) in _alignmentSourceIdsToSet) 
 		{
 			foreach (var alignmentId in AlignmentIds)
@@ -885,6 +943,7 @@ public class SplitTokenDbCommands : IDisposable
 			}
 		}
 
+		Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - setting {_alignmentTargetIdsToSet.Count} alignment target ids");
 		foreach (var (AlignmentIds, TokenComponentId) in _alignmentTargetIdsToSet)
 		{
 			foreach (var alignmentId in AlignmentIds)
@@ -894,6 +953,7 @@ public class SplitTokenDbCommands : IDisposable
 			}
 		}
 
+		Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - setting {_translationSourceIdsToSet.Count} translation/gloss source ids");
 		foreach (var (TranslationIds, TokenComponentId) in _translationSourceIdsToSet)
 		{
 			foreach (var translationId in TranslationIds)
@@ -903,6 +963,7 @@ public class SplitTokenDbCommands : IDisposable
 			}
 		}
 
+		Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - setting {_tvaTokenComponentIdsToSet.Count} token verse association token component ids");
 		foreach (var (TVAIds, TokenComponentId) in _tvaTokenComponentIdsToSet)
 		{
 			foreach (var tvaId in TVAIds)
@@ -912,6 +973,7 @@ public class SplitTokenDbCommands : IDisposable
 			}
 		}
 
+		Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - inserting {_alignmentsToInsert.Count} alignments");
 		foreach (var alignment in _alignmentsToInsert)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
@@ -922,6 +984,7 @@ public class SplitTokenDbCommands : IDisposable
 				Guid.Empty != alignment.UserId ? alignment.UserId : UserProvider.CurrentUser!.Id, 
 				cancellationToken);
 		}
+		Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - inserting {_translationsToInsert.Count} translations/glosses");
 		foreach (var translation in _translationsToInsert)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
@@ -933,6 +996,7 @@ public class SplitTokenDbCommands : IDisposable
 				cancellationToken);
 		}
 
+		Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - inserting {_tvasToInsert.Count} token verse associations");
 		foreach (var tva in _tvasToInsert)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
@@ -944,8 +1008,9 @@ public class SplitTokenDbCommands : IDisposable
 		}
 
 		_tokenComponentsToInsert.Clear();
-		_tokenComponentsToUpdateSurfaceTrainingText.Clear();
-		_tokenComponentsToSoftDelete.Clear();
+		_tokenComponentsToDelete.Clear();
+		_tokenComponentsToUpdateSurfaceTrainingEngineTokenId.Clear();
+		_tokenComponentsToSplitSoftDelete.Clear();
 		_tokenComponentsToUpdateType.Clear();
 		_tokensToSubwordRenumber.Clear();
 		_noteAssociationsToInsert.Clear();
@@ -966,19 +1031,29 @@ public class SplitTokenDbCommands : IDisposable
 		_tokenComponentsToInsert.Add(tokenComponent);
 	}
 
+	public void AddTokenCompositeChildrenToDelete(TokenComposite tokenComposite)
+	{
+		_tokenComponentsToDelete.AddRange(tokenComposite.Tokens);
+	}
+
 	public void AddTokenComponentsToInsert(IEnumerable<TokenComponent> tokenComponents)
 	{
 		_tokenComponentsToInsert.AddRange(tokenComponents);
 	}
 
-	public void AddTokenComponentToUpdateSurfaceTrainingText(TokenComponent tokenComponent)
+	public void AddTokenComponentToUpdateSurfaceTrainingEngineTokenId(TokenComposite tokenComposite, CompositeToken composite)
 	{
-		_tokenComponentsToUpdateSurfaceTrainingText.Add(tokenComponent);
+		_tokenComponentsToUpdateSurfaceTrainingEngineTokenId.Add(tokenComponent);
 	}
 
-	public void AddTokenComponentToSoftDelete(IEnumerable<TokenComponent> tokenComponents)
+	public void AddTokenComponentToUpdateSurfaceTrainingEngineTokenId(TokenComponent tokenComponent)
 	{
-		_tokenComponentsToSoftDelete.AddRange(tokenComponents);
+		_tokenComponentsToUpdateSurfaceTrainingEngineTokenId.Add(tokenComponent);
+	}
+
+	public void AddTokenComponentToSplitSoftDelete(TokenComponent tokenComponent)
+	{
+		_tokenComponentsToSplitSoftDelete.Add(tokenComponent);
 	}
 
 	public void AddTokenComponentToUpdateType(TokenComponent tokenComponent)
@@ -1108,7 +1183,8 @@ public class SplitTokenDbCommands : IDisposable
 			if (disposing)
 			{
 				_tokenComponentInsertCommand.Dispose();
-				_tokenComponentUpdateSurfaceTrainingTextCommand.Dispose();
+				_tokenComponentDeleteCommand.Dispose();
+				_tokenComponentUpdateSurfaceTrainingEngineTokenIdCommand.Dispose();
 				_tokenCompositeTokenAssociationInsertCommand.Dispose();
 				_tokenComponentSoftDeleteCommand.Dispose();
 				_tokenComponentUpdateTypeCommand.Dispose();

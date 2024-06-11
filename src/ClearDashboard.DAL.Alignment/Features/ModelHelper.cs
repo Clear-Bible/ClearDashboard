@@ -8,7 +8,6 @@ using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer.Data;
-
 using Microsoft.EntityFrameworkCore;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using MetadatumKeys = ClearDashboard.DataAccessLayer.Models.MetadatumKeys;
@@ -597,12 +596,22 @@ namespace ClearDashboard.DAL.Alignment.Features
             return baseType.FindEntityIdGenericType();
         }
 
-        public static void SetSplitSource(this CompositeToken compositeToken, Guid splitSourceId)
+        public static void SetWasSplit(this Models.Token replacedToken)
         {
-			compositeToken.EnsureModelTokenMetadatum(MetadatumKeys.SplitTokenSource, splitSourceId.ToString());
+            replacedToken.EnsureModelTokenMetadatum(MetadatumKeys.WasSplit, true.ToString());
+        }
+
+        public static void SetSplitSourceId(this CompositeToken compositeToken, Guid splitSourceId)
+        {
+			compositeToken.EnsureModelTokenMetadatum(MetadatumKeys.SplitTokenSourceId, splitSourceId.ToString());
 		}
 
-        public static void SetSplitInitialChildren(this CompositeToken compositeToken, List<ClearBible.Engine.Corpora.Token> childTokens)
+		public static void SetSplitSourceSurfaceText(this CompositeToken compositeToken, string surfaceText)
+		{
+			compositeToken.EnsureModelTokenMetadatum(MetadatumKeys.SplitTokenSourceSurfaceText, surfaceText);
+		}
+
+		public static void SetSplitInitialChildren(this CompositeToken compositeToken, List<ClearBible.Engine.Corpora.Token> childTokens)
         {
             compositeToken.EnsureModelTokenMetadatum(MetadatumKeys.SplitTokenInitialChildren, childTokens.GetSplitMatchInfoAsHash());
 		}
@@ -639,12 +648,26 @@ namespace ClearDashboard.DAL.Alignment.Features
 			return modelTokenMetadata;
 		}
 
+		public static void EnsureModelTokenMetadatum(this Models.Token token, string key, string? value)
+		{
+			var existingMetadatum = token.Metadata.Where(e => e.Key == key).FirstOrDefault();
+			if (existingMetadatum is null)
+			{
+				token.Metadata.Add(new Models.Metadatum { Key = key, Value = value });
+			}
+			else
+			{
+				existingMetadatum.Value = value;
+			}
+
+		}
+
 		public static bool TryGetSplitSourceId(this CompositeToken compositeToken, out Guid splitSourceId)
         {
             if (compositeToken.HasMetadatum(MetadatumKeys.ModelTokenMetadata))
             {
                 var metadatum = compositeToken.GetMetadatum<List<Models.Metadatum>>(MetadatumKeys.ModelTokenMetadata);
-                var splitTokenSource = metadatum.Where(e => e.Key == MetadatumKeys.SplitTokenSource).FirstOrDefault();
+                var splitTokenSource = metadatum.Where(e => e.Key == MetadatumKeys.SplitTokenSourceId).FirstOrDefault();
 
                 if (splitTokenSource != null && splitTokenSource.Value is not null)
                 {
@@ -671,6 +694,24 @@ namespace ClearDashboard.DAL.Alignment.Features
 			}
 
 			return false;
+		}
+
+		public static string GetSplitMatchInfoAsHash(this (string surfaceText, string trainingText, string? tokenType)[] wordAnalysisLexemes)
+		{
+			return string.Join('|', wordAnalysisLexemes.Select(e => $"{e.tokenType}:{e.surfaceText}")).ToMD5String();
+		}
+
+		public static string GetSplitMatchInfoAsHash(this Models.TokenComposite tokenComposite)
+        {
+            if (tokenComposite.Tokens.Count == 0)
+                throw new Exception($"Unable to extract split match info from token composite {tokenComposite.Id} because there are no child tokens (is there a query Include missing?)");
+
+			return tokenComposite.Tokens.GetSplitMatchInfoAsHash();
+		}
+
+		private static string GetSplitMatchInfoAsHash(this IEnumerable<Models.Token> childTokens)
+		{
+			return string.Join('|', childTokens.Select(e => $"{e.Type}:{e.SurfaceText}")).ToMD5String();
 		}
 
 		private static string GetSplitMatchInfoAsHash(this IEnumerable<ClearBible.Engine.Corpora.Token> childTokens)

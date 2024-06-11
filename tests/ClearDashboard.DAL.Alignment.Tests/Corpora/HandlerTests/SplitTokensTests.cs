@@ -1,6 +1,5 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
-using SIL.Machine.Tokenization;
 using SIL.Scripture;
 using System;
 using System.Collections.Generic;
@@ -13,7 +12,10 @@ using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features;
 using Microsoft.EntityFrameworkCore;
 using ClearDashboard.DAL.Alignment.Features.Lexicon;
-using SIL.Machine.Corpora;
+using ClearDashboard.DAL.Alignment.Features.Common;
+using System.Threading;
+using ClearDashboard.DataAccessLayer.Data;
+
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests
 {
@@ -57,6 +59,81 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests
 			}
 		}
 
+		[Fact]
+		[Trait("Category", "Handlers")]
+		public async Task TestMetadataSaveUsingBulkInsertAsync()
+        {
+			ProjectDbContext.Database.OpenConnection();
+			try
+			{
+				var textCorpus = TestDataHelpers.GetSampleTextCorpus();
+
+				// Create the corpus in the database:
+				var corpus = await Corpus.Create(Mediator!, false, "SAMPLE", "SAMPLE", "Standard", Guid.NewGuid().ToString());
+
+				// Create the TokenizedCorpus + Tokens in the database:
+				var tokenizedTextCorpus = await textCorpus.Create(
+					Mediator!,
+					corpus.CorpusId,
+					"MetadataTest",
+					"LatinWordTokenizer");
+
+				// Check initial save values:
+				Assert.NotNull(tokenizedTextCorpus);
+
+                var testMetadatum = new List<DataAccessLayer.Models.Metadatum>
+                {
+                    new DataAccessLayer.Models.Metadatum { Key = "key1", Value = "value1" },
+                    new DataAccessLayer.Models.Metadatum { Key = "key2", Value = "value2" }
+                };
+
+                var testToken = new DataAccessLayer.Models.Token
+                {
+                    Id = Guid.NewGuid(),
+                    TokenizedCorpusId = tokenizedTextCorpus.TokenizedTextCorpusId.Id,
+                    EngineTokenId = "001002003004005",
+                    VerseRowId = ProjectDbContext.VerseRows.First().Id,
+                    BookNumber = 1,
+                    ChapterNumber = 2,
+                    VerseNumber = 3,
+                    WordNumber = 4,
+                    SubwordNumber = 0,
+                    TrainingText = "testToken1",
+                    SurfaceText = "testToken1",
+                    Metadata = testMetadatum
+                };
+
+                // Add a token having Metadata using DbContext: 
+				ProjectDbContext.TokenComponents.Add(testToken);
+                await ProjectDbContext.SaveChangesAsync();
+
+                // Add a token having Metadata using DbCommand (i.e. Bulk Insert):
+				using (var cmd = TokenizedCorpusDataBuilder.CreateTokenComponentInsertCommand(ProjectDbContext.Database.GetDbConnection()))
+				{
+                    testToken.Id = Guid.NewGuid();
+                    testToken.Metadata.Add(new DataAccessLayer.Models.Metadatum { Key = "key3", Value = "value3" });
+					await TokenizedCorpusDataBuilder.InsertTokenAsync(testToken, null, cmd, CancellationToken.None);
+				}
+
+                Assert.Equal(2, ProjectDbContext.Tokens
+                    .Where(t => t.Deleted == null)
+                    .Where(t => t.Metadata.Any(m => m.Key == "key1" && m.Value == "value1"))
+                    .Count());
+
+				Assert.Single(ProjectDbContext.Tokens
+					.Where(t => t.Deleted == null)
+					.Where(t => t.Metadata.Any(m => m.Key == "key3" && m.Value != null)));
+
+				Assert.Empty(ProjectDbContext.Tokens
+                    .Where(t => t.Deleted == null)
+                    .Where(t => t.Metadata.Any(m => m.Key == "key2" && m.Value == "value1")));
+			}
+			finally
+			{
+				ProjectDbContext.Database.CloseConnection();
+				await DeleteDatabaseContext();
+			}
+		}
 
 		[Fact]
         [Trait("Category", "Handlers")]
