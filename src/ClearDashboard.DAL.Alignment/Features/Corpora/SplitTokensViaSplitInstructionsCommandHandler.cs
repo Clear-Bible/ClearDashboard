@@ -160,8 +160,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 
 		var (
 			    splitCompositeTokensByIncomingTokenId, 
-				splitChildTokensByIncomingTokenId, 
-				sourceTrainingTextsByAlignmentSetId
+				splitChildTokensByIncomingTokenId
 			) = SplitTokensIntoReplacements(
 			tokensDb,
 			replacementTokenInfos,
@@ -170,26 +169,8 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 			cancellationToken
 		);
 
-		await splitTokenDbCommands.CommitTransactionAsync(cancellationToken);
-
-		// TODO:  convert to bulk inserts?
-		// Update alignment denormalization data:
-        if (sourceTrainingTextsByAlignmentSetId.Any())
-        {
-            using (var transaction = ProjectDbContext.Database.BeginTransaction())
-            {
-                await _mediator.Publish(new AlignmentSetSourceTrainingTextsUpdatingEvent(sourceTrainingTextsByAlignmentSetId, ProjectDbContext));
-                _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
-
-                await transaction.CommitAsync(cancellationToken);
-            }
-
-            await _mediator.Publish(new AlignmentSetSourceTrainingTextsUpdatedEvent(sourceTrainingTextsByAlignmentSetId), cancellationToken);
-        }
-        else
-        {
-            _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
-        }
+		await splitTokenDbCommands.ExecuteBulkOperationsAsync(cancellationToken);
+		await splitTokenDbCommands.CommitTransactionAsync(_mediator, cancellationToken);
 
         return new RequestResult<(IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>)>
         (
@@ -197,7 +178,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
         );
     }
 
-	public static (IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>, Dictionary<Guid, List<string>>) SplitTokensIntoReplacements(
+	public static (IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>) SplitTokensIntoReplacements(
 		List<DataAccessLayer.Models.Token> tokensDb,
 		(string surfaceText, string trainingText, string? tokenType)[] replacementTokenInfos, 
 		bool createParallelComposite,
@@ -213,14 +194,14 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 				cancellationToken
 			);
 
-		var (incomingTokenIdCompositePairs, sourceTrainingTextsByAlignmentSetId) = AttachToComposites(
+		var incomingTokenIdCompositePairs = AttachToComposites(
 			replacementsBySourceId,
 			createParallelComposite,
 			splitTokenDbCommands,
 			cancellationToken
 		);
 
-		TransferNoteAssociationsToReplacementChildren(replacementsBySourceId, splitTokenDbCommands, cancellationToken);
+		TransferNoteAssociationsToReplacementComposites(incomingTokenIdCompositePairs, splitTokenDbCommands, cancellationToken);
 
 		// Generate output variables (split child tokens):
 		var splitChildTokensByIncomingTokenId = replacementsBySourceId.ToDictionary(
@@ -244,7 +225,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 			}
 		});
 
-		return (splitCompositeTokensByIncomingTokenId, splitChildTokensByIncomingTokenId, sourceTrainingTextsByAlignmentSetId);
+		return (splitCompositeTokensByIncomingTokenId, splitChildTokensByIncomingTokenId);
 	}
 
 	public static Dictionary<Guid, (DataAccessLayer.Models.Token SourceModelToken, List<Token> ReplacementTokens, List<DataAccessLayer.Models.Token> ReplacementModelTokens)> CreateTokenReplacements(List<DataAccessLayer.Models.Token> tokensDb, (string surfaceText, string trainingText, string? tokenType)[] replacementTokenInfos, SplitTokenDbCommands splitTokenDbCommands, CancellationToken cancellationToken)
@@ -299,9 +280,12 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 
 			splitTokenDbCommands.AddTokenComponentsToInsert(newChildTokensDb);
 
-			tokenDb.Deleted = currentDateTime;
-			tokenDb.SetWasSplit();
-			splitTokenDbCommands.AddTokenComponentToSplitSoftDelete(tokenDb);
+			if (tokenDb.Deleted is null && !tokenDb.GetWasSplit())
+			{
+				tokenDb.Deleted = currentDateTime;
+				tokenDb.SetWasSplit();
+				splitTokenDbCommands.AddTokenComponentToSplitSoftDelete(tokenDb);
+			}
 
 			// Find any tokens with a BCVW that matches the current tokenDb and
 			// with a SubwordNumber that is greater than the token that was split,
@@ -328,7 +312,10 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 		return replacementsBySourceId;
 	}
 
-	public static void TransferNoteAssociationsToReplacementChildren(Dictionary<Guid, (DataAccessLayer.Models.Token SourceModelToken, List<Token> ReplacementTokens, List<DataAccessLayer.Models.Token> ReplacementModelTokens)> replacementsBySourceId, SplitTokenDbCommands splitTokenDbCommands, CancellationToken cancellationToken)
+	public static void TransferNoteAssociationsToReplacementChildren(
+		Dictionary<Guid, (DataAccessLayer.Models.Token SourceModelToken, List<Token> ReplacementTokens, List<DataAccessLayer.Models.Token> ReplacementModelTokens)> replacementsBySourceId, 
+		SplitTokenDbCommands splitTokenDbCommands, 
+		CancellationToken cancellationToken)
 	{
 		var noteAssociationsDb = splitTokenDbCommands.ProjectDbContext.NoteDomainEntityAssociations
 			.Where(dea => dea.DomainEntityIdGuid != null)
@@ -365,7 +352,51 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 		}
 	}
 
-	private static (List<(Guid, CompositeToken)>, Dictionary<Guid, List<string>>) AttachToComposites(
+	public static void TransferNoteAssociationsToReplacementComposites(
+		List<(Guid, CompositeToken)> incomingTokenIdCompositePairs, 
+		SplitTokenDbCommands splitTokenDbCommands, 
+		CancellationToken cancellationToken)
+	{
+		var compositesByIncomingTokenId = incomingTokenIdCompositePairs
+			.GroupBy(e => e.Item1)
+			.ToDictionary(g => g.Key, g => g.Select(e => e.Item2).ToList());
+
+		var noteAssociationsDb = splitTokenDbCommands.ProjectDbContext.NoteDomainEntityAssociations
+			.Where(dea => dea.DomainEntityIdGuid != null)
+			.Where(dea => compositesByIncomingTokenId.Keys.Contains((Guid)dea.DomainEntityIdGuid!))
+			.ToList();
+
+		foreach (var kvp in compositesByIncomingTokenId)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			var tokenDbNoteAssociations = noteAssociationsDb
+				.Where(e => e.DomainEntityIdGuid == kvp.Key)
+				.ToList();
+
+			for (int i = 0; i < kvp.Value.Count; i++)
+			{
+				if (i == 0)
+				{
+					splitTokenDbCommands.AddTokenNoteAssociationsToSet(kvp.Value[i], tokenDbNoteAssociations);
+				}
+				else
+				{
+					tokenDbNoteAssociations.ForEach(e =>
+					{
+						splitTokenDbCommands.AddNoteAssociationToInsert(new DataAccessLayer.Models.NoteDomainEntityAssociation
+						{
+							NoteId = e.NoteId,
+							DomainEntityIdName = e.DomainEntityIdName,
+							DomainEntityIdGuid = kvp.Value[i].TokenId.Id
+						});
+					});
+				}
+			}
+		}
+	}
+
+	private static List<(Guid, CompositeToken)> AttachToComposites(
 		Dictionary<Guid, (DataAccessLayer.Models.Token SourceModelToken, List<Token> ReplacementTokens, List<DataAccessLayer.Models.Token> ReplacementModelTokens)> replacementsBySourceId,
 		bool createParallelComposite,
 		SplitTokenDbCommands splitTokenDbCommands, 
@@ -381,12 +412,10 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 		}
 
 		var tokensDb = replacementsBySourceId.Values.Select(e => e.SourceModelToken).ToList();
-		var sourceTrainingTextsByAlignmentSetId = new Dictionary<Guid, List<string>>();
 
 		var incomingTokenIdCompositePairs = ReplaceInExistingComposites(
 			tokensDb,
 			replacementTokensById,
-			sourceTrainingTextsByAlignmentSetId,
 			splitTokenDbCommands,
 			cancellationToken
 		);
@@ -417,7 +446,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 					splitTokenDbCommands);
 
 				incomingTokenIdCompositePairs.Add((tokenDb.Id, compositeToken));
-				TransferAssociations(tokenDb, tokenComposite, sourceTrainingTextsByAlignmentSetId, splitTokenDbCommands, true);
+				TransferAssociations(tokenDb, tokenComposite, splitTokenDbCommands, true);
 			}
 			else
 			{
@@ -437,20 +466,19 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 						splitTokenDbCommands);
 
 					incomingTokenIdCompositePairs.Add((tokenDb.Id, compositeToken));
-					TransferAssociations(tokenDb, tokenComposite, sourceTrainingTextsByAlignmentSetId, splitTokenDbCommands, isFirst);
+					TransferAssociations(tokenDb, tokenComposite, splitTokenDbCommands, isFirst);
 
 					isFirst = false;
 				}
 			}
 		}
 
-		return (incomingTokenIdCompositePairs, sourceTrainingTextsByAlignmentSetId);
+		return incomingTokenIdCompositePairs;
 	}
 
 	private static List<(Guid, CompositeToken)> ReplaceInExistingComposites(
         List<DataAccessLayer.Models.Token> tokensDb, 
         Dictionary<Guid, List<Token>> replacementTokensById,
-		Dictionary<Guid, List<string>> sourceTrainingTextsByAlignmentSetId,
 		SplitTokenDbCommands splitTokenDbCommands, 
         CancellationToken cancellationToken)
     {
@@ -520,23 +548,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 			tokenComposite.TrainingText = compositeToken.TrainingText;
 			tokenComposite.EngineTokenId = compositeToken.TokenId.ToString(); 
 			splitTokenDbCommands.AddTokenComponentToUpdateSurfaceTrainingEngineTokenId(tokenComposite);
-
-			foreach (var e in tokenComposite.SourceAlignments)
-			{
-				if (sourceTrainingTextsByAlignmentSetId.TryGetValue(e.AlignmentSetId, out var sourceTrainingTexts))
-				{
-					sourceTrainingTexts.Add(previousTrainingText!);
-					sourceTrainingTexts.Add(tokenComposite.TrainingText!);
-				}
-				else
-				{
-					sourceTrainingTextsByAlignmentSetId.Add(e.AlignmentSetId, new List<string>
-					{
-						previousTrainingText!,
-						tokenComposite.TrainingText!
-					});
-				}
-			}
+			splitTokenDbCommands.AddAlignmentTrainingTextChange(tokenComposite.SourceAlignments, previousTrainingText, tokenComposite.TrainingText);
 		}
 
         return incomingTokenIdCompositePairs;
@@ -612,7 +624,6 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 	private static void TransferAssociations(
 		DataAccessLayer.Models.Token tokenDb,
 		DataAccessLayer.Models.TokenComposite tokenComposite,
-		Dictionary<Guid, List<string>> sourceTrainingTextsByAlignmentSetId,
 		SplitTokenDbCommands splitTokenDbCommands,
 		bool isFirstForTokenDb)
 	{
@@ -623,22 +634,7 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 			splitTokenDbCommands.AddTranslationSourceIdsToSet(tokenDb.Translations, tokenComposite);
 			splitTokenDbCommands.AddTVATokenComponentIdsToSet(tokenDb.TokenVerseAssociations, tokenComposite);
 
-			foreach (var e in tokenDb.SourceAlignments)
-			{
-				if (sourceTrainingTextsByAlignmentSetId.TryGetValue(e.AlignmentSetId, out var sourceTrainingTexts))
-				{
-					sourceTrainingTexts.Add(tokenDb.TrainingText!);
-					sourceTrainingTexts.Add(tokenComposite.TrainingText!);
-				}
-				else
-				{
-					sourceTrainingTextsByAlignmentSetId.Add(e.AlignmentSetId, new List<string>
-					{
-						tokenDb.TrainingText!,
-						tokenComposite.TrainingText!
-					});
-				}
-			}
+			splitTokenDbCommands.AddAlignmentTrainingTextChange(tokenDb.SourceAlignments, tokenDb.TrainingText, tokenComposite.TrainingText);
 		}
 		else
 		{
@@ -653,14 +649,6 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 					AlignmentVerification = e.AlignmentVerification,
 					Score = e.Score
 				});
-				if (sourceTrainingTextsByAlignmentSetId.TryGetValue(e.AlignmentSetId, out var sourceTrainingTexts))
-				{
-					sourceTrainingTexts.Add(tokenComposite.TrainingText!);
-				}
-				else
-				{
-					sourceTrainingTextsByAlignmentSetId.Add(e.AlignmentSetId, new List<string> { tokenComposite.TrainingText! });
-				}
 			}
 			foreach (var e in tokenDb.TargetAlignments)
 			{
@@ -695,6 +683,8 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 					VerseId = e.VerseId
 				});
 			}
+
+			splitTokenDbCommands.AddAlignmentTrainingTextChange(tokenDb.SourceAlignments, null, tokenComposite.TrainingText);
 		}
 	}
 
@@ -800,6 +790,7 @@ public class SplitTokenDbCommands : IDisposable
 	private readonly List<TokenComponent> _tokenComponentsToUpdateType = new();
 	private readonly List<DataAccessLayer.Models.Token> _tokensToSubwordRenumber = new();
 	private readonly List<NoteDomainEntityAssociation> _noteAssociationsToInsert = new();
+	private readonly List<(Token Token, IEnumerable<NoteDomainEntityAssociation> NoteAssociations)> _tokenNoteAssociationsToSet = new();
 	private readonly List<(TokenComponent TokenComponent, IEnumerable<NoteDomainEntityAssociation> NoteAssociations)> _tokenComponentNoteAssociationsToSet = new();
 	private readonly List<(IEnumerable<Guid> AlignmentIds, Guid TokenComponentId)> _alignmentSourceIdsToSet = new();
 	private readonly List<(IEnumerable<Guid> AlignmentIds, Guid TokenComponentId)> _alignmentTargetIdsToSet = new();
@@ -808,6 +799,9 @@ public class SplitTokenDbCommands : IDisposable
 	private readonly List<DataAccessLayer.Models.Alignment> _alignmentsToInsert = new();
 	private readonly List<DataAccessLayer.Models.Translation> _translationsToInsert = new();
 	private readonly List<TokenVerseAssociation> _tvasToInsert = new();
+	private readonly Dictionary<Guid, List<string>> _sourceTrainingTextsByAlignmentSetId = new();
+
+	private AlignmentSetSourceTrainingTextsUpdatedEvent? _denormTriggerEvent = null;
 
 	public static async Task<SplitTokenDbCommands> CreateAsync(ProjectDbContext projectDbContext, IUserProvider userProvider, ILogger logger, CancellationToken cancellationToken)
 	{
@@ -845,9 +839,28 @@ public class SplitTokenDbCommands : IDisposable
 		_tvaInsertCommand = AlignmentUtil.CreateTokenVerseAssociationInsertCommand(connection);
 	}
 
-	public async Task CommitTransactionAsync(CancellationToken cancellationToken)
+	public bool HasAlignmentSetChangesToDenormalize()
 	{
-		await Transaction.CommitAsync(cancellationToken);
+		return _sourceTrainingTextsByAlignmentSetId.Any(kvp => kvp.Value.Count != 0);
+	}
+
+	public async Task CommitTransactionAsync(IMediator mediator, CancellationToken cancellationToken)
+	{
+		try
+		{
+			await Transaction.CommitAsync(cancellationToken);
+		}
+		finally
+		{
+			Transaction.Dispose();
+		}
+
+		if (_denormTriggerEvent is not null)
+		{
+			Logger.LogInformation($"Firing alignment data denormalization event");
+			await mediator.Publish(_denormTriggerEvent, cancellationToken);
+			_denormTriggerEvent = null;
+		}
 	}
 
 	public async Task ExecuteBulkOperationsAsync(CancellationToken cancellationToken)
@@ -865,7 +878,6 @@ public class SplitTokenDbCommands : IDisposable
 			{
 				await TokenizedCorpusDataBuilder.InsertTokenAsync((tokenComponent as DataAccessLayer.Models.Token)!, null, _tokenComponentInsertCommand, cancellationToken);
 			}
-
 		}
 
 		Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - deleting {_tokenComponentsToDelete.Count} token components");
@@ -908,6 +920,13 @@ public class SplitTokenDbCommands : IDisposable
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 			await InsertNoteDomainEntityAssociationAsync(na, _noteAssociationInsertCommand, cancellationToken);
+		}
+
+		Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - setting {_tokenNoteAssociationsToSet.Count} token/composite + note associations");
+		foreach (var tcn in _tokenNoteAssociationsToSet)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+			await SetNoteAssociationsDomainEntityIdAsync(tcn.Token, tcn.NoteAssociations, _noteAssociationDomainEntityIdSetCommand, cancellationToken);
 		}
 
 		Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - setting {_tokenComponentNoteAssociationsToSet.Count} token component + note associations");
@@ -1007,6 +1026,50 @@ public class SplitTokenDbCommands : IDisposable
 				cancellationToken);
 		}
 
+		if (HasAlignmentSetChangesToDenormalize())
+		{
+			Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - inserting alignment denormalization tasks");
+			using (var denormalizationTaskInsertCommand = AlignmentUtil.CreateAlignmentDenormalizationTaskInsertCommand(Connection))
+			{
+				foreach (var kvp in _sourceTrainingTextsByAlignmentSetId)
+				{
+					var sourceTexts = kvp.Value.Distinct().ToList();
+					if (sourceTexts.Count <= 20)
+					{
+						foreach (var sourceText in sourceTexts)
+						{
+							cancellationToken.ThrowIfCancellationRequested();
+
+							await AlignmentUtil.InsertAlignmentDenormalizationTaskAsync(new DataAccessLayer.Models.AlignmentSetDenormalizationTask
+							{
+								Id = Guid.NewGuid(),
+								AlignmentSetId = kvp.Key,
+								SourceText = sourceText,
+							}, denormalizationTaskInsertCommand, cancellationToken);
+						}
+					}
+					else
+					{
+						cancellationToken.ThrowIfCancellationRequested();
+
+						await AlignmentUtil.InsertAlignmentDenormalizationTaskAsync(new DataAccessLayer.Models.AlignmentSetDenormalizationTask
+						{
+							Id = Guid.NewGuid(),
+							AlignmentSetId = kvp.Key,
+							SourceText = null,
+						}, denormalizationTaskInsertCommand, cancellationToken);
+
+					}
+				}
+			}
+
+			AddToDenormTriggerEvent(_sourceTrainingTextsByAlignmentSetId);
+		}
+		else
+		{
+			Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - no alignment set data to denormalize");
+		}
+
 		_tokenComponentsToInsert.Clear();
 		_tokenComponentsToDelete.Clear();
 		_tokenComponentsToUpdateSurfaceTrainingEngineTokenId.Clear();
@@ -1014,6 +1077,7 @@ public class SplitTokenDbCommands : IDisposable
 		_tokenComponentsToUpdateType.Clear();
 		_tokensToSubwordRenumber.Clear();
 		_noteAssociationsToInsert.Clear();
+		_tokenNoteAssociationsToSet.Clear();
 		_tokenComponentNoteAssociationsToSet.Clear();
 		_tokenCompositeTokenAssociationsToRemove.Clear();
 		_tokenCompositeTokenAssociationsToInsert.Clear();
@@ -1024,7 +1088,36 @@ public class SplitTokenDbCommands : IDisposable
 		_alignmentsToInsert.Clear();
 		_translationsToInsert.Clear();
 		_tvasToInsert.Clear();
-}
+		_sourceTrainingTextsByAlignmentSetId.Clear();
+	}
+
+	private void AddToDenormTriggerEvent(IDictionary<Guid, List<string>> source)
+	{
+		if (_denormTriggerEvent is null)
+		{
+			_denormTriggerEvent = new(source);
+		}
+		else
+		{
+			foreach (var kvp in source)
+			{
+				if (_denormTriggerEvent.SourceTrainingTextsByAlignmentSetId.TryGetValue(kvp.Key, out var sourceTrainingTexts))
+				{
+					foreach (var text in kvp.Value)
+					{
+						if (!sourceTrainingTexts.Contains(text))
+						{
+							sourceTrainingTexts.Add(text);
+						}
+					}
+				}
+				else
+				{
+					_denormTriggerEvent.SourceTrainingTextsByAlignmentSetId.Add(kvp.Key, new (kvp.Value));
+				}
+			}
+		}
+	}
 
 	public void AddTokenComponentToInsert(TokenComponent tokenComponent)
 	{
@@ -1039,11 +1132,6 @@ public class SplitTokenDbCommands : IDisposable
 	public void AddTokenComponentsToInsert(IEnumerable<TokenComponent> tokenComponents)
 	{
 		_tokenComponentsToInsert.AddRange(tokenComponents);
-	}
-
-	public void AddTokenComponentToUpdateSurfaceTrainingEngineTokenId(TokenComposite tokenComposite, CompositeToken composite)
-	{
-		_tokenComponentsToUpdateSurfaceTrainingEngineTokenId.Add(tokenComponent);
 	}
 
 	public void AddTokenComponentToUpdateSurfaceTrainingEngineTokenId(TokenComponent tokenComponent)
@@ -1069,6 +1157,11 @@ public class SplitTokenDbCommands : IDisposable
 	public void AddNoteAssociationToInsert(NoteDomainEntityAssociation noteAssociation)
 	{
 		_noteAssociationsToInsert.Add(noteAssociation);
+	}
+
+	public void AddTokenNoteAssociationsToSet(Token token, IEnumerable<NoteDomainEntityAssociation> noteAssociations)
+	{
+		_tokenNoteAssociationsToSet.Add((token, noteAssociations));
 	}
 
 	public void AddTokenComponentNoteAssociationsToSet(TokenComponent tokenComponent, IEnumerable<NoteDomainEntityAssociation> noteAssociations)
@@ -1121,6 +1214,32 @@ public class SplitTokenDbCommands : IDisposable
 		_tvasToInsert.Add(tokenVerseAssociation);
 	}
 
+	public void AddAlignmentTrainingTextChange(IEnumerable<DataAccessLayer.Models.Alignment> alignments, string? previousTrainingText, string? newTrainingText)
+	{
+		if (string.IsNullOrEmpty(previousTrainingText) && string.IsNullOrEmpty(newTrainingText))
+		{
+			return;
+		}
+
+		foreach (var e in alignments)
+		{
+			if (_sourceTrainingTextsByAlignmentSetId.TryGetValue(e.AlignmentSetId, out var sourceTrainingTexts))
+			{
+				if (!string.IsNullOrEmpty(previousTrainingText) && !sourceTrainingTexts.Contains(previousTrainingText)) sourceTrainingTexts.Add(previousTrainingText);
+				if (!string.IsNullOrEmpty(newTrainingText) && !sourceTrainingTexts.Contains(newTrainingText)) sourceTrainingTexts.Add(newTrainingText);
+			}
+			else
+			{
+				sourceTrainingTexts = new();
+
+				if (!string.IsNullOrEmpty(previousTrainingText) && !sourceTrainingTexts.Contains(previousTrainingText)) sourceTrainingTexts.Add(previousTrainingText);
+				if (!string.IsNullOrEmpty(newTrainingText) && !sourceTrainingTexts.Contains(newTrainingText)) sourceTrainingTexts.Add(newTrainingText);
+
+				_sourceTrainingTextsByAlignmentSetId.Add(e.AlignmentSetId, sourceTrainingTexts);
+			}
+		}
+	}
+
 	private static DbCommand CreateNoteAssociationInsertCommand(DbConnection connection)
 	{
 		var command = connection.CreateCommand();
@@ -1158,6 +1277,22 @@ public class SplitTokenDbCommands : IDisposable
 		command.Prepare();
 
 		return command;
+	}
+
+	private async Task SetNoteAssociationsDomainEntityIdAsync(Token token, IEnumerable<NoteDomainEntityAssociation> noteAssociations, DbCommand command, CancellationToken cancellationToken)
+	{
+		foreach (var noteAssociation in noteAssociations)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			// Keep DbContext model in sync:
+			noteAssociation.DomainEntityIdGuid = token.TokenId.Id;
+
+			command.Parameters[$"@{nameof(IdentifiableEntity.Id)}"].Value = noteAssociation.Id;
+			command.Parameters[$"@{nameof(NoteDomainEntityAssociation.DomainEntityIdGuid)}"].Value = token.TokenId.Id;
+
+			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+		}
 	}
 
 	private async Task SetNoteAssociationsDomainEntityIdAsync(TokenComponent tokenComponent, IEnumerable<NoteDomainEntityAssociation> noteAssociations, DbCommand command, CancellationToken cancellationToken)

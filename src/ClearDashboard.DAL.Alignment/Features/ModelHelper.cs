@@ -13,6 +13,7 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 using MetadatumKeys = ClearDashboard.DataAccessLayer.Models.MetadatumKeys;
 using System.Text;
 using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ClearDashboard.DAL.Alignment.Features
 {
@@ -660,6 +661,17 @@ namespace ClearDashboard.DAL.Alignment.Features
 				existingMetadatum.Value = value;
 			}
 
+		}
+
+		public static bool GetWasSplit(this Models.Token token)
+		{
+			var existingMetadatum = token.Metadata.Where(e => e.Key == MetadatumKeys.WasSplit).FirstOrDefault();
+            if (existingMetadatum is not null)
+            {
+                return bool.Parse(existingMetadatum.Value!);
+            }
+
+            return false;
 		}
 
 		public static bool TryGetSplitSourceId(this CompositeToken compositeToken, out Guid splitSourceId)

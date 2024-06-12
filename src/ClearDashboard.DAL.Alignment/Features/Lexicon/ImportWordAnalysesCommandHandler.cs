@@ -42,8 +42,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
             var currentUserId = ModelHelper.BuildUserId(_userProvider.CurrentUser!);
             var currentDateTime = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
 
-			var sourceTrainingTextsByAlignmentSetId = new Dictionary<Guid, List<string>>();
-
 			var sw = Stopwatch.StartNew();
 
             try
@@ -101,6 +99,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                 }
 
                 Logger.LogInformation($"Superset token count: {supersetTokens.Count}");
+				Logger.LogInformation($"Previously split token count: {previouslySplitTokensById.Count}");
+				Logger.LogInformation($"Unchanged, previously split-formed composite count: {unchangedSplitComposites.Count}");
 				Logger.LogInformation($"Word analysis count: {request.WordAnalyses.Count()}");
 
 				// For each word
@@ -152,8 +152,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 
 					var (
 							splitCompositeTokensByIncomingTokenId,
-							splitChildTokensByIncomingTokenId,
-							denormalizationDataForWord
+							splitChildTokensByIncomingTokenId
 						) = SplitTokensViaSplitInstructionsCommandHandler.SplitTokensIntoReplacements(
 						standaloneTokens,
 						replacementTokenInfos,
@@ -161,18 +160,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 						splitTokenDbCommands,
 						cancellationToken
 					);
-
-                    foreach (var kvp in denormalizationDataForWord)
-                    {
-                        if (sourceTrainingTextsByAlignmentSetId.TryGetValue(kvp.Key, out var alignmentSetTexts))
-                        {
-                            alignmentSetTexts.AddRange(kvp.Value);
-                        }
-                        else
-                        {
-                            sourceTrainingTextsByAlignmentSetId.Add(kvp.Key, kvp.Value);
-                        }
-                    }
 
 					// Select from previous WordAnalysis import composites where its source surface text matches the current word
 					// and its child token 'split match info' hash is different from the incoming one (meaning it needs to be resplit)
@@ -189,8 +176,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                             continue;
                         }
 
-                        splitTokenDbCommands.AddTokenCompositeChildrenToDelete(tc.TokenComposite);
                         tokensToResplit.Add(tc.SourceId, (previousSplitTokenSource, tc.TokenComposite));
+					}
+
+					if (tokensToResplit.Count != 0)
+					{
+						Logger.LogInformation($"\tWord anaylsis for {wordAnalysis.Word} includes re-splitting {tokensToResplit.Count} tokens");
 					}
 
 					var replacementsBySourceId =
@@ -201,7 +192,24 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 							cancellationToken
 						);
 
-                    // TODO:  transfer notes?
+                    foreach (var kvp in tokensToResplit)
+                    {
+                        if (replacementsBySourceId.TryGetValue(kvp.Key, out var replacements))
+                        {
+                            var previousTrainingText = kvp.Value.TokenComposite.TrainingText;
+
+							splitTokenDbCommands.AddTokenCompositeChildrenToDelete(kvp.Value.TokenComposite);
+
+							var replacedComposite = SplitTokensViaSplitInstructionsCommandHandler.AssignChildTokensToTokenComposite(
+                                kvp.Value.TokenComposite, 
+                                replacements.ReplacementTokens, 
+                                splitTokenDbCommands);
+							splitTokenDbCommands.AddAlignmentTrainingTextChange(kvp.Value.TokenComposite.SourceAlignments, previousTrainingText, replacedComposite.TrainingText);
+						}
+					}
+
+                    // Since first-time splits transfer note associations from the original token to its replacement composite(s)
+                    // and we are reusing those replacement composite(s), there shouldn't be anything we need to do here.  
 
 					if (standaloneTokens.Count > 500)
 					{
@@ -220,44 +228,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 				}
 
                 await splitTokenDbCommands.ExecuteBulkOperationsAsync(cancellationToken);
-
-				if (sourceTrainingTextsByAlignmentSetId.Count != 0)
-                {
-					using (var denormalizationTaskInsertCommand = AlignmentUtil.CreateAlignmentDenormalizationTaskInsertCommand(splitTokenDbCommands.Connection))
-                    {
-                        foreach (var kvp in sourceTrainingTextsByAlignmentSetId)
-                        {
-                            var sourceTexts = kvp.Value.Distinct().ToList();
-                            if (sourceTexts.Count <= 20)
-                            {
-                                foreach (var sourceText in sourceTexts)
-                                {
-                                    cancellationToken.ThrowIfCancellationRequested();
-
-                                    await AlignmentUtil.InsertAlignmentDenormalizationTaskAsync(new Models.AlignmentSetDenormalizationTask
-                                    {
-                                        Id = Guid.NewGuid(),
-                                        AlignmentSetId = kvp.Key,
-                                        SourceText = sourceText,
-                                    }, denormalizationTaskInsertCommand, cancellationToken);
-                                }
-                            }
-                            else
-                            {
-								cancellationToken.ThrowIfCancellationRequested();
-
-								await AlignmentUtil.InsertAlignmentDenormalizationTaskAsync(new Models.AlignmentSetDenormalizationTask
-								{
-									Id = Guid.NewGuid(),
-									AlignmentSetId = kvp.Key,
-									SourceText = null,
-								}, denormalizationTaskInsertCommand, cancellationToken);
-							}
-						}
-                    }
-                }
-
-				await splitTokenDbCommands.CommitTransactionAsync(cancellationToken);
+				await splitTokenDbCommands.CommitTransactionAsync(_mediator, cancellationToken);
 
 				Logger.LogInformation($"Total word analyses processed: {waCount} during elapsed time {sw.Elapsed}.  Child tokens created: {childTokensCreatedCount}, composite tokens created: {compositeTokensCreatedCount}");
 
@@ -274,12 +245,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                     message: ex.Message
                 );
             }
-
-            if (sourceTrainingTextsByAlignmentSetId.Count != 0)
-            {
-				Logger.LogInformation($"Firing alignment data denormalization event");
-				await _mediator.Publish(new AlignmentSetSourceTrainingTextsUpdatedEvent(sourceTrainingTextsByAlignmentSetId), cancellationToken);
-			}
 
 			return new RequestResult<Unit>();
 		}
