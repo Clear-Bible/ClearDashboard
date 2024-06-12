@@ -1,19 +1,14 @@
-﻿using ClearBible.Engine.Utils;
-using ClearDashboard.DAL.Alignment.Corpora;
+﻿using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Common;
-using ClearDashboard.DAL.Alignment.Features.Corpora;
-using ClearDashboard.DAL.Alignment.Features.Events;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 
 //USE TO ACCESS Vocabulary
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -66,7 +61,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                 var previouslySplitTokensById = await ProjectDbContext.Tokens
                     .Where(t => t.TokenizedCorpusId == request.TokenizedTextCorpusId.Id)
                     .Where(t => t.Deleted != null)
-                    .Where(t => t.Metadata.Any(m => m.Key == MetadatumKeys.WasSplit && m.Value == true.ToString()))
+                    .Where(t => t.Metadata.Any(m => m.Key == Models.MetadatumKeys.WasSplit && m.Value == true.ToString()))
                     .ToDictionaryAsync(t => t.Id, t => t, cancellationToken: cancellationToken);
 
                 var compositesFormedViaWordAnalysisImport = await ProjectDbContext.TokenComposites
@@ -78,18 +73,18 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 					.Include(t => t.TokenVerseAssociations.Where(a => a.Deleted == null))
 					.Where(t => t.TokenizedCorpusId == request.TokenizedTextCorpusId.Id)
                     .Where(t => t.Deleted == null)
-					.Where(t => t.Metadata.Any(m => m.Key == MetadatumKeys.SplitTokenSourceId && m.Value != null))
+					.Where(t => t.Metadata.Any(m => m.Key == Models.MetadatumKeys.SplitTokenSourceId && m.Value != null))
                     .ToListAsync(cancellationToken: cancellationToken);
 
-                var unchangedSplitComposites = new List<(Guid SourceId, string SourceSurfaceText, string SplitMatchInfoAsHash, TokenComposite TokenComposite)>();
+                var unchangedSplitComposites = new List<(Guid SourceId, string SourceSurfaceText, string SplitMatchInfoAsHash, Models.TokenComposite TokenComposite)>();
                 foreach (var tokenComposite in compositesFormedViaWordAnalysisImport)
                 {
-					var sourceId = Guid.Parse(tokenComposite.Metadata.Single(e => e.Key == MetadatumKeys.SplitTokenSourceId).Value!);
-					var sourceSurfaceText = tokenComposite.Metadata.SingleOrDefault(e => e.Key == MetadatumKeys.SplitTokenSourceSurfaceText)?.Value;
-					var initialSplitMatchInfo = tokenComposite.Metadata.SingleOrDefault(e => e.Key == MetadatumKeys.SplitTokenInitialChildren)?.Value;
+					var sourceId = Guid.Parse(tokenComposite.Metadata.Single(e => e.Key == Models.MetadatumKeys.SplitTokenSourceId).Value!);
+					var sourceSurfaceText = tokenComposite.Metadata.SingleOrDefault(e => e.Key == Models.MetadatumKeys.SplitTokenSourceSurfaceText)?.Value;
+					var initialSplitMatchInfo = tokenComposite.Metadata.SingleOrDefault(e => e.Key == Models.MetadatumKeys.SplitTokenInitialChildren)?.Value;
                     if (sourceSurfaceText is null || initialSplitMatchInfo is null)
                     {
-                        Logger.LogInformation($"Token composite '{tokenComposite.Id}' has a {nameof(MetadatumKeys.SplitTokenSourceId)} but is missing either {nameof(MetadatumKeys.SplitTokenSourceSurfaceText)} or {nameof(MetadatumKeys.SplitTokenInitialChildren)} from Metadatum...skipping");
+                        Logger.LogInformation($"Token composite '{tokenComposite.Id}' has a {nameof(Models.MetadatumKeys.SplitTokenSourceId)} but is missing either {nameof(Models.MetadatumKeys.SplitTokenSourceSurfaceText)} or {nameof(Models.MetadatumKeys.SplitTokenInitialChildren)} from Metadatum...skipping");
                         continue;
                     }
                     if (initialSplitMatchInfo == tokenComposite.GetSplitMatchInfoAsHash())
@@ -153,7 +148,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 					var (
 							splitCompositeTokensByIncomingTokenId,
 							splitChildTokensByIncomingTokenId
-						) = SplitTokensViaSplitInstructionsCommandHandler.SplitTokensIntoReplacements(
+						) = SplitTokenUtil.SplitTokensIntoReplacements(
 						standaloneTokens,
 						replacementTokenInfos,
 						false, // CreateParallelComposite
@@ -164,7 +159,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 					// Select from previous WordAnalysis import composites where its source surface text matches the current word
 					// and its child token 'split match info' hash is different from the incoming one (meaning it needs to be resplit)
 					var wordAnalysisLexemeHash = replacementTokenInfos.GetSplitMatchInfoAsHash();
-                    var tokensToResplit = new Dictionary<Guid, (DataAccessLayer.Models.Token OriginalToken, TokenComposite TokenComposite)>();
+                    var tokensToResplit = new Dictionary<Guid, (Models.Token OriginalToken, Models.TokenComposite TokenComposite)>();
 					foreach (var tc in unchangedSplitComposites
                         .Where(e => e.SourceSurfaceText == wordAnalysis.Word)
                         .Where(e => e.SplitMatchInfoAsHash != wordAnalysisLexemeHash)
@@ -185,7 +180,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 					}
 
 					var replacementsBySourceId =
-						SplitTokensViaSplitInstructionsCommandHandler.CreateTokenReplacements(
+						SplitTokenUtil.CreateTokenReplacements(
 							tokensToResplit.Select(e => e.Value.OriginalToken).ToList(),
 							replacementTokenInfos,
 							splitTokenDbCommands,
@@ -200,7 +195,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 
 							splitTokenDbCommands.AddTokenCompositeChildrenToDelete(kvp.Value.TokenComposite);
 
-							var replacedComposite = SplitTokensViaSplitInstructionsCommandHandler.AssignChildTokensToTokenComposite(
+							var replacedComposite = SplitTokenUtil.AssignChildTokensToTokenComposite(
                                 kvp.Value.TokenComposite, 
                                 replacements.ReplacementTokens, 
                                 splitTokenDbCommands);
