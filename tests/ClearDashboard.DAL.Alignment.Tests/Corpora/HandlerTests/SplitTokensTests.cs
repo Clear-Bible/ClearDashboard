@@ -28,6 +28,58 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests
 
 		[Fact]
 		[Trait("Category", "Handlers")]
+		public async void WordAnalysesImportFromTokenizedCorpus()
+		{
+			try
+			{
+				var textCorpus = TestDataHelpers.GetZZSurCorpus(new string[] { "GEN" });
+
+				// Create the corpus in the database:
+				var corpus = await Corpus.Create(Mediator!, false, "SUR", "SUR", "Standard", "2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f" /* zzSUR */);
+
+				// Create the TokenizedCorpus + Tokens in the database:
+				var tokenizedTextCorpus = await textCorpus.Create(
+					Mediator!,
+					corpus.CorpusId,
+					"SURWordAnalysesTest",
+					"LatinWordTokenizer");
+
+				// Check initial save values:
+				Assert.NotNull(tokenizedTextCorpus);
+
+                await tokenizedTextCorpus.ImportWordAnalyses(Mediator!, CancellationToken.None);
+
+				var externalWordAnalysesCommand = new GetExternalWordAnalysesQuery("2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f" /* zzSUR */);
+				var externalWordAnalysesResult = await Mediator.Send(externalWordAnalysesCommand);
+
+                var wordAnalyses = externalWordAnalysesResult.Data!.ToList();
+
+                // Change some of these to force a re-split
+                var waChanged = 0;
+                foreach (var d in wordAnalyses.Where(w => w.Lexemes.Count() == 2).Where(w => w.Lexemes.Last().Lemma.Length > 4))
+                {
+                    // take first two characters of 2nd lexeme and put at end of first lexeme
+                    var lexeme1 = d.Lexemes.First();
+                    var lexeme2 = d.Lexemes.Last();
+                    var charactersToMove = lexeme2.Lemma.Substring(0, 2);
+                    lexeme1.Lemma = $"{lexeme1.Lemma}{charactersToMove}";
+                    lexeme2.Lemma = lexeme2.Lemma.Substring(2);
+
+                    if (waChanged++ >= 10)
+                        break;
+                }
+
+				var importWordAnalysesCommand = new ImportWordAnalysesCommand(wordAnalyses, tokenizedTextCorpus.TokenizedTextCorpusId);
+				await Mediator.Send(importWordAnalysesCommand);
+			}
+			finally
+			{
+				//				await DeleteDatabaseContext();
+			}
+		}
+
+		[Fact]
+		[Trait("Category", "Handlers")]
 		public async void WordAnalysesImport()
         {
             try

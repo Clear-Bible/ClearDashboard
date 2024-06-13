@@ -214,7 +214,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
         public static DbCommand CreateTokenComponentInsertCommand(DbConnection connection)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "EngineTokenId", "TrainingText", "VerseRowId", "TokenizedCorpusId", "Discriminator", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "ExtendedProperties", "Metadata" };
+            var columns = new string[] { "Id", "EngineTokenId", "TrainingText", "VerseRowId", "TokenizedCorpusId", "Discriminator", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "ExtendedProperties", "Type", "Metadata" };
 
             DataUtil.ApplyColumnsToInsertCommand(command, typeof(Models.TokenComponent), columns);
 
@@ -275,7 +275,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             componentCmd.Parameters["@SubwordNumber"].Value = token.SubwordNumber;
             componentCmd.Parameters["@SurfaceText"].Value = token.SurfaceText;
             componentCmd.Parameters["@ExtendedProperties"].Value = token.ExtendedProperties != null ? token.ExtendedProperties : DBNull.Value;
+			componentCmd.Parameters["@Type"].Value = token.Type != null ? token.Type : DBNull.Value;
 			componentCmd.Parameters["@Metadata"].Value = JsonSerializer.Serialize(token.Metadata);
+
 			_ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
         public static async Task InsertTokenCompositeAsync(Models.TokenComposite tokenComposite, DbCommand componentCmd, CancellationToken cancellationToken)
@@ -293,6 +295,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             componentCmd.Parameters["@WordNumber"].Value = DBNull.Value;
             componentCmd.Parameters["@SubwordNumber"].Value = DBNull.Value;
             componentCmd.Parameters["@SurfaceText"].Value = tokenComposite.SurfaceText;
+			componentCmd.Parameters["@Type"].Value = tokenComposite.Type != null ? tokenComposite.Type : DBNull.Value;
 			componentCmd.Parameters["@Metadata"].Value = JsonSerializer.Serialize(tokenComposite.Metadata);
 			_ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }

@@ -11,7 +11,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common;
 
 public static class SplitTokenUtil
 {
-	public static (IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>) SplitTokensIntoReplacements(
+	public static (Dictionary<TokenId, IEnumerable<CompositeToken>>, Dictionary<TokenId, IEnumerable<Token>>) SplitTokensIntoReplacements(
 		List<Models.Token> tokensDb,
 		(string surfaceText, string trainingText, string? tokenType)[] replacementTokenInfos,
 		bool createParallelComposite,
@@ -19,6 +19,9 @@ public static class SplitTokenUtil
 		CancellationToken cancellationToken
 	)
 	{
+		if (tokensDb.Count == 0)
+			return ([], []);
+
 		var replacementsBySourceId =
 			CreateTokenReplacements(
 				tokensDb,
@@ -63,6 +66,9 @@ public static class SplitTokenUtil
 
 	public static Dictionary<Guid, (Models.Token SourceModelToken, List<Token> ReplacementTokens, List<Models.Token> ReplacementModelTokens)> CreateTokenReplacements(List<Models.Token> tokensDb, (string surfaceText, string trainingText, string? tokenType)[] replacementTokenInfos, SplitTokenDbCommands splitTokenDbCommands, CancellationToken cancellationToken)
 	{
+		if (tokensDb.Count == 0)
+			return [];
+
 		var currentDateTime = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
 
 		var replacementsBySourceId =
@@ -440,7 +446,7 @@ public static class SplitTokenUtil
 
 		compositeToken.SetSplitSourceId(tokenDb.Id);
 		compositeToken.SetSplitSourceSurfaceText(tokenDb.SurfaceText!);
-		compositeToken.SetSplitInitialChildren(replacementTokens);
+		compositeToken.SetSplitInitialChildren(replacementModelTokens);
 
 		var tokenComposite = BuildModelTokenComposite(
 			compositeToken,
@@ -450,6 +456,13 @@ public static class SplitTokenUtil
 		tokenComposite.ParallelCorpusId = parallelCorpusId;
 
 		splitTokenDbCommands.AddTokenComponentToInsert(tokenComposite);
+		splitTokenDbCommands.AddTokenCompositeTokenAssociationsToInsert(replacementTokens
+			.Select(e => new Models.TokenCompositeTokenAssociation
+			{
+				Id = Guid.NewGuid(),
+				TokenCompositeId = tokenComposite.Id,
+				TokenId = e.TokenId.Id
+			}));
 
 		return (tokenDb.Id, tokenComposite, compositeToken);
 	}

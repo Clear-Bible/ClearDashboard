@@ -8,6 +8,8 @@ using SIL.Machine.Corpora;
 using SIL.Scripture;
 using ClearDashboard.DAL.Alignment.Features.Translation;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DAL.Alignment.Features.Lexicon;
+using ClearDashboard.DAL.Alignment.Lexicon;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
@@ -129,6 +131,30 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed();
+        }
+
+        public async Task ImportWordAnalyses(IMediator mediator, CancellationToken token = default)
+        {
+            var wordAnalyses = await GetExternalWordAnalysesAsync(mediator, token);
+            if (wordAnalyses.Any())
+            {
+				var importWordAnalysesCommand = new ImportWordAnalysesCommand(wordAnalyses, TokenizedTextCorpusId);
+				await mediator.Send(importWordAnalysesCommand);
+			}
+		}
+
+        public async Task<IEnumerable<WordAnalysis>> GetExternalWordAnalysesAsync(IMediator mediator, CancellationToken token = default)
+        {
+            var paratextProjectId = TokenizedTextCorpusId?.CorpusId?.ParatextGuid;
+            if (paratextProjectId is not null)
+            {
+                var externalWordAnalysesCommand = new GetExternalWordAnalysesQuery(paratextProjectId);
+                var externalWordAnalysesResult = await mediator.Send(externalWordAnalysesCommand, token);
+
+                return externalWordAnalysesResult.Data!;
+            }
+
+            return Enumerable.Empty<WordAnalysis>();
         }
 
         public static async Task<IEnumerable<TokenizedTextCorpusId>> GetAllTokenizedCorpusIds(IMediator mediator, CorpusId? corpusId)

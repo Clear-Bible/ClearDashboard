@@ -612,7 +612,7 @@ namespace ClearDashboard.DAL.Alignment.Features
 			compositeToken.EnsureModelTokenMetadatum(MetadatumKeys.SplitTokenSourceSurfaceText, surfaceText);
 		}
 
-		public static void SetSplitInitialChildren(this CompositeToken compositeToken, List<ClearBible.Engine.Corpora.Token> childTokens)
+		public static void SetSplitInitialChildren(this CompositeToken compositeToken, List<Models.Token> childTokens)
         {
             compositeToken.EnsureModelTokenMetadatum(MetadatumKeys.SplitTokenInitialChildren, childTokens.GetSplitMatchInfoAsHash());
 		}
@@ -692,22 +692,6 @@ namespace ClearDashboard.DAL.Alignment.Features
             return false;
         }
 
-		public static bool HasSplitTokenInitialChildrenMatch(this CompositeToken compositeToken, IEnumerable<ClearBible.Engine.Corpora.Token> childTokens)
-		{
-			if (compositeToken.HasMetadatum(MetadatumKeys.ModelTokenMetadata))
-			{
-				var metadatum = compositeToken.GetMetadatum<List<Models.Metadatum>>(MetadatumKeys.ModelTokenMetadata);
-				var splitTokenInitialChildren = metadatum.Where(e => e.Key == MetadatumKeys.SplitTokenInitialChildren).FirstOrDefault();
-
-				if (splitTokenInitialChildren != null && splitTokenInitialChildren.Value is not null)
-				{
-                    return (childTokens.GetSplitMatchInfoAsHash() == splitTokenInitialChildren.Value);
-				}
-			}
-
-			return false;
-		}
-
 		public static string GetSplitMatchInfoAsHash(this (string surfaceText, string trainingText, string? tokenType)[] wordAnalysisLexemes)
 		{
 			return string.Join('|', wordAnalysisLexemes.Select(e => $"{e.tokenType}:{e.surfaceText}")).ToMD5String();
@@ -723,12 +707,7 @@ namespace ClearDashboard.DAL.Alignment.Features
 
 		private static string GetSplitMatchInfoAsHash(this IEnumerable<Models.Token> childTokens)
 		{
-			return string.Join('|', childTokens.Select(e => $"{e.Type}:{e.SurfaceText}")).ToMD5String();
-		}
-
-		private static string GetSplitMatchInfoAsHash(this IEnumerable<ClearBible.Engine.Corpora.Token> childTokens)
-		{
-			return string.Join('|', childTokens.Select(e => $"{e.TokenType}:{e.SurfaceText}")).ToMD5String();
+			return string.Join('|', childTokens.OrderBy(e => ulong.Parse(e.EngineTokenId!)).Select(e => $"{e.Type}:{e.SurfaceText}")).ToMD5String();
 		}
 
 		public static string ToMD5String(this string sourceString)

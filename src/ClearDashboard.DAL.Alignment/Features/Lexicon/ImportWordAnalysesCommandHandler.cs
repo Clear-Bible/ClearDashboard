@@ -56,6 +56,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 					.Include(t => t.TokenVerseAssociations.Where(a => a.Deleted == null))
 					.Where(t => t.TokenizedCorpusId == request.TokenizedTextCorpusId.Id)
 					.Where(t => t.Deleted == null)
+                    .Where(t => t.TokenCompositeTokenAssociations.Count == 0)
 					.ToListAsync(cancellationToken: cancellationToken);
 
                 var previouslySplitTokensById = await ProjectDbContext.Tokens
@@ -91,6 +92,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                     {
                         unchangedSplitComposites.Add((sourceId, sourceSurfaceText, initialSplitMatchInfo, tokenComposite));
                     }
+                    else
+                    {
+                        Logger.LogWarning($"Token composite '{tokenComposite.Id}' intial split match info does not match {tokenComposite.GetSplitMatchInfoAsHash()} {string.Join(",", tokenComposite.Tokens.Select(t => t.Type))}");
+                    }
                 }
 
                 Logger.LogInformation($"Superset token count: {supersetTokens.Count}");
@@ -103,14 +108,16 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                 var childTokensCreatedCount = 0;
                 var compositeTokensCreatedCount = 0;
 
-				foreach (var wordAnalysis in request.WordAnalyses)
+                foreach (var wordAnalysis in request.WordAnalyses)
                 {
+                    //if (childTokensCreatedCount > 300) break;
+
                     Logger.LogInformation($"WordAnalysis for {wordAnalysis.Word}:");
 
-					//var splitInstructions = ToSplitInstructions(wordAnalysis, Logger);
+                    //var splitInstructions = ToSplitInstructions(wordAnalysis, Logger);
                     CheckWordAnalysis(wordAnalysis, Logger);
 
-					var replacementTokenInfos = wordAnalysis.Lexemes
+                    var replacementTokenInfos = wordAnalysis.Lexemes
                         .Select(e => (surfaceText: e.Lemma!, trainingText: e.Lemma!, tokenType: e.Type))
                         .ToArray();
 
@@ -128,39 +135,44 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                         foreach (var t in standaloneTokens)
                         {
                             t.Type = replacementTokenInfos[0].tokenType;
-							splitTokenDbCommands.AddTokenComponentToUpdateType(t);
-						}
-						waCount++;
-						continue;
+                            splitTokenDbCommands.AddTokenComponentToUpdateType(t);
+                        }
+                        waCount++;
+                        continue;
                     }
                     else if (replacementTokenInfos.Count() > 2)
                     {
                         Logger.LogInformation($"\tWord anaylsis for {wordAnalysis.Word} breaks up word into {replacementTokenInfos.Count()} parts");
-					}
+                    }
 
-					Stopwatch? frequentWordStopwatch = null;
-					if (standaloneTokens.Count > 500)
-					{
-						Logger.LogInformation($"\tLarge number of Token matches for word {wordAnalysis.Word}:  {standaloneTokens.Count}");
-						frequentWordStopwatch = Stopwatch.StartNew();
-					}
+                    Stopwatch? frequentWordStopwatch = null;
+                    if (standaloneTokens.Count > 500)
+                    {
+                        Logger.LogInformation($"\tLarge number of Token matches for word {wordAnalysis.Word}:  {standaloneTokens.Count}");
+                        frequentWordStopwatch = Stopwatch.StartNew();
+                    }
 
-					var (
-							splitCompositeTokensByIncomingTokenId,
-							splitChildTokensByIncomingTokenId
-						) = SplitTokenUtil.SplitTokensIntoReplacements(
-						standaloneTokens,
-						replacementTokenInfos,
-						false, // CreateParallelComposite
-						splitTokenDbCommands,
-						cancellationToken
-					);
+                    if (standaloneTokens.Count != 0)
+                    {
 
-					// Select from previous WordAnalysis import composites where its source surface text matches the current word
-					// and its child token 'split match info' hash is different from the incoming one (meaning it needs to be resplit)
-					var wordAnalysisLexemeHash = replacementTokenInfos.GetSplitMatchInfoAsHash();
+                    }
+
+                    var (
+                            splitCompositeTokensByIncomingTokenId,
+                            splitChildTokensByIncomingTokenId
+                        ) = SplitTokenUtil.SplitTokensIntoReplacements(
+                        standaloneTokens,
+                        replacementTokenInfos,
+                        false, // CreateParallelComposite
+                        splitTokenDbCommands,
+                        cancellationToken
+                    );
+
+                    // Select from previous WordAnalysis import composites where its source surface text matches the current word
+                    // and its child token 'split match info' hash is different from the incoming one (meaning it needs to be resplit)
+                    var wordAnalysisLexemeHash = replacementTokenInfos.GetSplitMatchInfoAsHash();
                     var tokensToResplit = new Dictionary<Guid, (Models.Token OriginalToken, Models.TokenComposite TokenComposite)>();
-					foreach (var tc in unchangedSplitComposites
+                    foreach (var tc in unchangedSplitComposites
                         .Where(e => e.SourceSurfaceText == wordAnalysis.Word)
                         .Where(e => e.SplitMatchInfoAsHash != wordAnalysisLexemeHash)
                         .Select(e => (e.SourceId, e.TokenComposite)))
@@ -172,36 +184,36 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                         }
 
                         tokensToResplit.Add(tc.SourceId, (previousSplitTokenSource, tc.TokenComposite));
-					}
+                    }
 
-					if (tokensToResplit.Count != 0)
-					{
-						Logger.LogInformation($"\tWord anaylsis for {wordAnalysis.Word} includes re-splitting {tokensToResplit.Count} tokens");
-					}
-
-					var replacementsBySourceId =
-						SplitTokenUtil.CreateTokenReplacements(
-							tokensToResplit.Select(e => e.Value.OriginalToken).ToList(),
-							replacementTokenInfos,
-							splitTokenDbCommands,
-							cancellationToken
-						);
-
-                    foreach (var kvp in tokensToResplit)
+                    if (tokensToResplit.Count != 0)
                     {
-                        if (replacementsBySourceId.TryGetValue(kvp.Key, out var replacements))
+                        Logger.LogInformation($"\tWord anaylsis for {wordAnalysis.Word} includes re-splitting {tokensToResplit.Count} tokens");
+
+                        var replacementsBySourceId =
+                            SplitTokenUtil.CreateTokenReplacements(
+                                tokensToResplit.Select(e => e.Value.OriginalToken).ToList(),
+                                replacementTokenInfos,
+                                splitTokenDbCommands,
+                                cancellationToken
+                            );
+
+                        foreach (var kvp in tokensToResplit)
                         {
-                            var previousTrainingText = kvp.Value.TokenComposite.TrainingText;
+                            if (replacementsBySourceId.TryGetValue(kvp.Key, out var replacements))
+                            {
+                                var previousTrainingText = kvp.Value.TokenComposite.TrainingText;
 
-							splitTokenDbCommands.AddTokenCompositeChildrenToDelete(kvp.Value.TokenComposite);
+                                splitTokenDbCommands.AddTokenCompositeChildrenToDelete(kvp.Value.TokenComposite);
 
-							var replacedComposite = SplitTokenUtil.AssignChildTokensToTokenComposite(
-                                kvp.Value.TokenComposite, 
-                                replacements.ReplacementTokens, 
-                                splitTokenDbCommands);
-							splitTokenDbCommands.AddAlignmentTrainingTextChange(kvp.Value.TokenComposite.SourceAlignments, previousTrainingText, replacedComposite.TrainingText);
-						}
-					}
+                                var replacedComposite = SplitTokenUtil.AssignChildTokensToTokenComposite(
+                                    kvp.Value.TokenComposite,
+                                    replacements.ReplacementTokens,
+                                    splitTokenDbCommands);
+                                splitTokenDbCommands.AddAlignmentTrainingTextChange(kvp.Value.TokenComposite.SourceAlignments, previousTrainingText, replacedComposite.TrainingText);
+                            }
+                        }
+                    }
 
                     // Since first-time splits transfer note associations from the original token to its replacement composite(s)
                     // and we are reusing those replacement composite(s), there shouldn't be anything we need to do here.  
