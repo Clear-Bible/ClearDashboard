@@ -898,6 +898,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>ប្រសិនបើធីក វានឹងផ្លាស់ប្តូរការកើតឡើងដែលមិនកំណត់ទាំងអស់នៃពាក្យនេះ។</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>ផ្លាស់ប្តូរការកើតឡើងដែលមិនបានកំណត់ទាំងអស់។</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>ប្រសិនបើធីក វានឹងផ្លាស់ប្តូរការកើតឡើងដែលមិនកំណត់ទាំងអស់នៃពាក្យនេះ។</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>ភាពស្របគ្នា។</value>
   </data>
@@ -919,6 +925,12 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>បញ្ចូលភាពរលោងថ្មី។</value>
   </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>រលោង</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>បញ្ជីរលោង</value>
+  </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>លេម៉ា</value>
   </data>
@@ -934,6 +946,9 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Lexeme សម្រាប់​មាន​រួច​ហើយ​សម្រាប់ lemma</value>
   </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>ការប្រកួត</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>អត្ថន័យ៖</value>
   </data>
@@ -941,13 +956,19 @@
     <value>រលោងថ្មី។</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>ដកដែនសុភាសិតនេះចេញពីអត្ថន័យនេះ។</value>
+    <value>ដក​ដែន​អត្ថន័យ​នេះ​ចេញ​ពី​អត្ថន័យ​នេះ។</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
     <value>យកទម្រង់ lexical នេះចេញពី lexical នេះ។</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>កំណត់ភាពរលោងសម្រាប់</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>មិនបានកំណត់</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>ផ្ទៀងផ្ទាត់</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>និង</value>
@@ -1646,7 +1667,7 @@
     <value>ជ្រើសរើសក្បួនដោះស្រាយ SMT ដើម្បីហ្វឹកហាត់</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>បន្ថែមការយល់ព្រមជាដុំដើម្បីមើល</value>
+    <value>បន្ថែមការយល់ព្រមជាដុំទៅមើល</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>បន្ថែមទៅទិដ្ឋភាព</value>

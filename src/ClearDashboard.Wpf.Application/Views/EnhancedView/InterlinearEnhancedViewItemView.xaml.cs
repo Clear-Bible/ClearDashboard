@@ -43,7 +43,7 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
             Task.Run(() => TranslationSetAsync(routedEventArgs as TranslationEventArgs ?? throw new InvalidOperationException()).GetAwaiter());
         }
 
-        public void TranslationSet(object sender, RoutedEventArgs routedEventArgs)
+        public void OnTranslationSet(object sender, RoutedEventArgs routedEventArgs)
         {
             Task.Run(() => TranslationSetAsync(routedEventArgs as TranslationEventArgs ?? throw new InvalidOperationException()).GetAwaiter());
         }
@@ -68,7 +68,7 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
         }
 
 
-        public void GlossSet(object sender, RoutedEventArgs routedEventArgs)
+        public void OnGlossSet(object sender, RoutedEventArgs routedEventArgs)
         {
             Task.Run(() => GlossSetAsync(routedEventArgs as TranslationEventArgs ?? throw new InvalidOperationException()).GetAwaiter());
         }
@@ -86,6 +86,7 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
                     if (args.InterlinearDisplay != null)
                     {
                         var dialogViewModel = args.InterlinearDisplay.Resolve<LexiconDialogViewModel>();
+                        dialogViewModel.Mode = LexiconDialogMode.SetGloss;
                         dialogViewModel.TokenDisplay = args.TokenDisplay!;
                         dialogViewModel.InterlinearDisplay = args.InterlinearDisplay;
                         _ = await args.InterlinearDisplay.WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());

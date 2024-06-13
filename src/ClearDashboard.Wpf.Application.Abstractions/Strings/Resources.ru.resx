@@ -635,7 +635,7 @@
     <value>Добавить выравнивание?</value>
   </data>
   <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>Выровнять "{0}" по "{1}"?</value>
+    <value>Выровнять '{0}' по '{1}'?</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
     <value>Выравнивание</value>
@@ -898,6 +898,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Если этот флажок установлен, это изменит все неустановленные вхождения этого слова.</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>Изменить все неустановленные вхождения</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>Если этот флажок установлен, это изменит все неустановленные вхождения этого слова.</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Согласие</value>
   </data>
@@ -919,6 +925,12 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Введите новый блеск</value>
   </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>Блеск</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>Список блесков</value>
+  </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Лемма</value>
   </data>
@@ -934,6 +946,9 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Лексема для леммы уже существует</value>
   </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>Матчи</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Значения:</value>
   </data>
@@ -948,6 +963,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Установите блеск для</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>Сброшено</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>Проверено</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>И</value>
@@ -1031,7 +1052,7 @@
     <value>Добавить цель в качестве перевода для...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Найдите лексемы, у которых есть один или несколько переводов, соответствующих целевому.</value>
+    <value>Найдите лексемы, у которых есть один или несколько переводов, соответствующих целевому значению.</value>
   </data>
   <data name="LexiconImport_Checked" xml:space="preserve">
     <value>Проверено</value>
@@ -1394,7 +1415,7 @@
     <value>Добавить Джот</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Добавить новый джот </value>
+    <value>Добавить новую запись </value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Тело</value>
@@ -1409,7 +1430,7 @@
     <value>В соответствии с вашими разрешениями на проект Paratext, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Фильтровать по стихам</value>
+    <value>Фильтровать по стиху</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Фильтры</value>
@@ -1442,7 +1463,7 @@
     <value>Вы хотите создать ярлык:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
-    <value>и свяжите его с группой меток:</value>
+    <value>и свяжем его с группой меток:</value>
   </data>
   <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
     <value>Вы хотите удалить ярлык:</value>
@@ -1550,7 +1571,7 @@
     <value>Положение дел</value>
   </data>
   <data name="Notes_OpenConfirmation" xml:space="preserve">
-    <value>Пометить эти записи как открытые?</value>
+    <value>Отметьте эти Jots как открытые?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Часть</value>
@@ -1856,7 +1877,7 @@
     <value>Примечания</value>
   </data>
   <data name="Pins_Occurences" xml:space="preserve">
-    <value>Случаи</value>
+    <value>События</value>
   </data>
   <data name="Pins_Origin" xml:space="preserve">
     <value>Источник</value>
@@ -2537,7 +2558,7 @@
     <value>Обновить и добавить новое</value>
   </data>
   <data name="UseDefaults" xml:space="preserve">
-    <value>Создать, используя значения по умолчанию</value>
+    <value>Создать, используя настройки по умолчанию</value>
   </data>
   <data name="Windows_AlignmentTool" xml:space="preserve">
     <value>Инструмент выравнивания</value>

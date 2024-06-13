@@ -12,6 +12,7 @@
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
+    xmlns:controls="clr-namespace:DotNetKit.Windows.Controls;assembly=DotNetKit.Wpf.AutoCompleteComboBox"
     x:Name="SplitTokenDialog"
     d:DataContext="{d:DesignInstance Type=viewModels:SplitTokenDialogViewModel}"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -81,7 +82,7 @@
         </StackPanel>
 
         <materialDesign:Card Grid.Row="3" Margin="20, 10">
-            <ListView Margin="5" >
+            <ListView Margin="5" x:Name="SplitTokenListView">
               
                 <ListView.View>
                 <GridView>
@@ -98,10 +99,11 @@
                             <DataTemplate>
                                 <ComboBox
                                     x:Name="TokenTypeComboBox"
-                                    MinWidth="60"
+                                    MinWidth="70"
                                     Margin="5,0,5,3"
                                     ItemsSource="{x:Static models:TokenTypes.All}"
                                     SelectedItem="{Binding TokenType, Mode=TwoWay}"
+                                    
                                    />
                                 </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -130,17 +132,42 @@
                     <GridViewColumn Header="{helpers:Localization TokenSplitting_Grammar}" Width="Auto">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox
+                                <!--<TextBox
                                     Style="{StaticResource ListViewTextBoxStyle}"
                                     Text="{Binding Grammar}" 
-                                    MinWidth="60"/>
-                            </DataTemplate>
+                                    MinWidth="60"/>-->
+
+                                    <controls:AutoCompleteComboBox
+                                    x:Name="GrammarComboBox"
+                                    Margin="5,0,5,3"
+                                    MinWidth="90"
+                                    ItemsSource="{Binding ElementName='SplitTokenListView', Path='DataContext.GrammarSuggestions' }"
+                                    SelectedItem="{Binding Grammar, Mode=TwoWay}"
+                                    Style="{StaticResource MaterialDesignComboBox}"
+                                    TextSearch.TextPath="ShortName">
+                                        <controls:AutoCompleteComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Vertical">
+                                                    <TextBlock FontSize="12" Text="{Binding ShortName}" />
+                                                    <TextBlock FontSize="24" Text="{Binding Description}" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </controls:AutoCompleteComboBox.ItemTemplate>
+                                        <controls:AutoCompleteComboBox.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <VirtualizingStackPanel />
+                                            </ItemsPanelTemplate>
+                                        </controls:AutoCompleteComboBox.ItemsPanel>
+                                    </controls:AutoCompleteComboBox>
+                                </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                 </GridView>
             </ListView.View>
 
-            <!--<ListView.ItemContainerStyle>
+               
+
+                <!--<ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Center" />
                 </Style>

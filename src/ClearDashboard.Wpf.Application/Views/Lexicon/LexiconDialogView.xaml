@@ -72,7 +72,8 @@
             TranslationFontFamily="{Binding TargetFontFamily}"
             TranslationFontSize="15"
             TranslationFontStyle="Normal"
-            TranslationMargin="0,0,0,0">
+            TranslationMargin="0,0,0,0"
+            Visibility="{Binding IsAddLexemeMode, Converter={StaticResource BooleanToVisibilityConverter}}">
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="LexemeAdded">
                     <b:CallMethodAction MethodName="OnLexemeAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gloss:GlossView}}, Path=DataContext}" />
@@ -125,7 +126,7 @@
             FontFamily="{StaticResource ClearDashboardFont}"
             FontSize="16"
             FontWeight="SemiBold"
-            Text="{helpers:Localization Lexicon_Concordance}" />
+            Text="{helpers:Localization Lexicon_GlossList}" />
 
         <lexiconControls:ConcordanceDisplay
             x:Name="ConcordanceDisplay"
@@ -158,9 +159,11 @@
                 x:Name="ApplyAllCheckbox"
                 Margin="10,20,0,20"
                 FontSize="13"
-                IsChecked="{Binding ApplyToAll}">
-                Change all unset occurrences
-                <CheckBox.ToolTip>If checked, this will change all unset occurrences of this word</CheckBox.ToolTip>
+                IsChecked="{Binding ApplyToAll}"
+                Content="{helpers:Localization Lexicon_ChangeAllUnsetOccurrences}">
+                <CheckBox.ToolTip >
+                    <ToolTip Content="{helpers:Localization Lexicon_ChangeAllUnsetOccurrencesToolTip}"></ToolTip>
+                </CheckBox.ToolTip>
             </CheckBox>
         </StackPanel>
         <StackPanel

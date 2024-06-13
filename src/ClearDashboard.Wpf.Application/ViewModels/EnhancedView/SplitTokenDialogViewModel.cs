@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
@@ -10,7 +11,8 @@ using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
-using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DataAccessLayer.Features.Grammar;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Infrastructure;
@@ -18,6 +20,7 @@ using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 // ReSharper disable UnusedMember.Global
 
@@ -30,6 +33,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public BindableCollection<SplitInstructionViewModel> SplitInstructionsViewModels { get; private set; } = new();
 
+        public BindableCollection<Grammar> GrammarSuggestions { get; private set; } = new();
+
         //private SplitInstructions? _splitInstructions;
 
         public SplitInstructionsViewModel SplitInstructionsViewModel
@@ -39,7 +44,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         public List<KeyValuePair<SplitTokenPropagationScope, string>> PropagationOptions { get; } = new();
-        public SplitTokenPropagationScope SelectedPropagationOption { get; set; } = SplitTokenPropagationScope.None;
+        public SplitTokenPropagationScope SelectedPropagationOption { get; set; } = SplitTokenPropagationScope.All;
 
         private FontFamily? _tokenFontFamily;
         public FontFamily? TokenFontFamily
@@ -210,6 +215,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 OnUIThread(() => ProgressBarVisibility = Visibility.Collapsed);
                 await TryCloseAsync(true);
             }
+        }
+
+        protected override async  Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            var results = await Mediator!.Send(new GetGrammarSuggestionsQuery(ProjectManager!.CurrentProject!.ProjectName!), cancellationToken);
+            if (results is { Success: true, HasData: true })
+            {
+                GrammarSuggestions = new BindableCollection<Grammar>(results.Data);
+            }
+
+            await base.OnActivateAsync(cancellationToken);
         }
 
         public async void CancelSplit()

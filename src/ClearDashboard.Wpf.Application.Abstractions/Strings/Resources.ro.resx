@@ -611,7 +611,7 @@
     <value>Șterge</value>
   </data>
   <data name="Delete_Project" xml:space="preserve">
-    <value>Ștergeți proiectul</value>
+    <value>Șterge proiectul</value>
   </data>
   <data name="Delete_Project_Confirmation" xml:space="preserve">
     <value>Sigur doriți să ștergeți acest proiect?</value>
@@ -898,6 +898,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Dacă este bifată, aceasta va schimba toate aparițiile nesetate ale acestui cuvânt</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>Modificați toate aparițiile nesetate</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>Dacă este bifată, aceasta va schimba toate aparițiile nesetate ale acestui cuvânt</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Concordanţă</value>
   </data>
@@ -908,16 +914,22 @@
     <value>Ștergeți acest lexem?</value>
   </data>
   <data name="Lexicon_DeleteMeaning" xml:space="preserve">
-    <value>Șterge acest sens</value>
+    <value>Ștergeți acest sens</value>
   </data>
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Ștergeți această traducere</value>
   </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
-    <value>Introduceți o nouă traducere pentru</value>
+    <value>Introdu o nouă traducere pentru</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Introduceți un nou luciu</value>
+  </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>Luciu</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>Lista lucioasă</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lema</value>
@@ -934,6 +946,9 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Un lexem pentru există deja pentru lemă</value>
   </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>Chibrituri</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Semnificatii:</value>
   </data>
@@ -948,6 +963,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Setați un luciu pentru</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>Dezactivat</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>Verificat</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Și</value>
@@ -1031,7 +1052,7 @@
     <value>Adăugați ținta ca traducere pentru...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Găsiți lexeme care au una sau mai multe traduceri care se potrivesc țintei</value>
+    <value>Găsiți lexeme care au una sau mai multe traduceri care se potrivesc cu destinația</value>
   </data>
   <data name="LexiconImport_Checked" xml:space="preserve">
     <value>Verificat</value>
@@ -1565,7 +1586,7 @@
     <value>Selectați etichetele de eliminat din grupul de etichete</value>
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
-    <value>Notă: aceste etichete vor apărea sub grupul de etichete: Nici unul</value>
+    <value>Notă: aceste etichete vor apărea sub grupul de etichete: Niciuna</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>Trimiți aceste note către Paratext?</value>
@@ -1628,13 +1649,13 @@
     <value>Algoritmul de aliniere a cuvintelor mașinii</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Modelul simetric al trenului?</value>
+    <value>Tren model simetrizat?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>Tren</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Alinierea cuvintelor Train Machine</value>
+    <value>Aliniere de cuvinte a mașinii de tren</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Setați maparea versurilor între corpurile paralelizate</value>
@@ -1922,7 +1943,7 @@
     <value>Nu puteți șterge acel proiect, o altă aplicație încă îl folosește.</value>
   </data>
   <data name="ProjectPicker_DeleteProject" xml:space="preserve">
-    <value>Ștergeți proiectul</value>
+    <value>Șterge proiectul</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
     <value>Activați selecția cărților</value>

@@ -898,6 +898,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>ምልክት ካደረጉ፣ ይህ ሁሉንም የዚህ ቃል ያልተዘጋጁ ክስተቶችን ይለውጣል</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>ሁሉንም ያልተዘጋጁ ክስተቶች ይቀይሩ</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>ምልክት ካደረጉ፣ ይህ ሁሉንም የዚህ ቃል ያልተዘጋጁ ክስተቶችን ይለውጣል</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>ኮንኮርዳንስ</value>
   </data>
@@ -919,6 +925,12 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>አዲስ አንጸባራቂ አስገባ</value>
   </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>አንጸባራቂ</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>አንጸባራቂ ዝርዝር</value>
+  </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>ለማ</value>
   </data>
@@ -934,6 +946,9 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>ለለማ አስቀድሞ ሌክስሜ አለ።</value>
   </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>ግጥሚያዎች</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>ትርጉሞች፡-</value>
   </data>
@@ -948,6 +963,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>አንጸባራቂ አዘጋጅ ለ</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>አልተዋቀረም።</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>የተረጋገጠ</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>እና</value>
@@ -1943,7 +1964,7 @@
     <value>የአኪ ግሪክ መጽሐፍ ቅዱሳዊ ጽሑፎችን ይጨምር?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
-    <value>የብኪ የዕብራይስጥ መጽሐፍ ቅዱሳዊ ጽሑፎችን ያካትቱ?</value>
+    <value>የብኪ የዕብራይስጥ መጽሐፍ ቅዱሳዊ ጽሑፎችን ይጨምራል?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>የትብብር ፕሮጀክቶችን ያስተዳድሩ</value>
@@ -2300,7 +2321,7 @@
     <value>አሰላለፍ አርትዖትን አንቃ</value>
   </data>
   <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
-    <value>በሙከራ ቡድን ውስጥ የውጭ ፓራቴክስት ማስታወሻዎችን አንቃ</value>
+    <value>በሙከራ ቡድን ውስጥ የውጪ ፓራቴክስት ማስታወሻዎችን አንቃ</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
     <value>የውጭ ፓራቴክስት ማስታወሻዎችን አንቃ</value>

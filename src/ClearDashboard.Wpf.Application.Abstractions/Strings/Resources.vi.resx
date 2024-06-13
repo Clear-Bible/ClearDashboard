@@ -677,7 +677,7 @@
     <value>Tham gia Token</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Tham gia Token cho cặp ngôn ngữ</value>
+    <value>Mã thông báo tham gia cho cặp ngôn ngữ</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>Đánh dấu căn chỉnh là 'Không hợp lệ'</value>
@@ -898,6 +898,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Nếu được chọn, điều này sẽ thay đổi tất cả các lần xuất hiện chưa được đặt của từ này</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>Thay đổi tất cả các lần xuất hiện chưa được đặt</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>Nếu được chọn, điều này sẽ thay đổi tất cả các lần xuất hiện chưa được đặt của từ này</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Sự phù hợp</value>
   </data>
@@ -919,11 +925,17 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Nhập độ bóng mới</value>
   </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>Độ bóng</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>Danh sách bóng</value>
+  </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>bổ đề</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
-    <value>Bổ đề/Dạng thức:</value>
+    <value>Bổ đề/Dạng:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
     <value>Bổ đề cho từ vựng mới:</value>
@@ -933,6 +945,9 @@
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Một từ vựng đã tồn tại cho bổ đề</value>
+  </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>Diêm</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Ý nghĩa:</value>
@@ -948,6 +963,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Đặt độ bóng cho</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>Bỏ đặt</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>Đã xác minh</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Và</value>
@@ -1049,7 +1070,7 @@
     <value>Ngôn ngữ:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
-    <value>Lexeme hoặc mẫu phù hợp</value>
+    <value>Từ vựng hoặc mẫu phù hợp</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
     <value>Không còn bản ghi nào để nhập.</value>
@@ -1076,7 +1097,7 @@
     <value>Từ mục tiêu</value>
   </data>
   <data name="LexiconImport_Title" xml:space="preserve">
-    <value>Nhập từ vựng</value>
+    <value>Nhập từ điển</value>
   </data>
   <data name="LexiconImport_TranslationMatches" xml:space="preserve">
     <value>Trận đấu dịch</value>
@@ -1142,7 +1163,7 @@
     <value>Sở thích</value>
   </data>
   <data name="MainView_QuickNew" xml:space="preserve">
-    <value>Mới nhanh</value>
+    <value>Nhanh chóng Mới</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Có sẵn các thay đổi cộng tác</value>
@@ -1790,7 +1811,7 @@
     <value>Nghiên CứuKinh ThánhBổ Sung</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Đi đến Paratext và chuyển đổi dự án.  Dự án Paratext hiện được kết nối với plugin ClearDashboard không giống với kho văn bản trong dự án ClearDashboard này.</value>
+    <value>Đi tới Paratext và chuyển đổi dự án.  Dự án Paratext hiện được kết nối với plugin ClearDashboard không giống với kho văn bản trong dự án ClearDashboard này.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Mục tiêu</value>
@@ -1799,7 +1820,7 @@
     <value>Chuyển ngữHướng dẫn sử dụng</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Chuyển ngữVới Bộ mã hóa</value>
+    <value>Chuyển ngữVớiBộ mã hóa</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>không xác định</value>
@@ -1814,7 +1835,7 @@
     <value>Phóng to nội dung</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>Thu nhỏ khỏi nội dung</value>
+    <value>Thu nhỏ nội dung</value>
   </data>
   <data name="PHM" xml:space="preserve">
     <value>PHM</value>
@@ -2201,7 +2222,7 @@
     <value>Thánh vịnh</value>
   </data>
   <data name="ProperCase_Revelation" xml:space="preserve">
-    <value>Khải Huyền</value>
+    <value>Khải huyền</value>
   </data>
   <data name="ProperCase_Romans" xml:space="preserve">
     <value>người La Mã</value>
@@ -2378,7 +2399,7 @@
     <value>Hiển thị Chế độ xem mở rộng trên màn hình khác với Trang tổng quan</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Đối với các hệ thống có ba màn hình trở lên, hãy hiển thị Chế độ xem mở rộng trên màn hình thứ ba</value>
+    <value>Đối với hệ thống có ba màn hình trở lên, hãy hiển thị Chế độ xem mở rộng trên màn hình thứ ba</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Bộ sưu tập văn bản</value>
@@ -2432,7 +2453,7 @@
     <value>Tôi không thể hoàn thành nhiệm vụ</value>
   </data>
   <data name="SlackMessageView_Combo3" xml:space="preserve">
-    <value>Tôi đã hoàn thành một nhiệm vụ nhưng nó rất khó khăn</value>
+    <value>Tôi đã hoàn thành một nhiệm vụ nhưng nó rất khó</value>
   </data>
   <data name="SlackMessageView_Combo4" xml:space="preserve">
     <value>Tôi muốn làm...</value>

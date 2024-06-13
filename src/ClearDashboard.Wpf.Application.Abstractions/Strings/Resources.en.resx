@@ -898,6 +898,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>If checked, this will change all unset occurrences of this word</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>Change all unset occurrences</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>If checked, this will change all unset occurrences of this word</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Concordance</value>
   </data>
@@ -919,6 +925,12 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Enter a new gloss</value>
   </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>Gloss</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>Gloss List</value>
+  </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lemma</value>
   </data>
@@ -934,6 +946,9 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>A lexeme for already exists for lemma</value>
   </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>Matches</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Meanings:</value>
   </data>
@@ -948,6 +963,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Set a gloss for</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>Unset</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>Verified</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>And</value>

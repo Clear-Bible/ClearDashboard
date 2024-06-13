@@ -125,7 +125,7 @@
     <value>协作用户ID：</value>
   </data>
   <data name="AccountInfo_CollaborationUsernameLabel" xml:space="preserve">
-    <value>合作用户名：</value>
+    <value>协作用户名：</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
     <value>-当前帐户详细信息-</value>
@@ -134,7 +134,7 @@
     <value>停用当前许可证</value>
   </data>
   <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
-    <value>-其他账户-</value>
+    <value>-其他帐户-</value>
   </data>
   <data name="AccountInfo_ParatextEmailLabel" xml:space="preserve">
     <value>副文本电子邮件：</value>
@@ -164,7 +164,7 @@
     <value>选择您正在使用的书籍，以后您可以随时添加更多书籍。</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
-    <value>检查 USFM</value>
+    <value>检查USFM</value>
   </data>
   <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
     <value>将 USFM 错误复制到剪贴板</value>
@@ -710,7 +710,7 @@
     <value>将拆分应用于令牌的其他实例</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>选择分割令牌的位置：</value>
+    <value>选择拆分令牌的位置：</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>三路分流</value>
@@ -898,6 +898,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>如果选中，这将更改该单词的所有未设置的出现</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>更改所有未设置的事件</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>如果选中，这将更改该单词的所有未设置的出现</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>索引</value>
   </data>
@@ -919,6 +925,12 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>输入新的光泽</value>
   </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>光泽度</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>光泽表</value>
+  </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>引理</value>
   </data>
@@ -934,6 +946,9 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>引理已经存在词位</value>
   </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>火柴</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>含义：</value>
   </data>
@@ -948,6 +963,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>设置光泽度</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>取消设置</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>已验证</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>和</value>
@@ -1025,7 +1046,7 @@
     <value>添加为表格...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>查找源的完整或部分词素或形式匹配</value>
+    <value>查找源的完整或部分词位或形式匹配</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>添加目标作为...的翻译</value>
@@ -1448,7 +1469,7 @@
     <value>是否要删除标签：</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>您想取消关联标签吗：</value>
+    <value>您要取消关联标签吗：</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>来自标签组：</value>
@@ -1607,7 +1628,7 @@
     <value>旧约</value>
   </data>
   <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
-    <value>创建字对齐</value>
+    <value>创建单词对齐</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
     <value>创建语料库诗句的并行化</value>
@@ -1730,7 +1751,7 @@
     <value>使整个内容区域适合视口</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>让所有节点适合视口</value>
+    <value>使所有节点适合视口</value>
   </data>
   <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
     <value>获取最新的外部笔记</value>
@@ -1739,7 +1760,7 @@
     <value>从 Paratext 获取最新信息</value>
   </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
-    <value>显示有关该项目的信息</value>
+    <value>显示有关此项目的信息</value>
   </data>
   <data name="Pds_ManuscriptGreek" xml:space="preserve">
     <value>希腊语 (NT) MACULA</value>
@@ -1901,7 +1922,7 @@
     <value>合作项目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>创建您的项目以开始。</value>
+    <value>创建您的项目以开始使用。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>创建一个新项目</value>

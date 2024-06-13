@@ -155,7 +155,7 @@
     <value>Menambahkan</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Pilih Cara Membuat Tokenisasi Corpus</value>
+    <value>Pilih Cara Tokenisasi Corpus</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Penyelarasan</value>
@@ -898,6 +898,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Jika dicentang, ini akan mengubah semua kemunculan kata ini yang tidak disetel</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>Ubah semua kejadian yang tidak disetel</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>Jika dicentang, ini akan mengubah semua kemunculan kata ini yang tidak disetel</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Konkordansi</value>
   </data>
@@ -919,6 +925,12 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Masukkan kilap baru</value>
   </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>Kilap</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>Daftar Kilap</value>
+  </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Kata pengantar singkat</value>
   </data>
@@ -934,6 +946,9 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Sebuah leksem untuk sudah ada untuk lemma</value>
   </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>Cocok</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Artinya:</value>
   </data>
@@ -948,6 +963,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Tetapkan kilap untuk</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>Tidak disetel</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>Diverifikasi</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Dan</value>
@@ -1409,7 +1430,7 @@
     <value>Karena izin proyek Paratext Anda, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Filter berdasarkan Ayat</value>
+    <value>Saring berdasarkan Ayat</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filter</value>
@@ -1730,7 +1751,7 @@
     <value>Paskan seluruh area konten ke area pandang</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>Pasangkan semua node ke viewport</value>
+    <value>Paskan semua node ke viewport</value>
   </data>
   <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
     <value>Dapatkan Catatan Eksternal Terbaru</value>
@@ -2000,7 +2021,7 @@
     <value>Segarkan Daftar Proyek Kolaborasi</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>Cari terkini</value>
+    <value>Cari terbaru</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
     <value>Klik di sini untuk memulai Paratext</value>
@@ -2393,7 +2414,7 @@
     <value>Validasi Kode Email</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Aktifkan tampilan Kumpulan Teks ayat demi ayat</value>
+    <value>Aktifkan tampilan Koleksi Teks ayat demi ayat</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>Batalkan Tugas</value>

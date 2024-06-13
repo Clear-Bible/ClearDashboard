@@ -449,7 +449,7 @@
     <value>Approuver la sélection</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentEditor" xml:space="preserve">
-    <value>Éditeur d'alignement en masse</value>
+    <value>Éditeur d'alignement en bloc</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
     <value>Examen de l'alignement en masse</value>
@@ -898,6 +898,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Si coché, cela modifiera toutes les occurrences non définies de ce mot</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>Modifier toutes les occurrences non définies</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>Si coché, cela modifiera toutes les occurrences non définies de ce mot</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Concordance</value>
   </data>
@@ -919,6 +925,12 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Entrez un nouveau gloss</value>
   </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>Brillant</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>Liste des glosses</value>
+  </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lemme</value>
   </data>
@@ -934,6 +946,9 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Un lexème pour existe déjà pour le lemme</value>
   </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>Allumettes</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Significations :</value>
   </data>
@@ -948,6 +963,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Définir un gloss pour</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>Désarmé</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>Vérifié</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Et</value>
@@ -1619,13 +1640,13 @@
     <value>Métadonnées JSON</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
-    <value>Paralléliser les versets des corpus</value>
+    <value>Paralléliser les versets de corpus</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Algorithme d’alignement des mots machine</value>
+    <value>Algorithme d’alignement de mots machine</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Algorithme d’alignement des mots machine</value>
+    <value>Algorithme d’alignement de mots machine</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Former un modèle symétrique ?</value>
@@ -1913,7 +1934,7 @@
     <value>Créer un projet : </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
-    <value>Créez votre projet à l'aide de l'assistant de modèle de projet.</value>
+    <value>Créez votre projet à l'aide de l'assistant Modèle de projet.</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
     <value>Base de données: </value>
@@ -2273,7 +2294,7 @@
     <value>Envoyer</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>Activer le plugin AQUA expérimental</value>
+    <value>Activer le plugin expérimental AQUA</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
     <value>Vérifiez votre email et saisissez le code de validation :</value>

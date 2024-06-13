@@ -194,7 +194,7 @@
     <value>Wählen Sie USFM-Bücher zum Senden aus</value>
   </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
-    <value>Wählen Sie Paratext-Projekt aus</value>
+    <value>Wählen Sie Paratextprojekt aus</value>
   </data>
   <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
     <value>Alles wiederufen</value>
@@ -677,7 +677,7 @@
     <value>Treten Sie Token bei</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Join-Token für Sprachpaar</value>
+    <value>Join-Tokens für Sprachpaar</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>Ausrichtung als „Ungültig“ markieren</value>
@@ -898,6 +898,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Wenn diese Option aktiviert ist, werden alle nicht festgelegten Vorkommen dieses Worts geändert</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>Alle nicht festgelegten Vorkommen ändern</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>Wenn diese Option aktiviert ist, werden alle nicht festgelegten Vorkommen dieses Worts geändert</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Konkordanz</value>
   </data>
@@ -919,6 +925,12 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Geben Sie einen neuen Glanz ein</value>
   </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>Glanz</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>Glanzliste</value>
+  </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lemma</value>
   </data>
@@ -934,6 +946,9 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Für Lemma existiert bereits ein Lexem</value>
   </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>Streichhölzer</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Bedeutungen:</value>
   </data>
@@ -948,6 +963,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Stellen Sie einen Glanz ein</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>Unscharf</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>Verifiziert</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Und</value>
@@ -1049,7 +1070,7 @@
     <value>Sprache:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
-    <value>Lexem- oder Formularübereinstimmungen</value>
+    <value>Lexem- oder Formübereinstimmungen</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
     <value>Es sind keine weiteren Datensätze zum Importieren vorhanden.</value>
@@ -1205,7 +1226,7 @@
     <value>Definition</value>
   </data>
   <data name="Marble_DefinitionLong" xml:space="preserve">
-    <value>Definition lang:</value>
+    <value>Definition Lang:</value>
   </data>
   <data name="Marble_DefinitionShort" xml:space="preserve">
     <value>Definition kurz:</value>
@@ -1628,7 +1649,7 @@
     <value>Algorithmus zur maschinellen Wortausrichtung</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Symmetrisiertes Modell trainieren?</value>
+    <value>Symmetrisches Modell trainieren?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>Zug</value>
@@ -2027,10 +2048,10 @@
     <value>1 Chroniken</value>
   </data>
   <data name="ProperCase_1_Corinthians" xml:space="preserve">
-    <value>1. Korinther</value>
+    <value>1 Korinther</value>
   </data>
   <data name="ProperCase_1_John" xml:space="preserve">
-    <value>1. Johannes</value>
+    <value>1 Johannes</value>
   </data>
   <data name="ProperCase_1_Kings" xml:space="preserve">
     <value>1 Könige</value>
@@ -2348,7 +2369,7 @@
     <value>Leistungsmodi</value>
   </data>
   <data name="Settings_PowerModesDescription" xml:space="preserve">
-    <value>Erlauben Sie ClearDashboard, den Energiemodus bei Ereignissen mit hoher Rechenleistung zu ändern</value>
+    <value>Erlauben Sie ClearDashboard, den Energiemodus bei Ereignissen mit hohem Rechenaufwand zu ändern</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
     <value>Reserviert</value>

@@ -866,7 +866,7 @@
     <value>LEV</value>
   </data>
   <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>Agregue un dominio semántico a este significado.</value>
+    <value>Añade un dominio semántico a este significado.</value>
   </data>
   <data name="Lexicon_AddForm" xml:space="preserve">
     <value>Añade una forma léxica a este lema.</value>
@@ -898,6 +898,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Si está marcado, esto cambiará todas las apariciones no configuradas de esta palabra.</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>Cambiar todas las ocurrencias no configuradas</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>Si está marcado, esto cambiará todas las apariciones no configuradas de esta palabra.</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Concordancia</value>
   </data>
@@ -919,6 +925,12 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Introduzca un nuevo brillo</value>
   </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>Brillo</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>Lista de brillo</value>
+  </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lema</value>
   </data>
@@ -934,6 +946,9 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Ya existe un lexema para el lema.</value>
   </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>Partidos</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Significados:</value>
   </data>
@@ -948,6 +963,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Establecer un brillo para</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>Desarmado</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>Verificado</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Y</value>
@@ -1208,7 +1229,7 @@
     <value>Definición larga:</value>
   </data>
   <data name="Marble_DefinitionShort" xml:space="preserve">
-    <value>Definición breve:</value>
+    <value>Definición corta:</value>
   </data>
   <data name="Marble_DefinitionUnavailable" xml:space="preserve">
     <value>definición no disponible</value>
@@ -2348,7 +2369,7 @@
     <value>Modos de energía</value>
   </data>
   <data name="Settings_PowerModesDescription" xml:space="preserve">
-    <value>Permita que ClearDashboard cambie los modos de energía durante eventos computacionales intensos</value>
+    <value>Permita que ClearDashboard cambie los modos de energía durante eventos computacionales elevados</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
     <value>Reservado</value>

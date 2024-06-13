@@ -1,5 +1,6 @@
 ﻿using System;
 using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
@@ -11,7 +12,7 @@ public class SplitInstructionViewModel : PropertyChangedBase
 
     private string? _circumfixGroup;
     private string? _gloss;
-    private string? _grammar;
+    private Grammar? _grammar;
     private Guid? _grammarId;
 
     public string? TrainingText
@@ -52,7 +53,7 @@ public class SplitInstructionViewModel : PropertyChangedBase
         set => Set(ref _gloss, value);
     }
 
-    public string? Grammar
+    public Grammar? Grammar
     {
         get => _grammar;
         set => Set(ref _grammar, value);

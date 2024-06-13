@@ -896,7 +896,13 @@
     <value>Alterar todas as ocorrências não definidas</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>Se marcado, isso mudará todas as ocorrências não definidas desta palavra</value>
+    <value>Se marcada, isso mudará todas as ocorrências não definidas desta palavra</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>Alterar todas as ocorrências não definidas</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>Se marcada, isso mudará todas as ocorrências não definidas desta palavra</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Concordância</value>
@@ -919,6 +925,12 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Insira um novo brilho</value>
   </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>Lustro</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>Lista de brilho</value>
+  </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lema</value>
   </data>
@@ -934,6 +946,9 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Já existe um lexema para o lema</value>
   </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>Partidas</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Significados:</value>
   </data>
@@ -948,6 +963,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Defina um brilho para</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>Desativar</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>Verificado</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>E</value>
@@ -1094,7 +1115,7 @@
     <value>O sobrenome é obrigatório</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>A chave de licença é obrigatória</value>
+    <value>A chave de licença é necessária</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
@@ -1637,7 +1658,7 @@
     <value>Alinhador de palavras da máquina de trem</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
-    <value>Defina o mapeamento de versículos entre corpora paralelizados</value>
+    <value>Defina o mapeamento de versos entre corpora paralelizados</value>
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Corpus Paratextual</value>

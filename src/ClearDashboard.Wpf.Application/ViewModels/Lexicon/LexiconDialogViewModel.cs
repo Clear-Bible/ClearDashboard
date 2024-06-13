@@ -28,8 +28,28 @@ using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 {
+
+    public enum LexiconDialogMode
+    {
+        AddLexeme,
+        SetGloss
+    }
+
     public class LexiconDialogViewModel : DashboardApplicationScreen
     {
+        private LexiconDialogMode _mode = LexiconDialogMode.AddLexeme;
+        public LexiconDialogMode Mode
+        {
+            get => _mode;
+            set
+            {
+                Set(ref _mode, value);
+                NotifyOfPropertyChange(() => IsAddLexemeMode);
+            }
+        }
+
+        public bool IsAddLexemeMode => Mode == LexiconDialogMode.AddLexeme;
+
         private string _sourceFontFamily = FontNames.DefaultFontFamily;
         public string SourceFontFamily
         {
@@ -140,6 +160,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         }
 
         private bool _isLoaded = false;
+       
         public bool IsLoaded
         {
             get => _isLoaded;
@@ -391,7 +412,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             // TokenSplitting -> glossing 
             base.OnViewLoaded(view);
 
-            OnUIThread(() => ProgressBarVisibility = Visibility.Visible);
+                        OnUIThread(() => ProgressBarVisibility = Visibility.Visible);
 
             await Task.Run(async () => {
 
