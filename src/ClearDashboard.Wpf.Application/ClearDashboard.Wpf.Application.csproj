@@ -264,6 +264,9 @@
     <Compile Update="UserControls\AlignmentBulkReview.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControls\Lexicon\GlossListDisplay.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\Lexicon\ConcordanceDisplay.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -456,6 +459,9 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="UserControls\ClockUserControl.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="UserControls\Lexicon\GlossListDisplay.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="UserControls\Lexicon\ConcordanceDisplay.xaml">

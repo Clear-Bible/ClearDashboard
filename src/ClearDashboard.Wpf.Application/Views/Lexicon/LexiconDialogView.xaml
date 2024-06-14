@@ -128,8 +128,8 @@
             FontWeight="SemiBold"
             Text="{helpers:Localization Lexicon_GlossList}" />
 
-        <lexiconControls:ConcordanceDisplay
-            x:Name="ConcordanceDisplay"
+        <lexiconControls:GlossListDisplay
+            x:Name="GlossListDisplay"
             Grid.Row="4"
             Margin="40,0,0,0"
             FontFamily="{Binding TargetFontFamily}"
@@ -149,7 +149,7 @@
                     <b:CallMethodAction MethodName="OnNewTranslationChanged" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gloss:GlossView}}, Path=DataContext}" />
                 </b:EventTrigger>
             </b:Interaction.Triggers>
-        </lexiconControls:ConcordanceDisplay>
+        </lexiconControls:GlossListDisplay>
 
         <StackPanel
             Grid.Row="5"
