@@ -20,7 +20,13 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    Focusable="True"
     FontFamily="{StaticResource ClearDashboardFont}"
+    GotFocus="TokenDisplay_OnGotFocus"
+    GotKeyboardFocus="TokenDisplay_OnGotKeyboardFocus"
+    IsKeyboardFocusedChanged="TokenDisplay_OnIsKeyboardFocusedChanged"
+    LostFocus="TokenDisplay_OnLostFocus"
+    LostKeyboardFocus="TokenDisplay_OnLostKeyboardFocus"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -57,6 +63,10 @@
             Key="C"
             Command="Copy"
             Modifiers="Control" />
+        <KeyBinding
+            Key="C"
+            Command="{Binding CopyTextCommand}"
+            Modifiers="Control" />
     </UserControl.InputBindings>
 
     <UserControl.CommandBindings>
@@ -66,6 +76,8 @@
     <StackPanel
         Width="Auto"
         HorizontalAlignment="Left"
+        Focusable="True"
+        GotFocus="UIElement_OnGotFocus"
         Orientation="Vertical">
 
         <!--<Grid>-->
@@ -193,11 +205,13 @@
                     Click="OnTokenClicked"
                     ContextMenuOpening="OnTokenContextMenuOpening"
                     FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFlowDirection}"
+                    Focusable="True"
                     FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontFamily}"
                     FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontSize}"
                     FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontStyle}"
                     FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontWeight}"
                     Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenForeground}"
+                    GotFocus="TokenButton_OnGotFocus"
                     IsDefault="False"
                     MouseDoubleClick="OnTokenDoubleClicked"
                     MouseEnter="OnTokenMouseEnter"
@@ -207,8 +221,28 @@
                     MouseRightButtonDown="OnTokenRightButtonDown"
                     MouseRightButtonUp="OnTokenRightButtonUp"
                     MouseWheel="OnTokenMouseWheel"
+                    PreviewGotKeyboardFocus="TokenButton_OnPreviewGotKeyboardFocus"
+                    PreviewKeyDown="TokenButton_OnPreviewKeyDown"
                     PreviewMouseLeftButtonDown="OnTokenLeftButtonDown">
-                    <!--  ToolTipOpening="OnToolTipOpening"  -->
+                    <!--
+                        Command="Copy"
+                        
+                        ToolTipOpening="OnToolTipOpening"
+                    -->
+                    <Button.InputBindings>
+                        <KeyBinding
+                            Key="C"
+                            Command="Copy"
+                            Modifiers="Control" />
+                        <KeyBinding
+                            Key="C"
+                            Command="{Binding CopyTextCommand}"
+                            Modifiers="Control" />
+                    </Button.InputBindings>
+
+                    <Button.CommandBindings>
+                        <CommandBinding Command="Copy" Executed="OnCopy" />
+                    </Button.CommandBindings>
 
                     <Button.ContextMenu>
                         <ContextMenu x:Name="TokenDisplayContextMenu" FlowDirection="LeftToRight">

@@ -83,5 +83,9 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
         //    }
 
         //}
+        private void MainGrid_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            var stop = true;
+        }
     }
 }
