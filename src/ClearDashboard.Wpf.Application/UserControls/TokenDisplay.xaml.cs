@@ -1422,24 +1422,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
-
-            //this.Focus();
             // 1
-            var tokenDisplay = (TokenDisplayViewModel)DataContext;
-
-            //            tokenDisplay.VerseDisplay.
-
-            Window parentWindow = Window.GetWindow(this);
-            if (parentWindow != null)
-            {
-                //parentWindow.Focus();
-            }
-
+         
             RaiseTokenEvent(TokenLeftButtonDownEvent, e);
 
             HighlightAlignedToken();
-            //e.Handled = true;
+            
+            e.Handled = true;
 
+            if (sender is Button button)
+            {
+                button.Focus();
+            }
         }
 
         private void HighlightAlignedToken()
@@ -2491,51 +2485,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             }
 
             await Task.CompletedTask;
-        }
-
-        private void TokenButton_OnPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            var stop = true;
-        }
-
-        private void TokenButton_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            var stop = true;
-        }
-
-        private void TokenButton_OnPreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            var stop = true;
-        }
-
-        private void UIElement_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            var stop = true;
-        }
-
-        private void TokenDisplay_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            var stop = true;
-        }
-
-        private void TokenDisplay_OnLostFocus(object sender, RoutedEventArgs e)
-        {
-            var stop = true;
-        }
-
-        private void TokenDisplay_OnGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            var stop = true;
-        }
-
-        private void TokenDisplay_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            var stop = true;
-        }
-
-        private void TokenDisplay_OnIsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            var stop = true;
         }
     }
 }

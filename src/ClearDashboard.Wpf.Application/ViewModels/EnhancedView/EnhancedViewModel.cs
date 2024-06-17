@@ -91,16 +91,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             TranslationsFontSizeValue = _originalTranslationsFontSizeValue;
         }
 
-        public ICommand CopyTextCommand => new RelayCommand(CopyText);
-
-        private void CopyText(object? commandParameter)
-        {
-            TokenDisplayViewModelCollection sortedTokens = new TokenDisplayViewModelCollection(SelectionManager.SelectedTokens.OrderBy(x => x.Token.Position));
-            sortedTokens.Refresh();
-            var surfaceText = sortedTokens.CombinedSurfaceText.Replace(",", "");
-            Clipboard.SetText(surfaceText);
-        }
-
         #endregion
 
         #region Member Variables

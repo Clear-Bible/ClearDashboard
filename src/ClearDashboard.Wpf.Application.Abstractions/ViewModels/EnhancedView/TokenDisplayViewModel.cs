@@ -19,7 +19,6 @@ using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using System.Threading;
 using ClearDashboard.Wpf.Application.Helpers;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
-using ClearApplicationFoundation.Framework.Input;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -456,17 +455,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             Token = token;
             NoteIndicatorBrush = Brushes.LightGray;
-        }
-
-        public ICommand CopyTextCommand => new RelayCommand(CopyText);
-
-        private void CopyText(object? commandParameter)
-        {
-            var stop = true;
-            //TokenDisplayViewModelCollection sortedTokens = new TokenDisplayViewModelCollection(SelectionManager.SelectedTokens.OrderBy(x => x.Token.Position));
-            //sortedTokens.Refresh();
-            //var surfaceText = sortedTokens.CombinedSurfaceText.Replace(",", "");
-            //Clipboard.SetText(surfaceText);
         }
     }
 }

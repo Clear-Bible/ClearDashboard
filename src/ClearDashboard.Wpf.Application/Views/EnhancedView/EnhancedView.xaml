@@ -40,10 +40,6 @@
             Key="N"
             Command="{Binding InsertNoteCommand}"
             Modifiers="Control+Shift" />
-        <KeyBinding
-            Key="C"
-            Command="{Binding CopyTextCommand}"
-            Modifiers="Control" />
 
     </UserControl.InputBindings>
     <UserControl.Resources>
@@ -65,7 +61,7 @@
 
     </UserControl.Resources>
 
-    <Grid x:Name="MainGrid" Background="{DynamicResource MaterialDesignBackground}" GotFocus="MainGrid_OnGotFocus">
+    <Grid x:Name="MainGrid" Background="{DynamicResource MaterialDesignBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
