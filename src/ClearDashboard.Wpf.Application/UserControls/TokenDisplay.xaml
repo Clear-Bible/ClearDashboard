@@ -52,7 +52,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <UserControl.InputBindings>
+    <!--<UserControl.InputBindings>
         <KeyBinding
             Key="C"
             Command="Copy"
@@ -61,7 +61,7 @@
 
     <UserControl.CommandBindings>
         <CommandBinding Command="Copy" Executed="OnCopy" />
-    </UserControl.CommandBindings>
+    </UserControl.CommandBindings>-->
 
     <StackPanel
         Width="Auto"
@@ -193,7 +193,6 @@
                     Click="OnTokenClicked"
                     ContextMenuOpening="OnTokenContextMenuOpening"
                     FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFlowDirection}"
-                    Focusable="True"
                     FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontFamily}"
                     FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontSize}"
                     FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontStyle}"

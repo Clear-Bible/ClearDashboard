@@ -1427,7 +1427,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenLeftButtonDownEvent, e);
 
             HighlightAlignedToken();
-            
             e.Handled = true;
 
             if (sender is Button button)
