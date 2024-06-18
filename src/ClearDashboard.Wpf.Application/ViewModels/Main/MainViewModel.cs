@@ -769,12 +769,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 foreach (var enhancedViewLayout in enhancedViewLayouts)
                 {
                     EnhancedViewModel enhancedViewModel = null;
-                    if (index == 0)
-                    {
-                        ++index;
-                        enhancedViewModel = (EnhancedViewModel)Items.FirstOrDefault(vm => vm is EnhancedViewModel);
-                    }
-
+                    
                     var isNewEnhancedView = enhancedViewModel is null;
                     if (isNewEnhancedView)
                     {
@@ -792,21 +787,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         AddNewEnhancedViewTab(enhancedViewLayoutDocument);
                         await enhancedViewModel.Initialize(enhancedViewLayout, null, cancellationToken);
                     }
-                    else
-                    {
-                        await enhancedViewModel.Initialize(enhancedViewLayout, null, cancellationToken);
-                        // first one - reset the title from the default
-                        enhancedViewModel.DisplayName = enhancedViewLayout.Title;
-                        //if (enhancedViewLayout.ParatextSync)
-                        //{
-                        //    // paratext sync is enabled so use whatever the current verse in paratext is
-                        //    enhancedViewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
-                        //}
-                    }
 
                     await Task.Delay(100, cancellationToken);
                 }
 
+                var placeholderEnhancedViewModel = (EnhancedViewModel)Items.FirstOrDefault(vm => vm is EnhancedViewModel);
+                if (placeholderEnhancedViewModel != null)
+                {
+                    await placeholderEnhancedViewModel.RequestClose(placeholderEnhancedViewModel, false);
+                }
             }
             catch (Exception ex)
             {
@@ -2347,6 +2336,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public async Task HandleAsync(CloseDockingPane message, CancellationToken cancellationToken)
         {
             var windowGuid = message.Guid;
+            var showConfirmation = message.showConfirmation;
 
             var dockableWindows = _dockingManager.Layout.Descendents()
                 .OfType<LayoutDocument>().ToArray();
@@ -2370,9 +2360,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                             confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.CloseEnhancedViewConfirmation;
 
-                            var result = await WindowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null, 
-                                SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
+                            bool result = true;
 
+                            if (showConfirmation)
+                            {
+                                result = await WindowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                                    SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
+                            }
+                            
                             if (result == true)
                             {
                                 pane.Close();
