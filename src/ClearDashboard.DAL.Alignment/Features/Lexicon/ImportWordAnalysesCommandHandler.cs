@@ -110,8 +110,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 
                 foreach (var wordAnalysis in request.WordAnalyses)
                 {
-                    //if (childTokensCreatedCount > 300) break;
-
                     Logger.LogInformation($"WordAnalysis for {wordAnalysis.Word}:");
 
                     //var splitInstructions = ToSplitInstructions(wordAnalysis, Logger);
