@@ -218,7 +218,7 @@
             Orientation="Horizontal">
             <Button
                 x:Name="ApplySplit"
-                Margin="10"
+            
                 Content="{helpers:Localization EnhancedView_SplitToken}"
                 FontFamily="{DynamicResource MaterialDesignFont}"
                 FontSize="14"
@@ -227,12 +227,11 @@
                 Visibility="{Binding ApplyEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
             <Button
                 x:Name="CancelSplit"
-                Margin="10"
                 Content="{helpers:Localization Cancel}"
                 FontFamily="{DynamicResource MaterialDesignFont}"
                 FontSize="14"
                 IsEnabled="{Binding CancelEnabled}"
-                Style="{StaticResource TransparentStyle}" />
+                Style="{StaticResource AlternativeStyle}" />
         </StackPanel>
 
         <ProgressBar

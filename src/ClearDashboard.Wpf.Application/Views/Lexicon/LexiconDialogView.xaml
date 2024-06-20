@@ -121,17 +121,16 @@
         </lexiconControls:LexemeEditor>
         <TextBlock
             Grid.Row="3"
-            Margin="20,10,0,0"
+            Margin="30,10,0,0"
             VerticalAlignment="Center"
             FontFamily="{StaticResource ClearDashboardFont}"
             FontSize="16"
             FontWeight="SemiBold"
             Text="{helpers:Localization Lexicon_GlossList}" />
-
         <lexiconControls:GlossListDisplay
             x:Name="GlossListDisplay"
             Grid.Row="4"
-            Margin="40,0,0,0"
+            Margin="30,0,0,0"
             FontFamily="{Binding TargetFontFamily}"
             NewTranslation="{Binding NewTranslation}"
             TranslationFontFamily="{Binding TargetFontFamily}"

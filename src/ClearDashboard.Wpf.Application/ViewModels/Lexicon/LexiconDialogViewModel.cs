@@ -412,7 +412,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             // TokenSplitting -> glossing 
             base.OnViewLoaded(view);
 
-                        OnUIThread(() => ProgressBarVisibility = Visibility.Visible);
+            OnUIThread(() => ProgressBarVisibility = Visibility.Visible);
 
             await Task.Run(async () => {
 
