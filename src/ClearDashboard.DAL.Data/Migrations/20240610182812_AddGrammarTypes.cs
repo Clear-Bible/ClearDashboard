@@ -10,7 +10,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-
             migrationBuilder.Sql("INSERT INTO Grammar (Id, ShortName, Description) VALUES ('fe86171a-fd7a-46ed-9826-945eb02170a9','[1st]', '1st Person');");
             migrationBuilder.Sql("INSERT INTO Grammar (Id, ShortName, Description) VALUES ('9820ccd0-2e5c-4b54-b147-2b32a03f14ad','[2nd]', '2nd Person');");
             migrationBuilder.Sql("INSERT INTO Grammar (Id, ShortName, Description) VALUES ('237d54a6-359b-429b-bb64-bddb34d752ec','[3rd]', '3rd Person');");

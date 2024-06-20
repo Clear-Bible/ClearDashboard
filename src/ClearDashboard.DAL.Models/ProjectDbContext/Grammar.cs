@@ -10,4 +10,6 @@ namespace ClearDashboard.DataAccessLayer.Models;
         public string? ShortName { get; set; }
         public string? Description { get; set; }
         public string? Category { get; set; }
+
+        public int Order { get; set; }
     }
