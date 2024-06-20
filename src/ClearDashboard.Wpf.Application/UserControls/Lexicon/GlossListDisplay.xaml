@@ -61,13 +61,13 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="" Width="30">
+                        <!--<GridViewColumn Header="" Width="30">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <!-- icon here -->
+                                    --><!-- icon here --><!--
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
+                        </GridViewColumn>-->
                         <GridViewColumn Header="{helpers:Localization Lexicon_Gloss}" Width="Auto"  >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -82,10 +82,10 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="{helpers:Localization Lexicon_Verified}" Width="Auto">
+                        <!--<GridViewColumn Header="{helpers:Localization Lexicon_Verified}" Width="Auto">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                
+                                 <TextBlock HorizontalAlignment="Center" Text="set me"></TextBlock>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -113,7 +113,7 @@
                                     </Button>
                             </DataTemplate>
                             </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
+                        </GridViewColumn>-->
                     </GridView>
                 </ListView.View>
                 <!--<ListView.ItemContainerStyle>

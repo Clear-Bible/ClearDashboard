@@ -1,4 +1,15 @@
-﻿using System;
+﻿using Autofac;
+using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Features.Corpora;
+using ClearDashboard.DataAccessLayer.Features.Grammar;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Services;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -7,19 +18,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
-using Autofac;
-using Caliburn.Micro;
-using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Features.Corpora;
-using ClearDashboard.DataAccessLayer.Features.Grammar;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.Collections;
-using ClearDashboard.Wpf.Application.Events;
-using ClearDashboard.Wpf.Application.Infrastructure;
-using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
-using MediatR;
-using Microsoft.Extensions.Logging;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 // ReSharper disable UnusedMember.Global
@@ -69,7 +67,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 _tokenDisplay = value;
                 //_splitInstructions ??= SplitInstructions.CreateSplits(_tokenDisplay.SurfaceText, []);
-                SplitInstructionsViewModel = SplitInstructionViewModelFactory.CreateSplits(_tokenDisplay.SurfaceText, []);
+                SplitInstructionsViewModel =
+                    SplitInstructionViewModelFactory.CreateSplits(_tokenDisplay.SurfaceText, [], LifetimeScope!);
                 NotifyOfPropertyChange(nameof(TokenCharacters));
             } 
         }
@@ -162,7 +161,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     SplitInstructionsViewModel.SplitIndexes.Add(splitIndex);
                     var indexes = SplitInstructionsViewModel.SplitIndexes.OrderBy(i => i).ToList();
 
-                    SplitInstructionsViewModel = SplitInstructionViewModelFactory.CreateSplits(TokenDisplay.SurfaceText, indexes);
+                    SplitInstructionsViewModel = SplitInstructionViewModelFactory.CreateSplits(TokenDisplay.SurfaceText, indexes, LifetimeScope);
                     NotifyOfPropertyChange(nameof(ApplyEnabled));
                 }
             }
@@ -173,7 +172,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 {
                     SplitInstructionsViewModel.SplitIndexes.Remove(splitIndex);
                     var indexes = SplitInstructionsViewModel.SplitIndexes.OrderBy(i => i).ToList();
-                    SplitInstructionsViewModel = SplitInstructionViewModelFactory.CreateSplits(TokenDisplay.SurfaceText, indexes);
+                    SplitInstructionsViewModel = SplitInstructionViewModelFactory.CreateSplits(TokenDisplay.SurfaceText, indexes, LifetimeScope!);
                     NotifyOfPropertyChange(nameof(ApplyEnabled));
                 }
 

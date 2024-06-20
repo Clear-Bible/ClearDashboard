@@ -13,6 +13,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     xmlns:controls="clr-namespace:DotNetKit.Windows.Controls;assembly=DotNetKit.Wpf.AutoCompleteComboBox"
+    xmlns:lexicon="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Lexicon"
     x:Name="SplitTokenDialog"
     d:DataContext="{d:DesignInstance Type=viewModels:SplitTokenDialogViewModel}"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -20,11 +21,11 @@
     <UserControl.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters:BoolToVisibilityCollapsedConverter x:Key="BoolToVisibilityCollapsedConverter" />
-     
-         <Style x:Key="ListViewTextBlockStyle" TargetType="TextBlock">
+
+        <Style x:Key="ListViewTextBlockStyle" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="{DynamicResource MaterialDesignFont}" />
             <Setter Property="FontSize" Value="16" />
-         </Style>
+        </Style>
 
         <Style x:Key="ListViewTextBoxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
             <Setter Property="FontFamily" Value="{DynamicResource MaterialDesignFont}" />
@@ -54,7 +55,7 @@
             FontFamily="{DynamicResource MaterialDesignFont}"
             FontSize="18" />
 
-       <userControls:SplittableTokenCharactersDisplay
+        <userControls:SplittableTokenCharactersDisplay
             x:Name="CharactersDisplay"
             Grid.Row="1"
             HorizontalAlignment="Center"
@@ -83,60 +84,50 @@
 
         <materialDesign:Card Grid.Row="3" Margin="20, 10">
             <ListView Margin="5" x:Name="SplitTokenListView">
-              
                 <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="{helpers:Localization TokenSplitting_TrainingText}" Width="Auto">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Style="{StaticResource ListViewTextBoxStyle}"
+                    <GridView>
+                        <GridViewColumn Header="{helpers:Localization TokenSplitting_TrainingText}" Width="Auto">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Style="{StaticResource ListViewTextBoxStyle}"
                                     Text="{Binding TrainingText, Mode=TwoWay}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="{helpers:Localization TokenSplitting_Type}" Width="Auto">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <ComboBox
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="{helpers:Localization TokenSplitting_Type}" Width="Auto">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox
                                     x:Name="TokenTypeComboBox"
                                     MinWidth="70"
                                     Margin="5,0,5,3"
                                     ItemsSource="{x:Static models:TokenTypes.All}"
                                     SelectedItem="{Binding TokenType, Mode=TwoWay}"
-                                    
                                    />
                                 </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Width="Auto">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="Auto">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox
                                     Style="{StaticResource ListViewTextBoxStyle}"
                                     MinWidth="60"
                                     Text="{Binding CircumfixGroup, Mode=TwoWay}"
                                     Visibility="{Binding TokenType, Mode=TwoWay,  Converter={StaticResource TokenTypeToVisibilityConverter}}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="{helpers:Localization TokenSplitting_Gloss}" Width="Auto">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox
-                                    Style="{StaticResource ListViewTextBoxStyle}"
-                                    Text="{Binding Gloss}" 
-                                    MinWidth="60"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="{helpers:Localization TokenSplitting_Grammar}" Width="Auto">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <!--<TextBox
-                                    Style="{StaticResource ListViewTextBoxStyle}"
-                                    Text="{Binding Grammar}" 
-                                    MinWidth="60"/>-->
-
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="{helpers:Localization TokenSplitting_Gloss}" Width="Auto">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <lexicon:GlossListDropdown MinWidth="60" SplitTokenDialogViewModel="{Binding .}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="{helpers:Localization TokenSplitting_Grammar}" Width="Auto">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
                                     <controls:AutoCompleteComboBox
                                     x:Name="GrammarComboBox"
                                     Margin="5,0,5,3"
@@ -160,19 +151,10 @@
                                         </controls:AutoCompleteComboBox.ItemsPanel>
                                     </controls:AutoCompleteComboBox>
                                 </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-
-               
-
-                <!--<ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Center" />
-                </Style>
-            </ListView.ItemContainerStyle>-->
-
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListBoxItem}">
                         <Setter Property="Background" Value="Transparent" />
@@ -191,54 +173,15 @@
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
-                      
+
                     </Style>
                 </ListView.ItemContainerStyle>
-
-<!--<ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="Background" Value="Transparent" />
-                        <Setter Property="Foreground" Value="#808182" />
-                        <Setter Property="HorizontalContentAlignment" Value="Center" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                    <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
-                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsSelected" Value="true">
-                                            <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
-                                        </Trigger>
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="IsSelected" Value="true"/>
-                                                <Condition Property="Selector.IsSelectionActive" Value="false"/>
-                                            </MultiTrigger.Conditions>
-                                            <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
-                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
-                                        </MultiTrigger>
-                                        <Trigger Property="IsEnabled" Value="false">
-                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                                        </Trigger>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="Transparent"/>
-                                            <Setter Property="Foreground" Value="{DynamicResource White_200}"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ListView.ItemContainerStyle>-->
-
                 <ListView.ItemsSource>
-                <Binding Path="SplitInstructionsViewModel.Instructions" />
-            </ListView.ItemsSource>
-        </ListView>
+                    <Binding Path="SplitInstructionsViewModel.Instructions" />
+                </ListView.ItemsSource>
+            </ListView>
         </materialDesign:Card>
-     
+
 
         <StackPanel
             Grid.Row="8"
