@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 // ReSharper disable UnusedMember.Global
@@ -41,8 +42,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             private set => Set(ref _splitInstructionsViewModel, value);
         }
 
-        public List<KeyValuePair<SplitTokenPropagationScope, string>> PropagationOptions { get; } = new();
-        public SplitTokenPropagationScope SelectedPropagationOption { get; set; } = SplitTokenPropagationScope.All;
+        public List<SplitTokenPropagationComboItem> PropagationOptions { get; } = new();
+
+        public SplitTokenPropagationScope SelectedPropagationOption
+        {
+            get => _selectedPropagationOption;
+            set => Set(ref _selectedPropagationOption, value);
+        }
+
+        public SplitTokenPropagationComboItem SelectedSplitTokenPropagationComboItem
+        {
+            get => _selectedPropagationKeyComboItem;
+            set
+            {
+                Set(ref _selectedPropagationKeyComboItem, value);
+                SelectedPropagationOption = value.SelectedValuePath;
+            }
+        }
 
         private FontFamily? _tokenFontFamily;
         public FontFamily? TokenFontFamily
@@ -70,7 +86,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 SplitInstructionsViewModel =
                     SplitInstructionViewModelFactory.CreateSplits(_tokenDisplay.SurfaceText, [], LifetimeScope!);
                 NotifyOfPropertyChange(nameof(TokenCharacters));
-            } 
+            }
         }
 
         private TokenCharacterViewModelCollection? _tokenCharacters;
@@ -120,14 +136,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             get
             {
                 var enabled = true;
-            
 
-                return  enabled;
+
+                return enabled;
             }
         }
 
         private bool _cancelEnabled = true;
         private SplitInstructionsViewModel _splitInstructionsViewModel;
+        private SplitTokenPropagationComboItem _selectedPropagationKeyComboItem;
+        private SplitTokenPropagationScope _selectedPropagationOption = SplitTokenPropagationScope.All;
 
         public bool CancelEnabled
         {
@@ -143,6 +161,96 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         //}
 
 
+
+        //public void CharacterClicked(object source, RoutedEventArgs args)
+        //{
+        //    var tokenCharacterArgs = args as TokenCharacterEventArgs;
+
+        //    var tokenCharacter = tokenCharacterArgs!.TokenCharacter;
+        //    var splitIndex = tokenCharacter.Index + 1;
+
+        //    //SplitInstructionsViewModel.UpdateInstructions(tokenCharacter.Index, tokenCharacter.IsSelected);
+
+        //    if (tokenCharacter.IsSelected)
+        //    {
+
+        //        if (!SplitInstructionsViewModel!.SplitIndexes.Contains(splitIndex))
+        //        {
+
+        //            var indexes = SplitInstructionsViewModel.SplitIndexes;
+        //            indexes.Add(splitIndex);
+        //            indexes = SplitInstructionsViewModel.SplitIndexes.OrderBy(i => i).ToList();
+
+        //            var newSplitInstructionsViewModel = SplitInstructionViewModelFactory.CreateSplits(TokenDisplay.SurfaceText, indexes, LifetimeScope);
+
+        //            if (SplitInstructionsViewModel.Count > newSplitInstructionsViewModel.Count)
+        //            {
+        //                var removedItems =
+        //                    SplitInstructionsViewModel.Instructions.Except(newSplitInstructionsViewModel.Instructions, new SplitInstructionComparer());
+
+        //                foreach (var removedItem in removedItems)
+        //                {
+        //                    SplitInstructionsViewModel.Instructions.Remove(removedItem);
+        //                }
+        //            }
+        //            else if (SplitInstructionsViewModel.Count > 0 && SplitInstructionsViewModel.Count < newSplitInstructionsViewModel.Count)
+        //            {
+        //                var addedItems =
+        //                    newSplitInstructionsViewModel.Instructions.Except(SplitInstructionsViewModel.Instructions, new SplitInstructionComparer());
+        //                foreach (var addedItem in addedItems)
+        //                {
+        //                    SplitInstructionsViewModel.Instructions.Add(addedItem);
+        //                }
+
+        //            }
+        //            else
+        //            {
+        //                SplitInstructionsViewModel = newSplitInstructionsViewModel;
+
+        //            }
+
+        //            NotifyOfPropertyChange(nameof(ApplyEnabled));
+        //        }
+        //    }
+        //    else
+        //    {
+
+        //        //if (SplitInstructionsViewModel!.SplitIndexes.Contains(splitIndex))
+        //        {
+        //            //SplitInstructionsViewModel.SplitIndexes.Remove(splitIndex);
+        //            //var indexes = SplitInstructionsViewModel.SplitIndexes.OrderBy(i => i).ToList();
+        //            //SplitInstructionsViewModel = SplitInstructionViewModelFactory.CreateSplits(TokenDisplay.SurfaceText, indexes, LifetimeScope!);
+        //            //NotifyOfPropertyChange(nameof(ApplyEnabled));
+
+        //            var indexes = SplitInstructionsViewModel.SplitIndexes;
+        //            if (indexes.Contains(splitIndex))
+        //            {
+        //                indexes.Remove(splitIndex);
+
+        //                indexes = SplitInstructionsViewModel.SplitIndexes.OrderBy(i => i).ToList();
+
+        //                var newSplitInstructionsViewModel =
+        //                    SplitInstructionViewModelFactory.CreateSplits(TokenDisplay.SurfaceText, indexes,
+        //                        LifetimeScope);
+
+        //                var commonItems = SplitInstructionsViewModel.Instructions
+        //                    .Intersect<SplitInstructionViewModel>(newSplitInstructionsViewModel.Instructions, new SplitInstructionComparer()).ToList();
+
+        //                var removedItems =
+        //                    SplitInstructionsViewModel.Instructions.Except(commonItems, new SplitInstructionComparer()).ToList();
+
+        //                if (removedItems.Any())
+        //                {
+        //                  SplitInstructionsViewModel.Instructions.RemoveRange(removedItems);
+        //                }
+        //            }
+
+        //            NotifyOfPropertyChange(nameof(ApplyEnabled));
+        //        }
+
+        //    }
+
+        //}
 
         public void CharacterClicked(object source, RoutedEventArgs args)
         {
@@ -180,7 +288,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         }
 
-      
+        private class SplitInstructionComparer : IEqualityComparer<SplitInstructionViewModel>
+    
+        {
+            public bool Equals(SplitInstructionViewModel x, SplitInstructionViewModel y)
+            {
+                return x.TokenText.Equals(y.TokenText);
+            }
+            // GetHashCode() must return the same value for equal objects.
+            public int GetHashCode(SplitInstructionViewModel vm)
+            {
+                return vm.TokenText.GetHashCode();
+            }
+        }
 
         public async void ApplySplit()
         {
@@ -216,13 +336,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        protected override async  Task OnActivateAsync(CancellationToken cancellationToken)
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             var results = await Mediator!.Send(new GetGrammarSuggestionsQuery(ProjectManager!.CurrentProject!.ProjectName!), cancellationToken);
             if (results is { Success: true, HasData: true })
             {
                 GrammarSuggestions = new BindableCollection<Grammar>(results.Data);
             }
+
+            SelectedSplitTokenPropagationComboItem = PropagationOptions.Last();
 
             await base.OnActivateAsync(cancellationToken);
         }
@@ -243,9 +365,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             settings.PopupAnimation = PopupAnimation.Fade;
             settings.WindowStartupLocation = WindowStartupLocation.Manual;
             //settings.Top = 0;
-            settings.Left = System.Windows.Application.Current.MainWindow!.ActualWidth/2 - 258;
+            settings.Left = System.Windows.Application.Current.MainWindow!.ActualWidth / 2 - 258;
             settings.Width = 1000;
-            settings.Height = 800;
+            settings.Height = 820;
             settings.Title = DialogTitle;
 
             // Keep the window on top
@@ -267,16 +389,36 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             ILogger<SplitTokenDialogViewModel> logger,
             IEventAggregator eventAggregator,
             IMediator mediator,
-            ILifetimeScope? lifetimeScope, 
+            ILifetimeScope? lifetimeScope,
             ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             VerseManager = verseManager;
-            PropagationOptions.Add(new KeyValuePair<SplitTokenPropagationScope, string>(SplitTokenPropagationScope.None, localizationService["None"]));
-            PropagationOptions.Add(new KeyValuePair<SplitTokenPropagationScope, string>(SplitTokenPropagationScope.BookChapterVerse, $"{localizationService["Current"]} {localizationService["BiblicalTermsBcv_Verse"]}"));
-            PropagationOptions.Add(new KeyValuePair<SplitTokenPropagationScope, string>(SplitTokenPropagationScope.BookChapter, $"{localizationService["Current"]} {localizationService["BiblicalTermsBcv_Chapter"]}"));
-            PropagationOptions.Add(new KeyValuePair<SplitTokenPropagationScope, string>(SplitTokenPropagationScope.BookChapter, $"{localizationService["Current"]} {localizationService["BiblicalTermsBcv_Book"]}"));
-            PropagationOptions.Add(new KeyValuePair<SplitTokenPropagationScope, string>(SplitTokenPropagationScope.BookChapter, $"{localizationService["BiblicalTermsBcv_All"]}"));
+            PropagationOptions.Add(new SplitTokenPropagationComboItem { SelectedValuePath = SplitTokenPropagationScope.None, DisplayMemberPath = localizationService["None"] });
+            PropagationOptions.Add(new SplitTokenPropagationComboItem { SelectedValuePath = SplitTokenPropagationScope.BookChapterVerse, DisplayMemberPath = $"{localizationService["Current"]} {localizationService["BiblicalTermsBcv_Verse"]}" });
+            PropagationOptions.Add(new SplitTokenPropagationComboItem { SelectedValuePath = SplitTokenPropagationScope.BookChapter, DisplayMemberPath = $"{localizationService["Current"]} {localizationService["BiblicalTermsBcv_Chapter"]}" });
+            PropagationOptions.Add(new SplitTokenPropagationComboItem { SelectedValuePath = SplitTokenPropagationScope.BookChapter, DisplayMemberPath = $"{localizationService["Current"]} {localizationService["BiblicalTermsBcv_Book"]}" });
+            PropagationOptions.Add(new SplitTokenPropagationComboItem { SelectedValuePath = SplitTokenPropagationScope.BookChapter, DisplayMemberPath = localizationService["BiblicalTermsBcv_All"] });
+
+            SelectedSplitTokenPropagationComboItem = PropagationOptions.Last();
+        }
+    }
+
+    public class SplitTokenPropagationComboItem : PropertyChangedBase
+    {
+        private string? _displayMemberPath;
+        private SplitTokenPropagationScope _selectedValuePath;
+
+        public SplitTokenPropagationScope SelectedValuePath
+        {
+            get => _selectedValuePath;
+            set => Set(ref _selectedValuePath, value);
+        }
+
+        public string? DisplayMemberPath
+        {
+            get => _displayMemberPath;
+            set => Set(ref _displayMemberPath, value);
         }
     }
 }

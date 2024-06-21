@@ -120,6 +120,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             set => Set(ref _lexemes, value);
         }
 
+
+
         private SemanticDomainCollection _semanticDomainSuggestions = new();
         public SemanticDomainCollection SemanticDomainSuggestions
         {
@@ -460,7 +462,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             settings.Top = 0;
             settings.Left = App.Current.MainWindow.ActualWidth/2 - 258;
             settings.Width = 1000;
-            settings.Height = 800;
+            settings.Height = 820;
             settings.Title = DialogTitle;
 
             // Keep the window on top

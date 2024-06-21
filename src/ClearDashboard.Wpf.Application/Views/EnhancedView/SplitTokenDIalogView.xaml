@@ -72,14 +72,15 @@
                         FontSize="14"
                         FontWeight="Normal"
                         Text="{helpers:Localization TokenSplitting_WordGloss}" />
-            <TextBox 
+            <!--<TextBox 
                 Width="250"
                 HorizontalContentAlignment="Center"
                 cm:Message.Attach="[Event TextChanged] = [Action TrainingTextChanged($this, $eventArgs)]"
                 FontFamily="{Binding ElementName=SplitTokenDialog, Path=DataContext.TokenFontFamily}"
                 FontSize="18"
                 FontWeight="SemiBold"
-                Text="{Binding WordGloss}" />
+                Text="{Binding WordGloss}" />-->
+            <lexicon:GlossListDropdown MinWidth="60" Margin="10,0,0,0" SplitTokenDialogViewModel="{Binding .}" />
         </StackPanel>
 
         <materialDesign:Card Grid.Row="3" Margin="20, 10">
@@ -197,19 +198,28 @@
                 FontWeight="Normal"
                 Text="{helpers:Localization EnhancedView_SplitTokenApplyToAll}" />
             <TextBlock
-                Margin="5,0,10,0"
+                Margin="5,0,0,0"
                 VerticalAlignment="Center"
                 FontFamily="{Binding ElementName=SplitTokenDialog, Path=DataContext.TokenFontFamily}"
                 FontSize="16"
                 FontWeight="SemiBold"
                 Text="{Binding TokenDisplay.SurfaceText}" />
+            <TextBlock
+                Margin="2,0,10,0"
+                VerticalAlignment="Center"
+                FontFamily="{Binding ElementName=SplitTokenDialog, Path=DataContext.TokenFontFamily}"
+                FontSize="16"
+                FontWeight="SemiBold"
+                Text=":" />
             <ComboBox
                 x:Name="PropagateComboBox"
-                DisplayMemberPath="Value"
+                DisplayMemberPath="DisplayMemberPath"
+                HorizontalContentAlignment="Center"
                 FontSize="14"
+                Width="120"
                 ItemsSource="{Binding PropagationOptions}"
-                SelectedValue="{Binding SelectedPropagationOption}"
-                SelectedValuePath="Key" />
+                SelectedValue="{Binding SelectedSplitTokenPropagationComboItem}"
+                 />
         </StackPanel>
 
         <StackPanel

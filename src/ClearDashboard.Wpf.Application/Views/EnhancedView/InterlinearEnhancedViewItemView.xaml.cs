@@ -86,7 +86,7 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
                     if (args.InterlinearDisplay != null)
                     {
                         var dialogViewModel = args.InterlinearDisplay.Resolve<LexiconDialogViewModel>();
-                        dialogViewModel.Mode = LexiconDialogMode.SetGloss;
+                        //dialogViewModel.Mode = LexiconDialogMode.SetGloss;
                         dialogViewModel.TokenDisplay = args.TokenDisplay!;
                         dialogViewModel.InterlinearDisplay = args.InterlinearDisplay;
                         _ = await args.InterlinearDisplay.WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());

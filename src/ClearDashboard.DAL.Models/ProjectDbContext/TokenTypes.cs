@@ -8,5 +8,5 @@ public static class TokenTypes
     public static string Suffix => "Suffix";
     public static string Circumfix => "Circumfix";
 
-    public static string[] All => new[] { Prefix, Infix, Stem, Suffix, Circumfix };
+    public static string[] All => new[] { Prefix, Infix, Stem, Suffix };  //NB:  add Circumfix in a later release (post 1.5)
 }
