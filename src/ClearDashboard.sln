@@ -118,6 +118,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.WpfViewModels", "ClearDashboard.DAL.WpfViewModels\ClearDashboard.DAL.WpfViewModels.csproj", "{82738C78-80F0-450E-BB03-F106BF7C4861}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Collab_Debug|Any CPU = Collab_Debug|Any CPU
@@ -702,6 +704,26 @@ Global
 		{EAFA3ECB-41F1-442C-85EE-BA5C9A1953DA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EAFA3ECB-41F1-442C-85EE-BA5C9A1953DA}.Release|x64.ActiveCfg = Release|Any CPU
 		{EAFA3ECB-41F1-442C-85EE-BA5C9A1953DA}.Release|x64.Build.0 = Release|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Collab_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Collab_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Collab_Debug|x64.ActiveCfg = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Collab_Debug|x64.Build.0 = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Collab_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Collab_Release|Any CPU.Build.0 = Release|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Collab_Release|x64.ActiveCfg = Release|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Collab_Release|x64.Build.0 = Release|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Debug|x64.Build.0 = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.HighDPIDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.HighDPIDebug|Any CPU.Build.0 = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.HighDPIDebug|x64.ActiveCfg = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.HighDPIDebug|x64.Build.0 = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Release|x64.ActiveCfg = Release|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
