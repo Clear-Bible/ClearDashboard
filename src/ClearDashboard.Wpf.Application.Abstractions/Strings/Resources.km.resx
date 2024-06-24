@@ -131,7 +131,7 @@
     <value>- ព័ត៌មានលម្អិតគណនីបច្ចុប្បន្ន-</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
-    <value>បិទដំណើរការអាជ្ញាប័ណ្ណបច្ចុប្បន្ន</value>
+    <value>អសកម្មអាជ្ញាប័ណ្ណបច្ចុប្បន្ន</value>
   </data>
   <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
     <value>- គណនីផ្សេងទៀត-</value>
@@ -674,7 +674,7 @@
     <value>អន្តរលីនេអ៊ែរ</value>
   </data>
   <data name="EnhancedView_JoinTokens" xml:space="preserve">
-    <value>ចូលរួម Token</value>
+    <value>ចូលរួមថូខឹន</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
     <value>ចូលរួម Token សម្រាប់ភាសា Pair</value>
@@ -905,7 +905,7 @@
     <value>ប្រសិនបើធីក វានឹងផ្លាស់ប្តូរការកើតឡើងដែលមិនកំណត់ទាំងអស់នៃពាក្យនេះ។</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
-    <value>ភាពស្របគ្នា។</value>
+    <value>ការចុះសម្រុងគ្នា។</value>
   </data>
   <data name="Lexicon_DeleteLexeme" xml:space="preserve">
     <value>លុបវេយ្យាករណ៍នេះ។</value>
@@ -956,7 +956,7 @@
     <value>រលោងថ្មី។</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>ដក​ដែន​អត្ថន័យ​នេះ​ចេញ​ពី​អត្ថន័យ​នេះ។</value>
+    <value>ដកដែនសុភាសិតនេះចេញពីអត្ថន័យនេះ។</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
     <value>យកទម្រង់ lexical នេះចេញពី lexical នេះ។</value>
@@ -1415,7 +1415,7 @@
     <value>បន្ថែម Jot</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>បន្ថែម​រឿង​ថ្មី </value>
+    <value>បន្ថែម​ចំណុច​ថ្មី​មួយ (ប្ដូរ​ចូល​សម្រាប់​បន្ទាត់​ថ្មី)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>រាងកាយ</value>
@@ -1481,7 +1481,7 @@
     <value>បន្ថែមក្រុមស្លាក</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>ក្រុមស្លាកមានរួចហើយដែលមានឈ្មោះ</value>
+    <value>ក្រុមស្លាកមានរួចហើយជាមួយឈ្មោះ</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>ចាប់ផ្តើមក្រុមស្លាក</value>
@@ -1667,7 +1667,7 @@
     <value>ជ្រើសរើសក្បួនដោះស្រាយ SMT ដើម្បីហ្វឹកហាត់</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>បន្ថែមការយល់ព្រមជាដុំទៅមើល</value>
+    <value>បន្ថែមការយល់ព្រមជាដុំដើម្បីមើល</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>បន្ថែមទៅទិដ្ឋភាព</value>

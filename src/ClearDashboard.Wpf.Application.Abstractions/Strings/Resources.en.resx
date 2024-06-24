@@ -1415,7 +1415,7 @@
     <value>Add Jot</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Add a new jot </value>
+    <value>Add a new jot (shift-enter for new line)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Body</value>

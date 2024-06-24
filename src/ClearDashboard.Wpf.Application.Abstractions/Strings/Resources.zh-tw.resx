@@ -125,7 +125,7 @@
     <value>協作用戶ID：</value>
   </data>
   <data name="AccountInfo_CollaborationUsernameLabel" xml:space="preserve">
-    <value>協作使用者名稱：</value>
+    <value>合作用戶名稱：</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
     <value>-目前帳戶詳細資料-</value>
@@ -164,7 +164,7 @@
     <value>選擇您正在使用的書籍，您以後可以隨時添加更多書籍。</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
-    <value>檢查USFM</value>
+    <value>檢查 USFM</value>
   </data>
   <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
     <value>將 USFM 錯誤複製到剪貼簿</value>
@@ -656,7 +656,7 @@
     <value>刪除對齊方式</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>刪除「{0}」的對齊方式嗎？</value>
+    <value>刪除「{0}」的對齊嗎？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
     <value>刪除所有對齊方式？</value>
@@ -710,7 +710,7 @@
     <value>將拆分應用於令牌的其他實例</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>選擇拆分令牌的位置：</value>
+    <value>選擇分割令牌的位置：</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>三路分流</value>
@@ -1394,7 +1394,7 @@
     <value>名為「{0}」的項目已存在。請選擇一個獨特的名稱。</value>
   </data>
   <data name="NewProjectDialog_Title" xml:space="preserve">
-    <value>建立新項目</value>
+    <value>建立新專案</value>
   </data>
   <data name="NewProjectDialogView_EnterName" xml:space="preserve">
     <value>請輸入您的項目的名稱。</value>
@@ -1415,7 +1415,7 @@
     <value>新增筆跡</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>新增筆跡 </value>
+    <value>新增新的記號（Shift-Enter 換行）</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>身體</value>
@@ -1628,7 +1628,7 @@
     <value>舊約</value>
   </data>
   <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
-    <value>建立單字對齊</value>
+    <value>建立字對齊</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
     <value>創建語料庫詩句的平行化</value>
@@ -1685,7 +1685,7 @@
     <value>建立新的語料庫標記化</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>新增新的行間</value>
+    <value>新增的行間</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>新增文字到視圖</value>
@@ -1760,7 +1760,7 @@
     <value>從 Paratext 獲取最新信息</value>
   </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
-    <value>顯示有​​關此項目的信息</value>
+    <value>顯示有​​關該項目的信息</value>
   </data>
   <data name="Pds_ManuscriptGreek" xml:space="preserve">
     <value>希臘語 (NT) MACULA</value>
@@ -1922,7 +1922,7 @@
     <value>合作項目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>建立您的專案以開始使用。</value>
+    <value>建立您的專案以開始。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>建立一個新項目</value>

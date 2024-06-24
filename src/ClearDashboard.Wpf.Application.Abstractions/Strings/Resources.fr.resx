@@ -449,10 +449,10 @@
     <value>Approuver la sélection</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentEditor" xml:space="preserve">
-    <value>Éditeur d'alignement en bloc</value>
+    <value>Éditeur d'alignement en masse</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>Examen de l'alignement en masse</value>
+    <value>Examen de l'alignement en bloc</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>Compter</value>
@@ -866,7 +866,7 @@
     <value>LEV</value>
   </data>
   <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>Ajoutez un domaine sémantique à cette signification</value>
+    <value>Ajouter un domaine sémantique à cette signification</value>
   </data>
   <data name="Lexicon_AddForm" xml:space="preserve">
     <value>Ajouter une forme lexicale à ce lemme</value>
@@ -1289,7 +1289,7 @@
     <value>Sens du verset</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
-    <value>Verset total</value>
+    <value>Verset Total</value>
   </data>
   <data name="MAT" xml:space="preserve">
     <value>MAT</value>
@@ -1415,7 +1415,7 @@
     <value>Ajouter un point</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Ajouter un nouveau point </value>
+    <value>Ajouter un nouveau jot (shift-enter pour une nouvelle ligne)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Corps</value>
@@ -2294,7 +2294,7 @@
     <value>Envoyer</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>Activer le plugin expérimental AQUA</value>
+    <value>Activer le plugin AQUA expérimental</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
     <value>Vérifiez votre email et saisissez le code de validation :</value>

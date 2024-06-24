@@ -179,7 +179,7 @@
     <value>त्रुटियाँ नहीं</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
-    <value>फाइल करने के लिए USFM त्रुटियों को सहेजें</value>
+    <value>यूएसएफएम त्रुटियों को फ़ाइल में सहेजें</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
     <value>सबका चयन करें</value>
@@ -911,7 +911,7 @@
     <value>इस शब्दकोष को हटा दें</value>
   </data>
   <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
-    <value>क्या यह लेक्सेम हटा दिया गया है?</value>
+    <value>इस लेक्सेम को हटाएं?</value>
   </data>
   <data name="Lexicon_DeleteMeaning" xml:space="preserve">
     <value>इस अर्थ को हटा दें</value>
@@ -1265,7 +1265,7 @@
     <value>इंग्लिश ग्लॉस द्वारा खोजें</value>
   </data>
   <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>हिब्रू/ग्रीक द्वारा खोजें</value>
+    <value>हिब्रू/ग्रीक के आधार पर खोजें</value>
   </data>
   <data name="Marble_Sense" xml:space="preserve">
     <value>समझ</value>
@@ -1415,7 +1415,7 @@
     <value>जोत जोड़ें</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>एक नया जोट जोड़ें </value>
+    <value>एक नया जोट जोड़ें (नई लाइन के लिए शिफ्ट-एंटर)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>शरीर</value>
@@ -1430,7 +1430,7 @@
     <value>आपके पैराटेक्स्ट प्रोजेक्ट अनुमतियों के कारण, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>श्लोक द्वारा फ़िल्टर करें</value>
+    <value>छंद द्वारा फ़िल्टर करें</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>फिल्टर</value>
@@ -1649,7 +1649,7 @@
     <value>मशीन वर्ड संरेखण एल्गोरिदम</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>ट्रेन सममिति मॉडल?</value>
+    <value>ट्रेन सममितिकृत मॉडल?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>रेलगाड़ी</value>

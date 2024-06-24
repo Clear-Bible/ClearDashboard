@@ -1115,7 +1115,7 @@
     <value>O sobrenome é obrigatório</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>A chave de licença é necessária</value>
+    <value>A chave de licença é obrigatória</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
@@ -1286,7 +1286,7 @@
     <value>Versículos</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Sentido do Verso</value>
+    <value>Sentido do verso</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Versículo Total</value>
@@ -1415,7 +1415,7 @@
     <value>Adicionar Jota</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Adicione um novo jot </value>
+    <value>Adicione um novo jot (shift-enter para nova linha)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Corpo</value>
@@ -1700,7 +1700,7 @@
     <value>Auxiliar</value>
   </data>
   <data name="Pds_BackTranslation" xml:space="preserve">
-    <value>Tradução reversa</value>
+    <value>Retrotradução</value>
   </data>
   <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
     <value>Calcular novo modelo de tradução</value>

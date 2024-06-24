@@ -59,14 +59,14 @@
                     Grid.Column="1"
                     Margin="9,-5,0,0"
                     Padding="0,0,0,0"
+                    VerticalAlignment="Top"
                     Background="Transparent"
                     BorderThickness="0"
-                    VerticalAlignment="Top"
                     Click="ConfirmNoteDeletion"
                     FontSize="12"
                     FontWeight="SemiBold"
-                    Visibility="{Binding ElementName=NotesDisplayControl, Path=TimestampRowVisibility}"
-                    ToolTip="{helpers:Localization Notes_Delete}">
+                    ToolTip="{helpers:Localization Notes_Delete}"
+                    Visibility="{Binding ElementName=NotesDisplayControl, Path=TimestampRowVisibility}">
                     <Image Height="18" Source="/Resources/close24.png" />
                     <Button.Style>
                         <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
@@ -80,17 +80,17 @@
                 </Button>
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <!--
-                     Labels section first (and reorder within Labels section as follows)
-                      - chosen label icons in the first row(s)
-                      - Label +  selection next
-                      - Group selection next 
-                      - Body next 
-                      - add "Body" as a section with bold name like the others, make it expandable.  
-                      - add Send to PT icon next to "Body" to send Jot body to PT
-                      - Include Author and Date on the same line below the body text
-                      - Associations- same content
-                      - Replies- same content
-                      - Status- same content
+                        Labels section first (and reorder within Labels section as follows)
+                        - chosen label icons in the first row(s)
+                        - Label +  selection next
+                        - Group selection next
+                        - Body next
+                        - add "Body" as a section with bold name like the others, make it expandable.
+                        - add Send to PT icon next to "Body" to send Jot body to PT
+                        - Include Author and Date on the same line below the body text
+                        - Associations- same content
+                        - Replies- same content
+                        - Status- same content
                     -->
 
                     <!--  Labels  -->
@@ -138,15 +138,15 @@
                             Labels="{Binding ElementName=NotesDisplayControl, Path=Labels}"
                             Note="{Binding ElementName=NotesDisplayControl, Path=Note}" />
                     </userControls:TogglePanel>
-                    <!-- Body -->
-                    <userControls:TogglePanel IsOpen="True" >
+                    <!--  Body  -->
+                    <userControls:TogglePanel IsOpen="True">
 
                         <userControls:TogglePanel.Header>
                             <StackPanel Orientation="Horizontal">
                                 <Label
-                     Content="{helpers:Localization Notes_Body}"
-                     FontSize="13"
-                     FontWeight="SemiBold" />
+                                    Content="{helpers:Localization Notes_Body}"
+                                    FontSize="13"
+                                    FontWeight="SemiBold" />
                                 <materialDesign:Chip Content="{Binding ElementName=NotesDisplayControl, Path=Note.Labels.Count}" Style="{StaticResource TogglePanelChip}" />
                             </StackPanel>
                         </userControls:TogglePanel.Header>
@@ -158,30 +158,32 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <TextBlock
-                                 Grid.Column="0"
-                                 Margin="{Binding ElementName=NotesDisplayControl, Path=NoteTextMargin}"
-                                 Padding="{Binding ElementName=NotesDisplayControl, Path=NoteTextPadding}"
-                                 FontFamily="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontFamily}"
-                                 FontSize="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontSize}"
-                                 FontStyle="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontStyle}"
-                                 FontWeight="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontWeight}"
-                                 MouseDown="OnNoteLabelClick"
-                                 Text="{Binding ElementName=NotesDisplayControl, Path=Note.Text}"
-                                 TextWrapping="Wrap"
-                                 Visibility="{Binding ElementName=NotesDisplayControl, Path=NoteLabelVisibility}" />
+                                    Grid.Column="0"
+                                    Margin="{Binding ElementName=NotesDisplayControl, Path=NoteTextMargin}"
+                                    Padding="{Binding ElementName=NotesDisplayControl, Path=NoteTextPadding}"
+                                    FontFamily="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontFamily}"
+                                    FontSize="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontSize}"
+                                    FontStyle="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontStyle}"
+                                    FontWeight="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontWeight}"
+                                    MouseDown="OnNoteLabelClick"
+                                    Text="{Binding ElementName=NotesDisplayControl, Path=Note.Text}"
+                                    TextWrapping="Wrap"
+                                    Visibility="{Binding ElementName=NotesDisplayControl, Path=NoteLabelVisibility}" />
                                 <TextBox
-                                         x:Name="NoteTextBox"
-                                         Grid.Column="0"
-                                         Margin="{Binding ElementName=NotesDisplayControl, Path=NoteTextMargin}"
-                                         Padding="{Binding ElementName=NotesDisplayControl, Path=NoteTextPadding}"
-                                         FontFamily="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontFamily}"
-                                         FontSize="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontSize}"
-                                         FontStyle="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontStyle}"
-                                         FontWeight="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontWeight}"
-                                         Text="{Binding ElementName=NotesDisplayControl, Path=Note.Text}"
-                                         TextChanged="OnNoteTextBoxChanged"
-                                         TextWrapping="Wrap"
-                                         Visibility="{Binding ElementName=NotesDisplayControl, Path=NoteTextBoxVisibility}">
+                                    x:Name="NoteTextBox"
+                                    Grid.Column="0"
+                                    Margin="{Binding ElementName=NotesDisplayControl, Path=NoteTextMargin}"
+                                    Padding="{Binding ElementName=NotesDisplayControl, Path=NoteTextPadding}"
+                                    FontFamily="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontFamily}"
+                                    FontSize="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontSize}"
+                                    FontStyle="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontStyle}"
+                                    FontWeight="{Binding ElementName=NotesDisplayControl, Path=NoteTextFontWeight}"
+                                    PreviewKeyDown="NoteTextBox_OnPreviewKeyDown"
+                                    Text="{Binding ElementName=NotesDisplayControl, Path=Note.Text}"
+                                    TextChanged="OnNoteTextBoxChanged"
+                                    TextWrapping="Wrap"
+                                    VerticalScrollBarVisibility="Visible"
+                                    Visibility="{Binding ElementName=NotesDisplayControl, Path=NoteTextBoxVisibility}">
                                     <TextBox.Style>
                                         <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="{x:Type TextBox}">
                                             <Style.Triggers>
@@ -193,14 +195,14 @@
                                     </TextBox.Style>
                                 </TextBox>
                                 <TextBlock
-                                         Grid.Row="0"
-                                         Grid.Column="0"
-                                         Margin="4,0,0,0"
-                                         HorizontalAlignment="Left"
-                                         VerticalAlignment="Center"
-                                         Foreground="DarkGray"
-                                         IsHitTestVisible="False"
-                                         Text="{Binding ElementName=NotesDisplayControl, Path=Watermark}">
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Margin="4,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Foreground="DarkGray"
+                                    IsHitTestVisible="False"
+                                    Text="{Binding ElementName=NotesDisplayControl, Path=Watermark}">
                                     <TextBlock.Style>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="Visibility" Value="Collapsed" />
@@ -214,22 +216,22 @@
                                 </TextBlock>
 
                                 <StackPanel
-Grid.Column="0"
-HorizontalAlignment="Right"
-VerticalAlignment="Bottom"
-Orientation="Vertical"
-Visibility="{Binding ElementName=NotesDisplayControl, Path=ParatextSendVisibility}">
+                                    Grid.Column="0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Bottom"
+                                    Orientation="Vertical"
+                                    Visibility="{Binding ElementName=NotesDisplayControl, Path=ParatextSendVisibility}">
                                     <Button
-    Name="SendToParatextButton"
-    Margin="10,-5,10,0"
-    Padding="0,0,0,0"
-    HorizontalAlignment="Right"
-    Background="Transparent"
-    BorderThickness="0"
-    Click="ConfirmParatextSend"
-    FontSize="12"
-    FontWeight="SemiBold"
-    ToolTip="{helpers:Localization Notes_SendToParatext}">
+                                        Name="SendToParatextButton"
+                                        Margin="10,-5,10,0"
+                                        Padding="0,0,0,0"
+                                        HorizontalAlignment="Right"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        Click="ConfirmParatextSend"
+                                        FontSize="12"
+                                        FontWeight="SemiBold"
+                                        ToolTip="{helpers:Localization Notes_SendToParatext}">
                                         <Button.Style>
                                             <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
                                                 <Style.Triggers>
@@ -242,60 +244,60 @@ Visibility="{Binding ElementName=NotesDisplayControl, Path=ParatextSendVisibilit
                                         <Image Height="24" Source="/Resources/Paratext_Send32.png" />
                                     </Button>
                                     <Popup
-    Name="ConfirmParatextSendPopup"
-    HorizontalOffset="100"
-    Placement="Left"
-    PlacementTarget="{Binding ElementName=SendToParatextButton}"
-    StaysOpen="False"
-    VerticalOffset="30">
+                                        Name="ConfirmParatextSendPopup"
+                                        HorizontalOffset="100"
+                                        Placement="Left"
+                                        PlacementTarget="{Binding ElementName=SendToParatextButton}"
+                                        StaysOpen="False"
+                                        VerticalOffset="30">
                                         <Border BorderThickness="2">
                                             <StackPanel Background="LightGreen" Orientation="Vertical">
                                                 <TextBlock
-                Padding="10"
-                HorizontalAlignment="Center"
-                FontWeight="Bold"
-                Text="{helpers:Localization Notes_SendConfirmation}" />
+                                                    Padding="10"
+                                                    HorizontalAlignment="Center"
+                                                    FontWeight="Bold"
+                                                    Text="{helpers:Localization Notes_SendConfirmation}" />
                                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                                     <Button
-                    Margin="5"
-                    Click="ParatextSendConfirmed"
-                    Content="{helpers:Localization Yes}"
-                    Style="{StaticResource TransparentStyle}" />
+                                                        Margin="5"
+                                                        Click="ParatextSendConfirmed"
+                                                        Content="{helpers:Localization Yes}"
+                                                        Style="{StaticResource TransparentStyle}" />
                                                     <Button
-                    Margin="5"
-                    Click="ParatextSendCancelled"
-                    Content="{helpers:Localization No}"
-                    Style="{StaticResource AlternativeStyle}" />
+                                                        Margin="5"
+                                                        Click="ParatextSendCancelled"
+                                                        Content="{helpers:Localization No}"
+                                                        Style="{StaticResource AlternativeStyle}" />
                                                 </StackPanel>
                                             </StackPanel>
                                         </Border>
                                     </Popup>
                                 </StackPanel>
                                 <Popup
-             x:Name="ConfirmDeletePopup"
-             Grid.Column="1"
-             Placement="Left"
-             PlacementTarget="{Binding ElementName=DeleteNoteButton}"
-             StaysOpen="False"
-             VerticalOffset="30">
+                                    x:Name="ConfirmDeletePopup"
+                                    Grid.Column="1"
+                                    Placement="Left"
+                                    PlacementTarget="{Binding ElementName=DeleteNoteButton}"
+                                    StaysOpen="False"
+                                    VerticalOffset="30">
                                     <Border BorderThickness="2">
                                         <StackPanel Background="WhiteSmoke" Orientation="Vertical">
                                             <TextBlock
-                         Padding="10"
-                         HorizontalAlignment="Center"
-                         FontWeight="Bold"
-                         Text="{helpers:Localization Notes_DeleteConfirmation}" />
+                                                Padding="10"
+                                                HorizontalAlignment="Center"
+                                                FontWeight="Bold"
+                                                Text="{helpers:Localization Notes_DeleteConfirmation}" />
                                             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                                 <Button
-                             Margin="5"
-                             Click="DeleteNoteConfirmed"
-                             Content="{helpers:Localization Yes}"
-                             Style="{StaticResource TransparentStyle}" />
+                                                    Margin="5"
+                                                    Click="DeleteNoteConfirmed"
+                                                    Content="{helpers:Localization Yes}"
+                                                    Style="{StaticResource TransparentStyle}" />
                                                 <Button
-                             Margin="5"
-                             Click="DeleteNoteCancelled"
-                             Content="{helpers:Localization No}"
-                             Style="{StaticResource AlternativeStyle}" />
+                                                    Margin="5"
+                                                    Click="DeleteNoteCancelled"
+                                                    Content="{helpers:Localization No}"
+                                                    Style="{StaticResource AlternativeStyle}" />
                                             </StackPanel>
                                         </StackPanel>
                                     </Border>
@@ -304,62 +306,62 @@ Visibility="{Binding ElementName=NotesDisplayControl, Path=ParatextSendVisibilit
 
                             <!--  User and timestamp  -->
                             <Grid
-         Margin="0,0"
-         VerticalAlignment="Top"
-         Visibility="{Binding ElementName=NotesDisplayControl, Path=TimestampRowVisibility}">
+                                Margin="0,0"
+                                VerticalAlignment="Top"
+                                Visibility="{Binding ElementName=NotesDisplayControl, Path=TimestampRowVisibility}">
                                 <Grid.RowDefinitions>
                                     <RowDefinition />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
                                 <Label
-             Grid.Row="0"
-             Margin="{Binding ElementName=NotesDisplayControl, Path=UserMargin}"
-             VerticalContentAlignment="Top"
-             Content="{Binding ElementName=NotesDisplayControl, Path=Note.ModifiedBy}"
-             FontFamily="{Binding ElementName=NotesDisplayControl, Path=UserFontFamily}"
-             FontSize="{Binding ElementName=NotesDisplayControl, Path=UserFontSize}"
-             FontStyle="{Binding ElementName=NotesDisplayControl, Path=UserFontStyle}"
-             FontWeight="{Binding ElementName=NotesDisplayControl, Path=UserFontWeight}" />
+                                    Grid.Row="0"
+                                    Margin="{Binding ElementName=NotesDisplayControl, Path=UserMargin}"
+                                    VerticalContentAlignment="Top"
+                                    Content="{Binding ElementName=NotesDisplayControl, Path=Note.ModifiedBy}"
+                                    FontFamily="{Binding ElementName=NotesDisplayControl, Path=UserFontFamily}"
+                                    FontSize="{Binding ElementName=NotesDisplayControl, Path=UserFontSize}"
+                                    FontStyle="{Binding ElementName=NotesDisplayControl, Path=UserFontStyle}"
+                                    FontWeight="{Binding ElementName=NotesDisplayControl, Path=UserFontWeight}" />
                                 <Label
-             Grid.Row="0"
-             Margin="{Binding ElementName=NotesDisplayControl, Path=TimestampMargin}"
-             HorizontalAlignment="Right"
-             HorizontalContentAlignment="Right"
-             VerticalContentAlignment="Top"
-             Content="{Binding ElementName=NotesDisplayControl, Path=Note.ModifiedLocalTime}"
-             FontFamily="{Binding ElementName=NotesDisplayControl, Path=TimestampFontFamily}"
-             FontSize="{Binding ElementName=NotesDisplayControl, Path=TimestampFontSize}"
-             FontStyle="{Binding ElementName=NotesDisplayControl, Path=UserFontStyle}"
-             FontWeight="{Binding ElementName=NotesDisplayControl, Path=UserFontWeight}" />
+                                    Grid.Row="0"
+                                    Margin="{Binding ElementName=NotesDisplayControl, Path=TimestampMargin}"
+                                    HorizontalAlignment="Right"
+                                    HorizontalContentAlignment="Right"
+                                    VerticalContentAlignment="Top"
+                                    Content="{Binding ElementName=NotesDisplayControl, Path=Note.ModifiedLocalTime}"
+                                    FontFamily="{Binding ElementName=NotesDisplayControl, Path=TimestampFontFamily}"
+                                    FontSize="{Binding ElementName=NotesDisplayControl, Path=TimestampFontSize}"
+                                    FontStyle="{Binding ElementName=NotesDisplayControl, Path=UserFontStyle}"
+                                    FontWeight="{Binding ElementName=NotesDisplayControl, Path=UserFontWeight}" />
                             </Grid>
                             <!--  Apply and Cancel buttons  -->
                             <StackPanel
-         HorizontalAlignment="Center"
-         Orientation="Horizontal"
-         Visibility="{Binding ElementName=NotesDisplayControl, Path=NoteSaveCancelButtonVisibility}">
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal"
+                                Visibility="{Binding ElementName=NotesDisplayControl, Path=NoteSaveCancelButtonVisibility}">
                                 <Button
-             Height="40"
-             Margin="0,5,3,0"
-             Click="Cancel"
-             Content="{helpers:Localization Cancel}"
-             FontSize="11"
-             Foreground="{DynamicResource MaterialDesignBody}"
-             Style="{StaticResource AlternativeStyle}" />
+                                    Height="40"
+                                    Margin="0,5,3,0"
+                                    Click="Cancel"
+                                    Content="{helpers:Localization Cancel}"
+                                    FontSize="11"
+                                    Foreground="{DynamicResource MaterialDesignBody}"
+                                    Style="{StaticResource AlternativeStyle}" />
                                 <Button
-             Height="40"
-             Margin="3,5,0,0"
-             Click="ApplyNote"
-             Content="{helpers:Localization Notes_UpdateJot}"
-             FontSize="11"
-             Foreground="{DynamicResource MaterialDesignBody}"
-             Style="{StaticResource TransparentStyle}" />
+                                    Height="40"
+                                    Margin="3,5,0,0"
+                                    Click="ApplyNote"
+                                    Content="{helpers:Localization Notes_UpdateJot}"
+                                    FontSize="11"
+                                    Foreground="{DynamicResource MaterialDesignBody}"
+                                    Style="{StaticResource TransparentStyle}" />
                             </StackPanel>
                         </StackPanel>
 
                     </userControls:TogglePanel>
 
-                
-                <!--  Associations  -->
+
+                    <!--  Associations  -->
                     <userControls:TogglePanel IsOpen="False" Visibility="{Binding ElementName=NotesDisplayControl, Path=AssociationsPanelVisibility}">
                         <userControls:TogglePanel.Header>
                             <StackPanel Orientation="Horizontal">
@@ -390,7 +392,7 @@ Visibility="{Binding ElementName=NotesDisplayControl, Path=ParatextSendVisibilit
                             NoteAssociationRightButtonUp="OnNoteAssociationRightButtonUp" />
                     </userControls:TogglePanel>
                     <!--  Replies  -->
-                    <userControls:TogglePanel IsOpen="False" Visibility="{Binding ElementName=NotesDisplayControl, Path=NotePropertiesVisibility}">
+                    <userControls:TogglePanel IsOpen="True" Visibility="{Binding ElementName=NotesDisplayControl, Path=NotePropertiesVisibility}">
                         <userControls:TogglePanel.Header>
                             <StackPanel Orientation="Horizontal">
                                 <Label
@@ -414,9 +416,9 @@ Visibility="{Binding ElementName=NotesDisplayControl, Path=ParatextSendVisibilit
                             TimestampOrientation="Vertical" />
                     </userControls:TogglePanel>
 
-                    <!-- Status -->
+                    <!--  Status  -->
                     <userControls:TogglePanel IsOpen="True">
-                        <!--  Visibility="{Binding ElementName=NotesDisplayControl, Path=AssociationsPanelVisibility}"-->
+                        <!--  Visibility="{Binding ElementName=NotesDisplayControl, Path=AssociationsPanelVisibility}"  -->
                         <userControls:TogglePanel.Header>
                             <StackPanel Orientation="Horizontal">
                                 <Label
@@ -433,17 +435,17 @@ Visibility="{Binding ElementName=NotesDisplayControl, Path=ParatextSendVisibilit
                             Margin="0,10,0,0"
                             HorizontalAlignment="Left"
                             Orientation="Horizontal">
-                         
+
                             <ComboBox
-                            x:Name="NoteStatusComboBox"
-                            Width="200"
-                            Height="30"
-                            Margin="10,0,0,0"
-                            HorizontalAlignment="Right"
-                            VerticalContentAlignment="Top"
-                            FontSize="12"
-                            ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type models:NoteStatus}, Archived}}"
-                            SelectedItem="{Binding ElementName=NotesDisplayControl, Path=SelectedNoteStatus, Mode=TwoWay}">
+                                x:Name="NoteStatusComboBox"
+                                Width="200"
+                                Height="30"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Right"
+                                VerticalContentAlignment="Top"
+                                FontSize="12"
+                                ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type models:NoteStatus}, Archived}}"
+                                SelectedItem="{Binding ElementName=NotesDisplayControl, Path=SelectedNoteStatus, Mode=TwoWay}">
                                 <ComboBox.Style>
                                     <Style BasedOn="{StaticResource {x:Type ComboBox}}" TargetType="{x:Type ComboBox}">
                                         <Style.Triggers>

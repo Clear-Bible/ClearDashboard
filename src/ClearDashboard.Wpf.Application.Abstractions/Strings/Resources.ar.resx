@@ -941,7 +941,7 @@
     <value>Lemma للمفردات الجديدة:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
-    <value>المعجم</value>
+    <value>معجم</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>معجم لـ موجود بالفعل لـ lemma</value>
@@ -1004,7 +1004,7 @@
     <value>مطابقة كاملة</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
-    <value>المعجم</value>
+    <value>معجم</value>
   </data>
   <data name="LexiconEdit_LoadingData" xml:space="preserve">
     <value>تحميل البيانات...</value>
@@ -1016,7 +1016,7 @@
     <value>مطابقة</value>
   </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
-    <value>المعاني [ترجمات]</value>
+    <value>المعاني [الترجمات]</value>
   </data>
   <data name="LexiconEdit_Or" xml:space="preserve">
     <value>أو</value>
@@ -1295,7 +1295,7 @@
     <value>MAT</value>
   </data>
   <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>جارٍ إنشاء قاعدة البيانات...</value>
+    <value>جارٍ إنشاء قاعدة بيانات...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
     <value>اكتمل الدمج...جاري إعادة تحميل الواجهة</value>
@@ -1415,7 +1415,7 @@
     <value>أضف جوت</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>أضف نقطة جديدة </value>
+    <value>إضافة نقطة جديدة (shift-enter للسطر الجديد)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>جسم</value>
@@ -1514,7 +1514,7 @@
     <value>افصل التسمية</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>علامة Jots المحددة على أنها مفتوحة</value>
+    <value>وضع علامة على النقاط المحددة على أنها مفتوحة</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
     <value>وضع علامة على النقاط المحددة على أنها تم حلها</value>
@@ -1787,7 +1787,7 @@
     <value>الموارد</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
-    <value>قم بتوسيع المحتوى إلى 100٪</value>
+    <value>قم بتوسيع المحتوى إلى 100%</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
     <value>إضافة نص إلى نافذة جديدة</value>
@@ -1862,7 +1862,7 @@
     <value>لغة</value>
   </data>
   <data name="Pins_Lexeme" xml:space="preserve">
-    <value>المعجم</value>
+    <value>معجم</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
     <value>نوع المفردات</value>
@@ -2021,7 +2021,7 @@
     <value>تحديث قائمة مشاريع التعاون</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>البحث مؤخرا</value>
+    <value>بحث مؤخرا</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
     <value>انقر هنا لبدء Paratext</value>
@@ -2147,7 +2147,7 @@
     <value>هوشع</value>
   </data>
   <data name="ProperCase_Isaiah" xml:space="preserve">
-    <value>إشعياء</value>
+    <value>أشعياء</value>
   </data>
   <data name="ProperCase_James" xml:space="preserve">
     <value>جوامع</value>
@@ -2453,7 +2453,7 @@
     <value>لا أستطيع إكمال المهمة</value>
   </data>
   <data name="SlackMessageView_Combo3" xml:space="preserve">
-    <value>لقد أكملت مهمة ولكنها كانت صعبة</value>
+    <value>لقد أكملت مهمة لكنها كانت صعبة</value>
   </data>
   <data name="SlackMessageView_Combo4" xml:space="preserve">
     <value>أود أن أفعل...</value>

@@ -9,12 +9,14 @@ using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Notes;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Features.Translation;
 using Brushes = System.Windows.Media.Brushes;
 using FontFamily = System.Windows.Media.FontFamily;
 using FontStyle = System.Windows.FontStyle;
@@ -693,6 +695,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         private void RaiseNoteEvent(RoutedEvent routedEvent)
         {
+            if (routedEvent == NoteSendToParatextEvent)
+            {
+                Debug.WriteLine("");
+            }
+
+
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,
@@ -1576,5 +1584,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         }
 
 
+        private void NoteTextBox_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && Keyboard.Modifiers == ModifierKeys.Shift)
+            {
+                Note.Text = NoteTextBox.Text + "\n";
+                // put the cursor at the end of the text
+                NoteTextBox.CaretIndex = NoteTextBox.Text.Length;
+                e.Handled = true;
+            }
+        }
     }
 }

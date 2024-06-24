@@ -194,7 +194,7 @@
     <value>Wählen Sie USFM-Bücher zum Senden aus</value>
   </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
-    <value>Wählen Sie Paratextprojekt aus</value>
+    <value>Wählen Sie Paratext-Projekt aus</value>
   </data>
   <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
     <value>Alles wiederufen</value>
@@ -677,7 +677,7 @@
     <value>Treten Sie Token bei</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Join-Tokens für Sprachpaar</value>
+    <value>Join-Token für Sprachpaar</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>Ausrichtung als „Ungültig“ markieren</value>
@@ -1070,7 +1070,7 @@
     <value>Sprache:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
-    <value>Lexem- oder Formübereinstimmungen</value>
+    <value>Lexem- oder Formularübereinstimmungen</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
     <value>Es sind keine weiteren Datensätze zum Importieren vorhanden.</value>
@@ -1226,7 +1226,7 @@
     <value>Definition</value>
   </data>
   <data name="Marble_DefinitionLong" xml:space="preserve">
-    <value>Definition Lang:</value>
+    <value>Definition lang:</value>
   </data>
   <data name="Marble_DefinitionShort" xml:space="preserve">
     <value>Definition kurz:</value>
@@ -1415,7 +1415,7 @@
     <value>Jot hinzufügen</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Fügen Sie ein neues Protokoll hinzu </value>
+    <value>Fügen Sie ein neues Jota hinzu (Umschalt-Eingabetaste für neue Zeile)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Körper</value>
@@ -1811,7 +1811,7 @@
     <value>StudyBibleAdditions</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Gehen Sie zu Paratext und wechseln Sie die Projekte.  Das derzeit mit dem ClearDashboard-Plugin verbundene Paratext-Projekt ist nicht dasselbe wie das Korpus in diesem ClearDashboard-Projekt.</value>
+    <value>Gehen Sie zu Paratext und wechseln Sie die Projekte.  Das Paratext-Projekt, das derzeit mit dem ClearDashboard-Plugin verbunden ist, ist nicht dasselbe wie das Korpus in diesem ClearDashboard-Projekt.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Ziel</value>
@@ -2369,7 +2369,7 @@
     <value>Leistungsmodi</value>
   </data>
   <data name="Settings_PowerModesDescription" xml:space="preserve">
-    <value>Erlauben Sie ClearDashboard, den Energiemodus bei Ereignissen mit hohem Rechenaufwand zu ändern</value>
+    <value>Erlauben Sie ClearDashboard, den Energiemodus bei Ereignissen mit hoher Rechenleistung zu ändern</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
     <value>Reserviert</value>

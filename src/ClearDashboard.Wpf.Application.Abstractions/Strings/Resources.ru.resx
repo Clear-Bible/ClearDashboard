@@ -389,7 +389,7 @@
     <value>Категория</value>
   </data>
   <data name="BiblicalTermsForm_Counts" xml:space="preserve">
-    <value>Считает</value>
+    <value>имеет значение</value>
   </data>
   <data name="BiblicalTermsForm_Found" xml:space="preserve">
     <value>Найденный</value>
@@ -635,7 +635,7 @@
     <value>Добавить выравнивание?</value>
   </data>
   <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>Выровнять '{0}' по '{1}'?</value>
+    <value>Выровнять "{0}" по "{1}"?</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
     <value>Выравнивание</value>
@@ -1052,7 +1052,7 @@
     <value>Добавить цель в качестве перевода для...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Найдите лексемы, у которых есть один или несколько переводов, соответствующих целевому значению.</value>
+    <value>Найдите лексемы, у которых есть один или несколько переводов, соответствующих целевому.</value>
   </data>
   <data name="LexiconImport_Checked" xml:space="preserve">
     <value>Проверено</value>
@@ -1415,7 +1415,7 @@
     <value>Добавить Джот</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Добавить новую запись </value>
+    <value>Добавить новую точку (shift-enter для новой строки)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Тело</value>
@@ -1571,7 +1571,7 @@
     <value>Положение дел</value>
   </data>
   <data name="Notes_OpenConfirmation" xml:space="preserve">
-    <value>Отметьте эти Jots как открытые?</value>
+    <value>Пометить эти заметки как открытые?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Часть</value>
@@ -1730,7 +1730,7 @@
     <value>Удалить подстрочный текст</value>
   </data>
   <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить этот корпус? Все примечания, выравнивания и подстрочные знаки, связанные с этим корпусом, будут удалены без возможности восстановления.</value>
+    <value>Вы уверены, что хотите удалить этот корпус? Все примечания, выравнивания и подстрочные строки, связанные с этим корпусом, будут удалены без возможности восстановления.</value>
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Словарь</value>
@@ -1877,7 +1877,7 @@
     <value>Примечания</value>
   </data>
   <data name="Pins_Occurences" xml:space="preserve">
-    <value>События</value>
+    <value>Случаи</value>
   </data>
   <data name="Pins_Origin" xml:space="preserve">
     <value>Источник</value>

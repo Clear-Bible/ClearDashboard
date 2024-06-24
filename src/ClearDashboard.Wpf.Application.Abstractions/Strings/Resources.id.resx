@@ -155,7 +155,7 @@
     <value>Menambahkan</value>
   </data>
   <data name="AddCorpusDialog_SelectEngine" xml:space="preserve">
-    <value>Pilih Cara Tokenisasi Corpus</value>
+    <value>Pilih Cara Membuat Tokenisasi Corpus</value>
   </data>
   <data name="AddParatextCorpusDialog_Alignment" xml:space="preserve">
     <value>Penyelarasan</value>
@@ -1046,7 +1046,7 @@
     <value>Tambahkan sebagai formulir untuk...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Temukan leksem atau bentuk yang lengkap atau sebagian yang cocok dengan sumbernya</value>
+    <value>Temukan leksem lengkap atau sebagian atau kecocokan bentuk dengan sumbernya</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Tambahkan target sebagai terjemahan untuk ...</value>
@@ -1415,7 +1415,7 @@
     <value>Tambahkan Jot</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Tambahkan catatan baru </value>
+    <value>Tambahkan catatan baru (shift-enter untuk baris baru)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Tubuh</value>
@@ -1430,7 +1430,7 @@
     <value>Karena izin proyek Paratext Anda, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Saring berdasarkan Ayat</value>
+    <value>Filter berdasarkan Ayat</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filter</value>
@@ -1505,7 +1505,7 @@
     <value>Hapus label ini</value>
   </data>
   <data name="Notes_LabelTextAttached" xml:space="preserve">
-    <value>Teks terlampir pada label</value>
+    <value>Teks dilampirkan pada label</value>
   </data>
   <data name="Notes_LabelTooltipDelete" xml:space="preserve">
     <value>Hapus label</value>
@@ -1586,7 +1586,7 @@
     <value>Pilih label yang akan dihapus dari grup label</value>
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
-    <value>Catatan: label ini akan muncul di bawah grup label: Tidak Ada</value>
+    <value>Catatan: label ini akan muncul di bawah grup label: Tidak ada</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>Kirim catatan ini ke Paratext?</value>
@@ -1751,7 +1751,7 @@
     <value>Paskan seluruh area konten ke area pandang</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>Paskan semua node ke viewport</value>
+    <value>Pasangkan semua node ke viewport</value>
   </data>
   <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
     <value>Dapatkan Catatan Eksternal Terbaru</value>
@@ -2021,7 +2021,7 @@
     <value>Segarkan Daftar Proyek Kolaborasi</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>Cari terbaru</value>
+    <value>Cari terkini</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
     <value>Klik di sini untuk memulai Paratext</value>
@@ -2414,7 +2414,7 @@
     <value>Validasi Kode Email</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Aktifkan tampilan Koleksi Teks ayat demi ayat</value>
+    <value>Aktifkan tampilan Kumpulan Teks ayat demi ayat</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>Batalkan Tugas</value>

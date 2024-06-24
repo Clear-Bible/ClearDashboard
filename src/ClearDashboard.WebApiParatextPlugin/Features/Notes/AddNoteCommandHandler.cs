@@ -76,6 +76,13 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                 verseRef = _parent.CurrentState.VerseRef;
             }
 
+            // check to see if the note author is different from the current user
+            if (request.Data.UserName != _host.UserInfo.Name)
+            {
+                request.Data.NoteParagraphs.Add($"[Jot Author: {request.Data.UserName}]");
+            }
+
+
             IProjectNote projectNoteAdded = null;
             using (var writeLock = project.RequestWriteLock(_mainWindow, WriteLockReleaseRequested, WriteLockScope.ProjectNotes))
             {

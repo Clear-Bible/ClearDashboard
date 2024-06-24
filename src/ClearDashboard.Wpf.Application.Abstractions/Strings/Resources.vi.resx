@@ -677,7 +677,7 @@
     <value>Tham gia Token</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Mã thông báo tham gia cho cặp ngôn ngữ</value>
+    <value>Tham gia Token cho cặp ngôn ngữ</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>Đánh dấu căn chỉnh là 'Không hợp lệ'</value>
@@ -1163,7 +1163,7 @@
     <value>Sở thích</value>
   </data>
   <data name="MainView_QuickNew" xml:space="preserve">
-    <value>Nhanh chóng Mới</value>
+    <value>Mới nhanh</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Có sẵn các thay đổi cộng tác</value>
@@ -1415,7 +1415,7 @@
     <value>Thêm tin nhắn</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Thêm một ghi chú mới </value>
+    <value>Thêm một ghi chú mới (shift-enter cho dòng mới)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Thân hình</value>
@@ -1811,7 +1811,7 @@
     <value>Nghiên CứuKinh ThánhBổ Sung</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Đi tới Paratext và chuyển đổi dự án.  Dự án Paratext hiện được kết nối với plugin ClearDashboard không giống với kho văn bản trong dự án ClearDashboard này.</value>
+    <value>Đi đến Paratext và chuyển đổi dự án.  Dự án Paratext hiện được kết nối với plugin ClearDashboard không giống với kho văn bản trong dự án ClearDashboard này.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Mục tiêu</value>
@@ -1820,7 +1820,7 @@
     <value>Chuyển ngữHướng dẫn sử dụng</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Chuyển ngữVớiBộ mã hóa</value>
+    <value>Chuyển ngữVới Bộ mã hóa</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>không xác định</value>
@@ -2222,7 +2222,7 @@
     <value>Thánh vịnh</value>
   </data>
   <data name="ProperCase_Revelation" xml:space="preserve">
-    <value>Khải huyền</value>
+    <value>Khải Huyền</value>
   </data>
   <data name="ProperCase_Romans" xml:space="preserve">
     <value>người La Mã</value>
@@ -2399,7 +2399,7 @@
     <value>Hiển thị Chế độ xem mở rộng trên màn hình khác với Trang tổng quan</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Đối với hệ thống có ba màn hình trở lên, hãy hiển thị Chế độ xem mở rộng trên màn hình thứ ba</value>
+    <value>Đối với các hệ thống có ba màn hình trở lên, hãy hiển thị Chế độ xem mở rộng trên màn hình thứ ba</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Bộ sưu tập văn bản</value>
@@ -2453,7 +2453,7 @@
     <value>Tôi không thể hoàn thành nhiệm vụ</value>
   </data>
   <data name="SlackMessageView_Combo3" xml:space="preserve">
-    <value>Tôi đã hoàn thành một nhiệm vụ nhưng nó rất khó</value>
+    <value>Tôi đã hoàn thành một nhiệm vụ nhưng nó rất khó khăn</value>
   </data>
   <data name="SlackMessageView_Combo4" xml:space="preserve">
     <value>Tôi muốn làm...</value>

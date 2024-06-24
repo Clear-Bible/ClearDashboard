@@ -503,7 +503,7 @@
     <value>Parte fuente</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Fuente de referencia</value>
+    <value>Referencia de fuente</value>
   </data>
   <data name="BulkAlignmentReview_Target" xml:space="preserve">
     <value>Objetivo</value>
@@ -1229,7 +1229,7 @@
     <value>Definición larga:</value>
   </data>
   <data name="Marble_DefinitionShort" xml:space="preserve">
-    <value>Definición corta:</value>
+    <value>Definición breve:</value>
   </data>
   <data name="Marble_DefinitionUnavailable" xml:space="preserve">
     <value>definición no disponible</value>
@@ -1415,7 +1415,7 @@
     <value>Añadir jota</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Agregar una nueva jota </value>
+    <value>Agregue una nueva jota (mayúsculas-ingresar para una nueva línea)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Cuerpo</value>
@@ -2129,7 +2129,7 @@
     <value>Esdras</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>gálatas</value>
+    <value>Gálatas</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>Génesis</value>
