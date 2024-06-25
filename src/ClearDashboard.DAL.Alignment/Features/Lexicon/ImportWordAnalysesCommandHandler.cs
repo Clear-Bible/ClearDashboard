@@ -249,7 +249,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                 Debug.WriteLine($"Time elapsed:  {sw.Elapsed} (debug)");
                 Console.WriteLine($"Time elapsed:  {sw.Elapsed} (console)");
 
-				return new RequestResult<Unit>();
+				return new RequestResult<Unit>(Unit.Value);
 			}
 			catch (OperationCanceledException)
             {
