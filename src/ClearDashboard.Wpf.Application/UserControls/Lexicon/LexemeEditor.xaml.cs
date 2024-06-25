@@ -129,6 +129,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         /// </summary>
         public static readonly DependencyProperty CurrentLexemeProperty = DependencyProperty.Register(nameof(CurrentLexeme), typeof(LexemeViewModel), typeof(LexemeEditor));
 
+        public static readonly DependencyProperty IsReadOnlyProperty = DependencyProperty.Register(nameof(IsReadOnly), typeof(bool), typeof(LexemeEditor));
+
         /// <summary>
         /// Identifies the Lexemes dependency property.
         /// </summary>
@@ -162,7 +164,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         /// Identifies the LemmaMargin dependency property.
         /// </summary>
         public static readonly DependencyProperty LemmaMarginProperty = DependencyProperty.Register(nameof(LemmaMargin), typeof(Thickness), typeof(LexemeEditor),
-            new PropertyMetadata(new Thickness(3, 0, 3, 0)));
+            new PropertyMetadata(new Thickness(4, 0, 3, 0)));
 
         /// <summary>
         /// Identifies the LemmaPadding dependency property.
@@ -769,6 +771,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         {
             get => (LexemeViewModel)GetValue(CurrentLexemeProperty);
             set => SetValue(CurrentLexemeProperty, value);
+        }
+
+        public bool IsReadOnly
+        {
+            get => (bool)GetValue(IsReadOnlyProperty);
+            set => SetValue(IsReadOnlyProperty, value);
         }
 
         /// <summary>

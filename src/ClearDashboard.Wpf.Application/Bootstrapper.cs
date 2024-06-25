@@ -32,6 +32,7 @@ using Autofac.Configuration;
 using ClearDashboard.Collaboration.Features;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Localization;
 using Microsoft.Extensions.Configuration;
 using DashboardApplication = System.Windows.Application;
 
@@ -182,7 +183,10 @@ namespace ClearDashboard.Wpf.Application
         protected override void PostInitialize()
         {
             LogDependencyInjectionRegistrations();
+
             SetupLanguage();
+
+            StaticLocalizationService.SetLocalizationService(Container!.Resolve<ILocalizationService>());
 
 #if DEBUG
             if (DependencyInjectionLogging)
@@ -508,6 +512,8 @@ namespace ClearDashboard.Wpf.Application
         }
 
         #endregion
+
+       
 
     }
 }

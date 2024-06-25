@@ -96,6 +96,7 @@
                     SemanticDomains="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Meaning.SemanticDomains}" />
                 <lexiconControls:SemanticDomainSelector
                     HorizontalAlignment="Center"
+                    IsReadOnly="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=IsReadOnly}" 
                     VerticalAlignment="Center"
                     VerticalContentAlignment="Center"
                     SemanticDomainAdded="OnSemanticDomainAdded"
@@ -112,7 +113,8 @@
                 Click="ConfirmMeaningDeletion"
                 FontSize="12"
                 FontWeight="SemiBold"
-                ToolTip="{helpers:Localization Lexicon_DeleteMeaning}">
+                ToolTip="{helpers:Localization Lexicon_DeleteMeaning}"
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=IsReadOnly, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                 <Image Height="18" Source="/Resources/close24.png" />
             </Button>
 
@@ -176,7 +178,8 @@
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
                 FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontStyle}"
                 FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontWeight}"
-                KeyUp="OnNewTranslationTextBoxKeyUp" />
+                KeyUp="OnNewTranslationTextBoxKeyUp"
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=IsReadOnly, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
             <TextBlock
                 Grid.Column="1"
                 Margin="4,0,0,0"
@@ -186,7 +189,8 @@
                 FontSize="13"
                 FontStyle="Italic"
                 Foreground="DarkGray"
-                IsHitTestVisible="False">
+                IsHitTestVisible="False"
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=IsReadOnly, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                 <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
                         <Setter Property="Visibility" Value="Collapsed" />
