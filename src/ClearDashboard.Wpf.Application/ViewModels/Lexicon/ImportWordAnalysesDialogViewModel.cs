@@ -146,7 +146,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         #endregion //Constructor
 
-
         #region Methods
 
         private bool PreAction()

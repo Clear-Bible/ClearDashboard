@@ -24,8 +24,9 @@ public class ProjectDifferences
     public IListDifference<IModelSnapshot<Models.User>> Users { get; private set; }
     public IListDifference<IModelSnapshot<Models.Lexicon_Lexeme>> LexiconLexemes { get; private set; }
     public IListDifference<IModelSnapshot<Models.Lexicon_SemanticDomain>> LexiconSemanticDomains { get; private set; }
-    public IListDifference<IModelSnapshot<Models.Corpus>> Corpora { get; private set; }
-    public IListDifference<IModelSnapshot<Models.TokenizedCorpus>> TokenizedCorpora { get; private set; }
+    public IListDifference<IModelSnapshot<Models.Grammar>> Grammar { get; private set; }
+	public IListDifference<IModelSnapshot<Models.Corpus>> Corpora { get; private set; }
+	public IListDifference<IModelSnapshot<Models.TokenizedCorpus>> TokenizedCorpora { get; private set; }
     public IListDifference<IModelSnapshot<Models.ParallelCorpus>> ParallelCorpora { get; private set; }
     public IListDifference<IModelSnapshot<Models.AlignmentSet>> AlignmentSets { get; private set; }
     public IListDifference<IModelSnapshot<Models.TranslationSet>> TranslationSets { get; private set; }
@@ -49,7 +50,10 @@ public class ProjectDifferences
         LexiconSemanticDomains = snapshot1.LexiconSemanticDomains.GetListDifference(snapshot2.LexiconSemanticDomains);
         cancellationToken.ThrowIfCancellationRequested();
 
-        Corpora = snapshot1.Corpora.GetListDifference(snapshot2.Corpora);
+		Grammar = snapshot1.Grammar.GetListDifference(snapshot2.Grammar);
+		cancellationToken.ThrowIfCancellationRequested();
+
+		Corpora = snapshot1.Corpora.GetListDifference(snapshot2.Corpora);
         cancellationToken.ThrowIfCancellationRequested();
 
         TokenizedCorpora = snapshot1.TokenizedCorpora.GetListDifference(snapshot2.TokenizedCorpora);
@@ -78,7 +82,8 @@ public class ProjectDifferences
             Users.HasDifferences ||
             LexiconLexemes.HasDifferences ||
             LexiconSemanticDomains.HasDifferences ||
-            Corpora.HasDifferences ||
+			Grammar.HasDifferences ||
+			Corpora.HasDifferences ||
             TokenizedCorpora.HasDifferences ||
             ParallelCorpora.HasDifferences ||
             AlignmentSets.HasDifferences ||
@@ -121,7 +126,10 @@ public class ProjectDifferences
         var serializedLexiconSemanticDomainDifferences = JsonSerializer.Serialize(LexiconSemanticDomains, jsonSerializerOptions);
         File.WriteAllText(Path.Combine(path, "_LexiconSemanticDomainDiffs"), serializedLexiconSemanticDomainDifferences);
 
-        var serializedCorporaDifferences = JsonSerializer.Serialize(Corpora, jsonSerializerOptions);
+		var serializedGrammarDifferences = JsonSerializer.Serialize(Grammar, jsonSerializerOptions);
+		File.WriteAllText(Path.Combine(path, "_GrammarDiffs"), serializedGrammarDifferences);
+
+		var serializedCorporaDifferences = JsonSerializer.Serialize(Corpora, jsonSerializerOptions);
         File.WriteAllText(Path.Combine(path, "_CorporaDiffs"), serializedCorporaDifferences);
 
         var serializedTokenizedCorporaDifferences = JsonSerializer.Serialize(TokenizedCorpora, jsonSerializerOptions);

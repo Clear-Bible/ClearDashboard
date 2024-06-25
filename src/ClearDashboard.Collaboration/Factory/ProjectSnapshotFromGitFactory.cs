@@ -125,7 +125,11 @@ public class ProjectSnapshotFromGitFactory
                         }, 
                         cancellationToken));
                 }
-                else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.Corpus)])
+				else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.Grammar)])
+				{
+					projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.Grammar>(topLevelEntry, repo, commitSha, null, cancellationToken));
+				}
+				else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.Corpus)])
                 {
                     projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.Corpus>(topLevelEntry, repo, commitSha, null, cancellationToken));
                 }

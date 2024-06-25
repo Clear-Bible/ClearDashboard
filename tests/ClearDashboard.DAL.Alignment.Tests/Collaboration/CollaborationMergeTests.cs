@@ -67,7 +67,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
             Assert.Equal(_fixture.Users.Count + 1, _fixture.ProjectDbContext.Users.Count());  // TestBase added 1 when setting up the project, and we added 2 in BuildInitialEntities
-            Assert.Equal(_fixture.Corpora.Count, _fixture.ProjectDbContext.Corpa.Count());
+			Assert.Equal(_fixture.Grammar.Count, _fixture.ProjectDbContext.Grammars.Count());
+			Assert.Equal(_fixture.Corpora.Count, _fixture.ProjectDbContext.Corpa.Count());
             Assert.Equal(_fixture.TokenizedCorpora.Count, _fixture.ProjectDbContext.TokenizedCorpora.Count());
             Assert.Equal(2, _fixture.ProjectDbContext.TokenComposites.Count());
             Assert.Equal(5, _fixture.ProjectDbContext.TokenCompositeTokenAssociations.Count());
@@ -270,6 +271,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         [Trait("Category", "Collaboration")]
         public async Task Test01()
         {
+            _fixture.Grammar.RemoveAll(e => e.ShortName == "Grammar1");
+            _fixture.Grammar.Add(new Models.Grammar() { Id = Guid.NewGuid(), ShortName = "Grammar1", Description = "Grammar1-b", Category = "NerdGrammars" });
+
             // Add custom versification of tokenized corpus
 
             var testTokenizedCorpus = _fixture.TokenizedCorpora.FirstOrDefault();
@@ -298,7 +302,14 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             await DoMerge();
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
-            Assert.Equal(2, _fixture.ProjectDbContext.TokenizedCorpora.Count());
+            Assert.Equal(3, _fixture.ProjectDbContext.Grammars.Count());
+            var dbGrammar1 = _fixture.ProjectDbContext.Grammars.Where(e => e.ShortName == "Grammar1").FirstOrDefault();
+            Assert.NotNull(dbGrammar1);
+            Assert.Equal("Grammar1-b", dbGrammar1.Description);
+			Assert.Equal("NerdGrammars", dbGrammar1.Category);
+
+
+			Assert.Equal(2, _fixture.ProjectDbContext.TokenizedCorpora.Count());
             Assert.Equal(1, _fixture.ProjectDbContext.ParallelCorpa.Count());
             Assert.True(_fixture.ProjectDbContext.TokenComponents.Count() > 400000);        // 23 Tokens + 2 TokenComposites + 468613 (Hebrew)
             Assert.True(_fixture.ProjectDbContext.VerseMappings.Count() > 30000);           // 31163
@@ -663,7 +674,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(6, _fixture.ProjectDbContext.Notes.Count());
+            Assert.Equal(7, _fixture.ProjectDbContext.Notes.Count());
             Assert.Equal(4, _fixture.ProjectDbContext.NoteDomainEntityAssociations.Count());
             Assert.Null(_fixture.ProjectDbContext.NoteDomainEntityAssociations.Where(e => e.Id == testNote3AssociationToRemove.Item1.Id).FirstOrDefault());
 
@@ -675,7 +686,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(5, _fixture.ProjectDbContext.Notes.Count());
+            Assert.Equal(6, _fixture.ProjectDbContext.Notes.Count());
             Assert.Equal(3, _fixture.ProjectDbContext.NoteDomainEntityAssociations.Count());
             Assert.Null(_fixture.ProjectDbContext.Notes.Where(e => e.Id == testNote3.Id).FirstOrDefault());
 
@@ -698,7 +709,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(4, _fixture.ProjectDbContext.Notes.Count());
+            Assert.Equal(5, _fixture.ProjectDbContext.Notes.Count());
             Assert.Equal(2, _fixture.ProjectDbContext.NoteDomainEntityAssociations.Count());
             Assert.Null(_fixture.ProjectDbContext.Notes.Where(e => e.Id == testNote2.Id).FirstOrDefault());
 
@@ -719,7 +730,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
 
-            Assert.Equal(4, _fixture.ProjectDbContext.Notes.Count());
+            Assert.Equal(5, _fixture.ProjectDbContext.Notes.Count());
             Assert.Equal(newNoteText, _fixture.ProjectDbContext.Notes.First().Text);
         }
 
