@@ -120,7 +120,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                         commentParagraphs.Add(new CommentParagraph(new FormattedString(paragraph)));
                     }
 
-                    projectNoteAdded = project.AddNote(writeLock, anchor, commentParagraphs, assignedUser: new UserInfo(request.Data.UserName));
+                    projectNoteAdded = project.AddNote(writeLock, anchor, commentParagraphs, assignedUser: new UserInfo(null));
                 }
             } //using
             if (projectNoteAdded != null)

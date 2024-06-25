@@ -695,12 +695,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         private void RaiseNoteEvent(RoutedEvent routedEvent)
         {
-            if (routedEvent == NoteSendToParatextEvent)
-            {
-                Debug.WriteLine("");
-            }
-
-
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,

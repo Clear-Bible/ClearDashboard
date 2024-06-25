@@ -117,6 +117,7 @@
                                 Text="{Binding ElementName=AddNoteControl, Path=Note.Text}"
                                 TextChanged="OnNoteTextBoxChanged"
                                 TextWrapping="Wrap"
+                                MaxWidth="460"
                                 Visibility="{Binding ElementName=AddNoteControl, Path=NoteTextBoxVisibility}" />
                             <TextBlock
                                 Grid.Row="0"
