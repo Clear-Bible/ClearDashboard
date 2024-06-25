@@ -70,21 +70,42 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             set => Set(ref _selectedParatextProject, value);
         }
 
-        private ParatextProjectMetadata? _selectedParatextBtProject;
+		private ParatextProjectMetadata? _selectedParatextBtProject;
         public ParatextProjectMetadata? SelectedParatextBtProject
         {
             get => _selectedParatextBtProject;
             set => Set(ref _selectedParatextBtProject, value);
         }
 
-        private ParatextProjectMetadata? _selectedParatextLwcProject;
+		private ParatextProjectMetadata? _selectedParatextLwcProject;
         public ParatextProjectMetadata? SelectedParatextLwcProject
         {
             get => _selectedParatextLwcProject;
             set => Set(ref _selectedParatextLwcProject, value);
         }
 
-        private bool _showOtBiblicalTexts = true;
+		private bool _importWordAnalysesParatextProject = false;
+		public bool ImportWordAnalysesParatextProject
+		{
+			get => _importWordAnalysesParatextProject;
+			set => Set(ref _importWordAnalysesParatextProject, value);
+		}
+
+		private bool _importWordAnalysesParatextBtProject = false;
+		public bool ImportWordAnalysesParatextBtProject
+		{
+			get => _importWordAnalysesParatextBtProject;
+			set => Set(ref _importWordAnalysesParatextBtProject, value);
+		}
+
+		private bool _importWordAnalysesParatextLwcProject = false;
+		public bool ImportWordAnalysesParatextLwcProject
+		{
+			get => _importWordAnalysesParatextLwcProject;
+			set => Set(ref _importWordAnalysesParatextLwcProject, value);
+		}
+
+		private bool _showOtBiblicalTexts = true;
         public bool ShowOtBiblicalTexts
         {
             get => _showOtBiblicalTexts;
@@ -119,8 +140,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             set => Set(ref _isEnabledSelectedParatextLwcProject, value);
         }
 
+		private bool _isEnabledImportWordAnalysesParatextProject = false;
+		public bool IsEnabledImportWordAnalysesParatextProject
+		{
+			get => _isEnabledImportWordAnalysesParatextProject;
+			set => Set(ref _isEnabledImportWordAnalysesParatextProject, value);
+		}
 
-        private string? _projectName;
+		private bool _isEnabledImportWordAnalysesParatextBtProject = false;
+		public bool IsEnabledImportWordAnalysesParatextBtProject
+		{
+			get => _isEnabledImportWordAnalysesParatextBtProject;
+			set => Set(ref _isEnabledImportWordAnalysesParatextBtProject, value);
+		}
+
+		private bool _isEnabledImportWordAnalysesParatextLwcProject = false;
+		public bool IsEnabledImportWordAnalysesParatextLwcProject
+		{
+			get => _isEnabledImportWordAnalysesParatextLwcProject;
+			set => Set(ref _isEnabledImportWordAnalysesParatextLwcProject, value);
+		}
+
+
+		private string? _projectName;
         public string? ProjectName
         {
             get => _projectName;
@@ -231,7 +273,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             ValidationResult = Validator!.Validate(this);
             CanMoveForwards = (SelectedParatextProject != null && !string.IsNullOrEmpty(ProjectName) && ValidationResult.IsValid);
 
-            if (SelectedParatextBtProject == null)
+			IsEnabledImportWordAnalysesParatextProject = SelectedParatextProject?.CorpusType == CorpusType.Standard || SelectedParatextProject?.CorpusType == CorpusType.BackTranslation;
+
+            // Instead of presenting a checkbox to the user so that they can choose whether or not to
+            // import word analyses for the selected corpus (just after tokenization), the current rule
+            // is to always do the import, if allowable for the given CorpusType
+            ImportWordAnalysesParatextProject = IsEnabledImportWordAnalysesParatextProject;
+
+			if (SelectedParatextBtProject == null)
             {
                 // FIXME:  Dirk knows some way to get the back translation for a given paratext project
                 // so we can in theory prefill SelectedParatextBtProject value
@@ -265,7 +314,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 }
             }
 
-            await Task.CompletedTask;
+			IsEnabledImportWordAnalysesParatextBtProject = SelectedParatextBtProject?.CorpusType == CorpusType.Standard || SelectedParatextBtProject?.CorpusType == CorpusType.BackTranslation;
+
+			// Instead of presenting a checkbox to the user so that they can choose whether or not to
+			// import word analyses for the selected corpus (just after tokenization), the current rule
+			// is to always do the import, if allowable for the given CorpusType
+			ImportWordAnalysesParatextBtProject = IsEnabledImportWordAnalysesParatextBtProject;
+
+			await Task.CompletedTask;
         }
 
         public async void ParatextLwcProjectSelected(SelectionChangedEventArgs args)
@@ -287,22 +343,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
                 }
             }
 
-            await Task.CompletedTask;
+			IsEnabledImportWordAnalysesParatextLwcProject = SelectedParatextLwcProject?.CorpusType == CorpusType.Standard || SelectedParatextLwcProject?.CorpusType == CorpusType.BackTranslation;
+
+			// Instead of presenting a checkbox to the user so that they can choose whether or not to
+			// import word analyses for the selected corpus (just after tokenization), the current rule
+			// is to always do the import, if allowable for the given CorpusType
+			ImportWordAnalysesParatextLwcProject = IsEnabledImportWordAnalysesParatextLwcProject;
+
+			await Task.CompletedTask;
         }
 
         public void ClearSelectedParatextProject()
         {
             SelectedParatextProject = null;
+            ImportWordAnalysesParatextProject = false;
+            IsEnabledImportWordAnalysesParatextProject = false;
         }
 
         public void ClearSelectedParatextBtProject()
         {
             SelectedParatextBtProject = null;
+            ImportWordAnalysesParatextBtProject = false;
+            IsEnabledImportWordAnalysesParatextBtProject = false;
         }
 
         public void ClearSelectedParatextLwcProject()
         {
             SelectedParatextLwcProject = null;
+            ImportWordAnalysesParatextLwcProject = false;
+            IsEnabledImportWordAnalysesParatextLwcProject = false;
         }
 
         public override async Task Reset(CancellationToken cancellationToken)
@@ -336,6 +405,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             SelectedParatextProject = ParentViewModel!.SelectedParatextProject;
             SelectedParatextBtProject = ParentViewModel!.SelectedParatextBtProject;
             SelectedParatextLwcProject = ParentViewModel!.SelectedParatextLwcProject;
+
+			ImportWordAnalysesParatextProject = ParentViewModel!.ImportWordAnalysesParatextProject;
+			ImportWordAnalysesParatextBtProject = ParentViewModel!.ImportWordAnalysesParatextBtProject;
+			ImportWordAnalysesParatextLwcProject = ParentViewModel!.ImportWordAnalysesParatextLwcProject;
+
             ShowOtBiblicalTexts = ParentViewModel!.IncludeOtBiblicalTexts;
             ShowNtBiblicalTexts = ParentViewModel!.IncludeNtBiblicalTexts;
 
@@ -374,6 +448,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             ParentViewModel!.SelectedParatextProject = SelectedParatextProject;
             ParentViewModel!.SelectedParatextBtProject = SelectedParatextBtProject;
             ParentViewModel!.SelectedParatextLwcProject = SelectedParatextLwcProject;
+
+			ParentViewModel!.ImportWordAnalysesParatextProject = ImportWordAnalysesParatextProject;
+			ParentViewModel!.ImportWordAnalysesParatextBtProject = ImportWordAnalysesParatextBtProject;
+			ParentViewModel!.ImportWordAnalysesParatextLwcProject = ImportWordAnalysesParatextLwcProject;
+
             ParentViewModel!.IncludeOtBiblicalTexts = ShowOtBiblicalTexts;
             ParentViewModel!.IncludeNtBiblicalTexts = ShowNtBiblicalTexts;
             ParentViewModel!.ProjectName = ProjectName;

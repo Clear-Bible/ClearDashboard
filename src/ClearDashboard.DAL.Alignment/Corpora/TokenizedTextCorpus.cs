@@ -139,8 +139,15 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             if (wordAnalyses.Any())
             {
 				var importWordAnalysesCommand = new ImportWordAnalysesCommand(wordAnalyses, TokenizedTextCorpusId);
-				await mediator.Send(importWordAnalysesCommand);
+				var importWordAnalysesResult = await mediator.Send(importWordAnalysesCommand, token);
+
+                importWordAnalysesResult.ThrowIfCanceledOrFailed();
 			}
+
+            if (UseCache)
+            {
+                InvalidateCache();
+            }
 		}
 
         public async Task<IEnumerable<WordAnalysis>> GetExternalWordAnalysesAsync(IMediator mediator, CancellationToken token = default)
@@ -150,6 +157,8 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             {
                 var externalWordAnalysesCommand = new GetExternalWordAnalysesQuery(paratextProjectId);
                 var externalWordAnalysesResult = await mediator.Send(externalWordAnalysesCommand, token);
+
+                externalWordAnalysesResult.ThrowIfCanceledOrFailed();
 
                 return externalWordAnalysesResult.Data!;
             }

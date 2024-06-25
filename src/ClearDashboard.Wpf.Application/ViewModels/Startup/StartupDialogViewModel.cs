@@ -61,21 +61,42 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             set => Set(ref _selectedParatextProject, value);
         }
 
-        private ParatextProjectMetadata? _selectedParatextBtProject;
+    	private ParatextProjectMetadata? _selectedParatextBtProject;
         public ParatextProjectMetadata? SelectedParatextBtProject
         {
             get => _selectedParatextBtProject;
             set => Set(ref _selectedParatextBtProject, value);
         }
 
-        private ParatextProjectMetadata? _selectedParatextLwcProject;
+		private ParatextProjectMetadata? _selectedParatextLwcProject;
         public ParatextProjectMetadata? SelectedParatextLwcProject
         {
             get => _selectedParatextLwcProject;
             set => Set(ref _selectedParatextLwcProject, value);
         }
 
-        private bool _includeOtBiblicalTexts = true;
+		private bool _importWordAnalysesParatextProject = false;
+		public bool ImportWordAnalysesParatextProject
+		{
+			get => _importWordAnalysesParatextProject;
+			set => Set(ref _importWordAnalysesParatextProject, value);
+		}
+
+		private bool _importWordAnalysesParatextBtProject = false;
+		public bool ImportWordAnalysesParatextBtProject
+		{
+			get => _importWordAnalysesParatextBtProject;
+			set => Set(ref _importWordAnalysesParatextBtProject, value);
+		}
+
+		private bool _importWordAnalysesParatextLwcProject = false;
+		public bool ImportWordAnalysesParatextLwcProject
+		{
+			get => _importWordAnalysesParatextLwcProject;
+			set => Set(ref _importWordAnalysesParatextLwcProject, value);
+		}
+
+		private bool _includeOtBiblicalTexts = true;
         public bool IncludeOtBiblicalTexts
         {
             get => _includeOtBiblicalTexts;

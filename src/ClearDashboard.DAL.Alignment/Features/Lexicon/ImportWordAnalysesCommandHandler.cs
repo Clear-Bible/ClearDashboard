@@ -59,13 +59,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                     .Where(t => t.TokenCompositeTokenAssociations.Count == 0)
 					.ToListAsync(cancellationToken: cancellationToken);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var previouslySplitTokensById = await ProjectDbContext.Tokens
                     .Where(t => t.TokenizedCorpusId == request.TokenizedTextCorpusId.Id)
                     .Where(t => t.Deleted != null)
                     .Where(t => t.Metadata.Any(m => m.Key == Models.MetadatumKeys.WasSplit && m.Value == true.ToString()))
                     .ToDictionaryAsync(t => t.Id, t => t, cancellationToken: cancellationToken);
 
-                var compositesFormedViaWordAnalysisImport = await ProjectDbContext.TokenComposites
+				cancellationToken.ThrowIfCancellationRequested();
+
+				var compositesFormedViaWordAnalysisImport = await ProjectDbContext.TokenComposites
 					.Include(t => t.TokenCompositeTokenAssociations)
                         .ThenInclude(t => t.Token)
 					.Include(t => t.Translations.Where(a => a.Deleted == null))
@@ -77,9 +81,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 					.Where(t => t.Metadata.Any(m => m.Key == Models.MetadatumKeys.SplitTokenSourceId && m.Value != null))
                     .ToListAsync(cancellationToken: cancellationToken);
 
-                var unchangedSplitComposites = new List<(Guid SourceId, string SourceSurfaceText, string SplitMatchInfoAsHash, Models.TokenComposite TokenComposite)>();
+				cancellationToken.ThrowIfCancellationRequested();
+
+				var unchangedSplitComposites = new List<(Guid SourceId, string SourceSurfaceText, string SplitMatchInfoAsHash, Models.TokenComposite TokenComposite)>();
                 foreach (var tokenComposite in compositesFormedViaWordAnalysisImport)
                 {
+					cancellationToken.ThrowIfCancellationRequested();
+
 					var sourceId = Guid.Parse(tokenComposite.Metadata.Single(e => e.Key == Models.MetadatumKeys.SplitTokenSourceId).Value!);
 					var sourceSurfaceText = tokenComposite.Metadata.SingleOrDefault(e => e.Key == Models.MetadatumKeys.SplitTokenSourceSurfaceText)?.Value;
 					var initialSplitMatchInfo = tokenComposite.Metadata.SingleOrDefault(e => e.Key == Models.MetadatumKeys.SplitTokenInitialChildren)?.Value;
@@ -110,7 +118,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 
                 foreach (var wordAnalysis in request.WordAnalyses)
                 {
-                    Logger.LogInformation($"WordAnalysis for {wordAnalysis.Word}:");
+					cancellationToken.ThrowIfCancellationRequested();
+
+					Logger.LogInformation($"WordAnalysis for {wordAnalysis.Word}:");
 
                     //var splitInstructions = ToSplitInstructions(wordAnalysis, Logger);
                     CheckWordAnalysis(wordAnalysis, Logger);
@@ -148,11 +158,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                     {
                         Logger.LogInformation($"\tLarge number of Token matches for word {wordAnalysis.Word}:  {standaloneTokens.Count}");
                         frequentWordStopwatch = Stopwatch.StartNew();
-                    }
-
-                    if (standaloneTokens.Count != 0)
-                    {
-
                     }
 
                     var (
@@ -198,7 +203,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 
                         foreach (var kvp in tokensToResplit)
                         {
-                            if (replacementsBySourceId.TryGetValue(kvp.Key, out var replacements))
+							cancellationToken.ThrowIfCancellationRequested();
+
+							if (replacementsBySourceId.TryGetValue(kvp.Key, out var replacements))
                             {
                                 var previousTrainingText = kvp.Value.TokenComposite.TrainingText;
 
@@ -241,8 +248,19 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                 Logger.LogInformation($"Time elapsed:  {sw.Elapsed} (log)");
                 Debug.WriteLine($"Time elapsed:  {sw.Elapsed} (debug)");
                 Console.WriteLine($"Time elapsed:  {sw.Elapsed} (console)");
-            }
-            catch (Exception ex)
+
+				return new RequestResult<Unit>();
+			}
+			catch (OperationCanceledException)
+            {
+				return new RequestResult<Unit>
+				{
+					Message = "Operation Canceled",
+					Success = false,
+					Canceled = true
+				};
+			}
+			catch (Exception ex)
             {
                 return new RequestResult<Unit>
                 (
@@ -250,8 +268,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                     message: ex.Message
                 );
             }
-
-			return new RequestResult<Unit>();
 		}
 
 		private static bool CheckWordAnalysis(Alignment.Lexicon.WordAnalysis wordAnalysis, ILogger logger)
@@ -265,32 +281,5 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 
             return true;
 		}
-
-		private static SplitInstructions? ToSplitInstructions(Alignment.Lexicon.WordAnalysis wordAnalysis, ILogger logger)
-        {
-            var trainingTexts = new List<string?>();
-            var splitIndexes = new List<int>();
-            foreach (var (type, lemma) in wordAnalysis.Lexemes.Select(e => (e.Type, e.Lemma)))
-            {
-                if (string.IsNullOrEmpty(lemma))
-                {
-                    logger.LogWarning($"WordAnalysis of {wordAnalysis.Word} contains a null or empty lemma");
-                    continue;
-                }
-
-                var startingIndex = splitIndexes.LastOrDefault(0);
-                var wordPart = wordAnalysis.Word.Substring(startingIndex, lemma.Length);
-                if (wordPart != lemma)
-                {
-                    logger.LogError($"WordAnalysis of {wordAnalysis.Word} starting at index {startingIndex} has value of {wordPart}, which does not match lemma {lemma}.  Ignoring and moving on to next WordAnalysis...");
-                    return null;
-                }
-
-                splitIndexes.Add(startingIndex + lemma.Length);
-                trainingTexts.Add(lemma);
-            }
-
-            return SplitInstructions.CreateSplits(wordAnalysis.Word, splitIndexes, trainingTexts);
-        }
     }
 }
