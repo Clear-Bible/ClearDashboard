@@ -866,7 +866,7 @@
     <value>LEV</value>
   </data>
   <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>Ajoutez un domaine sémantique à cette signification</value>
+    <value>Ajouter un domaine sémantique à cette signification</value>
   </data>
   <data name="Lexicon_AddForm" xml:space="preserve">
     <value>Ajouter une forme lexicale à ce lemme</value>
@@ -919,6 +919,9 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Supprimer cette traduction</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;vide&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Entrez une nouvelle traduction pour</value>
   </data>
@@ -930,6 +933,9 @@
   </data>
   <data name="Lexicon_GlossList" xml:space="preserve">
     <value>Liste des glosses</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>langue:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lemme</value>
@@ -945,6 +951,9 @@
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Un lexème pour existe déjà pour le lemme</value>
+  </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>Lexique</value>
   </data>
   <data name="Lexicon_Matches" xml:space="preserve">
     <value>Allumettes</value>
@@ -963,6 +972,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Définir un gloss pour</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>Traductions :</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>taper:</value>
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>Désarmé</value>
@@ -1001,7 +1016,7 @@
     <value>Pleinement</value>
   </data>
   <data name="LexiconEdit_FullyMatching" xml:space="preserve">
-    <value>Entièrement assorti</value>
+    <value>Entièrement correspondant</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexème</value>
@@ -1331,7 +1346,7 @@
     <value>Jeton d'accès:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Vérifiez votre email et saisissez le code de validation :</value>
+    <value>Vérifiez votre email et entrez le code de validation :</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Vérifier la disponibilité des utilisateurs</value>
@@ -1415,7 +1430,7 @@
     <value>Ajouter un point</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Ajouter un nouveau point </value>
+    <value>Ajouter un nouveau jot (shift-enter pour une nouvelle ligne)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Corps</value>
@@ -1643,10 +1658,10 @@
     <value>Paralléliser les versets de corpus</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Algorithme d’alignement de mots machine</value>
+    <value>Algorithme d’alignement des mots machine</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Algorithme d’alignement de mots machine</value>
+    <value>Algorithme d’alignement des mots machine</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Former un modèle symétrique ?</value>
@@ -1730,7 +1745,7 @@
     <value>Supprimer l'interlinéaire</value>
   </data>
   <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir supprimer ce corpus ? Toutes les notes, alignements et interlinéaires associés à ce corpus seront supprimés et ne pourront pas être récupérés.</value>
+    <value>Etes-vous sûr de vouloir supprimer ce corpus ? Toutes les notes, alignements et interlinéaires associés à ce corpus seront supprimés et ne pourront pas être récupérés.</value>
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Dictionnaire</value>
@@ -1934,7 +1949,7 @@
     <value>Créer un projet : </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
-    <value>Créez votre projet à l'aide de l'assistant Modèle de projet.</value>
+    <value>Créez votre projet à l'aide de l'assistant de modèle de projet.</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
     <value>Base de données: </value>
@@ -2297,7 +2312,7 @@
     <value>Activer le plugin expérimental AQUA</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Vérifiez votre email et saisissez le code de validation :</value>
+    <value>Vérifiez votre email et entrez le code de validation :</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Paramètres de collaboration</value>

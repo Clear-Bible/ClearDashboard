@@ -389,7 +389,7 @@
     <value>Категория</value>
   </data>
   <data name="BiblicalTermsForm_Counts" xml:space="preserve">
-    <value>Считает</value>
+    <value>имеет значение</value>
   </data>
   <data name="BiblicalTermsForm_Found" xml:space="preserve">
     <value>Найденный</value>
@@ -919,6 +919,9 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Удалить этот перевод</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;пусто&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Введите новый перевод для</value>
   </data>
@@ -930,6 +933,9 @@
   </data>
   <data name="Lexicon_GlossList" xml:space="preserve">
     <value>Список блесков</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>язык:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Лемма</value>
@@ -945,6 +951,9 @@
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Лексема для леммы уже существует</value>
+  </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>Лексикон</value>
   </data>
   <data name="Lexicon_Matches" xml:space="preserve">
     <value>Матчи</value>
@@ -963,6 +972,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Установите блеск для</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>Переводы:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>тип:</value>
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>Сброшено</value>
@@ -1052,7 +1067,7 @@
     <value>Добавить цель в качестве перевода для...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Найдите лексемы, у которых есть один или несколько переводов, соответствующих целевому значению.</value>
+    <value>Найдите лексемы, у которых есть один или несколько переводов, соответствующих целевому.</value>
   </data>
   <data name="LexiconImport_Checked" xml:space="preserve">
     <value>Проверено</value>
@@ -1415,7 +1430,7 @@
     <value>Добавить Джот</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Добавить новую запись </value>
+    <value>Добавить новую точку (shift-enter для новой строки)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Тело</value>
@@ -1430,7 +1445,7 @@
     <value>В соответствии с вашими разрешениями на проект Paratext, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Фильтровать по стиху</value>
+    <value>Фильтровать по стихам</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Фильтры</value>
@@ -1517,7 +1532,7 @@
     <value>Отметить выбранные записи как открытые</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>Отметить выбранные заметки как решенные</value>
+    <value>Отметить выбранные записи как решенные</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Созданный</value>
@@ -1571,7 +1586,7 @@
     <value>Положение дел</value>
   </data>
   <data name="Notes_OpenConfirmation" xml:space="preserve">
-    <value>Отметьте эти Jots как открытые?</value>
+    <value>Пометить эти записи как открытые?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Часть</value>
@@ -1730,7 +1745,7 @@
     <value>Удалить подстрочный текст</value>
   </data>
   <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить этот корпус? Все примечания, выравнивания и подстрочные знаки, связанные с этим корпусом, будут удалены без возможности восстановления.</value>
+    <value>Вы уверены, что хотите удалить этот корпус? Все примечания, выравнивания и подстрочные строки, связанные с этим корпусом, будут удалены без возможности восстановления.</value>
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Словарь</value>
@@ -2591,7 +2606,7 @@
     <value>Смысл:</value>
   </data>
   <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>Поддомен:</value>
+    <value>Субдомен:</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Да</value>

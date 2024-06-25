@@ -125,7 +125,7 @@
     <value>协作用户ID：</value>
   </data>
   <data name="AccountInfo_CollaborationUsernameLabel" xml:space="preserve">
-    <value>协作用户名：</value>
+    <value>合作用户名：</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
     <value>-当前帐户详细信息-</value>
@@ -164,7 +164,7 @@
     <value>选择您正在使用的书籍，以后您可以随时添加更多书籍。</value>
   </data>
   <data name="AddParatextCorpusDialog_Check" xml:space="preserve">
-    <value>检查USFM</value>
+    <value>检查 USFM</value>
   </data>
   <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
     <value>将 USFM 错误复制到剪贴板</value>
@@ -380,7 +380,7 @@
     <value>树木；香水和香料</value>
   </data>
   <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>智慧、理解力</value>
+    <value>智慧、理解</value>
   </data>
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>全部</value>
@@ -434,7 +434,7 @@
     <value>对齐的单词</value>
   </data>
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
-    <value>路线</value>
+    <value>对齐方式</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
     <value>对齐类型： </value>
@@ -656,7 +656,7 @@
     <value>删除对齐方式</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>删除“{0}”的对齐方式吗？</value>
+    <value>删除“{0}”的对齐吗？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
     <value>删除所有对齐方式？</value>
@@ -710,7 +710,7 @@
     <value>将拆分应用于令牌的其他实例</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>选择拆分令牌的位置：</value>
+    <value>选择分割令牌的位置：</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>三路分流</value>
@@ -919,6 +919,9 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>删除此翻译</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;空&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>输入新翻译</value>
   </data>
@@ -930,6 +933,9 @@
   </data>
   <data name="Lexicon_GlossList" xml:space="preserve">
     <value>光泽表</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>语言：</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>引理</value>
@@ -945,6 +951,9 @@
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>引理已经存在词位</value>
+  </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>词典</value>
   </data>
   <data name="Lexicon_Matches" xml:space="preserve">
     <value>火柴</value>
@@ -963,6 +972,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>设置光泽度</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>翻译：</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>类型：</value>
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>取消设置</value>
@@ -1046,7 +1061,7 @@
     <value>添加为表格...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>查找源的完整或部分词位或形式匹配</value>
+    <value>查找源的完整或部分词素或形式匹配</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>添加目标作为...的翻译</value>
@@ -1415,7 +1430,7 @@
     <value>添加笔迹</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>添加新笔迹 </value>
+    <value>添加新的记号（Shift-Enter 换行）</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>身体</value>
@@ -1469,7 +1484,7 @@
     <value>是否要删除标签：</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>您要取消关联标签吗：</value>
+    <value>您想取消关联标签吗：</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>来自标签组：</value>
@@ -1760,7 +1775,7 @@
     <value>从 Paratext 获取最新信息</value>
   </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
-    <value>显示有关此项目的信息</value>
+    <value>显示有关该项目的信息</value>
   </data>
   <data name="Pds_ManuscriptGreek" xml:space="preserve">
     <value>希腊语 (NT) MACULA</value>

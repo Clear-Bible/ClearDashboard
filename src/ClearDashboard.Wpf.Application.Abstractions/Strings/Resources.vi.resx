@@ -113,7 +113,7 @@
     <value>Phiên bản</value>
   </data>
   <data name="AccountInfo_ClearDashboardUserIdLabel" xml:space="preserve">
-    <value>ClearDashboard UserId:</value>
+    <value>Id người dùng ClearDashboard:</value>
   </data>
   <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
     <value>Tên người dùng ClearDashboard:</value>
@@ -677,7 +677,7 @@
     <value>Tham gia Token</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Mã thông báo tham gia cho cặp ngôn ngữ</value>
+    <value>Tham gia Token cho cặp ngôn ngữ</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>Đánh dấu căn chỉnh là 'Không hợp lệ'</value>
@@ -919,6 +919,9 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Xóa bản dịch này</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;trống&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Nhập bản dịch mới cho</value>
   </data>
@@ -931,11 +934,14 @@
   <data name="Lexicon_GlossList" xml:space="preserve">
     <value>Danh sách bóng</value>
   </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>ngôn ngữ:</value>
+  </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>bổ đề</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
-    <value>Bổ đề/Dạng:</value>
+    <value>Bổ đề/Dạng thức:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
     <value>Bổ đề cho từ vựng mới:</value>
@@ -945,6 +951,9 @@
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Một từ vựng đã tồn tại cho bổ đề</value>
+  </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>Từ điển</value>
   </data>
   <data name="Lexicon_Matches" xml:space="preserve">
     <value>Diêm</value>
@@ -963,6 +972,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Đặt độ bóng cho</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>Bản dịch:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>kiểu:</value>
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>Bỏ đặt</value>
@@ -1163,7 +1178,7 @@
     <value>Sở thích</value>
   </data>
   <data name="MainView_QuickNew" xml:space="preserve">
-    <value>Nhanh chóng Mới</value>
+    <value>Mới nhanh</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Có sẵn các thay đổi cộng tác</value>
@@ -1181,7 +1196,7 @@
     <value>Công cụ căn chỉnh</value>
   </data>
   <data name="MainView_WindowsBiblicalTerms" xml:space="preserve">
-    <value>Điều khoản Kinh Thánh</value>
+    <value>Điều khoản Kinh thánh</value>
   </data>
   <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
     <value>Mã thông báo Corpus</value>
@@ -1415,7 +1430,7 @@
     <value>Thêm tin nhắn</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Thêm một ghi chú mới </value>
+    <value>Thêm một ghi chú mới (shift-enter cho dòng mới)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Thân hình</value>
@@ -1811,7 +1826,7 @@
     <value>Nghiên CứuKinh ThánhBổ Sung</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Đi tới Paratext và chuyển đổi dự án.  Dự án Paratext hiện được kết nối với plugin ClearDashboard không giống với kho văn bản trong dự án ClearDashboard này.</value>
+    <value>Đi đến Paratext và chuyển đổi dự án.  Dự án Paratext hiện được kết nối với plugin ClearDashboard không giống với kho văn bản trong dự án ClearDashboard này.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Mục tiêu</value>
@@ -1820,7 +1835,7 @@
     <value>Chuyển ngữHướng dẫn sử dụng</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Chuyển ngữVớiBộ mã hóa</value>
+    <value>Chuyển ngữVới Bộ mã hóa</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>không xác định</value>
@@ -1835,7 +1850,7 @@
     <value>Phóng to nội dung</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>Thu nhỏ nội dung</value>
+    <value>Thu nhỏ khỏi nội dung</value>
   </data>
   <data name="PHM" xml:space="preserve">
     <value>PHM</value>
@@ -2453,7 +2468,7 @@
     <value>Tôi không thể hoàn thành nhiệm vụ</value>
   </data>
   <data name="SlackMessageView_Combo3" xml:space="preserve">
-    <value>Tôi đã hoàn thành một nhiệm vụ nhưng nó rất khó</value>
+    <value>Tôi đã hoàn thành một nhiệm vụ nhưng nó rất khó khăn</value>
   </data>
   <data name="SlackMessageView_Combo4" xml:space="preserve">
     <value>Tôi muốn làm...</value>
@@ -2564,7 +2579,7 @@
     <value>Công cụ căn chỉnh</value>
   </data>
   <data name="Windows_BiblicalTerms" xml:space="preserve">
-    <value>Điều khoản Kinh Thánh</value>
+    <value>Điều khoản Kinh thánh</value>
   </data>
   <data name="Windows_CorpusTokens" xml:space="preserve">
     <value>Mã thông báo Corpus</value>
