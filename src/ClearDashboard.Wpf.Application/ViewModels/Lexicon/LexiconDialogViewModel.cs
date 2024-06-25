@@ -49,6 +49,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         }
 
         public bool IsAddLexemeMode => Mode == LexiconDialogMode.AddLexeme;
+        public bool IsLexemeEditorReadOnly => IsAddLexemeMode;
 
         private string _sourceFontFamily = FontNames.DefaultFontFamily;
         public string SourceFontFamily

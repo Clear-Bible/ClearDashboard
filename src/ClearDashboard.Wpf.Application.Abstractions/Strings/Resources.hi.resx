@@ -919,6 +919,9 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>यह अनुवाद हटाएँ</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;खाली&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>के लिए एक नया अनुवाद दर्ज करें</value>
   </data>
@@ -930,6 +933,9 @@
   </data>
   <data name="Lexicon_GlossList" xml:space="preserve">
     <value>चमकदार सूची</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>भाषा:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>लेम्मा</value>
@@ -945,6 +951,9 @@
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>लेम्मा के लिए एक शब्द पहले से ही मौजूद है</value>
+  </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>शब्दकोश</value>
   </data>
   <data name="Lexicon_Matches" xml:space="preserve">
     <value>माचिस</value>
@@ -963,6 +972,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>के लिए एक चमक सेट करें</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>अनुवाद:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>प्रकार:</value>
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>अनसेट</value>
@@ -1241,7 +1256,7 @@
     <value>डोमेन</value>
   </data>
   <data name="Marble_FrequencyGraph" xml:space="preserve">
-    <value>आवृत्ति ग्राफ</value>
+    <value>आवृत्ति ग्राफ़</value>
   </data>
   <data name="Marble_GeneralInformation" xml:space="preserve">
     <value>सामान्य जानकारी</value>

@@ -686,7 +686,7 @@
     <value>សម្គាល់ការតម្រឹមជា 'ត្រូវការការពិនិត្យឡើងវិញ'</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
-    <value>សម្គាល់ការតម្រឹមជា 'ត្រឹមត្រូវ'</value>
+    <value>សម្គាល់ការតម្រឹមជា 'មានសុពលភាព'</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
     <value>និមិត្តសញ្ញាថ្មី៖ អត្ថបទបណ្តុះបណ្តាល</value>
@@ -919,6 +919,9 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>លុបការបកប្រែនេះ។</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;ទទេ&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>បញ្ចូលការបកប្រែថ្មីសម្រាប់</value>
   </data>
@@ -930,6 +933,9 @@
   </data>
   <data name="Lexicon_GlossList" xml:space="preserve">
     <value>បញ្ជីរលោង</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>ភាសា៖</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>លេម៉ា</value>
@@ -945,6 +951,9 @@
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Lexeme សម្រាប់​មាន​រួច​ហើយ​សម្រាប់ lemma</value>
+  </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>វចនានុក្រម</value>
   </data>
   <data name="Lexicon_Matches" xml:space="preserve">
     <value>ការប្រកួត</value>
@@ -963,6 +972,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>កំណត់ភាពរលោងសម្រាប់</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>ការបកប្រែ៖</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>ប្រភេទ៖</value>
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>មិនបានកំណត់</value>

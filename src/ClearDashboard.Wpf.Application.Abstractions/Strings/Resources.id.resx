@@ -919,6 +919,9 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Hapus terjemahan ini</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;kosong&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Masukkan terjemahan baru untuk</value>
   </data>
@@ -930,6 +933,9 @@
   </data>
   <data name="Lexicon_GlossList" xml:space="preserve">
     <value>Daftar Kilap</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>bahasa:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Kata pengantar singkat</value>
@@ -945,6 +951,9 @@
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Sebuah leksem untuk sudah ada untuk lemma</value>
+  </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>Kamus</value>
   </data>
   <data name="Lexicon_Matches" xml:space="preserve">
     <value>Cocok</value>
@@ -963,6 +972,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Tetapkan kilap untuk</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>Terjemahan:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>jenis:</value>
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>Tidak disetel</value>

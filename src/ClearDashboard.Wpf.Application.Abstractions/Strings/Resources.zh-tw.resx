@@ -140,7 +140,7 @@
     <value>副文字電子郵件：</value>
   </data>
   <data name="AccountInfo_ParatextUsernameLabel" xml:space="preserve">
-    <value>副文本使用者名稱：</value>
+    <value>副文字使用者名稱：</value>
   </data>
   <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
     <value>重新啟動應用程式</value>
@@ -380,7 +380,7 @@
     <value>樹木；香水和香料</value>
   </data>
   <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>智慧、理解力</value>
+    <value>智慧、理解</value>
   </data>
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>全部</value>
@@ -434,7 +434,7 @@
     <value>對齊的單字</value>
   </data>
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
-    <value>路線</value>
+    <value>對齊方式</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
     <value>對齊類型： </value>
@@ -919,6 +919,9 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>刪除此翻譯</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;空&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>輸入新翻譯</value>
   </data>
@@ -930,6 +933,9 @@
   </data>
   <data name="Lexicon_GlossList" xml:space="preserve">
     <value>光澤表</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>語言：</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>引理</value>
@@ -945,6 +951,9 @@
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>引理已經存在詞位</value>
+  </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>字典</value>
   </data>
   <data name="Lexicon_Matches" xml:space="preserve">
     <value>火柴</value>
@@ -963,6 +972,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>設定光澤度</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>翻譯：</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>類型：</value>
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>取消設定</value>
@@ -1046,7 +1061,7 @@
     <value>新增為表格...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>尋找來源的完整或部分詞位或形式匹配</value>
+    <value>尋找來源的完整或部分詞素或形式匹配</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>新增目標作為...的翻譯</value>
@@ -1073,7 +1088,7 @@
     <value>詞位或形式匹配</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
-    <value>沒有更多記錄可供導入。</value>
+    <value>沒有更多記錄可供匯入。</value>
   </data>
   <data name="LexiconImport_PleaseChooseACorpus" xml:space="preserve">
     <value>請選擇一個語料庫。</value>
@@ -1469,7 +1484,7 @@
     <value>是否要刪除標籤：</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>您要取消關聯標籤嗎：</value>
+    <value>您想取消關聯標籤嗎：</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>來自標籤組：</value>
@@ -1667,7 +1682,7 @@
     <value>選擇要訓練的 SMT 演算法</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>新增批次批准查看</value>
+    <value>新增批量批准查看</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>新增到視圖</value>

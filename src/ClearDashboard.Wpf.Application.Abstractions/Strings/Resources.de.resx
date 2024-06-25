@@ -482,7 +482,7 @@
     <value>Ausgewählte als „Ungültig“ markieren</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
-    <value>Markieren Sie die Auswahl als „Überprüfung erforderlich“.</value>
+    <value>Als „Überprüfung erforderlich“ markieren</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
     <value>Als „Gültig“ ausgewählt markieren</value>
@@ -919,6 +919,9 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Löschen Sie diese Übersetzung</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;leer&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Geben Sie eine neue Übersetzung für ein</value>
   </data>
@@ -930,6 +933,9 @@
   </data>
   <data name="Lexicon_GlossList" xml:space="preserve">
     <value>Glanzliste</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>Sprache:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lemma</value>
@@ -945,6 +951,9 @@
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Für Lemma existiert bereits ein Lexem</value>
+  </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>Lexikon</value>
   </data>
   <data name="Lexicon_Matches" xml:space="preserve">
     <value>Streichhölzer</value>
@@ -963,6 +972,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Stellen Sie einen Glanz ein</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>Übersetzungen:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>Typ:</value>
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>Unscharf</value>
@@ -1649,7 +1664,7 @@
     <value>Algorithmus zur maschinellen Wortausrichtung</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Symmetrisches Modell trainieren?</value>
+    <value>Symmetrisiertes Modell trainieren?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>Zug</value>
@@ -2051,7 +2066,7 @@
     <value>1 Korinther</value>
   </data>
   <data name="ProperCase_1_John" xml:space="preserve">
-    <value>1 Johannes</value>
+    <value>1. Johannes</value>
   </data>
   <data name="ProperCase_1_Kings" xml:space="preserve">
     <value>1 Könige</value>

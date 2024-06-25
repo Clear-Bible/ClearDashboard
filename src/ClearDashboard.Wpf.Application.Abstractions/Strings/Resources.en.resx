@@ -919,6 +919,9 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Delete this translation</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;empty&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Enter a new translation for</value>
   </data>
@@ -930,6 +933,9 @@
   </data>
   <data name="Lexicon_GlossList" xml:space="preserve">
     <value>Gloss List</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>language:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lemma</value>
@@ -945,6 +951,9 @@
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>A lexeme for already exists for lemma</value>
+  </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>Lexicon</value>
   </data>
   <data name="Lexicon_Matches" xml:space="preserve">
     <value>Matches</value>
@@ -963,6 +972,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Set a gloss for</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>Translations:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>type:</value>
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>Unset</value>

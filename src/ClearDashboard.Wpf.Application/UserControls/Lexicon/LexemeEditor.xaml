@@ -18,9 +18,12 @@
         <DataTemplate x:Key="MeaningDisplayTemplate">
             <lexiconControls:MeaningEditor
                 Margin="20,5,0,0"
+                IsReadOnly="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=IsReadOnly}"
                 Lexeme="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CurrentLexeme}"
+                
                 Meaning="{Binding}"
                 MeaningDeleted="OnMeaningDeleted"
+
                 MeaningTextFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=MeaningTextFontFamily}"
                 MeaningTextFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=MeaningTextFontSize}"
                 MeaningTextFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=MeaningTextFontStyle}"
@@ -77,23 +80,37 @@
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AddLexemeVisibility}">
             Add Lexeme
         </Button>
-        <Grid Grid.Row="1" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeControlsVisibility}">
+        <TextBlock
+            Grid.Row="0"
+            Margin="8,0,0,0"
+            Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaPadding}"
+            VerticalAlignment="Center"
+            FontFamily="{StaticResource ClearDashboardFont}"
+            FontSize="16"
+            FontStyle="Normal"
+            FontWeight="SemiBold"
+            Text="Lexicon" />
+        <Grid Grid.Row="1" Margin="10,0,0,0"
+              Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeControlsVisibility}">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
+          
             <TextBlock
                 Grid.Column="0"
-                Margin="0,0,0,0"
+                Margin="4,0,0,0"
                 Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaPadding}"
                 VerticalAlignment="Center"
                 FontFamily="{StaticResource ClearDashboardFont}"
-                FontSize="16"
+                FontSize="14"
                 FontStyle="Normal"
-                FontWeight="SemiBold"
-                Text="Lexeme" />
+                FontWeight="Normal"
+                Text="Lexeme" 
+                TextDecorations="Underline"/>
             <ComboBox
                 x:Name="LexemeComboBox"
                 Grid.Column="1"
@@ -106,13 +123,19 @@
                 SelectedItem="{Binding CurrentLexeme, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Vertical">
                             <TextBlock FontSize="16" Text="{Binding Lemma}" />
-                            <TextBlock Margin="10,3,0,0" FontSize="12">
-                                <Run>(</Run>
-                                <Run Text="{Binding Language}" />
-                                <Run>)</Run>
-                            </TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="0,3,0,0" FontSize="10">
+                                    <Run Text="{helpers:Localization Lexicon_Language}"/>
+                                    <Run Text="{Binding Language}" />
+                                    <Run Text=", "></Run>
+                                </TextBlock>
+                                <TextBlock Margin="0,3,0,0" FontSize="10">
+                                    <Run Text="{helpers:Localization Lexicon_Type}"/>
+                                    <Run Text="{Binding Type}" />
+                                </TextBlock>
+                            </StackPanel>
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
@@ -127,7 +150,8 @@
                     Click="ConfirmLexemeAdd"
                     FontSize="12"
                     FontWeight="SemiBold"
-                    ToolTip="{helpers:Localization Lexicon_AddLexeme}">
+                    ToolTip="{helpers:Localization Lexicon_AddLexeme}"
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=IsReadOnly, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                     <Image Height="18" Source="/Resources/add24.png" />
                 </Button>
                 <Button
@@ -139,7 +163,8 @@
                     Click="ConfirmLexemeDeletion"
                     FontSize="12"
                     FontWeight="SemiBold"
-                    ToolTip="{helpers:Localization Lexicon_DeleteLexeme}">
+                    ToolTip="{helpers:Localization Lexicon_DeleteLexeme}"
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=IsReadOnly, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                     <Image Height="18" Source="/Resources/close24.png" />
                 </Button>
             </StackPanel>
@@ -258,7 +283,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock
                 Grid.Column="0"
-                Margin="0,0,20,0"
+                Margin="4,0,20,0"
                 Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaPadding}"
                 VerticalAlignment="Center"
                 FontFamily="{StaticResource ClearDashboardFont}"
@@ -317,7 +342,8 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     VerticalContentAlignment="Center"
-                    LexemeFormAdded="OnLexemeFormAdded" />
+                    LexemeFormAdded="OnLexemeFormAdded" 
+                    IsReadOnly="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=IsReadOnly}"/>
             </StackPanel>
         </Grid>
 
@@ -333,14 +359,14 @@
 
             <TextBlock
                 Grid.Column="0"
-                Margin="0,0,0,0"
+                Margin="4,0,0,0"
                 Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaPadding}"
                 VerticalAlignment="Center"
                 FontFamily="{StaticResource ClearDashboardFont}"
                 FontSize="14"
                 FontStyle="Normal"
                 FontWeight="Normal"
-                Text="{helpers:Localization Lexicon_Meanings}"
+                Text="{helpers:Localization Lexicon_Translations}"
                 TextDecorations="Underline" />
 
             <Button
@@ -352,7 +378,8 @@
                 Click="AddMeaningClicked"
                 FontSize="12"
                 FontWeight="SemiBold"
-                ToolTip="{helpers:Localization Lexicon_AddMeaningTooltip}">
+                ToolTip="{helpers:Localization Lexicon_AddMeaningTooltip}"
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=IsReadOnly, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                 <Image Height="18" Source="/Resources/add24.png" />
             </Button>
 

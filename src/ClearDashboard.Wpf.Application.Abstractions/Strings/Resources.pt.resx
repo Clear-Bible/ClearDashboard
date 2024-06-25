@@ -896,13 +896,13 @@
     <value>Alterar todas as ocorrências não definidas</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>Se marcada, isso mudará todas as ocorrências não definidas desta palavra</value>
+    <value>Se marcado, isso mudará todas as ocorrências não definidas desta palavra</value>
   </data>
   <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
     <value>Alterar todas as ocorrências não definidas</value>
   </data>
   <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
-    <value>Se marcada, isso mudará todas as ocorrências não definidas desta palavra</value>
+    <value>Se marcado, isso mudará todas as ocorrências não definidas desta palavra</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Concordância</value>
@@ -919,6 +919,9 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Excluir esta tradução</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;vazio&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Insira uma nova tradução para</value>
   </data>
@@ -930,6 +933,9 @@
   </data>
   <data name="Lexicon_GlossList" xml:space="preserve">
     <value>Lista de brilho</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>linguagem:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lema</value>
@@ -945,6 +951,9 @@
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Já existe um lexema para o lema</value>
+  </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>Léxico</value>
   </data>
   <data name="Lexicon_Matches" xml:space="preserve">
     <value>Partidas</value>
@@ -963,6 +972,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Defina um brilho para</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>Traduções:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>tipo:</value>
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>Desativar</value>
@@ -1631,7 +1646,7 @@
     <value>Criar alinhamento de palavras</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
-    <value>Criar Paralelização de Corpora Versos</value>
+    <value>Criar Paralelização de Versos Corpora</value>
   </data>
   <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
     <value>Criar interlinear</value>
