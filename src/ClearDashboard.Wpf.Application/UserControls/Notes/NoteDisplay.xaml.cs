@@ -1582,7 +1582,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
         {
             if (e.Key == Key.Enter && Keyboard.Modifiers == ModifierKeys.Shift)
             {
-                Note.Text = NoteTextBox.Text + "\n";
+                NoteTextBox.Text += "\n";
                 // put the cursor at the end of the text
                 NoteTextBox.CaretIndex = NoteTextBox.Text.Length;
                 e.Handled = true;
