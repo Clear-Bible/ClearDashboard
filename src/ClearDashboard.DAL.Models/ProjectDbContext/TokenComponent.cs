@@ -27,9 +27,11 @@ namespace ClearDashboard.DataAccessLayer.Models
         // NB:  Should this be this specific?
         public string? CircumfixGroup { get; set; }
 
-        public Guid? GrammarId { get; set; }
+		[ForeignKey(nameof(GrammarId))]
+		public Guid? GrammarId { get; set; }
+		public virtual Grammar? Grammar { get; set; }
 
-        public string? ExtendedProperties { get; set; }
+		public string? ExtendedProperties { get; set; }
 
         [ForeignKey(nameof(VerseRowId))]
         public Guid? VerseRowId { get; set; }
