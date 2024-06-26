@@ -1,4 +1,6 @@
-﻿namespace ClearDashboard.DAL.WpfViewModels
+﻿using ClearDashboard.DAL.Wpf.ViewModels;
+
+namespace ClearDashboard.DAL.Wpf.ViewModels
 {
     public class PinsVerseListViewModel: VerseViewModel
     {
