@@ -380,6 +380,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.PaneId));
         }
+
+        //I'm doing a separate method because when I modify the signature of "RequestClose" then
+        //"RequestCloseCommand = new RelayCommandAsync(RequestClose);" complains
+        public async Task RequestClose(object? obj, bool showConfirmation = true) 
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.PaneId, showConfirmation));
+        }
         #endregion
 
         #region Constructor
