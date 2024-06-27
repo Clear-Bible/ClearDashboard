@@ -179,7 +179,7 @@
     <value>त्रुटियाँ नहीं</value>
   </data>
   <data name="AddParatextCorpusDialog_SaveToFile" xml:space="preserve">
-    <value>फाइल करने के लिए USFM त्रुटियों को सहेजें</value>
+    <value>यूएसएफएम त्रुटियों को फ़ाइल में सहेजें</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
     <value>सबका चयन करें</value>
@@ -911,7 +911,7 @@
     <value>इस शब्दकोष को हटा दें</value>
   </data>
   <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
-    <value>क्या यह लेक्सेम हटा दिया गया है?</value>
+    <value>इस लेक्सेम को हटाएं?</value>
   </data>
   <data name="Lexicon_DeleteMeaning" xml:space="preserve">
     <value>इस अर्थ को हटा दें</value>
@@ -919,17 +919,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>यह अनुवाद हटाएँ</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;खाली&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>के लिए एक नया अनुवाद दर्ज करें</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>एक नई चमक दर्ज करें</value>
   </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>प्रपत्र:</value>
+  </data>
   <data name="Lexicon_Gloss" xml:space="preserve">
     <value>ग्लोस</value>
   </data>
   <data name="Lexicon_GlossList" xml:space="preserve">
     <value>चमकदार सूची</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>भाषा:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>लेम्मा</value>
@@ -946,6 +955,9 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>लेम्मा के लिए एक शब्द पहले से ही मौजूद है</value>
   </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>शब्दकोश</value>
+  </data>
   <data name="Lexicon_Matches" xml:space="preserve">
     <value>माचिस</value>
   </data>
@@ -955,6 +967,9 @@
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>नई चमक</value>
   </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>कोई फॉर्म उपलब्ध नहीं है</value>
+  </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>इस अर्थ डोमेन को इस अर्थ से हटा दें</value>
   </data>
@@ -963,6 +978,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>के लिए एक चमक सेट करें</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>अनुवाद:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>प्रकार:</value>
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>अनसेट</value>
@@ -1241,7 +1262,7 @@
     <value>डोमेन</value>
   </data>
   <data name="Marble_FrequencyGraph" xml:space="preserve">
-    <value>आवृत्ति ग्राफ</value>
+    <value>आवृत्ति ग्राफ़</value>
   </data>
   <data name="Marble_GeneralInformation" xml:space="preserve">
     <value>सामान्य जानकारी</value>
@@ -1265,7 +1286,7 @@
     <value>इंग्लिश ग्लॉस द्वारा खोजें</value>
   </data>
   <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>हिब्रू/ग्रीक द्वारा खोजें</value>
+    <value>हिब्रू/ग्रीक के आधार पर खोजें</value>
   </data>
   <data name="Marble_Sense" xml:space="preserve">
     <value>समझ</value>
@@ -1415,7 +1436,7 @@
     <value>जोत जोड़ें</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>एक नया जोट जोड़ें </value>
+    <value>एक नया जोट जोड़ें (नई लाइन के लिए शिफ्ट-एंटर)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>शरीर</value>
@@ -1430,7 +1451,7 @@
     <value>आपके पैराटेक्स्ट प्रोजेक्ट अनुमतियों के कारण, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>श्लोक द्वारा फ़िल्टर करें</value>
+    <value>छंद द्वारा फ़िल्टर करें</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>फिल्टर</value>

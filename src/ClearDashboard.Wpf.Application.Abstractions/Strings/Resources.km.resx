@@ -686,7 +686,7 @@
     <value>សម្គាល់ការតម្រឹមជា 'ត្រូវការការពិនិត្យឡើងវិញ'</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
-    <value>សម្គាល់ការតម្រឹមជា 'ត្រឹមត្រូវ'</value>
+    <value>សម្គាល់ការតម្រឹមជា 'មានសុពលភាព'</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
     <value>និមិត្តសញ្ញាថ្មី៖ អត្ថបទបណ្តុះបណ្តាល</value>
@@ -919,17 +919,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>លុបការបកប្រែនេះ។</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;ទទេ&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>បញ្ចូលការបកប្រែថ្មីសម្រាប់</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>បញ្ចូលភាពរលោងថ្មី។</value>
   </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>ទម្រង់៖</value>
+  </data>
   <data name="Lexicon_Gloss" xml:space="preserve">
     <value>រលោង</value>
   </data>
   <data name="Lexicon_GlossList" xml:space="preserve">
     <value>បញ្ជីរលោង</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>ភាសា៖</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>លេម៉ា</value>
@@ -946,6 +955,9 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Lexeme សម្រាប់​មាន​រួច​ហើយ​សម្រាប់ lemma</value>
   </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>វចនានុក្រម</value>
+  </data>
   <data name="Lexicon_Matches" xml:space="preserve">
     <value>ការប្រកួត</value>
   </data>
@@ -955,14 +967,23 @@
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>រលោងថ្មី។</value>
   </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>មិនមានទម្រង់ដែលអាចប្រើបានទេ។</value>
+  </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>ដក​ដែន​អត្ថន័យ​នេះ​ចេញ​ពី​អត្ថន័យ​នេះ។</value>
+    <value>ដកដែនសុភាសិតនេះចេញពីអត្ថន័យនេះ។</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
     <value>យកទម្រង់ lexical នេះចេញពី lexical នេះ។</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>កំណត់ភាពរលោងសម្រាប់</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>ការបកប្រែ៖</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>ប្រភេទ៖</value>
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>មិនបានកំណត់</value>
@@ -1415,7 +1436,7 @@
     <value>បន្ថែម Jot</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>បន្ថែម​រឿង​ថ្មី </value>
+    <value>បន្ថែម​ចំណុច​ថ្មី​មួយ (ប្ដូរ​ចូល​សម្រាប់​បន្ទាត់​ថ្មី)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>រាងកាយ</value>
@@ -1667,7 +1688,7 @@
     <value>ជ្រើសរើសក្បួនដោះស្រាយ SMT ដើម្បីហ្វឹកហាត់</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>បន្ថែមការយល់ព្រមជាដុំទៅមើល</value>
+    <value>បន្ថែមការយល់ព្រមជាដុំដើម្បីមើល</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>បន្ថែមទៅទិដ្ឋភាព</value>

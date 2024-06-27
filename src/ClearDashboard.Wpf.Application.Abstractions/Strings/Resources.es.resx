@@ -866,7 +866,7 @@
     <value>LEV</value>
   </data>
   <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>Añade un dominio semántico a este significado.</value>
+    <value>Agregue un dominio semántico a este significado.</value>
   </data>
   <data name="Lexicon_AddForm" xml:space="preserve">
     <value>Añade una forma léxica a este lema.</value>
@@ -919,17 +919,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Eliminar esta traducción</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;vacío&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Introduzca una nueva traducción para</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Introduzca un nuevo brillo</value>
   </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>Formas:</value>
+  </data>
   <data name="Lexicon_Gloss" xml:space="preserve">
     <value>Brillo</value>
   </data>
   <data name="Lexicon_GlossList" xml:space="preserve">
     <value>Lista de brillo</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>idioma:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lema</value>
@@ -946,6 +955,9 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Ya existe un lexema para el lema.</value>
   </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>Léxico</value>
+  </data>
   <data name="Lexicon_Matches" xml:space="preserve">
     <value>Partidos</value>
   </data>
@@ -955,6 +967,9 @@
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>Nuevo brillo</value>
   </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>No hay formularios disponibles</value>
+  </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Eliminar este dominio semántico de este significado.</value>
   </data>
@@ -963,6 +978,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Establecer un brillo para</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>Traducciones:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>tipo:</value>
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>Desarmado</value>
@@ -1229,7 +1250,7 @@
     <value>Definición larga:</value>
   </data>
   <data name="Marble_DefinitionShort" xml:space="preserve">
-    <value>Definición corta:</value>
+    <value>Definición breve:</value>
   </data>
   <data name="Marble_DefinitionUnavailable" xml:space="preserve">
     <value>definición no disponible</value>
@@ -1412,10 +1433,10 @@
     <value>Ninguno</value>
   </data>
   <data name="Notes_AddJot" xml:space="preserve">
-    <value>Añadir jota</value>
+    <value>Agregar jota</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Agregar una nueva jota </value>
+    <value>Agregue una nueva jota (mayúsculas-ingresar para una nueva línea)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Cuerpo</value>

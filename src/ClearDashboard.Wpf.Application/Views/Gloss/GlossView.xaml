@@ -58,6 +58,7 @@
             LexemeFormFontSize="16"
             LexemeFormPadding="3"
             Lexemes="{Binding Lexemes}"
+            LemmaTextBlockVisibility="Collapsed"
             MeaningTextFontFamily="{Binding TargetFontFamily}"
             MeaningTextFontSize="14"
             SemanticDomainBackground="AliceBlue"

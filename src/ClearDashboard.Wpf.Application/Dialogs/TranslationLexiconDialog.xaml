@@ -43,6 +43,7 @@
             LexemeFormBackground="LightGray"
             LexemeFormCornerRadius="4"
             LexemeFormPadding="4"
+            LemmaTextBlockVisibility="Collapsed"
             MeaningTextFontSize="14"
             SemanticDomainBackground="AliceBlue"
             SemanticDomainCornerRadius="4"

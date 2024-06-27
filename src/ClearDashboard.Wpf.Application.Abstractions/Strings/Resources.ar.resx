@@ -908,7 +908,7 @@
     <value>فهرس أبجدي</value>
   </data>
   <data name="Lexicon_DeleteLexeme" xml:space="preserve">
-    <value>احذف هذا المعجم</value>
+    <value>احذف هذا المفردات</value>
   </data>
   <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
     <value>حذف هذا المعجم؟</value>
@@ -919,17 +919,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>احذف هذه الترجمة</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;فارغة&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>أدخل ترجمة جديدة ل</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>أدخل لمعان جديد</value>
   </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>نماذج:</value>
+  </data>
   <data name="Lexicon_Gloss" xml:space="preserve">
     <value>لمعان</value>
   </data>
   <data name="Lexicon_GlossList" xml:space="preserve">
     <value>قائمة اللمعان</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>لغة:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>ليما</value>
@@ -941,10 +950,13 @@
     <value>Lemma للمفردات الجديدة:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
-    <value>المعجم</value>
+    <value>معجم</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>معجم لـ موجود بالفعل لـ lemma</value>
+  </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>معجم</value>
   </data>
   <data name="Lexicon_Matches" xml:space="preserve">
     <value>اعواد الكبريت</value>
@@ -955,6 +967,9 @@
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>لمعان جديد</value>
   </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>لا توجد نماذج متاحة</value>
+  </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>أزل هذا المجال الدلالي من هذا المعنى</value>
   </data>
@@ -963,6 +978,12 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>تعيين لمعان ل</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>الترجمات:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>يكتب:</value>
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>غير محدد</value>
@@ -1004,7 +1025,7 @@
     <value>مطابقة كاملة</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
-    <value>المعجم</value>
+    <value>معجم</value>
   </data>
   <data name="LexiconEdit_LoadingData" xml:space="preserve">
     <value>تحميل البيانات...</value>
@@ -1016,7 +1037,7 @@
     <value>مطابقة</value>
   </data>
   <data name="LexiconEdit_Meanings" xml:space="preserve">
-    <value>المعاني [ترجمات]</value>
+    <value>المعاني [الترجمات]</value>
   </data>
   <data name="LexiconEdit_Or" xml:space="preserve">
     <value>أو</value>
@@ -1046,10 +1067,10 @@
     <value>إضافة كنموذج لـ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>ابحث عن المفردات الكاملة أو الجزئية أو تطابقات النموذج مع المصدر</value>
+    <value>ابحث عن المفردات الكاملة أو الجزئية أو تطابقات النموذج للمصدر</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>إضافة الهدف كترجمة ل...</value>
+    <value>إضافة الهدف كترجمة لـ...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>ابحث عن المعاجم التي تحتوي على ترجمة واحدة أو أكثر تطابق الهدف</value>
@@ -1277,7 +1298,7 @@
     <value>رموز قوية   </value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
-    <value>المجالات الفرعية:</value>
+    <value>النطاقات الفرعية:</value>
   </data>
   <data name="Marble_Verse" xml:space="preserve">
     <value>بيت شعر</value>
@@ -1415,7 +1436,7 @@
     <value>أضف جوت</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>أضف نقطة جديدة </value>
+    <value>إضافة نقطة جديدة (shift-enter للسطر الجديد)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>جسم</value>
@@ -1514,7 +1535,7 @@
     <value>افصل التسمية</value>
   </data>
   <data name="Notes_MarkOpen" xml:space="preserve">
-    <value>علامة Jots المحددة على أنها مفتوحة</value>
+    <value>وضع علامة على النقاط المحددة على أنها مفتوحة</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
     <value>وضع علامة على النقاط المحددة على أنها تم حلها</value>
@@ -1808,7 +1829,7 @@
     <value>StudyBible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
-    <value>إضافات StudyBible</value>
+    <value>StudyBibleAdditions</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
     <value>انتقل إلى Paratext وقم بتبديل المشاريع.  إن مشروع Paratext المتصل حاليًا بالمكون الإضافي ClearDashboard ليس هو نفس المجموعة الموجودة في مشروع ClearDashboard هذا.</value>
@@ -1862,10 +1883,10 @@
     <value>لغة</value>
   </data>
   <data name="Pins_Lexeme" xml:space="preserve">
-    <value>المعجم</value>
+    <value>معجم</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
-    <value>نوع المفردات</value>
+    <value>نوع المعجم</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
     <value>تحميل المراجع</value>
@@ -2147,7 +2168,7 @@
     <value>هوشع</value>
   </data>
   <data name="ProperCase_Isaiah" xml:space="preserve">
-    <value>إشعياء</value>
+    <value>أشعياء</value>
   </data>
   <data name="ProperCase_James" xml:space="preserve">
     <value>جوامع</value>
@@ -2321,7 +2342,7 @@
     <value>تمكين تحرير المحاذاة</value>
   </data>
   <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
-    <value>تمكين الملاحظات Paratext الخارجية في المجموعة التجريبية</value>
+    <value>تمكين ملاحظات Paratext الخارجية في المجموعة التجريبية</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
     <value>تمكين ملاحظات Paratext الخارجية</value>
