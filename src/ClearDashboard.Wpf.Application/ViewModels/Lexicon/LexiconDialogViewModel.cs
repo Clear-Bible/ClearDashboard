@@ -49,7 +49,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         }
 
         public bool IsAddLexemeMode => Mode == LexiconDialogMode.AddLexeme;
-        public bool IsLexemeEditorReadOnly => IsAddLexemeMode;
+
+        public bool IsLexemeEditorReadOnly
+        {
+            get => _isLexemeEditorReadOnly;
+            set => Set(ref _isLexemeEditorReadOnly, value);
+        }
 
         private string _sourceFontFamily = FontNames.DefaultFontFamily;
         public string SourceFontFamily
@@ -163,7 +168,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         }
 
         private bool _isLoaded = false;
-       
+        private bool _isLexemeEditorReadOnly;
+
         public bool IsLoaded
         {
             get => _isLoaded;
@@ -415,9 +421,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             // TokenSplitting -> glossing 
             base.OnViewLoaded(view);
 
+            await Initialize();
+        }
+
+        public async Task Initialize()
+        {
             OnUIThread(() => ProgressBarVisibility = Visibility.Visible);
 
-            await Task.Run(async () => {
+            await Task.Run(async () =>
+            {
+
+                IsLexemeEditorReadOnly = true;
 
                 SourceFontFamily = await GetFontFamily(TokenDisplay.VerseDisplay.ParallelCorpusId?.SourceTokenizedCorpusId?.CorpusId?.ParatextGuid);
                 TargetFontFamily = await GetFontFamily(TokenDisplay.VerseDisplay.ParallelCorpusId?.TargetTokenizedCorpusId?.CorpusId?.ParatextGuid);
@@ -448,7 +462,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                 ProgressBarVisibility = Visibility.Collapsed;
                 IsLoaded = true;
             });
-
         }
 
         public dynamic DialogSettings()

@@ -928,6 +928,9 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Nhập độ bóng mới</value>
   </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>Các hình thức:</value>
+  </data>
   <data name="Lexicon_Gloss" xml:space="preserve">
     <value>Độ bóng</value>
   </data>
@@ -963,6 +966,9 @@
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>Độ bóng mới</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>Không có biểu mẫu nào</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Xóa miền ngữ nghĩa này khỏi ý nghĩa này</value>

@@ -928,6 +928,9 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>أدخل لمعان جديد</value>
   </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>نماذج:</value>
+  </data>
   <data name="Lexicon_Gloss" xml:space="preserve">
     <value>لمعان</value>
   </data>
@@ -963,6 +966,9 @@
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>لمعان جديد</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>لا توجد نماذج متاحة</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>أزل هذا المجال الدلالي من هذا المعنى</value>

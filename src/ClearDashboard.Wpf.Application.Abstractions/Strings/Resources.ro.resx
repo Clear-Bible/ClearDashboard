@@ -353,7 +353,7 @@
     <value>jertfe și ofrande</value>
   </data>
   <data name="BiblicalTermsDomains_Settlement" xml:space="preserve">
-    <value>decontare</value>
+    <value>aşezare</value>
   </data>
   <data name="BiblicalTermsDomains_SignsAndWonders" xml:space="preserve">
     <value>semne și minuni</value>
@@ -928,6 +928,9 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Introduceți un nou luciu</value>
   </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>Forme:</value>
+  </data>
   <data name="Lexicon_Gloss" xml:space="preserve">
     <value>Luciu</value>
   </data>
@@ -963,6 +966,9 @@
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>Gloss nou</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>Nu există formulare disponibile</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Eliminați acest domeniu semantic din acest sens</value>

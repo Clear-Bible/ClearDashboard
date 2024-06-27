@@ -17,17 +17,19 @@
     FontFamily="{StaticResource ClearDashboardFont}"
     IsEnabled="{Binding IsLoaded}"
     mc:Ignorable="d">
-    <Grid MinWidth="500">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid MinWidth="500">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <Label
+
+            <Label
             Grid.Row="0"
             Margin="0,10,0,0"
             HorizontalContentAlignment="Center"
@@ -35,15 +37,15 @@
             FontFamily="{StaticResource ClearDashboardFont}"
             FontSize="16" />
 
-        <Label
+            <Label
             Grid.Row="1"
             HorizontalContentAlignment="Center"
             Content="{Binding TokenDisplay.TranslationSurfaceAndTrainingText}"
             FontFamily="{Binding SourceFontFamily}"
             FontSize="22"
             FontWeight="Bold" />
-        <materialDesign:Card Grid.Row="2" Margin="10">
-            <lexiconControls:LexemeEditor
+            <materialDesign:Card Grid.Row="2" Margin="10">
+                <lexiconControls:LexemeEditor
            x:Name="LexemeEditor"
           
            Margin="20,0,20,20"
@@ -59,6 +61,7 @@
            LexemeFormFontSize="16"
            LexemeFormPadding="3"
            Lexemes="{Binding Lexemes}"
+           LemmaTextBlockVisibility="Collapsed"
            MeaningTextFontFamily="{Binding TargetFontFamily}"
            MeaningTextFontSize="14"
            SemanticDomainBackground="AliceBlue"
@@ -77,58 +80,58 @@
            Visibility="{Binding IsAddLexemeMode, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <b:Interaction.Triggers>
                         <b:EventTrigger EventName="LexemeAdded">
-                            <b:CallMethodAction MethodName="OnLexemeAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gloss:GlossView}}, Path=DataContext}" />
+                            <b:CallMethodAction MethodName="OnLexemeAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
                         </b:EventTrigger>
                         <b:EventTrigger EventName="LexemeDeleted">
-                            <b:CallMethodAction MethodName="OnLexemeDeleted" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gloss:GlossView}}, Path=DataContext}" />
+                            <b:CallMethodAction MethodName="OnLexemeDeleted" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
                         </b:EventTrigger>
                         <b:EventTrigger EventName="LexemeFormAdded">
-                            <b:CallMethodAction MethodName="OnLexemeFormAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gloss:GlossView}}, Path=DataContext}" />
+                            <b:CallMethodAction MethodName="OnLexemeFormAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
                         </b:EventTrigger>
                         <b:EventTrigger EventName="LexemeFormRemoved">
-                            <b:CallMethodAction MethodName="OnLexemeFormRemoved" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gloss:GlossView}}, Path=DataContext}" />
+                            <b:CallMethodAction MethodName="OnLexemeFormRemoved" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
                         </b:EventTrigger>
                         <b:EventTrigger EventName="MeaningAdded">
-                            <b:CallMethodAction MethodName="OnMeaningAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gloss:GlossView}}, Path=DataContext}" />
+                            <b:CallMethodAction MethodName="OnMeaningAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
                         </b:EventTrigger>
                         <b:EventTrigger EventName="MeaningDeleted">
-                            <b:CallMethodAction MethodName="OnMeaningDeleted" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gloss:GlossView}}, Path=DataContext}" />
+                            <b:CallMethodAction MethodName="OnMeaningDeleted" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
                         </b:EventTrigger>
                         <b:EventTrigger EventName="MeaningUpdated">
-                            <b:CallMethodAction MethodName="OnMeaningUpdated" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gloss:GlossView}}, Path=DataContext}" />
+                            <b:CallMethodAction MethodName="OnMeaningUpdated" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
                         </b:EventTrigger>
                         <b:EventTrigger EventName="SemanticDomainAdded">
-                            <b:CallMethodAction MethodName="OnSemanticDomainAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gloss:GlossView}}, Path=DataContext}" />
+                            <b:CallMethodAction MethodName="OnSemanticDomainAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
                         </b:EventTrigger>
                         <b:EventTrigger EventName="SemanticDomainSelected">
-                            <b:CallMethodAction MethodName="OnSemanticDomainSelected" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gloss:GlossView}}, Path=DataContext}" />
+                            <b:CallMethodAction MethodName="OnSemanticDomainSelected" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
                         </b:EventTrigger>
                         <b:EventTrigger EventName="SemanticDomainRemoved">
-                            <b:CallMethodAction MethodName="OnSemanticDomainRemoved" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gloss:GlossView}}, Path=DataContext}" />
+                            <b:CallMethodAction MethodName="OnSemanticDomainRemoved" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
                         </b:EventTrigger>
                         <b:EventTrigger EventName="TranslationAdded">
-                            <b:CallMethodAction MethodName="OnMeaningTranslationAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gloss:GlossView}}, Path=DataContext}" />
+                            <b:CallMethodAction MethodName="OnMeaningTranslationAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
                         </b:EventTrigger>
                         <b:EventTrigger EventName="TranslationDeleted">
-                            <b:CallMethodAction MethodName="OnTranslationDeleted" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gloss:GlossView}}, Path=DataContext}" />
+                            <b:CallMethodAction MethodName="OnTranslationDeleted" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
                         </b:EventTrigger>
                         <b:EventTrigger EventName="TranslationDropped">
-                            <b:CallMethodAction MethodName="OnTranslationDropped" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gloss:GlossView}}, Path=DataContext}" />
+                            <b:CallMethodAction MethodName="OnTranslationDropped" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
                         </b:EventTrigger>
                         <b:EventTrigger EventName="TranslationSelected">
-                            <b:CallMethodAction MethodName="OnTranslationSelected" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gloss:GlossView}}, Path=DataContext}" />
+                            <b:CallMethodAction MethodName="OnTranslationSelected" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
                         </b:EventTrigger>
                     </b:Interaction.Triggers>
-            </lexiconControls:LexemeEditor>
-        </materialDesign:Card>
-        <materialDesign:Card Grid.Row ="3" Margin="10">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="25" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-            
-            <TextBlock
+                </lexiconControls:LexemeEditor>
+            </materialDesign:Card>
+            <materialDesign:Card Grid.Row ="3" Margin="10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
                 Grid.Row="0"
                 Margin="30,10,0,0"
                 VerticalAlignment="Center"
@@ -136,7 +139,7 @@
                 FontSize="16"
                 FontWeight="SemiBold"
                 Text="{helpers:Localization Lexicon_GlossList}" />
-            <lexiconControls:GlossListDisplay
+                    <lexiconControls:GlossListDisplay
                 x:Name="GlossListDisplay"
                 Grid.Row="1"
                 Margin="30,0,0,0"
@@ -146,42 +149,43 @@
                 TranslationFontSize="16"
                 TranslationFontStyle="Normal"
                 Translations="{Binding Concordance}">
-                <b:Interaction.Triggers>
-                    <b:EventTrigger EventName="TranslationAdded">
-                        <b:CallMethodAction MethodName="OnTranslationAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gloss:GlossView}}, Path=DataContext}" />
-                    </b:EventTrigger>
-                    <b:EventTrigger EventName="TranslationSelected">
-                        <b:CallMethodAction MethodName="OnTranslationSelected" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gloss:GlossView}}, Path=DataContext}" />
-                    </b:EventTrigger>
-                    <b:EventTrigger EventName="NewTranslationChanged">
-                        <b:CallMethodAction MethodName="OnNewTranslationChanged" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gloss:GlossView}}, Path=DataContext}" />
-                    </b:EventTrigger>
-                </b:Interaction.Triggers>
-            </lexiconControls:GlossListDisplay>
-            </Grid>
-        </materialDesign:Card>
-     
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="TranslationAdded">
+                                <b:CallMethodAction MethodName="OnTranslationAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
+                            </b:EventTrigger>
+                            <b:EventTrigger EventName="TranslationSelected">
+                                <b:CallMethodAction MethodName="OnTranslationSelected" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
+                            </b:EventTrigger>
+                            <b:EventTrigger EventName="NewTranslationChanged">
+                                <b:CallMethodAction MethodName="OnNewTranslationChanged" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </lexiconControls:GlossListDisplay>
+                </Grid>
+            </materialDesign:Card>
 
-        <StackPanel
+
+            <StackPanel
             Grid.Row="4"
             HorizontalAlignment="Center"
             Orientation="Horizontal">
-            <CheckBox
+                <CheckBox
                 x:Name="ApplyAllCheckbox"
                 Margin="10,5,0,5"
-                FontSize="13"
                 IsChecked="{Binding ApplyToAll}"
-                Content="{helpers:Localization Lexicon_ChangeAllUnsetOccurrences}">
-                <CheckBox.ToolTip >
-                    <ToolTip Content="{helpers:Localization Lexicon_ChangeAllUnsetOccurrencesToolTip}"></ToolTip>
-                </CheckBox.ToolTip>
-            </CheckBox>
-        </StackPanel>
-        <StackPanel
+                FontSize="13"
+                Content="{helpers:Localization Lexicon_ChangeAllUnsetOccurrences}"
+                Style="{StaticResource DashboardCheckBoxStyle}">
+                    <CheckBox.ToolTip >
+                        <ToolTip Content="{helpers:Localization Lexicon_ChangeAllUnsetOccurrencesToolTip}"></ToolTip>
+                    </CheckBox.ToolTip>
+                </CheckBox>
+            </StackPanel>
+            <StackPanel
             Grid.Row="5"
             HorizontalAlignment="Center"
             Orientation="Horizontal">
-            <Button
+                <Button
                 x:Name="ApplyTranslation"
                 Margin="5"
                 Content="{helpers:Localization Lexicon_ApplyTranslation}"
@@ -189,7 +193,7 @@
                 FontSize="14"
                 IsEnabled="{Binding ApplyEnabled}"
                 Style="{StaticResource TransparentStyle}" />
-            <Button
+                <Button
                 x:Name="CancelTranslation"
                 Margin="5"
                 Content="{helpers:Localization Lexicon_CancelTranslation}"
@@ -197,8 +201,8 @@
                 FontSize="14"
                 IsEnabled="{Binding CancelEnabled}"
                 Style="{StaticResource AlternativeStyle}" />
-        </StackPanel>
-        <ProgressBar
+            </StackPanel>
+            <ProgressBar
             Grid.Row="2"
             Grid.RowSpan="3"
             Width="76"
@@ -209,5 +213,6 @@
             Style="{StaticResource ClearDashboardCircularProgressBar}"
             Visibility="{Binding ProgressBarVisibility}"
             Value="0" />
-    </Grid>
+        </Grid>
+    </ScrollViewer>
 </UserControl>

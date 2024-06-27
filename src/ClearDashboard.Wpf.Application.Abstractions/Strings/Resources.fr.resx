@@ -928,6 +928,9 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Entrez un nouveau gloss</value>
   </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>Formes:</value>
+  </data>
   <data name="Lexicon_Gloss" xml:space="preserve">
     <value>Brillant</value>
   </data>
@@ -963,6 +966,9 @@
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>Nouveau brillant</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>Aucun formulaire disponible</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Supprimer ce domaine sémantique de ce sens</value>

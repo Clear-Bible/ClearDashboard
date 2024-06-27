@@ -56,7 +56,9 @@
             Click="ConfirmTranslationDeletion"
             FontSize="12"
             ToolTip="{helpers:Localization Lexicon_DeleteTranslation}"
-            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DeleteVisibility}">
+            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=IsReadOnly, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+
+<!-- Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DeleteVisibility}"> -->
             <Image Height="18" Source="/Resources/close24.png" />
         </Button>
         <Popup

@@ -118,7 +118,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.WpfViewModels", "ClearDashboard.DAL.WpfViewModels\ClearDashboard.DAL.WpfViewModels.csproj", "{82738C78-80F0-450E-BB03-F106BF7C4861}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Wpf.ViewModels", "ClearDashboard.DAL.WpfViewModels\ClearDashboard.DAL.Wpf.ViewModels.csproj", "{82738C78-80F0-450E-BB03-F106BF7C4861}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

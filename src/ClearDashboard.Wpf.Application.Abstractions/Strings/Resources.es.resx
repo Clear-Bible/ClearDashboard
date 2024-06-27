@@ -928,6 +928,9 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Introduzca un nuevo brillo</value>
   </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>Formas:</value>
+  </data>
   <data name="Lexicon_Gloss" xml:space="preserve">
     <value>Brillo</value>
   </data>
@@ -963,6 +966,9 @@
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>Nuevo brillo</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>No hay formularios disponibles</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Eliminar este dominio semántico de este significado.</value>

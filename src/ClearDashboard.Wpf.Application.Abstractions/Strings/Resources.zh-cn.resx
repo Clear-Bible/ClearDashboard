@@ -928,6 +928,9 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>输入新的光泽</value>
   </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>形式：</value>
+  </data>
   <data name="Lexicon_Gloss" xml:space="preserve">
     <value>光泽度</value>
   </data>
@@ -963,6 +966,9 @@
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>新光泽</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>没有可用的表格</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>从这个含义中删除这个语义域</value>

@@ -1,9 +1,9 @@
-﻿using ClearDashboard.DataAccessLayer.Models;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Documents;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Models;
 
-namespace ClearDashboard.DAL.WpfViewModels
+namespace ClearDashboard.DAL.Wpf.ViewModels
 {
     public class VerseViewModel : ViewModelBase<VerseObject>
     {

@@ -928,6 +928,9 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>បញ្ចូលភាពរលោងថ្មី។</value>
   </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>ទម្រង់៖</value>
+  </data>
   <data name="Lexicon_Gloss" xml:space="preserve">
     <value>រលោង</value>
   </data>
@@ -963,6 +966,9 @@
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>រលោងថ្មី។</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>មិនមានទម្រង់ដែលអាចប្រើបានទេ។</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>ដកដែនសុភាសិតនេះចេញពីអត្ថន័យនេះ។</value>

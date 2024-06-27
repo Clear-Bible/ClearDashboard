@@ -18,7 +18,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using ClearBible.Engine.Corpora;
+using ClearDashboard.Wpf.Application.UserControls.Lexicon;
+using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Token = ClearBible.Engine.Corpora.Token;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 // ReSharper disable UnusedMember.Global
@@ -334,6 +338,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 OnUIThread(() => ProgressBarVisibility = Visibility.Collapsed);
                 await TryCloseAsync(true);
             }
+        }
+
+        public void OnDropDownOpening(object sender, RoutedEventArgs e)
+        {
+            var args = e as SplitTokenEventArgs;
+            var lexiconDialogView = args!.LexiconDialogView;
+            var splitInstructionViewModel = args.SplitInstructionViewModel;
+            var lexiconDialogViewModel = LifetimeScope!.Resolve<LexiconDialogViewModel>();
+          
+            if (lexiconDialogViewModel != null)
+            {
+
+                var tokenId = TokenDisplay.Token.TokenId;
+                var token = new Token(new TokenId(tokenId.BookNumber, tokenId.ChapterNumber, tokenId.VerseNumber, tokenId.WordNumber, tokenId.SubWordNumber), splitInstructionViewModel.TokenText, splitInstructionViewModel.TrainingText);
+                var tokenDisplay = new TokenDisplayViewModel(token)
+                {
+                    VerseDisplay = TokenDisplay.VerseDisplay
+                };
+
+                lexiconDialogViewModel.InterlinearDisplay = InterlinearDisplay;
+                lexiconDialogViewModel.TokenDisplay = tokenDisplay;
+
+
+                ViewModelBinder.Bind(lexiconDialogViewModel, args!.LexiconDialogView, null);
+
+                
+            }
+           
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)

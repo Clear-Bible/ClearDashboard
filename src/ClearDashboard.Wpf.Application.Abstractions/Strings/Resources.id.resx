@@ -928,6 +928,9 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Masukkan kilap baru</value>
   </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>Formulir:</value>
+  </data>
   <data name="Lexicon_Gloss" xml:space="preserve">
     <value>Kilap</value>
   </data>
@@ -963,6 +966,9 @@
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>Kilau Baru</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>Tidak ada formulir yang tersedia</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Hapus domain semantik ini dari makna ini</value>
