@@ -1030,10 +1030,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             if (SelectionManager.IsDragInProcess)
             {
-                TokenDisplayViewModelCollection selectedTokensAcrossAllVersesCollection = new(); 
-                selectedTokensAcrossAllVersesCollection.AddRangeDistinct(SelectionManager.SelectedTokens);
-                selectedTokensAcrossAllVersesCollection.AddRangeDistinct(e.SelectedTokens);
-                SelectionManager.UpdateSelection(e.TokenDisplay, selectedTokensAcrossAllVersesCollection, e.IsControlPressed);
+                SelectionManager.UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
             }
 
             Message = $"'{e.TokenDisplay.SurfaceText}' token ({e.TokenDisplay.Token.TokenId}) hovered";
