@@ -62,7 +62,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public ICommand MoveCorpusUpRowCommand { get; set; }
         public ICommand DeleteCorpusRowCommand { get; set; }
         public ICommand IncreaseTextSizeCommand => new RelayCommand(IncreaseTextSize);
-        
+
         private void IncreaseTextSize(object? commandParameter)
         {
             SourceFontSizeValue += 1;
@@ -91,7 +91,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             TranslationsFontSizeValue = _originalTranslationsFontSizeValue;
         }
 
-        #endregion
+   #endregion
 
         #region Member Variables
 

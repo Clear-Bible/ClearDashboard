@@ -1423,16 +1423,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
             // 1
-         
+
             RaiseTokenEvent(TokenLeftButtonDownEvent, e);
 
             HighlightAlignedToken();
             e.Handled = true;
-
-            if (sender is Button button)
-            {
-                button.Focus();
-            }
         }
 
         private void HighlightAlignedToken()
