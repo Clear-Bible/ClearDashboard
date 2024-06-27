@@ -340,7 +340,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        public void OnDropDownOpening(object sender, RoutedEventArgs e)
+        public async void OnDropDownOpening(object sender, RoutedEventArgs e)
         {
             var args = e as SplitTokenEventArgs;
             var lexiconDialogView = args!.LexiconDialogView;
@@ -359,11 +359,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                 lexiconDialogViewModel.InterlinearDisplay = InterlinearDisplay;
                 lexiconDialogViewModel.TokenDisplay = tokenDisplay;
+                args!.LexiconDialogView.DataContext = lexiconDialogViewModel;
+
+                //ViewModelBinder.Bind(lexiconDialogViewModel, args!.LexiconDialogView, null);
+
+                await lexiconDialogViewModel.Initialize();
 
 
-                ViewModelBinder.Bind(lexiconDialogViewModel, args!.LexiconDialogView, null);
-
-                
             }
            
         }
