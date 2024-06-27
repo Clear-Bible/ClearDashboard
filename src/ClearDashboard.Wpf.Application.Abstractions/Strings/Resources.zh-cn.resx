@@ -1649,7 +1649,7 @@
     <value>旧约</value>
   </data>
   <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
-    <value>创建单词对齐</value>
+    <value>创建字对齐</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
     <value>创建语料库诗句的并行化</value>
@@ -1943,7 +1943,7 @@
     <value>合作项目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>创建您的项目以开始使用。</value>
+    <value>创建您的项目以开始。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>创建一个新项目</value>

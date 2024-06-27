@@ -635,7 +635,7 @@
     <value>Добавить выравнивание?</value>
   </data>
   <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>Выровнять '{0}' по '{1}'?</value>
+    <value>Выровнять "{0}" по "{1}"?</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
     <value>Выравнивание</value>
@@ -1592,7 +1592,7 @@
     <value>Положение дел</value>
   </data>
   <data name="Notes_OpenConfirmation" xml:space="preserve">
-    <value>Пометить эти записи как открытые?</value>
+    <value>Пометить эти заметки как открытые?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Часть</value>
@@ -1898,7 +1898,7 @@
     <value>Примечания</value>
   </data>
   <data name="Pins_Occurences" xml:space="preserve">
-    <value>События</value>
+    <value>Случаи</value>
   </data>
   <data name="Pins_Origin" xml:space="preserve">
     <value>Источник</value>

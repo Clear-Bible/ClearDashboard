@@ -503,7 +503,7 @@
     <value>Parte fuente</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Fuente de referencia</value>
+    <value>Referencia de fuente</value>
   </data>
   <data name="BulkAlignmentReview_Target" xml:space="preserve">
     <value>Objetivo</value>
@@ -2150,7 +2150,7 @@
     <value>Esdras</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>gálatas</value>
+    <value>Gálatas</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>Génesis</value>

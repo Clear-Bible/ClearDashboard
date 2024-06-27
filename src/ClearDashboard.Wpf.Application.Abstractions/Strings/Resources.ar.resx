@@ -1316,7 +1316,7 @@
     <value>MAT</value>
   </data>
   <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>جارٍ إنشاء قاعدة البيانات...</value>
+    <value>جارٍ إنشاء قاعدة بيانات...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
     <value>اكتمل الدمج...جاري إعادة تحميل الواجهة</value>
@@ -1808,7 +1808,7 @@
     <value>الموارد</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
-    <value>قم بتوسيع المحتوى إلى 100٪</value>
+    <value>قم بتوسيع المحتوى إلى 100%</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
     <value>إضافة نص إلى نافذة جديدة</value>
@@ -2042,7 +2042,7 @@
     <value>تحديث قائمة مشاريع التعاون</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>البحث مؤخرا</value>
+    <value>بحث مؤخرا</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
     <value>انقر هنا لبدء Paratext</value>
@@ -2474,7 +2474,7 @@
     <value>لا أستطيع إكمال المهمة</value>
   </data>
   <data name="SlackMessageView_Combo3" xml:space="preserve">
-    <value>لقد أكملت مهمة ولكنها كانت صعبة</value>
+    <value>لقد أكملت مهمة لكنها كانت صعبة</value>
   </data>
   <data name="SlackMessageView_Combo4" xml:space="preserve">
     <value>أود أن أفعل...</value>
