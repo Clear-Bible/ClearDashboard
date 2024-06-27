@@ -167,7 +167,7 @@
     <value>USFM በመፈተሽ ላይ</value>
   </data>
   <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
-    <value>የUSFM ስህተቶችን ወደ ቅንጥብ ሰሌዳ ይቅዱ</value>
+    <value>የ USFM ስህተቶችን ወደ ቅንጥብ ሰሌዳ ይቅዱ</value>
   </data>
   <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
     <value>የስህተት ብዛት፡-</value>
@@ -740,10 +740,10 @@
     <value>EZR</value>
   </data>
   <data name="FontSettings_FontSize" xml:space="preserve">
-    <value>የፊደል መጠን፡</value>
+    <value>የፊደል መጠን፡-</value>
   </data>
   <data name="FontSettings_Height" xml:space="preserve">
-    <value>ቁመት፡-</value>
+    <value>ቁመት፡</value>
   </data>
   <data name="FontSettings_Horizontal" xml:space="preserve">
     <value>አግድም ክፍተት፡</value>
@@ -1031,7 +1031,7 @@
     <value>ውሂብ በመጫን ላይ...</value>
   </data>
   <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
-    <value>ውሂብ በመጫን ላይ ሳለ ያልተጠበቀ ስህተት ተፈጥሯል። {0}</value>
+    <value>ውሂብ በመጫን ላይ ሳለ ያልተጠበቀ ስህተት ተከስቷል። {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>ማዛመድ</value>
@@ -1310,7 +1310,7 @@
     <value>የጥቅስ ስሜት</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
-    <value>የቁጥር ድምር</value>
+    <value>ጠቅላላ ቁጥር</value>
   </data>
   <data name="MAT" xml:space="preserve">
     <value>MAT</value>
@@ -1469,7 +1469,7 @@
     <value>ማንኛውም</value>
   </data>
   <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>ተፈትቷል</value>
+    <value>ተፈቷል።</value>
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>ክፈት</value>
@@ -1556,7 +1556,7 @@
     <value>ክፈት</value>
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>ተፈትቷል</value>
+    <value>ተፈቷል።</value>
   </data>
   <data name="Notes_Note_Verse" xml:space="preserve">
     <value>ቁጥር</value>
@@ -1997,7 +1997,7 @@
     <value>እዚህ ብቸኝነት ነው።  እባክዎ አዲስ ፕሮጀክት ይፍጠሩ።</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>ፓራቴክስት አልተጫነም።  እባክህ Paratextን ጫን እና የ ClearDashboard መተግበሪያን እንደገና አስጀምር።</value>
+    <value>ፓራቴክስት አልተጫነም።  እባክህ Paratext ጫን እና የ ClearDashboard መተግበሪያን እንደገና አስጀምር።</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>ፓራቴክስት እየሰራ አይደለም።</value>
@@ -2030,7 +2030,7 @@
     <value>'Dashboard Getting' ቪዲዮዎችን ለማየት እዚህ ጠቅ ያድርጉ</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
-    <value>ከታች ያለውን 'ፍጠር' የሚለውን ቁልፍ ከተጫኑ በኋላ፣ ፕሮጀክትዎን በማስመሰያ፣ በማስተካከል እና በማዘጋጀት ላይ እንሆናለን። ሁሉም እርምጃዎች ሲሰሩ እዚህ ይታያሉ። በመጠባበቅ ላይ እያሉ ClearDashboard መጠቀም ለመጀመር ከስር ያለውን ሊንክ ተጭነው አንዳንድ ጠቃሚ ቪዲዮዎችን ለማየት ነፃነት ይሰማዎ!</value>
+    <value>ከታች ያለውን 'ፍጠር' የሚለውን ቁልፍ ከተጫኑ በኋላ፣ ፕሮጀክትዎን በማስመሰያ፣ በማስተካከል እና በማዘጋጀት ላይ እንሆናለን። ሁሉም እርምጃዎች ሲሰሩ እዚህ ይታያሉ። በመጠባበቅ ላይ እያሉ ClearDashboard መጠቀም ለመጀመር ከስር ያለውን ሊንክ ተጭነው አንዳንድ ጠቃሚ ቪዲዮዎችን ይመልከቱ!</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
     <value>የፕሮጀክት አብነት አዋቂ</value>

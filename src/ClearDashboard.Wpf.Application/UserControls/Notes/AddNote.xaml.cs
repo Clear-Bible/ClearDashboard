@@ -1450,5 +1450,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             Loaded += OnLoaded;
         }
 
+        private void NoteTextBox_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && Keyboard.Modifiers == ModifierKeys.Shift)
+            {
+                NoteTextBox.Text += "\n";
+                // put the cursor at the end of the text
+                NoteTextBox.CaretIndex = NoteTextBox.Text.Length;
+                e.Handled = true;
+            }
+        }
     }
 }

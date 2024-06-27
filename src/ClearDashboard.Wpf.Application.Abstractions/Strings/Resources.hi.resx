@@ -1670,7 +1670,7 @@
     <value>मशीन वर्ड संरेखण एल्गोरिदम</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>ट्रेन सममिति मॉडल?</value>
+    <value>ट्रेन सममितिकृत मॉडल?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>रेलगाड़ी</value>

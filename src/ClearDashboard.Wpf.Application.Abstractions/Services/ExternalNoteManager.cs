@@ -19,6 +19,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Models;
 using static ClearBible.Engine.Persistence.FileGetBookIds;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
@@ -122,7 +123,8 @@ namespace ClearDashboard.Wpf.Application.Services
                     note.Labels,
                     verseFirstTokenId.BookNumber,
                     verseFirstTokenId.ChapterNumber,
-                    verseFirstTokenId.VerseNumber
+                    verseFirstTokenId.VerseNumber,
+                    note.UserName
                 );
 
                 var result = await mediator.Send(new AddNoteCommand(addNoteCommandParam), cancellationToken);

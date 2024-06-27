@@ -74,6 +74,7 @@
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyFontSize}"
                 Foreground="{DynamicResource MaterialDesignBody}"
                 KeyDown="AddReplyText_KeyDown"
+                PreviewKeyDown="NoteReplyTextBox_OnPreviewKeyDown"
                 TextWrapping="Wrap">
                 <TextBox.Style>
                     <Style BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}" TargetType="{x:Type TextBox}">
