@@ -928,6 +928,9 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Введите новый блеск</value>
   </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>Формы:</value>
+  </data>
   <data name="Lexicon_Gloss" xml:space="preserve">
     <value>Блеск</value>
   </data>
@@ -963,6 +966,9 @@
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>Новый блеск</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>Нет доступных форм</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Удалите эту семантическую область из этого значения.</value>

@@ -928,6 +928,9 @@
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>एक नई चमक दर्ज करें</value>
   </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>प्रपत्र:</value>
+  </data>
   <data name="Lexicon_Gloss" xml:space="preserve">
     <value>ग्लोस</value>
   </data>
@@ -963,6 +966,9 @@
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>नई चमक</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>कोई फॉर्म उपलब्ध नहीं है</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>इस अर्थ डोमेन को इस अर्थ से हटा दें</value>

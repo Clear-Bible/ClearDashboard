@@ -372,7 +372,19 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         public Visibility AddLexemeVisibility => Lexemes != null && Lexemes.Any() ? Visibility.Collapsed : Visibility.Visible;
         public Visibility LexemeControlsVisibility => Lexemes != null && Lexemes.Any() ? Visibility.Visible : Visibility.Collapsed;
 
-        public Visibility LemmaTextBlockVisibility => IsEditing ? Visibility.Hidden : Visibility.Visible;
+        public Visibility LemmaTextBlockVisibility
+        {
+            get => _lemmaTextBlockVisibility;
+            set
+            {
+                //if (value == _lemmaTextBlockVisibility) return;
+                _lemmaTextBlockVisibility = value;
+                OnPropertyChanged();
+            }
+        }
+        // NB:  was the following...
+        //return IsEditing ? Visibility.Hidden : Visibility.Visible;
+
         public Visibility LemmaTextBoxVisibility => IsEditing ? Visibility.Visible : Visibility.Hidden;
 
         #endregion
@@ -982,6 +994,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         }
 
         private Visibility _newLexemeErrorVisibility = Visibility.Hidden;
+        private Visibility _lemmaTextBlockVisibility = Visibility.Hidden;
+
         /// <summary>
         /// Gets or sets the visibility of the new lexeme validation message.
         /// </summary>
@@ -1296,5 +1310,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
             EventAggregator?.SubscribeOnUIThread(this);
         }
+
+       
     }
 }

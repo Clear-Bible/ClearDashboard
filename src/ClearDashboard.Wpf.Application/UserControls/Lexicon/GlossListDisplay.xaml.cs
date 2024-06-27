@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Annotations;
@@ -357,6 +358,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
             Loaded += OnLoaded;
             EventAggregator?.SubscribeOnUIThread(this);
+        }
+
+
+        private void OnSelectTranslationEntry(object sender, RoutedEventArgs e)
+        {
+            // Stopped here....
+            var args = e;
+            var translation = ((e.Source as RadioButton).DataContext as LexiconTranslationViewModel);
+            RaiseTranslationEntryEvent(TranslationSelectedEvent, translation);
         }
     }
 }

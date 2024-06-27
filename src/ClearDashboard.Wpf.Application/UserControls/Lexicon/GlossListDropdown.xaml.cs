@@ -3,6 +3,11 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using MahApps.Metro.Controls;
+using System.Windows.Controls.Primitives;
+using Caliburn.Micro;
+using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
+using ClearDashboard.Wpf.Application.Views.Lexicon;
 
 namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 {
@@ -18,12 +23,19 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         /// <summary>
         /// Identifies the SplitTokenDialogViewModel dependency property.
         /// </summary>
-        public static readonly DependencyProperty SplitTokenDialogViewModelProperty = DependencyProperty.Register(nameof(SplitTokenDialogViewModel), typeof(SplitTokenDialogViewModel), typeof(GlossListDropdown));
+        public static DependencyProperty SplitTokenDialogViewModelProperty = DependencyProperty.Register
+            (nameof(SplitTokenDialogViewModel), typeof(SplitTokenDialogViewModel), typeof(GlossListDropdown));
 
         public GlossListDropdown()
         {
             InitializeComponent();
         }
+
+        protected override void OnInitialized(EventArgs e)
+        {
+           base.OnInitialized(e);
+        }
+
 
         /// <summary>
         /// Occurs when a new semantic domain is added.
@@ -35,7 +47,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="TokenDisplayViewModel"/> token display information to display in this control.
+        /// Gets or sets the <see cref="SplitTokenDialogViewModel"/> split token display information to display in this control.
         /// </summary>
         public SplitTokenDialogViewModel SplitTokenDialogViewModel
         {
@@ -43,24 +55,36 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             set => SetValue(SplitTokenDialogViewModelProperty, value);
         }
 
-        private void DropdownToggleButton_OnChecked(object sender, RoutedEventArgs e)
+        private async void DropdownToggleButton_OnChecked(object sender, RoutedEventArgs e)
         {
-            RaiseEvent(new SplitTokenEventArgs(DropDownOpeningEvent, this, SplitTokenDialogViewModel));
+            var toggleButton = (ToggleButton)sender;
+            var parent = toggleButton.Parent;
+            var popup = parent.FindChild<Popup>();
+            var border = popup.Child as Border;
+            var lexiconDialogView = border.Child as LexiconDialogView;
+            var splitInstructionViewModel = this.DataContext as SplitInstructionViewModel;
+            var v = this.LexiconDialogView;
+            RaiseEvent(new SplitTokenEventArgs(DropDownOpeningEvent, this, lexiconDialogView, splitInstructionViewModel ));
         }
     }
 
     public class SplitTokenEventArgs : RoutedEventArgs
     {
-        public SplitTokenEventArgs(RoutedEvent routedEvent, SplitTokenDialogViewModel splitTokenDialogViewModel) : base(routedEvent)
+        public SplitTokenEventArgs(RoutedEvent routedEvent, LexiconDialogView lexiconDialogView, SplitInstructionViewModel splitInstructionViewModel) : base(routedEvent)
         {
-            SplitTokenDialogViewModel = splitTokenDialogViewModel;
+            LexiconDialogView = lexiconDialogView;
+            SplitInstructionViewModel = splitInstructionViewModel;
         }
 
-        public SplitTokenEventArgs(RoutedEvent routedEvent, object source, SplitTokenDialogViewModel splitTokenDialogViewModel) : base(routedEvent, source)
+        public SplitTokenEventArgs(RoutedEvent routedEvent, object source, LexiconDialogView lexiconDialogView, SplitInstructionViewModel splitInstructionViewModel) : base(routedEvent, source)
         {
-            SplitTokenDialogViewModel = splitTokenDialogViewModel;
+            LexiconDialogView = lexiconDialogView;
+            SplitInstructionViewModel = splitInstructionViewModel;
         }
 
-        public SplitTokenDialogViewModel? SplitTokenDialogViewModel { get; set; }
+        
+        public LexiconDialogView? LexiconDialogView { get; set; }
+
+        public SplitInstructionViewModel SplitInstructionViewModel { get; set; }
     }
 }
