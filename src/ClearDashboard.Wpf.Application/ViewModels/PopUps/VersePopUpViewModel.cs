@@ -10,6 +10,7 @@ using System.Data;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using ClearDashboard.DAL.Wpf.ViewModels;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
