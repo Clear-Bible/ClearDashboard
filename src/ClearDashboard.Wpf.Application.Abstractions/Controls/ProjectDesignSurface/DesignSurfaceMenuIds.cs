@@ -27,5 +27,6 @@ public partial class DesignSurfaceViewModel
         public const string GetLatestExternalNotes = "GetLatestExternalNotes";
         public const string UpdateLabelsWithExternalLabels = "UpdateLabelsWithExternalLabels";
         public const string ShowLexiconDialog = "ShowLexiconDialog";
-    }
+		public const string ImportWordAnalyses = "ImportWordAnalyses";
+	}
 }
