@@ -81,8 +81,7 @@
                                 <CheckBox
                                     Margin="5,0,0,0"
                                     VerticalAlignment="Center"
-                                    IsChecked="{Binding ShowExternalNotes}"
-                                    IsEnabled="{Binding IsExternalNotesEnabled}" />
+                                    IsChecked="{Binding ShowExternalNotes}"/>
                                 <Label
                                     Margin="15,0,0,0"
                                     VerticalAlignment="Center"
@@ -493,13 +492,7 @@
                                 Foreground="{StaticResource AccentHueBrush}"
                                 IsChecked="{Binding IsLexiconImportEnabled}" />
 
-                            <CheckBox
-                                x:Name="ExternalNotesEnabled"
-                                Margin="5"
-                                cm:Message.Attach="EnableExternalNotes($datacontext)"
-                                Content="{helpers:Localization Settings_EnableExternalNotes}"
-                                Foreground="{StaticResource AccentHueBrush}"
-                                IsChecked="{Binding IsExternalNotesEnabled}" />
+
                         </StackPanel>
                     </GroupBox>
                     <TextBlock
