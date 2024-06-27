@@ -75,38 +75,33 @@
                     </StackPanel>
                 </TabItem.Header>
                 <StackPanel Orientation="Vertical">
-                    <!--<GroupBox Margin="16" Header="{helpers:Localization Settings_GeneralSettings}">
+                    <GroupBox Margin="16" Header="{helpers:Localization Settings_GeneralSettings}">
                         <StackPanel Orientation="Vertical">
                             <StackPanel MinWidth="400" Orientation="Horizontal">
                                 <CheckBox
                                     Margin="5,0,0,0"
                                     VerticalAlignment="Center"
-                                    IsChecked="{Binding ShowExternalNotes}" />
+                                    IsChecked="{Binding ShowExternalNotes}"
+                                    IsEnabled="{Binding IsExternalNotesEnabled}" />
                                 <Label
                                     Margin="15,0,0,0"
                                     VerticalAlignment="Center"
-                                    Content="{helpers:Localization FontSettings_ShowExternalNotes}" />
+                                    Content="{helpers:Localization FontSettings_ShowExternalNotes}"
+                                    IsEnabled="{Binding IsExternalNotesEnabled}" />
                             </StackPanel>
+                            <TextBlock
+                                Margin="45,0,0,0"
+                                VerticalAlignment="Center"
+                                Foreground="{StaticResource OrangeDarkBrush}"
+                                Text="{helpers:Localization Settings_EnableEnhancedNotes}"
+                                Visibility="{Binding IsExternalNotesEnabled, Converter={StaticResource BoolToVisibilityCollapsedConverter}, ConverterParameter=true}" />
 
                         </StackPanel>
-                    </GroupBox>-->
-                    <GroupBox
-                        Margin="16"
-                        Header="{helpers:Localization Notes_NoteLabelGroups}"
-                        IsEnabled="{Binding IsProjectLoaded}">
+                    </GroupBox>
+                    <GroupBox Margin="16" Header="{helpers:Localization Notes_NoteLabelGroups}" IsEnabled="{Binding IsProjectLoaded}">
                         <StackPanel MinWidth="400" Orientation="Horizontal">
-                            <Button
-                                x:Name="ExportLabelGroups"
-                                Width="200"
-                                Margin="10"
-                                Background="Transparent"
-                                Content="{helpers:Localization Settings_ExportLabelGroups}" />
-                            <Button
-                                x:Name="ImportLabelGroups"
-                                Width="200"
-                                Margin="10"
-                                Background="Transparent"
-                                Content="{helpers:Localization Settings_ImportLabelGroups}" />
+                            <Button x:Name="ExportLabelGroups" Content="{helpers:Localization Settings_ExportLabelGroups}" Margin="10" Background="Transparent" Width="200"/>
+                            <Button x:Name="ImportLabelGroups" Content="{helpers:Localization Settings_ImportLabelGroups}" Margin="10" Background="Transparent" Width="200"/>
                         </StackPanel>
                     </GroupBox>
                 </StackPanel>
@@ -498,7 +493,13 @@
                                 Foreground="{StaticResource AccentHueBrush}"
                                 IsChecked="{Binding IsLexiconImportEnabled}" />
 
-
+                            <CheckBox
+                                x:Name="ExternalNotesEnabled"
+                                Margin="5"
+                                cm:Message.Attach="EnableExternalNotes($datacontext)"
+                                Content="{helpers:Localization Settings_EnableExternalNotes}"
+                                Foreground="{StaticResource AccentHueBrush}"
+                                IsChecked="{Binding IsExternalNotesEnabled}" />
                         </StackPanel>
                     </GroupBox>
                     <TextBlock
