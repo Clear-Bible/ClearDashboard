@@ -1,5 +1,7 @@
 ﻿using System;
 using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
@@ -11,8 +13,17 @@ public class SplitInstructionViewModel : PropertyChangedBase
 
     private string? _circumfixGroup;
     private string? _gloss;
-    private string? _grammar;
+    private Grammar? _grammar;
     private Guid? _grammarId;
+    private string? _tokenType;
+    private LexiconDialogViewModel? _lexiconDialogViewModel;
+
+   
+    public LexiconDialogViewModel? LexiconDialogViewModel
+    {
+        get => _lexiconDialogViewModel;
+        set => Set(ref _lexiconDialogViewModel, value);
+    }
 
     public string? TrainingText
     {
@@ -32,7 +43,7 @@ public class SplitInstructionViewModel : PropertyChangedBase
         set => Set(ref _tokenText, value);
     }
 
-    private string? _tokenType;
+  
 
     public string? TokenType
     {
@@ -52,7 +63,7 @@ public class SplitInstructionViewModel : PropertyChangedBase
         set => Set(ref _gloss, value);
     }
 
-    public string? Grammar
+    public Grammar? Grammar
     {
         get => _grammar;
         set => Set(ref _grammar, value);

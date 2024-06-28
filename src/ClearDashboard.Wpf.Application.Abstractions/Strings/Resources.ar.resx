@@ -898,6 +898,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>إذا تم تحديده، فسيؤدي ذلك إلى تغيير جميع التكرارات غير المحددة لهذه الكلمة</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>تغيير كافة التكرارات غير المحددة</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>إذا تم تحديده، فسيؤدي ذلك إلى تغيير جميع التكرارات غير المحددة لهذه الكلمة</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>فهرس أبجدي</value>
   </data>
@@ -913,11 +919,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>احذف هذه الترجمة</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;فارغة&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>أدخل ترجمة جديدة ل</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>أدخل لمعان جديد</value>
+  </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>نماذج:</value>
+  </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>لمعان</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>قائمة اللمعان</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>لغة:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>ليما</value>
@@ -926,19 +947,28 @@
     <value>ليما / النماذج:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Lemma للمعجم الجديد:</value>
+    <value>Lemma للمفردات الجديدة:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
-    <value>المعجم</value>
+    <value>معجم</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>معجم لـ موجود بالفعل لـ lemma</value>
+  </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>معجم</value>
+  </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>اعواد الكبريت</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>المعاني:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>لمعان جديد</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>لا توجد نماذج متاحة</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>أزل هذا المجال الدلالي من هذا المعنى</value>
@@ -948,6 +978,18 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>تعيين لمعان ل</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>الترجمات:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>يكتب:</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>غير محدد</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>تم التحقق</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>و</value>
@@ -983,7 +1025,7 @@
     <value>مطابقة كاملة</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
-    <value>المعجم</value>
+    <value>معجم</value>
   </data>
   <data name="LexiconEdit_LoadingData" xml:space="preserve">
     <value>تحميل البيانات...</value>
@@ -1274,7 +1316,7 @@
     <value>MAT</value>
   </data>
   <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>جارٍ إنشاء قاعدة البيانات...</value>
+    <value>جارٍ إنشاء قاعدة بيانات...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
     <value>اكتمل الدمج...جاري إعادة تحميل الواجهة</value>
@@ -1394,7 +1436,7 @@
     <value>أضف جوت</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>أضف نقطة جديدة </value>
+    <value>إضافة نقطة جديدة (shift-enter للسطر الجديد)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>جسم</value>
@@ -1730,7 +1772,7 @@
     <value>احتواء منطقة المحتوى بالكامل في إطار العرض</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>احتواء جميع العقد في إطار العرض</value>
+    <value>تناسب كافة العقد إلى إطار العرض</value>
   </data>
   <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
     <value>احصل على أحدث الملاحظات الخارجية</value>
@@ -1841,7 +1883,7 @@
     <value>لغة</value>
   </data>
   <data name="Pins_Lexeme" xml:space="preserve">
-    <value>المعجم</value>
+    <value>معجم</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
     <value>نوع المعجم</value>
@@ -2000,7 +2042,7 @@
     <value>تحديث قائمة مشاريع التعاون</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>البحث مؤخرا</value>
+    <value>بحث مؤخرا</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
     <value>انقر هنا لبدء Paratext</value>
@@ -2126,7 +2168,7 @@
     <value>هوشع</value>
   </data>
   <data name="ProperCase_Isaiah" xml:space="preserve">
-    <value>إشعياء</value>
+    <value>أشعياء</value>
   </data>
   <data name="ProperCase_James" xml:space="preserve">
     <value>جوامع</value>
@@ -2432,7 +2474,7 @@
     <value>لا أستطيع إكمال المهمة</value>
   </data>
   <data name="SlackMessageView_Combo3" xml:space="preserve">
-    <value>لقد أكملت مهمة ولكنها كانت صعبة</value>
+    <value>لقد أكملت مهمة لكنها كانت صعبة</value>
   </data>
   <data name="SlackMessageView_Combo4" xml:space="preserve">
     <value>أود أن أفعل...</value>

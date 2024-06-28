@@ -898,6 +898,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Jika dicentang, ini akan mengubah semua kemunculan kata ini yang tidak disetel</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>Ubah semua kejadian yang tidak disetel</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>Jika dicentang, ini akan mengubah semua kemunculan kata ini yang tidak disetel</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Konkordansi</value>
   </data>
@@ -913,11 +919,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Hapus terjemahan ini</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;kosong&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Masukkan terjemahan baru untuk</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Masukkan kilap baru</value>
+  </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>Formulir:</value>
+  </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>Kilap</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>Daftar Kilap</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>bahasa:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Kata pengantar singkat</value>
@@ -934,11 +955,20 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Sebuah leksem untuk sudah ada untuk lemma</value>
   </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>Kamus</value>
+  </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>Cocok</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Artinya:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>Kilau Baru</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>Tidak ada formulir yang tersedia</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Hapus domain semantik ini dari makna ini</value>
@@ -948,6 +978,18 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Tetapkan kilap untuk</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>Terjemahan:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>jenis:</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>Tidak disetel</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>Diverifikasi</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Dan</value>
@@ -1025,7 +1067,7 @@
     <value>Tambahkan sebagai formulir untuk...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Temukan leksem atau bentuk yang lengkap atau sebagian yang cocok dengan sumbernya</value>
+    <value>Temukan leksem lengkap atau sebagian atau kecocokan bentuk dengan sumbernya</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Tambahkan target sebagai terjemahan untuk ...</value>
@@ -1394,7 +1436,7 @@
     <value>Tambahkan Jot</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Tambahkan catatan baru </value>
+    <value>Tambahkan catatan baru (shift-enter untuk baris baru)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Tubuh</value>
@@ -1484,7 +1526,7 @@
     <value>Hapus label ini</value>
   </data>
   <data name="Notes_LabelTextAttached" xml:space="preserve">
-    <value>Teks terlampir pada label</value>
+    <value>Teks dilampirkan pada label</value>
   </data>
   <data name="Notes_LabelTooltipDelete" xml:space="preserve">
     <value>Hapus label</value>
@@ -1565,7 +1607,7 @@
     <value>Pilih label yang akan dihapus dari grup label</value>
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
-    <value>Catatan: label ini akan muncul di bawah grup label: Tidak Ada</value>
+    <value>Catatan: label ini akan muncul di bawah grup label: Tidak ada</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>Kirim catatan ini ke Paratext?</value>

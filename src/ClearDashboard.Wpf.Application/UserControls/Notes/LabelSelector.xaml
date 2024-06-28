@@ -32,12 +32,12 @@
                 Margin="5,0,0,0"
                 FontSize="13"
                 GotFocus="OnLabelTextBoxGotFocus"
-                KeyUp="OnLabelTextBoxKeyUp"
                 KeyDown="OnLabelTextBoxKeyDown"
+                KeyUp="OnLabelTextBoxKeyUp"
                 LostFocus="OnLabelTextBoxLostFocus"
                 LostKeyboardFocus="OnLabelTextBoxLostKeyboardFocus"
-                TextChanged="OnLabelTextChanged"
-                PreviewTextInput="OnLabelTextBoxPreviewTextInput"/>
+                PreviewTextInput="OnLabelTextBoxPreviewTextInput"
+                TextChanged="OnLabelTextChanged" />
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="0"
@@ -65,7 +65,7 @@
                 Height="Auto"
                 Margin="5,0,0,0"
                 Placement="Bottom"
-                StaysOpen="{Binding ElementName=LabelTextBox,Path=IsKeyboardFocused}"
+                StaysOpen="{Binding ElementName=LabelTextBox, Path=IsKeyboardFocused}"
                 Visibility="Collapsed">
                 <ListBox
                     x:Name="LabelSuggestionListBox"

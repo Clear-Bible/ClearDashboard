@@ -386,11 +386,14 @@
                         Click="OnSetGloss"
                         Header="{helpers:Localization TokenDisplay_SetGloss}"
                         Visibility="Collapsed" />
+
                     <MenuItem
                         x:Name="SetTranslationMenuItem"
                         Click="OnSetTranslation"
                         Header="{helpers:Localization TokenDisplay_SetTranslation}"
-                        Visibility="Collapsed" />
+                        Visibility="Collapsed" /> 
+
+
                     <!--<MenuItem
                         x:Name="CreateTranslationNoteMenuItem"
                         Click="OnCreateNote"

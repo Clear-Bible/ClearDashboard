@@ -452,7 +452,7 @@
     <value>Éditeur d'alignement en masse</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>Examen de l'alignement en masse</value>
+    <value>Examen de l'alignement en bloc</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>Compter</value>
@@ -866,7 +866,7 @@
     <value>LEV</value>
   </data>
   <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>Ajoutez un domaine sémantique à cette signification</value>
+    <value>Ajouter un domaine sémantique à cette signification</value>
   </data>
   <data name="Lexicon_AddForm" xml:space="preserve">
     <value>Ajouter une forme lexicale à ce lemme</value>
@@ -898,6 +898,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Si coché, cela modifiera toutes les occurrences non définies de ce mot</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>Modifier toutes les occurrences non définies</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>Si coché, cela modifiera toutes les occurrences non définies de ce mot</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Concordance</value>
   </data>
@@ -913,11 +919,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Supprimer cette traduction</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;vide&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Entrez une nouvelle traduction pour</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Entrez un nouveau gloss</value>
+  </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>Formes:</value>
+  </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>Brillant</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>Liste des glosses</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>langue:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lemme</value>
@@ -934,11 +955,20 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Un lexème pour existe déjà pour le lemme</value>
   </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>Lexique</value>
+  </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>Allumettes</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Significations :</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>Nouveau brillant</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>Aucun formulaire disponible</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Supprimer ce domaine sémantique de ce sens</value>
@@ -948,6 +978,18 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Définir un gloss pour</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>Traductions :</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>taper:</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>Désarmé</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>Vérifié</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Et</value>
@@ -980,7 +1022,7 @@
     <value>Pleinement</value>
   </data>
   <data name="LexiconEdit_FullyMatching" xml:space="preserve">
-    <value>Entièrement assorti</value>
+    <value>Entièrement correspondant</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexème</value>
@@ -1268,7 +1310,7 @@
     <value>Sens du verset</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
-    <value>Verset total</value>
+    <value>Verset Total</value>
   </data>
   <data name="MAT" xml:space="preserve">
     <value>MAT</value>
@@ -1310,7 +1352,7 @@
     <value>Jeton d'accès:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Vérifiez votre email et saisissez le code de validation :</value>
+    <value>Vérifiez votre email et entrez le code de validation :</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Vérifier la disponibilité des utilisateurs</value>
@@ -1394,7 +1436,7 @@
     <value>Ajouter un point</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Ajouter un nouveau point </value>
+    <value>Ajouter un nouveau jot (shift-enter pour une nouvelle ligne)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Corps</value>
@@ -1619,7 +1661,7 @@
     <value>Métadonnées JSON</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
-    <value>Paralléliser les versets des corpus</value>
+    <value>Paralléliser les versets de corpus</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
     <value>Algorithme d’alignement des mots machine</value>
@@ -1709,7 +1751,7 @@
     <value>Supprimer l'interlinéaire</value>
   </data>
   <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir supprimer ce corpus ? Toutes les notes, alignements et interlinéaires associés à ce corpus seront supprimés et ne pourront pas être récupérés.</value>
+    <value>Etes-vous sûr de vouloir supprimer ce corpus ? Toutes les notes, alignements et interlinéaires associés à ce corpus seront supprimés et ne pourront pas être récupérés.</value>
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Dictionnaire</value>
@@ -2276,7 +2318,7 @@
     <value>Activer le plugin AQUA expérimental</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Vérifiez votre email et saisissez le code de validation :</value>
+    <value>Vérifiez votre email et entrez le code de validation :</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Paramètres de collaboration</value>

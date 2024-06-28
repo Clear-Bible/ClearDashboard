@@ -1252,14 +1252,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     //CreateTranslationNoteMenuItem.Visibility = Visibility.Collapsed;
                 }
 
-                if (selectedTokenCount == 0 && AllSelectedTokens.CanTranslateToken)
-                {
-                    SetTranslationMenuItem.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    SetTranslationMenuItem.Visibility = Visibility.Collapsed;
-                }
+                // NB:  Unremark post 1.4.2 release.
+                SetTranslationMenuItem.Visibility = Visibility.Collapsed;
+                //if (selectedTokenCount == 0 && AllSelectedTokens.CanTranslateToken)
+                //{
+                //    SetTranslationMenuItem.Visibility = Visibility.Visible;
+                //}
+                //else
+                //{
+                //    SetTranslationMenuItem.Visibility = Visibility.Collapsed;
+                //}
 
                 if (selectedTokenCount == 0 && AllSelectedTokens.CanTranslateToken)
                 {

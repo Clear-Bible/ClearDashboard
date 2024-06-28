@@ -22,16 +22,20 @@ namespace ClearDashboard.DataAccessLayer.Models
         /// Optional type analogous to Lexicon_Lexeme.Type (lemma, suffix, etc.)
         /// </summary>
         public string? Type { get; set; }
-        
 
-        // NB:  Should this be this specific?
+        /// <summary>
+        /// If the token is part of a circumfix group, this is the group name.
+        /// </summary>
         public string? CircumfixGroup { get; set; }
 
+		/// <summary>
+		/// The grammar type associated to this token.
+		/// </summary>
 		[ForeignKey(nameof(GrammarId))]
 		public Guid? GrammarId { get; set; }
 		public virtual Grammar? Grammar { get; set; }
 
-		public string? ExtendedProperties { get; set; }
+        public string? ExtendedProperties { get; set; }
 
         [ForeignKey(nameof(VerseRowId))]
         public Guid? VerseRowId { get; set; }
@@ -48,6 +52,9 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public DateTimeOffset? Deleted { get; set; }
 
+        /// <summary>
+        /// Metadata for the token component - stored as a JSON blob in the database.
+        /// </summary>
         public virtual List<Metadatum> Metadata { get; set; } = new();
     }
 }

@@ -353,7 +353,7 @@
     <value>jertfe și ofrande</value>
   </data>
   <data name="BiblicalTermsDomains_Settlement" xml:space="preserve">
-    <value>decontare</value>
+    <value>aşezare</value>
   </data>
   <data name="BiblicalTermsDomains_SignsAndWonders" xml:space="preserve">
     <value>semne și minuni</value>
@@ -767,7 +767,7 @@
     <value>Textul țintă:</value>
   </data>
   <data name="FontSettings_TargetFontSize" xml:space="preserve">
-    <value>Dimensiunea vizată a fontului:</value>
+    <value>Dimensiunea țintă a fontului:</value>
   </data>
   <data name="FontSettings_Title" xml:space="preserve">
     <value>Titlu:</value>
@@ -898,6 +898,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Dacă este bifată, aceasta va schimba toate aparițiile nesetate ale acestui cuvânt</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>Modificați toate aparițiile nesetate</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>Dacă este bifată, aceasta va schimba toate aparițiile nesetate ale acestui cuvânt</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Concordanţă</value>
   </data>
@@ -908,16 +914,31 @@
     <value>Ștergeți acest lexem?</value>
   </data>
   <data name="Lexicon_DeleteMeaning" xml:space="preserve">
-    <value>Șterge acest sens</value>
+    <value>Ștergeți acest sens</value>
   </data>
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Ștergeți această traducere</value>
+  </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;gol&gt;</value>
   </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Introduceți o nouă traducere pentru</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Introduceți un nou luciu</value>
+  </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>Forme:</value>
+  </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>Luciu</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>Lista lucioasă</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>limba:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lema</value>
@@ -934,11 +955,20 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Un lexem pentru există deja pentru lemă</value>
   </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>Lexicon</value>
+  </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>Chibrituri</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Semnificatii:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>Gloss nou</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>Nu există formulare disponibile</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Eliminați acest domeniu semantic din acest sens</value>
@@ -948,6 +978,18 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Setați un luciu pentru</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>Traduceri:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>tip:</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>Dezactivat</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>Verificat</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Și</value>
@@ -1394,7 +1436,7 @@
     <value>Adăugați Jot</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Adăugați o notă nouă </value>
+    <value>Adăugați o notă nouă (shift-enter pentru linia nouă)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Corp</value>
@@ -1610,7 +1652,7 @@
     <value>Creați alinierea cuvintelor</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
-    <value>Creați paralelizarea versurilor corpurilor</value>
+    <value>Creați o paralelă a versurilor corpurilor</value>
   </data>
   <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
     <value>Creați interliniar</value>
@@ -1937,7 +1979,7 @@
     <value>Import Server Project</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Bifați această casetă pentru a include textele biblice greacă și ebraică atunci când vă creați proiectul.</value>
+    <value>Bifați această casetă pentru a include textele biblice grecești și ebraice atunci când vă creați proiectul.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>Includeți texte biblice grecești din NT?</value>
@@ -2156,7 +2198,7 @@
     <value>Judecătorii</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentații</value>
+    <value>Lamentări</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
     <value>Leviticul</value>

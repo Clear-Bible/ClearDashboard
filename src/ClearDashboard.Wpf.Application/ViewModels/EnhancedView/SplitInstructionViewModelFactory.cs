@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 public static class SplitInstructionViewModelFactory
 {
-    public static SplitInstructionsViewModel CreateSplits(string surfaceText, List<int> splitIndexes)
+    public static SplitInstructionsViewModel CreateSplits(string surfaceText, List<int> splitIndexes, ILifetimeScope? lifetimeScope)
     {
 
         if (!splitIndexes.ValidateIndexesInAscendingOrder(out string? message))
@@ -36,13 +38,15 @@ public static class SplitInstructionViewModelFactory
 
             string tokenText;
 
+            var lexiconDialogViewModel = lifetimeScope.Resolve<LexiconDialogViewModel>();
+
             if (first)
             {
                 tokenText = surfaceText[..splitIndex];
-                splitInstructions.Add(new SplitInstructionViewModel{ Index = 0, TokenText = tokenText, TrainingText = tokenText, TokenType = TokenTypes.Prefix});
+                splitInstructions.Add(new SplitInstructionViewModel{ Index = 0, TokenText = tokenText, TrainingText = tokenText, TokenType = TokenTypes.Prefix, LexiconDialogViewModel = lexiconDialogViewModel});
                 index++;
             }
-
+            
             var length = last ? surfaceTextLength - splitIndex : splitIndexes[index] - splitIndex;
             tokenText = surfaceText.Substring(splitIndex, length);
             splitInstructions.Add(new SplitInstructionViewModel {Index = splitIndex, TokenText = tokenText, TrainingText = tokenText, TokenType = DetermineTokenType(index, splitIndex, surfaceTextLength, splitIndexes.Count), CircumfixGroup = "A"});

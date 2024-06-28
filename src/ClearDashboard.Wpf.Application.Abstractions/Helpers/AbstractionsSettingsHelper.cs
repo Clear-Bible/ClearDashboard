@@ -55,15 +55,5 @@ namespace ClearDashboard.Wpf.Application.Helpers
             Settings.Default.Save();
         }
 
-        public static bool GetExternalNotesEnabled()
-        {
-            return Settings.Default.IsExternalNotesEnabled;
-        }
-
-        public static void SaveExternalNotesEnabled(bool value)
-        {
-            Settings.Default.IsExternalNotesEnabled = value;
-            Settings.Default.Save();
-        }
     }
 }

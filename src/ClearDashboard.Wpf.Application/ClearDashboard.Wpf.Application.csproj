@@ -163,6 +163,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.Collaboration\ClearDashboard.Collaboration.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj" />
+    <ProjectReference Include="..\ClearDashboard.DAL.WpfViewModels\ClearDashboard.DAL.Wpf.ViewModels.csproj" />
     <ProjectReference Include="..\ClearDashboard.Wpf.Application.Abstractions\ClearDashboard.Wpf.Application.Abstractions.csproj" />
     <ProjectReference Include="..\ClearDashboard.Wpf.Controls\ClearDashboard.Wpf.Controls.csproj" />
   </ItemGroup>
@@ -262,6 +263,9 @@
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="UserControls\AlignmentBulkReview.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\Lexicon\GlossListDisplay.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControls\Lexicon\ConcordanceDisplay.xaml.cs">
@@ -456,6 +460,9 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="UserControls\ClockUserControl.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="UserControls\Lexicon\GlossListDisplay.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="UserControls\Lexicon\ConcordanceDisplay.xaml">

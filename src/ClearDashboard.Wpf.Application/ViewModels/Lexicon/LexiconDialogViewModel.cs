@@ -28,8 +28,34 @@ using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 {
+
+    public enum LexiconDialogMode
+    {
+        AddLexeme,
+        SetGloss
+    }
+
     public class LexiconDialogViewModel : DashboardApplicationScreen
     {
+        private LexiconDialogMode _mode = LexiconDialogMode.AddLexeme;
+        public LexiconDialogMode Mode
+        {
+            get => _mode;
+            set
+            {
+                Set(ref _mode, value);
+                NotifyOfPropertyChange(() => IsAddLexemeMode);
+            }
+        }
+
+        public bool IsAddLexemeMode => Mode == LexiconDialogMode.AddLexeme;
+
+        public bool IsLexemeEditorReadOnly
+        {
+            get => _isLexemeEditorReadOnly;
+            set => Set(ref _isLexemeEditorReadOnly, value);
+        }
+
         private string _sourceFontFamily = FontNames.DefaultFontFamily;
         public string SourceFontFamily
         {
@@ -100,6 +126,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             set => Set(ref _lexemes, value);
         }
 
+
+
         private SemanticDomainCollection _semanticDomainSuggestions = new();
         public SemanticDomainCollection SemanticDomainSuggestions
         {
@@ -140,6 +168,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         }
 
         private bool _isLoaded = false;
+        private bool _isLexemeEditorReadOnly;
+
         public bool IsLoaded
         {
             get => _isLoaded;
@@ -391,9 +421,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             // TokenSplitting -> glossing 
             base.OnViewLoaded(view);
 
+            await Initialize();
+        }
+
+        public async Task Initialize()
+        {
             OnUIThread(() => ProgressBarVisibility = Visibility.Visible);
 
-            await Task.Run(async () => {
+            await Task.Run(async () =>
+            {
+
+                IsLexemeEditorReadOnly = true;
 
                 SourceFontFamily = await GetFontFamily(TokenDisplay.VerseDisplay.ParallelCorpusId?.SourceTokenizedCorpusId?.CorpusId?.ParatextGuid);
                 TargetFontFamily = await GetFontFamily(TokenDisplay.VerseDisplay.ParallelCorpusId?.TargetTokenizedCorpusId?.CorpusId?.ParatextGuid);
@@ -424,7 +462,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                 ProgressBarVisibility = Visibility.Collapsed;
                 IsLoaded = true;
             });
-
         }
 
         public dynamic DialogSettings()
@@ -439,7 +476,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             settings.Top = 0;
             settings.Left = App.Current.MainWindow.ActualWidth/2 - 258;
             settings.Width = 1000;
-            settings.Height = 800;
+            settings.Height = 820;
             settings.Title = DialogTitle;
 
             // Keep the window on top

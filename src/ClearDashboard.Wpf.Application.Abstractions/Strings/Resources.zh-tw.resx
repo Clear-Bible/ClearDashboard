@@ -380,7 +380,7 @@
     <value>樹木；香水和香料</value>
   </data>
   <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>智慧、理解力</value>
+    <value>智慧、理解</value>
   </data>
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>全部</value>
@@ -434,7 +434,7 @@
     <value>對齊的單字</value>
   </data>
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
-    <value>路線</value>
+    <value>對齊方式</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
     <value>對齊類型： </value>
@@ -656,7 +656,7 @@
     <value>刪除對齊方式</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>刪除「{0}」的對齊方式嗎？</value>
+    <value>刪除「{0}」的對齊嗎？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
     <value>刪除所有對齊方式？</value>
@@ -898,6 +898,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>如果選中，這將更改該單字的所有未設定的出現</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>更改所有未設定的事件</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>如果選中，這將更改該單字的所有未設定的出現</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>索引</value>
   </data>
@@ -913,11 +919,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>刪除此翻譯</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;空&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>輸入新翻譯</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>輸入新的光澤</value>
+  </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>形式：</value>
+  </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>光澤度</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>光澤表</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>語言：</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>引理</value>
@@ -934,11 +955,20 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>引理已經存在詞位</value>
   </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>字典</value>
+  </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>火柴</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>意義：</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>新光澤</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>沒有可用的表格</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>從這個意義中刪除這個語意域</value>
@@ -948,6 +978,18 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>設定光澤度</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>翻譯：</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>類型：</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>取消設定</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>已驗證</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>和</value>
@@ -1394,7 +1436,7 @@
     <value>新增筆跡</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>新增筆跡 </value>
+    <value>新增新的記號（Shift-Enter 換行）</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>身體</value>
@@ -1646,7 +1688,7 @@
     <value>選擇要訓練的 SMT 演算法</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>新增批次批准查看</value>
+    <value>新增批量批准查看</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>新增到視圖</value>
@@ -1664,7 +1706,7 @@
     <value>建立新的語料庫標記化</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>新增新的行間</value>
+    <value>新增的行間</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>新增文字到視圖</value>
@@ -1730,7 +1772,7 @@
     <value>使整個內容區域適合視口</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>讓所有節點適合視口</value>
+    <value>使所有節點適合視口</value>
   </data>
   <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
     <value>取得最新的外部筆記</value>

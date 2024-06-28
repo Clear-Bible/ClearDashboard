@@ -898,6 +898,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>यदि जाँच की जाए, तो यह इस शब्द की सभी अनिर्धारित घटनाओं को बदल देगा</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>सभी अनसेट घटनाओं को बदलें</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>यदि जाँच की जाए, तो यह इस शब्द की सभी अनिर्धारित घटनाओं को बदल देगा</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>क़बूल</value>
   </data>
@@ -913,11 +919,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>यह अनुवाद हटाएँ</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;खाली&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>के लिए एक नया अनुवाद दर्ज करें</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>एक नई चमक दर्ज करें</value>
+  </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>प्रपत्र:</value>
+  </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>ग्लोस</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>चमकदार सूची</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>भाषा:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>लेम्मा</value>
@@ -934,11 +955,20 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>लेम्मा के लिए एक शब्द पहले से ही मौजूद है</value>
   </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>शब्दकोश</value>
+  </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>माचिस</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>अर्थ:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>नई चमक</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>कोई फॉर्म उपलब्ध नहीं है</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>इस अर्थ डोमेन को इस अर्थ से हटा दें</value>
@@ -948,6 +978,18 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>के लिए एक चमक सेट करें</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>अनुवाद:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>प्रकार:</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>अनसेट</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>सत्यापित</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>और</value>
@@ -1031,7 +1073,7 @@
     <value>लक्ष्य को अनुवाद के रूप में जोड़ें...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>ऐसे शब्द ढूंढें जिनका एक या अधिक अनुवाद लक्ष्य से मेल खाता हो</value>
+    <value>ऐसे शब्द खोजें जिनका एक या अधिक अनुवाद लक्ष्य से मेल खाता हो</value>
   </data>
   <data name="LexiconImport_Checked" xml:space="preserve">
     <value>चेक किए गए</value>
@@ -1220,7 +1262,7 @@
     <value>डोमेन</value>
   </data>
   <data name="Marble_FrequencyGraph" xml:space="preserve">
-    <value>आवृत्ति ग्राफ</value>
+    <value>आवृत्ति ग्राफ़</value>
   </data>
   <data name="Marble_GeneralInformation" xml:space="preserve">
     <value>सामान्य जानकारी</value>
@@ -1394,7 +1436,7 @@
     <value>जोत जोड़ें</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>एक नया जोट जोड़ें </value>
+    <value>एक नया जोट जोड़ें (नई लाइन के लिए शिफ्ट-एंटर)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>शरीर</value>
@@ -1628,7 +1670,7 @@
     <value>मशीन वर्ड संरेखण एल्गोरिदम</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>ट्रेन सममिति मॉडल?</value>
+    <value>ट्रेन सममितिकृत मॉडल?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>रेलगाड़ी</value>
@@ -1985,7 +2027,7 @@
     <value>हम बस पहुँच गए!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>'डैशबोर्ड प्रारंभ करना' वीडियो देखने के लिए यहां क्लिक करें</value>
+    <value>'डैशबोर्ड गेटिंग स्टार्टेड' वीडियो देखने के लिए यहां क्लिक करें</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
     <value>आपके द्वारा नीचे दिए गए 'बनाएं' बटन पर क्लिक करने के बाद, हम आपके प्रोजेक्ट को टोकनाइज़, संरेखित और तैयार करेंगे। संसाधित होते ही सभी चरण यहां दिखाई देंगे. जब आप प्रतीक्षा कर रहे हों तो बेझिझक नीचे दिए गए लिंक पर क्लिक करें और ClearDashboard का उपयोग शुरू करने के लिए कुछ उपयोगी वीडियो देखें!</value>

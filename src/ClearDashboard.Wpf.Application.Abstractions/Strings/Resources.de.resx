@@ -482,7 +482,7 @@
     <value>Ausgewählte als „Ungültig“ markieren</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
-    <value>Markieren Sie die Auswahl als „Überprüfung erforderlich“.</value>
+    <value>Als „Überprüfung erforderlich“ markieren</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
     <value>Als „Gültig“ ausgewählt markieren</value>
@@ -898,6 +898,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Wenn diese Option aktiviert ist, werden alle nicht festgelegten Vorkommen dieses Worts geändert</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>Alle nicht festgelegten Vorkommen ändern</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>Wenn diese Option aktiviert ist, werden alle nicht festgelegten Vorkommen dieses Worts geändert</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Konkordanz</value>
   </data>
@@ -913,11 +919,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Löschen Sie diese Übersetzung</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;leer&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Geben Sie eine neue Übersetzung für ein</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Geben Sie einen neuen Glanz ein</value>
+  </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>Formen:</value>
+  </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>Glanz</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>Glanzliste</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>Sprache:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lemma</value>
@@ -934,11 +955,20 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Für Lemma existiert bereits ein Lexem</value>
   </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>Lexikon</value>
+  </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>Streichhölzer</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Bedeutungen:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>Neuer Glanz</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>Keine Formulare verfügbar</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Entfernen Sie diesen semantischen Bereich aus dieser Bedeutung</value>
@@ -948,6 +978,18 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Stellen Sie einen Glanz ein</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>Übersetzungen:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>Typ:</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>Unscharf</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>Verifiziert</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Und</value>
@@ -1394,7 +1436,7 @@
     <value>Jot hinzufügen</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Fügen Sie ein neues Protokoll hinzu </value>
+    <value>Fügen Sie ein neues Jota hinzu (Umschalt-Eingabetaste für neue Zeile)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Körper</value>
@@ -1790,7 +1832,7 @@
     <value>StudyBibleAdditions</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Gehen Sie zu Paratext und wechseln Sie die Projekte.  Das derzeit mit dem ClearDashboard-Plugin verbundene Paratext-Projekt ist nicht dasselbe wie das Korpus in diesem ClearDashboard-Projekt.</value>
+    <value>Gehen Sie zu Paratext und wechseln Sie die Projekte.  Das Paratext-Projekt, das derzeit mit dem ClearDashboard-Plugin verbunden ist, ist nicht dasselbe wie das Korpus in diesem ClearDashboard-Projekt.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Ziel</value>
@@ -2027,7 +2069,7 @@
     <value>1 Chroniken</value>
   </data>
   <data name="ProperCase_1_Corinthians" xml:space="preserve">
-    <value>1. Korinther</value>
+    <value>1 Korinther</value>
   </data>
   <data name="ProperCase_1_John" xml:space="preserve">
     <value>1. Johannes</value>
