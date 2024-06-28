@@ -500,12 +500,9 @@ public static class DbCommandExtensions
         else if (property.PropertyType.IsAssignableTo(typeof(IList<Models.Metadatum>)))
         {
 			var columnAttribute = (ColumnAttribute?)property.GetCustomAttribute(typeof(ColumnAttribute), true);
-			if (columnAttribute?.TypeName == "jsonb")
+			if (nullabilityInfo.WriteState is not NullabilityState.Nullable)
 			{
-				if (nullabilityInfo.WriteState is not NullabilityState.Nullable)
-				{
-					return JsonSerializer.Serialize(new List<Models.Metadatum>());
-				}
+				return JsonSerializer.Serialize(new List<Models.Metadatum>());
 			}
 		}
 

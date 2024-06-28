@@ -31,7 +31,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     ShortName = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     Category = table.Column<string>(type: "TEXT", nullable: true),
-                    Order = table.Column<int>(type: "INTEGER", nullable: false, defaultValue:1000)
+					Precedence = table.Column<int>(type: "INTEGER", nullable: false, defaultValue:1000)
                 },
                 constraints: table =>
                 {

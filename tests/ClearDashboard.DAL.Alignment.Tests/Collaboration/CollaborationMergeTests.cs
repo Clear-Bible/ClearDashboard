@@ -63,11 +63,13 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             //return;
 
-            await DoMerge();
+            var initialGrammarCount = _fixture.ProjectDbContext.Grammars.Count();
+
+			await DoMerge();
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
             Assert.Equal(_fixture.Users.Count + 1, _fixture.ProjectDbContext.Users.Count());  // TestBase added 1 when setting up the project, and we added 2 in BuildInitialEntities
-			Assert.Equal(_fixture.Grammar.Count, _fixture.ProjectDbContext.Grammars.Count());
+			Assert.Equal(_fixture.Grammar.Count + initialGrammarCount, _fixture.ProjectDbContext.Grammars.Count());
 			Assert.Equal(_fixture.Corpora.Count, _fixture.ProjectDbContext.Corpa.Count());
             Assert.Equal(_fixture.TokenizedCorpora.Count, _fixture.ProjectDbContext.TokenizedCorpora.Count());
             Assert.Equal(2, _fixture.ProjectDbContext.TokenComposites.Count());
@@ -271,7 +273,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         [Trait("Category", "Collaboration")]
         public async Task Test01()
         {
-            _fixture.Grammar.RemoveAll(e => e.ShortName == "Grammar1");
+			var initialGrammarCount = _fixture.ProjectDbContext.Grammars.Count();
+
+			_fixture.Grammar.RemoveAll(e => e.ShortName == "Grammar1");
             _fixture.Grammar.Add(new Models.Grammar() { Id = Guid.NewGuid(), ShortName = "Grammar1", Description = "Grammar1-b", Category = "NerdGrammars" });
 
             // Add custom versification of tokenized corpus
@@ -302,7 +306,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             await DoMerge();
 
             _fixture.ProjectDbContext.ChangeTracker.Clear();
-            Assert.Equal(3, _fixture.ProjectDbContext.Grammars.Count());
+            Assert.Equal(initialGrammarCount, _fixture.ProjectDbContext.Grammars.Count());
             var dbGrammar1 = _fixture.ProjectDbContext.Grammars.Where(e => e.ShortName == "Grammar1").FirstOrDefault();
             Assert.NotNull(dbGrammar1);
             Assert.Equal("Grammar1-b", dbGrammar1.Description);
