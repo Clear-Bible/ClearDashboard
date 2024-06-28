@@ -196,8 +196,12 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
             {
                 generalModel.Add(kvp.Key, (IDictionary<string, object>)kvp.Value.value!);
             }
-            else
-            {
+			else if (kvp.Value.type.IsAssignableTo(typeof(IList<Models.Metadatum>)))
+			{
+				generalModel.Add(kvp.Key, (IList<Models.Metadatum>)kvp.Value.value!);
+			}
+			else
+			{
                 // Should never get here if caller already checked IsDatabasePrimitiveType
                 throw new NotSupportedException($"Type {kvp.Value.type.Name} not supported in commit snapshot builder");
             }

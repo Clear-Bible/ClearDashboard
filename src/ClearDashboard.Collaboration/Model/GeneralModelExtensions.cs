@@ -50,7 +50,8 @@ internal static class GeneralModelExtensions
             type.IsValueType ||
             type == typeof(string) ||
             type == typeof(Dictionary<string, object>) ||
-            type == typeof(Dictionary<string, object?>);
+            type == typeof(Dictionary<string, object?>) ||
+            type == typeof(List<DataAccessLayer.Models.Metadatum>);
     }
 
     internal static GeneralModel ToGeneralModel(

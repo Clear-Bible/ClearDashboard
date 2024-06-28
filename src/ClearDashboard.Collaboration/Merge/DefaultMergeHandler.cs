@@ -446,7 +446,7 @@ public class DefaultMergeHandler
         return hasChange;
     }
 
-    protected bool CheckMergePropertyModelDifferences<T>(IModelDifference modelDifference, T itemToModify)
+	protected bool CheckMergePropertyModelDifferences<T>(IModelDifference modelDifference, T itemToModify)
         where T : IModelDistinguishable
     {
         var hasChange = false;
@@ -465,8 +465,14 @@ public class DefaultMergeHandler
                         .ToDictionary(e => e.Key, e => (object?)e.Value).AsReadOnly();
                     hasChange = CheckMergePropertyValueDifferences(propertyModelDifference, propertyValues) || hasChange;
                 }
-                else
-                {
+				else if (v is IList<Models.Metadatum>)
+				{
+					var propertyValues = ((IList<Models.Metadatum>)v)
+						.ToDictionary(e => e.Key, e => (object?)e.Value).AsReadOnly();
+					hasChange = CheckMergePropertyValueDifferences(propertyModelDifference, propertyValues) || hasChange;
+				}
+				else
+				{
                     throw new InvalidDifferenceStateException($"Unable to CheckMerge for property '{propertyName}' having item type {v?.GetType()?.ShortDisplayName()}");
                 }
             }
