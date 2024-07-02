@@ -15,8 +15,8 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
-        <converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter"/>
-        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <DataTemplate x:Key="SourceTokenDisplay">
             <userControls:TokenDisplay
                 HorizontalAlignment="Left"
@@ -42,9 +42,8 @@
                 DataContext="{Binding}"
                 FilterPins="OnFilterPins"
                 FilterPinsByBiblicalTerms="OnFilterPinsByBiblicalTerms"
-                FilterPinsTarget="OnFilterPinsTarget"
-                GlossSet="OnGlossSet"
                 FilterPinsTranslation="OnFilterPinsTranslation"
+                GlossSet="OnGlossSet"
                 HighlightedTokenBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=HighlightedTokenBackground}"
                 HorizontalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=HorizontalSpacing}"
                 NoteCreate="OnNoteCreate"
@@ -111,15 +110,14 @@
                 TranslationSet="OnTranslationSet"
                 TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}">
                 <userControls:TokenDisplay.CommandBindings>
-                    <CommandBinding Command="Copy"
-                                    Executed="OnCopy"/>
+                    <CommandBinding Command="Copy" Executed="OnCopy" />
                 </userControls:TokenDisplay.CommandBindings>
 
                 <userControls:TokenDisplay.InputBindings>
                     <KeyBinding
                         Key="C"
                         Command="Copy"
-                        Modifiers="Control"/>
+                        Modifiers="Control" />
                 </userControls:TokenDisplay.InputBindings>
             </userControls:TokenDisplay>
         </DataTemplate>
@@ -148,9 +146,8 @@
                 DataContext="{Binding}"
                 FilterPins="OnFilterPins"
                 FilterPinsByBiblicalTerms="OnFilterPinsByBiblicalTerms"
-                FilterPinsTarget="OnFilterPinsTarget"
-                GlossSet="OnGlossSet"
                 FilterPinsTranslation="OnFilterPinsTranslation"
+                GlossSet="OnGlossSet"
                 HighlightedTokenBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=HighlightedTokenBackground}"
                 HorizontalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=HorizontalSpacing}"
                 NoteCreate="OnNoteCreate"
@@ -215,48 +212,45 @@
                 TranslationSet="OnTranslationSet"
                 TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}">
                 <userControls:TokenDisplay.CommandBindings>
-                    <CommandBinding Command="Copy"
-                                    Executed="OnCopy"/>
+                    <CommandBinding Command="Copy" Executed="OnCopy" />
                 </userControls:TokenDisplay.CommandBindings>
 
                 <userControls:TokenDisplay.InputBindings>
                     <KeyBinding
                         Key="C"
                         Command="Copy"
-                        Modifiers="Control"/>
+                        Modifiers="Control" />
                 </userControls:TokenDisplay.InputBindings>
             </userControls:TokenDisplay>
         </DataTemplate>
         <!--  ReSharper disable once Xaml.RedundantResource  -->
         <ItemsPanelTemplate x:Key="SourceWrapPanelTemplate">
-            <WrapPanel FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
-                       Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}"/>
+            <WrapPanel FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}" Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
         </ItemsPanelTemplate>
         <!--  ReSharper disable once Xaml.RedundantResource  -->
         <ItemsPanelTemplate x:Key="TargetWrapPanelTemplate">
-            <WrapPanel FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsTargetRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
-                       Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}"/>
+            <WrapPanel FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsTargetRtl), Converter={StaticResource BoolFlowDirectionConverter}}" Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
         </ItemsPanelTemplate>
         <!--  ReSharper disable once Xaml.RedundantResource  -->
         <ItemsPanelTemplate x:Key="SourceStackPanelTemplate">
             <StackPanel
                 HorizontalAlignment="Left"
                 FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
-                Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}"/>
+                Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
         </ItemsPanelTemplate>
         <!--  ReSharper disable once Xaml.RedundantResource  -->
         <ItemsPanelTemplate x:Key="TargetStackPanelTemplate">
             <StackPanel
                 HorizontalAlignment="Left"
                 FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
-                Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}"/>
+                Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
         </ItemsPanelTemplate>
     </UserControl.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <!--  External Notes  -->
         <Border
@@ -283,11 +277,10 @@
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Vertical">
-                                        <Separator/>
-                                        <Label Content="{Binding ExternalLabelsString}"
-                                               Foreground="{StaticResource BlueMidBrush}"/>
-                                        <Label Content="{Binding ExternalNoteMessagesString}"/>
-                                        <Label Content="{Binding ExternalLabel[0]}"/>
+                                        <Separator />
+                                        <Label Content="{Binding ExternalLabelsString}" Foreground="{StaticResource BlueMidBrush}" />
+                                        <Label Content="{Binding ExternalNoteMessagesString}" />
+                                        <Label Content="{Binding ExternalLabel[0]}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
@@ -303,7 +296,7 @@
                         Foreground="DarkGray"
                         IsHitTestVisible="False"
                         Kind="Flag"
-                        Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.HasExternalNotes), Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.HasExternalNotes), Converter={StaticResource BoolToVisibilityConverter}}" />
                 </StackPanel>
                 <iconPacks:PackIconModern
                     x:Name="ExternalNotesIcon"
@@ -313,13 +306,10 @@
                     Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.HasExternalNotes), Converter={StaticResource BoolToVisibilityConverter}}">
                     <iconPacks:PackIconModern.Style>
                         <Style TargetType="{x:Type iconPacks:PackIconModern}">
-                            <Setter Property="Kind"
-                                    Value="Flag"/>
+                            <Setter Property="Kind" Value="Flag" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding MultipleExternalNotes}"
-                                             Value="True">
-                                    <Setter Property="Kind"
-                                            Value="Flag"/>
+                                <DataTrigger Binding="{Binding MultipleExternalNotes}" Value="True">
+                                    <Setter Property="Kind" Value="Flag" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -330,8 +320,7 @@
         </Border>
 
 
-        <StackPanel Grid.Column="1"
-                    Orientation="Vertical">
+        <StackPanel Grid.Column="1" Orientation="Vertical">
             <TextBlock
                 Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleMargin}"
                 Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitlePadding}"
@@ -339,7 +328,7 @@
                 FlowDirection="LeftToRight"
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleFontSize}"
                 Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Title}"
-                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleVisibility}"/>
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleVisibility}" />
             <Border
                 Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseMargin}"
                 Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VersePadding}"
@@ -350,7 +339,7 @@
                     FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
                     ItemTemplate="{StaticResource SourceTokenDisplay}"
                     ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceItemsPanelTemplate}"
-                    ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceTokens}"/>
+                    ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceTokens}" />
             </Border>
             <Border
                 Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseMargin}"
@@ -364,7 +353,7 @@
                     ItemTemplate="{StaticResource TargetTokenDisplay}"
                     ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetItemsPanelTemplate}"
                     ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetTokens}"
-                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetVisibility}"/>
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetVisibility}" />
             </Border>
         </StackPanel>
     </Grid>
