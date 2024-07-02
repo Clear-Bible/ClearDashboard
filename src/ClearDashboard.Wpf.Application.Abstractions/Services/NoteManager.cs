@@ -575,7 +575,14 @@ namespace ClearDashboard.Wpf.Application.Services
                 };
                 if (domainEntityContexts.TryGetValue(associatedEntityId, out var entityContext))
                 {
-                    association.CorpusName = entityContext[EntityContextKeys.TokenizedCorpus.DisplayName];
+                    if(entityContext.ContainsKey(EntityContextKeys.TokenizedCorpus.DisplayName))
+                    {
+                        association.CorpusName = entityContext[EntityContextKeys.TokenizedCorpus.DisplayName];
+                    }
+                    else if (entityContext.ContainsKey(EntityContextKeys.TranslationSet.DisplayName))
+                    {
+                        association.CorpusName = entityContext[EntityContextKeys.TranslationSet.DisplayName];
+                    }
                     association.Book = entityContext[EntityContextKeys.TokenId.BookId];
                     association.Chapter = entityContext[EntityContextKeys.TokenId.ChapterNumber];
                     association.Verse = entityContext[EntityContextKeys.TokenId.VerseNumber];
@@ -673,6 +680,8 @@ namespace ClearDashboard.Wpf.Application.Services
                     Logger?.LogError($"GetNoteDetails: ID {id} is not a NoteId");
                 }
             }
+
+            result.RemoveAll(x => x.Entity.IsReply());
 
             var orderedList = result.OrderByDescending(n => n.CreatedLocalTime).ToArray();
 

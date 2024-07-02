@@ -765,28 +765,34 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         private void OnTabHeaderMouseEnter(object sender, MouseEventArgs e)
         {
-            var viewModel = (NoteViewModel)TabControl.SelectedContent;
-            var args = new NoteEventArgs
+            if (sender is Grid tabGrid)
             {
-                EntityIds = new EntityIdCollection(viewModel.Associations.
-                    Select(a=>a.AssociatedEntityId)),
-                Note = viewModel,
-                IsNewNote = false,
-            };
-            RaiseNoteEvent(AddNoteEditorMouseEnterEvent, args);
+                var viewModel = (NoteViewModel)tabGrid.DataContext;
+                var args = new NoteEventArgs
+                {
+                    EntityIds = new EntityIdCollection(viewModel.Associations.
+                        Select(a => a.AssociatedEntityId)),
+                    Note = viewModel,
+                    IsNewNote = false,
+                };
+                RaiseNoteEvent(AddNoteEditorMouseEnterEvent, args);
+            }
 
         }
 
         private void OnTabHeaderMouseLeave(object sender, MouseEventArgs e)
         {
-            var viewModel = (NoteViewModel)TabControl.SelectedContent;
-            var args = new NoteEventArgs
+            if (sender is Grid tabGrid)
+            {
+                var viewModel = (NoteViewModel)tabGrid.DataContext;
+                var args = new NoteEventArgs
             {
                 EntityIds = new EntityIdCollection(viewModel.Associations.
                     Select(a => a.AssociatedEntityId)),
                 IsNewNote = false,
             };
             RaiseNoteEvent(NoteEditorMouseLeaveEvent, args);
+            }
         }
 
         private void OnPopupMouseEnter(object sender, MouseEventArgs e)

@@ -611,7 +611,7 @@
     <value>Șterge</value>
   </data>
   <data name="Delete_Project" xml:space="preserve">
-    <value>Ștergeți proiectul</value>
+    <value>Șterge proiectul</value>
   </data>
   <data name="Delete_Project_Confirmation" xml:space="preserve">
     <value>Sigur doriți să ștergeți acest proiect?</value>
@@ -767,7 +767,7 @@
     <value>Textul țintă:</value>
   </data>
   <data name="FontSettings_TargetFontSize" xml:space="preserve">
-    <value>Dimensiunea țintă a fontului:</value>
+    <value>Dimensiunea vizată a fontului:</value>
   </data>
   <data name="FontSettings_Title" xml:space="preserve">
     <value>Titlu:</value>
@@ -1073,7 +1073,16 @@
     <value>Adăugați ținta ca traducere pentru...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Găsiți lexeme care au una sau mai multe traduceri care se potrivesc țintei</value>
+    <value>Găsiți lexeme care au una sau mai multe traduceri care se potrivesc cu destinația</value>
+  </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>Verificat</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>Corpus:</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>Import</value>
   </data>
   <data name="LexiconImport_Checked" xml:space="preserve">
     <value>Verificat</value>
@@ -1652,7 +1661,7 @@
     <value>Creați alinierea cuvintelor</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
-    <value>Creați o paralelă a versurilor corpurilor</value>
+    <value>Creați paralelizarea versurilor corpurilor</value>
   </data>
   <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
     <value>Creați interliniar</value>
@@ -1964,7 +1973,7 @@
     <value>Nu puteți șterge acel proiect, o altă aplicație încă îl folosește.</value>
   </data>
   <data name="ProjectPicker_DeleteProject" xml:space="preserve">
-    <value>Ștergeți proiectul</value>
+    <value>Șterge proiectul</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
     <value>Activați selecția cărților</value>

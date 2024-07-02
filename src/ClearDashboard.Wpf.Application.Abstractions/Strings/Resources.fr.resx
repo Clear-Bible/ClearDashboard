@@ -452,7 +452,7 @@
     <value>Éditeur d'alignement en masse</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>Examen de l'alignement en bloc</value>
+    <value>Examen de l'alignement en masse</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>Compter</value>
@@ -1022,7 +1022,7 @@
     <value>Pleinement</value>
   </data>
   <data name="LexiconEdit_FullyMatching" xml:space="preserve">
-    <value>Entièrement correspondant</value>
+    <value>Entièrement assorti</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexème</value>

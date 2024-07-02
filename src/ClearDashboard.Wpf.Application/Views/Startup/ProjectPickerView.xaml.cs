@@ -1,19 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using ClearDashboard.DataAccessLayer.Models;
-using Path = System.Windows.Shapes.Path;
 
 namespace ClearDashboard.Wpf.Application.Views.Startup
 {
@@ -26,6 +14,18 @@ namespace ClearDashboard.Wpf.Application.Views.Startup
         {
             InitializeComponent();
         }
-       
+
+        private void ProjectListView_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (e.Delta < 0)
+            {
+                ScrollBar.LineDownCommand.Execute(null, e.OriginalSource as IInputElement);
+            }
+            else if (e.Delta > 0)
+            {
+                ScrollBar.LineUpCommand.Execute(null, e.OriginalSource as IInputElement);
+            }
+            e.Handled = true;
+        }
     }
 }

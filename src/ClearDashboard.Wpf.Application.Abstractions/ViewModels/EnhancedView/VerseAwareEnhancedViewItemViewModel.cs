@@ -281,6 +281,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 _ = await Task.Factory.StartNew(async () =>
                     {
+                        foreach (var viewModel in Verses)
+                        {
+                            if (viewModel is IDisposable disposable)
+                            {
+                                disposable.Dispose();
+                            }
+                        }
                         Verses.Clear();
 
                         FetchingData = true;

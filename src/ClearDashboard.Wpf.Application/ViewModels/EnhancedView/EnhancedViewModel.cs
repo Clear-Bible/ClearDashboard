@@ -949,10 +949,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             // select the attached token
             if (e.SelectedTokens.Count == 0)
             {
-                e.TokenDisplayViewModel.IsTokenSelected = true;
+                if (!e.TokenDisplayViewModel.IsTranslationSelected &&
+                    e.TokenDisplayViewModel.IsTokenSelected != true)
+                {
+                    e.TokenDisplayViewModel.IsTokenSelected = true;
+                }
                 e.SelectedTokens.Add(e.TokenDisplayViewModel);
             }
 
+            SelectionManager.SelectedTokens = e.SelectedTokens;
             // 3
             if (SelectionManager.AnySelectedNotes)
             {
@@ -1117,7 +1122,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 //SelectionManager.UpdateRightClickTranslationSelection(e.TokenDisplay);
                 //NoteControlVisibility = SelectionManager.AnySelectedTokenTranslationNotes ? Visibility.Visible : Visibility.Collapsed;
-
+                
                 SelectionManager.UpdateRightClickSelection(e.TokenDisplay);
             }
         }
@@ -1193,7 +1198,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EventAggregator.PublishOnUIThreadAsync(new FilterPinsMessage(e.TokenDisplayViewModel.SurfaceText));
         }
 
-        public void FilterPinsTarget(object? sender, NoteEventArgs e)
+        public void FilterPinsTranslation(object? sender, NoteEventArgs e)
         {
             EventAggregator.PublishOnUIThreadAsync(new FilterPinsMessage(e.TokenDisplayViewModel.TargetTranslationText));
         }

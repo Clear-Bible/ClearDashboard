@@ -1,4 +1,4 @@
-﻿using ClearDashboard.DAL.Wpf.ViewModels;
+using ClearDashboard.DAL.Wpf.ViewModels;
 
 namespace ClearDashboard.DAL.Wpf.ViewModels
 {

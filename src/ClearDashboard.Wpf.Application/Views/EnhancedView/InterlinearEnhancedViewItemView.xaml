@@ -135,8 +135,8 @@
                             <b:EventTrigger EventName="FilterPins">
                                 <b:CallMethodAction MethodName="FilterPins" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
                             </b:EventTrigger>
-                            <b:EventTrigger EventName="FilterPinsTarget">
-                                <b:CallMethodAction MethodName="FilterPinsTarget" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                            <b:EventTrigger EventName="FilterPinsTranslation">
+                                <b:CallMethodAction MethodName="FilterPinsTranslation" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
                             </b:EventTrigger>
                             <b:EventTrigger EventName="FilterPinsByBiblicalTerms">
                                 <b:CallMethodAction MethodName="FilterPinsByBiblicalTerms" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />

@@ -134,7 +134,7 @@
     <value>停用当前许可证</value>
   </data>
   <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
-    <value>-其他帐户-</value>
+    <value>-其他账户-</value>
   </data>
   <data name="AccountInfo_ParatextEmailLabel" xml:space="preserve">
     <value>副文本电子邮件：</value>
@@ -1490,7 +1490,7 @@
     <value>是否要删除标签：</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>您想取消关联标签吗：</value>
+    <value>您要取消关联标签吗：</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>来自标签组：</value>

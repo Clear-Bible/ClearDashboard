@@ -950,7 +950,7 @@
     <value>Lemma للمفردات الجديدة:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
-    <value>معجم</value>
+    <value>المعجم</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>معجم لـ موجود بالفعل لـ lemma</value>
@@ -1025,7 +1025,7 @@
     <value>مطابقة كاملة</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
-    <value>معجم</value>
+    <value>المعجم</value>
   </data>
   <data name="LexiconEdit_LoadingData" xml:space="preserve">
     <value>تحميل البيانات...</value>
@@ -1808,7 +1808,7 @@
     <value>الموارد</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
-    <value>قم بتوسيع المحتوى إلى 100%</value>
+    <value>قم بتوسيع المحتوى إلى 100٪</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
     <value>إضافة نص إلى نافذة جديدة</value>
@@ -1883,7 +1883,7 @@
     <value>لغة</value>
   </data>
   <data name="Pins_Lexeme" xml:space="preserve">
-    <value>معجم</value>
+    <value>المعجم</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
     <value>نوع المعجم</value>
