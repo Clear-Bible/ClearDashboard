@@ -57,302 +57,114 @@
         HorizontalAlignment="Left"
         Orientation="Vertical">
 
-        <!--<Grid>-->
+        <!--  Composite Indicator  -->
+        <Rectangle
+            Width="{Binding Path=ActualWidth, ElementName=TokenButton}"
+            Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorHeight}"
+            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorMargin}"
+            HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
+            Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorComputedColor}"
+            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorVisibility}" />
 
-        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-            <!--  External Notes Indicator  -->
-            <Grid VerticalAlignment="Top">
-                <iconPacks:PackIconModern
-                    x:Name="MultipleNotesIcon"
+        <Grid>
+
+            <StackPanel Orientation="Horizontal">
+                <!--  External Notes Indicator  -->
+                <Grid>
+                    <iconPacks:PackIconModern
+                        x:Name="MultipleNotesIcon"
+                        Margin="3,0,0,0"
+                        Foreground="DarkGray"
+                        IsHitTestVisible="False"
+                        Kind="Flag">
+                        <iconPacks:PackIconModern.Style>
+                            <Style TargetType="iconPacks:PackIconModern">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding MultipleExternalNotes}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </iconPacks:PackIconModern.Style>
+
+                    </iconPacks:PackIconModern>
+
+                    <iconPacks:PackIconModern
+                        x:Name="ExternalNotesIcon"
+                        Margin="0,2,0,0"
+                        Cursor="Hand"
+                        Foreground="Red"
+                        MouseDown="PackIconModern_MouseDown">
+                        <iconPacks:PackIconModern.Style>
+                            <Style TargetType="{x:Type iconPacks:PackIconModern}">
+                                <Setter Property="Kind" Value="Flag" />
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding MultipleExternalNotes}" Value="True">
+                                        <Setter Property="Kind" Value="Flag" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsFirstExternalNoteToken}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </iconPacks:PackIconModern.Style>
+
+                        <iconPacks:PackIconModern.ToolTip>
+                            <ToolTip
+                                Background="LightYellow"
+                                HasDropShadow="false"
+                                HorizontalOffset="10"
+                                Placement="Left"
+                                PlacementRectangle="50,0,0,0"
+                                VerticalOffset="20">
+                                <StackPanel Orientation="Vertical">
+                                    <ListView ItemsSource="{Binding ExternalNotes}">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Vertical">
+                                                    <Separator />
+                                                    <Label Content="{Binding ExternalLabelsString}" Foreground="{StaticResource BlueMidBrush}" />
+                                                    <Label Content="{Binding ExternalNoteMessagesString}" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </StackPanel>
+                            </ToolTip>
+                        </iconPacks:PackIconModern.ToolTip>
+                    </iconPacks:PackIconModern>
+                </Grid>
+
+
+                <!--  Jots Notes Indicator  -->
+                <iconPacks:PackIconBootstrapIcons
+                    x:Name="MultipleJotsIcon"
                     Margin="3,0,0,0"
-                    Foreground="DarkGray"
-                    IsHitTestVisible="False"
-                    Kind="Flag">
-                    <iconPacks:PackIconModern.Style>
-                        <Style TargetType="iconPacks:PackIconModern">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding MultipleExternalNotes}" Value="True">
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </iconPacks:PackIconModern.Style>
-
-                </iconPacks:PackIconModern>
-
-                <iconPacks:PackIconModern
-                    x:Name="ExternalNotesIcon"
-                    Margin="0,8,0,0"
+                    Background="White"
                     Cursor="Hand"
-                    Foreground="Red"
-                    MouseDown="PackIconModern_MouseDown">
-                    <iconPacks:PackIconModern.Style>
-                        <Style TargetType="{x:Type iconPacks:PackIconModern}">
-                            <Setter Property="Kind" Value="Flag" />
-                            <Setter Property="Visibility" Value="Collapsed" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding MultipleExternalNotes}" Value="True">
-                                    <Setter Property="Kind" Value="Flag" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding IsFirstExternalNoteToken}" Value="True">
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </iconPacks:PackIconModern.Style>
-
-                    <iconPacks:PackIconModern.ToolTip>
-                        <ToolTip
-                            Background="LightYellow"
-                            HasDropShadow="false"
-                            HorizontalOffset="10"
-                            Placement="Left"
-                            PlacementRectangle="50,0,0,0"
-                            VerticalOffset="20">
-                            <StackPanel Orientation="Vertical">
-                                <ListView ItemsSource="{Binding ExternalNotes}">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Vertical">
-                                                <Separator />
-                                                <Label Content="{Binding ExternalLabelsString}" Foreground="{StaticResource BlueMidBrush}" />
-                                                <Label Content="{Binding ExternalNoteMessagesString}" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </StackPanel>
-                        </ToolTip>
-                    </iconPacks:PackIconModern.ToolTip>
-                </iconPacks:PackIconModern>
-            </Grid>
-
-
-            <!--  Jots Notes Indicator  -->
-            <iconPacks:PackIconBootstrapIcons
-                x:Name="MultipleJotsIcon"
-                Margin="3,10,0,0"
-                Background="White"
-                Cursor="Hand"
-                IsHitTestVisible="True"
-                MouseLeftButtonDown="OnNoteLeftButtonDown"
-                RenderTransformOrigin="0.5,0.5">
-                <iconPacks:PackIconBootstrapIcons.Style>
-                    <Style TargetType="iconPacks:PackIconBootstrapIcons">
-                        <Setter Property="Kind" Value="ChatRightDots" />
-                        <Setter Property="Visibility" Value="Collapsed" />
-                        <Setter Property="Foreground" Value="Orange" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFlowDirection}" Value="RightToLeft">
-                                <Setter Property="Kind" Value="ChatLeftDots" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenNoteFlagIndicatorVisibility}" Value="Visible">
-                                <Setter Property="Visibility" Value="Visible" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </iconPacks:PackIconBootstrapIcons.Style>
-            </iconPacks:PackIconBootstrapIcons>
-
-
-//NEW NEW NEW
-            <StackPanel Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenMargin}" Orientation="Vertical">
-                <!--  Composite Indicator  -->
-                <Rectangle
-                    Width="{Binding Path=ActualWidth, ElementName=TokenButton}"
-                    Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorHeight}"
-                    Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorMargin}"
-                    HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
-                    Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorComputedColor}"
-                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorVisibility}" />
-                <!--  Token Button  -->
-                <Button
-                    x:Name="TokenButton"
-                    Width="{Binding ElementName=SurfaceTextBlock, Path=ActualWidth}"
-                    Height="Auto"
-                    Padding="0"
-                    HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
-                    HorizontalContentAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
-                    cm:Message.Attach="[ToolTipOpening]=[OnToolTipOpening($eventArgs)]"
-                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                    Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenBackground}"
-                    BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenBorder}"
-                    BorderThickness="2"
-                    Click="OnTokenClicked"
-                    ContextMenuOpening="OnTokenContextMenuOpening"
-                    FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFlowDirection}"
-                    FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontFamily}"
-                    FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontSize}"
-                    FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontStyle}"
-                    FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontWeight}"
-                    Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenForeground}"
-                    IsDefault="False"
-                    MouseDoubleClick="OnTokenDoubleClicked"
-                    MouseEnter="OnTokenMouseEnter"
-                    MouseLeave="OnTokenMouseLeave"
-                    MouseLeftButtonDown="OnTokenLeftButtonDown"
-                    MouseLeftButtonUp="OnTokenLeftButtonUp"
-                    MouseRightButtonDown="OnTokenRightButtonDown"
-                    MouseRightButtonUp="OnTokenRightButtonUp"
-                    MouseWheel="OnTokenMouseWheel"
-                    PreviewMouseLeftButtonDown="OnTokenLeftButtonDown">
-                    <!--  ToolTipOpening="OnToolTipOpening"  -->
-
-                    <Button.ContextMenu>
-                        <ContextMenu x:Name="TokenDisplayContextMenu" FlowDirection="LeftToRight">
-                            <MenuItem
-                                x:Name="CreateNoteMenuItem"
-                                Click="OnCreateNote"
-                                Header="{helpers:Localization EnhancedView_CreateNote}"
-                                Visibility="Collapsed" />
-                            <MenuItem
-                                x:Name="CreateAlignmentMenuItem"
-                                Click="OnTokenCreateAlignment"
-                                Header="{helpers:Localization EnhancedView_CreateAlignment}"
-                                Visibility="Collapsed" />
-                            <MenuItem
-                                x:Name="DeleteAlignmentMenuItem"
-                                Click="OnTokenDeleteAlignment"
-                                Header="{helpers:Localization EnhancedView_DeleteAlignmentMenu}"
-                                Visibility="Collapsed" />
-                            <MenuItem
-                                x:Name="JoinTokensMenuItem"
-                                Click="OnTokenJoin"
-                                Header="{helpers:Localization EnhancedView_JoinTokens}"
-                                Visibility="Collapsed" />
-                            <MenuItem
-                                x:Name="JoinTokensLanguagePairMenuItem"
-                                Click="OnTokenJoinLanguagePair"
-                                Header="{helpers:Localization EnhancedView_JoinTokensForLanguagePair}"
-                                Visibility="Collapsed" />
-                            <MenuItem
-                                x:Name="UnjoinTokenMenuItem"
-                                Click="OnTokenUnjoin"
-                                Header="{helpers:Localization EnhancedView_UnjoinTokens}" />
-                            <MenuItem
-                                x:Name="SplitTokenMenuItem"
-                                Click="OnTokenSplit"
-                                Header="{helpers:Localization EnhancedView_SplitToken}" />
-                            <MenuItem
-                                x:Name="CopyMenuItem"
-                                Click="OnCopy"
-                                Header="{helpers:Localization Copy}"
-                                Visibility="Collapsed" />
-                            <MenuItem
-                                x:Name="FilterPinsMenuItem"
-                                Click="OnFilterPins"
-                                Header="{helpers:Localization EnhancedView_FilterPins}"
-                                Visibility="Collapsed" />
-                            <MenuItem
-                                x:Name="FilterPinsByBiblicalTermsMenuItem"
-                                Click="OnFilterPinsByBiblicalTerms"
-                                Header="{helpers:Localization EnhancedView_FilterPinsByKeyTerms}"
-                                Visibility="Collapsed" />
-                        </ContextMenu>
-                    </Button.ContextMenu>
-                    <TextBlock
-                        x:Name="SurfaceTextBlock"
-                        Margin="0"
-                        Padding="2"
-                        Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SurfaceText}" />
-                    <Button.ToolTip>
-                        <ToolTip
-                            Background="LightYellow"
-                            HasDropShadow="false"
-                            HorizontalOffset="10"
-                            Placement="Left"
-                            PlacementRectangle="50,0,0,0"
-                            VerticalOffset="20">
-                            <StackPanel Orientation="Vertical">
-                                <bulkAlignment:AlignmentTooltip Visibility="{Binding IsHighlighted, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                                <controls:ExtendedPropertiesTreeView
-                                    x:Name="ExtendedPropertiesTreeViewName"
-                                    ExtendedPropertiesXml="{Binding ExtendedProperties}"
-                                    Visibility="{Binding HasExtendedProperties, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                            </StackPanel>
-                        </ToolTip>
-                    </Button.ToolTip>
-                </Button>
-                <!--  DEBUG STUFF  -->
-                <!--<Label
-                    Margin="20,35,0,0"
-                    Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.TokenHasNote}"
-                    Foreground="Purple"
-                    IsHitTestVisible="False" />
-                <Label
-                    Margin="20,45,0,0"
-                    Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.IsFirstJotsNoteToken}"
-                    Foreground="DarkCyan"
-                    IsHitTestVisible="False" />-->
-                <!--</Grid>-->
-
-
-                <!--  Dashboard Notes  -->
-                <Rectangle
-                    x:Name="NoteIndicator"
-                    Width="{Binding Path=ActualWidth, ElementName=TokenButton}"
-                    Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorHeight}"
-                    Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorMargin}"
-                    HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
-                    Cursor="Hand"
-                    Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorComputedColor}"
-                    MouseEnter="OnNoteMouseEnter"
-                    MouseLeave="OnNoteMouseLeave"
+                    IsHitTestVisible="True"
                     MouseLeftButtonDown="OnNoteLeftButtonDown"
-                    MouseLeftButtonUp="OnNoteLeftButtonUp"
-                    MouseRightButtonDown="OnNoteRightButtonDown"
-                    MouseRightButtonUp="OnNoteRightButtonUp"
-                    MouseWheel="OnNoteMouseWheel"
-                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenNoteIndicatorVisibility}" />
-
-                <!--  External Notes  -->
-                <Border
-                    Width="{Binding Path=ActualWidth, ElementName=TokenButton}"
-                    Height="5"
-                    Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorMargin}"
-                    Background="{StaticResource HatchBrush}">
-                    <Border.Style>
-                        <Style TargetType="{x:Type Border}">
-                            <Setter Property="Opacity" Value="0.0" />
+                    RenderTransformOrigin="0.5,0.5">
+                    <iconPacks:PackIconBootstrapIcons.Style>
+                        <Style TargetType="iconPacks:PackIconBootstrapIcons">
+                            <Setter Property="Kind" Value="ChatRightDots" />
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Setter Property="Foreground" Value="Orange" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding HasExternalNotes}" Value="True">
-                                    <Setter Property="Opacity" Value="1.0" />
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFlowDirection}" Value="RightToLeft">
+                                    <Setter Property="Kind" Value="ChatLeftDots" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenNoteFlagIndicatorVisibility}" Value="Visible">
+                                    <Setter Property="Visibility" Value="Visible" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </Border.Style>
-
-                    <Border.ToolTip>
-                        <ToolTip
-                            Background="LightYellow"
-                            HasDropShadow="false"
-                            HorizontalOffset="10"
-                            Placement="Left"
-                            PlacementRectangle="50,0,0,0"
-                            VerticalOffset="20">
-                            <StackPanel Orientation="Vertical">
-                                <ListView ItemsSource="{Binding ExternalNotes}">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Vertical">
-                                                <Separator />
-                                                <Label Content="{Binding ExternalLabelsString}" Foreground="{StaticResource BlueMidBrush}" />
-                                                <Label Content="{Binding ExternalNoteMessagesString}" />
-
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </StackPanel>
-                        </ToolTip>
-                    </Border.ToolTip>
-                </Border>
+                    </iconPacks:PackIconBootstrapIcons.Style>
+                </iconPacks:PackIconBootstrapIcons>
             </StackPanel>
-        </StackPanel>
-// END NEW END NEW
 
-        <<<<<<< HEAD
             <!--  Token Button  -->
             <Button
                 x:Name="TokenButton"
@@ -473,11 +285,11 @@
                 Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.IsFirstJotsNoteToken}"
                 Foreground="DarkCyan"
                 IsHitTestVisible="False" />-->
-            </Grid>
+        </Grid>
 
 
-            <!--  Dashboard Notes  -->
-            <Rectangle
+        <!--  Dashboard Notes  -->
+        <Rectangle
             x:Name="NoteIndicator"
             Width="{Binding Path=ActualWidth, ElementName=TokenButton}"
             Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorHeight}"
@@ -494,51 +306,51 @@
             MouseWheel="OnNoteMouseWheel"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenNoteIndicatorVisibility}" />
 
-            <!--  External Notes  -->
-            <Border
+        <!--  External Notes  -->
+        <Border
             Width="{Binding Path=ActualWidth, ElementName=TokenButton}"
             Height="5"
             Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorMargin}"
             Background="{StaticResource HatchBrush}">
-                <Border.Style>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="Opacity" Value="0.0" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasExternalNotes}" Value="True">
-                                <Setter Property="Opacity" Value="1.0" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Border.Style>
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="Opacity" Value="0.0" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasExternalNotes}" Value="True">
+                            <Setter Property="Opacity" Value="1.0" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
 
-                <Border.ToolTip>
-                    <ToolTip
+            <Border.ToolTip>
+                <ToolTip
                     Background="LightYellow"
                     HasDropShadow="false"
                     HorizontalOffset="10"
                     Placement="Left"
                     PlacementRectangle="50,0,0,0"
                     VerticalOffset="20">
-                        <StackPanel Orientation="Vertical">
-                            <ListView ItemsSource="{Binding ExternalNotes}">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Vertical">
-                                            <Separator />
-                                            <Label Content="{Binding ExternalLabelsString}" Foreground="{StaticResource BlueMidBrush}" />
-                                            <Label Content="{Binding ExternalNoteMessagesString}" />
+                    <StackPanel Orientation="Vertical">
+                        <ListView ItemsSource="{Binding ExternalNotes}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical">
+                                        <Separator />
+                                        <Label Content="{Binding ExternalLabelsString}" Foreground="{StaticResource BlueMidBrush}" />
+                                        <Label Content="{Binding ExternalNoteMessagesString}" />
 
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </StackPanel>
-                    </ToolTip>
-                </Border.ToolTip>
-            </Border>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </ToolTip>
+            </Border.ToolTip>
+        </Border>
 
 
-            <Button
+        <Button
             x:Name="TranslationButton"
             Height="Auto"
             Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationMargin}"
@@ -567,35 +379,35 @@
             MouseWheel="OnTranslationMouseWheel"
             PreviewMouseLeftButtonDown="OnTranslationLeftButtonDown"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVisibility}">
-                <Button.ContextMenu>
-                    <ContextMenu x:Name="TranslationDisplayContextMenu" FlowDirection="LeftToRight">
-                        <MenuItem
+            <Button.ContextMenu>
+                <ContextMenu x:Name="TranslationDisplayContextMenu" FlowDirection="LeftToRight">
+                    <MenuItem
                         x:Name="SetGlossMenuItem"
                         Click="OnSetGloss"
                         Header="{helpers:Localization TokenDisplay_SetGloss}"
                         Visibility="Collapsed" />
 
-                        <MenuItem
+                    <MenuItem
                         x:Name="SetTranslationMenuItem"
                         Click="OnSetTranslation"
                         Header="{helpers:Localization TokenDisplay_SetTranslation}"
                         Visibility="Collapsed" />
 
 
-                        <!--<MenuItem
+                    <!--<MenuItem
                         x:Name="CreateTranslationNoteMenuItem"
                         Click="OnCreateNote"
                         Header="{helpers:Localization EnhancedView_CreateNote}"
                         Visibility="Collapsed" />-->
-                        <MenuItem
+                    <MenuItem
                         Click="OnFilterPinsTarget"
                         Header="{helpers:Localization EnhancedView_FilterPins}"
                         Visibility="Visible" />
-                    </ContextMenu>
-                </Button.ContextMenu>
-                <TextBlock Margin="0" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationText}" />
-            </Button>
-            <Button
+                </ContextMenu>
+            </Button.ContextMenu>
+            <TextBlock Margin="0" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationText}" />
+        </Button>
+        <Button
             Height="Auto"
             Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenMargin}"
             Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenPadding}"
@@ -621,9 +433,9 @@
             MouseWheel="OnAlignedTokenMouseWheel"
             PreviewMouseLeftButtonDown="OnAlignedTokenLeftButtonDown"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenVisibility}">
-                <TextBlock Margin="0" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenText}" />
-            </Button>
-            <Rectangle
+            <TextBlock Margin="0" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenText}" />
+        </Button>
+        <Rectangle
             Width="{Binding Path=ActualWidth, ElementName=TranslationButton}"
             Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorHeight}"
             Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorMargin}"
@@ -637,130 +449,5 @@
             MouseRightButtonUp="OnNoteRightButtonUp"
             MouseWheel="OnNoteMouseWheel"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationNoteIndicatorVisibility}" />
-            =======
-            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                <!--  Jots Notes Indicator  -->
-                <iconPacks:PackIconBootstrapIcons
-                x:Name="TranslationJotsIcon"
-                Margin="3,4,2,0"
-                Background="White"
-                Cursor="Hand"
-                IsHitTestVisible="True"
-                MouseLeftButtonDown="OnTranslationNoteLeftButtonDown"
-                RenderTransformOrigin="0.5,0.5">
-                    <iconPacks:PackIconBootstrapIcons.Style>
-                        <Style TargetType="iconPacks:PackIconBootstrapIcons">
-                            <Setter Property="Kind" Value="ChatRightDots" />
-                            <Setter Property="Visibility" Value="Collapsed" />
-                            <Setter Property="Foreground" Value="Orange" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFlowDirection}" Value="RightToLeft">
-                                    <Setter Property="Kind" Value="ChatLeftDots" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationNoteFlagIndicatorVisibility}" Value="Visible">
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </iconPacks:PackIconBootstrapIcons.Style>
-                </iconPacks:PackIconBootstrapIcons>
-                <StackPanel Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenMargin}" Orientation="Vertical">
-                    <Button
-                    x:Name="TranslationButton"
-                    Height="Auto"
-                    Padding="0"
-                    HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
-                    HorizontalContentAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
-                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                    Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationBackground}"
-                    BorderThickness="0"
-                    Click="OnTranslationClicked"
-                    ContextMenuOpening="OnTranslationContextMenuOpening"
-                    FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFlowDirection}"
-                    FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
-                    FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
-                    FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontStyle}"
-                    FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontWeight}"
-                    Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationColor}"
-                    IsDefault="False"
-                    KeyUp="OnTranslationButtonKeyUp"
-                    MouseDoubleClick="OnTranslationDoubleClicked"
-                    MouseEnter="OnTranslationMouseEnter"
-                    MouseLeave="OnTranslationMouseLeave"
-                    MouseLeftButtonUp="OnTranslationLeftButtonUp"
-                    MouseRightButtonDown="OnTranslationRightButtonDown"
-                    MouseRightButtonUp="OnTranslationRightButtonUp"
-                    MouseWheel="OnTranslationMouseWheel"
-                    PreviewMouseLeftButtonDown="OnTranslationLeftButtonDown"
-                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVisibility}">
-                        <Button.ContextMenu>
-                            <ContextMenu x:Name="TranslationDisplayContextMenu" FlowDirection="LeftToRight">
-                                <MenuItem
-                                x:Name="SetTranslationMenuItem"
-                                Click="OnSetTranslation"
-                                Header="{helpers:Localization TokenDisplay_SetTranslation}"
-                                Visibility="Collapsed" />
-                                <MenuItem
-                                x:Name="CreateTranslationNoteMenuItem"
-                                Click="OnTranslationCreateNote"
-                                Header="{helpers:Localization EnhancedView_CreateNote}"
-                                Visibility="Collapsed" />
-                                <MenuItem
-                                Click="OnFilterPinsTranslation"
-                                Header="{helpers:Localization EnhancedView_FilterPins}"
-                                Visibility="Visible" />
-                            </ContextMenu>
-                        </Button.ContextMenu>
-                        <TextBlock
-                        Margin="0"
-                        FontWeight="Normal"
-                        Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationText}" />
-                    </Button>
-                    <Button
-                    Height="Auto"
-                    Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenMargin}"
-                    Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenPadding}"
-                    HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenAlignment}"
-                    HorizontalContentAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenAlignment}"
-                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                    Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenBackground}"
-                    BorderThickness="0"
-                    Click="OnAlignedTokenClicked"
-                    FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenFlowDirection}"
-                    FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenFontFamily}"
-                    FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenFontSize}"
-                    FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenFontStyle}"
-                    FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenFontWeight}"
-                    Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenColor}"
-                    IsDefault="False"
-                    MouseDoubleClick="OnAlignedTokenDoubleClicked"
-                    MouseEnter="OnAlignedTokenMouseEnter"
-                    MouseLeave="OnAlignedTokenMouseLeave"
-                    MouseLeftButtonUp="OnAlignedTokenLeftButtonUp"
-                    MouseRightButtonDown="OnAlignedTokenRightButtonDown"
-                    MouseRightButtonUp="OnAlignedTokenRightButtonUp"
-                    MouseWheel="OnAlignedTokenMouseWheel"
-                    PreviewMouseLeftButtonDown="OnAlignedTokenLeftButtonDown"
-                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenVisibility}">
-                        <TextBlock Margin="0" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AlignedTokenText}" />
-                    </Button>
-                    <Rectangle
-                    Width="{Binding Path=ActualWidth, ElementName=TranslationButton}"
-                    Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorHeight}"
-                    Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationNoteIndicatorMargin}"
-                    HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
-                    Cursor="Hand"
-                    Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationNoteIndicatorComputedColor}"
-                    MouseEnter="OnNoteMouseEnter"
-                    MouseLeave="OnNoteMouseLeave"
-                    MouseLeftButtonDown="OnTranslationNoteLeftButtonDown"
-                    MouseLeftButtonUp="OnTranslationNoteLeftButtonUp"
-                    MouseRightButtonDown="OnNoteRightButtonDown"
-                    MouseRightButtonUp="OnNoteRightButtonUp"
-                    MouseWheel="OnNoteMouseWheel"
-                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationNoteIndicatorVisibility}" />
-                </StackPanel>
-            </StackPanel>
-            >>>>>>> DEV
     </StackPanel>
 </usercontrols:TokenDisplayBase>
