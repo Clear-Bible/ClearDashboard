@@ -1008,7 +1008,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             // Fix for #1249
             // Clear the VerseSelectedTokens collection and add 
             // the token selected on the TokenDisplay control 
-            if (control != null)
+            if (control != null && routedEvent != VerseDisplay.CopyEvent)
             {
                 var isTokenClickedWhileTranslationSelected = control?.TokenDisplayViewModel!.IsTranslationSelected != isTranslation;
 
