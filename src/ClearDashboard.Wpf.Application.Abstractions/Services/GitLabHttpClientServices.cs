@@ -1,17 +1,25 @@
 ﻿using Caliburn.Micro;
+using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
+using HttpClientToCurl;
 using Microsoft.Extensions.Logging;
+using Mono.Unix.Native;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Windows.Documents;
+using ClearDashboard.DataAccessLayer;
+using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using StringContent = System.Net.Http.StringContent;
+using User = ClearDashboard.DataAccessLayer.Models.User;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -20,7 +28,10 @@ namespace ClearDashboard.Wpf.Application.Services
         #region Member Variables   
 
         private readonly GitLabClient _gitLabClient;
+        private readonly CollaborationManager _collaborationManager;
         private ILogger? _logger;
+        private CollaborationConfiguration _collaborationConfiguration;
+        private readonly CollaborationServerHttpClientServices _collaborationHttpClientServices;
 
         #endregion //Member Variables
 
@@ -36,6 +47,9 @@ namespace ClearDashboard.Wpf.Application.Services
         public GitLabHttpClientServices(GitLabClient gitLabClient)
         {
             _gitLabClient = gitLabClient;
+            _collaborationManager = IoC.Get<CollaborationManager>();
+            _collaborationHttpClientServices = IoC.Get<CollaborationServerHttpClientServices>();
+            _collaborationConfiguration = IoC.Get<CollaborationConfiguration>();
         }
 
         #endregion //Constructor
@@ -375,6 +389,64 @@ namespace ClearDashboard.Wpf.Application.Services
             return list;
         }
 
+
+        public async Task<GitAccessToken> GetTokenExpirationDate(CollaborationConfiguration user)
+        {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return null;  // return a date 60 days from now
+            }
+
+            List<GitAccessToken> list = new();
+
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
+
+            try
+            {
+                var pageNum = 0;
+                var totalPages = 1;
+
+                do
+                {
+                    pageNum++;
+
+                    var request = new HttpRequestMessage(HttpMethod.Get, $"personal_access_tokens");
+
+                    var content = new MultipartFormDataContent();
+                    content.Add(new StringContent("100"), "per_page");
+                    content.Add(new StringContent($"{pageNum}"), "page");
+                    request.Content = content;
+
+                    var response = await _gitLabClient.Client.SendAsync(request);
+                    response.EnsureSuccessStatusCode();
+
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    var tempList = JsonSerializer.Deserialize<List<GitAccessToken>>(result)!;
+                    list.AddRange(tempList);
+
+                    // get the total number of API pages
+                    if (response.Headers.Contains("X-Total-Pages"))
+                    {
+                        totalPages = Convert.ToInt32(response.Headers.GetValues("X-Total-Pages").First());
+                    }
+
+                } while (pageNum < totalPages);
+
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+
+            // find the non-revoked token for the user
+            var token = list.FirstOrDefault(s => s.UserId == user.UserId && s.Revoked == false);
+            
+            return token;
+        }
 
         public async Task<List<GitLabProject>> GetProjectsForUserWhereOwner(CollaborationConfiguration user)
         {
@@ -827,9 +899,125 @@ namespace ClearDashboard.Wpf.Application.Services
             return false;
         }
 
+        /// <summary>
+        /// Revokes the personal access token for the token
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public async Task<bool> RevokeUsersPersonalAccessToken(GitAccessToken token)
+        {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return false;
+            }
+
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
+
+
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"personal_access_tokens/{token.Id}");
+
+            try
+            {
+                var response = await _gitLabClient.Client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                if ((int)response.StatusCode == 204)
+                {
+                    return true;
+                }
+
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+            return false;
+        }
+
+
         #endregion // Delete requests
 
 
+        /// <summary>
+        /// We need to refresh the personal access token for the user
+        /// as it is about to expire
+        /// </summary>
+        /// <param name="userConfig"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public async Task<bool> RefreshToken(CollaborationConfiguration userConfig, GitAccessToken? token)
+        {
+            // get the user
+            var gitUsers = await GetAllUsers();
+            var gitUser = gitUsers.FirstOrDefault(u => u.Id == userConfig.UserId);
+            if (gitUser is null)
+            {
+                return false;
+            }
+
+            GitLabUser gitLabUser = new()
+            {
+                Id = gitUser.Id,
+                UserName = gitUser.UserName,
+                Name = gitUser.Name,
+                Email = gitUser.Email,
+                Organization = gitUser.Organization,
+                NamespaceId = userConfig.NamespaceId,
+            };
+
+            // generate a new token
+            var newToken = await GeneratePersonalAccessToken(gitLabUser);
+            userConfig.RemotePersonalAccessToken = newToken;
+
+            _collaborationManager.SaveCollaborationLicense(userConfig);
+
+
+            // get the user from mysql to update it
+            var dashboardUser =
+                await _collaborationHttpClientServices.GetDashboardUserExistsByEmail(userConfig.RemoteEmail);
+
+            // split out the dashboard license key and the collaboration key with the ^ delimiter
+            var licenseArray = dashboardUser.LicenseKey.Split('^');
+            var encryptedDashboardUser = licenseArray.FirstOrDefault();
+
+            //string decryptedLicenseKey = string.Empty;
+            //try
+            //{
+            //    decryptedLicenseKey = LicenseManager.DecryptLicenseFromString(encryptedUserLicense);
+                    
+            //}
+            //catch (Exception ex)
+            //{
+                    
+            //}
+
+            // encrypt the user config
+            var collabEncrypted = LicenseManager.EncryptCollabJsonToString(userConfig);
+
+            // update the license key to be a combination of the dashboard user and the collaboration user
+            dashboardUser.LicenseKey = $"{encryptedDashboardUser}^{collabEncrypted}";
+
+            // update the user to the collaboration server
+            var results = await _collaborationHttpClientServices.UpdateDashboardUser(dashboardUser);
+
+            if (results == false)
+            {
+                return false;
+            }
+
+            // delete/revoke the old token
+            var result = await RevokeUsersPersonalAccessToken(token);
+            if (result == false)
+            {
+                return false;
+            }
+
+
+            return false;
+        }
 
         #endregion // Methods
     }

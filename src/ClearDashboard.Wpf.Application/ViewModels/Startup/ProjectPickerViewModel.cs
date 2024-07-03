@@ -522,6 +522,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 await FinishAccountSetup();
 
+                await CheckTokenExpiration();
+
+
                 await GetCollabProjects();
             }
 
@@ -536,6 +539,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             StartTimer();
         }
+
+
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
@@ -1078,6 +1083,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         public async Task RefreshProjectList()
         {
             await GetProjectsVersion(afterMigration: true);
+        }
+
+
+        private async Task CheckTokenExpiration()
+        {
+            var token = await _gitLabHttpClientServices.GetTokenExpirationDate(_collaborationManager.GetConfig());
+            
+            DateTime expireDate;
+            if (token is null)
+            {
+                expireDate = DateTime.Now.AddDays(60);  // return a date 60 days from now
+            }
+            else
+            {
+                try
+                {
+                    expireDate = DateTime.Parse(token.ExpiresAt);
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+            }
+
+            // check to see if the token has expires in more than 30 days
+            // then bail out as nothing to do
+            if (expireDate > DateTime.Now.AddDays(30))
+            {
+                return;
+            }
+
+            // less than 30 days left on the token so lets regenerate a new one
+            var result = await _gitLabHttpClientServices.RefreshToken(_collaborationManager.GetConfig(), token);
         }
 
         public async Task GetCollabProjects()
