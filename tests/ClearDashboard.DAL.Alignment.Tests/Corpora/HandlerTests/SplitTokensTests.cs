@@ -247,11 +247,11 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests
                 var waChanged = 0;
 
                 var exampleWord1 = string.Empty;
-                var exampleLexemeInfoBefore1 = new (string surfaceText, string trainingText, string type)[] { };
+                var exampleLexemeInfoBefore1 = new (string surfaceText, string trainingText, string type, string circumfixGroup, Guid? grammarId)[] { };
                 var exampleLemmasAfter1 = (string.Empty, string.Empty, string.Empty);
 
                 var exampleWord2 = string.Empty;
-                var exampleLexemeInfoBefore2 = new (string surfaceText, string trainingText, string type)[] { };
+                var exampleLexemeInfoBefore2 = new (string surfaceText, string trainingText, string type, string circumfixGroup, Guid? grammarId)[] { };
 				var exampleLemmasAfter2 = (string.Empty, string.Empty);
 
                 foreach (var d in wordAnalyses.Where(w => w.Lexemes.Count() == 2).Where(w => w.Lexemes.Last().Lemma.Length > 4))
@@ -262,7 +262,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests
                     if (waChanged == 0)
                     {
                         exampleWord1 = d.Word;
-                        exampleLexemeInfoBefore1 = d.Lexemes.Select(e => (e.Lemma, e.Lemma, e.Type)).ToArray();
+                        exampleLexemeInfoBefore1 = d.Lexemes.Select(e => (e.Lemma, e.Lemma, e.Type, default(string), default(Guid?))).ToArray();
 
                         // take first character of second lexeme and put at end of first lexeme lemma
                         var lemma1 = $"{lexeme1.Lemma}{lexeme2.Lemma.Substring(0, 1)}";
@@ -293,7 +293,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests
                         if (waChanged == 1)
                         {
                             exampleWord2 = d.Word;
-                            exampleLexemeInfoBefore2 = d.Lexemes.Select(e => (e.Lemma, e.Lemma, e.Type)).ToArray();
+                            exampleLexemeInfoBefore2 = d.Lexemes.Select(e => (e.Lemma, e.Lemma, e.Type, default(string), default(Guid?))).ToArray();
 						}
 
                         // take first two characters of 2nd lexeme and put at end of first lexeme lemma

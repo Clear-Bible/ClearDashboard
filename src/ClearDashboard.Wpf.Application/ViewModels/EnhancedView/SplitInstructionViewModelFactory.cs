@@ -38,7 +38,7 @@ public static class SplitInstructionViewModelFactory
 
             string tokenText;
 
-            var lexiconDialogViewModel = lifetimeScope.Resolve<LexiconDialogViewModel>();
+            var lexiconDialogViewModel = lifetimeScope?.Resolve<LexiconDialogViewModel>();
 
             if (first)
             {

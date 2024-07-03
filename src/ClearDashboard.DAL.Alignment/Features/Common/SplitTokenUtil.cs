@@ -13,7 +13,7 @@ public static class SplitTokenUtil
 {
 	public static (Dictionary<TokenId, IEnumerable<CompositeToken>>, Dictionary<TokenId, IEnumerable<Token>>) SplitTokensIntoReplacements(
 		List<Models.Token> tokensDb,
-		(string surfaceText, string trainingText, string? tokenType)[] replacementTokenInfos,
+		(string surfaceText, string trainingText, string? tokenType, string? circumfixGroup, Guid? grammarId)[] replacementTokenInfos,
 		bool createParallelComposite,
 		SplitTokenDbCommands splitTokenDbCommands,
 		CancellationToken cancellationToken
@@ -64,7 +64,7 @@ public static class SplitTokenUtil
 		return (splitCompositeTokensByIncomingTokenId, splitChildTokensByIncomingTokenId);
 	}
 
-	public static Dictionary<Guid, (Models.Token SourceModelToken, List<Token> ReplacementTokens, List<Models.Token> ReplacementModelTokens)> CreateTokenReplacements(List<Models.Token> tokensDb, (string surfaceText, string trainingText, string? tokenType)[] replacementTokenInfos, SplitTokenDbCommands splitTokenDbCommands, CancellationToken cancellationToken)
+	public static Dictionary<Guid, (Models.Token SourceModelToken, List<Token> ReplacementTokens, List<Models.Token> ReplacementModelTokens)> CreateTokenReplacements(List<Models.Token> tokensDb, (string surfaceText, string trainingText, string? tokenType, string circumfixGroup, Guid? grammarId)[] replacementTokenInfos, SplitTokenDbCommands splitTokenDbCommands, CancellationToken cancellationToken)
 	{
 		if (tokensDb.Count == 0)
 			return [];
@@ -102,16 +102,22 @@ public static class SplitTokenUtil
 						Id = Guid.NewGuid()
 					},
 					replacementTokenInfos[i].surfaceText,
-					replacementTokenInfos[i].trainingText)
+					replacementTokenInfos[i].trainingText
+					)
 				{
 					ExtendedProperties = tokenDb.ExtendedProperties,
+					
 				};
 
 				var newModelToken = BuildModelToken(newToken, tokenDb.TokenizedCorpusId, tokenDb.VerseRowId);
 				newModelToken.Type = replacementTokenInfos[i].tokenType;
 				newModelToken.OriginTokenLocation ??= tokenDb.OriginTokenLocation ?? tokenDb.EngineTokenId;
 
-				newChildTokens.Add(newToken);
+                newModelToken.CircumfixGroup = replacementTokenInfos[i].circumfixGroup;
+                newModelToken.GrammarId = replacementTokenInfos[i].grammarId;
+
+
+                newChildTokens.Add(newToken);
 				newChildTokensDb.Add(newModelToken);
 			}
 

@@ -920,7 +920,7 @@
     <value>Xóa bản dịch này</value>
   </data>
   <data name="Lexicon_Empty_Translation" xml:space="preserve">
-    <value>&lt;trống&gt;</value>
+    <value>&lt;ý nghĩa trống rỗng&gt;</value>
   </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Nhập bản dịch mới cho</value>
@@ -987,6 +987,9 @@
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>Bỏ đặt</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>Độ bóng do người dùng xác định</value>
   </data>
   <data name="Lexicon_Verified" xml:space="preserve">
     <value>Đã xác minh</value>
@@ -1202,7 +1205,7 @@
     <value>Công cụ căn chỉnh</value>
   </data>
   <data name="MainView_WindowsBiblicalTerms" xml:space="preserve">
-    <value>Điều khoản Kinh thánh</value>
+    <value>Điều khoản Kinh Thánh</value>
   </data>
   <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
     <value>Mã thông báo Corpus</value>
@@ -1856,7 +1859,7 @@
     <value>Phóng to nội dung</value>
   </data>
   <data name="Pds_ZoomOut" xml:space="preserve">
-    <value>Thu nhỏ khỏi nội dung</value>
+    <value>Thu nhỏ nội dung</value>
   </data>
   <data name="PHM" xml:space="preserve">
     <value>PHM</value>
@@ -2243,7 +2246,7 @@
     <value>Thánh vịnh</value>
   </data>
   <data name="ProperCase_Revelation" xml:space="preserve">
-    <value>Khải Huyền</value>
+    <value>Khải huyền</value>
   </data>
   <data name="ProperCase_Romans" xml:space="preserve">
     <value>người La Mã</value>
@@ -2585,7 +2588,7 @@
     <value>Công cụ căn chỉnh</value>
   </data>
   <data name="Windows_BiblicalTerms" xml:space="preserve">
-    <value>Điều khoản Kinh thánh</value>
+    <value>Điều khoản Kinh Thánh</value>
   </data>
   <data name="Windows_CorpusTokens" xml:space="preserve">
     <value>Mã thông báo Corpus</value>

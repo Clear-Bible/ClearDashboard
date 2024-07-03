@@ -15,7 +15,7 @@ public class SplitInstructions
     public int? SurfaceTextLength => SurfaceText?.Length;
 
     [JsonIgnore]
-    public string? ErrorMessage { get; private set; }
+    public string? ErrorMessage { get;  set; }
 
     public string? SurfaceText { get; set; }
 

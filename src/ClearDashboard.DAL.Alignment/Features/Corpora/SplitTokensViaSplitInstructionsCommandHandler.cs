@@ -12,6 +12,36 @@ using Token = ClearBible.Engine.Corpora.Token;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora;
 
+public record GetTokenIdsWithCommonSurfaceTextQuery(string SurfaceText): ProjectRequestQuery<IDictionary<TokenId, List<Guid>>>;
+
+public class GetTokenIdsWithCommonSurfaceTextQueryHandler : ProjectDbContextQueryHandler<
+    GetTokenIdsWithCommonSurfaceTextQuery, RequestResult<IDictionary<TokenId, List<Guid>>>, IDictionary<TokenId, List<Guid>>>
+{
+    public GetTokenIdsWithCommonSurfaceTextQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider? projectProvider, ILogger logger) : base(projectNameDbContextFactory, projectProvider, logger)
+    {
+    }
+
+    protected override async Task<RequestResult<IDictionary<TokenId, List<Guid>>>> GetDataAsync(GetTokenIdsWithCommonSurfaceTextQuery request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var tokenIdsWithCommonSurfaceText = ProjectDbContext!.Tokens
+                .Include(e => e.TokenCompositeTokenAssociations)
+                .Where(e => e.SurfaceText == request.SurfaceText)
+                .ToDictionary(ModelHelper.BuildTokenId, e => e.TokenCompositeTokenAssociations.Select(ta => ta.TokenCompositeId).ToList());
+
+            await Task.CompletedTask;
+
+            return new RequestResult<IDictionary<TokenId, List<Guid>>>(tokenIdsWithCommonSurfaceText);
+        }
+        catch (Exception e)
+        {
+            return new RequestResult<IDictionary<TokenId, List<Guid>>>(success: false, message: e.Message);
+        }
+       
+    }
+}
+
 public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCommandHandler<SplitTokensViaSplitInstructionsCommand,
     RequestResult<(IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>)>,
     (IDictionary<TokenId, IEnumerable<CompositeToken>>, IDictionary<TokenId, IEnumerable<Token>>)>
@@ -140,18 +170,21 @@ public class SplitTokensViaSplitInstructionsCommandHandler : ProjectDbContextCom
 		var replacementTokenInfos = new (
 			string surfaceText,
 			string trainingText,
-			string? tokenType)[request.SplitInstructions.Count];
+			string? tokenType,
+            string? circumfixGroup,
+            Guid? grammarId)[request.SplitInstructions.Count];
 
 		for (var i = 0; i < request.SplitInstructions.Count; i++)
 		{
 			var splitInstruction = request.SplitInstructions[i];
 			replacementTokenInfos[i] = (
 				surfaceText: splitInstruction.TokenText,
-				// NB:  What to do here when TrainingText is null?  Ask Dirk.  Should this be set to the Token 'surface text'
-				trainingText: splitInstruction.TrainingText, // ?? string.Empty,
-				// TODO:  Get TokenType from SplitInstructions
-				tokenType: null
-			)!;
+				trainingText: splitInstruction.TrainingText, 
+				tokenType: splitInstruction.TokenType,
+                circumfixGroup: splitInstruction.CircumfixGroup,
+                grammarId: splitInstruction.GrammarId
+
+            )!;
 		}
 
 		var (

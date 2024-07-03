@@ -58,11 +58,11 @@
         </Style>
     </UserControl.Resources>
     <Grid x:Name="DropDownGrid">
-        <TextBox x:Name="InputTextBox" Width="160" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBox x:Name="InputTextBox" Width="160" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenText}"/>
         <ToggleButton x:Name="DropdownToggleButton" Content="▼" Width="16" Height="25" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,-2,0,0" Style="{StaticResource ToggleButtonStyle}" Checked="DropdownToggleButton_OnChecked"/>
         <Popup IsOpen="{Binding IsChecked, ElementName=DropdownToggleButton, Mode=TwoWay}"  PlacementTarget="{Binding ElementName=InputTextBox}" StaysOpen="False" AllowsTransparency="True"  >
             <Border Background="White" CornerRadius="3" BorderBrush="DarkGray" BorderThickness="1" Width="Auto" Height="Auto">
-                <lexicon:LexiconDialogView x:Name="LexiconDialogView" />
+                <lexicon:LexiconDialogView x:Name="LexiconDialogView"  />
             </Border>
         </Popup>
     </Grid>

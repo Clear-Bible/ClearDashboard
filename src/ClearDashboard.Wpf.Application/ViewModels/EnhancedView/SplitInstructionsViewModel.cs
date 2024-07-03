@@ -8,16 +8,61 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 public class SplitInstructionsViewModel : PropertyChangedBase
 {
-    
-    public List<int> SplitIndexes { get; set; } = [];
+
+    public SplitInstructionsViewModel(): this(new SplitInstructions())
+    {
+        
+    }
+
+    public SplitInstructionsViewModel(SplitInstructions entity)
+    {
+        Entity = entity;
+
+        foreach (var splitInstruction in entity.Instructions)
+        {
+            Instructions.Add(new SplitInstructionViewModel(splitInstruction));
+        }
+
+        Instructions.CollectionChanged += (sender, args) =>
+        {
+            args.NewItems?.OfType<SplitInstructionViewModel>().ToList().ForEach(i => entity.Instructions.Add(i.Entity));
+            args.OldItems?.OfType<SplitInstructionViewModel>().ToList().ForEach(i => entity.Instructions.Remove(i.Entity));
+        };
+    }
+    public SplitInstructions Entity { get; set; }
+    public List<int> SplitIndexes
+    {
+        get => Entity.SplitIndexes;
+        set
+        {
+            Entity.SplitIndexes = value;
+            NotifyOfPropertyChange(()=> SplitIndexes);
+        }
+    }
 
     public int Count => Instructions.Count;
 
     public int? SurfaceTextLength => SurfaceText?.Length;
-    
-    public string? ErrorMessage { get; private set; }
 
-    public string? SurfaceText { get; set; }
+    public string? ErrorMessage
+    {
+        get=>Entity.ErrorMessage;
+         set
+        {
+            Entity.ErrorMessage = value;
+            NotifyOfPropertyChange(() => ErrorMessage);
+        }
+    }
+
+    public string? SurfaceText
+    {
+        get=> Entity.SurfaceText;
+        set
+        {
+            Entity.SurfaceText = value;
+            NotifyOfPropertyChange(() => SurfaceText);
+        }
+    }
 
     public BindableCollection<SplitInstructionViewModel> Instructions { get; set; } = [];
 
