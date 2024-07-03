@@ -452,7 +452,7 @@
     <value>Éditeur d'alignement en masse</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>Examen de l'alignement en bloc</value>
+    <value>Examen de l'alignement en masse</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>Compter</value>
@@ -866,7 +866,7 @@
     <value>LEV</value>
   </data>
   <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>Ajouter un domaine sémantique à cette signification</value>
+    <value>Ajoutez un domaine sémantique à cette signification</value>
   </data>
   <data name="Lexicon_AddForm" xml:space="preserve">
     <value>Ajouter une forme lexicale à ce lemme</value>
@@ -920,7 +920,7 @@
     <value>Supprimer cette traduction</value>
   </data>
   <data name="Lexicon_Empty_Translation" xml:space="preserve">
-    <value>&lt;vide&gt;</value>
+    <value>&lt;sens vide&gt;</value>
   </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Entrez une nouvelle traduction pour</value>
@@ -988,6 +988,9 @@
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>Désarmé</value>
   </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>Brillant défini par l'utilisateur</value>
+  </data>
   <data name="Lexicon_Verified" xml:space="preserve">
     <value>Vérifié</value>
   </data>
@@ -1022,7 +1025,7 @@
     <value>Pleinement</value>
   </data>
   <data name="LexiconEdit_FullyMatching" xml:space="preserve">
-    <value>Entièrement correspondant</value>
+    <value>Entièrement assorti</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexème</value>
@@ -1310,7 +1313,7 @@
     <value>Sens du verset</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
-    <value>Verset Total</value>
+    <value>Verset total</value>
   </data>
   <data name="MAT" xml:space="preserve">
     <value>MAT</value>
@@ -1352,7 +1355,7 @@
     <value>Jeton d'accès:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Vérifiez votre email et entrez le code de validation :</value>
+    <value>Vérifiez votre email et saisissez le code de validation :</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Vérifier la disponibilité des utilisateurs</value>
@@ -1751,7 +1754,7 @@
     <value>Supprimer l'interlinéaire</value>
   </data>
   <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>Etes-vous sûr de vouloir supprimer ce corpus ? Toutes les notes, alignements et interlinéaires associés à ce corpus seront supprimés et ne pourront pas être récupérés.</value>
+    <value>Êtes-vous sûr de vouloir supprimer ce corpus ? Toutes les notes, alignements et interlinéaires associés à ce corpus seront supprimés et ne pourront pas être récupérés.</value>
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Dictionnaire</value>
@@ -2315,10 +2318,10 @@
     <value>Envoyer</value>
   </data>
   <data name="Settings_AquaEnabled" xml:space="preserve">
-    <value>Activer le plugin AQUA expérimental</value>
+    <value>Activer le plugin expérimental AQUA</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Vérifiez votre email et entrez le code de validation :</value>
+    <value>Vérifiez votre email et saisissez le code de validation :</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Paramètres de collaboration</value>

@@ -134,7 +134,7 @@
     <value>停用当前许可证</value>
   </data>
   <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
-    <value>-其他帐户-</value>
+    <value>-其他账户-</value>
   </data>
   <data name="AccountInfo_ParatextEmailLabel" xml:space="preserve">
     <value>副文本电子邮件：</value>
@@ -380,7 +380,7 @@
     <value>树木；香水和香料</value>
   </data>
   <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>智慧、理解</value>
+    <value>智慧、理解力</value>
   </data>
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>全部</value>
@@ -434,7 +434,7 @@
     <value>对齐的单词</value>
   </data>
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
-    <value>对齐方式</value>
+    <value>路线</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
     <value>对齐类型： </value>
@@ -920,7 +920,7 @@
     <value>删除此翻译</value>
   </data>
   <data name="Lexicon_Empty_Translation" xml:space="preserve">
-    <value>&lt;空&gt;</value>
+    <value>&lt;空意义&gt;</value>
   </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>输入新翻译</value>
@@ -987,6 +987,9 @@
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>取消设置</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>用户定义的光泽度</value>
   </data>
   <data name="Lexicon_Verified" xml:space="preserve">
     <value>已验证</value>
@@ -1490,7 +1493,7 @@
     <value>是否要删除标签：</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>您想取消关联标签吗：</value>
+    <value>您要取消关联标签吗：</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>来自标签组：</value>
@@ -1598,7 +1601,7 @@
     <value>部分</value>
   </data>
   <data name="Notes_PleaseAddJot" xml:space="preserve">
-    <value>请使用下面的对话框添加记号。</value>
+    <value>请使用下面的对话框添加注释。</value>
   </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
     <value>将这些笔记标记为已解决？</value>
@@ -1649,7 +1652,7 @@
     <value>旧约</value>
   </data>
   <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
-    <value>创建字对齐</value>
+    <value>创建单词对齐</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
     <value>创建语料库诗句的并行化</value>
@@ -1772,7 +1775,7 @@
     <value>使整个内容区域适合视口</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>使所有节点适合视口</value>
+    <value>让所有节点适合视口</value>
   </data>
   <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
     <value>获取最新的外部笔记</value>
@@ -1943,7 +1946,7 @@
     <value>合作项目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>创建您的项目以开始。</value>
+    <value>创建您的项目以开始使用。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>创建一个新项目</value>

@@ -767,7 +767,7 @@
     <value>Textul țintă:</value>
   </data>
   <data name="FontSettings_TargetFontSize" xml:space="preserve">
-    <value>Dimensiunea țintă a fontului:</value>
+    <value>Dimensiunea vizată a fontului:</value>
   </data>
   <data name="FontSettings_Title" xml:space="preserve">
     <value>Titlu:</value>
@@ -920,7 +920,7 @@
     <value>Ștergeți această traducere</value>
   </data>
   <data name="Lexicon_Empty_Translation" xml:space="preserve">
-    <value>&lt;gol&gt;</value>
+    <value>&lt;sens gol&gt;</value>
   </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Introduceți o nouă traducere pentru</value>
@@ -987,6 +987,9 @@
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>Dezactivat</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>Luciu definit de utilizator</value>
   </data>
   <data name="Lexicon_Verified" xml:space="preserve">
     <value>Verificat</value>
@@ -1073,7 +1076,7 @@
     <value>Adăugați ținta ca traducere pentru...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Găsiți lexeme care au una sau mai multe traduceri care se potrivesc țintei</value>
+    <value>Găsiți lexeme care au una sau mai multe traduceri care se potrivesc cu destinația</value>
   </data>
   <data name="LexiconImport_Checked" xml:space="preserve">
     <value>Verificat</value>
@@ -1652,7 +1655,7 @@
     <value>Creați alinierea cuvintelor</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
-    <value>Creați o paralelă a versurilor corpurilor</value>
+    <value>Creați paralelizarea versurilor corpurilor</value>
   </data>
   <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
     <value>Creați interliniar</value>
@@ -1670,7 +1673,7 @@
     <value>Algoritmul de aliniere a cuvintelor mașinii</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Modelul simetric al trenului?</value>
+    <value>Tren model simetrizat?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>Tren</value>
@@ -1865,7 +1868,7 @@
     <value>PHP</value>
   </data>
   <data name="Pins_ClearFilter" xml:space="preserve">
-    <value>Ștergeți filtrul</value>
+    <value>Șterge filtrul</value>
   </data>
   <data name="Pins_Code" xml:space="preserve">
     <value>Cod</value>
@@ -2198,7 +2201,7 @@
     <value>Judecătorii</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentări</value>
+    <value>Lamentații</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
     <value>Leviticul</value>

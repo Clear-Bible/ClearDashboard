@@ -920,7 +920,7 @@
     <value>Hapus terjemahan ini</value>
   </data>
   <data name="Lexicon_Empty_Translation" xml:space="preserve">
-    <value>&lt;kosong&gt;</value>
+    <value>&lt;makna kosong&gt;</value>
   </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Masukkan terjemahan baru untuk</value>
@@ -987,6 +987,9 @@
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>Tidak disetel</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>Gloss Buatan Pengguna</value>
   </data>
   <data name="Lexicon_Verified" xml:space="preserve">
     <value>Diverifikasi</value>
@@ -1067,7 +1070,7 @@
     <value>Tambahkan sebagai formulir untuk...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Temukan leksem lengkap atau sebagian atau kecocokan bentuk dengan sumbernya</value>
+    <value>Temukan leksem atau bentuk yang lengkap atau sebagian yang cocok dengan sumbernya</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Tambahkan target sebagai terjemahan untuk ...</value>
@@ -1526,7 +1529,7 @@
     <value>Hapus label ini</value>
   </data>
   <data name="Notes_LabelTextAttached" xml:space="preserve">
-    <value>Teks dilampirkan pada label</value>
+    <value>Teks terlampir pada label</value>
   </data>
   <data name="Notes_LabelTooltipDelete" xml:space="preserve">
     <value>Hapus label</value>
@@ -2042,7 +2045,7 @@
     <value>Segarkan Daftar Proyek Kolaborasi</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>Cari terkini</value>
+    <value>Cari terbaru</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
     <value>Klik di sini untuk memulai Paratext</value>

@@ -920,7 +920,7 @@
     <value>Удалить этот перевод</value>
   </data>
   <data name="Lexicon_Empty_Translation" xml:space="preserve">
-    <value>&lt;пусто&gt;</value>
+    <value>&lt;пустой смысл&gt;</value>
   </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Введите новый перевод для</value>
@@ -987,6 +987,9 @@
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>Сброшено</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>Пользовательский блеск</value>
   </data>
   <data name="Lexicon_Verified" xml:space="preserve">
     <value>Проверено</value>
@@ -1073,7 +1076,7 @@
     <value>Добавить цель в качестве перевода для...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Найдите лексемы, у которых есть один или несколько переводов, соответствующих целевому.</value>
+    <value>Найдите лексемы, у которых есть один или несколько переводов, соответствующих целевому значению.</value>
   </data>
   <data name="LexiconImport_Checked" xml:space="preserve">
     <value>Проверено</value>
@@ -1451,7 +1454,7 @@
     <value>В соответствии с вашими разрешениями на проект Paratext, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Фильтровать по стихам</value>
+    <value>Фильтровать по стиху</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Фильтры</value>
@@ -1484,7 +1487,7 @@
     <value>Вы хотите создать ярлык:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
-    <value>и свяжем его с группой меток:</value>
+    <value>и свяжите его с группой меток:</value>
   </data>
   <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
     <value>Вы хотите удалить ярлык:</value>
@@ -1592,7 +1595,7 @@
     <value>Положение дел</value>
   </data>
   <data name="Notes_OpenConfirmation" xml:space="preserve">
-    <value>Пометить эти заметки как открытые?</value>
+    <value>Пометить эти записи как открытые?</value>
   </data>
   <data name="Notes_Part" xml:space="preserve">
     <value>Часть</value>
@@ -2276,7 +2279,7 @@
     <value>регистр</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Предоставленный ключ неисправен.  При расшифровке не удалось найти некоторые элементы json.</value>
+    <value>Предоставленный ключ неисправен.  При расшифровке некоторые элементы json не удалось найти.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>Содержимое расшифрованного лицензионного ключа не соответствует предоставленной вами информации.</value>
@@ -2612,7 +2615,7 @@
     <value>Смысл:</value>
   </data>
   <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>Субдомен:</value>
+    <value>Поддомен:</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Да</value>

@@ -116,7 +116,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
             migrationBuilder.Sql("INSERT INTO Grammar (Id, ShortName, Description) VALUES ('35e8c4fb-1f7c-4932-b0fa-146259985f6b','[OV]', 'Objective voice');");
             migrationBuilder.Sql("INSERT INTO Grammar (Id, ShortName, Description) VALUES ('bd2692e9-aafd-49d8-a36e-c435c772b149','[PART]', 'Participle');");
             migrationBuilder.Sql("INSERT INTO Grammar (Id, ShortName, Description) VALUES ('1a4121a2-de80-45b7-b24f-7c96593ff040','[PASS]', 'Passive');");
-            migrationBuilder.Sql("INSERT INTO Grammar (Id, ShortName, Description) VALUES ('e71a1b68-6ccf-4d49-bcad-0d1c1c35be18','[PAST.HIST]Historical past marker', '');");
+            migrationBuilder.Sql("INSERT INTO Grammar (Id, ShortName, Description) VALUES ('e71a1b68-6ccf-4d49-bcad-0d1c1c35be18','[PAST.HIST]', 'Historical past marker');");
             migrationBuilder.Sql("INSERT INTO Grammar (Id, ShortName, Description) VALUES ('5552441d-be11-4529-bb55-b400c671e92a','[Past.Rec]', 'Recent Past');");
             migrationBuilder.Sql("INSERT INTO Grammar (Id, ShortName, Description) VALUES ('a89ab6b9-fc95-4fa2-8888-5bb19611a80a','[PAST]', 'past tense');");
             migrationBuilder.Sql("INSERT INTO Grammar (Id, ShortName, Description) VALUES ('86c8f3ab-410c-45ae-a7d0-9bcf2765e0cd','[PAT]', 'Patient');");

@@ -17,11 +17,13 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Dynamic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using ClearDashboard.Wpf.Application.Helpers;
+using Newtonsoft.Json;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 // ReSharper disable UnusedMember.Global
@@ -31,24 +33,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
     public enum LexiconDialogMode
     {
-        AddLexeme,
-        SetGloss
+        //AddLexeme,
+        //SetGloss,
+        DropDown,
+        Dialog
     }
 
-    public class LexiconDialogViewModel : DashboardApplicationScreen
+    public partial class LexiconDialogViewModel : DashboardApplicationScreen
     {
-        private LexiconDialogMode _mode = LexiconDialogMode.AddLexeme;
+        private LexiconDialogMode _mode = LexiconDialogMode.Dialog;
         public LexiconDialogMode Mode
         {
             get => _mode;
             set
             {
                 Set(ref _mode, value);
-                NotifyOfPropertyChange(() => IsAddLexemeMode);
+                NotifyOfPropertyChange(() => IsDialogMode);
             }
         }
 
-        public bool IsAddLexemeMode => Mode == LexiconDialogMode.AddLexeme;
+        public bool IsDialogMode => Mode == LexiconDialogMode.Dialog;
 
         public bool IsLexemeEditorReadOnly
         {
@@ -199,14 +203,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 #if !DEMO
                 await Task.Run(async () => await SaveTranslation());
 #endif
+
             }
             finally
             {
                 Telemetry.IncrementMetric(Telemetry.TelemetryDictionaryKeys.GlossesConfirmed, 1);
                 OnUIThread(() => ProgressBarVisibility = Visibility.Collapsed);
-                await TryCloseAsync(true);
+
+                if (Mode == LexiconDialogMode.Dialog)
+                {
+                    await TryCloseAsync(true);
+                }
+                else
+                {
+                    await EventAggregator!.PublishAsync(new GlossSetMessage { Translation = SelectedTranslation}, null);
+                }
             }
         }
+
 
         public async void CancelTranslation()
         {
@@ -227,7 +241,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             finally
             {
                 OnUIThread(() => ProgressBarVisibility = Visibility.Collapsed);
-                await TryCloseAsync(false);
+
+                if (Mode == LexiconDialogMode.Dialog)
+                {
+                    await TryCloseAsync(false);
+                }
+                else
+                {
+                    await EventAggregator!.PublishAsync(new GlossSetMessage(), null);
+                }
+                
             }
         }
 
@@ -326,7 +349,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             RefreshTranslations = true;
         }
 
-        private LexiconTranslationViewModel? SelectedTranslation { get; set; }
+        public LexiconTranslationViewModel? SelectedTranslation { get; set; }
         public LexiconTranslationViewModel? NewTranslation { get; set; }
         public void OnTranslationSelected(object sender, LexiconTranslationEventArgs e)
         {
@@ -374,6 +397,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         private void SelectCurrentTranslation()
         {
             SelectedTranslation = CurrentLexeme?.SelectTranslationText(TokenDisplay.TargetTranslationText);
+
+            //var translationJson = JsonConvert.SerializeObject(TokenDisplay.Translation);
             var concordanceSelection = Concordance.SelectIfContainsText(TokenDisplay.TargetTranslationText);
             SelectedTranslation ??= concordanceSelection;
 
