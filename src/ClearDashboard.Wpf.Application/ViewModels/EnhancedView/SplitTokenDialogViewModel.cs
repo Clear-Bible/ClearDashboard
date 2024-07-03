@@ -218,7 +218,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 async Task SaveSplitTokens()
                 {
                     await VerseManager!.SplitTokensAsync(TokenDisplay.Corpus!, TokenDisplay.Token.TokenId,
-                        SplitInstructionsViewModel.Entity, !TokenDisplay.IsCorpusView,
+                        SplitInstructionsViewModel.Entity, /*!TokenDisplay.IsCorpusView*/ false,
                         SelectedPropagationOption);
 
                     var applyToAll = true;
