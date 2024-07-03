@@ -99,8 +99,12 @@ public class SplitInstructionViewModel : PropertyChangedBase
         get => _grammar;
         set
         {
-            Set(ref _grammar, value);
-            GrammarId = value?.Id;
+            if (value != null)
+            {
+                Set(ref _grammar, value);
+                GrammarId = value?.Id;
+            }
+           
         }
     }
 
@@ -109,8 +113,20 @@ public class SplitInstructionViewModel : PropertyChangedBase
         get => Entity.GrammarId;
         set
         {
-            Entity.GrammarId = value;
-            NotifyOfPropertyChange(() => GrammarId);
+            if (value != null)
+            {
+                Entity.GrammarId = value;
+                NotifyOfPropertyChange(() => GrammarId);
+            }
+            else
+            {
+                if (Entity.GrammarId != null)
+                {
+                    Entity.GrammarId = value;
+                    NotifyOfPropertyChange(() => GrammarId);
+                }
+            }
+           
         }
     }
 

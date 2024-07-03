@@ -217,27 +217,36 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                 async Task SaveSplitTokens()
                 {
+                    // NB:  Only dealing with non-parallel composites for now.
+                    // Will need to deal with reconciliation of tokens in the parallel composite case in the future.
                     var result = await VerseManager!.SplitTokensAsync(TokenDisplay.Corpus!, TokenDisplay.Token.TokenId,
                         SplitInstructionsViewModel.Entity, /*!TokenDisplay.IsCorpusView*/ false,
                         SelectedPropagationOption);
 
                     var applyToAll = true;
-                  
-                    foreach (var splitInstruction in SplitInstructionsViewModel.Instructions)
+
+                    var compositeTokens = result.SplitCompositeTokensByIncomingTokenId[TokenDisplay.Token.TokenId].ToList();
+                    var childTokens = result.SplitChildTokensByIncomingTokenId[TokenDisplay.Token.TokenId].ToList();
+
+                    for(var i = 0; i < SplitInstructionsViewModel.Instructions.Count; i++)
                     {
+                        var splitInstruction = SplitInstructionsViewModel.Instructions[i];
                         if (splitInstruction.HasGloss)
                         {
+                            var childToken = childTokens[i];
                             var translation = new LexiconTranslationViewModel { Text = splitInstruction.Gloss };
-                            await SaveGloss(translation, applyToAll);
+                            await SaveGloss(translation, childToken, applyToAll);
                         }
                     }
-
+                  
                     if (HasWordGloss)
                     {
                         var translation = new LexiconTranslationViewModel { Text = WordGloss };
-                        await SaveGloss(translation, applyToAll);
+                        foreach (var composite in compositeTokens)
+                        {
+                            await SaveGloss(translation, composite, applyToAll);
+                        }
                     }
-
                     await Task.CompletedTask;
                 }
 
@@ -250,10 +259,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private async Task SaveGloss(LexiconTranslationViewModel translation, bool applyToAll)
+        private async Task SaveGloss(LexiconTranslationViewModel translation, Token token,  bool applyToAll)
         {
             var lexiconTranslationId = (translation.TranslationId.IsInDatabase) ? translation.TranslationId : null;
-            await InterlinearDisplay.PutTranslationAsync(new Translation(TokenDisplay.TokenForTranslation, translation.Text, Translation.OriginatedFromValues.Assigned, lexiconTranslationId),
+            await InterlinearDisplay.PutTranslationAsync(new Translation(token, translation.Text, Translation.OriginatedFromValues.Assigned, lexiconTranslationId),
                 applyToAll ? TranslationActionTypes.PutPropagate : TranslationActionTypes.PutNoPropagate);
         }
 
