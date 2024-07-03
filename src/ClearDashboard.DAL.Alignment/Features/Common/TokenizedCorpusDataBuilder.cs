@@ -214,7 +214,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
         public static DbCommand CreateTokenComponentInsertCommand(DbConnection connection)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "EngineTokenId", "TrainingText", "VerseRowId", "TokenizedCorpusId", "Discriminator", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "ExtendedProperties", "Type", "Metadata", "GrammarId", "CircumfixGroup" };
+            var columns = new string[] { "Id", "EngineTokenId", "TrainingText", "VerseRowId", "TokenizedCorpusId", "ParallelCorpusId", "Discriminator", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "ExtendedProperties", "Type", "Metadata", "GrammarId", "CircumfixGroup" };
 
             DataUtil.ApplyColumnsToInsertCommand(command, typeof(Models.TokenComponent), columns);
 
@@ -267,7 +267,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             componentCmd.Parameters["@TrainingText"].Value = token.TrainingText;
             componentCmd.Parameters["@VerseRowId"].Value = token.VerseRowId;
             componentCmd.Parameters["@TokenizedCorpusId"].Value = token.TokenizedCorpusId;
-            componentCmd.Parameters["@Discriminator"].Value = token.GetType().Name;
+			componentCmd.Parameters["@ParallelCorpusId"].Value = DBNull.Value;
+			componentCmd.Parameters["@Discriminator"].Value = token.GetType().Name;
             componentCmd.Parameters["@BookNumber"].Value = token.BookNumber;
             componentCmd.Parameters["@ChapterNumber"].Value = token.ChapterNumber;
             componentCmd.Parameters["@VerseNumber"].Value = token.VerseNumber;
@@ -290,7 +291,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             componentCmd.Parameters["@VerseRowId"].Value = tokenComposite.VerseRowId;
             componentCmd.Parameters["@ExtendedProperties"].Value = tokenComposite.ExtendedProperties != null ? tokenComposite.ExtendedProperties : DBNull.Value;
             componentCmd.Parameters["@TokenizedCorpusId"].Value = tokenComposite.TokenizedCorpusId;
-            componentCmd.Parameters["@Discriminator"].Value = tokenComposite.GetType().Name;
+			componentCmd.Parameters["@ParallelCorpusId"].Value = tokenComposite.ParallelCorpusId != null ? tokenComposite.ParallelCorpusId : DBNull.Value;
+			componentCmd.Parameters["@Discriminator"].Value = tokenComposite.GetType().Name;
             componentCmd.Parameters["@BookNumber"].Value = DBNull.Value;
             componentCmd.Parameters["@ChapterNumber"].Value = DBNull.Value;
             componentCmd.Parameters["@VerseNumber"].Value = DBNull.Value;
