@@ -105,7 +105,7 @@
                                     MinWidth="70"
                                     Margin="5,0,5,3"
                                     ItemsSource="{x:Static models:TokenTypes.All}"
-                                    SelectedItem="{Binding TokenType, Mode=TwoWay}"
+                                    SelectedItem="{Binding Type, Mode=TwoWay}"
                                    />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
@@ -117,7 +117,7 @@
                                     Style="{StaticResource ListViewTextBoxStyle}"
                                     MinWidth="60"
                                     Text="{Binding CircumfixGroup, Mode=TwoWay}"
-                                    Visibility="{Binding TokenType, Mode=TwoWay,  Converter={StaticResource TokenTypeToVisibilityConverter}}"/>
+                                    Visibility="{Binding Type, Mode=TwoWay,  Converter={StaticResource TokenTypeToVisibilityConverter}}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

@@ -64,7 +64,7 @@ public static class SplitTokenUtil
 		return (splitCompositeTokensByIncomingTokenId, splitChildTokensByIncomingTokenId);
 	}
 
-	public static Dictionary<Guid, (Models.Token SourceModelToken, List<Token> ReplacementTokens, List<Models.Token> ReplacementModelTokens)> CreateTokenReplacements(List<Models.Token> tokensDb, (string surfaceText, string trainingText, string? tokenType, string circumfixGroup, Guid? grammarId)[] replacementTokenInfos, SplitTokenDbCommands splitTokenDbCommands, CancellationToken cancellationToken)
+	public static Dictionary<Guid, (Models.Token SourceModelToken, List<Token> ReplacementTokens, List<Models.Token> ReplacementModelTokens)> CreateTokenReplacements(List<Models.Token> tokensDb, (string surfaceText, string trainingText, string? tokenType, string? circumfixGroup, Guid? grammarId)[] replacementTokenInfos, SplitTokenDbCommands splitTokenDbCommands, CancellationToken cancellationToken)
 	{
 		if (tokensDb.Count == 0)
 			return [];
@@ -109,10 +109,24 @@ public static class SplitTokenUtil
 					
 				};
 
-				var newModelToken = BuildModelToken(newToken, tokenDb.TokenizedCorpusId, tokenDb.VerseRowId);
-				newModelToken.Type = replacementTokenInfos[i].tokenType;
-				newModelToken.OriginTokenLocation ??= tokenDb.OriginTokenLocation ?? tokenDb.EngineTokenId;
+                if (replacementTokenInfos[i].tokenType != null)
+                {
+					newToken.Metadata[Models.MetadatumKeys.Type] = replacementTokenInfos[i].tokenType;
+                }
 
+                if (replacementTokenInfos[i].circumfixGroup != null)
+                {
+					newToken.Metadata[Models.MetadatumKeys.CircumfixGroup] = replacementTokenInfos[i].circumfixGroup;
+                }
+
+                if (replacementTokenInfos[i].grammarId != null)
+                {
+					newToken.Metadata[Models.MetadatumKeys.GrammarId] = replacementTokenInfos[i].grammarId;
+                }
+
+                var newModelToken = BuildModelToken(newToken, tokenDb.TokenizedCorpusId, tokenDb.VerseRowId);
+				newModelToken.OriginTokenLocation ??= tokenDb.OriginTokenLocation ?? tokenDb.EngineTokenId;
+				newModelToken.Type = replacementTokenInfos[i].tokenType;
                 newModelToken.CircumfixGroup = replacementTokenInfos[i].circumfixGroup;
                 newModelToken.GrammarId = replacementTokenInfos[i].grammarId;
 
