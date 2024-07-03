@@ -159,7 +159,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 				string surfaceText,
 				string trainingText,
 				string? tokenType,
-                string? type, 
+                string? circumfixGroup, 
                 Guid? grammarId)[(request.SurfaceTextIndex > 0) ? 3 : 2];
 
             if (request.SurfaceTextIndex > 0)
