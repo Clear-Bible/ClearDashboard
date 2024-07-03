@@ -14,6 +14,7 @@ using System.Linq;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+using ClearDashboard.Wpf.Application.Messages;
 using SIL.Scripture;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -106,6 +107,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             await BuildTokenDisplayViewModelsAsync();
             await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage());
+            await EventAggregator.PublishOnUIThreadAsync(new RefreshVerse());
         }
 
         public TViewModel Resolve<TViewModel>() where TViewModel : notnull

@@ -9,6 +9,8 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 
 namespace ClearDashboard.Wpf.Application.Views.Notes
 {
@@ -201,6 +203,19 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
                 _vm.DisplayJotsEditor(null, note);
             }
             
+        }
+
+        private void GridNotes_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (e.Delta < 0)
+            {
+                ScrollBar.LineDownCommand.Execute(null, e.OriginalSource as IInputElement);
+            }
+            else if (e.Delta > 0)
+            {
+                ScrollBar.LineUpCommand.Execute(null, e.OriginalSource as IInputElement);
+            }
+            e.Handled = true;
         }
     }
 }

@@ -1472,7 +1472,7 @@
     <value>ማንኛውም</value>
   </data>
   <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>ተፈቷል።</value>
+    <value>ተፈትቷል</value>
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>ክፈት</value>
@@ -1559,7 +1559,7 @@
     <value>ክፈት</value>
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>ተፈቷል።</value>
+    <value>ተፈትቷል</value>
   </data>
   <data name="Notes_Note_Verse" xml:space="preserve">
     <value>ቁጥር</value>

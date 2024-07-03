@@ -48,7 +48,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<NoteMouseLeaveMessage>,
         IHandle<TokensJoinedMessage>,
         IHandle<TokenUnjoinedMessage>,
-        IHandle<TokenSplitMessage>
+        IHandle<TokenSplitMessage>, IDisposable
     {
 
         #region Member Variables   
@@ -141,6 +141,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         private bool _multipleExternalNotes = false;
+        private bool disposedValue;
+
         public bool MultipleExternalNotes
         {
             get => _multipleExternalNotes && AbstractionsSettingsHelper.GetShowExternalNotes();
@@ -223,8 +225,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     IsSource = isSource,
                 };
 
+                if (tokenDisplayViewModel.Translation?.TranslationId != null)
+                {
+                    tokenDisplayViewModel.TranslationNoteIds = await NoteManager.GetNoteIdsAsync(tokenDisplayViewModel.Translation.TranslationId);
+                }
+
                 // check to see if this is the first jot note in a series of notes
-                if (tokenDisplayViewModel.TokenNoteIds.Count > 0)
+                if (tokenDisplayViewModel.TokenNoteIds.Count > 0 || tokenDisplayViewModel.TranslationNoteIds.Count > 0)
                 {
                     foreach (var noteId in tokenDisplayViewModel.TokenNoteIds)
                     {
@@ -234,13 +241,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                             tokenDisplayViewModel.IsFirstJotsNoteToken = true;
                         }
                     }
-                }
 
-                //Debug.WriteLine($"TokenDisplayViewModel: {tokenDisplayViewModel.SurfaceText} {tokenDisplayViewModel.TokenHasNote} {tokenDisplayViewModel.IsFirstJotsNoteToken}");
-
-                if (tokenDisplayViewModel.Translation?.TranslationId != null)
-                {
-                    tokenDisplayViewModel.TranslationNoteIds = await NoteManager.GetNoteIdsAsync(tokenDisplayViewModel.Translation.TranslationId);
+                    foreach (var noteId in tokenDisplayViewModel.TranslationNoteIds)
+                    {
+                        if (!noteGuids.ContainsKey(noteId.Id))
+                        {
+                            noteGuids.Add(noteId.Id, Guid.NewGuid());
+                            tokenDisplayViewModel.IsFirstJotsNoteTranslation = true;
+                        }
+                    }
                 }
 
                 // pad out extra space on the first token for the external notes flag
@@ -568,7 +577,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             foreach (var model in SourceTokenDisplayViewModels)
             {
                 // check to see if this is the first jot note in a series of notes
-                if (model.TokenNoteIds.Count > 0)
+                if (model.TokenNoteIds.Count > 0 || model.TranslationNoteIds.Count > 0)
                 {
                     foreach (var noteId in model.TokenNoteIds)
                     {
@@ -578,6 +587,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                             model.IsFirstJotsNoteToken = true;
                         }
                     }
+
+                    foreach (var noteId in model.TranslationNoteIds)
+                    {
+                        if (!noteGuids.ContainsKey(noteId.Id))
+                        {
+                            noteGuids.Add(noteId.Id, Guid.NewGuid());
+                            model.IsFirstJotsNoteTranslation = true;
+                        }
+                    }
                 }
             }
 
@@ -585,7 +603,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             foreach (var model in TargetTokenDisplayViewModels)
             {
                 // check to see if this is the first jot note in a series of notes
-                if (model.TokenNoteIds.Count > 0)
+                if (model.TokenNoteIds.Count > 0 || model.TranslationNoteIds.Count > 0)
                 {
                     foreach (var noteId in model.TokenNoteIds)
                     {
@@ -593,6 +611,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         {
                             noteGuids.Add(noteId.Id, Guid.NewGuid());
                             model.IsFirstJotsNoteToken = true;
+                        }
+                    }
+
+                    foreach (var noteId in model.TranslationNoteIds)
+                    {
+                        if (!noteGuids.ContainsKey(noteId.Id))
+                        {
+                            noteGuids.Add(noteId.Id, Guid.NewGuid());
+                            model.IsFirstJotsNoteTranslation = true;
                         }
                     }
                 }
@@ -612,10 +639,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 MatchingTokenAction(
                     t => message.Note.Associations.Any(a =>
-                        a.AssociatedEntityId.IdEquals(t.Token.TokenId) ||
-                        a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t =>
+                        a.AssociatedEntityId.IdEquals(t.Token.TokenId)), t =>
                     {
                         t.IsNoteHovered = true;
+                        t.NoteIndicatorBrush = message.NewNote ? Brushes.Orange : Brushes.MediumPurple;
+                    });
+
+                MatchingTokenAction(
+                    t => message.Note.Associations.Any(a =>
+                        a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t =>
+                    {
+                        t.IsTranslationNoteHovered = true;
                         t.NoteIndicatorBrush = message.NewNote ? Brushes.Orange : Brushes.MediumPurple;
                     });
             }
@@ -630,7 +664,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 MatchingTokenAction(
                     t => message.Note.Associations.Any(a =>
                         a.AssociatedEntityId.IdEquals(t.Token.TokenId) ||
-                        a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t => t.IsNoteHovered = false);
+                        a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t =>
+                    {
+                        t.IsNoteHovered = false;
+                        t.IsTranslationNoteHovered = false;
+                    });
 
             }
 
@@ -716,6 +754,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
 
             public int GetHashCode([DisallowNull] TokenId obj) => obj.BookNumber ^ obj.ChapterNumber ^ obj.VerseNumber;
+        }
+
+        public void Dispose()
+        {
+            EventAggregator.Unsubscribe(this);
         }
     }
 }

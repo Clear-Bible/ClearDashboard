@@ -128,7 +128,7 @@
     <value>Nama Pengguna Kolaborasi:</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
-    <value>-DETAIL REKENING SAAT INI-</value>
+    <value>-DETAIL AKUN SAAT INI-</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
     <value>Nonaktifkan Lisensi Saat Ini</value>

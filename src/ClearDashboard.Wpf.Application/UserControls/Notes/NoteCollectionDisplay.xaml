@@ -147,22 +147,26 @@
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <Grid
+                        Background="Transparent"
                         MouseEnter="OnTabHeaderMouseEnter"
                         MouseLeave="OnTabHeaderMouseLeave"
                         ToolTip="{Binding Text}">
-                        <StackPanel Width="auto" Height="auto">
-                            <iconPacks:PackIconUnicons
-                                Width="24"
-                                Height="24"
-                                HorizontalAlignment="Center"
-                                Kind="CommentAltNotes" />
-                            <TextBlock
-                                x:Name="Header"
-                                Margin="5,0,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Text="{Binding TabHeader}" />
-                        </StackPanel>
+                        <Border Padding="20,15">
+                            <StackPanel Width="auto" Height="auto">
+                                <iconPacks:PackIconUnicons
+                                    Width="24"
+                                    Height="24"
+                                    HorizontalAlignment="Center"
+                                    Kind="CommentAltNotes" />
+                                <TextBlock
+                                    x:Name="Header"
+                                    Margin="5,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding TabHeader}" />
+                            </StackPanel>
+                        </Border>
+
                     </Grid>
                 </DataTemplate>
             </TabControl.ItemTemplate>

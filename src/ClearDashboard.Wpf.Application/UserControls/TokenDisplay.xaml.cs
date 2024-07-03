@@ -28,7 +28,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
     /// A control for displaying a single <see cref="Token"/> alongside a possible note indicator, <see cref="Translation"/>, and aligned token.
     /// </summary>
     public partial class TokenDisplay : IHandle<SelectionUpdatedMessage>,
-        IHandle<NoteMouseEnterMessage>,
         IHandle<NoteMouseLeaveMessage>
     {
         #region Static DependencyProperties
@@ -236,10 +235,45 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(Visibility.Collapsed));
 
         /// <summary>
+        /// Identifies the TranslationNoteIndicatorColor dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationNoteIndicatorColorProperty = DependencyProperty.Register(
+            nameof(TranslationNoteIndicatorColor), typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.LightGray));
+
+        /// <summary>
+        /// Identifies the TranslationNoteIndicatorComputedColor dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationNoteIndicatorComputedColorProperty = DependencyProperty.Register(
+            nameof(TranslationNoteIndicatorComputedColor), typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.LightGray));
+
+        /// <summary>
+        /// Identifies the TranslationNoteIndicatorHeight dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationNoteIndicatorHeightProperty = DependencyProperty.Register(
+            nameof(TranslationNoteIndicatorHeight), typeof(double), typeof(TokenDisplay),
+            new PropertyMetadata(5d, OnLayoutChanged));
+
+        /// <summary>
+        /// Identifies the TranslationNoteIndicatorMargin dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationNoteIndicatorMarginProperty = DependencyProperty.Register(
+            nameof(TranslationNoteIndicatorMargin), typeof(Thickness), typeof(TokenDisplay),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
         /// Identifies the TranslationNoteIndicatorVisibility dependency property.
         /// </summary>
         public static readonly DependencyProperty TranslationNoteIndicatorVisibilityProperty = DependencyProperty.Register(
             nameof(TranslationNoteIndicatorVisibility), typeof(Visibility), typeof(TokenDisplay),
+            new PropertyMetadata(Visibility.Collapsed));
+
+        /// <summary>
+        /// Identifies the TranslationNoteIndicatorVisibility dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationNoteFlagIndicatorVisibilityProperty = DependencyProperty.Register(
+            nameof(TranslationNoteFlagIndicatorVisibility), typeof(Visibility), typeof(TokenDisplay),
             new PropertyMetadata(Visibility.Collapsed));
 
         /// <summary>
@@ -268,6 +302,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty ShowNoteIndicatorProperty = DependencyProperty.Register(
             nameof(ShowNoteIndicator), typeof(bool), typeof(TokenDisplay),
+            new PropertyMetadata(true, OnLayoutChanged));
+
+        /// <summary>
+        /// Identifies the ShowTranslationNoteIndicator dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ShowTranslationNoteIndicatorProperty = DependencyProperty.Register(
+            nameof(ShowTranslationNoteIndicator), typeof(bool), typeof(TokenDisplay),
             new PropertyMetadata(true, OnLayoutChanged));
 
         /// <summary>
@@ -646,6 +687,48 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("NoteIndicatorMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
+        /// Identifies the TranslationNoteIndicatorLeftButtonDownEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslationNoteIndicatorLeftButtonDownEvent = EventManager.RegisterRoutedEvent
+            ("TranslationNoteIndicatorLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the TranslationNoteIndicatorLeftButtonUpEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslationNoteIndicatorLeftButtonUpEvent = EventManager.RegisterRoutedEvent
+            ("TranslationNoteIndicatorLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the TranslationNoteIndicatorRightButtonDownEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslationNoteIndicatorRightButtonDownEvent = EventManager.RegisterRoutedEvent
+            ("TranslationNoteIndicatorRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the TranslationNoteIndicatorRightButtonUpEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslationNoteIndicatorRightButtonUpEvent = EventManager.RegisterRoutedEvent
+            ("TranslationNoteIndicatorRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the TranslationNoteIndicatorMouseEnterEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslationNoteIndicatorMouseEnterEvent = EventManager.RegisterRoutedEvent
+            ("TranslationNoteIndicatorMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the TranslationNoteIndicatorMouseLeaveEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslationNoteIndicatorMouseLeaveEvent = EventManager.RegisterRoutedEvent
+            ("TranslationNoteIndicatorMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the TranslationNoteIndicatorMouseWheelEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslationNoteIndicatorMouseWheelEvent = EventManager.RegisterRoutedEvent
+            ("TranslationNoteIndicatorMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
         /// Identifies the TranslationSetEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationSetEvent = EventManager.RegisterRoutedEvent
@@ -664,16 +747,22 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("NoteCreate", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
+        /// Identifies the TranslationNoteCreateEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslationNoteCreateEvent = EventManager.RegisterRoutedEvent
+            ("TranslationNoteCreate", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
         /// Identifies the FilterPinsEvent routed event.
         /// </summary>
         public static readonly RoutedEvent FilterPinsEvent = EventManager.RegisterRoutedEvent
             ("FilterPins", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
-        /// Identifies the FilterPinsTargetEvent routed event.
+        /// Identifies the FilterPinsTranslationEvent routed event.
         /// </summary>
-        public static readonly RoutedEvent FilterPinsTargetEvent = EventManager.RegisterRoutedEvent
-            ("FilterPinsTarget", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+        public static readonly RoutedEvent FilterPinsTranslationEvent = EventManager.RegisterRoutedEvent
+            ("FilterPinsTranslation", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the FilterPinsByBiblicalTermsEvent routed event.
@@ -1058,6 +1147,69 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Occurs when the left mouse button is pressed while the mouse pointer is over a note indicator.
+        /// </summary>
+        public event RoutedEventHandler TranslationNoteIndicatorLeftButtonDown
+        {
+            add => AddHandler(TranslationNoteIndicatorLeftButtonDownEvent, value);
+            remove => RemoveHandler(TranslationNoteIndicatorLeftButtonDownEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the left mouse button is released while the mouse pointer is over a note indicator.
+        /// </summary>
+        public event RoutedEventHandler TranslationNoteIndicatorLeftButtonUp
+        {
+            add => AddHandler(TranslationNoteIndicatorLeftButtonUpEvent, value);
+            remove => RemoveHandler(TranslationNoteIndicatorLeftButtonUpEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the right mouse button is pressed while the mouse pointer is over a note indicator.
+        /// </summary>
+        public event RoutedEventHandler TranslationNoteIndicatorRightButtonDown
+        {
+            add => AddHandler(TranslationNoteIndicatorRightButtonDownEvent, value);
+            remove => RemoveHandler(TranslationNoteIndicatorRightButtonDownEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the right mouse button is released while the mouse pointer is over a note indicator.
+        /// </summary>
+        public event RoutedEventHandler TranslationNoteIndicatorRightButtonUp
+        {
+            add => AddHandler(TranslationNoteIndicatorRightButtonUpEvent, value);
+            remove => RemoveHandler(TranslationNoteIndicatorRightButtonUpEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse pointer enters the bounds of a note indicator.
+        /// </summary>
+        public event RoutedEventHandler TranslationNoteIndicatorMouseEnter
+        {
+            add => AddHandler(TranslationNoteIndicatorMouseEnterEvent, value);
+            remove => RemoveHandler(NoteIndicatorMouseEnterEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse pointer leaves the bounds of a note indicator.
+        /// </summary>
+        public event RoutedEventHandler TranslationNoteIndicatorMouseLeave
+        {
+            add => AddHandler(TranslationNoteIndicatorMouseLeaveEvent, value);
+            remove => RemoveHandler(TranslationNoteIndicatorMouseLeaveEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user rotates the mouse wheel while the mouse pointer is over a note indicator.
+        /// </summary>
+        public event RoutedEventHandler TranslationNoteIndicatorMouseWheel
+        {
+            add => AddHandler(TranslationNoteIndicatorMouseWheelEvent, value);
+            remove => RemoveHandler(TranslationNoteIndicatorMouseWheelEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when the user requests to create or modify a translation.
         /// </summary>
         public event RoutedEventHandler TranslationSet
@@ -1085,6 +1237,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Occurs when the user requests to create a new note.
+        /// </summary>
+        public event RoutedEventHandler TranslationNoteCreate
+        {
+            add => AddHandler(TranslationNoteCreateEvent, value);
+            remove => RemoveHandler(TranslationNoteCreateEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when the user requests to filter pins.
         /// </summary>
         public event RoutedEventHandler FilterPins
@@ -1096,10 +1257,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Occurs when the user requests to filter pins.
         /// </summary>
-        public event RoutedEventHandler FilterPinsTarget
+        public event RoutedEventHandler FilterPinsTranslation
         {
-            add => AddHandler(FilterPinsTargetEvent, value);
-            remove => RemoveHandler(FilterPinsTargetEvent, value);
+            add => AddHandler(FilterPinsTranslationEvent, value);
+            remove => RemoveHandler(FilterPinsTranslationEvent, value);
         }
 
         /// <summary>
@@ -1245,11 +1406,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
                
                 if (AllSelectedTokens.SelectedUnassignedTranslationCount == 0 && (selectedTokenCount > 0 || AllSelectedTokens.SelectedAssignedTranslationCount > 0))
                 {
-                    //CreateTranslationNoteMenuItem.Visibility = Visibility.Visible;
+                    CreateTranslationNoteMenuItem.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    //CreateTranslationNoteMenuItem.Visibility = Visibility.Collapsed;
+                    CreateTranslationNoteMenuItem.Visibility = Visibility.Collapsed;
                 }
 
                 // NB:  Unremark post 1.4.2 release.
@@ -1298,11 +1459,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
             // 1
-
+         
             RaiseTokenEvent(TokenLeftButtonDownEvent, e);
 
             HighlightAlignedToken();
             e.Handled = true;
+
+            if (sender is Button button)
+            {
+                button.Focus();
+            }
         }
 
         private void HighlightAlignedToken()
@@ -1490,7 +1656,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTranslationEvent(TranslationSetEvent, e);
         }
 
-        private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e)
+        private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e, bool isTranslation = false)
         {
             //2
             var control = e.Source as FrameworkElement;
@@ -1501,6 +1667,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             //
             //Debug.WriteLine($"OnCreateNote - 'this': {p.X}, {p.Y}");
             var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
+
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,
@@ -1516,9 +1683,19 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseNoteEvent(NoteIndicatorLeftButtonDownEvent, e);
         }
 
+        private void OnTranslationNoteLeftButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(TranslationNoteIndicatorLeftButtonDownEvent, e, true);
+        }
+
         private void OnNoteLeftButtonUp(object sender, RoutedEventArgs e)
         {
             RaiseNoteEvent(NoteIndicatorRightButtonUpEvent, e);
+        }
+
+        private void OnTranslationNoteLeftButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(TranslationNoteIndicatorRightButtonUpEvent, e, true);
         }
 
         private void OnNoteRightButtonDown(object sender, RoutedEventArgs e)
@@ -1533,12 +1710,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnNoteMouseEnter(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteIndicatorMouseEnterEvent, e);
+            //What is supposed to happen when this is hit?
+            //RaiseNoteEvent(NoteIndicatorMouseEnterEvent, e);
         }
 
         private void OnNoteMouseLeave(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteIndicatorMouseLeaveEvent, e);
+            //What is supposed to happen when this is hit?
+            //RaiseNoteEvent(NoteIndicatorMouseLeaveEvent, e);
         }
 
         private void OnNoteMouseWheel(object sender, RoutedEventArgs e)
@@ -1559,6 +1738,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnCreateNote(object sender, RoutedEventArgs e)
         {
            RaiseNoteEvent(NoteCreateEvent, e);
+        }
+        
+        private void OnTranslationCreateNote(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(TranslationNoteCreateEvent, e, true);
         }
 
         private void OnTokenJoin(object sender, RoutedEventArgs e)
@@ -1587,10 +1771,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseNoteEvent(FilterPinsEvent, e);
         }
 
-        private void OnFilterPinsTarget(object sender, RoutedEventArgs e)
+        private void OnFilterPinsTranslation(object sender, RoutedEventArgs e)
         {
             //1
-            RaiseNoteEvent(FilterPinsTargetEvent, e);
+            RaiseNoteEvent(FilterPinsTranslationEvent, e, true);
         }
 
         private void OnFilterPinsByBiblicalTerms(object sender, RoutedEventArgs e)
@@ -1913,13 +2097,61 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="Visibility"/> of the note indicator on a translation/gloss.
+        /// Gets or sets the default <see cref="Brush"/> used to draw the note indicator.
+        /// </summary>
+        public Brush TranslationNoteIndicatorColor
+        {
+            get => (Brush)GetValue(TranslationNoteIndicatorColorProperty);
+            set => SetValue(TranslationNoteIndicatorColorProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the note indicator, depending on the note's hover status.
+        /// </summary>
+        /// <remarks>
+        /// This should not be set explicitly; it is computed from the note's hover status.
+        /// </remarks>
+        public Brush TranslationNoteIndicatorComputedColor
+        {
+            get => (Brush)GetValue(TranslationNoteIndicatorComputedColorProperty);
+            private set => SetValue(TranslationNoteIndicatorComputedColorProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the height of the note indicator.
+        /// </summary>
+        public double TranslationNoteIndicatorHeight
+        {
+            get => (double)GetValue(TranslationNoteIndicatorHeightProperty);
+            set => SetValue(TranslationNoteIndicatorHeightProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the margin around the note indicator.
+        /// </summary>
+        /// <remarks>
+        /// This property should not be set explicitly; it is computed from the token horizontal and vertical spacing.
+        /// </remarks>
+        public Thickness TranslationNoteIndicatorMargin
+        {
+            get => (Thickness)GetValue(TranslationNoteIndicatorMarginProperty);
+            private set => SetValue(TranslationNoteIndicatorMarginProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Visibility"/> of the note indicator on a token.
         /// </summary>
         /// <remarks>This should not be set explicitly; it is computed based on the <see cref="ShowNoteIndicator"/> value.</remarks>
         public Visibility TranslationNoteIndicatorVisibility
         {
             get => (Visibility)GetValue(TranslationNoteIndicatorVisibilityProperty);
             private set => SetValue(TranslationNoteIndicatorVisibilityProperty, value);
+        }
+
+        public Visibility TranslationNoteFlagIndicatorVisibility
+        {
+            get => (Visibility)GetValue(TranslationNoteFlagIndicatorVisibilityProperty);
+            private set => SetValue(TranslationNoteFlagIndicatorVisibilityProperty, value);
         }
 
         /// <summary>
@@ -1960,6 +2192,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (bool)GetValue(ShowNoteIndicatorProperty);
             set => SetValue(ShowNoteIndicatorProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the whether to show the note indicator.
+        /// </summary>
+        public bool ShowTranslationNoteIndicator
+        {
+            get => (bool)GetValue(ShowTranslationNoteIndicatorProperty);
+            set => SetValue(ShowTranslationNoteIndicatorProperty, value);
         }
 
         /// <summary>
@@ -2174,12 +2415,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         protected override void CalculateLayout()
         {
-            var tokenLeftMargin = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.PaddingBefore.Length * HorizontalSpacing : 0;
-            var tokenRightMargin = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.PaddingAfter.Length * HorizontalSpacing : 0;
-            var translationLeftMargin = Orientation == Orientation.Horizontal ? Math.Max(tokenLeftMargin, HorizontalSpacing / 2) : 0;
-            var translationRightMargin = Orientation == Orientation.Horizontal ? Math.Max(tokenRightMargin, HorizontalSpacing / 2) : 0;
-            var alignedTokenLeftMargin = Orientation == Orientation.Horizontal ? Math.Max(tokenLeftMargin, HorizontalSpacing / 2) : 0;
-            var alignedTokenRightMargin = Orientation == Orientation.Horizontal ? Math.Max(tokenRightMargin, HorizontalSpacing / 2) : 0;
+            var tokenLeftMargin = 0;
+            var tokenRightMargin = Orientation == Orientation.Horizontal ? HorizontalSpacing : 0;
+            var translationLeftMargin = 0;
+            var translationRightMargin = 0;
+            var alignedTokenLeftMargin = 0;
+            var alignedTokenRightMargin = 0;
 
             CompositeIndicatorMargin = new Thickness(tokenLeftMargin, 0, 0, 1);
             CompositeIndicatorVisibility = TokenDisplayViewModel.IsCompositeTokenMember ? Visibility.Visible : Visibility.Hidden;
@@ -2195,54 +2436,21 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 ? TokenDisplayViewModel.IsAligned ? TokenColor : TokenAlternateColor
                 : TokenColor;
 
-            // add spacing for the external notes icon and the note indicator for LTR
-            if (TokenDisplayViewModel.HasExternalNotes == false && TokenDisplayViewModel.TokenHasNote && FlowDirection == FlowDirection.LeftToRight)
-            {
-                // only note indicator
-                tokenLeftMargin = tokenLeftMargin + 10;
-            }
-            else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote && FlowDirection == FlowDirection.LeftToRight)
-            {
-                // both external notes and note indicator
-                tokenLeftMargin = tokenLeftMargin + 25;
-            }
-            else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote == false && FlowDirection == FlowDirection.LeftToRight)
-            {
-                // only external notes
-                tokenLeftMargin = tokenLeftMargin;
-            }
-
-            // add spacing for the external notes icon and the note indicator for RTL
-            if (TokenDisplayViewModel.HasExternalNotes == false && TokenDisplayViewModel.TokenHasNote && FlowDirection == FlowDirection.RightToLeft)
-            {
-                // only note indicator
-                tokenLeftMargin = tokenLeftMargin + 20;
-            }
-            else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote && FlowDirection == FlowDirection.RightToLeft)
-            {
-                // both external notes and note indicator
-                tokenLeftMargin = tokenLeftMargin + 35;
-            }
-            else if (TokenDisplayViewModel.HasExternalNotes && TokenDisplayViewModel.TokenHasNote == false && FlowDirection == FlowDirection.RightToLeft)
-            {
-                // only external notes
-                tokenLeftMargin = tokenLeftMargin;
-            }
-
-
-
             TokenMargin = new Thickness(tokenLeftMargin, 0, tokenRightMargin, 0);
             SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.SurfaceText : TokenDisplayViewModel.SurfaceText.Trim();
             ExtendedProperties = TokenDisplayViewModel.ExtendedProperties;
 
             NoteIndicatorMargin = new Thickness(tokenLeftMargin, 1, 0, TokenVerticalSpacing);
+            TranslationNoteIndicatorMargin = new Thickness(translationLeftMargin, 1, 0, TranslationVerticalSpacing);
 
             TokenNoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TokenHasNote) ? Visibility.Visible : Visibility.Hidden;
             TokenNoteFlagIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TokenHasNote && TokenDisplayViewModel.IsFirstJotsNoteToken) ? Visibility.Visible : Visibility.Hidden;
             TranslationNoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TranslationHasNote) ? Visibility.Visible : Visibility.Hidden;
+            TranslationNoteFlagIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.TranslationHasNote && TokenDisplayViewModel.IsFirstJotsNoteTranslation) ? Visibility.Visible : Visibility.Hidden;
 
             // JOTS - highlighting
             NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered ? TokenDisplayViewModel.NoteIndicatorBrush : NoteIndicatorColor;
+            TranslationNoteIndicatorComputedColor = TokenDisplayViewModel.IsTranslationNoteHovered ? TokenDisplayViewModel.NoteIndicatorBrush : NoteIndicatorColor;
 
             TranslationMargin = new Thickness(translationLeftMargin, 0, translationRightMargin, TranslationVerticalSpacing);
             TranslationVisibility = (ShowTranslation && TokenDisplayViewModel.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
@@ -2304,29 +2512,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
             manager.ShowWindowAsync(viewModel, null, settings);
 
         }
-
-      
-        public async Task HandleAsync(NoteMouseEnterMessage message, CancellationToken cancellationToken)
-        {
-            if (TokenDisplayViewModel != null)
-            {
-                if (message.Entities.ContainsId(TokenDisplayViewModel.Token.TokenId))
-                {
-                    TokenDisplayViewModel.IsNoteHovered = true;
-                    TokenDisplayViewModel.NoteIndicatorBrush = message.NewNote ? Brushes.Orange : Brushes.MediumPurple;
-                }
-            }
-
-            await Task.CompletedTask;
-        }
-
+        
         public async Task HandleAsync(NoteMouseLeaveMessage message, CancellationToken cancellationToken)
         {
-            if (TokenDisplayViewModel != null)
+            if (TokenDisplayViewModel?.Translation != null)
             {
-                if (message.Entities.ContainsId(TokenDisplayViewModel.Token.TokenId))
+                if (message.Entities.ContainsId(TokenDisplayViewModel.Token.TokenId) || message.Entities.ContainsId(TokenDisplayViewModel.Translation.TranslationId))
                 {
                     TokenDisplayViewModel.IsNoteHovered = false;
+                    TokenDisplayViewModel.IsTranslationNoteHovered = false;
                 }
             }
 

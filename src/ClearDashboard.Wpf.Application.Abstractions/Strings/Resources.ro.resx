@@ -611,7 +611,7 @@
     <value>Șterge</value>
   </data>
   <data name="Delete_Project" xml:space="preserve">
-    <value>Ștergeți proiectul</value>
+    <value>Șterge proiectul</value>
   </data>
   <data name="Delete_Project_Confirmation" xml:space="preserve">
     <value>Sigur doriți să ștergeți acest proiect?</value>
@@ -1967,7 +1967,7 @@
     <value>Nu puteți șterge acel proiect, o altă aplicație încă îl folosește.</value>
   </data>
   <data name="ProjectPicker_DeleteProject" xml:space="preserve">
-    <value>Ștergeți proiectul</value>
+    <value>Șterge proiectul</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
     <value>Activați selecția cărților</value>
