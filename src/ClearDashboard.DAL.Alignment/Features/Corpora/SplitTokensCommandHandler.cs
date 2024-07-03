@@ -158,23 +158,31 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var replacementTokenInfos = new (
 				string surfaceText,
 				string trainingText,
-				string? tokenType)[(request.SurfaceTextIndex > 0) ? 3 : 2];
+				string? tokenType,
+                string? type, 
+                Guid? grammarId)[(request.SurfaceTextIndex > 0) ? 3 : 2];
 
             if (request.SurfaceTextIndex > 0)
             {
 				replacementTokenInfos[idx++] = (
 					surfaceText: surfaceText[0..request.SurfaceTextIndex],
 					trainingText: request.TrainingText1,
-                    null);
+                    default(string?),
+                    default(string?),
+                    default(Guid?));
 			}
 			replacementTokenInfos[idx++] = (
 				surfaceText: surfaceText[request.SurfaceTextIndex..(request.SurfaceTextIndex + request.SurfaceTextLength)],
 				trainingText: (request.SurfaceTextIndex > 0) ? request.TrainingText2 : request.TrainingText1,
-                null);
+                default(string?),
+                default(string?),
+                default(Guid?));
 			replacementTokenInfos[idx++] = (
 				surfaceText: surfaceText[(request.SurfaceTextIndex + request.SurfaceTextLength)..^0],
 				trainingText: (request.SurfaceTextIndex > 0) ? request.TrainingText3! : request.TrainingText2,
-                null);
+                default(string?),
+                default(string?),
+                default(Guid?));
 
 			var (
 					splitCompositeTokensByIncomingTokenId,
