@@ -217,13 +217,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                 async Task SaveSplitTokens()
                 {
-                    await VerseManager!.SplitTokensAsync(TokenDisplay.Corpus!, TokenDisplay.Token.TokenId,
+                    var result = await VerseManager!.SplitTokensAsync(TokenDisplay.Corpus!, TokenDisplay.Token.TokenId,
                         SplitInstructionsViewModel.Entity, /*!TokenDisplay.IsCorpusView*/ false,
                         SelectedPropagationOption);
 
                     var applyToAll = true;
-                    // TODO:  set
-                    // new LexiconTranslationViewModel
+                  
                     foreach (var splitInstruction in SplitInstructionsViewModel.Instructions)
                     {
                         if (splitInstruction.HasGloss)
@@ -231,15 +230,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                             var translation = new LexiconTranslationViewModel { Text = splitInstruction.Gloss };
                             await SaveGloss(translation, applyToAll);
                         }
-
-                        if (HasWordGloss)
-                        {
-                            var translation = new LexiconTranslationViewModel { Text = WordGloss };
-                            await SaveGloss(translation, applyToAll);
-                        }
-
-                        await Task.CompletedTask;
                     }
+
+                    if (HasWordGloss)
+                    {
+                        var translation = new LexiconTranslationViewModel { Text = WordGloss };
+                        await SaveGloss(translation, applyToAll);
+                    }
+
+                    await Task.CompletedTask;
                 }
 
                 await Task.Run(async () => await SaveSplitTokens());

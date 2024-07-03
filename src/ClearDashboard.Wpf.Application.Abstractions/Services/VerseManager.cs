@@ -138,7 +138,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public async Task SplitTokensAsync(TokenizedTextCorpus corpus,
+        public async Task<(IDictionary<TokenId, IEnumerable<CompositeToken>> SplitCompositeTokensByIncomingTokenId, IDictionary<TokenId, IEnumerable<Token>> SplitChildTokensByIncomingTokenId)> SplitTokensAsync(TokenizedTextCorpus corpus,
             TokenId tokenId,
             SplitInstructions splitInstructions,
             bool createParallelComposite = true,
@@ -157,13 +157,16 @@ namespace ClearDashboard.Wpf.Application.Services
                         createParallelComposite,
                         propagateTo, 
                         cancellationToken);
+             
 
                 stopwatch.Stop();
                 Logger.LogInformation($"Split token {tokenId.Id} in {stopwatch.ElapsedMilliseconds} ms");
 
                 await EventAggregator.PublishOnUIThreadAsync(new TokenSplitMessage(result.SplitCompositeTokensByIncomingTokenId, result.SplitChildTokensByIncomingTokenId), cancellationToken);
                 SelectionManager.SelectionUpdated();
-                
+
+                return result;
+
             }
             catch (Exception e)
             {
