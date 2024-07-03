@@ -896,13 +896,13 @@
     <value>Alterar todas as ocorrências não definidas</value>
   </data>
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
-    <value>Se marcado, isso mudará todas as ocorrências não definidas desta palavra</value>
+    <value>Se marcada, isso mudará todas as ocorrências não definidas desta palavra</value>
   </data>
   <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
     <value>Alterar todas as ocorrências não definidas</value>
   </data>
   <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
-    <value>Se marcado, isso mudará todas as ocorrências não definidas desta palavra</value>
+    <value>Se marcada, isso mudará todas as ocorrências não definidas desta palavra</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Concordância</value>
@@ -920,7 +920,7 @@
     <value>Excluir esta tradução</value>
   </data>
   <data name="Lexicon_Empty_Translation" xml:space="preserve">
-    <value>&lt;vazio&gt;</value>
+    <value>&lt;significado vazio&gt;</value>
   </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Insira uma nova tradução para</value>
@@ -987,6 +987,9 @@
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>Desativar</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>Brilho definido pelo usuário</value>
   </data>
   <data name="Lexicon_Verified" xml:space="preserve">
     <value>Verificado</value>
@@ -1307,7 +1310,7 @@
     <value>Versículos</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
-    <value>Sentido do verso</value>
+    <value>Sentido do Verso</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
     <value>Versículo Total</value>
@@ -1652,7 +1655,7 @@
     <value>Criar alinhamento de palavras</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
-    <value>Criar Paralelização de Versos Corpora</value>
+    <value>Criar Paralelização de Corpora Versos</value>
   </data>
   <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
     <value>Criar interlinear</value>

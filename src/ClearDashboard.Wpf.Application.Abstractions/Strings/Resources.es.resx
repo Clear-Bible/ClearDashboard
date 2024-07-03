@@ -503,7 +503,7 @@
     <value>Parte fuente</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Referencia de fuente</value>
+    <value>Fuente de referencia</value>
   </data>
   <data name="BulkAlignmentReview_Target" xml:space="preserve">
     <value>Objetivo</value>
@@ -920,7 +920,7 @@
     <value>Eliminar esta traducción</value>
   </data>
   <data name="Lexicon_Empty_Translation" xml:space="preserve">
-    <value>&lt;vacío&gt;</value>
+    <value>&lt;significado vacío&gt;</value>
   </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Introduzca una nueva traducción para</value>
@@ -987,6 +987,9 @@
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>Desarmado</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>Brillo definido por el usuario</value>
   </data>
   <data name="Lexicon_Verified" xml:space="preserve">
     <value>Verificado</value>
@@ -1433,7 +1436,7 @@
     <value>Ninguno</value>
   </data>
   <data name="Notes_AddJot" xml:space="preserve">
-    <value>Agregar jota</value>
+    <value>Añadir jota</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
     <value>Agregue una nueva jota (mayúsculas-ingresar para una nueva línea)</value>

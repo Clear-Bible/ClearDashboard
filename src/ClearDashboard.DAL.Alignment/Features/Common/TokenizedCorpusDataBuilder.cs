@@ -214,7 +214,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
         public static DbCommand CreateTokenComponentInsertCommand(DbConnection connection)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "EngineTokenId", "TrainingText", "VerseRowId", "TokenizedCorpusId", "Discriminator", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "ExtendedProperties", "Type", "Metadata" };
+            var columns = new string[] { "Id", "EngineTokenId", "TrainingText", "VerseRowId", "TokenizedCorpusId", "Discriminator", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "ExtendedProperties", "Type", "Metadata", "GrammarId", "CircumfixGroup" };
 
             DataUtil.ApplyColumnsToInsertCommand(command, typeof(Models.TokenComponent), columns);
 
@@ -277,8 +277,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             componentCmd.Parameters["@ExtendedProperties"].Value = token.ExtendedProperties != null ? token.ExtendedProperties : DBNull.Value;
 			componentCmd.Parameters["@Type"].Value = token.Type != null ? token.Type : DBNull.Value;
 			componentCmd.Parameters["@Metadata"].Value = JsonSerializer.Serialize(token.Metadata);
+            componentCmd.Parameters["@GrammarId"].Value = token.GrammarId != null ? token.GrammarId : DBNull.Value;
+            componentCmd.Parameters["@CircumfixGroup"].Value = token.CircumfixGroup != null ? token.CircumfixGroup : DBNull.Value;
 
-			_ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+            _ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
         public static async Task InsertTokenCompositeAsync(Models.TokenComposite tokenComposite, DbCommand componentCmd, CancellationToken cancellationToken)
         {
@@ -297,7 +299,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             componentCmd.Parameters["@SurfaceText"].Value = tokenComposite.SurfaceText;
 			componentCmd.Parameters["@Type"].Value = tokenComposite.Type != null ? tokenComposite.Type : DBNull.Value;
 			componentCmd.Parameters["@Metadata"].Value = JsonSerializer.Serialize(tokenComposite.Metadata);
-			_ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+            componentCmd.Parameters["@GrammarId"].Value = tokenComposite.GrammarId != null ? tokenComposite.GrammarId : DBNull.Value;
+            componentCmd.Parameters["@CircumfixGroup"].Value = tokenComposite.CircumfixGroup != null ? tokenComposite.CircumfixGroup : DBNull.Value;
+            _ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
         public static async Task<Guid> InsertTokenCompositeTokenAssociationAsync(Guid tokenId, Guid tokenCompositeId, DbCommand assocCmd, CancellationToken cancellationToken)
         {

@@ -72,12 +72,17 @@
                         FontSize="14"
                         FontWeight="Normal"
                         Text="{helpers:Localization TokenSplitting_WordGloss}" />
-            <lexicon:GlossListDropdown MinWidth="60" 
-                                       Margin="10,0,0,0" 
-                                       SplitTokenDialogViewModel="{Binding .}"
-                                       cm:Message.Attach="[Event DropDownOpening] = [Action OnDropDownOpening($this, $eventArgs)]">
 
-            </lexicon:GlossListDropdown>
+            <TextBox
+                Style="{StaticResource ListViewTextBoxStyle}"
+                MinWidth="60"
+                Margin="10,0"
+                Text="{Binding WordGloss, Mode=TwoWay}"/>
+            <!--<lexicon:GlossListDropdown MinWidth="60" 
+                                       Margin="10,0,0,0" 
+                                       TokenText="{Binding TokenDisplay.SurfaceText}"
+                                       DataContext="{Binding}"-->
+           
         </StackPanel>
 
         <materialDesign:Card Grid.Row="3" Margin="20, 10">
@@ -119,11 +124,16 @@
                         <GridViewColumn Header="{helpers:Localization TokenSplitting_Gloss}" Width="Auto">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <lexicon:GlossListDropdown 
+                                    <!--<lexicon:GlossListDropdown 
                                         MinWidth="60" 
                                         DataContext="{Binding}"
+                                        TokenText="{Binding tokenText}"
                                         SplitTokenDialogViewModel="{Binding ElementName='SplitTokenListView', Path='DataContext'}"
-                                        cm:Message.Attach="[Event DropDownOpening] = [Action OnDropDownOpening($this, $eventArgs)]"/>
+                                        cm:Message.Attach="[Event DropDownOpening] = [Action OnDropDownOpening($this, $eventArgs)]"/>-->
+                                    <TextBox
+                                        Style="{StaticResource ListViewTextBoxStyle}"
+                                        MinWidth="60"
+                                        Text="{Binding Gloss, Mode=TwoWay}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -179,7 +189,7 @@
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.ItemsSource>
-                    <Binding Path="SplitInstructionsViewModel.Instructions" />
+                    <Binding Path="SplitInstructionsViewModel.Instructions"  />
                 </ListView.ItemsSource>
             </ListView>
         </materialDesign:Card>
@@ -228,7 +238,7 @@
             HorizontalAlignment="Center"
             Orientation="Horizontal">
             <Button
-                x:Name="ApplySplit"
+                x:Name="ApplySplits"
             
                 Content="{helpers:Localization EnhancedView_SplitToken}"
                 FontFamily="{DynamicResource MaterialDesignFont}"

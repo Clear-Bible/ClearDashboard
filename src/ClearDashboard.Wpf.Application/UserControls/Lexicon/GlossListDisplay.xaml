@@ -152,7 +152,7 @@
             FontFamily="{StaticResource ClearDashboardFont}"
             FontSize="16"
             FontWeight="SemiBold"
-            Text="{helpers:Localization Lexicon_NewTranslation}" />
+            Text="{helpers:Localization Lexicon_User_Defined_Gloss}" />
 
         <Grid Grid.Row="2" Margin="34,5,0,10">
             <Grid.ColumnDefinitions>

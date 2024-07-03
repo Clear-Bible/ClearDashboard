@@ -131,7 +131,7 @@
     <value>- ព័ត៌មានលម្អិតគណនីបច្ចុប្បន្ន-</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
-    <value>អសកម្មអាជ្ញាប័ណ្ណបច្ចុប្បន្ន</value>
+    <value>បិទដំណើរការអាជ្ញាប័ណ្ណបច្ចុប្បន្ន</value>
   </data>
   <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
     <value>- គណនីផ្សេងទៀត-</value>
@@ -674,7 +674,7 @@
     <value>អន្តរលីនេអ៊ែរ</value>
   </data>
   <data name="EnhancedView_JoinTokens" xml:space="preserve">
-    <value>ចូលរួមថូខឹន</value>
+    <value>ចូលរួម Token</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
     <value>ចូលរួម Token សម្រាប់ភាសា Pair</value>
@@ -686,7 +686,7 @@
     <value>សម្គាល់ការតម្រឹមជា 'ត្រូវការការពិនិត្យឡើងវិញ'</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
-    <value>សម្គាល់ការតម្រឹមជា 'មានសុពលភាព'</value>
+    <value>សម្គាល់ការតម្រឹមជា 'ត្រឹមត្រូវ'</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
     <value>និមិត្តសញ្ញាថ្មី៖ អត្ថបទបណ្តុះបណ្តាល</value>
@@ -905,7 +905,7 @@
     <value>ប្រសិនបើធីក វានឹងផ្លាស់ប្តូរការកើតឡើងដែលមិនកំណត់ទាំងអស់នៃពាក្យនេះ។</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
-    <value>ការចុះសម្រុងគ្នា។</value>
+    <value>ភាពស្របគ្នា។</value>
   </data>
   <data name="Lexicon_DeleteLexeme" xml:space="preserve">
     <value>លុបវេយ្យាករណ៍នេះ។</value>
@@ -920,7 +920,7 @@
     <value>លុបការបកប្រែនេះ។</value>
   </data>
   <data name="Lexicon_Empty_Translation" xml:space="preserve">
-    <value>&lt;ទទេ&gt;</value>
+    <value>&lt;អត្ថន័យទទេ&gt;</value>
   </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>បញ្ចូលការបកប្រែថ្មីសម្រាប់</value>
@@ -987,6 +987,9 @@
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>មិនបានកំណត់</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>ភាពរលោងដែលកំណត់ដោយអ្នកប្រើប្រាស់</value>
   </data>
   <data name="Lexicon_Verified" xml:space="preserve">
     <value>ផ្ទៀងផ្ទាត់</value>
@@ -1502,7 +1505,7 @@
     <value>បន្ថែមក្រុមស្លាក</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>ក្រុមស្លាកមានរួចហើយជាមួយឈ្មោះ</value>
+    <value>ក្រុមស្លាកមានរួចហើយដែលមានឈ្មោះ</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>ចាប់ផ្តើមក្រុមស្លាក</value>
@@ -1574,7 +1577,7 @@
     <value>ស្លាក</value>
   </data>
   <data name="Notes_NoteReplies" xml:space="preserve">
-    <value>ឆ្លើយតប</value>
+    <value>ការឆ្លើយតប</value>
   </data>
   <data name="Notes_NoteReplies_Read" xml:space="preserve">
     <value>បានឃើញ</value>

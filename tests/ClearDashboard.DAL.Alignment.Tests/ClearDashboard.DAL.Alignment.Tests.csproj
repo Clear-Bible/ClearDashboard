@@ -36,6 +36,7 @@
     <ProjectReference Include="..\..\src\ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj" />
     <ProjectReference Include="..\..\src\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
     <ProjectReference Include="..\..\src\ClearDashboard.Wpf.Application.Abstractions\ClearDashboard.Wpf.Application.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\ClearDashboard.Wpf.Application\ClearDashboard.Wpf.Application.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="appsettings.json">

@@ -692,7 +692,7 @@ namespace ClearDashboard.DAL.Alignment.Features
             return false;
         }
 
-		public static string GetSplitMatchInfoAsHash(this (string surfaceText, string trainingText, string? tokenType)[] wordAnalysisLexemes)
+		public static string GetSplitMatchInfoAsHash(this (string surfaceText, string trainingText, string? tokenType, string? circumfixGroup, Guid? grammarId )[] wordAnalysisLexemes)
 		{
 			return string.Join('|', wordAnalysisLexemes.Select(e => $"{e.tokenType}:{e.surfaceText}")).ToMD5String();
 		}

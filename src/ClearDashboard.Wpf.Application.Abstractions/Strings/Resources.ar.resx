@@ -920,7 +920,7 @@
     <value>احذف هذه الترجمة</value>
   </data>
   <data name="Lexicon_Empty_Translation" xml:space="preserve">
-    <value>&lt;فارغة&gt;</value>
+    <value>&lt;معنى فارغ&gt;</value>
   </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>أدخل ترجمة جديدة ل</value>
@@ -947,7 +947,7 @@
     <value>ليما / النماذج:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Lemma للمفردات الجديدة:</value>
+    <value>Lemma للمعجم الجديد:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>المعجم</value>
@@ -987,6 +987,9 @@
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>غير محدد</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>لمعان محدد من قبل المستخدم</value>
   </data>
   <data name="Lexicon_Verified" xml:space="preserve">
     <value>تم التحقق</value>
@@ -1298,7 +1301,7 @@
     <value>رموز قوية   </value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
-    <value>النطاقات الفرعية:</value>
+    <value>المجالات الفرعية:</value>
   </data>
   <data name="Marble_Verse" xml:space="preserve">
     <value>بيت شعر</value>
@@ -1316,7 +1319,7 @@
     <value>MAT</value>
   </data>
   <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>جارٍ إنشاء قاعدة بيانات...</value>
+    <value>جارٍ إنشاء قاعدة البيانات...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
     <value>اكتمل الدمج...جاري إعادة تحميل الواجهة</value>
@@ -1436,7 +1439,7 @@
     <value>أضف جوت</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>إضافة نقطة جديدة (shift-enter للسطر الجديد)</value>
+    <value>إضافة نقطة جديدة (إدخال Shift للسطر الجديد)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>جسم</value>
@@ -2168,7 +2171,7 @@
     <value>هوشع</value>
   </data>
   <data name="ProperCase_Isaiah" xml:space="preserve">
-    <value>أشعياء</value>
+    <value>إشعياء</value>
   </data>
   <data name="ProperCase_James" xml:space="preserve">
     <value>جوامع</value>
@@ -2342,7 +2345,7 @@
     <value>تمكين تحرير المحاذاة</value>
   </data>
   <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
-    <value>تمكين ملاحظات Paratext الخارجية في المجموعة التجريبية</value>
+    <value>تمكين الملاحظات Paratext الخارجية في المجموعة التجريبية</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
     <value>تمكين ملاحظات Paratext الخارجية</value>
@@ -2474,7 +2477,7 @@
     <value>لا أستطيع إكمال المهمة</value>
   </data>
   <data name="SlackMessageView_Combo3" xml:space="preserve">
-    <value>لقد أكملت مهمة لكنها كانت صعبة</value>
+    <value>لقد أكملت مهمة ولكنها كانت صعبة</value>
   </data>
   <data name="SlackMessageView_Combo4" xml:space="preserve">
     <value>أود أن أفعل...</value>

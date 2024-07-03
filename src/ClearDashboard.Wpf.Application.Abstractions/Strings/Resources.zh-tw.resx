@@ -380,7 +380,7 @@
     <value>樹木；香水和香料</value>
   </data>
   <data name="BiblicalTermsDomains_WisdomUnderstanding" xml:space="preserve">
-    <value>智慧、理解</value>
+    <value>智慧、理解力</value>
   </data>
   <data name="BiblicalTermsForm_All" xml:space="preserve">
     <value>全部</value>
@@ -434,7 +434,7 @@
     <value>對齊的單字</value>
   </data>
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
-    <value>對齊方式</value>
+    <value>路線</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
     <value>對齊類型： </value>
@@ -920,7 +920,7 @@
     <value>刪除此翻譯</value>
   </data>
   <data name="Lexicon_Empty_Translation" xml:space="preserve">
-    <value>&lt;空&gt;</value>
+    <value>&lt;空意義&gt;</value>
   </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>輸入新翻譯</value>
@@ -987,6 +987,9 @@
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>取消設定</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>使用者定義的光澤度</value>
   </data>
   <data name="Lexicon_Verified" xml:space="preserve">
     <value>已驗證</value>
@@ -1358,10 +1361,10 @@
     <value>檢查使用者可用性</value>
   </data>
   <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
-    <value>創建協作用戶</value>
+    <value>創造協作用戶</value>
   </data>
   <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
-    <value>創建協作用戶</value>
+    <value>創造協作用戶</value>
   </data>
   <data name="NewCollabUserView_DashboardEmailValidationCode" xml:space="preserve">
     <value>ClearDashboard 電子郵件驗證碼</value>
@@ -1490,7 +1493,7 @@
     <value>是否要刪除標籤：</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>您想取消關聯標籤嗎：</value>
+    <value>您要取消關聯標籤嗎：</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>來自標籤組：</value>
@@ -1598,7 +1601,7 @@
     <value>部分</value>
   </data>
   <data name="Notes_PleaseAddJot" xml:space="preserve">
-    <value>請使用下面的對話框添加記號。</value>
+    <value>請使用下面的對話方塊新增註解。</value>
   </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
     <value>將這些筆記標記為已解決？</value>
@@ -1649,7 +1652,7 @@
     <value>舊約</value>
   </data>
   <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
-    <value>建立字對齊</value>
+    <value>建立單字對齊</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
     <value>創建語料庫詩句的平行化</value>
@@ -1706,7 +1709,7 @@
     <value>建立新的語料庫標記化</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>新增的行間</value>
+    <value>新增新的行間</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>新增文字到視圖</value>
@@ -1772,7 +1775,7 @@
     <value>使整個內容區域適合視口</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>使所有節點適合視口</value>
+    <value>讓所有節點適合視口</value>
   </data>
   <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
     <value>取得最新的外部筆記</value>
@@ -1943,7 +1946,7 @@
     <value>合作項目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>建立您的專案以開始。</value>
+    <value>建立您的專案以開始使用。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>建立一個新項目</value>
