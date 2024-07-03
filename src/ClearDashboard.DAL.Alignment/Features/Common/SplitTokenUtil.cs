@@ -187,6 +187,7 @@ public static class SplitTokenUtil
 					{
 						splitTokenDbCommands.AddNoteAssociationToInsert(new Models.NoteDomainEntityAssociation
 						{
+							Id = Guid.NewGuid(),
 							NoteId = e.NoteId,
 							DomainEntityIdName = e.DomainEntityIdName,
 							DomainEntityIdGuid = kvp.Value.ReplacementModelTokens[i].Id
@@ -231,6 +232,7 @@ public static class SplitTokenUtil
 					{
 						splitTokenDbCommands.AddNoteAssociationToInsert(new Models.NoteDomainEntityAssociation
 						{
+							Id = Guid.NewGuid(),
 							NoteId = e.NoteId,
 							DomainEntityIdName = e.DomainEntityIdName,
 							DomainEntityIdGuid = kvp.Value[i].TokenId.Id
@@ -494,6 +496,7 @@ public static class SplitTokenUtil
 			{
 				splitTokenDbCommands.AddAlignmentToInsert(new Models.Alignment
 				{
+					Id = Guid.NewGuid(),
 					AlignmentSetId = e.AlignmentSetId,
 					SourceTokenComponentId = tokenComposite.Id,
 					TargetTokenComponentId = e.TargetTokenComponentId,
@@ -506,6 +509,7 @@ public static class SplitTokenUtil
 			{
 				splitTokenDbCommands.AddAlignmentToInsert(new Models.Alignment
 				{
+					Id = Guid.NewGuid(),
 					AlignmentSetId = e.AlignmentSetId,
 					SourceTokenComponentId = e.SourceTokenComponentId,
 					TargetTokenComponentId = tokenComposite.Id,
@@ -518,6 +522,7 @@ public static class SplitTokenUtil
 			{
 				splitTokenDbCommands.AddTranslationToInsert(new Models.Translation
 				{
+					Id = Guid.NewGuid(),
 					TranslationSetId = e.TranslationSetId,
 					SourceTokenComponentId = tokenComposite.Id,
 					TargetText = e.TargetText,
@@ -530,6 +535,7 @@ public static class SplitTokenUtil
 			{
 				splitTokenDbCommands.AddTokenVerseAssociationToInsert(new Models.TokenVerseAssociation
 				{
+					Id = Guid.NewGuid(),
 					TokenComponentId = tokenComposite.Id,
 					Position = e.Position,
 					VerseId = e.VerseId

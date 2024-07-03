@@ -278,7 +278,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 			var command = connection.CreateCommand();
 			var columns = new string[] { "Id", "AlignmentSetId", "SourceText" };
 
-			DataUtil.ApplyColumnsToInsertCommand(command, typeof(Models.VerseRow), columns);
+			DataUtil.ApplyColumnsToInsertCommand(command, typeof(Models.AlignmentSetDenormalizationTask), columns);
 
 			command.Prepare();
 
