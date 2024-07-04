@@ -1045,6 +1045,20 @@ namespace ClearDashboard.Wpf.Application.Services
 
             // todo: update the user on the server is not working
             results = await _collaborationHttpClientServices.UpdateGitLabUserAccessToken(gitLabUserServer);
+
+
+            CollaborationUser collabUser = new()
+            {
+                UserId = userConfig.UserId,
+                RemoteUserName = userConfig.RemoteUserName,
+                RemoteEmail = userConfig.RemoteEmail,
+                RemotePersonalAccessToken = Encryption.Encrypt(userConfig.RemotePersonalAccessToken),
+                RemotePersonalPassword = Encryption.Encrypt(userConfig.RemotePersonalPassword),
+                GroupName = userConfig.Group,
+                NamespaceId = userConfig.NamespaceId,
+            };
+
+            results = await _collaborationHttpClientServices.UpdateGitLabUserAccessToken(collabUser);
             //if (results == false)
             //{
             //    return false;

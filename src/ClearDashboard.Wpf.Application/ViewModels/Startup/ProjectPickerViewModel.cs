@@ -525,7 +525,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                 await CheckTokenExpiration();
 
-
                 await GetCollabProjects();
             }
 
@@ -1099,10 +1098,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             var userConfig = _collaborationManager.GetConfig();
             var token = await _gitLabHttpClientServices.GetTokenExpirationDate(userConfig);
             
-            DateTime expireDate;
+            DateTime expireDate = DateTime.Now.AddDays(-60);
             if (token is null)
             {
-                expireDate = DateTime.Now.AddDays(60);  // return a date 60 days from now
+                // generate a new token as the user has none
+                var tempGitLabUser = new GitLabUser
+                {
+                    Id = userConfig.UserId,
+                    UserName = userConfig.RemoteUserName,
+                };
+                var newToken = await _gitLabHttpClientServices.GeneratePersonalAccessToken(tempGitLabUser);
+                token = await _gitLabHttpClientServices.GetTokenExpirationDate(userConfig);
+                expireDate = DateTime.Parse(token.ExpiresAt);
             }
             else
             {
