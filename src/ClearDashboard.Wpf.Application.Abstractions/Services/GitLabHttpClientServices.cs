@@ -828,6 +828,35 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
+        #region PUT Requests
+
+        public async Task UpdateCollabUser(GitLabProjectUser selectedCurrentUser, GitLabProject selectedProject)
+        {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return;
+            }
+
+            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
+
+
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"projects/{selectedProject.Id}/members/{selectedCurrentUser.Id}");
+
+            try
+            {
+                var response = await _gitLabClient.Client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+        }
+
+        #endregion
+
         #endregion // POST Requests
 
 
@@ -972,6 +1001,7 @@ namespace ClearDashboard.Wpf.Application.Services
             var newToken = await GeneratePersonalAccessToken(gitLabUser);
             userConfig.RemotePersonalAccessToken = newToken;
 
+            // save locally
             _collaborationManager.SaveCollaborationLicense(userConfig);
 
 
@@ -1007,6 +1037,19 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 return false;
             }
+
+
+            // update the gitlabusers table
+            var gitLabUserServer = await _collaborationHttpClientServices.GetCollabUserExistsById(userConfig.UserId);
+            gitLabUserServer.RemotePersonalAccessToken = Encryption.Encrypt(newToken);
+
+            // todo: update the user on the server is not working
+            results = await _collaborationHttpClientServices.UpdateGitLabUserAccessToken(gitLabUserServer);
+            //if (results == false)
+            //{
+            //    return false;
+            //}
+
 
             // delete/revoke the old token
             var result = await RevokeUsersPersonalAccessToken(token);

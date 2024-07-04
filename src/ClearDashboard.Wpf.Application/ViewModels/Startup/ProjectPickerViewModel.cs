@@ -32,6 +32,7 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -839,6 +840,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     Group = collaborationUser.GroupName,
                     NamespaceId = collaborationUser.NamespaceId
                 };
+
+                if (gitLabUser.RemotePersonalAccessToken != CollaborationConfig.RemotePersonalAccessToken)
+                {
+                    // update to using the remote personal access token from mysql
+                    gitLabUser.RemotePersonalAccessToken = CollaborationConfig.RemotePersonalAccessToken;
+                }
+
                 _collaborationManager.SaveCollaborationLicense(gitLabUser);
             }
 
@@ -1088,7 +1096,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         private async Task CheckTokenExpiration()
         {
-            var token = await _gitLabHttpClientServices.GetTokenExpirationDate(_collaborationManager.GetConfig());
+            var userConfig = _collaborationManager.GetConfig();
+            var token = await _gitLabHttpClientServices.GetTokenExpirationDate(userConfig);
             
             DateTime expireDate;
             if (token is null)
@@ -1114,8 +1123,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 return;
             }
 
-            // less than 30 days left on the token so lets regenerate a new one
-            var result = await _gitLabHttpClientServices.RefreshToken(_collaborationManager.GetConfig(), token);
+            // check to see if there is a new token that has been generated up on the mysql server
+            var gitLabUser = await _collaborationHttpClientServices.GetCollabUserExistsById(userConfig.UserId);
+            var remotePersonalAccessToken = Encryption.Decrypt(gitLabUser.RemotePersonalAccessToken);
+
+            if (remotePersonalAccessToken != userConfig.RemotePersonalAccessToken)
+            {
+                // the token has been updated so lets update the local config
+                userConfig.RemotePersonalAccessToken = remotePersonalAccessToken;
+                _collaborationManager.SaveCollaborationLicense(userConfig);
+            }
+            else
+            {
+                // less than 30 days left on the token so lets regenerate a new one
+                var result = await _gitLabHttpClientServices.RefreshToken(_collaborationManager.GetConfig(), token);
+            }
         }
 
         public async Task GetCollabProjects()

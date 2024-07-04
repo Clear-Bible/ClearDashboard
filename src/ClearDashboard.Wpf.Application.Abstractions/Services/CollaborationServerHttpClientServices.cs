@@ -4,12 +4,14 @@ using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
+using Microsoft.AspNet.SignalR.Client.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -379,7 +381,36 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
+        public async Task<bool> UpdateGitLabUserAccessToken(CollaborationUser user)
+        {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return false;
+            }
 
+            string jsonUser = JsonSerializer.Serialize(user);
+            var content = new System.Net.Http.StringContent(jsonUser, Encoding.UTF8, "application/json");
+
+            try
+            {
+                // add in the query to the URL
+                var query = new Dictionary<string, string>()
+                {
+                    ["api-version"] = "2.0",
+                };
+                var uri = QueryHelpers.AddQueryString($"/api/users/{user.UserId}", query);
+
+                var response = await _collaborationClient.Client.PutAsync(uri, content);
+                response.EnsureSuccessStatusCode();
+
+                return true;
+
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
 
         #endregion // PUT Requests
 
