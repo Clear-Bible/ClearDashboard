@@ -113,19 +113,19 @@ public class SplitInstructionViewModel : PropertyChangedBase
         get => Entity.GrammarId;
         set
         {
-            if (value != null)
-            {
+            // if (value != null)
+            //{
                 Entity.GrammarId = value;
                 NotifyOfPropertyChange(() => GrammarId);
-            }
-            else
-            {
-                if (Entity.GrammarId != null)
-                {
-                    Entity.GrammarId = value;
-                    NotifyOfPropertyChange(() => GrammarId);
-                }
-            }
+            //}
+            //else
+            //{
+            //    if (Entity.GrammarId != null)
+            //    {
+            //        Entity.GrammarId = value;
+            //        NotifyOfPropertyChange(() => GrammarId);
+            //    }
+            //}
            
         }
     }

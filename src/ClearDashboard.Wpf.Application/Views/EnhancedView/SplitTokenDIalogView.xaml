@@ -105,8 +105,7 @@
                                     MinWidth="70"
                                     Margin="5,0,5,3"
                                     ItemsSource="{x:Static models:TokenTypes.All}"
-                                    SelectedItem="{Binding Type, Mode=TwoWay}"
-                                   />
+                                    SelectedItem="{Binding TokenType, Mode=TwoWay}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -115,9 +114,9 @@
                                 <DataTemplate>
                                     <TextBox
                                     Style="{StaticResource ListViewTextBoxStyle}"
-                                    MinWidth="60"
+                                    MinWidth="{Binding TokenType, Mode=TwoWay, Converter={StaticResource TokenTypeToWidthConverter}, ConverterParameter=60}"
                                     Text="{Binding CircumfixGroup, Mode=TwoWay}"
-                                    Visibility="{Binding Type, Mode=TwoWay,  Converter={StaticResource TokenTypeToVisibilityConverter}}"/>
+                                    Visibility="{Binding TokenType, Mode=TwoWay,  Converter={StaticResource TokenTypeToVisibilityConverter}}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -145,7 +144,7 @@
                                     Margin="5,0,5,3"
                                     MinWidth="90"
                                     ItemsSource="{Binding ElementName='SplitTokenListView', Path='DataContext.GrammarSuggestions' }"
-                                    SelectedItem="{Binding Grammar, Mode=TwoWay}"
+                                    SelectedItem="{Binding Grammar, Mode=OneWayToSource}"
                                     Style="{StaticResource MaterialDesignComboBox}"
                                     TextSearch.TextPath="ShortName">
                                         <controls:AutoCompleteComboBox.ItemTemplate>
