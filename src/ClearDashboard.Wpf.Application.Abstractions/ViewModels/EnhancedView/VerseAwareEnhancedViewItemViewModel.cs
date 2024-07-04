@@ -889,6 +889,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public async Task HandleAsync(RefreshVerse message, CancellationToken cancellationToken)
         {
             await RefreshData();
+            //await RefreshData(message.ReloadType);
         }
     }
 }

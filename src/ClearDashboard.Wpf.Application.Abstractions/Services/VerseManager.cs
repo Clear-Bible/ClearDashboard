@@ -12,6 +12,8 @@ using System.Diagnostics;
 using System.Threading;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Messages;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -47,8 +49,9 @@ namespace ClearDashboard.Wpf.Application.Services
                 stopwatch.Stop();
                 Logger.LogInformation($"Joined {tokens.Count} tokens into composite token {compositeToken.TokenId.Id} in {stopwatch.ElapsedMilliseconds} ms");
 
-                await EventAggregator.PublishOnUIThreadAsync(new TokensJoinedMessage(compositeToken, tokens));
+                await EventAggregator.PublishOnUIThreadAsync(new TokensJoinedMessage(compositeToken, tokens, parallelCorpusId!));
                 SelectionManager.SelectionUpdated();
+                //await EventAggregator.PublishOnUIThreadAsync(new RefreshVerse(ReloadType.Force));
             }
             catch (Exception e)
             {
