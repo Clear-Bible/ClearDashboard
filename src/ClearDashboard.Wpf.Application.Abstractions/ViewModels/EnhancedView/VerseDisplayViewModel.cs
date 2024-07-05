@@ -23,14 +23,9 @@ using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using SIL.Scripture;
 using System.Diagnostics.CodeAnalysis;
-using System.Collections.ObjectModel;
-using SIL.Extensions;
-using System.Diagnostics;
 using System.Windows.Media;
-using System.Windows.Threading;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -705,7 +700,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 }
                 else if (compositeToken != null)
                 {
-                    // For Chris - this
+                    // TODO:  If there are child tokens in the parallel view which are part of both parallel
+                    // and non-parallel composites we only want to show the children if the non-parallel composite.
                     var childTokens  = message.SplitChildTokensByIncomingTokenId[kvp.Key].ToList();
                   
                     SourceTokenMap?.RemoveCompositeToken(compositeToken, new TokenCollection(childTokens));
