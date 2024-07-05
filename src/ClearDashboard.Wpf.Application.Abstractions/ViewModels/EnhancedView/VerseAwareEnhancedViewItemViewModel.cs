@@ -238,11 +238,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             CancellationToken cancellationToken,
             bool clearCachedExternalNotesMap = false)
         {
-            if (AbstractionsSettingsHelper.GetExternalNotesEnabled() == false)
-            {
-                return;
-            }
-
             if (NoteManager != null && Rows != null && Verses.Count() > 0 && tokenizedTextCorpusIds.Count() > 0)
             {
                 await Task.Run(() => //put this in a task.run so that it can be called in a UI main thread as well.
@@ -406,6 +401,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 {
                     metadatum.TokenizedTextCorpus ??= await TokenizedTextCorpus.Get(Mediator!,
                         new TokenizedTextCorpusId(metadatum.TokenizedTextCorpusId!.Value), true, cancellationToken);
+                    metadatum.TokenizedTextCorpus.InvalidateCache();
                 }
 
                 var offset = (ushort)ParentViewModel.VerseOffsetRange;

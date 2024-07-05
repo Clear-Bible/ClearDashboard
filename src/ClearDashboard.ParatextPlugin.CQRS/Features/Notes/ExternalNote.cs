@@ -14,8 +14,8 @@ public class ExternalNote
     /// </summary>
     public int? IndexOfSelectedPlainTextInVersePainText { get; set; }
     public string VerseRefString { get; set; }
-    public HashSet<int> ExternalLabelIds { get; set; }
-    public HashSet<ExternalLabel> ExternalLabels { get; set; }
+    public HashSet<int> ExternalLabelIds { get; set; } = new();
+    public HashSet<ExternalLabel> ExternalLabels { get; set; } = new();
 
     public string ExternalLabelsString
     {

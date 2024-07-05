@@ -41,9 +41,9 @@ public class SelectedBookManager : PropertyChangedBase
 
     #region Observable Properties
 
-    private ObservableCollection<SelectedBook> _selectedBooks;
+    private BindableCollection<SelectedBook> _selectedBooks;
 
-    public ObservableCollection<SelectedBook> SelectedBooks
+    public BindableCollection<SelectedBook> SelectedBooks
     {
         get => _selectedBooks;
         set

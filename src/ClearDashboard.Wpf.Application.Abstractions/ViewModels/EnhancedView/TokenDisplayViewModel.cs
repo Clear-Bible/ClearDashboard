@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -13,15 +14,15 @@ using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
-using System.Windows.Input;
-using System.Dynamic;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
-using System.Threading;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Helpers;
+using Token = ClearBible.Engine.Corpora.Token;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
+ 
+
     /// <summary>
     /// A class containing the needed information to render a <see cref="Token"/> in the UI.
     /// </summary>
@@ -140,6 +141,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 if (Set(ref _compositeToken, value))
                 {
+                   
                     CompositeTokenMembers = _compositeToken != null
                         ? new TokenCollection(_compositeToken.Tokens)
                         : new TokenCollection();
@@ -154,6 +156,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// Gets whether this is token is part of a composite token.
         /// </summary>
         public bool IsCompositeTokenMember => CompositeToken != null;
+
+        /// <summary>
+        /// Gets whether this is token is part of a 'parallel' composite token as determined by the HasTag property of the token.
+        /// </summary>
+        public bool IsParallelCompositeTokenMember => IsCompositeTokenMember &&
+                                                      CompositeToken!.HasMetadatum(MetadatumKeys.IsParallelCompositeToken)
+                                                      && CompositeToken!.GetMetadatum<bool>(MetadatumKeys.IsParallelCompositeToken);
 
         /// <summary>
         /// Gets a collection of the composite token members.

@@ -26,9 +26,4 @@
     <PackageReference Include="System.Drawing.Common" Version="8.0.4" />
     <PackageReference Include="System.Text.Json" Version="8.0.3" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="PresentationFramework">
-      <HintPath>..\..\..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_MSIL\PresentationFramework\v4.0_4.0.0.0__31bf3856ad364e35\PresentationFramework.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 </Project>

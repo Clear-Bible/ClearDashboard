@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
@@ -98,7 +99,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <returns>The parent <see cref="CompositeToken"/>, if any; null otherwise.</returns>
         public CompositeToken? GetCompositeToken(Token token)
         {
-            return Tokens.Where(t => t is CompositeToken).Cast<CompositeToken>().FirstOrDefault(compositeToken => compositeToken.Tokens.Any(t => t.TokenId.IdEquals(token.TokenId)));
+            // TODO808: Completed - reviewed with Andy
+            // 1. a Composite(parallel) that overlaps with Composite(null) in parallel view will hide Composite(null) (but show its child tokens).
+            //
+            // The GetCompositeToken() call should prioritize Composite(parallel) over Composite(null).  Requires a property on CompositeToken to indicate whether
+            // it is parallel or not.
+
+            var parallelResult = Tokens.Where(t => t is CompositeToken).Cast<CompositeToken>().FirstOrDefault(compositeToken => compositeToken.Tokens.Any(t => t.TokenId.IdEquals(token.TokenId) && t.HasMetadatum("IsParallelCorpusToken") && t.GetMetadatum<bool>("IsParallelCorpusToken")));
+
+            return parallelResult ?? Tokens.Where(t => t is CompositeToken).Cast<CompositeToken>().FirstOrDefault(compositeToken => compositeToken.Tokens.Any(t => t.TokenId.IdEquals(token.TokenId)));
+
+            //return Tokens.Where(t => t is CompositeToken).Cast<CompositeToken>().FirstOrDefault(compositeToken => compositeToken.Tokens.Any(t => t.TokenId.IdEquals(token.TokenId) && t.HasTag));
         }
 
         private void RebuildPaddedTokens()
@@ -141,10 +152,40 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             var existing = Tokens.FirstOrDefault(t => t.TokenId.IdEquals(tokenId));
             if (existing != null)
             {
-                Tokens.Insert(Tokens.IndexOf(existing), replacementToken);
+                var index = Tokens.IndexOf(existing);
+                Tokens.Insert(index, replacementToken);
                 Tokens.Remove(existing);
 
                 RebuildPaddedTokens();
+            }
+        }
+
+
+        //TODO: 808 - review with Chris
+        // This method or the method below.
+        public void ReplaceTokensII(TokenId tokenId, IEnumerable<Token> replacementTokens)
+        {
+            var existing = Tokens.FirstOrDefault(t => t.TokenId.IdEquals(tokenId));
+            if (existing != null)
+            {
+                var existingTokenIndex = Tokens.IndexOf(existing);
+
+                Tokens.RemoveAt(existingTokenIndex);
+                foreach (var replacementToken in replacementTokens)
+                {
+                    Tokens.Insert(existingTokenIndex, replacementToken);
+                }
+                RebuildPaddedTokens();
+            }
+        }
+
+
+        // TODO808: review with Chris
+        public void ReplaceTokens(TokenId tokenId, IEnumerable<Token> childTokens)
+        {
+            foreach (var childToken in childTokens)
+            {
+               ReplaceToken(tokenId, childToken);
             }
         }
 
@@ -178,5 +219,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             Corpus = corpus;
             Tokens = new TokenCollection(tokens);
         }
+
+      
     }
 }

@@ -13,14 +13,16 @@ namespace ClearDashboard.Collaboration.Builder;
 public class TokenCompositeBuilder : GeneralModelBuilder<Models.TokenComposite>
 {
     public const string VERSE_ROW_LOCATION = "VerseRowLocation";
-    public const string TOKEN_LOCATIONS = "TokenLocations";
+	public const string GRAMMAR_SHORT_NAME = "GrammerShortName";
+	public const string TOKEN_LOCATIONS = "TokenLocations";
 //    public override string IdentityKey => BuildPropertyRefName();
 
     public override IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes =>
         new Dictionary<string, Type>()
         {
             { VERSE_ROW_LOCATION, typeof(string) },
-            { TOKEN_LOCATIONS, typeof(GeneralListModel<string>) }
+			{ GRAMMAR_SHORT_NAME, typeof(string) },
+			{ TOKEN_LOCATIONS, typeof(GeneralListModel<string>) }
         };
 
     public Func<ProjectDbContext, Guid, IEnumerable<(Models.TokenComposite TokenComposite, IEnumerable<Models.Token> Tokens)>> GetTokenizedCorpusCompositeTokens = 
@@ -30,7 +32,8 @@ public class TokenCompositeBuilder : GeneralModelBuilder<Models.TokenComposite>
                     .Include(tc => tc.TokenCompositeTokenAssociations)
                         .ThenInclude(ta => ta.Token)
                     .Include(tc => tc.VerseRow)
-                    .Where(tc => tc.ParallelCorpusId == null)
+					.Include(tc => tc.Grammar)
+					.Where(tc => tc.ParallelCorpusId == null)
                     .Where(tc => tc.TokenizedCorpusId == tokenizedCorpusId)
                     .ToList()
                     .Select(tc => (TokenComposite: tc, Tokens: tc.Tokens.ToList().AsEnumerable()))
@@ -53,10 +56,11 @@ public class TokenCompositeBuilder : GeneralModelBuilder<Models.TokenComposite>
     {
         var modelSnapshot = ExtractUsingModelIds(
             tokenComposite,
-            new List<string>() { "VerseRowId" });
+            new List<string>() { nameof(Models.TokenComponent.VerseRowId), nameof(Models.TokenComponent.GrammarId) });
 
         modelSnapshot.Add(VERSE_ROW_LOCATION, tokenComposite.VerseRow?.BookChapterVerse, typeof(string));
-        modelSnapshot.Add(TOKEN_LOCATIONS, childTokens.Select(t => TokenBuilder.BuildTokenLocation(t)).ToGeneralListModel<string>());
+		modelSnapshot.Add(GRAMMAR_SHORT_NAME, tokenComposite.Grammar?.ShortName, typeof(string));
+		modelSnapshot.Add(TOKEN_LOCATIONS, childTokens.Select(t => TokenBuilder.BuildTokenLocation(t)).ToGeneralListModel<string>());
 
         return modelSnapshot;
 

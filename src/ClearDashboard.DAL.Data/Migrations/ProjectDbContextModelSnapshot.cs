@@ -15,7 +15,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.9");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.5");
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Adornment", b =>
                 {
@@ -51,7 +51,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Adornment");
+                    b.ToTable("Adornment", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Alignment", b =>
@@ -97,7 +97,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Alignment");
+                    b.ToTable("Alignment", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentSet", b =>
@@ -142,7 +142,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AlignmentSet");
+                    b.ToTable("AlignmentSet", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentSetDenormalizationTask", b =>
@@ -161,7 +161,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("AlignmentSetId");
 
-                    b.ToTable("AlignmentSetDenormalizationTask");
+                    b.ToTable("AlignmentSetDenormalizationTask", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentTopTargetTrainingText", b =>
@@ -192,7 +192,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("AlignmentSetId", "SourceTrainingText");
 
-                    b.ToTable("AlignmentTopTargetTrainingText");
+                    b.ToTable("AlignmentTopTargetTrainingText", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Corpus", b =>
@@ -236,7 +236,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Corpus");
+                    b.ToTable("Corpus", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.CorpusHistory", b =>
@@ -274,7 +274,36 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CorpusHistory");
+                    b.ToTable("CorpusHistory", (string)null);
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Grammar", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Category")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ShortName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("ShortName");
+
+                    b.HasIndex("ShortName")
+                        .IsUnique();
+
+                    b.ToTable("Grammar", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Label", b =>
@@ -294,7 +323,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("Text")
                         .IsUnique();
 
-                    b.ToTable("Label");
+                    b.ToTable("Label", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.LabelGroup", b =>
@@ -312,7 +341,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("LabelGroup");
+                    b.ToTable("LabelGroup", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.LabelGroupAssociation", b =>
@@ -333,7 +362,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("LabelId");
 
-                    b.ToTable("LabelGroupAssociation");
+                    b.ToTable("LabelGroupAssociation", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.LabelNoteAssociation", b =>
@@ -354,7 +383,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("NoteId");
 
-                    b.ToTable("LabelNoteAssociation");
+                    b.ToTable("LabelNoteAssociation", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_Form", b =>
@@ -383,7 +412,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Lexicon_Form");
+                    b.ToTable("Lexicon_Form", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_Lexeme", b =>
@@ -421,7 +450,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasDatabaseName("IX_Lexicon_Lexeme_Lemma_TypeNotNull_Language")
                         .HasFilter("Type IS NOT NULL");
 
-                    b.ToTable("Lexicon_Lexeme");
+                    b.ToTable("Lexicon_Lexeme", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_Meaning", b =>
@@ -451,7 +480,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Lexicon_Meaning");
+                    b.ToTable("Lexicon_Meaning", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_SemanticDomain", b =>
@@ -473,7 +502,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Lexicon_SemanticDomain");
+                    b.ToTable("Lexicon_SemanticDomain", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_SemanticDomainMeaningAssociation", b =>
@@ -494,7 +523,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("SemanticDomainId");
 
-                    b.ToTable("Lexicon_SemanticDomainMeaningAssociation");
+                    b.ToTable("Lexicon_SemanticDomainMeaningAssociation", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_Translation", b =>
@@ -524,7 +553,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Lexicon_Translation");
+                    b.ToTable("Lexicon_Translation", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Note", b =>
@@ -558,7 +587,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Note");
+                    b.ToTable("Note", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.NoteAssociation", b =>
@@ -572,11 +601,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.Property<string>("AssociationType")
                         .IsRequired()
+                        .HasMaxLength(21)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("NoteAssociation");
+                    b.ToTable("NoteAssociation", (string)null);
 
                     b.HasDiscriminator<string>("AssociationType").HasValue("NoteAssociation");
 
@@ -602,7 +632,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("NoteId");
 
-                    b.ToTable("NoteDomainEntityAssociation");
+                    b.ToTable("NoteDomainEntityAssociation", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.NoteRecipient", b =>
@@ -626,7 +656,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("NoteRecipient");
+                    b.ToTable("NoteRecipient", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.NoteUserSeenAssociation", b =>
@@ -647,7 +677,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("NoteUserSeenAssociation");
+                    b.ToTable("NoteUserSeenAssociation", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelCorpus", b =>
@@ -683,7 +713,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ParallelCorpus");
+                    b.ToTable("ParallelCorpus", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.ParallelCorpusHistory", b =>
@@ -719,7 +749,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ParallelCorpusHistory");
+                    b.ToTable("ParallelCorpusHistory", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Project", b =>
@@ -756,7 +786,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Project");
+                    b.ToTable("Project", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.RawContent", b =>
@@ -770,6 +800,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.Property<string>("ContentType")
                         .IsRequired()
+                        .HasMaxLength(13)
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("NoteId")
@@ -779,7 +810,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("NoteId");
 
-                    b.ToTable("RawContent");
+                    b.ToTable("RawContent", (string)null);
 
                     b.HasDiscriminator<string>("ContentType").HasValue("RawContent");
 
@@ -792,17 +823,24 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("CircumfixGroup")
+                        .HasColumnType("TEXT");
+
                     b.Property<long?>("Deleted")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
+                        .HasMaxLength(21)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("EngineTokenId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ExtendedProperties")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("GrammarId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SurfaceText")
@@ -822,7 +860,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CircumfixGroup");
+
                     b.HasIndex("EngineTokenId");
+
+                    b.HasIndex("GrammarId");
 
                     b.HasIndex("SurfaceText");
 
@@ -830,9 +872,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("TrainingText");
 
+                    b.HasIndex("Type");
+
                     b.HasIndex("VerseRowId");
 
-                    b.ToTable("TokenComponent");
+                    b.ToTable("TokenComponent", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("TokenComponent");
 
@@ -860,7 +904,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("TokenId");
 
-                    b.ToTable("TokenCompositeTokenAssociation");
+                    b.ToTable("TokenCompositeTokenAssociation", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenVerseAssociation", b =>
@@ -895,7 +939,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("VerseId");
 
-                    b.ToTable("TokenVerseAssociation");
+                    b.ToTable("TokenVerseAssociation", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenizedCorpus", b =>
@@ -943,7 +987,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TokenizedCorpus");
+                    b.ToTable("TokenizedCorpus", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Translation", b =>
@@ -989,7 +1033,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Translation");
+                    b.ToTable("Translation", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TranslationModelEntry", b =>
@@ -1009,7 +1053,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("TranslationSetId", "SourceText")
                         .IsUnique();
 
-                    b.ToTable("TranslationModelEntry");
+                    b.ToTable("TranslationModelEntry", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TranslationModelTargetTextScore", b =>
@@ -1032,7 +1076,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("TranslationModelEntryId", "Text")
                         .IsUnique();
 
-                    b.ToTable("TranslationModelTargetTextScore");
+                    b.ToTable("TranslationModelTargetTextScore", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TranslationSet", b =>
@@ -1078,7 +1122,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TranslationSet");
+                    b.ToTable("TranslationSet", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.User", b =>
@@ -1101,7 +1145,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Verse", b =>
@@ -1163,7 +1207,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("VerseNumber");
 
-                    b.ToTable("Verse");
+                    b.ToTable("Verse", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseMapping", b =>
@@ -1192,7 +1236,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("VerseMapping");
+                    b.ToTable("VerseMapping", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseRow", b =>
@@ -1239,7 +1283,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("VerseRow");
+                    b.ToTable("VerseRow", (string)null);
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentAssociation", b =>
@@ -1743,6 +1787,34 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .WithMany("TokenComponents")
                         .HasForeignKey("VerseRowId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.OwnsMany("ClearDashboard.DataAccessLayer.Models.TokenComponent.Metadata#ClearDashboard.DataAccessLayer.Models.Metadatum", "Metadata", b1 =>
+                        {
+                            b1.Property<Guid>("TokenComponentId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<string>("Key")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Value")
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("TokenComponentId", "Id");
+
+                            b1.ToTable("TokenComponent", (string)null);
+
+                            b1.ToJson("Metadata");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TokenComponentId");
+                        });
+
+                    b.Navigation("Metadata");
 
                     b.Navigation("TokenizedCorpus");
 

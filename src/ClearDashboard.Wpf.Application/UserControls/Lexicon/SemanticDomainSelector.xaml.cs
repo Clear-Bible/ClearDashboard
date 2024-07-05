@@ -34,6 +34,13 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         #endregion
         #region Static Dependency Properties
 
+        public static readonly DependencyProperty IsReadOnlyProperty = DependencyProperty.Register(nameof(IsReadOnly), typeof(bool), typeof(SemanticDomainSelector));
+     
+        public bool IsReadOnly
+        {
+            get => (bool)GetValue(IsReadOnlyProperty);
+            set => SetValue(IsReadOnlyProperty, value);
+        }
         /// <summary>
         /// Identifies the SemanticDomainSuggestions dependency property.
         /// </summary>

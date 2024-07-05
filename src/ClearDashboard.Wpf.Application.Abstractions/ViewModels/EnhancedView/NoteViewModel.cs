@@ -256,6 +256,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// </summary>
         public string ModifiedBy => (Entity.NoteId != null && Entity.NoteId.UserId != null ? Entity.NoteId.UserId.DisplayName : string.Empty) ?? string.Empty;
 
+        public string UserName => ModifiedBy;
+
         /// <summary>
         /// Gets whether this note is eligible to be sent to Paratext.
         /// </summary>

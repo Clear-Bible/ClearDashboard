@@ -218,6 +218,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly RoutedEvent TranslationSetEvent = EventManager.RegisterRoutedEvent
             (nameof(TranslationSet), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
+        /// <summary>
+        /// Identifies the TranslationSetEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent GlossSetEvent = EventManager.RegisterRoutedEvent
+            (nameof(GlossSet), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
         ///// <summary>
         ///// Identifies the NoteIndicatorButtonDownEvent routed event.
         ///// </summary>
@@ -587,6 +593,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 RoutedEvent = routedEvent,
                 TokenDisplay = args.TokenDisplay,
                 SelectedTokens = VerseSelectedTokens,
+                InterlinearDisplay = VerseDisplayViewModel as InterlinearDisplayViewModel,
+                Translation = args.TokenDisplay!.Translation!,
                 ModifierKeys = args.ModifierKeys,
                 MouseLeftButton = args.MouseLeftButton,
                 MouseMiddleButton = args.MouseMiddleButton,
@@ -983,6 +991,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnTranslationSet(object sender, RoutedEventArgs e)
         {
             RaiseTranslationEvent(TranslationSetEvent, e);
+        }
+
+        private void OnGlossSet(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(GlossSetEvent, e);
         }
 
         private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e, bool isTranslation = false)
@@ -1459,6 +1472,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(TranslationSetEvent, value);
             remove => RemoveHandler(TranslationSetEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when an individual translation is clicked.
+        /// </summary>
+        public event RoutedEventHandler GlossSet
+        {
+            add => AddHandler(GlossSetEvent, value);
+            remove => RemoveHandler(GlossSetEvent, value);
         }
 
         ///// <summary>

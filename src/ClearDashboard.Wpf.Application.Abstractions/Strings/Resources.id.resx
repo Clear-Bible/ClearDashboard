@@ -128,7 +128,7 @@
     <value>Nama Pengguna Kolaborasi:</value>
   </data>
   <data name="AccountInfo_CurrentAccountDetailsLabel" xml:space="preserve">
-    <value>-DETAIL AKUN SAAT INI-</value>
+    <value>-DETAIL REKENING SAAT INI-</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
     <value>Nonaktifkan Lisensi Saat Ini</value>
@@ -437,7 +437,7 @@
     <value>Penyelarasan</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>Jenis Penyelarasan:</value>
+    <value>Jenis Penyelarasan: </value>
   </data>
   <data name="BulkAlignmentReview_Approve" xml:space="preserve">
     <value>Menyetujui</value>
@@ -566,7 +566,7 @@
     <value>Hapus Kolaborasi Proyek</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>Anda memiliki pengguna lain yang terhubung ke proyek ini. Proyek ini juga akan dihapus untuk mereka. Yakin ingin menghapus proyek ini?</value>
+    <value>Anda memiliki pengguna lain yang terhubung ke proyek ini.  Proyek ini juga akan dihapus untuk mereka. Yakin ingin menghapus proyek ini?</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
     <value>Apakah Anda yakin ingin menghapus proyek ini?</value>
@@ -787,6 +787,12 @@
   <data name="GEN" xml:space="preserve">
     <value>GEN</value>
   </data>
+  <data name="GrammarTagList_Description" xml:space="preserve">
+    <value>Keterangan</value>
+  </data>
+  <data name="GrammarTagList_Short" xml:space="preserve">
+    <value>Pendek</value>
+  </data>
   <data name="HAB" xml:space="preserve">
     <value>HAB</value>
   </data>
@@ -798,6 +804,18 @@
   </data>
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>Impor Dibatalkan</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>Impor Selesai</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>Terjadi Kesalahan (periksa log untuk detailnya)</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>Impor Analisis Kata</value>
   </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
@@ -892,6 +910,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Jika dicentang, ini akan mengubah semua kemunculan kata ini yang tidak disetel</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>Ubah semua kejadian yang tidak disetel</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>Jika dicentang, ini akan mengubah semua kemunculan kata ini yang tidak disetel</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Konkordansi</value>
   </data>
@@ -907,11 +931,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Hapus terjemahan ini</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;makna kosong&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Masukkan terjemahan baru untuk</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Masukkan kilap baru</value>
+  </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>Formulir:</value>
+  </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>Kilap</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>Daftar Kilap</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>bahasa:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Kata pengantar singkat</value>
@@ -928,11 +967,20 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Sebuah leksem untuk sudah ada untuk lemma</value>
   </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>Kamus</value>
+  </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>Cocok</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Artinya:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>Kilau Baru</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>Tidak ada formulir yang tersedia</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Hapus domain semantik ini dari makna ini</value>
@@ -942,6 +990,21 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Tetapkan kilap untuk</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>Terjemahan:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>jenis:</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>Tidak disetel</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>Gloss Buatan Pengguna</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>Diverifikasi</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Dan</value>
@@ -1223,10 +1286,10 @@
     <value>Gloss:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Bagian dari pidato</value>
+    <value>Bagian dari pidato   </value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>Lemma Terkait</value>
+    <value>Lemma Terkait   </value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>Cakupan:</value>
@@ -1247,7 +1310,7 @@
     <value>Indra</value>
   </data>
   <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>Kode yang Kuat</value>
+    <value>Kode yang Kuat   </value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>Sub Domain:</value>
@@ -1388,7 +1451,7 @@
     <value>Tambahkan Jot</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Tambahkan catatan baru</value>
+    <value>Tambahkan catatan baru (shift-enter untuk baris baru)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Tubuh</value>
@@ -1400,7 +1463,7 @@
     <value>Hapus catatan ini?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
-    <value>Karena izin proyek Paratext Anda,</value>
+    <value>Karena izin proyek Paratext Anda, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>Filter berdasarkan Ayat</value>
@@ -1559,7 +1622,7 @@
     <value>Pilih label yang akan dihapus dari grup label</value>
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
-    <value>Catatan: label ini akan muncul di bawah grup label: Tidak ada</value>
+    <value>Catatan: label ini akan muncul di bawah grup label: Tidak Ada</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>Kirim catatan ini ke Paratext?</value>
@@ -1724,7 +1787,7 @@
     <value>Paskan seluruh area konten ke area pandang</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>Pasangkan semua node ke viewport</value>
+    <value>Paskan semua node ke viewport</value>
   </data>
   <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
     <value>Dapatkan Catatan Eksternal Terbaru</value>
@@ -1784,7 +1847,7 @@
     <value>Studi Tambahan Alkitab</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Buka Paratext dan ganti proyek. Proyek Paratext yang saat ini terhubung ke plugin ClearDashboard tidak sama dengan korpus di proyek ClearDashboard ini.</value>
+    <value>Buka Paratext dan ganti proyek.  Proyek Paratext yang saat ini terhubung ke plugin ClearDashboard tidak sama dengan korpus di proyek ClearDashboard ini.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Target</value>
@@ -1904,13 +1967,13 @@
     <value>Mulai Cepat Proyek Baru</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>Buat Proyek:</value>
+    <value>Buat Proyek: </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
     <value>Buat proyek Anda menggunakan wizard Templat Proyek.</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>Basis Data:</value>
+    <value>Basis Data: </value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
     <value>Anda tidak dapat menghapus proyek itu, aplikasi lain masih menggunakannya.</value>
@@ -1946,10 +2009,10 @@
     <value>Tidak ada yang cocok.</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>Sepi disini. Silakan buat proyek baru.</value>
+    <value>Sepi disini.  Silakan buat proyek baru.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Paratext tidak diinstal. Silakan install Paratext dan jalankan kembali aplikasi ClearDashboard.</value>
+    <value>Paratext tidak diinstal.  Silakan install Paratext dan jalankan kembali aplikasi ClearDashboard.</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>Parateks tidak berjalan</value>
@@ -1973,7 +2036,7 @@
     <value>Proyek Parateks</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Proyek:</value>
+    <value>Proyek: </value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>Kita hampir sampai!</value>
@@ -2000,7 +2063,7 @@
     <value>Klik di sini untuk memulai Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Versi: kapan:</value>
+    <value>Versi: kapan: </value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>Silakan masukkan nama untuk proyek Anda</value>
@@ -2009,7 +2072,7 @@
     <value>Buat proyek baru Anda</value>
   </data>
   <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>Nama proyek yang diberikan mengandung karakter ilegal. Karakter yang valid antara lain 'A-Z' (huruf kecil dan besar), angka '0-9', serta karakter '-' dan '_'.</value>
+    <value>Nama proyek yang diberikan mengandung karakter ilegal.  Karakter yang valid antara lain 'A-Z' (huruf kecil dan besar), angka '0-9', serta karakter '-' dan '_'.</value>
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>Proyek dengan nama yang sama sudah ada. Silakan pilih nama yang unik.</value>
@@ -2228,7 +2291,7 @@
     <value>Daftar</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Kunci yang diberikan salah. Saat didekripsi, elemen json tertentu tidak dapat ditemukan.</value>
+    <value>Kunci yang diberikan salah.  Saat didekripsi, elemen json tertentu tidak dapat ditemukan.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>Isi kunci lisensi yang didekripsi tidak sesuai dengan informasi yang Anda berikan.</value>
@@ -2237,7 +2300,7 @@
     <value>Kunci lisensi Anda hilang atau rusak.</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>Selamat datang di ClearDashboard! Silakan masukkan informasi pendaftaran Anda.</value>
+    <value>Selamat datang di ClearDashboard!  Silakan masukkan informasi pendaftaran Anda.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Silakan masukkan nama depan Anda</value>
@@ -2491,8 +2554,29 @@
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
   </data>
-  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+  <data name="TokenDisplay_SetGloss" xml:space="preserve">
     <value>Atur Kilau</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>Tambahkan Leksem</value>
+  </data>
+  <data name="TokenSplitting_ClickWhere" xml:space="preserve">
+    <value>Klik di mana untuk membagi kata menjadi token</value>
+  </data>
+  <data name="TokenSplitting_Gloss" xml:space="preserve">
+    <value>Kilap</value>
+  </data>
+  <data name="TokenSplitting_Grammar" xml:space="preserve">
+    <value>Tata bahasa</value>
+  </data>
+  <data name="TokenSplitting_TrainingText" xml:space="preserve">
+    <value>Teks Pelatihan</value>
+  </data>
+  <data name="TokenSplitting_Type" xml:space="preserve">
+    <value>Jenis</value>
+  </data>
+  <data name="TokenSplitting_WordGloss" xml:space="preserve">
+    <value>Kata Gloss</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Memperbarui</value>

@@ -27,10 +27,10 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using ClearApplicationFoundation.Framework.Input;
-using ClearDashboard.DAL.WpfViewModels;
+using ClearDashboard.DAL.Wpf.ViewModels;
 using Point = System.Windows.Point;
 using ClearDashboard.Wpf.Application.Messages;
-using ClearDashboard.DAL.WpfViewModels;
+using ClearDashboard.DAL.Wpf.ViewModels;
 
 // ReSharper disable InconsistentNaming
 

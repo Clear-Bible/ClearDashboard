@@ -437,7 +437,7 @@
     <value>Alineaciones</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>Tipo de alineación:</value>
+    <value>Tipo de alineación: </value>
   </data>
   <data name="BulkAlignmentReview_Approve" xml:space="preserve">
     <value>Aprobar</value>
@@ -566,7 +566,7 @@
     <value>Eliminar colaboración en proyectos</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>Tienes otros usuarios conectados a este proyecto. Este proyecto también se eliminará para ellos. ¿Estás seguro de que deseas eliminar este proyecto?</value>
+    <value>Tienes otros usuarios conectados a este proyecto.  Este proyecto también se eliminará para ellos. ¿Estás seguro de que deseas eliminar este proyecto?</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
     <value>¿Estás seguro de que deseas eliminar este proyecto?</value>
@@ -787,6 +787,12 @@
   <data name="GEN" xml:space="preserve">
     <value>GEN</value>
   </data>
+  <data name="GrammarTagList_Description" xml:space="preserve">
+    <value>Descripción</value>
+  </data>
+  <data name="GrammarTagList_Short" xml:space="preserve">
+    <value>Corto</value>
+  </data>
   <data name="HAB" xml:space="preserve">
     <value>HAB</value>
   </data>
@@ -798,6 +804,18 @@
   </data>
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>Importación cancelada</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>Importación completa</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>Error encontrado (consulte el registro para obtener más detalles)</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>Importar análisis de palabras</value>
   </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
@@ -892,6 +910,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Si está marcado, esto cambiará todas las apariciones no configuradas de esta palabra.</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>Cambiar todas las ocurrencias no configuradas</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>Si está marcado, esto cambiará todas las apariciones no configuradas de esta palabra.</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Concordancia</value>
   </data>
@@ -907,11 +931,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Eliminar esta traducción</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;significado vacío&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Introduzca una nueva traducción para</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Introduzca un nuevo brillo</value>
+  </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>Formas:</value>
+  </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>Brillo</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>Lista de brillo</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>idioma:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lema</value>
@@ -928,11 +967,20 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Ya existe un lexema para el lema.</value>
   </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>Léxico</value>
+  </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>Partidos</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Significados:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>Nuevo brillo</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>No hay formularios disponibles</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Eliminar este dominio semántico de este significado.</value>
@@ -942,6 +990,21 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Establecer un brillo para</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>Traducciones:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>tipo:</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>Desarmado</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>Brillo definido por el usuario</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>Verificado</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Y</value>
@@ -1223,10 +1286,10 @@
     <value>Glosas:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Partes de la oración</value>
+    <value>Partes de la oración   </value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>Lemas relacionados</value>
+    <value>Lemas relacionados   </value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>Alcance:</value>
@@ -1247,7 +1310,7 @@
     <value>Sentidos</value>
   </data>
   <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>Códigos fuertes</value>
+    <value>Códigos fuertes   </value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>Subdominios:</value>
@@ -1388,7 +1451,7 @@
     <value>Añadir jota</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Agregar una nueva jota</value>
+    <value>Agregue una nueva jota (mayúsculas-ingresar para una nueva línea)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Cuerpo</value>
@@ -1400,7 +1463,7 @@
     <value>¿Eliminar esta jota?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
-    <value>Debido a los permisos de su proyecto Paratext,</value>
+    <value>Debido a los permisos de su proyecto Paratext, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>Filtrar por Verso</value>
@@ -1784,7 +1847,7 @@
     <value>EstudioBibliaAdiciones</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Vaya a Paratext y cambie de proyecto. El proyecto Paratext actualmente conectado al complemento ClearDashboard no es el mismo que el corpus de este proyecto ClearDashboard.</value>
+    <value>Vaya a Paratext y cambie de proyecto.  El proyecto Paratext actualmente conectado al complemento ClearDashboard no es el mismo que el corpus de este proyecto ClearDashboard.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Objetivo</value>
@@ -1904,13 +1967,13 @@
     <value>Inicio rápido Nuevo proyecto</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>Crear proyecto:</value>
+    <value>Crear proyecto: </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
     <value>Cree su proyecto utilizando el asistente de plantilla de proyecto.</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>Base de datos:</value>
+    <value>Base de datos: </value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
     <value>No puedes eliminar ese proyecto, otra aplicación todavía lo está usando.</value>
@@ -1946,10 +2009,10 @@
     <value>No hay coincidencias.</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>Es un lugar solitario aquí. Por favor crea un nuevo proyecto.</value>
+    <value>Es un lugar solitario aquí.  Por favor crea un nuevo proyecto.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Paratext no está instalado. Instale Paratext y vuelva a ejecutar la aplicación ClearDashboard.</value>
+    <value>Paratext no está instalado.  Instale Paratext y vuelva a ejecutar la aplicación ClearDashboard.</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>El paratexto no se está ejecutando</value>
@@ -1973,7 +2036,7 @@
     <value>Proyecto Paratexto</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Proyecto:</value>
+    <value>Proyecto: </value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>¡Casi estámos allí!</value>
@@ -2000,7 +2063,7 @@
     <value>Haga clic aquí para iniciar Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Versión:</value>
+    <value>Versión: </value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>Por favor ingresa un nombre para tu proyecto</value>
@@ -2009,7 +2072,7 @@
     <value>Crea tu nuevo proyecto</value>
   </data>
   <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>El nombre del proyecto dado contiene caracteres ilegales. Los caracteres válidos incluyen 'A-Z' (minúsculas y mayúsculas), números '0-9' y los caracteres '-' y '_'.</value>
+    <value>El nombre del proyecto dado contiene caracteres ilegales.  Los caracteres válidos incluyen 'A-Z' (minúsculas y mayúsculas), números '0-9' y los caracteres '-' y '_'.</value>
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>Ya existe un proyecto con el mismo nombre. Elija un nombre único.</value>
@@ -2228,7 +2291,7 @@
     <value>Registro</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>La llave proporcionada está defectuosa. Cuando se descifró, no se pudieron encontrar ciertos elementos json.</value>
+    <value>La llave proporcionada está defectuosa.  Cuando se descifró, no se pudieron encontrar ciertos elementos json.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>El contenido de la clave de licencia descifrada no coincide con la información que proporcionó.</value>
@@ -2237,7 +2300,7 @@
     <value>Su clave de licencia falta o está rota.</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>¡Bienvenido a ClearDashboard! Por favor ingrese su información de registro.</value>
+    <value>¡Bienvenido a ClearDashboard!  Por favor ingrese su información de registro.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Por favor, introduzca su nombre de pila</value>
@@ -2491,8 +2554,29 @@
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
   </data>
-  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+  <data name="TokenDisplay_SetGloss" xml:space="preserve">
     <value>Establecer brillo</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>Agregar lexema</value>
+  </data>
+  <data name="TokenSplitting_ClickWhere" xml:space="preserve">
+    <value>Haga clic donde dividir la palabra en tokens</value>
+  </data>
+  <data name="TokenSplitting_Gloss" xml:space="preserve">
+    <value>Brillo</value>
+  </data>
+  <data name="TokenSplitting_Grammar" xml:space="preserve">
+    <value>Gramática</value>
+  </data>
+  <data name="TokenSplitting_TrainingText" xml:space="preserve">
+    <value>Texto de entrenamiento</value>
+  </data>
+  <data name="TokenSplitting_Type" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="TokenSplitting_WordGloss" xml:space="preserve">
+    <value>Brillo de palabras</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Actualizar</value>

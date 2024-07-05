@@ -8,5 +8,7 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
         {
             InitializeComponent();
         }
+
+        
     }
 }

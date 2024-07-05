@@ -122,7 +122,8 @@ namespace ClearDashboard.Wpf.Application.Services
                     note.Labels,
                     verseFirstTokenId.BookNumber,
                     verseFirstTokenId.ChapterNumber,
-                    verseFirstTokenId.VerseNumber
+                    verseFirstTokenId.VerseNumber,
+                    note.UserName
                 );
 
                 var result = await mediator.Send(new AddNoteCommand(addNoteCommandParam), cancellationToken);

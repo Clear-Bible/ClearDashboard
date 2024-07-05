@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.Wpf.Application.Collections.Lexicon;
+using ClearDashboard.Wpf.Application.Localization;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
 {
@@ -19,7 +20,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
 
         public string? Text
         {
-            get => Entity.Text ?? string.Empty;
+            get => !string.IsNullOrEmpty(Entity.Text) ? Entity.Text : StaticLocalizationService.Localization!["Lexicon_Empty_Translation"];
             set
             {
                 if (value.Trim() == string.Empty) return;

@@ -735,6 +735,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("TranslationSet", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
+        /// Identifies the GlossSetEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent GlossSetEvent = EventManager.RegisterRoutedEvent
+            ("GlossSet", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
         /// Identifies the NoteCreateEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteCreateEvent = EventManager.RegisterRoutedEvent
@@ -1213,6 +1219,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Occurs when the user requests to create or modify a gloss.
+        /// </summary>
+        public event RoutedEventHandler GlossSet
+        {
+            add => AddHandler(GlossSetEvent, value);
+            remove => RemoveHandler(GlossSetEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when the user requests to create a new note.
         /// </summary>
         public event RoutedEventHandler NoteCreate
@@ -1316,6 +1331,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 RoutedEvent = routedEvent,
                 TokenDisplay = tokenDisplay!,
+                //InterlinearDisplay = VerseDisplayViewModel as InterlinearDisplayViewModel,
+                Translation = tokenDisplay!.Translation!,
                 ModifierKeys = Keyboard.Modifiers,
                 MouseLeftButton = Mouse.LeftButton,
                 MouseMiddleButton = Mouse.MiddleButton,
@@ -1351,7 +1368,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 {
                     CopyMenuItem.Visibility = Visibility.Visible;
                     JoinTokensMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
-                    JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens.CanJoinTokens && !IsCorpusView ? Visibility.Visible : Visibility.Collapsed;
+
+                    // TODO808: Completed
+                    // 2. in a parallel view, allow the creating of a Composite(parallel) on top of a Composite(null) (but not other Composite(parallel))
+                    //
+                    // Currently the JoinTokens and JoinTokensLanguagePair menu items use the same visibility logic.  TokenDisplayViewModelCollection should get a 
+                    // new CanJoinTokensLanguagePair property that is mostly similar to CanJoinTokens, but also incorporates the possibility of containing a Composite(null).
+                    // See notes in TokenDisplayViewModelCollection.
+                    JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens.CanJoinTokensLanguagePair && !IsCorpusView ? Visibility.Visible : Visibility.Collapsed;
+
                     UnjoinTokenMenuItem.Visibility = AllSelectedTokens.CanUnjoinToken ? Visibility.Visible : Visibility.Collapsed;
                     SplitTokenMenuItem.Visibility = Properties.Settings.Default.IsTokenSplittingEnabled && AllSelectedTokens.Count == 1 ? Visibility.Visible : Visibility.Collapsed;
                     FilterPinsMenuItem.Visibility = AllSelectedTokens.Count == 1 ? Visibility.Visible : Visibility.Collapsed;
@@ -1388,13 +1413,24 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     CreateTranslationNoteMenuItem.Visibility = Visibility.Collapsed;
                 }
 
+                // NB:  Unremark post 1.4.2 release.
+                SetTranslationMenuItem.Visibility = Visibility.Collapsed;
+                //if (selectedTokenCount == 0 && AllSelectedTokens.CanTranslateToken)
+                //{
+                //    SetTranslationMenuItem.Visibility = Visibility.Visible;
+                //}
+                //else
+                //{
+                //    SetTranslationMenuItem.Visibility = Visibility.Collapsed;
+                //}
+
                 if (selectedTokenCount == 0 && AllSelectedTokens.CanTranslateToken)
                 {
-                    SetTranslationMenuItem.Visibility = Visibility.Visible;
+                    SetGlossMenuItem.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    SetTranslationMenuItem.Visibility = Visibility.Collapsed;
+                    SetGlossMenuItem.Visibility = Visibility.Collapsed;
                 }
             }
         }
@@ -1687,6 +1723,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnSetTranslation(object sender, RoutedEventArgs e)
         {
             RaiseTranslationEvent(TranslationSetEvent, e);
+        }
+
+        private void OnSetGloss(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(GlossSetEvent, e);
         }
 
         private void OnCreateNote(object sender, RoutedEventArgs e)

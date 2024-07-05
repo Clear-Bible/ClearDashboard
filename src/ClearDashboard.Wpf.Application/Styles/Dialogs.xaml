@@ -303,4 +303,8 @@
     <converters:DialogModeToVisibilityConverter x:Key="DialogModeToVisibilityConverter" />
     <converters:BooleanInversionConverter x:Key="BooleanInversionConverter" />
     <converters:LexiconEditDialogViewModelToBooleanConverter x:Key="LexiconEditDialogViewModelToBooleanConverter" />
+    <converters:IsLastItemVisibilityConverter x:Key="IsLastItemVisibilityConverter" />
+    <converters:SplitTokenSelectorColorConverter x:Key="SplitTokenSelectorColorConverter" />
+    <converters:TokenTypeToVisibilityConverter x:Key="TokenTypeToVisibilityConverter" />
+    <converters:TokenTypeToWidthConverter x:Key="TokenTypeToWidthConverter" />
 </ResourceDictionary>

@@ -8,15 +8,32 @@
              x:Name="TokenCharacterDisplayControl"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock 
+        <StackPanel Orientation="Horizontal">
+            <TextBlock 
             Background="{Binding ElementName=TokenCharacterDisplayControl, Path=ComputedBackgroundColor}" 
             MouseLeftButtonDown="OnMouseLeftButtonDown"
             FontFamily="{Binding ElementName=TokenCharacterDisplayControl, Path=FontFamily}" 
             FontSize="{Binding ElementName=TokenCharacterDisplayControl, Path=FontSize}"
             HorizontalAlignment="Center"
-            Padding="10,3"
+            TextAlignment="Center"
+            Padding="5,3"
             Text="{Binding ElementName=TokenCharacterDisplayControl, Path=Character}" 
             Width="{Binding ElementName=TokenCharacterDisplayControl, Path=Width}" 
             />
+
+            <!--<Rectangle Width="6" Height="40" Fill="Gray" MouseLeftButtonDown="OnMouseLeftButtonDown" Cursor="Hand">
+                <Rectangle.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="0"/>
+                    </Style>
+                </Rectangle.Resources>
+                <Rectangle.Visibility>
+                    <MultiBinding Converter="{StaticResource IsLastItemVisibilityConverter}">
+                        <Binding ElementName="TokensItemsControl" Path="DataContext.Count" />
+                        <Binding Path="Index" />
+                    </MultiBinding>
+                </Rectangle.Visibility>
+            </Rectangle>-->
+        </StackPanel>
     </Grid>
 </UserControl>

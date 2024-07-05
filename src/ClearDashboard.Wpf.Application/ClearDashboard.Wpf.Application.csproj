@@ -129,7 +129,7 @@
     <PackageReference Include="Autofac.Configuration" Version="6.0.0" />
     <PackageReference Include="CefSharp.Wpf.NETCore" Version="115.3.110" />
     <PackageReference Include="ClearApplicationFoundation" Version="3.0.0" />
-    <PackageReference Include="ClearBible.Engine" Version="3.0.3" />
+    <PackageReference Include="ClearBible.Engine" Version="3.0.6" />
     <PackageReference Include="Dahomey.Json" Version="1.12.2" />
     <PackageReference Include="Dahomey.Json.Attributes" Version="1.0.1" />
     <PackageReference Include="Dirkster.AvalonDock" Version="4.70.12" />
@@ -163,7 +163,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.Collaboration\ClearDashboard.Collaboration.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj" />
-    <ProjectReference Include="..\ClearDashboard.DAL.WpfViewModels\ClearDashboard.DAL.WpfViewModels.csproj" />
+    <ProjectReference Include="..\ClearDashboard.DAL.WpfViewModels\ClearDashboard.DAL.Wpf.ViewModels.csproj" />
     <ProjectReference Include="..\ClearDashboard.Wpf.Application.Abstractions\ClearDashboard.Wpf.Application.Abstractions.csproj" />
     <ProjectReference Include="..\ClearDashboard.Wpf.Controls\ClearDashboard.Wpf.Controls.csproj" />
   </ItemGroup>
@@ -265,6 +265,9 @@
     <Compile Update="UserControls\AlignmentBulkReview.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControls\Lexicon\GlossListDisplay.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\Lexicon\ConcordanceDisplay.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -290,6 +293,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControls\SelectBooksControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\SplittableTokenCharactersDisplay.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControls\TokenCharactersDisplay.xaml.cs">
@@ -454,6 +460,9 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="UserControls\ClockUserControl.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="UserControls\Lexicon\GlossListDisplay.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="UserControls\Lexicon\ConcordanceDisplay.xaml">

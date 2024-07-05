@@ -25,11 +25,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
         protected override async Task<RequestResult<IEnumerable<Token>>> GetDataAsync(GetAlignmentSetTargetTokensBySourceTrainingTextQuery request, CancellationToken cancellationToken)
         {
+            //NB:  Talk to Chris about updating ModelHelper.BuildToken to include where the gloss came from
             var filteredAlignments = ProjectDbContext.Alignments
                 .Include(e => e.TargetTokenComponent)
                 .Where(a => a.AlignmentSetId == request.AlignmentSetId.Id)
                 .Where(a => a.Deleted == null)
-                .Where(a => a.SourceTokenComponent!.TrainingText == request.SourceTrainingText)
+                .Where(a => a.SourceTokenComponent!.TrainingText == request.SourceTrainingText).AsEnumerable()
                 .WhereAlignmentTypesFilter(request.AlignmentTypesToInclude)
                 .Select(a => ModelHelper.BuildToken(a.TargetTokenComponent!))
                 .ToList();

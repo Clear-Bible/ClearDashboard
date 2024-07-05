@@ -155,8 +155,6 @@
                 </iconPacks:PackIconBootstrapIcons.Style>
             </iconPacks:PackIconBootstrapIcons>
 
-
-
             <StackPanel Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenMargin}" Orientation="Vertical">
                 <!--  Composite Indicator  -->
                 <Rectangle
@@ -166,6 +164,8 @@
                     HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
                     Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorComputedColor}"
                     Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorVisibility}" />
+
+
                 <!--  Token Button  -->
                 <Button
                     x:Name="TokenButton"
@@ -276,15 +276,15 @@
                 </Button>
                 <!--  DEBUG STUFF  -->
                 <!--<Label
-                    Margin="20,35,0,0"
-                    Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.TokenHasNote}"
-                    Foreground="Purple"
-                    IsHitTestVisible="False" />
-                <Label
-                    Margin="20,45,0,0"
-                    Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.IsFirstJotsNoteToken}"
-                    Foreground="DarkCyan"
-                    IsHitTestVisible="False" />-->
+                Margin="20,35,0,0"
+                Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.TokenHasNote}"
+                Foreground="Purple"
+                IsHitTestVisible="False" />
+            <Label
+                Margin="20,45,0,0"
+                Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.IsFirstJotsNoteToken}"
+                Foreground="DarkCyan"
+                IsHitTestVisible="False" />-->
                 <!--</Grid>-->
 
 
@@ -378,6 +378,8 @@
                 </iconPacks:PackIconBootstrapIcons.Style>
             </iconPacks:PackIconBootstrapIcons>
             <StackPanel Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenMargin}" Orientation="Vertical">
+
+
                 <Button
                     x:Name="TranslationButton"
                     Height="Auto"
@@ -409,10 +411,18 @@
                     <Button.ContextMenu>
                         <ContextMenu x:Name="TranslationDisplayContextMenu" FlowDirection="LeftToRight">
                             <MenuItem
+                                x:Name="SetGlossMenuItem"
+                                Click="OnSetGloss"
+                                Header="{helpers:Localization TokenDisplay_SetGloss}"
+                                Visibility="Collapsed" />
+
+                            <MenuItem
                                 x:Name="SetTranslationMenuItem"
                                 Click="OnSetTranslation"
                                 Header="{helpers:Localization TokenDisplay_SetTranslation}"
                                 Visibility="Collapsed" />
+
+
                             <MenuItem
                                 x:Name="CreateTranslationNoteMenuItem"
                                 Click="OnTranslationCreateNote"

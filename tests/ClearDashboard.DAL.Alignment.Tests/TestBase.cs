@@ -19,6 +19,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -94,7 +95,11 @@ namespace ClearDashboard.DAL.Alignment.Tests
                 .As<IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>>>()
                 .Keyed<IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>>>("External");
 
-            var container = builder.Build();
+			builder.RegisterType<ParatextPlugin.CQRS.Features.Lexicon.GetWordAnalysesQuery>()
+	            .As<IRequest<RequestResult<IEnumerable<DataAccessLayer.Models.Lexicon_WordAnalysis>>>>()
+	            .Keyed<IRequest<RequestResult<IEnumerable<DataAccessLayer.Models.Lexicon_WordAnalysis>>>>("External");
+
+			var container = builder.Build();
             return container;
         }
 
