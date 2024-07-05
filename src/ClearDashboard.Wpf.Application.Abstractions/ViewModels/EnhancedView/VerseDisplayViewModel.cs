@@ -673,10 +673,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task HandleAsync(TokensJoinedMessage message, CancellationToken cancellationToken)
         {
-            MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = message.CompositeToken);
-            SourceTokenMap?.AddCompositeToken(message.CompositeToken);
-            TargetTokenMap?.AddCompositeToken(message.CompositeToken);
-            await RefreshTranslationsAsync(message.Tokens, message.CompositeToken);
+            if (message.ParallelCorpusId == null || (message.ParallelCorpusId != null && message.ParallelCorpusId == ParallelCorpusId))
+            {
+                MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = message.CompositeToken);
+                SourceTokenMap?.AddCompositeToken(message.CompositeToken);
+                TargetTokenMap?.AddCompositeToken(message.CompositeToken);
+                await RefreshTranslationsAsync(message.Tokens, message.CompositeToken);
+                
+            }
         }        
         
         public async Task HandleAsync(TokenSplitMessage message, CancellationToken cancellationToken)

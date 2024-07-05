@@ -48,8 +48,9 @@ namespace ClearDashboard.Wpf.Application.Services
                 stopwatch.Stop();
                 Logger.LogInformation($"Joined {tokens.Count} tokens into composite token {compositeToken.TokenId.Id} in {stopwatch.ElapsedMilliseconds} ms");
 
-                await EventAggregator.PublishOnUIThreadAsync(new TokensJoinedMessage(compositeToken, tokens));
+                await EventAggregator.PublishOnUIThreadAsync(new TokensJoinedMessage(compositeToken, tokens, parallelCorpusId!));
                 SelectionManager.SelectionUpdated();
+                await EventAggregator.PublishOnBackgroundThreadAsync(new ReloadDataMessage(ReloadType.Force));
             }
             catch (Exception e)
             {
