@@ -364,15 +364,16 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
 
                     entityPropertyValuesSet.Add(ep);
                 }
-                else if (modelValueDifference.ModelType.IsAssignableTo(typeof(IDictionary<string, object>)))
+                else if (modelValueDifference.ModelType.IsAssignableTo(typeof(IDictionary<string, object>)) ||
+					     modelValueDifference.ModelType.IsAssignableTo(typeof(IList<Models.Metadatum>)))
                 {
                     command.Parameters[$"@{ep}"].Value = modelSnapshot.PropertyValues[propertyModelDifference.PropertyName]
                         .ToDatabaseCommandParameterValue(_dateTimeOffsetToBinary);
 
                     entityPropertyValuesSet.Add(ep);
                 }
-                else
-                {
+				else
+				{
                     throw new PropertyResolutionException($"Found mapped property '{propertyModelDifference.PropertyName}' ModelDifference for entity type '{entityType}' property '{ep}', but no resolver configured");
                 }
             }
@@ -496,8 +497,16 @@ public static class DbCommandExtensions
                 }
             }
         }
+        else if (property.PropertyType.IsAssignableTo(typeof(IList<Models.Metadatum>)))
+        {
+			var columnAttribute = (ColumnAttribute?)property.GetCustomAttribute(typeof(ColumnAttribute), true);
+			if (nullabilityInfo.WriteState is not NullabilityState.Nullable)
+			{
+				return JsonSerializer.Serialize(new List<Models.Metadatum>());
+			}
+		}
 
-        if (nullabilityInfo.WriteState is not NullabilityState.Nullable)
+		if (nullabilityInfo.WriteState is not NullabilityState.Nullable)
         {
             if (property.PropertyType.IsValueType)
             {
@@ -526,8 +535,12 @@ public static class DbCommandExtensions
         {
             value = JsonSerializer.Serialize((IDictionary<string, object>)value);
         }
+		else if (value is IList<Models.Metadatum>)
+		{
+			value = JsonSerializer.Serialize((IList<Models.Metadatum>)value);
+		}
 
-        return value != null ? value : DBNull.Value;
+		return value != null ? value : DBNull.Value;
     }
 
     internal static Type ToDomainEntityIdType(this string domainEntityTypeName)
