@@ -1,25 +1,19 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.Collaboration.Services;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
-using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
-using HttpClientToCurl;
 using Microsoft.Extensions.Logging;
-using Mono.Unix.Native;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Windows.Documents;
-using ClearDashboard.DataAccessLayer;
-using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using StringContent = System.Net.Http.StringContent;
-using User = ClearDashboard.DataAccessLayer.Models.User;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -82,7 +76,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return list;
             }
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
             var pageNum = 0;
@@ -140,7 +134,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return list;
             }
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
             try
@@ -196,7 +190,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return list;
             }
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
             try
@@ -262,7 +256,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return false;
             }
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
 
@@ -399,7 +393,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
             List<GitAccessToken> list = new();
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
             try
@@ -533,7 +527,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return list;
             }
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
             try
@@ -614,7 +608,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
 
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
             
@@ -677,7 +671,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
 
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
             GitAccessToken accessToken = new();
@@ -716,7 +710,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return project;
             }
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
 
@@ -781,7 +775,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
             request.Content = content;
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
             try
@@ -810,7 +804,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return;
             }
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
 
@@ -837,7 +831,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return;
             }
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
 
@@ -869,7 +863,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return false;
             }
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
 
@@ -902,7 +896,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return false;
             }
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
 
@@ -940,7 +934,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return false;
             }
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
 

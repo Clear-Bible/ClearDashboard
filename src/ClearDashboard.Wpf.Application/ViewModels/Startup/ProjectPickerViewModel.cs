@@ -1107,6 +1107,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     Id = userConfig.UserId,
                     UserName = userConfig.RemoteUserName,
                 };
+
                 var newToken = await _gitLabHttpClientServices.GeneratePersonalAccessToken(tempGitLabUser);
                 token = await _gitLabHttpClientServices.GetTokenExpirationDate(userConfig);
                 expireDate = DateTime.Parse(token.ExpiresAt);
