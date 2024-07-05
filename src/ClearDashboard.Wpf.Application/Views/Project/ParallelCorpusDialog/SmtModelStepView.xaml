@@ -85,9 +85,24 @@
             <Button
                 x:Name="Train"
                 Content="{helpers:Localization ParallelCorpusDialog_Train}"
-                IsDefault="True"
-                IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
-                Style="{StaticResource TransparentStyle}" />
+                IsDefault="True">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource TransparentStyleButtonNoIsEnabledTrigger}" TargetType="Button">
+                        <Setter Property="IsEnabled" Value="False" />
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding SMTsReady}" Value="True" />
+                                    <Condition Binding="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}" Value="True" />
+                                </MultiDataTrigger.Conditions>
+                                <MultiDataTrigger.Setters>
+                                    <Setter Property="IsEnabled" Value="True" />
+                                </MultiDataTrigger.Setters>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
             <!--<TextBlock Text="{Binding SMTsReady}" />
             <TextBlock Text="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}" />-->
         </StackPanel>
