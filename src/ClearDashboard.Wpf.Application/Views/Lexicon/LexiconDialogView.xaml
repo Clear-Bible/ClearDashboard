@@ -10,7 +10,6 @@
     xmlns:lexiconViews="clr-namespace:ClearDashboard.Wpf.Application.Views.Lexicon"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings;assembly=ClearDashboard.Wpf.Application.Abstractions"
-    xmlns:gloss="clr-namespace:ClearDashboard.Wpf.Application.Views.Gloss"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     d:DataContext="{d:DesignInstance Type=lexiconViewModels:LexiconDialogViewModel}"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -76,8 +75,7 @@
            TranslationFontFamily="{Binding TargetFontFamily}"
            TranslationFontSize="15"
            TranslationFontStyle="Normal"
-           TranslationMargin="0,0,0,0"
-           Visibility="{Binding IsAddLexemeMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+           TranslationMargin="0,0,0,0">
                     <b:Interaction.Triggers>
                         <b:EventTrigger EventName="LexemeAdded">
                             <b:CallMethodAction MethodName="OnLexemeAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />

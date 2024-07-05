@@ -677,7 +677,7 @@
     <value>Treten Sie Token bei</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Join-Token für Sprachpaar</value>
+    <value>Join-Tokens für Sprachpaar</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>Ausrichtung als „Ungültig“ markieren</value>
@@ -920,7 +920,7 @@
     <value>Löschen Sie diese Übersetzung</value>
   </data>
   <data name="Lexicon_Empty_Translation" xml:space="preserve">
-    <value>&lt;leer&gt;</value>
+    <value>&lt;leere Bedeutung&gt;</value>
   </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Geben Sie eine neue Übersetzung für ein</value>
@@ -987,6 +987,9 @@
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>Unscharf</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>Benutzerdefinierter Glanz</value>
   </data>
   <data name="Lexicon_Verified" xml:space="preserve">
     <value>Verifiziert</value>
@@ -1055,7 +1058,7 @@
     <value>Zielsprache</value>
   </data>
   <data name="LexiconEdit_Title" xml:space="preserve">
-    <value>Lexikon bearbeiten</value>
+    <value>Lexikonbearbeitung</value>
   </data>
   <data name="LexiconEdit_Translation" xml:space="preserve">
     <value>Übersetzung</value>
@@ -1832,7 +1835,7 @@
     <value>StudyBibleAdditions</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Gehen Sie zu Paratext und wechseln Sie die Projekte.  Das Paratext-Projekt, das derzeit mit dem ClearDashboard-Plugin verbunden ist, ist nicht dasselbe wie das Korpus in diesem ClearDashboard-Projekt.</value>
+    <value>Gehen Sie zu Paratext und wechseln Sie die Projekte.  Das derzeit mit dem ClearDashboard-Plugin verbundene Paratext-Projekt ist nicht dasselbe wie das Korpus in diesem ClearDashboard-Projekt.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Ziel</value>

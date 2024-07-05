@@ -24,7 +24,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
         protected override async Task<RequestResult<IEnumerable<Token>>> GetDataAsync(FindTokensBySurfaceTextQuery request, CancellationToken cancellationToken)
         {
-            var tokenizedCorpus = await ProjectDbContext!.TokenizedCorpora
+			var tokenizedCorpus = await ProjectDbContext!.TokenizedCorpora
                 .FirstOrDefaultAsync(i => i.Id == request.TokenizedTextCorpusId.Id);
 
             if (tokenizedCorpus == null)
@@ -63,7 +63,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             {
                 switch (request.WordPart)
                 {
-                    // NB:  This is now not case-sensitive - due to upgrade to .net 8.  Do we need to fix? 
                     case WordPart.First:
                         findTokensQuery = findTokensQuery.Where(e => e.SurfaceText!.StartsWith(request.SearchString));
                         break;
@@ -83,9 +82,19 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 .Select(e => ModelHelper.BuildToken(e))
                 .ToListAsync(cancellationToken);
 
+            if (!request.IgnoreCase)
+            {
+				// NB:  StartsWith/EndsWith are now not case-sensitive - due to upgrade to .net 8.  This post query filter is meant to fix that
+                // (this StartWith/EndsWith syntax isn't valid for Sqlite EF Core queries - cannot be interpreted)
+				if (request.WordPart == WordPart.First)
+				    tokens = tokens.Where(e => e.SurfaceText!.StartsWith(request.SearchString, false, System.Globalization.CultureInfo.CurrentCulture)).ToList();
+                if (request.WordPart == WordPart.Last)
+					tokens = tokens.Where(e => e.SurfaceText!.EndsWith(request.SearchString, false, System.Globalization.CultureInfo.CurrentCulture)).ToList();
+			}
+
             cancellationToken.ThrowIfCancellationRequested();
 
             return new RequestResult<IEnumerable<Token>>(tokens);
-        }
-    }
+		}
+	}
 }

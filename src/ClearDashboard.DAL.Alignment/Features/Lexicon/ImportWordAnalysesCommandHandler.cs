@@ -126,7 +126,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                     CheckWordAnalysis(wordAnalysis, Logger);
 
                     var replacementTokenInfos = wordAnalysis.Lexemes
-                        .Select(e => (surfaceText: e.Lemma!, trainingText: e.Lemma!, tokenType: e.Type))
+                        .Select(e => (surfaceText: e.Lemma!, trainingText: e.Lemma!, tokenType: e.Type, circumfixGroup: default(string?), grammarId: default(Guid?)))
                         .ToArray();
 
                     var standaloneTokens = supersetTokens.Where(e => e.SurfaceText == wordAnalysis.Word).ToList();

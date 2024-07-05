@@ -920,7 +920,7 @@
     <value>यह अनुवाद हटाएँ</value>
   </data>
   <data name="Lexicon_Empty_Translation" xml:space="preserve">
-    <value>&lt;खाली&gt;</value>
+    <value>&lt;खाली अर्थ&gt;</value>
   </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>के लिए एक नया अनुवाद दर्ज करें</value>
@@ -987,6 +987,9 @@
   </data>
   <data name="Lexicon_Unset" xml:space="preserve">
     <value>अनसेट</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>उपयोगकर्ता परिभाषित चमक</value>
   </data>
   <data name="Lexicon_Verified" xml:space="preserve">
     <value>सत्यापित</value>
@@ -1451,7 +1454,7 @@
     <value>आपके पैराटेक्स्ट प्रोजेक्ट अनुमतियों के कारण, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>छंद द्वारा फ़िल्टर करें</value>
+    <value>श्लोक द्वारा फ़िल्टर करें</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>फिल्टर</value>

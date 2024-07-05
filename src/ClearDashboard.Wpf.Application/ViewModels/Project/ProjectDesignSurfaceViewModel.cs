@@ -2042,10 +2042,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage());
                     }
                 }
-                catch (Exception ex)
-                {
-                    var something = true;
-                }
                 finally
                 {
                    await  viewModel.DeactivateAsync(false);

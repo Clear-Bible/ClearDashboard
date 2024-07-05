@@ -19,11 +19,13 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.UserControls.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Token = ClearBible.Engine.Corpora.Token;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 
 // ReSharper disable UnusedMember.Global
 
@@ -102,6 +104,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+      
+
         /// <summary>
         /// The <see cref="InterlinearDisplayViewModel"/> .
         /// </summary>
@@ -119,12 +123,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public string WordGloss
         {
             get => _wordGloss;
-            set
-            {
-                _wordGloss = value;
-                NotifyOfPropertyChange();
-            }
+            set => Set(ref _wordGloss, value);
         }
+
+        public bool HasWordGloss => !string.IsNullOrEmpty(WordGloss);
 
         public string DialogTitle => $"{LocalizationService!["EnhancedView_SplitToken"]}: {TokenDisplay.SurfaceText}";
 
@@ -137,124 +139,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public bool ApplyEnabled
         {
-            get
-            {
-                var enabled = true;
-
-
-                return enabled;
-            }
+            get => _applyEnabled;
+            set => Set(ref _applyEnabled, value);
         }
 
         private bool _cancelEnabled = true;
         private SplitInstructionsViewModel _splitInstructionsViewModel;
         private SplitTokenPropagationComboItem _selectedPropagationKeyComboItem;
         private SplitTokenPropagationScope _selectedPropagationOption = SplitTokenPropagationScope.All;
+        private bool _applyEnabled;
 
         public bool CancelEnabled
         {
             get => _cancelEnabled;
             private set => Set(ref _cancelEnabled, value);
         }
-
-        //private bool _isLoaded;
-        //public bool IsLoaded
-        //{
-        //    get => _isLoaded;
-        //    private set => Set(ref _isLoaded, value);
-        //}
-
-
-
-        //public void CharacterClicked(object source, RoutedEventArgs args)
-        //{
-        //    var tokenCharacterArgs = args as TokenCharacterEventArgs;
-
-        //    var tokenCharacter = tokenCharacterArgs!.TokenCharacter;
-        //    var splitIndex = tokenCharacter.Index + 1;
-
-        //    //SplitInstructionsViewModel.UpdateInstructions(tokenCharacter.Index, tokenCharacter.IsSelected);
-
-        //    if (tokenCharacter.IsSelected)
-        //    {
-
-        //        if (!SplitInstructionsViewModel!.SplitIndexes.Contains(splitIndex))
-        //        {
-
-        //            var indexes = SplitInstructionsViewModel.SplitIndexes;
-        //            indexes.Add(splitIndex);
-        //            indexes = SplitInstructionsViewModel.SplitIndexes.OrderBy(i => i).ToList();
-
-        //            var newSplitInstructionsViewModel = SplitInstructionViewModelFactory.CreateSplits(TokenDisplay.SurfaceText, indexes, LifetimeScope);
-
-        //            if (SplitInstructionsViewModel.Count > newSplitInstructionsViewModel.Count)
-        //            {
-        //                var removedItems =
-        //                    SplitInstructionsViewModel.Instructions.Except(newSplitInstructionsViewModel.Instructions, new SplitInstructionComparer());
-
-        //                foreach (var removedItem in removedItems)
-        //                {
-        //                    SplitInstructionsViewModel.Instructions.Remove(removedItem);
-        //                }
-        //            }
-        //            else if (SplitInstructionsViewModel.Count > 0 && SplitInstructionsViewModel.Count < newSplitInstructionsViewModel.Count)
-        //            {
-        //                var addedItems =
-        //                    newSplitInstructionsViewModel.Instructions.Except(SplitInstructionsViewModel.Instructions, new SplitInstructionComparer());
-        //                foreach (var addedItem in addedItems)
-        //                {
-        //                    SplitInstructionsViewModel.Instructions.Add(addedItem);
-        //                }
-
-        //            }
-        //            else
-        //            {
-        //                SplitInstructionsViewModel = newSplitInstructionsViewModel;
-
-        //            }
-
-        //            NotifyOfPropertyChange(nameof(ApplyEnabled));
-        //        }
-        //    }
-        //    else
-        //    {
-
-        //        //if (SplitInstructionsViewModel!.SplitIndexes.Contains(splitIndex))
-        //        {
-        //            //SplitInstructionsViewModel.SplitIndexes.Remove(splitIndex);
-        //            //var indexes = SplitInstructionsViewModel.SplitIndexes.OrderBy(i => i).ToList();
-        //            //SplitInstructionsViewModel = SplitInstructionViewModelFactory.CreateSplits(TokenDisplay.SurfaceText, indexes, LifetimeScope!);
-        //            //NotifyOfPropertyChange(nameof(ApplyEnabled));
-
-        //            var indexes = SplitInstructionsViewModel.SplitIndexes;
-        //            if (indexes.Contains(splitIndex))
-        //            {
-        //                indexes.Remove(splitIndex);
-
-        //                indexes = SplitInstructionsViewModel.SplitIndexes.OrderBy(i => i).ToList();
-
-        //                var newSplitInstructionsViewModel =
-        //                    SplitInstructionViewModelFactory.CreateSplits(TokenDisplay.SurfaceText, indexes,
-        //                        LifetimeScope);
-
-        //                var commonItems = SplitInstructionsViewModel.Instructions
-        //                    .Intersect<SplitInstructionViewModel>(newSplitInstructionsViewModel.Instructions, new SplitInstructionComparer()).ToList();
-
-        //                var removedItems =
-        //                    SplitInstructionsViewModel.Instructions.Except(commonItems, new SplitInstructionComparer()).ToList();
-
-        //                if (removedItems.Any())
-        //                {
-        //                  SplitInstructionsViewModel.Instructions.RemoveRange(removedItems);
-        //                }
-        //            }
-
-        //            NotifyOfPropertyChange(nameof(ApplyEnabled));
-        //        }
-
-        //    }
-
-        //}
 
         public void CharacterClicked(object source, RoutedEventArgs args)
         {
@@ -274,7 +173,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     var indexes = SplitInstructionsViewModel.SplitIndexes.OrderBy(i => i).ToList();
 
                     SplitInstructionsViewModel = SplitInstructionViewModelFactory.CreateSplits(TokenDisplay.SurfaceText, indexes, LifetimeScope);
-                    NotifyOfPropertyChange(nameof(ApplyEnabled));
+                    ApplyEnabled = true;
                 }
             }
             else
@@ -285,7 +184,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     SplitInstructionsViewModel.SplitIndexes.Remove(splitIndex);
                     var indexes = SplitInstructionsViewModel.SplitIndexes.OrderBy(i => i).ToList();
                     SplitInstructionsViewModel = SplitInstructionViewModelFactory.CreateSplits(TokenDisplay.SurfaceText, indexes, LifetimeScope!);
-                    NotifyOfPropertyChange(nameof(ApplyEnabled));
+                    ApplyEnabled = true;
                 }
 
             }
@@ -293,7 +192,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         private class SplitInstructionComparer : IEqualityComparer<SplitInstructionViewModel>
-    
+
         {
             public bool Equals(SplitInstructionViewModel x, SplitInstructionViewModel y)
             {
@@ -306,7 +205,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        public async void ApplySplit()
+        public async void ApplySplits()
         {
             try
             {
@@ -316,22 +215,42 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     CancelEnabled = false;
                 });
 
-                async Task SaveSplitToken()
+                async Task SaveSplitTokens()
                 {
-                    // TODO: Implement this method
+                    // NB:  Only dealing with non-parallel composites for now.
+                    // Will need to deal with reconciliation of tokens in the parallel composite case in the future.
+                    var result = await VerseManager!.SplitTokensAsync(TokenDisplay.Corpus!, TokenDisplay.Token.TokenId,
+                        SplitInstructionsViewModel.Entity, /*!TokenDisplay.IsCorpusView*/ false,
+                        SelectedPropagationOption);
 
-                    //await VerseManager.SplitToken(TokenDisplay.Corpus!,
-                    //    TokenDisplay.Token.TokenId,
-                    //    Subtoken3Enabled ? CharacterThreshold1 : 0,
-                    //    Subtoken3Enabled ? CharacterThreshold2 : CharacterThreshold1,
-                    //    Subtoken1,
-                    //    Subtoken2,
-                    //    Subtoken3,
-                    //    !TokenDisplay.IsCorpusView,
-                    //    SelectedPropagationOption);
+                    var applyToAll = true;
+
+                    var compositeTokens = result.SplitCompositeTokensByIncomingTokenId[TokenDisplay.Token.TokenId].ToList();
+                    var childTokens = result.SplitChildTokensByIncomingTokenId[TokenDisplay.Token.TokenId].ToList();
+
+                    for(var i = 0; i < SplitInstructionsViewModel.Instructions.Count; i++)
+                    {
+                        var splitInstruction = SplitInstructionsViewModel.Instructions[i];
+                        if (splitInstruction.HasGloss)
+                        {
+                            var childToken = childTokens[i];
+                            var translation = new LexiconTranslationViewModel { Text = splitInstruction.Gloss };
+                            await SaveGloss(translation, childToken, applyToAll);
+                        }
+                    }
+                  
+                    if (HasWordGloss)
+                    {
+                        var translation = new LexiconTranslationViewModel { Text = WordGloss };
+                        foreach (var composite in compositeTokens)
+                        {
+                            await SaveGloss(translation, composite, applyToAll);
+                        }
+                    }
                     await Task.CompletedTask;
                 }
-                await Task.Run(async () => await SaveSplitToken());
+
+                await Task.Run(async () => await SaveSplitTokens());
             }
             finally
             {
@@ -340,34 +259,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        private async Task SaveGloss(LexiconTranslationViewModel translation, Token token,  bool applyToAll)
+        {
+            var lexiconTranslationId = (translation.TranslationId.IsInDatabase) ? translation.TranslationId : null;
+            await InterlinearDisplay.PutTranslationAsync(new Translation(token, translation.Text, Translation.OriginatedFromValues.Assigned, lexiconTranslationId),
+                applyToAll ? TranslationActionTypes.PutPropagate : TranslationActionTypes.PutNoPropagate);
+        }
+
+
+        private LexiconDialogViewModel? lexiconDialogViewModel_;
+
         public async void OnDropDownOpening(object sender, RoutedEventArgs e)
         {
             var args = e as SplitTokenEventArgs;
             var lexiconDialogView = args!.LexiconDialogView;
             var splitInstructionViewModel = args.SplitInstructionViewModel;
-            var lexiconDialogViewModel = LifetimeScope!.Resolve<LexiconDialogViewModel>();
-          
-            if (lexiconDialogViewModel != null)
+            var lexiconDialogViewModel_ = LifetimeScope!.Resolve<LexiconDialogViewModel>();
+            lexiconDialogViewModel_.Mode = LexiconDialogMode.DropDown;
+            var tokenId = TokenDisplay.Token.TokenId;
+            var token = new Token(
+                new TokenId(tokenId.BookNumber, tokenId.ChapterNumber, tokenId.VerseNumber, tokenId.WordNumber,
+                    tokenId.SubWordNumber), args.TokenText, args.TrainingText);
+            var tokenDisplay = new TokenDisplayViewModel(token)
             {
+                VerseDisplay = TokenDisplay.VerseDisplay,
+                //TargetTranslationText = args.TokenText
+            };
 
-                var tokenId = TokenDisplay.Token.TokenId;
-                var token = new Token(new TokenId(tokenId.BookNumber, tokenId.ChapterNumber, tokenId.VerseNumber, tokenId.WordNumber, tokenId.SubWordNumber), splitInstructionViewModel.TokenText, splitInstructionViewModel.TrainingText);
-                var tokenDisplay = new TokenDisplayViewModel(token)
-                {
-                    VerseDisplay = TokenDisplay.VerseDisplay
-                };
+            lexiconDialogViewModel_.InterlinearDisplay = InterlinearDisplay;
+            lexiconDialogViewModel_.TokenDisplay = tokenDisplay;
+            args!.LexiconDialogView.DataContext = lexiconDialogViewModel_;
 
-                lexiconDialogViewModel.InterlinearDisplay = InterlinearDisplay;
-                lexiconDialogViewModel.TokenDisplay = tokenDisplay;
-                args!.LexiconDialogView.DataContext = lexiconDialogViewModel;
+            //ViewModelBinder.Bind(lexiconDialogViewModel, args!.LexiconDialogView, null);
 
-                //ViewModelBinder.Bind(lexiconDialogViewModel, args!.LexiconDialogView, null);
-
-                await lexiconDialogViewModel.Initialize();
+            await lexiconDialogViewModel_.Initialize();
 
 
-            }
-           
+
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)

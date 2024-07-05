@@ -31,7 +31,7 @@ namespace ClearDashboard.DAL.CQRS.Features
         {
             try
             {
-                Logger.LogDebug($"ProjectDbContextQueryHandler - current project name - {ProjectProvider?.CurrentProject?.ProjectName}");
+                //Logger.LogDebug($"ProjectDbContextQueryHandler - current project name - {ProjectProvider?.CurrentProject?.ProjectName}");
 
                 if (ProjectNameDbContextFactory!.ServiceScope.Tag == Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag)
                 {

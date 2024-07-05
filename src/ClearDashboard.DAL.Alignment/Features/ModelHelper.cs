@@ -42,6 +42,23 @@ namespace ClearDashboard.DAL.Alignment.Features
             {
                 ct.Metadata[MetadatumKeys.IsParallelCorpusToken] = true;
                 ct.Metadata[MetadatumKeys.ParallelCorpusId] = tokenComposite.ParallelCorpusId;
+
+                 
+            }
+          
+            if (tokenComposite.CircumfixGroup != null)
+            {
+                ct.Metadata[MetadatumKeys.CircumfixGroup] = tokenComposite.CircumfixGroup;
+            }
+
+            if (tokenComposite.GrammarId != null)
+            {
+                ct.Metadata[MetadatumKeys.GrammarId] = tokenComposite.GrammarId;
+            }
+
+            if (tokenComposite.Type != null)
+            {
+                ct.Metadata[MetadatumKeys.Type] = tokenComposite.Type;
             }
 
             ct.Metadata[MetadatumKeys.ModelTokenMetadata] = tokenComposite.Metadata.ToList();
@@ -68,7 +85,7 @@ namespace ClearDashboard.DAL.Alignment.Features
             else
             { 
                 var modelToken = (tokenComponent as Models.Token)!;
-                return new Token(
+                var token =  new Token(
                     ModelHelper.BuildTokenId(modelToken),
                     modelToken.SurfaceText ?? string.Empty,
                     modelToken.TrainingText ?? string.Empty)
@@ -80,6 +97,22 @@ namespace ClearDashboard.DAL.Alignment.Features
                     }
                 };
 
+                if (modelToken.CircumfixGroup != null)
+                {
+                    token.Metadata[MetadatumKeys.CircumfixGroup] = modelToken.CircumfixGroup;
+                }
+
+                if (modelToken.GrammarId != null)
+                {
+                    token.Metadata[MetadatumKeys.GrammarId] = modelToken.GrammarId;
+                }
+
+                if (modelToken.Type != null)
+                {
+                    token.Metadata[MetadatumKeys.Type] = modelToken.Type;
+                }
+
+                return token;
             }
         }
         public static TokenId BuildTokenId(Models.TokenComponent tokenComponent)
@@ -692,7 +725,7 @@ namespace ClearDashboard.DAL.Alignment.Features
             return false;
         }
 
-		public static string GetSplitMatchInfoAsHash(this (string surfaceText, string trainingText, string? tokenType)[] wordAnalysisLexemes)
+		public static string GetSplitMatchInfoAsHash(this (string surfaceText, string trainingText, string? tokenType, string? circumfixGroup, Guid? grammarId )[] wordAnalysisLexemes)
 		{
 			return string.Join('|', wordAnalysisLexemes.Select(e => $"{e.tokenType}:{e.surfaceText}")).ToMD5String();
 		}

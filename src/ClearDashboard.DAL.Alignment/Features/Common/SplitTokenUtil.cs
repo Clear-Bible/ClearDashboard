@@ -13,7 +13,7 @@ public static class SplitTokenUtil
 {
 	public static (Dictionary<TokenId, IEnumerable<CompositeToken>>, Dictionary<TokenId, IEnumerable<Token>>) SplitTokensIntoReplacements(
 		List<Models.Token> tokensDb,
-		(string surfaceText, string trainingText, string? tokenType)[] replacementTokenInfos,
+		(string surfaceText, string trainingText, string? tokenType, string? circumfixGroup, Guid? grammarId)[] replacementTokenInfos,
 		bool createParallelComposite,
 		SplitTokenDbCommands splitTokenDbCommands,
 		CancellationToken cancellationToken
@@ -64,7 +64,7 @@ public static class SplitTokenUtil
 		return (splitCompositeTokensByIncomingTokenId, splitChildTokensByIncomingTokenId);
 	}
 
-	public static Dictionary<Guid, (Models.Token SourceModelToken, List<Token> ReplacementTokens, List<Models.Token> ReplacementModelTokens)> CreateTokenReplacements(List<Models.Token> tokensDb, (string surfaceText, string trainingText, string? tokenType)[] replacementTokenInfos, SplitTokenDbCommands splitTokenDbCommands, CancellationToken cancellationToken)
+	public static Dictionary<Guid, (Models.Token SourceModelToken, List<Token> ReplacementTokens, List<Models.Token> ReplacementModelTokens)> CreateTokenReplacements(List<Models.Token> tokensDb, (string surfaceText, string trainingText, string? tokenType, string? circumfixGroup, Guid? grammarId)[] replacementTokenInfos, SplitTokenDbCommands splitTokenDbCommands, CancellationToken cancellationToken)
 	{
 		if (tokensDb.Count == 0)
 			return [];
@@ -102,16 +102,36 @@ public static class SplitTokenUtil
 						Id = Guid.NewGuid()
 					},
 					replacementTokenInfos[i].surfaceText,
-					replacementTokenInfos[i].trainingText)
+					replacementTokenInfos[i].trainingText
+					)
 				{
 					ExtendedProperties = tokenDb.ExtendedProperties,
+					
 				};
 
-				var newModelToken = BuildModelToken(newToken, tokenDb.TokenizedCorpusId, tokenDb.VerseRowId);
-				newModelToken.Type = replacementTokenInfos[i].tokenType;
-				newModelToken.OriginTokenLocation ??= tokenDb.OriginTokenLocation ?? tokenDb.EngineTokenId;
+                if (replacementTokenInfos[i].tokenType != null)
+                {
+					newToken.Metadata[Models.MetadatumKeys.Type] = replacementTokenInfos[i].tokenType;
+                }
 
-				newChildTokens.Add(newToken);
+                if (replacementTokenInfos[i].circumfixGroup != null)
+                {
+					newToken.Metadata[Models.MetadatumKeys.CircumfixGroup] = replacementTokenInfos[i].circumfixGroup;
+                }
+
+                if (replacementTokenInfos[i].grammarId != null)
+                {
+					newToken.Metadata[Models.MetadatumKeys.GrammarId] = replacementTokenInfos[i].grammarId;
+                }
+
+                var newModelToken = BuildModelToken(newToken, tokenDb.TokenizedCorpusId, tokenDb.VerseRowId);
+				newModelToken.OriginTokenLocation ??= tokenDb.OriginTokenLocation ?? tokenDb.EngineTokenId;
+				newModelToken.Type = replacementTokenInfos[i].tokenType;
+                newModelToken.CircumfixGroup = replacementTokenInfos[i].circumfixGroup;
+                newModelToken.GrammarId = replacementTokenInfos[i].grammarId;
+
+
+                newChildTokens.Add(newToken);
 				newChildTokensDb.Add(newModelToken);
 			}
 
@@ -181,6 +201,7 @@ public static class SplitTokenUtil
 					{
 						splitTokenDbCommands.AddNoteAssociationToInsert(new Models.NoteDomainEntityAssociation
 						{
+							Id = Guid.NewGuid(),
 							NoteId = e.NoteId,
 							DomainEntityIdName = e.DomainEntityIdName,
 							DomainEntityIdGuid = kvp.Value.ReplacementModelTokens[i].Id
@@ -225,6 +246,7 @@ public static class SplitTokenUtil
 					{
 						splitTokenDbCommands.AddNoteAssociationToInsert(new Models.NoteDomainEntityAssociation
 						{
+							Id = Guid.NewGuid(),
 							NoteId = e.NoteId,
 							DomainEntityIdName = e.DomainEntityIdName,
 							DomainEntityIdGuid = kvp.Value[i].TokenId.Id
@@ -488,6 +510,7 @@ public static class SplitTokenUtil
 			{
 				splitTokenDbCommands.AddAlignmentToInsert(new Models.Alignment
 				{
+					Id = Guid.NewGuid(),
 					AlignmentSetId = e.AlignmentSetId,
 					SourceTokenComponentId = tokenComposite.Id,
 					TargetTokenComponentId = e.TargetTokenComponentId,
@@ -500,6 +523,7 @@ public static class SplitTokenUtil
 			{
 				splitTokenDbCommands.AddAlignmentToInsert(new Models.Alignment
 				{
+					Id = Guid.NewGuid(),
 					AlignmentSetId = e.AlignmentSetId,
 					SourceTokenComponentId = e.SourceTokenComponentId,
 					TargetTokenComponentId = tokenComposite.Id,
@@ -512,6 +536,7 @@ public static class SplitTokenUtil
 			{
 				splitTokenDbCommands.AddTranslationToInsert(new Models.Translation
 				{
+					Id = Guid.NewGuid(),
 					TranslationSetId = e.TranslationSetId,
 					SourceTokenComponentId = tokenComposite.Id,
 					TargetText = e.TargetText,
@@ -524,6 +549,7 @@ public static class SplitTokenUtil
 			{
 				splitTokenDbCommands.AddTokenVerseAssociationToInsert(new Models.TokenVerseAssociation
 				{
+					Id = Guid.NewGuid(),
 					TokenComponentId = tokenComposite.Id,
 					Position = e.Position,
 					VerseId = e.VerseId

@@ -424,8 +424,8 @@
     "Description": "Passive"
   },
   {
-    "ShortName": "[PAST.HIST]Historical past marker",
-    "Description": null
+    "ShortName": "[PAST.HIST]",
+    "Description": "Historical past marker"
   },
   {
     "ShortName": "[Past.Rec]",
