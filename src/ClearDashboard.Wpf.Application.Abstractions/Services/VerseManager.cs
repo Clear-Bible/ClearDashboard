@@ -10,11 +10,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
-using ClearDashboard.DAL.Alignment.Features.Corpora;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.Messages;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using System.Threading.Tasks;
+using ClearDashboard.Wpf.Application.Messages;
+using Token = ClearBible.Engine.Corpora.Token;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -53,6 +51,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 await EventAggregator.PublishOnUIThreadAsync(new TokensJoinedMessage(compositeToken, tokens, parallelCorpusId!));
                 SelectionManager.SelectionUpdated();
                 //await EventAggregator.PublishOnUIThreadAsync(new RefreshVerse(ReloadType.Force));
+                await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage(ReloadType.Force));
             }
             catch (Exception e)
             {
