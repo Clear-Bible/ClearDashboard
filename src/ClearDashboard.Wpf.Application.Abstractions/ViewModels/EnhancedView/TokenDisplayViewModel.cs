@@ -14,11 +14,9 @@ using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.Collections.Notes;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
-using System.Windows.Input;
-using System.Dynamic;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
-using System.Threading;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Helpers;
+using Token = ClearBible.Engine.Corpora.Token;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -162,7 +160,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <summary>
         /// Gets whether this is token is part of a 'parallel' composite token as determined by the HasTag property of the token.
         /// </summary>
-        public bool IsParallelCompositeTokenMember => IsCompositeTokenMember &&  CompositeToken!.HasMetadatum("IsParallelCompositeToken") && CompositeToken!.GetMetadatum<bool>("IsParallelCompositeToken");
+        public bool IsParallelCompositeTokenMember => IsCompositeTokenMember &&  CompositeToken!.HasMetadatum(MetadatumKeys.IsParallelCompositeToken) && CompositeToken!.GetMetadatum<bool>("IsParallelCompositeToken");
 
         /// <summary>
         /// Gets a collection of the composite token members.
