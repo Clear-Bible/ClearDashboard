@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.Wpf.Application.Messages;
 using Token = ClearBible.Engine.Corpora.Token;
 
 namespace ClearDashboard.Wpf.Application.Services
@@ -50,7 +49,6 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 await EventAggregator.PublishOnUIThreadAsync(new TokensJoinedMessage(compositeToken, tokens, parallelCorpusId!));
                 SelectionManager.SelectionUpdated();
-                //await EventAggregator.PublishOnUIThreadAsync(new RefreshVerse(ReloadType.Force));
                 await EventAggregator.PublishOnBackgroundThreadAsync(new ReloadDataMessage(ReloadType.Force));
             }
             catch (Exception e)

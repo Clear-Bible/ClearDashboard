@@ -354,7 +354,6 @@ public abstract class VerseAwareConductorOneActive : DashboardConductorOneActive
         try
         {
             await ReloadData();
-            //await ReloadData(ReloadType.Force);
         }
         finally
         {
