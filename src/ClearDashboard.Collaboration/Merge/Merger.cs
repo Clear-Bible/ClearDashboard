@@ -35,7 +35,7 @@ public class Merger
 
         var reporter = new PhasedProgressReporter(MergeContext.Progress,
             new Phase("Merging delete activity ..."),
-            new Phase("Merging create/modify activity ... Users, Lexicon, Corpora, and Tokenized Corpora"),
+            new Phase("Merging create/modify activity ... Users, Lexicon, Grammar, Corpora, and Tokenized Corpora"),
             new Phase("Merging create/modify activity ... Parallel Corpora, Alignment Sets, and Translation Sets"),
             new Phase("Merging create/modify activity ... Notes and Labels"));
 
@@ -50,7 +50,8 @@ public class Merger
             await DeleteListDifferencesAsync(differencesToApply.ParallelCorpora, currentSnapshot.ParallelCorpora, cancellationToken);
             await DeleteListDifferencesAsync(differencesToApply.TokenizedCorpora, currentSnapshot.TokenizedCorpora, cancellationToken);
             await DeleteListDifferencesAsync(differencesToApply.Corpora, currentSnapshot.Corpora, cancellationToken);
-            await DeleteListDifferencesAsync(differencesToApply.LexiconSemanticDomains, currentSnapshot.LexiconSemanticDomains, cancellationToken);
+			await DeleteListDifferencesAsync(differencesToApply.Grammar, currentSnapshot.Grammar, cancellationToken);
+			await DeleteListDifferencesAsync(differencesToApply.LexiconSemanticDomains, currentSnapshot.LexiconSemanticDomains, cancellationToken);
             await DeleteListDifferencesAsync(differencesToApply.LexiconLexemes, currentSnapshot.LexiconLexemes, cancellationToken);
             await DeleteListDifferencesAsync(differencesToApply.Users, currentSnapshot.Users, cancellationToken);
         }
@@ -68,7 +69,10 @@ public class Merger
             await CreateListDifferencesAsync(differencesToApply.LexiconSemanticDomains, currentSnapshot.LexiconSemanticDomains, cancellationToken);
             await ModifyListDifferencesAsync(differencesToApply.LexiconSemanticDomains, currentSnapshot.LexiconSemanticDomains, targetCommitSnapshot.LexiconSemanticDomains, previousCommitSnapshot.LexiconSemanticDomains, cancellationToken);
 
-            await CreateListDifferencesAsync(differencesToApply.Corpora, currentSnapshot.Corpora, cancellationToken);
+			await CreateListDifferencesAsync(differencesToApply.Grammar, currentSnapshot.Grammar, cancellationToken);
+			await ModifyListDifferencesAsync(differencesToApply.Grammar, currentSnapshot.Grammar, targetCommitSnapshot.Grammar, previousCommitSnapshot.Grammar, cancellationToken);
+
+			await CreateListDifferencesAsync(differencesToApply.Corpora, currentSnapshot.Corpora, cancellationToken);
             await ModifyListDifferencesAsync(differencesToApply.Corpora, currentSnapshot.Corpora, targetCommitSnapshot.Corpora, previousCommitSnapshot.Corpora, cancellationToken);
 
             await CreateListDifferencesAsync(differencesToApply.TokenizedCorpora, currentSnapshot.TokenizedCorpora, cancellationToken);

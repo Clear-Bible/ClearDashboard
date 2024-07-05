@@ -23,13 +23,9 @@ using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using SIL.Scripture;
 using System.Diagnostics.CodeAnalysis;
-using System.Collections.ObjectModel;
-using SIL.Extensions;
-using System.Diagnostics;
 using System.Windows.Media;
-using System.Windows.Threading;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -490,11 +486,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// Get the <see cref="Translation"/> for a specified token.
         /// </summary>
         /// <remarks>
-        /// This will be null unless called from an <see cref="InterlinearDisplayViewModel"/> containing a valid <see cref="TranslationSet"/>.
+        /// This will be null unless called from an <see cref="InterlinearDisplayViewModel"/> containing a valid <see cref="DAL.Alignment.Translation.TranslationSet"/>.
         /// </remarks>
         /// <param name="token">The <see cref="Token"/> for which to obtain a translation.</param>
         /// <param name="compositeToken">An optional <see cref="CompositeToken"/> that <paramref name="token"/> is a constituent of.</param>
-        /// <returns>A <see cref="Translation"/> for the token if a valid <see cref="TranslationSet"/> is known; null otherwise.</returns>
+        /// <returns>A <see cref="Translation"/> for the token if a valid <see cref="DAL.Alignment.Translation.TranslationSet"/> is known; null otherwise.</returns>
         protected virtual Translation? GetTranslationForToken(Token token, CompositeToken? compositeToken)
         {
             return null;
@@ -689,7 +685,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         
         public async Task HandleAsync(TokenSplitMessage message, CancellationToken cancellationToken)
         {
-            // TODO808:  Need some input from Andy/Chris
+           
             // 3. for token splitting api return value, for corpus view needs to look in the composite dict for a Composite(null),
             // and if none use the dict of individual non-composite tokens.
             //
@@ -700,15 +696,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             foreach (var kvp in message.SplitCompositeTokensByIncomingTokenId)
             {
                 var compositeToken = kvp.Value.FirstOrDefault();    // For now, the user can only split one token at a time.
-                var isParallel = compositeToken?.HasMetadatum("IsParallelCompositeToken");
-                if (compositeToken != null && isParallel != null && isParallel.Value && compositeToken.GetMetadatum<bool>("IsParallelCompositeToken"))
+                var isParallel = compositeToken?.HasMetadatum(MetadatumKeys.IsParallelCompositeToken);
+                if (compositeToken != null && isParallel != null && isParallel.Value && compositeToken.GetMetadatum<bool>(MetadatumKeys.IsParallelCompositeToken))
                 {
                     SourceTokenMap?.ReplaceToken(kvp.Key, compositeToken);
                     TargetTokenMap?.ReplaceToken(kvp.Key, compositeToken);
                 }
                 else if (compositeToken != null)
                 {
-                    // For Chris - this
+                    // TODO:  If there are child tokens in the parallel view which are part of both parallel
+                    // and non-parallel composites we only want to show the children if the non-parallel composite.
                     var childTokens  = message.SplitChildTokensByIncomingTokenId[kvp.Key].ToList();
                   
                     SourceTokenMap?.RemoveCompositeToken(compositeToken, new TokenCollection(childTokens));

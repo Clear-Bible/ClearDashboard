@@ -28,7 +28,7 @@ public class SplitInstructions
         set => Instructions[index] = value;
     }
 
-
+    [Obsolete]
     public static SplitInstructions CreateSplits(string surfaceText, List<int> splitIndexes, List<string?> trainingTexts)
     {
         if (splitIndexes.Count  != trainingTexts.Count - 1)
@@ -79,6 +79,7 @@ public class SplitInstructions
         return splitInstructions;
     }
 
+    [Obsolete]
     public static SplitInstructions CreateSplits(string surfaceText, List<int> splitIndexes)
     {
         

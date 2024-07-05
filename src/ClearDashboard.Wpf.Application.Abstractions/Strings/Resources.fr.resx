@@ -452,7 +452,7 @@
     <value>Éditeur d'alignement en masse</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>Examen de l'alignement en masse</value>
+    <value>Examen de l'alignement en bloc</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>Compter</value>
@@ -805,6 +805,18 @@
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
   </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>Importation annulée</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>Importation terminée</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>Erreur rencontrée (consultez le journal pour plus de détails)</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>Importer des analyses de mots</value>
+  </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
   </data>
@@ -1025,7 +1037,7 @@
     <value>Pleinement</value>
   </data>
   <data name="LexiconEdit_FullyMatching" xml:space="preserve">
-    <value>Entièrement assorti</value>
+    <value>Entièrement correspondant</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
     <value>Lexème</value>
@@ -1355,7 +1367,7 @@
     <value>Jeton d'accès:</value>
   </data>
   <data name="NewCollabUserView_CheckEmail" xml:space="preserve">
-    <value>Vérifiez votre email et saisissez le code de validation :</value>
+    <value>Vérifiez votre email et entrez le code de validation :</value>
   </data>
   <data name="NewCollabUserView_CheckUserAvailability" xml:space="preserve">
     <value>Vérifier la disponibilité des utilisateurs</value>
@@ -1667,10 +1679,10 @@
     <value>Paralléliser les versets de corpus</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Algorithme d’alignement des mots machine</value>
+    <value>Algorithme d’alignement de mots machine</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Algorithme d’alignement des mots machine</value>
+    <value>Algorithme d’alignement de mots machine</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Former un modèle symétrique ?</value>
@@ -1958,7 +1970,7 @@
     <value>Créer un projet : </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
-    <value>Créez votre projet à l'aide de l'assistant de modèle de projet.</value>
+    <value>Créez votre projet à l'aide de l'assistant Modèle de projet.</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
     <value>Base de données: </value>
@@ -2321,7 +2333,7 @@
     <value>Activer le plugin expérimental AQUA</value>
   </data>
   <data name="Settings_CheckEmail" xml:space="preserve">
-    <value>Vérifiez votre email et saisissez le code de validation :</value>
+    <value>Vérifiez votre email et entrez le code de validation :</value>
   </data>
   <data name="Settings_CollaborationSettings" xml:space="preserve">
     <value>Paramètres de collaboration</value>

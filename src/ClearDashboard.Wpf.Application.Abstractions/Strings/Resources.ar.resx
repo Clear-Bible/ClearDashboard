@@ -805,6 +805,18 @@
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
   </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>تم إلغاء الاستيراد</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>اكتمل الاستيراد</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>حدث خطأ (راجع السجل للحصول على التفاصيل)</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>استيراد تحليلات الكلمات</value>
+  </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
   </data>
@@ -908,7 +920,7 @@
     <value>فهرس أبجدي</value>
   </data>
   <data name="Lexicon_DeleteLexeme" xml:space="preserve">
-    <value>احذف هذا المفردات</value>
+    <value>احذف هذا المعجم</value>
   </data>
   <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
     <value>حذف هذا المعجم؟</value>
@@ -920,7 +932,7 @@
     <value>احذف هذه الترجمة</value>
   </data>
   <data name="Lexicon_Empty_Translation" xml:space="preserve">
-    <value>&lt;معنى فارغ&gt;</value>
+    <value>&lt;المعنى الفارغ&gt;</value>
   </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>أدخل ترجمة جديدة ل</value>
@@ -947,7 +959,7 @@
     <value>ليما / النماذج:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Lemma للمعجم الجديد:</value>
+    <value>Lemma للمفردات الجديدة:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>المعجم</value>
@@ -1070,10 +1082,10 @@
     <value>إضافة كنموذج لـ...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>ابحث عن المفردات الكاملة أو الجزئية أو تطابقات النموذج للمصدر</value>
+    <value>ابحث عن المفردات الكاملة أو الجزئية أو تطابقات النموذج مع المصدر</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
-    <value>إضافة الهدف كترجمة لـ...</value>
+    <value>إضافة الهدف كترجمة ل...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>ابحث عن المعاجم التي تحتوي على ترجمة واحدة أو أكثر تطابق الهدف</value>
@@ -1439,7 +1451,7 @@
     <value>أضف جوت</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>إضافة نقطة جديدة (إدخال Shift للسطر الجديد)</value>
+    <value>إضافة نقطة جديدة (shift-enter للسطر الجديد)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>جسم</value>
@@ -1811,7 +1823,7 @@
     <value>الموارد</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
-    <value>قم بتوسيع المحتوى إلى 100٪</value>
+    <value>قم بتوسيع المحتوى إلى 100%</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
     <value>إضافة نص إلى نافذة جديدة</value>
@@ -1832,7 +1844,7 @@
     <value>StudyBible</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
-    <value>StudyBibleAdditions</value>
+    <value>إضافات StudyBible</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
     <value>انتقل إلى Paratext وقم بتبديل المشاريع.  إن مشروع Paratext المتصل حاليًا بالمكون الإضافي ClearDashboard ليس هو نفس المجموعة الموجودة في مشروع ClearDashboard هذا.</value>
@@ -1889,7 +1901,7 @@
     <value>المعجم</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
-    <value>نوع المعجم</value>
+    <value>نوع المفردات</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
     <value>تحميل المراجع</value>
@@ -1958,7 +1970,7 @@
     <value>إنشاء مشروع: </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
-    <value>قم بإنشاء مشروعك باستخدام معالج قالب المشروع.</value>
+    <value>أنشئ مشروعك باستخدام معالج قالب المشروع.</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
     <value>قاعدة البيانات: </value>
@@ -2171,7 +2183,7 @@
     <value>هوشع</value>
   </data>
   <data name="ProperCase_Isaiah" xml:space="preserve">
-    <value>إشعياء</value>
+    <value>أشعياء</value>
   </data>
   <data name="ProperCase_James" xml:space="preserve">
     <value>جوامع</value>
@@ -2477,7 +2489,7 @@
     <value>لا أستطيع إكمال المهمة</value>
   </data>
   <data name="SlackMessageView_Combo3" xml:space="preserve">
-    <value>لقد أكملت مهمة ولكنها كانت صعبة</value>
+    <value>لقد أكملت مهمة لكنها كانت صعبة</value>
   </data>
   <data name="SlackMessageView_Combo4" xml:space="preserve">
     <value>أود أن أفعل...</value>

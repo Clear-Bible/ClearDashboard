@@ -805,6 +805,18 @@
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
   </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>आयात रद्द किया गया</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>आयात पूर्ण</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>त्रुटि आई (विवरण के लिए लॉग जांचें)</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>शब्द विश्लेषण आयात करें</value>
+  </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
   </data>
@@ -911,7 +923,7 @@
     <value>इस शब्दकोष को हटा दें</value>
   </data>
   <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
-    <value>इस लेक्सेम को हटाएं?</value>
+    <value>क्या यह लेक्सेम हटा दिया गया है?</value>
   </data>
   <data name="Lexicon_DeleteMeaning" xml:space="preserve">
     <value>इस अर्थ को हटा दें</value>
@@ -1070,7 +1082,7 @@
     <value>फॉर्म के रूप में जोड़ें...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>स्रोत के लिए पूर्ण या आंशिक लेक्सेम या फॉर्म मिलान खोजें</value>
+    <value>स्रोत के लिए पूर्ण या आंशिक लेक्सेम या फॉर्म मिलान ढूंढें</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>लक्ष्य को अनुवाद के रूप में जोड़ें...</value>
@@ -1835,7 +1847,7 @@
     <value>अध्ययन बाइबिल परिवर्धन</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>पैराटेक्स्ट पर जाएं और प्रोजेक्ट स्विच करें।  वर्तमान में क्लियरडैशबोर्ड प्लगइन से जुड़ा पैराटेक्स्ट प्रोजेक्ट इस क्लियरडैशबोर्ड प्रोजेक्ट के कॉर्पस के समान नहीं है।</value>
+    <value>पैराटेक्स्ट पर जाएँ और प्रोजेक्ट स्विच करें।  वर्तमान में क्लियरडैशबोर्ड प्लगइन से जुड़ा पैराटेक्स्ट प्रोजेक्ट इस क्लियरडैशबोर्ड प्रोजेक्ट के कॉर्पस के समान नहीं है।</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>लक्ष्य</value>
@@ -2033,7 +2045,7 @@
     <value>'डैशबोर्ड गेटिंग स्टार्टेड' वीडियो देखने के लिए यहां क्लिक करें</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
-    <value>आपके द्वारा नीचे दिए गए 'बनाएं' बटन पर क्लिक करने के बाद, हम आपके प्रोजेक्ट को टोकनाइज़, संरेखित और तैयार करेंगे। संसाधित होते ही सभी चरण यहां दिखाई देंगे. जब आप प्रतीक्षा कर रहे हों तो बेझिझक नीचे दिए गए लिंक पर क्लिक करें और ClearDashboard का उपयोग शुरू करने के लिए कुछ उपयोगी वीडियो देखें!</value>
+    <value>आपके द्वारा नीचे दिए गए 'बनाएँ' बटन पर क्लिक करने के बाद, हम आपके प्रोजेक्ट को टोकनाइज़, संरेखित और तैयार करेंगे। संसाधित होते ही सभी चरण यहां दिखाई देंगे. जब आप प्रतीक्षा कर रहे हों तो बेझिझक नीचे दिए गए लिंक पर क्लिक करें और ClearDashboard का उपयोग शुरू करने के लिए कुछ उपयोगी वीडियो देखें!</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
     <value>प्रोजेक्ट टेम्पलेट विज़ार्ड</value>

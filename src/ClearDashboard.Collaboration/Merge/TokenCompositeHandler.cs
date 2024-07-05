@@ -51,16 +51,37 @@ public class TokenCompositeHandler : TokenComponentHandler<IModelSnapshot<Models
 
             });
 
-        mergeContext.MergeBehavior.AddPropertyNameMapping(
+		mergeContext.MergeBehavior.AddEntityValueResolver(
+			(typeof(Models.TokenComposite), nameof(Models.TokenComposite.GrammarId)),
+			entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
+
+				if (modelSnapshot.PropertyValues.TryGetValue(TokenCompositeBuilder.GRAMMAR_SHORT_NAME, out var grammarShortName))
+				{
+					if (string.IsNullOrEmpty((string?)grammarShortName)) return null;
+					var grammarId = await GrammarHandler.GrammarShortNameToId((string)grammarShortName, projectDbContext, logger);
+					return (grammarId != default) ? grammarId : null;
+				}
+				else
+				{
+					throw new PropertyResolutionException($"TokenComposite snapshot does not have Grammer ShortName, which is required for Grammar conversion.");
+				}
+
+			});
+
+		mergeContext.MergeBehavior.AddPropertyNameMapping(
             (typeof(Models.TokenComposite), TokenCompositeBuilder.VERSE_ROW_LOCATION),
             new[] { nameof(Models.TokenComposite.VerseRowId) });
 
-        mergeContext.MergeBehavior.AddPropertyNameMapping(
+		mergeContext.MergeBehavior.AddPropertyNameMapping(
+			(typeof(Models.TokenComposite), TokenCompositeBuilder.GRAMMAR_SHORT_NAME),
+			new[] { nameof(Models.Token.GrammarId) });
+
+		mergeContext.MergeBehavior.AddPropertyNameMapping(
             (typeof(Models.TokenComposite), TokenCompositeBuilder.TOKEN_LOCATIONS),
             Enumerable.Empty<string>());
-    }
+	}
 
-    public static ProjectDbContextMergeQueryAsync GetDeleteCompositesByVerseRowIdQueryAsync(Guid verseRowId)
+	public static ProjectDbContextMergeQueryAsync GetDeleteCompositesByVerseRowIdQueryAsync(Guid verseRowId)
     {
         /*
          * Query to run before deleting a VerseRow (and using its real Id):

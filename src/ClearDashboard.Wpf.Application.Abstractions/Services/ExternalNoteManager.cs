@@ -19,7 +19,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Models;
 using static ClearBible.Engine.Persistence.FileGetBookIds;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 

@@ -401,6 +401,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 {
                     metadatum.TokenizedTextCorpus ??= await TokenizedTextCorpus.Get(Mediator!,
                         new TokenizedTextCorpusId(metadatum.TokenizedTextCorpusId!.Value), true, cancellationToken);
+                    metadatum.TokenizedTextCorpus.InvalidateCache();
                 }
 
                 var offset = (ushort)ParentViewModel.VerseOffsetRange;
