@@ -160,7 +160,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <summary>
         /// Gets whether this is token is part of a 'parallel' composite token as determined by the HasTag property of the token.
         /// </summary>
-        public bool IsParallelCompositeTokenMember => IsCompositeTokenMember &&  CompositeToken!.HasMetadatum(MetadatumKeys.IsParallelCompositeToken) && CompositeToken!.GetMetadatum<bool>("IsParallelCompositeToken");
+        public bool IsParallelCompositeTokenMember => IsCompositeTokenMember &&
+                                                      CompositeToken!.HasMetadatum(MetadatumKeys.IsParallelCompositeToken)
+                                                      && CompositeToken!.GetMetadatum<bool>(MetadatumKeys.IsParallelCompositeToken);
 
         /// <summary>
         /// Gets a collection of the composite token members.
