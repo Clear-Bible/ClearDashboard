@@ -686,7 +686,7 @@
     <value>សម្គាល់ការតម្រឹមជា 'ត្រូវការការពិនិត្យឡើងវិញ'</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
-    <value>សម្គាល់ការតម្រឹមជា 'ត្រឹមត្រូវ'</value>
+    <value>សម្គាល់ការតម្រឹមជា 'មានសុពលភាព'</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
     <value>និមិត្តសញ្ញាថ្មី៖ អត្ថបទបណ្តុះបណ្តាល</value>
@@ -695,7 +695,7 @@
     <value>កំណត់ចំណាំ</value>
   </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
-    <value>មិនមានទិន្នន័យខគម្ពីរនៅក្នុងជួរខគម្ពីរនេះទេ។</value>
+    <value>មិនមានទិន្នន័យខនៅក្នុងជួរខគម្ពីរនេះទេ។</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
     <value>យក Corpus ចេញ</value>
@@ -804,6 +804,18 @@
   </data>
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>ការនាំចូលត្រូវបានលុបចោល</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>ការនាំចូលពេញលេញ</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>កំហុសបានជួបប្រទះ (ពិនិត្យមើលកំណត់ហេតុសម្រាប់ព័ត៌មានលម្អិត)</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>នាំចូលការវិភាគពាក្យ</value>
   </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
@@ -953,7 +965,7 @@
     <value>លេសេម</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
-    <value>Lexeme សម្រាប់​មាន​រួច​ហើយ​សម្រាប់ lemma</value>
+    <value>Lexeme សម្រាប់​មាន​រួច​ហើយ​សម្រាប់​លេម៉ា</value>
   </data>
   <data name="Lexicon_Lexicon" xml:space="preserve">
     <value>វចនានុក្រម</value>
@@ -971,7 +983,7 @@
     <value>មិនមានទម្រង់ដែលអាចប្រើបានទេ។</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>ដកដែនសុភាសិតនេះចេញពីអត្ថន័យនេះ។</value>
+    <value>ដក​ដែន​អត្ថន័យ​នេះ​ចេញ​ពី​អត្ថន័យ​នេះ។</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
     <value>យកទម្រង់ lexical នេះចេញពី lexical នេះ។</value>
@@ -1505,7 +1517,7 @@
     <value>បន្ថែមក្រុមស្លាក</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>ក្រុមស្លាកមានរួចហើយដែលមានឈ្មោះ</value>
+    <value>ក្រុមស្លាកមានរួចហើយជាមួយឈ្មោះ</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>ចាប់ផ្តើមក្រុមស្លាក</value>
@@ -2498,7 +2510,7 @@
     <value>ផ្ញើឯកសារ USFM</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
-    <value>ការណែនាំ</value>
+    <value>សំណូមពរ</value>
   </data>
   <data name="SlackMessageView_SuggestionEditor" xml:space="preserve">
     <value>កម្មវិធីនិពន្ធ</value>

@@ -482,7 +482,7 @@
     <value>Ausgewählte als „Ungültig“ markieren</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsNeedsReview" xml:space="preserve">
-    <value>Als „Überprüfung erforderlich“ markieren</value>
+    <value>Markieren Sie die Auswahl als „Überprüfung erforderlich“.</value>
   </data>
   <data name="BulkAlignmentReview_MarkSelectedAsValid" xml:space="preserve">
     <value>Als „Gültig“ ausgewählt markieren</value>
@@ -677,7 +677,7 @@
     <value>Treten Sie Token bei</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Join-Tokens für Sprachpaar</value>
+    <value>Join-Token für Sprachpaar</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>Ausrichtung als „Ungültig“ markieren</value>
@@ -804,6 +804,18 @@
   </data>
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>Import abgebrochen</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>Import abgeschlossen</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>Es ist ein Fehler aufgetreten (siehe Protokoll für Details)</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>Wortanalysen importieren</value>
   </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
@@ -1286,7 +1298,7 @@
     <value>Suchen</value>
   </data>
   <data name="Marble_SearchEnglish" xml:space="preserve">
-    <value>Suche nach englischem Glanz</value>
+    <value>Suche nach englischem Gloss</value>
   </data>
   <data name="Marble_SearchHebrew" xml:space="preserve">
     <value>Suche nach Hebräisch/Griechisch</value>
@@ -1835,7 +1847,7 @@
     <value>StudyBibleAdditions</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Gehen Sie zu Paratext und wechseln Sie die Projekte.  Das derzeit mit dem ClearDashboard-Plugin verbundene Paratext-Projekt ist nicht dasselbe wie das Korpus in diesem ClearDashboard-Projekt.</value>
+    <value>Gehen Sie zu Paratext und wechseln Sie die Projekte.  Das Paratext-Projekt, das derzeit mit dem ClearDashboard-Plugin verbunden ist, ist nicht dasselbe wie das Korpus in diesem ClearDashboard-Projekt.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Ziel</value>

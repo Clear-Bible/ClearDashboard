@@ -805,6 +805,18 @@
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
   </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>ማስመጣት ተሰርዟል።</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>ማስመጣት ተጠናቋል</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>ስህተት አጋጥሞታል (ለዝርዝሮቹ ምዝግብ ማስታወሻን ይመልከቱ)</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>የቃል ትንታኔዎችን አስመጣ</value>
+  </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
   </data>
@@ -1466,7 +1478,7 @@
     <value>በሁኔታ አጣራ</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>በፅሁፍ አጣራ</value>
+    <value>በጽሁፍ አጣራ</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>ማንኛውም</value>
@@ -1616,7 +1628,7 @@
     <value>እነዚህ ጆቶች ወደ Paratext ይላኩ?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>ጆቶችን ወደ ፓራቴክስት ላክ</value>
+    <value>ጆቶችን ወደ Paratext ይላኩ።</value>
   </data>
   <data name="Notes_TakeAction" xml:space="preserve">
     <value />
@@ -1988,7 +2000,7 @@
     <value>የአኪ ግሪክ መጽሐፍ ቅዱሳዊ ጽሑፎችን ይጨምር?</value>
   </data>
   <data name="ProjectPicker_IncludeOtBiblicalTexts" xml:space="preserve">
-    <value>የብኪ የዕብራይስጥ መጽሐፍ ቅዱሳዊ ጽሑፎችን ያካትቱ?</value>
+    <value>የብኪ የዕብራይስጥ መጽሐፍ ቅዱሳዊ ጽሑፎችን ይጨምራል?</value>
   </data>
   <data name="ProjectPicker_ManageCollaborationProjects" xml:space="preserve">
     <value>የትብብር ፕሮጀክቶችን ያስተዳድሩ</value>
@@ -2000,7 +2012,7 @@
     <value>እዚህ ብቸኝነት ነው።  እባክዎ አዲስ ፕሮጀክት ይፍጠሩ።</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>ፓራቴክስት አልተጫነም።  እባክህ Paratextን ጫን እና የ ClearDashboard መተግበሪያን እንደገና አስጀምር።</value>
+    <value>ፓራቴክስት አልተጫነም።  እባክህ Paratext ጫን እና የ ClearDashboard መተግበሪያን እንደገና አስጀምር።</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>ፓራቴክስት እየሰራ አይደለም።</value>
@@ -2027,7 +2039,7 @@
     <value>ፕሮጀክት፡- </value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
-    <value>ልንደርስ ነው!</value>
+    <value>እዚያ ደርሰናል!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
     <value>'Dashboard Getting' ቪዲዮዎችን ለማየት እዚህ ጠቅ ያድርጉ</value>
@@ -2345,7 +2357,7 @@
     <value>አሰላለፍ አርትዖትን አንቃ</value>
   </data>
   <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
-    <value>በሙከራ ቡድን ውስጥ የውጪ ፓራቴክስት ማስታወሻዎችን አንቃ</value>
+    <value>በሙከራ ቡድን ውስጥ የውጭ ፓራቴክስት ማስታወሻዎችን አንቃ</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
     <value>የውጭ ፓራቴክስት ማስታወሻዎችን አንቃ</value>

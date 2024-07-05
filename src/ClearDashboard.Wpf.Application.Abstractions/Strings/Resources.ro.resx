@@ -611,7 +611,7 @@
     <value>Șterge</value>
   </data>
   <data name="Delete_Project" xml:space="preserve">
-    <value>Șterge proiectul</value>
+    <value>Ștergeți proiectul</value>
   </data>
   <data name="Delete_Project_Confirmation" xml:space="preserve">
     <value>Sigur doriți să ștergeți acest proiect?</value>
@@ -767,7 +767,7 @@
     <value>Textul țintă:</value>
   </data>
   <data name="FontSettings_TargetFontSize" xml:space="preserve">
-    <value>Dimensiunea vizată a fontului:</value>
+    <value>Dimensiunea țintă a fontului:</value>
   </data>
   <data name="FontSettings_Title" xml:space="preserve">
     <value>Titlu:</value>
@@ -804,6 +804,18 @@
   </data>
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>Import anulat</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>Import finalizat</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>Eroare întâlnită (verificați jurnalul pentru detalii)</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>Importați analize Word</value>
   </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
@@ -947,7 +959,7 @@
     <value>Lema/Forme:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Lema pentru lexemul nou:</value>
+    <value>Lema pentru noul lexem:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>Lexem</value>
@@ -1655,7 +1667,7 @@
     <value>Creați alinierea cuvintelor</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
-    <value>Creați paralelizarea versurilor corpurilor</value>
+    <value>Creați o paralelă a versurilor corpurilor</value>
   </data>
   <data name="ParallelCorpusDialog_AddTranslationSet" xml:space="preserve">
     <value>Creați interliniar</value>
@@ -1679,7 +1691,7 @@
     <value>Tren</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Alinierea cuvintelor Train Machine</value>
+    <value>Aliniere de cuvinte a mașinii de tren</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Setați maparea versurilor între corpurile paralelizate</value>
@@ -1754,7 +1766,7 @@
     <value>Ștergeți Interlinear</value>
   </data>
   <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>Sigur doriți să ștergeți acest corpus? Toate notele, aliniamentele și elementele interliniare asociate cu acest corpus vor fi șterse și nu pot fi recuperate.</value>
+    <value>Sigur doriți să ștergeți acest corpus? Toate notele, aliniamentele și interliniarele asociate cu acest corpus vor fi șterse și nu pot fi recuperate.</value>
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>Dicţionar</value>
@@ -1868,7 +1880,7 @@
     <value>PHP</value>
   </data>
   <data name="Pins_ClearFilter" xml:space="preserve">
-    <value>Șterge filtrul</value>
+    <value>Ștergeți filtrul</value>
   </data>
   <data name="Pins_Code" xml:space="preserve">
     <value>Cod</value>
@@ -1967,7 +1979,7 @@
     <value>Nu puteți șterge acel proiect, o altă aplicație încă îl folosește.</value>
   </data>
   <data name="ProjectPicker_DeleteProject" xml:space="preserve">
-    <value>Șterge proiectul</value>
+    <value>Ștergeți proiectul</value>
   </data>
   <data name="ProjectPicker_EnableBookSelection" xml:space="preserve">
     <value>Activați selecția cărților</value>
@@ -1982,7 +1994,7 @@
     <value>Import Server Project</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Bifați această casetă pentru a include textele biblice grecești și ebraice atunci când vă creați proiectul.</value>
+    <value>Bifați această casetă pentru a include textele biblice greacă și ebraică atunci când vă creați proiectul.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>Includeți texte biblice grecești din NT?</value>
@@ -2291,10 +2303,10 @@
     <value>Bun venit la ClearDashboard!  Vă rugăm să introduceți informațiile de înregistrare.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
-    <value>Vă rugăm să introduceți prenumele dvs</value>
+    <value>Vă rugăm să introduceți prenumele</value>
   </data>
   <data name="RegistrationView_LastName" xml:space="preserve">
-    <value>Vă rugăm să introduceți numele de familie</value>
+    <value>Vă rugăm să introduceți numele dvs. de familie</value>
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
     <value>Vă rugăm să introduceți cheia de licență</value>

@@ -805,6 +805,18 @@
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
   </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>Import Cancelled</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>Import Complete</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>Error Encountered (check log for details)</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>Import Word Analyses</value>
+  </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
   </data>
