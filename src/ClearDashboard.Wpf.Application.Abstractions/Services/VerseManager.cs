@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Models;
 using Token = ClearBible.Engine.Corpora.Token;
 
 namespace ClearDashboard.Wpf.Application.Services
@@ -39,7 +40,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 // IsParallelCorpusToken so we can tell if this is CompositeToken(parallel) or CompositeToken(null)
                 if (parallelCorpusId != null)
                 {
-                    compositeToken.Metadata["IsParallelCorpusToken"] = true;
+                    compositeToken.Metadata[MetadatumKeys.IsParallelCorpusToken] = true;
                 }
            
                 await TokenizedTextCorpus.PutCompositeToken(Mediator, compositeToken, parallelCorpusId);

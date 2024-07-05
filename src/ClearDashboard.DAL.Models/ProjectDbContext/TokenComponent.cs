@@ -28,10 +28,12 @@ namespace ClearDashboard.DataAccessLayer.Models
         /// </summary>
         public string? CircumfixGroup { get; set; }
 
-        /// <summary>
-        /// The grammar type associated to this token.
-        /// </summary>
-        public Guid? GrammarId { get; set; }
+		/// <summary>
+		/// The grammar type associated to this token.
+		/// </summary>
+		[ForeignKey(nameof(GrammarId))]
+		public Guid? GrammarId { get; set; }
+		public virtual Grammar? Grammar { get; set; }
 
         public string? ExtendedProperties { get; set; }
 

@@ -134,7 +134,7 @@
     <value>停用当前许可证</value>
   </data>
   <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
-    <value>-其他账户-</value>
+    <value>-其他帐户-</value>
   </data>
   <data name="AccountInfo_ParatextEmailLabel" xml:space="preserve">
     <value>副文本电子邮件：</value>
@@ -656,7 +656,7 @@
     <value>删除对齐方式</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>删除“{0}”的对齐吗？</value>
+    <value>删除“{0}”的对齐方式吗？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
     <value>删除所有对齐方式？</value>
@@ -710,7 +710,7 @@
     <value>将拆分应用于令牌的其他实例</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>选择分割令牌的位置：</value>
+    <value>选择拆分令牌的位置：</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>三路分流</value>
@@ -804,6 +804,18 @@
   </data>
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>进口已取消</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>导入完成</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>遇到错误（查看日志了解详细信息）</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>导入词分析</value>
   </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
@@ -1493,7 +1505,7 @@
     <value>是否要删除标签：</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>您要取消关联标签吗：</value>
+    <value>您想取消关联标签吗：</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>来自标签组：</value>
@@ -1601,7 +1613,7 @@
     <value>部分</value>
   </data>
   <data name="Notes_PleaseAddJot" xml:space="preserve">
-    <value>请使用下面的对话框添加注释。</value>
+    <value>请使用下面的对话框添加记号。</value>
   </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
     <value>将这些笔记标记为已解决？</value>
@@ -1652,7 +1664,7 @@
     <value>旧约</value>
   </data>
   <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
-    <value>创建单词对齐</value>
+    <value>创建字对齐</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
     <value>创建语料库诗句的并行化</value>

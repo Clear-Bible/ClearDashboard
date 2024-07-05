@@ -11,5 +11,5 @@ namespace ClearDashboard.DataAccessLayer.Models;
         public string? Description { get; set; }
         public string? Category { get; set; }
 
-        public int Order { get; set; }
+        public int Precedence { get; set; }
     }

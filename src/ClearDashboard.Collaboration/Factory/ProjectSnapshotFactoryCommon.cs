@@ -25,7 +25,8 @@ public class ProjectSnapshotFactoryCommon
 
     public static readonly Dictionary<Type, string> topLevelEntityFolderNameMappings = new() {
         { typeof(Models.AlignmentSet), "AlignmentSets" },
-        { typeof(Models.Corpus), "Corpora" },
+		{ typeof(Models.Grammar), "Grammar" },
+		{ typeof(Models.Corpus), "Corpora" },
         { typeof(Models.LabelGroup), "LabelGroups" },
         { typeof(Models.Label), "Labels" },
         { typeof(Models.Note), "Notes" },
@@ -94,7 +95,8 @@ public class ProjectSnapshotFactoryCommon
         modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.User>>());
         modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.Lexicon_Lexeme>>());
         modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.Lexicon_SemanticDomain>>());
-        modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.Corpus>>());
+		modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.Grammar>>());
+		modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.Corpus>>());
         modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.TokenizedCorpus>>());
         modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.ParallelCorpus>>());
         modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.AlignmentSet>>());

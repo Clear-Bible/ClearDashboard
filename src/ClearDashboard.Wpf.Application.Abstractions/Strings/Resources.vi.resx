@@ -113,7 +113,7 @@
     <value>Phiên bản</value>
   </data>
   <data name="AccountInfo_ClearDashboardUserIdLabel" xml:space="preserve">
-    <value>Id người dùng ClearDashboard:</value>
+    <value>ClearDashboard UserId:</value>
   </data>
   <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
     <value>Tên người dùng ClearDashboard:</value>
@@ -805,6 +805,18 @@
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
   </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>Đã hủy nhập</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>Nhập hoàn tất</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>Đã gặp lỗi (kiểm tra nhật ký để biết chi tiết)</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>Nhập phân tích từ</value>
+  </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
   </data>
@@ -1187,7 +1199,7 @@
     <value>Sở thích</value>
   </data>
   <data name="MainView_QuickNew" xml:space="preserve">
-    <value>Mới nhanh</value>
+    <value>Nhanh chóng Mới</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Có sẵn các thay đổi cộng tác</value>
@@ -1826,7 +1838,7 @@
     <value>Tiêu chuẩn</value>
   </data>
   <data name="Pds_StartParatextFirst" xml:space="preserve">
-    <value>Bắt đầu đoạn văn đầu tiên</value>
+    <value>Bắt đầu đoạn văn bản đầu tiên</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
     <value>Nghiên CứuKinh Thánh</value>
@@ -2477,7 +2489,7 @@
     <value>Tôi không thể hoàn thành nhiệm vụ</value>
   </data>
   <data name="SlackMessageView_Combo3" xml:space="preserve">
-    <value>Tôi đã hoàn thành một nhiệm vụ nhưng nó rất khó khăn</value>
+    <value>Tôi đã hoàn thành một nhiệm vụ nhưng nó rất khó</value>
   </data>
   <data name="SlackMessageView_Combo4" xml:space="preserve">
     <value>Tôi muốn làm...</value>

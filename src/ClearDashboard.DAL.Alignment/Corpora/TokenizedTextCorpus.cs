@@ -299,6 +299,11 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             var result = await mediator.Send(command, cancellationToken);
             result.ThrowIfCanceledOrFailed(true);
 
+            if (UseCache)
+            {
+                InvalidateCache();
+            }
+
             return result.Data!;
         }
 
