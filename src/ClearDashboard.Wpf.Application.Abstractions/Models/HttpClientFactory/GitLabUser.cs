@@ -29,6 +29,9 @@ namespace ClearDashboard.Wpf.Application.Models.HttpClientFactory
 
         [JsonPropertyName("tokenId")]
         public int TokenId { get; set; }
+        
+        [JsonPropertyName("token")]
+        public string Token { get; set; }
 
         public string Password { get; set; } = "";
     }

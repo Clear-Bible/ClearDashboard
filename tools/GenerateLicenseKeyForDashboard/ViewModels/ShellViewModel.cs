@@ -681,7 +681,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                 {
                     Group = SelectedGroup.Name,
                     RemoteEmail = EmailBox,
-                    RemotePersonalAccessToken = accessToken,
+                    RemotePersonalAccessToken = accessToken.Token,
                     RemotePersonalPassword = password,
                     RemoteUrl = "",
                     RemoteUserName = user.UserName,
@@ -694,7 +694,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
                 user.Password = password;
 
-                var results = await _mySqlHttpClientServices.CreateNewCollabUser(user, accessToken);
+                var results = await _mySqlHttpClientServices.CreateNewCollabUser(user, accessToken.Token);
 
                 if (results)
                 {
