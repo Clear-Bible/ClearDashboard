@@ -1104,9 +1104,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 // no tokenId so create a new one
                 var result = await _gitLabHttpClientServices.RefreshToken(_collaborationManager.GetConfig(), token);
+                userConfig = _collaborationManager.GetConfig();
                 return;
             }
 
+            // check to see if the token is different from the one on the mysql server
+            var collabRemoteUsers = await _collaborationHttpClientServices.GetAllCollabUsers();
+            var collabRemoteUser = collabRemoteUsers.FirstOrDefault(x => x.UserId == userConfig.UserId);
+            if (collabRemoteUser.TokenId > userConfig.TokenId)
+            {
+                // update the tokenId
+                userConfig.TokenId = collabRemoteUser.TokenId;
+                userConfig.RemotePersonalAccessToken = collabRemoteUser.RemotePersonalAccessToken;
+
+                _collaborationManager.SaveCollaborationLicense(userConfig);
+            }
+
+            if (token.Id != collabRemoteUser.TokenId)
+            {
+                return;
+            }
 
             
             DateTime expireDate = DateTime.Now.AddDays(-60);
