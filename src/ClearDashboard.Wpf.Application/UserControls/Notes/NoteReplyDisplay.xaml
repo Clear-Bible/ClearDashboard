@@ -125,6 +125,9 @@
                                     <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ReplyParatextSendInformation}" Value="{x:Null}">
                                         <Setter Property="Visibility" Value="Collapsed" />
                                     </DataTrigger>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Reply.NoteStatus}" Value="Archived">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Button.Style>

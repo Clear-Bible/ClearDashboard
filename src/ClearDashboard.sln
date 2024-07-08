@@ -22,6 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		Build-Dashboard-Module-Project-Template.md = Build-Dashboard-Module-Project-Template.md
 		..\Caliburn-Micro-Cheat-Sheet.md = ..\Caliburn-Micro-Cheat-Sheet.md
 		..\CQRS-Cheat-Sheet.md = ..\CQRS-Cheat-Sheet.md
+		DotNet-Framework-Upgrade.md = DotNet-Framework-Upgrade.md
 		Generate Sematic Domain Lookup Sqlite.md = Generate Sematic Domain Lookup Sqlite.md
 		..\Localization-How-To.md = ..\Localization-How-To.md
 		Migration-How-To.md = Migration-How-To.md
@@ -111,6 +112,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{C04A676C-4AFC-4A03-961C-089CBA169193}"
+	ProjectSection(SolutionItems) = preProject
+		ReadMe.md = ReadMe.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClearDashboard.DAL.WpfViewModels", "ClearDashboard.DAL.WpfViewModels\ClearDashboard.DAL.WpfViewModels.csproj", "{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -696,6 +704,26 @@ Global
 		{EAFA3ECB-41F1-442C-85EE-BA5C9A1953DA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EAFA3ECB-41F1-442C-85EE-BA5C9A1953DA}.Release|x64.ActiveCfg = Release|Any CPU
 		{EAFA3ECB-41F1-442C-85EE-BA5C9A1953DA}.Release|x64.Build.0 = Release|Any CPU
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}.Collab_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}.Collab_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}.Collab_Debug|x64.ActiveCfg = Debug|Any CPU
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}.Collab_Debug|x64.Build.0 = Debug|Any CPU
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}.Collab_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}.Collab_Release|Any CPU.Build.0 = Release|Any CPU
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}.Collab_Release|x64.ActiveCfg = Release|Any CPU
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}.Collab_Release|x64.Build.0 = Release|Any CPU
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}.Debug|x64.Build.0 = Debug|Any CPU
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}.HighDPIDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}.HighDPIDebug|Any CPU.Build.0 = Debug|Any CPU
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}.HighDPIDebug|x64.ActiveCfg = Debug|Any CPU
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}.HighDPIDebug|x64.Build.0 = Debug|Any CPU
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}.Release|x64.ActiveCfg = Release|Any CPU
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -734,6 +762,8 @@ Global
 		{877AB7C9-8AE4-4C85-80F2-9ECE120D92A3} = {AA93D4BA-F38C-4446-BF88-90BDE0DC5F0B}
 		{B82B5AFC-27F1-40DC-8D34-714465D30761} = {AA93D4BA-F38C-4446-BF88-90BDE0DC5F0B}
 		{EAFA3ECB-41F1-442C-85EE-BA5C9A1953DA} = {AA93D4BA-F38C-4446-BF88-90BDE0DC5F0B}
+		{C04A676C-4AFC-4A03-961C-089CBA169193} = {AA93D4BA-F38C-4446-BF88-90BDE0DC5F0B}
+		{7B335DBB-2BF5-40A1-8791-E232CF9CE7B4} = {AB666381-AB6E-46E9-8CAB-DC08A7C93AA1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BFF05FFA-E592-49AC-8796-A4E60A3D729F}

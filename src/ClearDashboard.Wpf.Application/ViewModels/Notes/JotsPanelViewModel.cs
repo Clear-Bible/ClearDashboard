@@ -537,7 +537,10 @@ public JotsPanelViewModel()
 
                             foreach (var note in list)
                             {
-                                NoteViewModels.Add(note);
+                                if (!note.Entity.IsReply())
+                                {
+                                    NoteViewModels.Add(note);
+                                }
                             }
 
                             //noteVms
@@ -802,17 +805,17 @@ public JotsPanelViewModel()
             ConfirmationText = LocalizationService!["Notes_SendConfirmation"];
         }
 
-        private void SendNotesToParatext()
+        private async void SendNotesToParatext()
         {
             foreach (NoteViewModel note in NotesCollectionView)
             {
                 if (note.IsSelectedForBulkAction && note.EnableParatextSend)
                 {
-                    Task.Run(() => SendNotesToParatextAsync(note).GetAwaiter());
+                    await SendNotesToParatextAsync(note);
                 }
             }
 
-            EventAggregator.PublishOnUIThreadAsync(new ReloadExternalNotesDataMessage(ReloadType.Refresh),CancellationToken.None);
+            await EventAggregator.PublishOnUIThreadAsync(new ReloadExternalNotesDataMessage(ReloadType.Refresh),CancellationToken.None);
         }
 
         public async Task SendNotesToParatextAsync(NoteViewModel note)

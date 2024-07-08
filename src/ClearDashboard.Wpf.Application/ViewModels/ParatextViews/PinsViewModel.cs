@@ -36,6 +36,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Xml;
+using ClearDashboard.DAL.WpfViewModels;
 using Brushes = System.Windows.Media.Brushes;
 using Point = System.Windows.Point;
 
@@ -834,7 +835,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         private async Task<bool> GenerateLexiconDataCalculations(CancellationToken cancellationToken)
         {
-            if (ProjectManager.CurrentParatextProject is null)
+            if (ProjectManager?.CurrentParatextProject is null)
             {
                 return false;
             }
@@ -851,7 +852,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             foreach (var f in bookfilesfiltered) // loop through books f
             {
-                projectBookFileData = File.ReadAllLines(f); // read file and check
+                projectBookFileData = await File.ReadAllLinesAsync(f, cancellationToken); // read file and check
                 for (var k = 0; k < projectBookFileData.Count(); k++)
                 {
                     if (projectBookFileData[k].Contains("<item>"))
@@ -882,67 +883,70 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             if (_lexicon.Entries != null)
             {
                 // populate the data grid
-                foreach (var entry in _lexicon.Entries.Item)
-                {
-                    foreach (var senseEntry in entry.Entry.Sense)
+                if (_lexicon.Entries.Item != null)
+                    foreach (var entry in _lexicon.Entries.Item)
                     {
-                        string vl = string.Empty;
-                        var numRefCount = "0";
-                        List<string> verseList = new List<string>();
-
-                        try
-                        {
-                            if (LexMatRef.ContainsKey(senseEntry.Id + entry.Lexeme.Form))
+                        if (entry.Entry?.Sense != null)
+                            foreach (var senseEntry in entry.Entry?.Sense)
                             {
-                                var verseReferences = LexMatRef[senseEntry.Id + entry.Lexeme.Form].Split(',').ToList();
+                                string vl = string.Empty;
+                                var numRefCount = "0";
+                                List<string> verseList = new List<string>();
 
-                                var orderedList = SortRefs(verseReferences); // sort the List  
-
-                                verseReferences.Clear();
-                                foreach (var orderedReference in orderedList)
+                                try
                                 {
-                                    verseReferences.Add(orderedReference.stringB);
-                                    verseList.Add(orderedReference.stringA);
+                                    if (LexMatRef.ContainsKey(senseEntry.Id + entry.Lexeme?.Form))
+                                    {
+                                        var verseReferences = LexMatRef[senseEntry.Id + entry.Lexeme?.Form].Split(',')
+                                            .ToList();
 
+                                        var orderedList = SortRefs(verseReferences); // sort the List  
+
+                                        verseReferences.Clear();
+                                        foreach (var orderedReference in orderedList)
+                                        {
+                                            verseReferences.Add(orderedReference.stringB);
+                                            verseList.Add(orderedReference.stringA);
+                                        }
+
+                                        vl = string.Join(", ", verseReferences);
+                                        numRefCount = verseList.Count.ToString();
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    _logger.LogError(ex, "Adding Verse References from Interlinear_*.xml failed");
                                 }
 
-                                vl = string.Join(", ", verseReferences);
-                                numRefCount = verseList.Count.ToString();
+                                var xmlSource = XmlSource.Lexicon;
+
+                                _gridData.Add(new PinsDataTable
+                                {
+                                    Id = Guid.NewGuid(),
+                                    XmlSource = xmlSource,
+                                    XmlSourceAbbreviation = xmlSource.GetDescription(),
+                                    XmlSourceDisplayName =
+                                        "Lexicon", //Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath, "Lexicon.xml"),
+                                    Code = senseEntry.Id ?? string.Empty,
+                                    Gloss = senseEntry.Gloss?.Text ?? string.Empty,
+                                    Lang = senseEntry.Gloss?.Language ?? string.Empty,
+                                    Lform = entry.Lexeme?.Type ?? string.Empty,
+                                    Match = senseEntry.Id + entry.Lexeme?.Form,
+                                    Notes = "",
+                                    LexemeType = entry.Lexeme?.Type ?? string.Empty,
+                                    //Phrase = (entry.Lexeme.Type == "Phrase") ? "Phr" : "",
+                                    //Prefix = (entry.Lexeme.Type == "Prefix") ? "pre-" : "",
+                                    Refs = vl,
+                                    SimpRefs = numRefCount,
+                                    Source = entry.Lexeme?.Form ?? string.Empty,
+                                    //Stem = (entry.Lexeme.Type == "Stem") ? "Stem" : "",
+                                    //Suffix = (entry.Lexeme.Type == "Suffix") ? "-suf" : "",
+                                    VerseList = verseList,
+                                    //Word = (entry.Lexeme.Type == "Word") ? "Wrd" : "",
+                                });
+                                cancellationToken.ThrowIfCancellationRequested();
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            _logger.LogError(ex, "Adding Verse References from Interlinear_*.xml failed");
-                        }
-
-                        var xmlSource = XmlSource.Lexicon;
-
-                        _gridData.Add(new PinsDataTable
-                        {
-                            Id = Guid.NewGuid(),
-                            XmlSource = xmlSource,
-                            XmlSourceAbbreviation = xmlSource.GetDescription(),
-                            XmlSourceDisplayName = "Lexicon",//Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath, "Lexicon.xml"),
-                            Code = senseEntry.Id,
-                            Gloss = senseEntry.Gloss.Text,
-                            Lang = senseEntry.Gloss.Language,
-                            Lform = entry.Lexeme.Type,
-                            Match = senseEntry.Id + entry.Lexeme.Form,
-                            Notes = "",
-                            LexemeType = entry.Lexeme.Type,
-                            //Phrase = (entry.Lexeme.Type == "Phrase") ? "Phr" : "",
-                            //Prefix = (entry.Lexeme.Type == "Prefix") ? "pre-" : "",
-                            Refs = vl,
-                            SimpRefs = numRefCount,
-                            Source = entry.Lexeme.Form,
-                            //Stem = (entry.Lexeme.Type == "Stem") ? "Stem" : "",
-                            //Suffix = (entry.Lexeme.Type == "Suffix") ? "-suf" : "",
-                            VerseList = verseList,
-                            //Word = (entry.Lexeme.Type == "Word") ? "Wrd" : "",
-                        });
-                        cancellationToken.ThrowIfCancellationRequested();
                     }
-                }
             }
 
             return true;
