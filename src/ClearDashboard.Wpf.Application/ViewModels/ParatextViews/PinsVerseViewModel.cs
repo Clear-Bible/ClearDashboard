@@ -17,7 +17,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using ClearDashboard.DAL.WpfViewModels;
+using ClearDashboard.DAL.Wpf.ViewModels;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {

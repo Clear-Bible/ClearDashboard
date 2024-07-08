@@ -36,7 +36,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Xml;
-using ClearDashboard.DAL.WpfViewModels;
+using ClearDashboard.DAL.Wpf.ViewModels;
 using Brushes = System.Windows.Media.Brushes;
 using Point = System.Windows.Point;
 

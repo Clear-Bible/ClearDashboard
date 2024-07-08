@@ -4,7 +4,7 @@ using System.Windows.Documents;
 using ClearDashboard.DAL.ViewModels;
 
 
-namespace ClearDashboard.DAL.WpfViewModels
+namespace ClearDashboard.DAL.Wpf.ViewModels
 {
     public class VerseViewModel : ViewModelBase<VerseObject>
     {

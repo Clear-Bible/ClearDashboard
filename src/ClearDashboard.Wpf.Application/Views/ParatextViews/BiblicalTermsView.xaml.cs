@@ -1,16 +1,11 @@
-﻿using System;
+﻿using ClearDashboard.DAL.Wpf.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
+using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
-using SIL.IO.FileLock;
-using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DAL.WpfViewModels;
-using ClearDashboard.Wpf.Application.Helpers;
 
 namespace ClearDashboard.Wpf.Application.Views.ParatextViews
 {
