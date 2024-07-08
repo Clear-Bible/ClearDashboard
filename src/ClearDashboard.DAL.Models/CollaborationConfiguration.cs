@@ -10,5 +10,6 @@
         public string? RemotePersonalPassword { get; set; } = string.Empty;
         public string? Group { get; set; } = string.Empty;
         public int NamespaceId { get; set; }
+        public int TokenId { get; set; }
     }
 }

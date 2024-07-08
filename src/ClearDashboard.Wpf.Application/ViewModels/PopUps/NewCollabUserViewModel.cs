@@ -532,12 +532,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 {
                     Group = SelectedGroup.Name,
                     RemoteEmail = Email,
-                    RemotePersonalAccessToken = accessToken,
+                    RemotePersonalAccessToken = accessToken.Token,
                     RemotePersonalPassword = password,
                     RemoteUrl = "",
                     RemoteUserName = user.UserName,
                     UserId = user.Id,
                     NamespaceId = user.NamespaceId,
+                    TokenId = accessToken.Id
                 };
 
                 _collaborationConfiguration = CollaborationConfig;
@@ -545,7 +546,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
                 user.Password = password;
 
-                var results = await _collaborationHttpClientServices.CreateNewCollabUser(user, accessToken);
+                var results = await _collaborationHttpClientServices.CreateNewCollabUser(user, accessToken.Token);
 
                 if (results)
                 {

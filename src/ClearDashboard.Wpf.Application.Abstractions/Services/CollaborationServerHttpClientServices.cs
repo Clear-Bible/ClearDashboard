@@ -398,9 +398,9 @@ namespace ClearDashboard.Wpf.Application.Services
                 {
                     ["api-version"] = "2.0",
                 };
-                var uri = QueryHelpers.AddQueryString($"/api/users/{user.UserId}", query);
+                var uri = QueryHelpers.AddQueryString($"/api/users/", query);
 
-                var response = await _collaborationClient.Client.PutAsync(uri, content);
+                var response = await _collaborationClient.Client.PutAsJsonAsync(uri, user);
                 response.EnsureSuccessStatusCode();
 
                 return true;

@@ -759,7 +759,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         Email = CollaborationConfig.RemoteEmail!,
                         Password = CollaborationConfig.RemotePersonalPassword!,
                         Organization = CollaborationConfig.Group!,
-                        NamespaceId = CollaborationConfig.NamespaceId
+                        NamespaceId = CollaborationConfig.NamespaceId,
+                        TokenId = CollaborationConfig.TokenId
                     };
 
                     var result = await _collaborationHttpClientServices.CreateNewCollabUser(user, user.Password);
@@ -837,7 +838,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     RemotePersonalAccessToken = Encryption.Decrypt(collaborationUser.RemotePersonalAccessToken),
                     RemotePersonalPassword = Encryption.Decrypt(collaborationUser.RemotePersonalPassword),
                     Group = collaborationUser.GroupName,
-                    NamespaceId = collaborationUser.NamespaceId
+                    NamespaceId = collaborationUser.NamespaceId,
+                    TokenId = collaborationUser.TokenId
                 };
 
                 if (gitLabUser.RemotePersonalAccessToken != CollaborationConfig.RemotePersonalAccessToken)
@@ -1097,6 +1099,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             var userConfig = _collaborationManager.GetConfig();
             var token = await _gitLabHttpClientServices.GetTokenExpirationDate(userConfig);
+
+            if (userConfig.TokenId == 0)
+            {
+                // no tokenId so create a new one
+                var result = await _gitLabHttpClientServices.RefreshToken(_collaborationManager.GetConfig(), token);
+                return;
+            }
+
+
             
             DateTime expireDate = DateTime.Now.AddDays(-60);
             if (token is null)
