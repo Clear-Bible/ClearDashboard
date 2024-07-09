@@ -1111,7 +1111,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             // check to see if the token is different from the one on the mysql server
             var collabRemoteUsers = await _collaborationHttpClientServices.GetAllCollabUsers();
             var collabRemoteUser = collabRemoteUsers.FirstOrDefault(x => x.UserId == userConfig.UserId);
-            if (collabRemoteUser.TokenId > userConfig.TokenId)
+            if (collabRemoteUser.TokenId > userConfig.TokenId || collabRemoteUser.RemotePersonalAccessToken != userConfig.RemotePersonalAccessToken)
             {
                 // update the tokenId
                 userConfig.TokenId = collabRemoteUser.TokenId;
