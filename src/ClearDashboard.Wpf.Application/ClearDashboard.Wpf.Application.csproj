@@ -7,9 +7,9 @@
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>Assets\ClearDashboard_Icon.ico</ApplicationIcon>
     <Copyright>Clear Bible, 2023</Copyright>
-    <AssemblyVersion>1.4.4.1</AssemblyVersion>
-    <FileVersion>1.4.4.1</FileVersion>
-    <Version>1.4.4.1</Version>
+    <AssemblyVersion>1.4.4.2</AssemblyVersion>
+    <FileVersion>1.4.4.2</FileVersion>
+    <Version>1.4.4.2</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <UserSecretsId>b02febcf-d7fc-48e1-abb1-f03647ca553c</UserSecretsId>
     <Configurations>Debug;Release;Collab_Release;Collab_Debug;HighDPIDebug</Configurations>
