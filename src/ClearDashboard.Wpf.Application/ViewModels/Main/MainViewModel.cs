@@ -450,13 +450,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await RebuildMainMenu();
             await ActivateDockedWindowViewModels(cancellationToken);
             await LoadAvalonDockLayout();
+            EventAggregator.SubscribeOnUIThread(this);
             await LoadEnhancedViewTabs(cancellationToken);
         }
 
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            EventAggregator.SubscribeOnUIThread(this);
             Logger.LogInformation($"Subscribing {nameof(MainViewModel)} to the EventAggregator");
             _dockingManager.ActiveContentChanged += OnActiveContentChanged;
             _dockingManager.DocumentClosed += OnEnhancedViewClosed;

@@ -97,6 +97,7 @@
 
             <StackPanel
                 Grid.Row="3"
+                Grid.RowSpan="2"
                 Grid.ColumnSpan="1"
                 Margin="10"
                 HorizontalAlignment="Left"
@@ -110,6 +111,8 @@
                 <Label HorizontalAlignment="Left" Content="{helpers:Localization AccountInfo_SelectAccountLabel}" />
 
                 <ListBox
+                    Height="185"
+                    ScrollViewer.CanContentScroll="False"
                     IsEnabled="{Binding IsEnabled}"
                     ItemsSource="{Binding UserAndPathList}"
                     SelectedItem="{Binding SelectedUserAndPath}">
