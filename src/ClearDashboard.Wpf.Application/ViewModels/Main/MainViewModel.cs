@@ -450,13 +450,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await RebuildMainMenu();
             await ActivateDockedWindowViewModels(cancellationToken);
             await LoadAvalonDockLayout();
-            EventAggregator.SubscribeOnUIThread(this);
-            await LoadEnhancedViewTabs(cancellationToken);
+            await LoadEnhancedViewTabs(cancellationToken, true);
         }
 
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
+            EventAggregator.SubscribeOnUIThread(this);
             Logger.LogInformation($"Subscribing {nameof(MainViewModel)} to the EventAggregator");
             _dockingManager.ActiveContentChanged += OnActiveContentChanged;
             _dockingManager.DocumentClosed += OnEnhancedViewClosed;
@@ -704,7 +704,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 
 
-        private async Task LoadEnhancedViewTabs(CancellationToken cancellationToken)
+        private async Task LoadEnhancedViewTabs(CancellationToken cancellationToken, bool skipFirstTab = false, bool onlyLoadFirstTab = false)
         {
             _ = Task.Run((Func<Task>)(async () =>
             {
@@ -714,6 +714,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 if (enhancedViews == null)
                 {
                     return;
+                } 
+                else if (enhancedViews.Count > 0 && skipFirstTab)
+                {
+                    enhancedViews.RemoveAt(0);
+                }
+                else if (enhancedViews.Count > 1 && onlyLoadFirstTab)
+                {
+                    enhancedViews.RemoveRange(1, enhancedViews.Count - 1);
                 }
 
                 await Execute.OnUIThreadAsync(async () =>
@@ -790,12 +798,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                     await Task.Delay(100, cancellationToken);
                 }
-
-                var placeholderEnhancedViewModel = (EnhancedViewModel)Items.FirstOrDefault(vm => vm is EnhancedViewModel);
-                if (placeholderEnhancedViewModel != null)
-                {
-                    await placeholderEnhancedViewModel.RequestClose(placeholderEnhancedViewModel, false);
-                }
             }
             catch (Exception ex)
             {
@@ -837,9 +839,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         private async Task ActivateDockedWindowViewModels(CancellationToken cancellationToken)
         {
             Items.Clear();
-
+            
             // documents
-            await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
+            await LoadEnhancedViewTabs(cancellationToken, onlyLoadFirstTab: true);
             // tools
             await ActivateItemAsync<BiblicalTermsViewModel>(cancellationToken);
 
