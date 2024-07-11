@@ -197,7 +197,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                     {
                         var lexiconTranslationId = (SelectedTranslation.TranslationId.IsInDatabase) ? SelectedTranslation.TranslationId : null;
                         await InterlinearDisplay.PutTranslationAsync(new Translation(TokenDisplay.TokenForTranslation, SelectedTranslation.Text, Translation.OriginatedFromValues.Assigned, lexiconTranslationId),
-                                                                     ApplyToAll ? TranslationActionTypes.PutPropagate : TranslationActionTypes.PutNoPropagate);
+                                                                     ApplyToAll ? TranslationActionTypes.PutPropagate : TranslationActionTypes.PutNoPropagate );
                     }
                 }
 #if !DEMO

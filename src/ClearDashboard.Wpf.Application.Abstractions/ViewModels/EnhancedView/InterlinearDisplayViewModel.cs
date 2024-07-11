@@ -87,19 +87,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <param name="translation">The <see cref="Translation"/> to save to the database.</param>
         /// <param name="translationActionType"></param>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task PutTranslationAsync(Translation translation, string translationActionType)
+        public async Task PutTranslationAsync(Translation translation, string translationActionType, bool refreshVerse = true, ReloadType reloadType = ReloadType.Refresh)
         {
             if (TranslationManager == null) throw new InvalidOperationException($"Cannot save translation {translation.TargetTranslationText} for token '{translation.SourceToken.SurfaceText}' ({translation.SourceToken.TokenId.Id}) because the translation manager is invalid.");
 
             await TranslationManager.PutTranslationAsync(translation, translationActionType);
-            await UpdateTokens(false);
+            await UpdateTokens(false, refreshVerse, reloadType);
         }
 
         /// <summary>
         /// Rebuild the token display view models and broadcast a message that the underlying tokens may have changed.
         /// </summary>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task UpdateTokens(bool updateTranslations)
+        public async Task UpdateTokens(bool updateTranslations, bool refreshVerse = true, ReloadType reloadType = ReloadType.Refresh)
         {
             if (updateTranslations && TranslationManager != null)
             {
@@ -107,7 +107,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             await BuildTokenDisplayViewModelsAsync();
             await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage());
-            await EventAggregator.PublishOnUIThreadAsync(new RefreshVerse());
+            if (refreshVerse)
+            {
+                await EventAggregator.PublishOnUIThreadAsync(new RefreshVerse(reloadType));
+            }
         }
 
         public TViewModel Resolve<TViewModel>() where TViewModel : notnull
