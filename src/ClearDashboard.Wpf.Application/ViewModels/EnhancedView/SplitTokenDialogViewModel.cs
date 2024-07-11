@@ -26,6 +26,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Token = ClearBible.Engine.Corpora.Token;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using ClearDashboard.Wpf.Application.Messages;
 
 // ReSharper disable UnusedMember.Global
 
@@ -247,7 +249,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                             await SaveGloss(translation, composite, applyToAll);
                         }
                     }
-                    await Task.CompletedTask;
+
+
+                    TokenDisplay.Corpus.InvalidateCache();
+                    //await Task.CompletedTask;
+
+                    await EventAggregator.PublishOnUIThreadAsync(new TokenSplitMessage(result.SplitCompositeTokensByIncomingTokenId, result.SplitChildTokensByIncomingTokenId), CancellationToken.None);
+                   // await EventAggregator.PublishOnUIThreadAsync(new RefreshVerse(ReloadType.Force));
+                    await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage(ReloadType.Force));
                 }
 
                 await Task.Run(async () => await SaveSplitTokens());
@@ -263,7 +272,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             var lexiconTranslationId = (translation.TranslationId.IsInDatabase) ? translation.TranslationId : null;
             await InterlinearDisplay.PutTranslationAsync(new Translation(token, translation.Text, Translation.OriginatedFromValues.Assigned, lexiconTranslationId),
-                applyToAll ? TranslationActionTypes.PutPropagate : TranslationActionTypes.PutNoPropagate);
+                applyToAll ? TranslationActionTypes.PutPropagate : TranslationActionTypes.PutNoPropagate, false);
         }
 
 
