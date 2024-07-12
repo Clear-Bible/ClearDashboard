@@ -55,13 +55,8 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
 		public ObservableCollection<Lexeme> Lexemes
 		{
             get { return lexemes_; }
-#if DEBUG
             set { lexemes_ = value; }
-#else
-            // RELEASE MODIFIED
-            //set { meanings_ = value; }
-            set { meanings_ = value; }
-#endif
+
         }
 
         public bool IsDirty { get; internal set; } = false;

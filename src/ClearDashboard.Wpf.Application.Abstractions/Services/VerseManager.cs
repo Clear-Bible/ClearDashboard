@@ -50,7 +50,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 await EventAggregator.PublishOnUIThreadAsync(new TokensJoinedMessage(compositeToken, tokens, parallelCorpusId!));
                 SelectionManager.SelectionUpdated();
-                await EventAggregator.PublishOnBackgroundThreadAsync(new ReloadDataMessage(ReloadType.Force));
+                await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage(ReloadType.Force));
             }
             catch (Exception e)
             {
