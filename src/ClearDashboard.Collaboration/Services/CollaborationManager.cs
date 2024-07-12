@@ -114,6 +114,7 @@ public class CollaborationManager
             RemoteUserName = collaborationConfiguration.RemoteUserName,
             UserId = collaborationConfiguration.UserId,
             NamespaceId = collaborationConfiguration.NamespaceId,
+            TokenId = collaborationConfiguration.TokenId
         };
 
         var gitCollaboration = new GitCollaboration
@@ -942,6 +943,7 @@ public class CollaborationManager
             RemoteUserName = _configuration.RemoteUserName,
             UserId = _configuration.UserId,
             NamespaceId = _configuration.NamespaceId,
+            TokenId = _configuration.TokenId
         };
     }
 

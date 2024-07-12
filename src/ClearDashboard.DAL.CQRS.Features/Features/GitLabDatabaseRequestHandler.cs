@@ -45,6 +45,7 @@ namespace ClearDashboard.DAL.CQRS.Features.Features
                 var remotePersonalPassword = reader.GetValue(4).ToString();
                 var groupName = reader.GetValue(5).ToString();
                 var namespaceId = (int)reader.GetValue(6);
+                var tokenId = (int)reader.GetValue(7);
 
                 CollaborationConfigurations.Add(new CollaborationConfiguration
                 {
@@ -54,7 +55,8 @@ namespace ClearDashboard.DAL.CQRS.Features.Features
                     RemotePersonalAccessToken = remotePersonalAccessToken,
                     RemotePersonalPassword = remotePersonalPassword,
                     Group = groupName,
-                    NamespaceId = namespaceId
+                    NamespaceId = namespaceId,
+                    TokenId = tokenId,
                 });
             }
 

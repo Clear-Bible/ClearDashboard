@@ -272,6 +272,7 @@ namespace ClearDashboard.Wpf.Application
                     userId = 2;
                     nameSpaceId = 0;
                 }
+
                 return new CollaborationConfiguration()
                 {
                     RemoteUrl = section["RemoteUrl"],
@@ -281,7 +282,8 @@ namespace ClearDashboard.Wpf.Application
                     Group  = section["Group"],
                     RemotePersonalPassword = section["RemotePersonalPassword"], 
                     UserId = userId,
-                    NamespaceId = nameSpaceId
+                    NamespaceId = nameSpaceId,
+                    TokenId = section["TokenId"] is not null ? Convert.ToInt16(section["TokenId"]) : 0
                 };
             });
 

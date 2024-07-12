@@ -228,7 +228,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
                 Email = _userInfo.RemoteEmail,
                 UserName = _userInfo.RemoteUserName,
                 NamespaceId = _userInfo.NamespaceId,
-                Organization = _userInfo.Group
+                Organization = _userInfo.Group,
+                TokenId = _userInfo.TokenId
             };
 
             var projectCreated = await CreateProjectOnServerIfNotCreated();
