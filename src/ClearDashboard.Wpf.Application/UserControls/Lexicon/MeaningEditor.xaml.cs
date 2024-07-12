@@ -86,6 +86,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         #endregion Static Routed Events
         #region Static Dependency Properties
 
+        public static readonly DependencyProperty IsReadOnlyProperty = DependencyProperty.Register(nameof(IsReadOnly), typeof(bool), typeof(MeaningEditor));
+
         /// <summary>
         /// Identifies the Lexeme dependency property.
         /// </summary>
@@ -493,6 +495,14 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         #region Public Properties
 
         public static IEventAggregator? EventAggregator { get; set; }
+
+
+
+        public bool IsReadOnly
+        {
+            get => (bool)GetValue(IsReadOnlyProperty);
+            set => SetValue(IsReadOnlyProperty, value);
+        }
 
         /// <summary>
         /// Gets or sets the lexeme containing the meaning associated with the editor.

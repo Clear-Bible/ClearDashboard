@@ -1,5 +1,6 @@
 ﻿using ClearDashboard.Wpf.Application.Events.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -43,9 +44,11 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         public static readonly DependencyProperty DeleteVisibilityProperty = DependencyProperty.Register(nameof(DeleteVisibility), typeof(Visibility), typeof(LexiconTranslationDisplay),
             new PropertyMetadata(Visibility.Visible));
 
+        public static readonly DependencyProperty IsReadOnlyProperty = DependencyProperty.Register(nameof(IsReadOnly), typeof(bool), typeof(LexiconTranslationDisplay));
+
         #endregion Static Dependency Properties
         #region Private Methods
-        
+
         private LexiconTranslationViewModel Translation => (DataContext as LexiconTranslationViewModel)!;
 
         private void RaiseTranslationEntryEvent(RoutedEvent routedEvent, LexiconTranslationViewModel translation)
@@ -108,6 +111,11 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         #endregion Private Event Handlers
         #region Public Properties
 
+        public bool IsReadOnly
+        {
+            get => (bool)GetValue(IsReadOnlyProperty);
+            set => SetValue(IsReadOnlyProperty, value);
+        }
         /// <summary>
         /// Gets or sets the visibility of the count text.
         /// </summary>

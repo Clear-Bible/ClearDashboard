@@ -12,6 +12,8 @@ using static ClearDashboard.DAL.Alignment.Features.Corpora.UpdateOrAddVersesInTo
 using Models = ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models;
 using SIL.Machine.SequenceAlignment;
+using static ClearDashboard.DAL.Alignment.Features.Common.DataUtil;
+using ClearDashboard.DAL.Interfaces;
 
 namespace ClearDashboard.DAL.Alignment.Features.Common
 {
@@ -90,7 +92,59 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             _ = await alignmentCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        private static void ApplyColumnsToCommand(DbCommand command, Type type, string[] columns)
+		public static DbCommand CreateTranslationInsertCommand(DbConnection connection)
+		{
+			var command = connection.CreateCommand();
+			var columns = new string[] { "Id", "SourceTokenComponentId", "TargetText", "TranslationState", "TranslationSetId", "LexiconTranslationId", "UserId", "Created" };
+
+			ApplyColumnsToCommand(command, typeof(Models.Translation), columns);
+
+			command.Prepare();
+
+			return command;
+		}
+
+		public static async Task InsertTranslationAsync(Models.Translation translation, Guid translationSetId, DbCommand translationCommand, Guid currentUserId, CancellationToken cancellationToken)
+		{
+			var converter = new DateTimeOffsetToBinaryConverter();
+
+			translationCommand.Parameters["@Id"].Value = (Guid.Empty != translation.Id) ? translation.Id : Guid.NewGuid();
+			translationCommand.Parameters["@SourceTokenComponentId"].Value = translation.SourceTokenComponentId;
+			translationCommand.Parameters["@TargetText"].Value = translation.TargetText;
+			translationCommand.Parameters["@TranslationState"].Value = translation.TranslationState;
+			translationCommand.Parameters["@TranslationSetId"].Value = translationSetId;
+			translationCommand.Parameters["@LexiconTranslationId"].Value = (null != translation.LexiconTranslationId) ? translation.LexiconTranslationId : DBNull.Value;
+			translationCommand.Parameters["@UserId"].Value = Guid.Empty != translation.UserId ? translation.UserId : currentUserId;
+			translationCommand.Parameters["@Created"].Value = converter.ConvertToProvider(translation.Created);
+			_ = await translationCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+		}
+
+		public static DbCommand CreateTokenVerseAssociationInsertCommand(DbConnection connection)
+		{
+			var command = connection.CreateCommand();
+			var columns = new string[] { "Id", "TokenComponentId", "VerseId", "Position", "UserId", "Created" };
+
+			ApplyColumnsToCommand(command, typeof(Models.TokenVerseAssociation), columns);
+
+			command.Prepare();
+
+			return command;
+		}
+
+		public static async Task InsertTokenVerseAssociationAsync(Models.TokenVerseAssociation tokenVerseAssociation, DbCommand tvaCommand, Guid currentUserId, CancellationToken cancellationToken)
+		{
+			var converter = new DateTimeOffsetToBinaryConverter();
+
+			tvaCommand.Parameters["@Id"].Value = (Guid.Empty != tokenVerseAssociation.Id) ? tokenVerseAssociation.Id : Guid.NewGuid();
+			tvaCommand.Parameters["@TokenComponentId"].Value = tokenVerseAssociation.TokenComponentId;
+			tvaCommand.Parameters["@VerseId"].Value = tokenVerseAssociation.VerseId;
+			tvaCommand.Parameters["@Position"].Value = tokenVerseAssociation.Position;
+			tvaCommand.Parameters["@UserId"].Value = Guid.Empty != tokenVerseAssociation.UserId ? tokenVerseAssociation.UserId : currentUserId;
+			tvaCommand.Parameters["@Created"].Value = converter.ConvertToProvider(tokenVerseAssociation.Created);
+			_ = await tvaCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+		}
+
+		private static void ApplyColumnsToCommand(DbCommand command, Type type, string[] columns)
         {
             command.CommandText =
             $@"
@@ -129,8 +183,123 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        //Same as ProjectTemplateProcessRunner, how do we do background tasks?
-        public static async Task<TrainSmtModelSet> TrainSmtModelAsync(string taskName, bool isTrainedSymmetrizedModel, SmtModelType smtModelType, bool generateAlignedTokenPairs, EngineParallelTextCorpus parallelCorpus, ILogger logger, TranslationCommands translationCommands, CancellationToken cancellationToken)
+		public static DbCommand CreateAlignmentSourceOrTargetIdSetCommand(DbConnection connection, bool isSource)
+		{
+			var columnName = isSource
+				? nameof(DataAccessLayer.Models.Alignment.SourceTokenComponentId)
+				: nameof(DataAccessLayer.Models.Alignment.TargetTokenComponentId);
+
+			var command = connection.CreateCommand();
+			var columns = new string[] { columnName };
+			var whereColumns = new (string, WhereEquality)[] { (nameof(IdentifiableEntity.Id), WhereEquality.Equals) };
+
+			DataUtil.ApplyColumnsToUpdateCommand(
+				command,
+				typeof(DataAccessLayer.Models.Alignment),
+				columns,
+				whereColumns,
+				Array.Empty<(string, int)>());
+
+			command.Prepare();
+
+			return command;
+		}
+
+		public static async Task SetAlignmentSourceIdAsync(Guid alignmentId, Guid sourceTokenComponentId, DbCommand command, CancellationToken cancellationToken)
+		{
+			command.Parameters[$"@{nameof(DataAccessLayer.Models.Alignment.SourceTokenComponentId)}"].Value = sourceTokenComponentId;
+			command.Parameters[$"@{nameof(IdentifiableEntity.Id)}"].Value = alignmentId;
+
+			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+		}
+
+		public static async Task SetAlignmentTargetIdAsync(Guid alignmentId, Guid targetTokenComponentId, DbCommand command, CancellationToken cancellationToken)
+		{
+			command.Parameters[$"@{nameof(DataAccessLayer.Models.Alignment.TargetTokenComponentId)}"].Value = targetTokenComponentId;
+			command.Parameters[$"@{nameof(IdentifiableEntity.Id)}"].Value = alignmentId;
+
+			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+		}
+
+		public static DbCommand CreateTranslationSourceIdSetCommand(DbConnection connection)
+		{
+			var command = connection.CreateCommand();
+			var columns = new string[] { nameof(DataAccessLayer.Models.Translation.SourceTokenComponentId) };
+			var whereColumns = new (string, WhereEquality)[] { (nameof(IdentifiableEntity.Id), WhereEquality.Equals) };
+
+			DataUtil.ApplyColumnsToUpdateCommand(
+				command,
+				typeof(DataAccessLayer.Models.Translation),
+				columns,
+				whereColumns,
+				Array.Empty<(string, int)>());
+
+			command.Prepare();
+
+			return command;
+		}
+
+		public static async Task SetTranslationSourceIdAsync(Guid translationId, Guid sourceTokenComponentId, DbCommand command, CancellationToken cancellationToken)
+		{
+			command.Parameters[$"@{nameof(DataAccessLayer.Models.Translation.SourceTokenComponentId)}"].Value = sourceTokenComponentId;
+			command.Parameters[$"@{nameof(IdentifiableEntity.Id)}"].Value = translationId;
+
+			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+		}
+
+		public static DbCommand CreateTVATokenComponentIdSetCommand(DbConnection connection)
+		{
+			var command = connection.CreateCommand();
+			var columns = new string[] { nameof(DataAccessLayer.Models.TokenVerseAssociation.TokenComponentId) };
+			var whereColumns = new (string, WhereEquality)[] { (nameof(IdentifiableEntity.Id), WhereEquality.Equals) };
+
+			DataUtil.ApplyColumnsToUpdateCommand(
+				command,
+				typeof(DataAccessLayer.Models.TokenVerseAssociation),
+				columns,
+				whereColumns,
+				Array.Empty<(string, int)>());
+
+			command.Prepare();
+
+			return command;
+		}
+
+		public static async Task SetTVATokenComponentIdAsync(Guid tvaId, Guid tokenComponentId, DbCommand command, CancellationToken cancellationToken)
+		{
+			command.Parameters[$"@{nameof(DataAccessLayer.Models.TokenVerseAssociation.TokenComponentId)}"].Value = tokenComponentId;
+			command.Parameters[$"@{nameof(IdentifiableEntity.Id)}"].Value = tvaId;
+
+			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+		}
+
+		public static DbCommand CreateAlignmentDenormalizationTaskInsertCommand(DbConnection connection)
+		{
+			var command = connection.CreateCommand();
+			var columns = new string[] { "Id", "AlignmentSetId", "SourceText" };
+
+			DataUtil.ApplyColumnsToInsertCommand(command, typeof(Models.AlignmentSetDenormalizationTask), columns);
+
+			command.Prepare();
+
+			return command;
+		}
+
+		public static async Task<Guid> InsertAlignmentDenormalizationTaskAsync(Models.AlignmentSetDenormalizationTask denormalizationTask, DbCommand command, CancellationToken cancellationToken)
+		{
+            var id = Guid.NewGuid();
+
+			command.Parameters["@Id"].Value = id;
+			command.Parameters["@AlignmentSetId"].Value = denormalizationTask.AlignmentSetId;
+			command.Parameters["@SourceText"].Value = !string.IsNullOrEmpty(denormalizationTask.SourceText) ? denormalizationTask.SourceText : DBNull.Value;
+
+			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+
+            return id;
+		}
+
+		//Same as ProjectTemplateProcessRunner, how do we do background tasks?
+		public static async Task<TrainSmtModelSet> TrainSmtModelAsync(string taskName, bool isTrainedSymmetrizedModel, SmtModelType smtModelType, bool generateAlignedTokenPairs, EngineParallelTextCorpus parallelCorpus, ILogger logger, TranslationCommands translationCommands, CancellationToken cancellationToken)
         {
             var symmetrizationHeuristic = isTrainedSymmetrizedModel
                 ? SymmetrizationHeuristic.GrowDiagFinalAnd

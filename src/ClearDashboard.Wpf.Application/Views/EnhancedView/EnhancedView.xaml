@@ -366,6 +366,22 @@
                         Margin="5,0,0,0"
                         VerticalAlignment="Center"
                         IsChecked="{Binding ParagraphMode}" />
+                    <StackPanel
+                        Grid.Row="5"
+                        Grid.Column="2"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                        <Label
+                            Margin="15,0,0,0"
+                            VerticalAlignment="Center"
+                            Content="{helpers:Localization FontSettings_ShowExternalNotes}"
+                            FontWeight="Bold" />
+                        <CheckBox
+                            Margin="5,0,0,0"
+                            VerticalAlignment="Center"
+                            IsChecked="{Binding ShowExternalNotes}" />
+                    </StackPanel>
+
 
                     <StackPanel
                         Grid.Row="5"

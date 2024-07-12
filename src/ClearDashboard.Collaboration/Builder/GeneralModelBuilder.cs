@@ -26,6 +26,9 @@ namespace ClearDashboard.Collaboration.Builder;
 /// <typeparam name="T"></typeparam>
 public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> where T : Models.IdentifiableEntity
 {
+    public const string HASH_SEPARATOR = "_";
+    public const string ENCODE_DECODE_SEPARATOR = "||";
+
     public override string IdentityKey { get; init; } = typeof(T).GetIdentityProperty()!.Name;
     public override IEnumerable<PropertyInfo> PropertyInfos { get; init; } = typeof(T).GetProperties();
     public override IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes { get; init; } = new Dictionary<string, Type>();
@@ -196,8 +199,12 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
             {
                 generalModel.Add(kvp.Key, (IDictionary<string, object>)kvp.Value.value!);
             }
-            else
-            {
+			else if (kvp.Value.type.IsAssignableTo(typeof(IList<Models.Metadatum>)))
+			{
+				generalModel.Add(kvp.Key, (IList<Models.Metadatum>)kvp.Value.value!);
+			}
+			else
+			{
                 // Should never get here if caller already checked IsDatabasePrimitiveType
                 throw new NotSupportedException($"Type {kvp.Value.type.Name} not supported in commit snapshot builder");
             }
@@ -206,13 +213,13 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
 
     internal static string HashPartsToRef(string refPrefixNoUnderscore, params string?[] parts)
     {
-        var joinedParts = string.Join('_', parts.Select(e => string.IsNullOrEmpty(e) ? string.Empty : e));
+        var joinedParts = string.Join(HASH_SEPARATOR, parts.Select(e => string.IsNullOrEmpty(e) ? string.Empty : e));
         return $"{refPrefixNoUnderscore}_{joinedParts.ToMD5String()}";
     }
 
     internal static string EncodePartsToRef(string refPrefixNoUnderscore, params string?[] parts)
     {
-        var joinedParts = string.Join('_', parts.Select(e => string.IsNullOrEmpty(e) ? string.Empty : e));
+        var joinedParts = string.Join(ENCODE_DECODE_SEPARATOR, parts.Select(e => string.IsNullOrEmpty(e) ? string.Empty : e));
         var bytes = Encoding.UTF8.GetBytes(joinedParts);
         return $"{refPrefixNoUnderscore}_{Convert.ToBase64String(bytes)}";
     }
@@ -222,38 +229,20 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
         var base64String = Regex.Replace(refValue, $@"^{refPrefixNoUnderscore}_", string.Empty);
         var decodedString = Encoding.UTF8.GetString(Convert.FromBase64String(base64String));
 
-        var parts = decodedString.Split('_');
+        var parts = decodedString.Split(ENCODE_DECODE_SEPARATOR);
 
         if (parts.Length != expectedNumberOfParts)
         {
-            // label and group test
-            if (refPrefixNoUnderscore == "Label" || refPrefixNoUnderscore == "LabelGroup")
-            {
-                //Debug.WriteLine($"Unable to decode {refPrefixNoUnderscore} {decodedString} Ref {refValue}");
-                parts = decodedString.Split("bogus!!delimiter");
+			// Per issue https://github.com/Clear-Bible/ClearDashboard/issues/1321
+			// First try to decode using the new ENCODE_DECODE_SEPARATOR delimiter. If the resulting number of parts
+            // doesn't match what was expected, try the older "_" as the delimiter, and if neither match, throw the
+            // PropertyResolutionException.
+			parts = decodedString.Split('_');
+        }
 
-                /* 
-                 * the below code of just trying to replace underscores with hyphens throws an exception
-                 * later on:
-                 * 
-                 * Exception thrown attempting to initialize project database: Unable to initialize database for project '5f98deaf-23c0-4654-bf3d-ec46168ec1cc', 
-                 * commit 'efb46e8aec0240d9064a80343e6398831083f810':  
-                 * exception type: SqliteException, having message: SQLite Error 19: 'NOT NULL constraint failed: LabelNoteAssociation.LabelId'.
-                 * 
-                 */
-                
-                //decodedString = decodedString.Replace("_", "-");
-
-                //parts = decodedString.Split('_');
-                //if (parts.Length != expectedNumberOfParts)
-                //{
-                //    throw new PropertyResolutionException($"Unable to decode {refPrefixNoUnderscore} Ref {refValue}");
-                //}
-            }
-            else
-            {
-                throw new PropertyResolutionException($"Unable to decode {refPrefixNoUnderscore} Ref {refValue}");
-            }
+        if (parts.Length != expectedNumberOfParts)
+        {
+            throw new PropertyResolutionException($"Unable to decode {refPrefixNoUnderscore} Ref {refValue}");
         }
 
         return parts;

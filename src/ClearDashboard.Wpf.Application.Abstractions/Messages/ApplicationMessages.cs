@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace ClearDashboard.Wpf.Application.Messages
 {
-    public record RefreshVerse();
+    public record RefreshVerse(ReloadType ReloadType = ReloadType.Refresh);
     public record IsBackgroundDeletionTaskRunning(string TaskName, ParallelCorpusConnectorViewModel ConnectorDraggedOut, ParallelCorpusConnectorViewModel ConnectorDraggedOver, ParallelCorpusConnectionViewModel NewConnection);
     public record BackgroundDeletionTaskRunning(bool Result, ParallelCorpusConnectorViewModel ConnectorDraggedOut, ParallelCorpusConnectorViewModel ConnectorDraggedOver, ParallelCorpusConnectionViewModel NewConnection);
 

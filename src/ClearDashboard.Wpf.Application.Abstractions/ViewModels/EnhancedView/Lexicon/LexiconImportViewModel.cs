@@ -10,6 +10,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
         private Guid _meaningId;
         private Guid _translationId;
         private bool _isSelected;
+        private bool _hasConflictingMatch;
         private bool _showAddAsFormButton;
         private bool _showAddTargetAsTranslationButton;
 
@@ -25,6 +26,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
         {
             get => _isSelected;
             set => Set(ref _isSelected, value);
+        }
+
+        public bool HasConflictingMatch
+        {
+            get => _hasConflictingMatch;
+            set => Set(ref _hasConflictingMatch, value);
         }
 
         public Guid LexemeId

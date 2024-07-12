@@ -113,7 +113,15 @@ namespace ClearDashboard.Collaboration.Model
                         propertyDifference = new PropertyDifference(propertyName, diff);
                     }
                 }
-                else if (propertyType.IsValueType || propertyType == typeof(string))
+				else if (propertyType.IsAssignableTo(typeof(IList<DataAccessLayer.Models.Metadatum>)))
+				{
+					var diff = ((IList<DataAccessLayer.Models.Metadatum>)value).FindMetadataListDifference((IList<DataAccessLayer.Models.Metadatum>)valueOther);
+					if (diff.HasDifferences)
+					{
+						propertyDifference = new PropertyDifference(propertyName, diff);
+					}
+				}
+				else if (propertyType.IsValueType || propertyType == typeof(string))
                 {
                     propertyDifference = new PropertyDifference(propertyName, propertyType.ToValueDifference(value, valueOther));
                 }
@@ -199,7 +207,45 @@ namespace ClearDashboard.Collaboration.Model
             return difference;
         }
 
-        internal static ListDifference? FindChildListDifference<T>(this IModelSnapshot<T> modelSnapshot, string childName, IModelSnapshot<T> otherModelSnapshot)
+		/// <summary>
+		/// Finds differences in a Metadatum list
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="other"></param>
+		/// <returns></returns>
+		internal static IListDifference<DataAccessLayer.Models.Metadatum> FindMetadataListDifference(
+			this IList<DataAccessLayer.Models.Metadatum> source,
+			IList<DataAccessLayer.Models.Metadatum> other)
+		{
+			var onlyInThis = source.ExceptBy(other.Select(e => e.Key), e => e.Key).ToList();
+			var onlyInOther = other.ExceptBy(source.Select(e => e.Key), e => e.Key).ToList();
+
+			var listMembershipDifference = new ListMembershipDifference<DataAccessLayer.Models.Metadatum>(onlyInThis, onlyInOther);
+			var listMemberModelDifferences = new List<IModelDifference<DataAccessLayer.Models.Metadatum>>();
+
+			var inBothThis = source
+				.IntersectBy(other
+					.Select(e => e.Key), e => e.Key)
+				.ToDictionary(e => e.Key, e => e.Value);
+
+			var inBothOther = other
+				.IntersectBy(source
+					.Select(e => e.Key), e => e.Key)
+				.ToDictionary(e => e.Key, e => e.Value);
+
+			foreach (var key in inBothThis.Keys)
+			{
+				if (!string.Equals(inBothThis[key], inBothOther[key]))
+				{
+                    var pds = new List<PropertyDifference>() { new(key, new ValueDifference<string?>(inBothThis[key], inBothOther[key]))  };
+					listMemberModelDifferences.Add(pds.ToModelDifference<DataAccessLayer.Models.Metadatum>(typeof(DataAccessLayer.Models.Metadatum), key));
+				}
+			}
+
+			return new ListDifference<DataAccessLayer.Models.Metadatum>(listMembershipDifference, listMemberModelDifferences);
+		}
+
+		internal static ListDifference? FindChildListDifference<T>(this IModelSnapshot<T> modelSnapshot, string childName, IModelSnapshot<T> otherModelSnapshot)
             where T : notnull
         {
             IEnumerable<IModelDistinguishable>? childList1 = null;

@@ -1,6 +1,5 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
-using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SIL.Machine.Corpora;
@@ -9,6 +8,7 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Text.Json;
 using static ClearBible.Engine.Persistence.FileGetBookIds;
+using static ClearDashboard.DAL.Alignment.Features.Common.DataUtil;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Common
@@ -97,7 +97,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
                                             .Select(childToken =>
                                             {
                                                 tokenCount++;
-                                                return new Models.Token
+                                                var modelToken =  new Models.Token
                                                 {
                                                     Id = childToken.TokenId.Id,
                                                     VerseRowId = verseRowId,
@@ -112,13 +112,20 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
                                                     SurfaceText = childToken.SurfaceText,
                                                     ExtendedProperties = childToken.ExtendedProperties
                                                 };
+
+                                                if (childToken.HasMetadatum(Models.MetadatumKeys.ModelTokenMetadata))
+                                                {
+                                                    modelToken.Metadata = childToken.GetMetadatum<List<Models.Metadatum>>(Models.MetadatumKeys.ModelTokenMetadata).ToList();
+                                                }
+
+                                                return modelToken;
                                             }).ToList()
                                     };
                                 }
                                 else
                                 {
                                     tokenCount++;
-                                    return new Models.Token
+                                    var modelToken  = new Models.Token
                                     {
                                         Id = token.TokenId.Id,
                                         VerseRowId = verseRowId,
@@ -133,6 +140,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
                                         SurfaceText = token.SurfaceText,
                                         ExtendedProperties = token.ExtendedProperties
                                     } as Models.TokenComponent;
+
+                                    if (token.HasMetadatum(Models.MetadatumKeys.ModelTokenMetadata))
+                                    {
+                                        modelToken.Metadata = token.GetMetadatum<List<Models.Metadatum>>(Models.MetadatumKeys.ModelTokenMetadata).ToList();
+                                    }
+
+                                    return modelToken;
                                 }
                             })
                         .ToList()
@@ -200,7 +214,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
         public static DbCommand CreateTokenComponentInsertCommand(DbConnection connection)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "EngineTokenId", "TrainingText", "VerseRowId", "TokenizedCorpusId", "Discriminator", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "ExtendedProperties" };
+            var columns = new string[] { "Id", "EngineTokenId", "TrainingText", "VerseRowId", "TokenizedCorpusId", "ParallelCorpusId", "Discriminator", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "ExtendedProperties", "Type", "Metadata", "GrammarId", "CircumfixGroup" };
 
             DataUtil.ApplyColumnsToInsertCommand(command, typeof(Models.TokenComponent), columns);
 
@@ -253,7 +267,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             componentCmd.Parameters["@TrainingText"].Value = token.TrainingText;
             componentCmd.Parameters["@VerseRowId"].Value = token.VerseRowId;
             componentCmd.Parameters["@TokenizedCorpusId"].Value = token.TokenizedCorpusId;
-            componentCmd.Parameters["@Discriminator"].Value = token.GetType().Name;
+			componentCmd.Parameters["@ParallelCorpusId"].Value = DBNull.Value;
+			componentCmd.Parameters["@Discriminator"].Value = token.GetType().Name;
             componentCmd.Parameters["@BookNumber"].Value = token.BookNumber;
             componentCmd.Parameters["@ChapterNumber"].Value = token.ChapterNumber;
             componentCmd.Parameters["@VerseNumber"].Value = token.VerseNumber;
@@ -261,6 +276,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             componentCmd.Parameters["@SubwordNumber"].Value = token.SubwordNumber;
             componentCmd.Parameters["@SurfaceText"].Value = token.SurfaceText;
             componentCmd.Parameters["@ExtendedProperties"].Value = token.ExtendedProperties != null ? token.ExtendedProperties : DBNull.Value;
+			componentCmd.Parameters["@Type"].Value = token.Type != null ? token.Type : DBNull.Value;
+			componentCmd.Parameters["@Metadata"].Value = JsonSerializer.Serialize(token.Metadata);
+            componentCmd.Parameters["@GrammarId"].Value = token.GrammarId != null ? token.GrammarId : DBNull.Value;
+            componentCmd.Parameters["@CircumfixGroup"].Value = token.CircumfixGroup != null ? token.CircumfixGroup : DBNull.Value;
+
             _ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
         public static async Task InsertTokenCompositeAsync(Models.TokenComposite tokenComposite, DbCommand componentCmd, CancellationToken cancellationToken)
@@ -271,13 +291,18 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             componentCmd.Parameters["@VerseRowId"].Value = tokenComposite.VerseRowId;
             componentCmd.Parameters["@ExtendedProperties"].Value = tokenComposite.ExtendedProperties != null ? tokenComposite.ExtendedProperties : DBNull.Value;
             componentCmd.Parameters["@TokenizedCorpusId"].Value = tokenComposite.TokenizedCorpusId;
-            componentCmd.Parameters["@Discriminator"].Value = tokenComposite.GetType().Name;
+			componentCmd.Parameters["@ParallelCorpusId"].Value = tokenComposite.ParallelCorpusId != null ? tokenComposite.ParallelCorpusId : DBNull.Value;
+			componentCmd.Parameters["@Discriminator"].Value = tokenComposite.GetType().Name;
             componentCmd.Parameters["@BookNumber"].Value = DBNull.Value;
             componentCmd.Parameters["@ChapterNumber"].Value = DBNull.Value;
             componentCmd.Parameters["@VerseNumber"].Value = DBNull.Value;
             componentCmd.Parameters["@WordNumber"].Value = DBNull.Value;
             componentCmd.Parameters["@SubwordNumber"].Value = DBNull.Value;
             componentCmd.Parameters["@SurfaceText"].Value = tokenComposite.SurfaceText;
+			componentCmd.Parameters["@Type"].Value = tokenComposite.Type != null ? tokenComposite.Type : DBNull.Value;
+			componentCmd.Parameters["@Metadata"].Value = JsonSerializer.Serialize(tokenComposite.Metadata);
+            componentCmd.Parameters["@GrammarId"].Value = tokenComposite.GrammarId != null ? tokenComposite.GrammarId : DBNull.Value;
+            componentCmd.Parameters["@CircumfixGroup"].Value = tokenComposite.CircumfixGroup != null ? tokenComposite.CircumfixGroup : DBNull.Value;
             _ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
         public static async Task<Guid> InsertTokenCompositeTokenAssociationAsync(Guid tokenId, Guid tokenCompositeId, DbCommand assocCmd, CancellationToken cancellationToken)
@@ -343,5 +368,143 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 
-    }
+		public static DbCommand CreateTokenComponentUpdateSurfaceTrainingEngineTokenIdCommand(DbConnection connection)
+		{
+			var command = connection.CreateCommand();
+			var columns = new string[] { nameof(Models.TokenComponent.SurfaceText), nameof(Models.TokenComponent.TrainingText), nameof(Models.TokenComponent.EngineTokenId) };
+			var whereColumns = new (string, WhereEquality)[] { (nameof(Models.IdentifiableEntity.Id), WhereEquality.Equals) };
+
+			DataUtil.ApplyColumnsToUpdateCommand(
+				command,
+				typeof(Models.TokenComponent),
+				columns,
+				whereColumns,
+				Array.Empty<(string, int)>());
+
+			command.Prepare();
+
+			return command;
+		}
+
+		public static async Task UpdateTokenComponentSurfaceTrainingTextAsync(Models.TokenComponent tokenComponent, DbCommand command, CancellationToken cancellationToken)
+		{
+			command.Parameters[$"@{nameof(Models.TokenComponent.SurfaceText)}"].Value = tokenComponent.SurfaceText;
+			command.Parameters[$"@{nameof(Models.TokenComponent.TrainingText)}"].Value = tokenComponent.TrainingText;
+			command.Parameters[$"@{nameof(Models.TokenComponent.EngineTokenId)}"].Value = tokenComponent.EngineTokenId;
+			command.Parameters[$"@{nameof(Models.IdentifiableEntity.Id)}"].Value = tokenComponent.Id;
+
+			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+		}
+
+		public static async Task SoftDeleteMetadataUpdateTokenComponentAsync(Models.TokenComponent tokenComponent, DbCommand command, CancellationToken cancellationToken)
+		{
+			// Keep DbContext model in sync:
+			tokenComponent.Deleted ??= DateTimeOffset.UtcNow;
+
+			await SoftDeleteMetadataUpdateByIdAsync((DateTimeOffset)tokenComponent.Deleted, tokenComponent.Metadata, tokenComponent.Id, command, cancellationToken);
+		}
+
+		public static DbCommand CreateSoftDeleteMetadataUpdateByIdCommand(DbConnection connection)
+		{
+			var command = connection.CreateCommand();
+			var columns = new string[] { nameof(Models.TokenComponent.Deleted), nameof(Models.TokenComponent.Metadata) };
+			var whereColumns = new (string, WhereEquality)[] { (nameof(Models.IdentifiableEntity.Id), WhereEquality.Equals) };
+
+			DataUtil.ApplyColumnsToUpdateCommand(
+				command,
+				typeof(Models.TokenComponent),
+				columns,
+				whereColumns,
+				Array.Empty<(string, int)>());
+
+			command.Prepare();
+
+			return command;
+		}
+
+		public static async Task SoftDeleteMetadataUpdateByIdAsync(DateTimeOffset deleted, List<Models.Metadatum> metadata, Guid id, DbCommand command, CancellationToken cancellationToken)
+		{
+			var converter = new DateTimeOffsetToBinaryConverter();
+
+			command.Parameters[$"@{nameof(Models.TokenComponent.Deleted)}"].Value = converter.ConvertToProvider(deleted);
+			command.Parameters[$"@{nameof(Models.TokenComponent.Metadata)}"].Value = JsonSerializer.Serialize(metadata);
+			command.Parameters[$"@{nameof(Models.IdentifiableEntity.Id)}"].Value = id;
+
+			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+		}
+
+		public static DbCommand CreateTokenComponentTypeUpdateCommand(DbConnection connection)
+		{
+			var command = connection.CreateCommand();
+			var columns = new string[] { nameof(Models.TokenComponent.Type) };
+			var whereColumns = new (string, WhereEquality)[] { (nameof(Models.IdentifiableEntity.Id), WhereEquality.Equals) };
+
+			DataUtil.ApplyColumnsToUpdateCommand(
+				command,
+				typeof(Models.TokenComponent),
+				columns,
+				whereColumns,
+				Array.Empty<(string, int)>());
+
+			command.Prepare();
+
+			return command;
+		}
+
+		public static async Task UpdateTypeTokenComponentAsync(Models.TokenComponent tokenComponent, DbCommand command, CancellationToken cancellationToken)
+		{
+			command.Parameters[$"@{nameof(Models.TokenComponent.Type)}"].Value = tokenComponent.Type;
+			command.Parameters[$"@{nameof(Models.IdentifiableEntity.Id)}"].Value = tokenComponent.Id;
+			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+		}
+
+		public static DbCommand CreateTokenSubwordRenumberCommand(DbConnection connection)
+		{
+			var command = connection.CreateCommand();
+			var columns = new string[] { nameof(Models.Token.OriginTokenLocation), nameof(Models.Token.SubwordNumber) };
+			var whereColumns = new (string, WhereEquality)[] { (nameof(Models.IdentifiableEntity.Id), WhereEquality.Equals) };
+
+			DataUtil.ApplyColumnsToUpdateCommand(
+				command,
+				typeof(Models.TokenComponent),
+				columns,
+				whereColumns,
+				Array.Empty<(string, int)>());
+
+			command.Prepare();
+
+			return command;
+		}
+
+		public static async Task SubwordRenumberTokenAsync(DataAccessLayer.Models.Token token, DbCommand command, CancellationToken cancellationToken)
+		{
+			command.Parameters[$"@{nameof(Models.Token.OriginTokenLocation)}"].Value = token.OriginTokenLocation;
+			command.Parameters[$"@{nameof(Models.Token.SubwordNumber)}"].Value = token.SubwordNumber;
+			command.Parameters[$"@{nameof(Models.IdentifiableEntity.Id)}"].Value = token.Id;
+
+			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+		}
+
+		public static DbCommand CreateTokenComponentDeleteCommand(DbConnection connection)
+		{
+			var command = connection.CreateCommand();
+			var whereColumns = new (string, WhereEquality)[] { (nameof(Models.IdentifiableEntity.Id), WhereEquality.Equals) };
+
+			DataUtil.ApplyColumnsToDeleteCommand(
+				command,
+				typeof(Models.TokenComponent),
+				whereColumns,
+				Array.Empty<(string, int)>());
+
+			command.Prepare();
+
+			return command;
+		}
+
+		public static async Task DeleteTokenComponentAsync(Models.TokenComponent tokenComponent, DbCommand command, CancellationToken cancellationToken)
+		{
+			command.Parameters["@Id"].Value = tokenComponent.Id;
+			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+		}
+	}
 }

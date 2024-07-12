@@ -8,6 +8,8 @@ using SIL.Machine.Corpora;
 using SIL.Scripture;
 using ClearDashboard.DAL.Alignment.Features.Translation;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DAL.Alignment.Features.Lexicon;
+using ClearDashboard.DAL.Alignment.Lexicon;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
@@ -131,6 +133,39 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             result.ThrowIfCanceledOrFailed();
         }
 
+        public async Task ImportWordAnalyses(IMediator mediator, CancellationToken token = default)
+        {
+            var wordAnalyses = await GetExternalWordAnalysesAsync(mediator, token);
+            if (wordAnalyses.Any())
+            {
+				var importWordAnalysesCommand = new ImportWordAnalysesCommand(wordAnalyses, TokenizedTextCorpusId);
+				var importWordAnalysesResult = await mediator.Send(importWordAnalysesCommand, token);
+
+                importWordAnalysesResult.ThrowIfCanceledOrFailed();
+			}
+
+            if (UseCache)
+            {
+                InvalidateCache();
+            }
+		}
+
+        public async Task<IEnumerable<WordAnalysis>> GetExternalWordAnalysesAsync(IMediator mediator, CancellationToken token = default)
+        {
+            var paratextProjectId = TokenizedTextCorpusId?.CorpusId?.ParatextGuid;
+            if (paratextProjectId is not null)
+            {
+                var externalWordAnalysesCommand = new GetExternalWordAnalysesQuery(paratextProjectId);
+                var externalWordAnalysesResult = await mediator.Send(externalWordAnalysesCommand, token);
+
+                externalWordAnalysesResult.ThrowIfCanceledOrFailed();
+
+                return externalWordAnalysesResult.Data!;
+            }
+
+            return Enumerable.Empty<WordAnalysis>();
+        }
+
         public static async Task<IEnumerable<TokenizedTextCorpusId>> GetAllTokenizedCorpusIds(IMediator mediator, CorpusId? corpusId)
         {
             var result = await mediator.Send(new GetAllTokenizedCorpusIdsByCorpusIdQuery(corpusId));
@@ -241,6 +276,33 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
             var result = await mediator.Send(command, cancellationToken);
             result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
+        }
+
+        public async Task<(IDictionary<TokenId, IEnumerable<CompositeToken>> SplitCompositeTokensByIncomingTokenId, IDictionary<TokenId, IEnumerable<Token>> SplitChildTokensByIncomingTokenId)> SplitTokensViaSplitInstructions(
+            IMediator mediator,
+            IEnumerable<TokenId> tokenIdsWithSameSurfaceText,
+           SplitInstructions splitInstructions,
+            bool createParallelComposite = true,
+            SplitTokenPropagationScope propagateTo = SplitTokenPropagationScope.None,
+            CancellationToken cancellationToken = default
+        )
+        {
+            var command = new SplitTokensViaSplitInstructionsCommand(
+                TokenizedTextCorpusId,
+                tokenIdsWithSameSurfaceText,
+                splitInstructions,
+                createParallelComposite,
+                propagateTo);
+
+            var result = await mediator.Send(command, cancellationToken);
+            result.ThrowIfCanceledOrFailed(true);
+
+            if (UseCache)
+            {
+                InvalidateCache();
+            }
 
             return result.Data!;
         }

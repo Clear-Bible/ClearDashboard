@@ -591,6 +591,7 @@ namespace ClearDashboard.Wpf.Application.Services
                                     TargetLanguage = meaning.Language,
                                     TargetWord = translation.Text,
                                     IsSelected = !translationMatch && !lemmaOrFormMatch,
+                                    HasConflictingMatch = translationMatch || lemmaOrFormMatch,
                                     ShowAddAsFormButton = translationMatch,
                                     ShowAddTargetAsTranslationButton = lemmaOrFormMatch
                                 };

@@ -5,9 +5,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System.Text.Json;
-using System.Xml.Serialization;
+// ReSharper disable InconsistentNaming
 
 namespace ClearDashboard.DataAccessLayer.Data
 {
@@ -28,6 +27,8 @@ namespace ClearDashboard.DataAccessLayer.Data
             UserProvider = userProvider;
             DatabaseName = databaseName;
             OptionsBuilder = optionsBuilder;
+
+
         }
         internal ProjectDbContext(string databaseName, DbContextOptionsBuilder<ProjectDbContext> optionsBuilder)
             : base(optionsBuilder.Options)
@@ -35,6 +36,8 @@ namespace ClearDashboard.DataAccessLayer.Data
             // This constructor is only for initial migration / design time usage
             DatabaseName = databaseName;
             OptionsBuilder = optionsBuilder;
+
+        
         }
 
         public virtual DbSet<Adornment> Adornments => Set<Adornment>();
@@ -44,6 +47,7 @@ namespace ClearDashboard.DataAccessLayer.Data
 
         public virtual DbSet<Corpus> Corpa => Set<Corpus>();
         public virtual DbSet<CorpusHistory> CorpaHistory => Set<CorpusHistory>();
+        public virtual DbSet<Grammar> Grammars => Set<Grammar>();
         public virtual DbSet<NoteAssociation> NoteAssociations => Set<NoteAssociation>();
         public virtual DbSet<Note> Notes => Set<Note>();
         public virtual DbSet<Label> Labels => Set<Label>();
@@ -135,6 +139,27 @@ namespace ClearDashboard.DataAccessLayer.Data
         }
 
 
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+
+        //    optionsBuilder.EnableSensitiveDataLogging();
+
+        //    if (_logger != null)
+        //    {
+        //        optionsBuilder.LogTo(
+        //            s =>
+        //            {
+        //                //if (LoggingEnabled)
+        //                //{
+        //                _logger.LogInformation(s);
+        //                Console.WriteLine(s);
+        //                //}
+        //            }, LogLevel.Information);
+        //    }
+
+        //    base.OnConfiguring(optionsBuilder);
+        //}
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -179,6 +204,10 @@ namespace ClearDashboard.DataAccessLayer.Data
                         (c1, c2) => c1.SequenceEqual(c2!),
                         c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
                         c => c));
+
+            modelBuilder.Entity<Grammar>().HasAlternateKey(e => e.ShortName);
+            modelBuilder.Entity<Grammar>().HasIndex(e => e.ShortName).IsUnique();
+            
 
             modelBuilder.Entity<ParallelCorpus>()
                .Property(e => e.Metadata)
@@ -280,6 +309,16 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.TokenizedCorpusId);
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.TrainingText);
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.SurfaceText);
+            modelBuilder.Entity<TokenComponent>().HasIndex(e => e.GrammarId);
+            modelBuilder.Entity<TokenComponent>().HasIndex(e => e.CircumfixGroup);
+            modelBuilder.Entity<TokenComponent>().HasIndex(e => e.Type);
+
+            // Configure the TokenComponent.Metadata property as a JSON column
+            modelBuilder.Entity<TokenComponent>().OwnsMany(tokenComponent => tokenComponent.Metadata, ownedNavigationBuilder =>
+            {
+                ownedNavigationBuilder.ToJson(); // Store as JSON
+            });
+
 
             modelBuilder.Entity<Token>().HasIndex(e => e.OriginTokenLocation);
             modelBuilder.Entity<Token>().HasIndex(e => e.BookNumber);
@@ -287,6 +326,8 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<Token>().HasIndex(e => e.VerseNumber);
             //modelBuilder.Entity<Token>().HasIndex(e => e.WordNumber);
             //modelBuilder.Entity<Token>().HasIndex(e => e.SubwordNumber);
+
+          
 
             modelBuilder.Entity<TokenCompositeTokenAssociation>().HasIndex(e => e.TokenId);
             modelBuilder.Entity<TokenCompositeTokenAssociation>().HasIndex(e => e.TokenCompositeId);

@@ -437,7 +437,7 @@
     <value>Alinhamentos</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>Tipo de alinhamento:</value>
+    <value>Tipo de alinhamento: </value>
   </data>
   <data name="BulkAlignmentReview_Approve" xml:space="preserve">
     <value>Aprovar</value>
@@ -566,7 +566,7 @@
     <value>Excluir colaboração do projeto</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>Você tem outros usuários conectados a este projeto. Este projeto também será removido para eles. Tem certeza de que deseja excluir este projeto?</value>
+    <value>Você tem outros usuários conectados a este projeto.  Este projeto também será removido para eles. Tem certeza de que deseja excluir este projeto?</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
     <value>Tem certeza de que deseja excluir este projeto?</value>
@@ -787,6 +787,12 @@
   <data name="GEN" xml:space="preserve">
     <value>GEN</value>
   </data>
+  <data name="GrammarTagList_Description" xml:space="preserve">
+    <value>Descrição</value>
+  </data>
+  <data name="GrammarTagList_Short" xml:space="preserve">
+    <value>Curto</value>
+  </data>
   <data name="HAB" xml:space="preserve">
     <value>HAB</value>
   </data>
@@ -798,6 +804,18 @@
   </data>
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>Importação cancelada</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>Importação concluída</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>Erro encontrado (verifique o log para obter detalhes)</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>Importar análises de palavras</value>
   </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
@@ -892,6 +910,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Se marcada, isso mudará todas as ocorrências não definidas desta palavra</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>Alterar todas as ocorrências não definidas</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>Se marcada, isso mudará todas as ocorrências não definidas desta palavra</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Concordância</value>
   </data>
@@ -907,11 +931,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Excluir esta tradução</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;significado vazio&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Insira uma nova tradução para</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Insira um novo brilho</value>
+  </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>Formulários:</value>
+  </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>Lustro</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>Lista de brilho</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>linguagem:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lema</value>
@@ -928,11 +967,20 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Já existe um lexema para o lema</value>
   </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>Léxico</value>
+  </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>Partidas</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Significados:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>Novo brilho</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>Nenhum formulário disponível</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Remova este domínio semântico deste significado</value>
@@ -942,6 +990,21 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Defina um brilho para</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>Traduções:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>tipo:</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>Desativar</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>Brilho definido pelo usuário</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>Verificado</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>E</value>
@@ -1027,8 +1090,20 @@
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Encontre lexemas que tenham uma ou mais traduções que correspondam ao destino</value>
   </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>Verificado</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>Corpus:</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>Importar</value>
+  </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Importação verificada</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>Linguagem:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexeme ou correspondências de formulário</value>
@@ -1065,6 +1140,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Desmarque todos</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>Palavra:</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>O primeiro nome é necessário</value>
@@ -1208,10 +1286,10 @@
     <value>Glosas:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Partes do discurso</value>
+    <value>Partes do discurso   </value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>Lemas Relacionados</value>
+    <value>Lemas Relacionados   </value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>Escopo:</value>
@@ -1232,7 +1310,7 @@
     <value>Sentidos</value>
   </data>
   <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>Códigos Fortes</value>
+    <value>Códigos Fortes   </value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>Subdomínios:</value>
@@ -1373,7 +1451,7 @@
     <value>Adicionar Jota</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Adicione um novo jot</value>
+    <value>Adicione um novo jot (shift-enter para nova linha)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Corpo</value>
@@ -1385,7 +1463,7 @@
     <value>Excluir este jot?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
-    <value>Devido às permissões do seu projeto Paratext,</value>
+    <value>Devido às permissões do seu projeto Paratext, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>Filtrar por versículo</value>
@@ -1400,7 +1478,7 @@
     <value>Filtrar por status</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>Filtrar por Texto</value>
+    <value>Filtrar por texto</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>Qualquer</value>
@@ -1616,7 +1694,7 @@
     <value>Alinhador de palavras da máquina de trem</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
-    <value>Defina o mapeamento de versos entre corpora paralelizados</value>
+    <value>Defina o mapeamento de versículos entre corpora paralelizados</value>
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Corpus Paratextual</value>
@@ -1658,7 +1736,7 @@
     <value>Auxiliar</value>
   </data>
   <data name="Pds_BackTranslation" xml:space="preserve">
-    <value>Tradução reversa</value>
+    <value>Retrotradução</value>
   </data>
   <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
     <value>Calcular novo modelo de tradução</value>
@@ -1769,7 +1847,7 @@
     <value>EstudoBíbliaAdições</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Vá para o Paratext e troque de projeto. O projeto Paratext atualmente conectado ao plugin ClearDashboard não é o mesmo que o corpus deste projeto ClearDashboard.</value>
+    <value>Vá para o Paratext e troque de projeto.  O projeto Paratext atualmente conectado ao plugin ClearDashboard não é o mesmo que o corpus deste projeto ClearDashboard.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Alvo</value>
@@ -1889,13 +1967,13 @@
     <value>Início rápido de novo projeto</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>Criar projeto:</value>
+    <value>Criar projeto: </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
     <value>Crie seu projeto usando o assistente de modelo de projeto.</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>Base de dados:</value>
+    <value>Base de dados: </value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
     <value>Você não pode excluir esse projeto, outro aplicativo ainda o está usando.</value>
@@ -1931,10 +2009,10 @@
     <value>Sem combinações.</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>É solitário aqui. Por favor, crie um novo projeto.</value>
+    <value>É solitário aqui.  Por favor, crie um novo projeto.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>O paratexto não está instalado. Instale o Paratext e execute novamente o aplicativo ClearDashboard.</value>
+    <value>O paratexto não está instalado.  Instale o Paratext e execute novamente o aplicativo ClearDashboard.</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>O paratexto não está funcionando</value>
@@ -1958,7 +2036,7 @@
     <value>Projeto Paratexto</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Projeto:</value>
+    <value>Projeto: </value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>Estamos quase lá!</value>
@@ -1985,7 +2063,7 @@
     <value>Clique aqui para iniciar o Paratexto</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Versão:</value>
+    <value>Versão: </value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>Por favor insira um nome para o seu projeto</value>
@@ -1994,7 +2072,7 @@
     <value>Crie seu novo projeto</value>
   </data>
   <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>O nome do projeto fornecido contém caracteres ilegais. Os caracteres válidos incluem 'A-Z' (minúsculas e maiúsculas), números '0-9' e os caracteres '-' e '_'.</value>
+    <value>O nome do projeto fornecido contém caracteres ilegais.  Os caracteres válidos incluem 'A-Z' (minúsculas e maiúsculas), números '0-9' e os caracteres '-' e '_'.</value>
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>Já existe um projeto com o mesmo nome. Escolha um nome exclusivo.</value>
@@ -2213,7 +2291,7 @@
     <value>Registro</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>A chave fornecida está com defeito. Quando descriptografado, determinados elementos JSON não foram encontrados.</value>
+    <value>A chave fornecida está com defeito.  Quando descriptografado, determinados elementos JSON não foram encontrados.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>O conteúdo da chave de licença descriptografada não corresponde às informações fornecidas.</value>
@@ -2222,7 +2300,7 @@
     <value>Sua chave de licença está faltando ou quebrada.</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>Bem-vindo ao ClearDashboard! Por favor, insira suas informações de registro.</value>
+    <value>Bem-vindo ao ClearDashboard!  Por favor, insira suas informações de registro.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>por favor entre com seu primeiro nome</value>
@@ -2476,8 +2554,29 @@
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
   </data>
-  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+  <data name="TokenDisplay_SetGloss" xml:space="preserve">
     <value>Definir brilho</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>Adicionar Lexeme</value>
+  </data>
+  <data name="TokenSplitting_ClickWhere" xml:space="preserve">
+    <value>Clique onde dividir a palavra em tokens</value>
+  </data>
+  <data name="TokenSplitting_Gloss" xml:space="preserve">
+    <value>Lustro</value>
+  </data>
+  <data name="TokenSplitting_Grammar" xml:space="preserve">
+    <value>Gramática</value>
+  </data>
+  <data name="TokenSplitting_TrainingText" xml:space="preserve">
+    <value>Texto de treinamento</value>
+  </data>
+  <data name="TokenSplitting_Type" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="TokenSplitting_WordGloss" xml:space="preserve">
+    <value>Glossário de palavras</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Atualizar</value>

@@ -16,7 +16,7 @@ namespace ClearDashboard.DataAccessLayer.Data
                 return SqliteDbContextOptionsBuilderExtensions.UseSqlite<T>(
                     new(),
                     $"DataSource={DatabaseDirectory}\\{DatabaseName}.sqlite;Pooling=true;Mode=ReadWriteCreate",
-                    options => options.CommandTimeout(600)).Options;
+                    options =>  options.CommandTimeout(600)).Options;
             }
         }
 

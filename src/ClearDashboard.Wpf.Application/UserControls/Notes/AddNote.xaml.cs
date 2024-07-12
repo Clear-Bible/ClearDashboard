@@ -520,9 +520,18 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
 
         private void OnNoteTextBoxChanged(object sender, TextChangedEventArgs e)
         {
-            if (NoteTextBoxVisibility == Visibility.Visible)
+            if (sender is TextBox textBox)
+            {
+                Note.Text = textBox.Text;
+            }
+
+            if (NoteTextBoxVisibility == Visibility.Visible && Note.Text != string.Empty)
             {
                 IsChanged = true;
+            }
+            else
+            {
+                IsChanged = false;
             }
         }
 
@@ -1450,5 +1459,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Notes
             Loaded += OnLoaded;
         }
 
+        private void NoteTextBox_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && Keyboard.Modifiers == ModifierKeys.Shift)
+            {
+                NoteTextBox.Text += "\n";
+                // put the cursor at the end of the text
+                NoteTextBox.CaretIndex = NoteTextBox.Text.Length;
+                e.Handled = true;
+            }
+        }
     }
 }

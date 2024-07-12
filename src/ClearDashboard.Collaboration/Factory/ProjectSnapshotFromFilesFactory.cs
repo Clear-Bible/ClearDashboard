@@ -105,7 +105,11 @@ public class ProjectSnapshotFromFilesFactory
                     },
                     cancellationToken));
             }
-            else if (topLevelEntryName == topLevelEntityFolderNameMappings[typeof(Models.Corpus)])
+			else if (topLevelEntryName == topLevelEntityFolderNameMappings[typeof(Models.Grammar)])
+			{
+				projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.Grammar>(topLevelEntry, null, cancellationToken));
+			}
+			else if (topLevelEntryName == topLevelEntityFolderNameMappings[typeof(Models.Corpus)])
             {
                 projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.Corpus>(topLevelEntry, null, cancellationToken));
             }

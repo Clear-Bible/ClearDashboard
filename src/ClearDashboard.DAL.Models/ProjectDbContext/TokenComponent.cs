@@ -23,6 +23,18 @@ namespace ClearDashboard.DataAccessLayer.Models
         /// </summary>
         public string? Type { get; set; }
 
+        /// <summary>
+        /// If the token is part of a circumfix group, this is the group name.
+        /// </summary>
+        public string? CircumfixGroup { get; set; }
+
+		/// <summary>
+		/// The grammar type associated to this token.
+		/// </summary>
+		[ForeignKey(nameof(GrammarId))]
+		public Guid? GrammarId { get; set; }
+		public virtual Grammar? Grammar { get; set; }
+
         public string? ExtendedProperties { get; set; }
 
         [ForeignKey(nameof(VerseRowId))]
@@ -39,5 +51,10 @@ namespace ClearDashboard.DataAccessLayer.Models
         public virtual ICollection<Translation> Translations { get; set; }
 
         public DateTimeOffset? Deleted { get; set; }
+
+        /// <summary>
+        /// Metadata for the token component - stored as a JSON blob in the database.
+        /// </summary>
+        public virtual List<Metadatum> Metadata { get; set; } = new();
     }
 }

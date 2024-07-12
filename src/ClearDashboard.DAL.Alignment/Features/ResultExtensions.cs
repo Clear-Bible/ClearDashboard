@@ -18,7 +18,14 @@ namespace ClearDashboard.DAL.Alignment.Features
             }
             else if (!result.Success)
             {
-                throw new MediatorErrorEngineException(result.Message);
+                if (result.Message is not null && result.Message.Contains("The operation was canceled"))
+                {
+                    throw new OperationCanceledException();
+                }
+                else
+                {
+                    throw new MediatorErrorEngineException(result.Message ?? string.Empty);
+                }
             }
             else if (throwIfDataNull && result.Data is null)
             {

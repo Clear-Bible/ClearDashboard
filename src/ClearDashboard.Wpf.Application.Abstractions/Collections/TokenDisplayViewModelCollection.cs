@@ -285,6 +285,27 @@ namespace ClearDashboard.Wpf.Application.Collections
                                      && SelectedTokens.Count(t => t.IsCompositeTokenMember) <= 1
                                      && SelectedTokenVersesCount == 1 
                                      && !SelectedTranslations.Any();
+
+        // TODO808: Completed
+        // 2. in a parallel view, allow the creating of a Composite(parallel) on top of a Composite(null) (but not other Composite(parallel))
+        //
+        // Currently the JoinTokens and JoinTokensLanguagePair menu items use the same visibility logic.  TokenDisplayViewModelCollection should get a 
+        // new CanJoinTokensLanguagePair property that is mostly similar to CanJoinTokens, but also incorporates the possibility of containing a Composite(null).
+        // I'd recommend implementing this with a new TokenDisplayViewModel.IsParallelCompositeTokenMember property, which would require the addition of a
+        // CompositeToken.IsParallel property or similar.  Then the above logic would be the same, just replacing:
+        //
+        //      && SelectedTokens.Count(t => t.IsCompositeTokenMember) <= 1
+        //
+        // with:
+        //
+        //      && SelectedTokens.Count(t => t.IsParallelCompositeTokenMember) <= 1
+
+        public bool CanJoinTokensLanguagePair => SelectedTokens.Count() > 1
+                                                && SelectedTokens.All(t => t.IsSource)
+                                                && SelectedTokens.Count(t => t.IsParallelCompositeTokenMember) <= 1
+                                                && SelectedTokenVersesCount == 1
+                                                && !SelectedTranslations.Any();
+
         public bool CanUnjoinToken => SelectedTokens.All(t => t.IsCompositeTokenMember) && SelectedTokenCompositeTokenCount == 1;
 
         public bool CanCreateAlignment => SourceTokenCount == 1 && TargetTokenCount == 1;

@@ -11,6 +11,8 @@ using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Events.Lexicon;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 {
@@ -81,7 +83,14 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         #endregion
         #region Public properties
 
+        public static readonly DependencyProperty IsReadOnlyProperty = DependencyProperty.Register(nameof(IsReadOnly), typeof(bool), typeof(LexemeFormSelector));
         public Visibility TextBoxVisibility { get; set; } = Visibility.Hidden;
+
+        public bool IsReadOnly
+        {
+            get => (bool)GetValue(IsReadOnlyProperty);
+            set => SetValue(IsReadOnlyProperty, value);
+        }
 
         #endregion
 

@@ -465,12 +465,11 @@
                 Grid.Row="4"
                 Margin="5"
                 ItemsSource="{Binding DashboardProjectsDisplay}"
-                ScrollViewer.CanContentScroll="False"
+                PreviewMouseWheel="ProjectListView_OnPreviewMouseWheel"
                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                 ScrollViewer.VerticalScrollBarVisibility="Visible"
-                Visibility="{Binding NoProjectVisibility}"
-              >
-                <!--  IsEnabled="{Binding IsParatextRunning}"-->
+                Visibility="{Binding NoProjectVisibility}">
+                <!--  IsEnabled="{Binding IsParatextRunning}"  -->
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -855,6 +854,7 @@
                 x:Name="CollabProjectListView"
                 Grid.Row="4"
                 ItemsSource="{Binding DashboardCollabProjectsDisplay}"
+                PreviewMouseWheel="ProjectListView_OnPreviewMouseWheel"
                 ScrollViewer.CanContentScroll="True"
                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                 ScrollViewer.VerticalScrollBarVisibility="Visible">

@@ -276,7 +276,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             NotePaneVisibility = Visibility.Visible;
         }
 
-        public void FilterPinsTarget(NoteEventArgs e)
+        public void FilterPinsTranslation(NoteEventArgs e)
         {
             NotePaneVisibility = Visibility.Visible;
         }
@@ -395,7 +395,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             await base.OnActivateAsync(cancellationToken);
             //await PopulateData();
-            PopulateLexicon();
+            //PopulateLexicon();
 
         }
 

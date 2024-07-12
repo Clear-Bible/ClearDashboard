@@ -389,7 +389,7 @@
     <value>Категория</value>
   </data>
   <data name="BiblicalTermsForm_Counts" xml:space="preserve">
-    <value>имеет значение</value>
+    <value>Считает</value>
   </data>
   <data name="BiblicalTermsForm_Found" xml:space="preserve">
     <value>Найденный</value>
@@ -437,7 +437,7 @@
     <value>Выравнивания</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>Тип выравнивания:</value>
+    <value>Тип выравнивания: </value>
   </data>
   <data name="BulkAlignmentReview_Approve" xml:space="preserve">
     <value>Утвердить</value>
@@ -566,7 +566,7 @@
     <value>Удалить совместную работу над проектом</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>К этому проекту подключены другие пользователи. Для них этот проект тоже будет удален. Вы уверены, что хотите удалить этот проект?</value>
+    <value>К этому проекту подключены другие пользователи.  Для них этот проект тоже будет удален. Вы уверены, что хотите удалить этот проект?</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
     <value>Вы уверены, что хотите удалить этот проект?</value>
@@ -668,7 +668,7 @@
     <value>Фильтровать поиск по терминам</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>Фильтрация поиска по ключевым словам</value>
+    <value>Фильтровать поиск по ключевым словам</value>
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
     <value>Подстрочный</value>
@@ -787,6 +787,12 @@
   <data name="GEN" xml:space="preserve">
     <value>Быт.</value>
   </data>
+  <data name="GrammarTagList_Description" xml:space="preserve">
+    <value>Описание</value>
+  </data>
+  <data name="GrammarTagList_Short" xml:space="preserve">
+    <value>Короткий</value>
+  </data>
   <data name="HAB" xml:space="preserve">
     <value>Авв.</value>
   </data>
@@ -798,6 +804,18 @@
   </data>
   <data name="HOS" xml:space="preserve">
     <value>Ос.</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>Импорт отменен</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>Импорт завершен</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>Обнаружена ошибка (подробности см. в журнале)</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>Импортировать анализ слов</value>
   </data>
   <data name="ISA" xml:space="preserve">
     <value>Ис.</value>
@@ -892,6 +910,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Если этот флажок установлен, это изменит все неустановленные вхождения этого слова.</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>Изменить все неустановленные вхождения</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>Если этот флажок установлен, это изменит все неустановленные вхождения этого слова.</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Согласие</value>
   </data>
@@ -907,11 +931,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Удалить этот перевод</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;пустой смысл&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Введите новый перевод для</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Введите новый блеск</value>
+  </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>Формы:</value>
+  </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>Блеск</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>Список блесков</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>язык:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Лемма</value>
@@ -928,11 +967,20 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Лексема для леммы уже существует</value>
   </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>Лексикон</value>
+  </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>Матчи</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Значения:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>Новый блеск</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>Нет доступных форм</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Удалите эту семантическую область из этого значения.</value>
@@ -942,6 +990,21 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Установите блеск для</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>Переводы:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>тип:</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>Сброшено</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>Пользовательский блеск</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>Проверено</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>И</value>
@@ -1025,10 +1088,22 @@
     <value>Добавить цель в качестве перевода для...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Найдите лексемы, у которых есть один или несколько переводов, соответствующих целевому значению.</value>
+    <value>Найдите лексемы, у которых есть один или несколько переводов, соответствующих целевому.</value>
+  </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>Проверено</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>Корпус:</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>Импортировать</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Импорт проверен</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>Язык:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Лексема или совпадение форм</value>
@@ -1065,6 +1140,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Снять все</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>Слово:</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>Требуется имя</value>
@@ -1208,10 +1286,10 @@
     <value>Блеск:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Части речи</value>
+    <value>Части речи   </value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>Связанные леммы</value>
+    <value>Связанные леммы   </value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>Объем:</value>
@@ -1232,7 +1310,7 @@
     <value>Чувства</value>
   </data>
   <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>Надежные коды</value>
+    <value>Надежные коды   </value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>Поддомены:</value>
@@ -1373,7 +1451,7 @@
     <value>Добавить Джот</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Добавить новый джот</value>
+    <value>Добавить новую точку (shift-enter для новой строки)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Тело</value>
@@ -1385,7 +1463,7 @@
     <value>Удалить эту заметку?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
-    <value>В соответствии с вашими разрешениями на проект Paratext,</value>
+    <value>В соответствии с вашими разрешениями на проект Paratext, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>Фильтровать по стиху</value>
@@ -1421,7 +1499,7 @@
     <value>Вы хотите создать ярлык:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
-    <value>и свяжите его с группой меток:</value>
+    <value>и свяжем его с группой меток:</value>
   </data>
   <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
     <value>Вы хотите удалить ярлык:</value>
@@ -1475,7 +1553,7 @@
     <value>Отметить выбранные записи как открытые</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>Отметить выбранные заметки как решенные</value>
+    <value>Отметить выбранные записи как решенные</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Созданный</value>
@@ -1769,7 +1847,7 @@
     <value>ИсследованиеБиблияДополнения</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Перейдите в Паратекст и переключите проекты. Проект Paratext, подключенный в настоящее время к плагину ClearDashboard, отличается от корпуса в этом проекте ClearDashboard.</value>
+    <value>Перейдите в Паратекст и переключите проекты.  Проект Paratext, подключенный в настоящее время к плагину ClearDashboard, не совпадает с корпусом в этом проекте ClearDashboard.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Цель</value>
@@ -1889,13 +1967,13 @@
     <value>Быстрый старт нового проекта</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>Создать проект:</value>
+    <value>Создать проект: </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
     <value>Создайте свой проект с помощью мастера шаблонов проектов.</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>База данных:</value>
+    <value>База данных: </value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
     <value>Вы не можете удалить этот проект, другое приложение все еще использует его.</value>
@@ -1931,10 +2009,10 @@
     <value>Нет совпадений.</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>Здесь одиноко. Пожалуйста, создайте новый проект.</value>
+    <value>Здесь одиноко.  Пожалуйста, создайте новый проект.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Паратекст не установлен. Пожалуйста, установите Paratext и перезапустите приложение ClearDashboard.</value>
+    <value>Паратекст не установлен.  Пожалуйста, установите Paratext и перезапустите приложение ClearDashboard.</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>Паратекст не запускается</value>
@@ -1958,7 +2036,7 @@
     <value>Паратекстовый проект</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Проект:</value>
+    <value>Проект: </value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>Мы почти там!</value>
@@ -1985,7 +2063,7 @@
     <value>Нажмите здесь, чтобы запустить Паратекст</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Версия:</value>
+    <value>Версия: </value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>Пожалуйста, введите название вашего проекта</value>
@@ -1994,7 +2072,7 @@
     <value>Создайте свой новый проект</value>
   </data>
   <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>Данное имя проекта содержит недопустимые символы. Допустимые символы: буквы «A–Z» (строчные и прописные), цифры «0–9», а также символы «-» и «_».</value>
+    <value>Данное имя проекта содержит недопустимые символы.  Допустимые символы: буквы «A–Z» (строчные и прописные), цифры «0–9», а также символы «-» и «_».</value>
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>Проект с таким названием уже существует. Пожалуйста, выберите уникальное имя.</value>
@@ -2213,7 +2291,7 @@
     <value>регистр</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Предоставленный ключ неисправен. При расшифровке не удалось найти некоторые элементы json.</value>
+    <value>Предоставленный ключ неисправен.  При расшифровке некоторые элементы json не удалось найти.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>Содержимое расшифрованного лицензионного ключа не соответствует предоставленной вами информации.</value>
@@ -2222,7 +2300,7 @@
     <value>Ваш лицензионный ключ отсутствует или сломан.</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>Добро пожаловать в ClearDashboard! Пожалуйста, введите вашу регистрационную информацию.</value>
+    <value>Добро пожаловать в ClearDashboard!  Пожалуйста, введите вашу регистрационную информацию.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Пожалуйста, введите ваше имя</value>
@@ -2476,8 +2554,29 @@
   <data name="TIT" xml:space="preserve">
     <value>Тит.</value>
   </data>
-  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+  <data name="TokenDisplay_SetGloss" xml:space="preserve">
     <value>Установить блеск</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>Добавить лексему</value>
+  </data>
+  <data name="TokenSplitting_ClickWhere" xml:space="preserve">
+    <value>Нажмите, где разделить слово на токены</value>
+  </data>
+  <data name="TokenSplitting_Gloss" xml:space="preserve">
+    <value>Блеск</value>
+  </data>
+  <data name="TokenSplitting_Grammar" xml:space="preserve">
+    <value>Грамматика</value>
+  </data>
+  <data name="TokenSplitting_TrainingText" xml:space="preserve">
+    <value>Текст обучения</value>
+  </data>
+  <data name="TokenSplitting_Type" xml:space="preserve">
+    <value>Тип</value>
+  </data>
+  <data name="TokenSplitting_WordGloss" xml:space="preserve">
+    <value>Слово блеск</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Обновлять</value>

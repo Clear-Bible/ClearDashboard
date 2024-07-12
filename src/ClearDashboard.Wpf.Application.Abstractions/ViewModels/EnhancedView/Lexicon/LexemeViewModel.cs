@@ -1,12 +1,15 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.Wpf.Application.Collections.Lexicon;
+using SIL.Reporting;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
 {
-    public class LexemeViewModel : PropertyChangedBase
+    public class LexemeViewModel : PropertyChangedBase, IDisposable
     {
         public Lexeme Entity { get; }
 
@@ -70,6 +73,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
         }
 
         private LexemeFormCollection? _forms;
+        private bool _hasForms;
+
+        public bool HasForms
+        {
+            get => _hasForms;
+            set => Set(ref _hasForms, value);
+        }
+
         public LexemeFormCollection Forms
         {
             get => _forms ??= new LexemeFormCollection(Entity.Forms);
@@ -106,6 +117,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
         {
             Entity = lexeme;
             _meanings = new MeaningViewModelCollection(lexeme.Meanings);
+
+            Forms.CollectionChanged += OnCollectionChanged;
+        }
+
+        private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            HasForms = Forms.Count > 0;
+        }
+        
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Forms.CollectionChanged -= OnCollectionChanged;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

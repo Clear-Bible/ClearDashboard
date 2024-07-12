@@ -53,7 +53,9 @@ public class ProjectSnapshotFilesFactory
         var serializedProject = JsonSerializer.Serialize(projectSnapshot.GetGeneralModelProject(), _jsonSerializerOptions);
         File.WriteAllText(Path.Combine(_path, ProjectSnapshotFactoryCommon.PROPERTIES_FILE), serializedProject);
 
-        SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.Corpus>(), null, cancellationToken);
+		SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.Grammar>(), null, cancellationToken);
+
+		SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.Corpus>(), null, cancellationToken);
 
         SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.TokenizedCorpus>(),
             (string parentPath,

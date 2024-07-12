@@ -341,7 +341,6 @@
                             Header="{helpers:Localization Notes_FilterNoteText}">
                             <TextBox
                                 x:Name="FilterNotesText"
-                                MinWidth="125"
                                 Margin="5,0,5,5"
                                 VerticalAlignment="Center"
                                 materialDesign:TextFieldAssist.HasClearButton="True"
@@ -357,7 +356,6 @@
                             Header="{helpers:Localization Notes_FilterAssociationsDescriptionText}">
                             <TextBox
                                 x:Name="FilterAssociationsText"
-                                MinWidth="125"
                                 Margin="5,0,5,5"
                                 VerticalAlignment="Center"
                                 materialDesign:TextFieldAssist.HasClearButton="True"
@@ -437,6 +435,7 @@
             HorizontalGridLinesBrush="{StaticResource GridBrush}"
             IsReadOnly="True"
             ItemsSource="{Binding NotesCollectionView}"
+            PreviewMouseWheel="GridNotes_OnPreviewMouseWheel"
             ScrollViewer.CanContentScroll="True"
             ScrollViewer.HorizontalScrollBarVisibility="Auto"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -444,7 +443,7 @@
             SelectionMode="Single"
             SelectionUnit="FullRow"
             VerticalGridLinesBrush="{StaticResource GridBrush}"
-            VirtualizingStackPanel.IsVirtualizing="False">
+            VirtualizingStackPanel.IsVirtualizing="True">
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
@@ -633,7 +632,7 @@
                         <DataTemplate>
                             <TextBlock
                                 VerticalAlignment="Center"
-                                Text="{Binding AssociationVerse}"
+                                Text="{Binding LongAssociationVerse}"
                                 TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

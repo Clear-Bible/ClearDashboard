@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using MediatR;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
-using ClearDashboard.DAL.Alignment.Features.Corpora;
+using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models;
+using Token = ClearBible.Engine.Corpora.Token;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -36,13 +37,20 @@ namespace ClearDashboard.Wpf.Application.Services
                 stopwatch.Start();
 
                 var compositeToken = new CompositeToken(tokens);
+                // IsParallelCorpusToken so we can tell if this is CompositeToken(parallel) or CompositeToken(null)
+                if (parallelCorpusId != null)
+                {
+                    compositeToken.Metadata[MetadatumKeys.IsParallelCorpusToken] = true;
+                }
+           
                 await TokenizedTextCorpus.PutCompositeToken(Mediator, compositeToken, parallelCorpusId);
 
                 stopwatch.Stop();
                 Logger.LogInformation($"Joined {tokens.Count} tokens into composite token {compositeToken.TokenId.Id} in {stopwatch.ElapsedMilliseconds} ms");
 
-                await EventAggregator.PublishOnUIThreadAsync(new TokensJoinedMessage(compositeToken, tokens));
+                await EventAggregator.PublishOnUIThreadAsync(new TokensJoinedMessage(compositeToken, tokens, parallelCorpusId!));
                 SelectionManager.SelectionUpdated();
+                await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage(ReloadType.Force));
             }
             catch (Exception e)
             {
@@ -71,7 +79,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 stopwatch.Start();
 
                 var tokens = new TokenCollection(compositeToken.Tokens);
-                compositeToken.Tokens = new List<ClearBible.Engine.Corpora.Token>();
+                compositeToken.Tokens = [];
                 await TokenizedTextCorpus.PutCompositeToken(Mediator, compositeToken, parallelCorpusId);
 
                 stopwatch.Stop();
@@ -101,6 +109,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <param name="propagateTo">The <see cref="SplitTokenPropagationScope"/> value indicating how the token split should be propagated.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> for the asynchronous operation.</param>
         /// <returns></returns>
+        [Obsolete("Use SplitTokensAsync instead.")]
         public async Task SplitToken(TokenizedTextCorpus corpus, 
             TokenId tokenId, 
             int tokenIndex1, 
@@ -124,6 +133,43 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 await EventAggregator.PublishOnUIThreadAsync(new TokenSplitMessage(result.SplitCompositeTokensByIncomingTokenId, result.SplitChildTokensByIncomingTokenId), cancellationToken);
                 SelectionManager.SelectionUpdated();
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, "An unexpected error occurred while splitting tokens.");
+                throw;
+            }
+        }
+
+        public async Task<(IDictionary<TokenId, IEnumerable<CompositeToken>> SplitCompositeTokensByIncomingTokenId, IDictionary<TokenId, IEnumerable<Token>> SplitChildTokensByIncomingTokenId)> SplitTokensAsync(TokenizedTextCorpus corpus,
+            TokenId tokenId,
+            SplitInstructions splitInstructions,
+            bool createParallelComposite = true,
+            SplitTokenPropagationScope propagateTo = SplitTokenPropagationScope.None,
+            CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                var result = await corpus.SplitTokensViaSplitInstructions(
+                        Mediator!,
+                        [tokenId],
+                        splitInstructions,
+                        createParallelComposite,
+                        propagateTo, 
+                        cancellationToken);
+             
+
+                stopwatch.Stop();
+                Logger.LogInformation($"Split token {tokenId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+
+                await EventAggregator.PublishOnUIThreadAsync(new TokenSplitMessage(result.SplitCompositeTokensByIncomingTokenId, result.SplitChildTokensByIncomingTokenId), cancellationToken);
+                SelectionManager.SelectionUpdated();
+
+                return result;
+
             }
             catch (Exception e)
             {
