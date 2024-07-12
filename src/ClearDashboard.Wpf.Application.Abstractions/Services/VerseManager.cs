@@ -165,7 +165,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 stopwatch.Stop();
                 Logger.LogInformation($"Split token {tokenId.Id} in {stopwatch.ElapsedMilliseconds} ms");
 
-                await EventAggregator.PublishOnUIThreadAsync(new TokenSplitMessage(result.SplitCompositeTokensByIncomingTokenId, result.SplitChildTokensByIncomingTokenId), cancellationToken);
+                //await EventAggregator.PublishOnUIThreadAsync(new TokenSplitMessage(result.SplitCompositeTokensByIncomingTokenId, result.SplitChildTokensByIncomingTokenId), cancellationToken);
                 SelectionManager.SelectionUpdated();
 
                 return result;
