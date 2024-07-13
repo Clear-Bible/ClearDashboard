@@ -22,6 +22,8 @@
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters:BoolToVisibilityCollapsedConverter x:Key="BoolToVisibilityCollapsedConverter" />
 
+        <viewModels:CustomAutoCompleteSetting x:Key="AutoCompleteSetting" />
+
         <Style x:Key="ListViewTextBlockStyle" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="{DynamicResource MaterialDesignFont}" />
             <Setter Property="FontSize" Value="16" />
@@ -146,7 +148,8 @@
                                     ItemsSource="{Binding ElementName='SplitTokenListView', Path='DataContext.GrammarSuggestions' }"
                                     SelectedItem="{Binding Grammar, Mode=OneWayToSource}"
                                     Style="{StaticResource MaterialDesignComboBox}"
-                                    TextSearch.TextPath="ShortName">
+                                    Setting="{Binding ElementName='SplitTokenListView', Path='DataContext.AutoCompleteSetting'}" 
+                                    TextSearch.TextPath="Description">
                                         <controls:AutoCompleteComboBox.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Vertical">
