@@ -444,7 +444,7 @@ public static class SplitTokenUtil
 		return compositeToken;
 	}
 
-	private static (Guid, Models.TokenComposite, CompositeToken) CreateComposite(
+	public static (Guid, Models.TokenComposite, CompositeToken) CreateComposite(
 		Models.Token tokenDb,
 		Guid? parallelCorpusId,
 		List<Token> replacementTokens,
@@ -489,7 +489,7 @@ public static class SplitTokenUtil
 		return (tokenDb.Id, tokenComposite, compositeToken);
 	}
 
-	private static void TransferAssociations(
+	public static void TransferAssociations(
 		Models.Token tokenDb,
 		Models.TokenComposite tokenComposite,
 		SplitTokenDbCommands splitTokenDbCommands,

@@ -53,7 +53,12 @@ public abstract class ModelDifference : IModelDifference
             .Where(pd => pd.PropertyValueDifference.GetType().IsAssignableTo(typeof(ValueDifference)))
             .Select(pd => (pd.PropertyName, (ValueDifference)pd.PropertyValueDifference));
 
-    public IReadOnlyDictionary<string, IListDifference> ChildListDifferences { get => _childListDifferences; }
+	[JsonIgnore]
+	public IEnumerable<(string propertyName, ListDifference propertyValueDifference)> PropertyListDifferences => _propertyDifferences
+			.Where(pd => pd.PropertyValueDifference.GetType().IsAssignableTo(typeof(ListDifference)))
+			.Select(pd => (pd.PropertyName, (ListDifference)pd.PropertyValueDifference));
+
+	public IReadOnlyDictionary<string, IListDifference> ChildListDifferences { get => _childListDifferences; }
     public void AddPropertyDifference(PropertyDifference propertyDifference) { _propertyDifferences.Add(propertyDifference); }
     public void AddPropertyDifferenceRange(IEnumerable<PropertyDifference> propertyDifferences) { _propertyDifferences.AddRange(propertyDifferences); }
     public void AddChildListDifference(string childName, IListDifference listDifference)
