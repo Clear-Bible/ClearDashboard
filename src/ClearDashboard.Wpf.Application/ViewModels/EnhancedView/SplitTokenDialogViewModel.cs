@@ -28,14 +28,32 @@ using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.Messages;
+using DotNetKit.Windows.Controls;
 
 // ReSharper disable UnusedMember.Global
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
+
+    public class CustomAutoCompleteSetting : AutoCompleteComboBoxSetting
+    {
+        public CustomAutoCompleteSetting()
+        {
+            
+        }
+
+        public override Predicate<object> GetFilter(string query, Func<object, string> stringFromItem)
+        {
+            query = query.Trim('[');
+            return item => stringFromItem(item).IndexOf(query, StringComparison.InvariantCultureIgnoreCase) >= 0;
+        }
+    }
+
     public class SplitTokenDialogViewModel : DashboardApplicationScreen
     {
         public VerseManager? VerseManager { get; }
+
+        public CustomAutoCompleteSetting AutoCompleteSetting { get; } = new CustomAutoCompleteSetting();
 
 
         public BindableCollection<SplitInstructionViewModel> SplitInstructionsViewModels { get; private set; } = new();
