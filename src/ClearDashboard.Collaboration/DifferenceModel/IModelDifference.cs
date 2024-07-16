@@ -46,6 +46,7 @@ public interface IModelDifference : IDifference
     IEnumerable<PropertyDifference> PropertyDifferences { get; }
     IEnumerable<(string propertyName, IModelDifference propertyModelDifference)> PropertyModelDifferences { get; }
     IEnumerable<(string propertyName, ValueDifference propertyValueDifference)> PropertyValueDifferences { get; }
-    IReadOnlyDictionary<string, IListDifference> ChildListDifferences { get; }
+	IEnumerable<(string propertyName, ListDifference propertyValueDifference)> PropertyListDifferences { get; }
+	IReadOnlyDictionary<string, IListDifference> ChildListDifferences { get; }
 }
 

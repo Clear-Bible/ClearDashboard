@@ -32,7 +32,8 @@ namespace ClearDashboard.DAL.Alignment.Tests
     public abstract class TestBase
     {
         public IMediator Mediator { get; private set; }
-        public ProjectDbContext ProjectDbContext { get; set; }
+		public IUserProvider UserProvider { get; private set; }
+		public ProjectDbContext ProjectDbContext { get; set; }
         protected ITestOutputHelper Output { get; private set; }
         protected IContainer? Container { get; private set; }
         protected string ProjectName { get; set; }
@@ -50,7 +51,8 @@ namespace ClearDashboard.DAL.Alignment.Tests
                 // ReSharper disable once VirtualMemberCallInConstructor
                 Container = SetupDependencyInjection();
                 Mediator = Container!.Resolve<IMediator>();
-                Logger = SetupLogging(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects\\Logs\\ClearDashboardTests.log"));
+				UserProvider = Container!.Resolve<IUserProvider>();
+				Logger = SetupLogging(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects\\Logs\\ClearDashboardTests.log"));
                 (ProjectName, ProjectDbContext) = SetupTests().GetAwaiter().GetResult();
             }
             finally
