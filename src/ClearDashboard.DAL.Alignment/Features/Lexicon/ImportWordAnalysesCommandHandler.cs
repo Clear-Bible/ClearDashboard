@@ -129,6 +129,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                         .Select(e => (surfaceText: e.Lemma!, trainingText: e.Lemma!, tokenType: e.Type, circumfixGroup: default(string?), grammarId: default(Guid?)))
                         .ToArray();
 
+                    // If there are no Lexemes for this word analysis, there is nothing to split the token into, so skip:
+                    if (replacementTokenInfos.Length == 0)
+                    {
+                        continue;
+                    }
+
                     var standaloneTokens = supersetTokens.Where(e => e.SurfaceText == wordAnalysis.Word).ToList();
 
                     if (replacementTokenInfos.Length == 1)
