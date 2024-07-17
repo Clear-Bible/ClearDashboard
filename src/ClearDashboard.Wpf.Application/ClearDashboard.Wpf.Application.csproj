@@ -129,7 +129,7 @@
     <PackageReference Include="Autofac.Configuration" Version="6.0.0" />
     <PackageReference Include="CefSharp.Wpf.NETCore" Version="115.3.110" />
     <PackageReference Include="ClearApplicationFoundation" Version="3.0.0" />
-    <PackageReference Include="ClearBible.Engine" Version="3.0.6" />
+    <PackageReference Include="ClearBible.Engine" Version="3.0.7" />
     <PackageReference Include="Dahomey.Json" Version="1.12.2" />
     <PackageReference Include="Dahomey.Json.Attributes" Version="1.0.1" />
     <PackageReference Include="Dirkster.AvalonDock" Version="4.70.12" />
