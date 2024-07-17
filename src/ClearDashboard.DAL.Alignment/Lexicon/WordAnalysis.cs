@@ -59,8 +59,8 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             set { lexemes_ = value; }
 #else
             // RELEASE MODIFIED
-            //set { meanings_ = value; }
-            set { meanings_ = value; }
+            //set { lexemes_ = value; }
+            set { lexemes_ = value; }
 #endif
         }
 
