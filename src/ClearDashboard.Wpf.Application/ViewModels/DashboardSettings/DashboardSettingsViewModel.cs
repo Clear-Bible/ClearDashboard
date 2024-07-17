@@ -531,7 +531,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
                 Email = _collaborationConfig.RemoteEmail!,
                 Password = _collaborationConfig.RemotePersonalPassword!,
                 Organization = _collaborationConfig.Group!,
-                NamespaceId = _collaborationConfig.NamespaceId
+                NamespaceId = _collaborationConfig.NamespaceId,
+                TokenId = _collaborationConfig.TokenId
             };
 #pragma warning restore CA1416
 
@@ -740,6 +741,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
                     RemoteUserName = user.RemoteUserName,
                     UserId = user.UserId,
                     NamespaceId = user.NamespaceId,
+                    TokenId = user.TokenId
                 };
 
                 _collaborationManager.SaveCollaborationLicense(CollaborationConfig);

@@ -1,4 +1,6 @@
 ﻿using Caliburn.Micro;
+using ClearDashboard.Collaboration.Services;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.Wpf.Application.Helpers;
@@ -20,7 +22,10 @@ namespace ClearDashboard.Wpf.Application.Services
         #region Member Variables   
 
         private readonly GitLabClient _gitLabClient;
+        private readonly CollaborationManager _collaborationManager;
         private ILogger? _logger;
+        private CollaborationConfiguration _collaborationConfiguration;
+        private readonly CollaborationServerHttpClientServices _collaborationHttpClientServices;
 
         #endregion //Member Variables
 
@@ -36,6 +41,9 @@ namespace ClearDashboard.Wpf.Application.Services
         public GitLabHttpClientServices(GitLabClient gitLabClient)
         {
             _gitLabClient = gitLabClient;
+            _collaborationManager = IoC.Get<CollaborationManager>();
+            _collaborationHttpClientServices = IoC.Get<CollaborationServerHttpClientServices>();
+            _collaborationConfiguration = IoC.Get<CollaborationConfiguration>();
         }
 
         #endregion //Constructor
@@ -68,7 +76,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return list;
             }
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
             var pageNum = 0;
@@ -126,7 +134,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return list;
             }
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
             try
@@ -182,7 +190,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return list;
             }
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
             try
@@ -248,7 +256,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return false;
             }
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
 
@@ -376,6 +384,123 @@ namespace ClearDashboard.Wpf.Application.Services
         }
 
 
+        public async Task<List<GitAccessToken>> GetAllTokensForUser(CollaborationConfiguration user)
+        {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return null;  // return a date 60 days from now
+            }
+
+            List<GitAccessToken> list = new();
+
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
+
+            try
+            {
+                var pageNum = 0;
+                var totalPages = 1;
+
+                do
+                {
+                    pageNum++;
+
+                    var request = new HttpRequestMessage(HttpMethod.Get, $"personal_access_tokens");
+
+                    var content = new MultipartFormDataContent();
+                    content.Add(new StringContent("100"), "per_page");
+                    content.Add(new StringContent($"{pageNum}"), "page");
+                    request.Content = content;
+
+                    var response = await _gitLabClient.Client.SendAsync(request);
+                    response.EnsureSuccessStatusCode();
+
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    var tempList = JsonSerializer.Deserialize<List<GitAccessToken>>(result)!;
+                    list.AddRange(tempList);
+
+                    // get the total number of API pages
+                    if (response.Headers.Contains("X-Total-Pages"))
+                    {
+                        totalPages = Convert.ToInt32(response.Headers.GetValues("X-Total-Pages").First());
+                    }
+
+                } while (pageNum < totalPages);
+
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+
+            // find the non-revoked token for the user
+            var token = list.Where(s => s.UserId == user.UserId && s.Revoked == false).ToList();
+            
+            return token;
+        }
+
+
+
+        public async Task<GitAccessToken> GetTokenExpirationDate(CollaborationConfiguration user)
+        {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return null;  // return a date 60 days from now
+            }
+
+            List<GitAccessToken> list = new();
+
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
+
+            try
+            {
+                var pageNum = 0;
+                var totalPages = 1;
+
+                do
+                {
+                    pageNum++;
+
+                    var request = new HttpRequestMessage(HttpMethod.Get, $"personal_access_tokens");
+
+                    var content = new MultipartFormDataContent();
+                    content.Add(new StringContent("100"), "per_page");
+                    content.Add(new StringContent($"{pageNum}"), "page");
+                    request.Content = content;
+
+                    var response = await _gitLabClient.Client.SendAsync(request);
+                    response.EnsureSuccessStatusCode();
+
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    var tempList = JsonSerializer.Deserialize<List<GitAccessToken>>(result)!;
+                    list.AddRange(tempList);
+
+                    // get the total number of API pages
+                    if (response.Headers.Contains("X-Total-Pages"))
+                    {
+                        totalPages = Convert.ToInt32(response.Headers.GetValues("X-Total-Pages").First());
+                    }
+
+                } while (pageNum < totalPages);
+
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+
+            // find the non-revoked token for the user
+            var token = list.FirstOrDefault(s => s.UserId == user.UserId && s.Revoked == false);
+
+            return token;
+        }
         public async Task<List<GitLabProject>> GetProjectsForUserWhereOwner(CollaborationConfiguration user)
         {
             List<GitLabProject> list = new();
@@ -461,7 +586,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return list;
             }
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
             try
@@ -542,7 +667,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
 
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
             
@@ -597,15 +722,15 @@ namespace ClearDashboard.Wpf.Application.Services
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task<string> GeneratePersonalAccessToken(GitLabUser user)
+        public async Task<GitAccessToken> GeneratePersonalAccessToken(GitLabUser user)
         {
             if (await NetworkHelper.IsConnectedToInternet() == false)
             {
-                return string.Empty;
+                return new GitAccessToken();
             }
 
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
             GitAccessToken accessToken = new();
@@ -633,7 +758,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 _logger?.LogError(e.Message, e);
             }
 
-            return accessToken.Token;
+            return accessToken;
         }
 
         public async Task<GitLabProject> CreateNewProjectForUser(GitLabUser user, string projectName, string projectDescription)
@@ -644,7 +769,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return project;
             }
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
 
@@ -709,7 +834,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
             request.Content = content;
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
             try
@@ -738,7 +863,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return;
             }
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
 
@@ -756,6 +881,35 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
+        #region PUT Requests
+
+        public async Task UpdateCollabUser(GitLabProjectUser selectedCurrentUser, GitLabProject selectedProject)
+        {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return;
+            }
+
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
+
+
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"projects/{selectedProject.Id}/members/{selectedCurrentUser.Id}");
+
+            try
+            {
+                var response = await _gitLabClient.Client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+        }
+
+        #endregion
+
         #endregion // POST Requests
 
 
@@ -768,7 +922,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return false;
             }
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
 
@@ -801,7 +955,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return false;
             }
 
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
 
 
@@ -827,9 +981,157 @@ namespace ClearDashboard.Wpf.Application.Services
             return false;
         }
 
+        /// <summary>
+        /// Revokes the personal access token for the token
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public async Task<bool> RevokeUsersPersonalAccessToken(GitAccessToken token)
+        {
+            if (await NetworkHelper.IsConnectedToInternet() == false)
+            {
+                return false;
+            }
+
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
+            _gitLabClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value.Replace("Bearer ", ""));
+
+
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"personal_access_tokens/{token.Id}");
+
+            try
+            {
+                var response = await _gitLabClient.Client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                if ((int)response.StatusCode == 204)
+                {
+                    return true;
+                }
+
+            }
+            catch (Exception e)
+            {
+                WireUpLogger();
+                _logger?.LogError(e.Message, e);
+            }
+
+            return false;
+        }
+
+
         #endregion // Delete requests
 
 
+        /// <summary>
+        /// We need to refresh the personal access token for the user
+        /// as it is about to expire
+        /// </summary>
+        /// <param name="userConfig"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public async Task<bool> RefreshToken(CollaborationConfiguration userConfig, GitAccessToken? token)
+        {
+            // get the user
+            var gitUsers = await GetAllUsers();
+            var gitUser = gitUsers.FirstOrDefault(u => u.Id == userConfig.UserId);
+            if (gitUser is null)
+            {
+                return false;
+            }
+
+            GitLabUser gitLabUser = new()
+            {
+                Id = gitUser.Id,
+                UserName = gitUser.UserName,
+                Name = gitUser.Name,
+                Email = gitUser.Email,
+                Organization = gitUser.Organization,
+                NamespaceId = userConfig.NamespaceId,
+                TokenId = userConfig.TokenId,
+            };
+
+
+            // delete/revoke all existing tokens for a user
+            var tokens = await GetAllTokensForUser(userConfig);
+            foreach (var userToken in tokens)
+            {
+                var result = await RevokeUsersPersonalAccessToken(userToken);
+            }
+            
+
+            // generate a new token
+            var newToken = await GeneratePersonalAccessToken(gitLabUser);
+            userConfig.RemotePersonalAccessToken = newToken.Token;
+            userConfig.TokenId = newToken.Id;
+            
+
+            // save locally
+            _collaborationManager.SaveCollaborationLicense(userConfig);
+
+
+            // get the user from mysql to update it
+            var dashboardUser =
+                await _collaborationHttpClientServices.GetDashboardUserExistsByEmail(userConfig.RemoteEmail);
+
+            // split out the dashboard license key and the collaboration key with the ^ delimiter
+            var licenseArray = dashboardUser.LicenseKey.Split('^');
+            var encryptedDashboardUser = licenseArray.FirstOrDefault();
+
+            //string decryptedLicenseKey = string.Empty;
+            //try
+            //{
+            //    decryptedLicenseKey = LicenseManager.DecryptLicenseFromString(encryptedUserLicense);
+                    
+            //}
+            //catch (Exception ex)
+            //{
+                    
+            //}
+
+            // encrypt the user config
+            var collabEncrypted = LicenseManager.EncryptCollabJsonToString(userConfig);
+
+            // update the license key to be a combination of the dashboard user and the collaboration user
+            dashboardUser.LicenseKey = $"{encryptedDashboardUser}^{collabEncrypted}";
+
+            // update the user to the collaboration server
+            var results = await _collaborationHttpClientServices.UpdateDashboardUser(dashboardUser);
+
+            if (results == false)
+            {
+                return false;
+            }
+
+
+            // update the gitlabusers table
+            var gitLabUserServer = await _collaborationHttpClientServices.GetCollabUserExistsById(userConfig.UserId);
+            gitLabUserServer.RemotePersonalAccessToken = Encryption.Encrypt(newToken.Token);
+            gitLabUserServer.TokenId = newToken.Id;
+
+            // todo: update the user on the server is not working
+            results = await _collaborationHttpClientServices.UpdateGitLabUserAccessToken(gitLabUserServer);
+            if (results == false)
+            {
+                return false;
+            }
+
+            CollaborationUser collabUser = new()
+            {
+                UserId = userConfig.UserId,
+                RemoteUserName = userConfig.RemoteUserName,
+                RemoteEmail = userConfig.RemoteEmail,
+                RemotePersonalAccessToken = Encryption.Encrypt(userConfig.RemotePersonalAccessToken),
+                RemotePersonalPassword = Encryption.Encrypt(userConfig.RemotePersonalPassword),
+                GroupName = userConfig.Group,
+                NamespaceId = userConfig.NamespaceId,
+                TokenId = userConfig.TokenId,
+            };
+
+            results = await _collaborationHttpClientServices.UpdateGitLabUserAccessToken(collabUser);
+
+            return false;
+        }
 
         #endregion // Methods
     }

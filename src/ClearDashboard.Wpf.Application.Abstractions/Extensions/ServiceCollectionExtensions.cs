@@ -30,9 +30,7 @@ namespace ClearDashboard.Wpf.Application.Extensions
             serviceCollection.AddSingleton<GitLabClient>();
             serviceCollection.AddSingleton<GitLabHttpClientServices>();
 
-            //var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");  // expires June 1, 2024
-            var value = Encryption.Decrypt("hR9dpR9OVP9oUpvCOX/LM1E/W0BoTVrcmRwnUVD/ey7tbwsVJp4U93PZ/mzW1ZCu");  // expires May 21, 2025
-
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             // add in a service for the GitLab repository
             serviceCollection.AddHttpClient<GitLabClient>("GitLabClient", client =>
             {
@@ -92,7 +90,7 @@ namespace ClearDashboard.Wpf.Application.Extensions
 
         public static GitLabHttpClientServices GetGitLabHttpClientServices()
         {
-            var value = Encryption.Decrypt("IhxlhV+rjvducjKx0q2TlRD4opTViPRm5w/h7CvsGcLXmSAgrZLX1pWFLLYpWqS3");
+            var value = Encryption.Decrypt("vfSGtPmTH8G+I0LW4oQb1zKnIpLvrnkcttUHKDXKwAaSrXU7u8o1qxx/xFAJ+7l6");
             var client = new HttpClient();
 
             client.BaseAddress = new Uri(Settings.Default.GitRootUrl); //"https://gitlab.cleardashboard.org/api/v4/"

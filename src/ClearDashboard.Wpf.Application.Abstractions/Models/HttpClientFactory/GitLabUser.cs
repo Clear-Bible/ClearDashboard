@@ -27,6 +27,12 @@ namespace ClearDashboard.Wpf.Application.Models.HttpClientFactory
         [JsonPropertyName("namespace_id")]
         public int NamespaceId { get; set; }
 
+        [JsonPropertyName("tokenId")]
+        public int TokenId { get; set; }
+        
+        [JsonPropertyName("token")]
+        public string Token { get; set; }
+
         public string Password { get; set; } = "";
     }
 }

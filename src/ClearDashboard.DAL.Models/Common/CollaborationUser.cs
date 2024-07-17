@@ -24,5 +24,8 @@ namespace ClearDashboard.DataAccessLayer.Models.Common
 
         [JsonPropertyName("namespaceId")]
         public int NamespaceId { get; set; }
+
+        [JsonPropertyName("tokenId")]
+        public int TokenId { get; set; }
     }
 }
