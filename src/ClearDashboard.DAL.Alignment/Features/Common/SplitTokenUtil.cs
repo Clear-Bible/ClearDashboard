@@ -163,6 +163,13 @@ public static class SplitTokenUtil
 			{
 				tokensHavingSubwordsToRenumberDb[i].OriginTokenLocation ??= tokenDb.OriginTokenLocation ?? tokenDb.EngineTokenId;
 				tokensHavingSubwordsToRenumberDb[i].SubwordNumber = nextSubwordNumber + i;
+				tokensHavingSubwordsToRenumberDb[i].EngineTokenId = (new TokenId(
+					tokenDb.BookNumber, 
+					tokenDb.ChapterNumber, 
+					tokenDb.VerseNumber, 
+					tokenDb.WordNumber, 
+					tokensHavingSubwordsToRenumberDb[i].SubwordNumber)
+				).ToString();
 
 				splitTokenDbCommands.AddTokenToSubwordRenumber(tokensHavingSubwordsToRenumberDb[i]);
 			}

@@ -18,7 +18,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Caliburn.Micro.Core" Version="4.0.212" />
-    <PackageReference Include="ClearBible.Engine" Version="3.0.6" />
+    <PackageReference Include="ClearBible.Engine" Version="3.0.9" />
     <PackageReference Include="MediatR" Version="9.0.0" />
   </ItemGroup>
   <ItemGroup>

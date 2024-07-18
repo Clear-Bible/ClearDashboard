@@ -461,7 +461,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 		public static DbCommand CreateTokenSubwordRenumberCommand(DbConnection connection)
 		{
 			var command = connection.CreateCommand();
-			var columns = new string[] { nameof(Models.Token.OriginTokenLocation), nameof(Models.Token.SubwordNumber) };
+			var columns = new string[] { nameof(Models.Token.OriginTokenLocation), nameof(Models.Token.SubwordNumber), nameof(Models.Token.EngineTokenId) };
 			var whereColumns = new (string, WhereEquality)[] { (nameof(Models.IdentifiableEntity.Id), WhereEquality.Equals) };
 
 			DataUtil.ApplyColumnsToUpdateCommand(
@@ -480,6 +480,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 		{
 			command.Parameters[$"@{nameof(Models.Token.OriginTokenLocation)}"].Value = token.OriginTokenLocation;
 			command.Parameters[$"@{nameof(Models.Token.SubwordNumber)}"].Value = token.SubwordNumber;
+			command.Parameters[$"@{nameof(Models.Token.EngineTokenId)}"].Value = token.EngineTokenId;
 			command.Parameters[$"@{nameof(Models.IdentifiableEntity.Id)}"].Value = token.Id;
 
 			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
