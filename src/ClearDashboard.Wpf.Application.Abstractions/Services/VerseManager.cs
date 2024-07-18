@@ -140,10 +140,22 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
+
+        /// <summary>
+        /// Split tokens in a <see cref="TokenizedTextCorpus"/> according to the provided <see cref="SplitInstructions"/>.
+        /// </summary>
+        /// <param name="corpus"></param>
+        /// <param name="tokenId"></param>
+        /// <param name="splitInstructions"></param>
+        /// <param name="createParallelComposite"></param>
+        /// <param name="propagateTo"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <remarks>Only dealing with non-parallel composites for now. Will need to deal with reconciliation of tokens in the parallel composite case in the future.</remarks>
         public async Task<(IDictionary<TokenId, IEnumerable<CompositeToken>> SplitCompositeTokensByIncomingTokenId, IDictionary<TokenId, IEnumerable<Token>> SplitChildTokensByIncomingTokenId)> SplitTokensAsync(TokenizedTextCorpus corpus,
             TokenId tokenId,
             SplitInstructions splitInstructions,
-            bool createParallelComposite = true,
+            bool createParallelComposite = false,
             SplitTokenPropagationScope propagateTo = SplitTokenPropagationScope.None,
             CancellationToken cancellationToken = default)
         {
