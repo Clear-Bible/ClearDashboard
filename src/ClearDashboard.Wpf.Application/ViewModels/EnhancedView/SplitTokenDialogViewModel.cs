@@ -45,6 +45,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public override Predicate<object> GetFilter(string query, Func<object, string> stringFromItem)
         {
             query = query.Trim('[');
+
+
+
+            var item = InternalGetFilter(query, stringFromItem);
+
+           
+
+            return item;
+        }
+
+
+
+        private Predicate<object> InternalGetFilter(string query, Func<object, string> stringFromItem)
+        {
+
             return item => stringFromItem(item).IndexOf(query, StringComparison.InvariantCultureIgnoreCase) >= 0;
         }
     }
@@ -56,7 +71,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public CustomAutoCompleteSetting AutoCompleteSetting { get; } = new CustomAutoCompleteSetting();
 
 
-        public BindableCollection<SplitInstructionViewModel> SplitInstructionsViewModels { get; private set; } = new();
+        //public BindableCollection<SplitInstructionViewModel> SplitInstructionsViewModels { get; private set; } = new();
 
         public BindableCollection<Grammar> GrammarSuggestions { get; private set; } = new();
 
@@ -193,7 +208,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     var indexes = SplitInstructionsViewModel.SplitIndexes.OrderBy(i => i).ToList();
 
                     SplitInstructionsViewModel = SplitInstructionViewModelFactory.CreateSplits(TokenDisplay.SurfaceText, indexes, LifetimeScope);
-                    ApplyEnabled = true;
+                    ApplyEnabled = SplitInstructionsViewModel.SplitIndexes.Count > 0;
                 }
             }
             else
@@ -204,7 +219,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     SplitInstructionsViewModel.SplitIndexes.Remove(splitIndex);
                     var indexes = SplitInstructionsViewModel.SplitIndexes.OrderBy(i => i).ToList();
                     SplitInstructionsViewModel = SplitInstructionViewModelFactory.CreateSplits(TokenDisplay.SurfaceText, indexes, LifetimeScope!);
-                    ApplyEnabled = true;
+                    ApplyEnabled = SplitInstructionsViewModel.SplitIndexes.Count > 0;
                 }
 
             }
@@ -229,6 +244,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             try
             {
+
+                if (SplitInstructionsViewModel.SplitIndexes.Count == 0)
+                {
+                    return;
+                }
+
                 OnUIThread(() =>
                 {
                     ProgressBarVisibility = Visibility.Visible;
