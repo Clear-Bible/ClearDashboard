@@ -434,7 +434,7 @@
     <value>对齐的单词</value>
   </data>
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
-    <value>路线</value>
+    <value>对齐方式</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
     <value>对齐类型： </value>
@@ -656,7 +656,7 @@
     <value>删除对齐方式</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>删除“{0}”的对齐方式吗？</value>
+    <value>删除“{0}”的对齐吗？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
     <value>删除所有对齐方式？</value>
@@ -710,7 +710,7 @@
     <value>将拆分应用于令牌的其他实例</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>选择拆分令牌的位置：</value>
+    <value>选择分割令牌的位置：</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>三路分流</value>
@@ -1664,7 +1664,7 @@
     <value>旧约</value>
   </data>
   <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
-    <value>创建字对齐</value>
+    <value>创建单词对齐</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
     <value>创建语料库诗句的并行化</value>
@@ -1794,6 +1794,9 @@
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>从 Paratext 获取最新信息</value>
+  </data>
+  <data name="Pds_ImportWordAnlysisMenu" xml:space="preserve">
+    <value>导入词分析 </value>
   </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
     <value>显示有关该项目的信息</value>
@@ -1958,7 +1961,7 @@
     <value>合作项目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>创建您的项目以开始使用。</value>
+    <value>创建您的项目以开始。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>创建一个新项目</value>

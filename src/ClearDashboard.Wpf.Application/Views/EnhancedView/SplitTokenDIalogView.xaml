@@ -247,7 +247,7 @@
                 FontSize="14"
                 IsEnabled="{Binding ApplyEnabled}"
                 Style="{StaticResource TransparentStyle}"
-                Visibility="{Binding ApplyEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
+                 />
             <Button
                 x:Name="CancelSplit"
                 Content="{helpers:Localization Cancel}"

@@ -698,7 +698,7 @@
     <value>इस पद्य श्रेणी में कोई पद्य डेटा नहीं है।</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
-    <value>कॉर्पस हटाएं</value>
+    <value>कॉर्पस हटाएँ</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
     <value>दृश्य नियंत्रण दिखाएँ</value>
@@ -1082,7 +1082,7 @@
     <value>फॉर्म के रूप में जोड़ें...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>स्रोत के लिए पूर्ण या आंशिक लेक्सेम या फॉर्म मिलान ढूंढें</value>
+    <value>स्रोत के लिए पूर्ण या आंशिक लेक्सेम या फॉर्म मिलान खोजें</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>लक्ष्य को अनुवाद के रूप में जोड़ें...</value>
@@ -1277,7 +1277,7 @@
     <value>डोमेन</value>
   </data>
   <data name="Marble_FrequencyGraph" xml:space="preserve">
-    <value>आवृत्ति ग्राफ़</value>
+    <value>आवृत्ति ग्राफ</value>
   </data>
   <data name="Marble_GeneralInformation" xml:space="preserve">
     <value>सामान्य जानकारी</value>
@@ -1795,6 +1795,9 @@
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>पैराटेक्स्ट से नवीनतम जानकारी प्राप्त करें</value>
   </data>
+  <data name="Pds_ImportWordAnlysisMenu" xml:space="preserve">
+    <value>शब्द विश्लेषण आयात करें </value>
+  </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
     <value>इस परियोजना के बारे में जानकारी दिखाएं</value>
   </data>
@@ -2045,7 +2048,7 @@
     <value>'डैशबोर्ड गेटिंग स्टार्टेड' वीडियो देखने के लिए यहां क्लिक करें</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
-    <value>आपके द्वारा नीचे दिए गए 'बनाएँ' बटन पर क्लिक करने के बाद, हम आपके प्रोजेक्ट को टोकनाइज़, संरेखित और तैयार करेंगे। संसाधित होते ही सभी चरण यहां दिखाई देंगे. जब आप प्रतीक्षा कर रहे हों तो बेझिझक नीचे दिए गए लिंक पर क्लिक करें और ClearDashboard का उपयोग शुरू करने के लिए कुछ उपयोगी वीडियो देखें!</value>
+    <value>आपके द्वारा नीचे दिए गए 'बनाएं' बटन पर क्लिक करने के बाद, हम आपके प्रोजेक्ट को टोकनाइज़, संरेखित और तैयार करेंगे। संसाधित होते ही सभी चरण यहां दिखाई देंगे. जब आप प्रतीक्षा कर रहे हों तो बेझिझक नीचे दिए गए लिंक पर क्लिक करें और ClearDashboard का उपयोग शुरू करने के लिए कुछ उपयोगी वीडियो देखें!</value>
   </data>
   <data name="ProjectPicker_ProjectTemplateWizard" xml:space="preserve">
     <value>प्रोजेक्ट टेम्पलेट विज़ार्ड</value>

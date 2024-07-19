@@ -920,7 +920,7 @@
     <value>فهرس أبجدي</value>
   </data>
   <data name="Lexicon_DeleteLexeme" xml:space="preserve">
-    <value>احذف هذا المعجم</value>
+    <value>احذف هذا المفردات</value>
   </data>
   <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
     <value>حذف هذا المعجم؟</value>
@@ -962,7 +962,7 @@
     <value>Lemma للمفردات الجديدة:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
-    <value>المعجم</value>
+    <value>معجم</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>معجم لـ موجود بالفعل لـ lemma</value>
@@ -1040,7 +1040,7 @@
     <value>مطابقة كاملة</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
-    <value>المعجم</value>
+    <value>معجم</value>
   </data>
   <data name="LexiconEdit_LoadingData" xml:space="preserve">
     <value>تحميل البيانات...</value>
@@ -1331,7 +1331,7 @@
     <value>MAT</value>
   </data>
   <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>جارٍ إنشاء قاعدة البيانات...</value>
+    <value>جارٍ إنشاء قاعدة بيانات...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
     <value>اكتمل الدمج...جاري إعادة تحميل الواجهة</value>
@@ -1795,6 +1795,9 @@
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>احصل على الأحدث من Paratext</value>
   </data>
+  <data name="Pds_ImportWordAnlysisMenu" xml:space="preserve">
+    <value>استيراد تحليلات الكلمات </value>
+  </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
     <value>عرض معلومات حول هذا المشروع</value>
   </data>
@@ -1823,7 +1826,7 @@
     <value>الموارد</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
-    <value>قم بتوسيع المحتوى إلى 100%</value>
+    <value>قم بتوسيع المحتوى إلى 100٪</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
     <value>إضافة نص إلى نافذة جديدة</value>
@@ -1898,7 +1901,7 @@
     <value>لغة</value>
   </data>
   <data name="Pins_Lexeme" xml:space="preserve">
-    <value>المعجم</value>
+    <value>معجم</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
     <value>نوع المفردات</value>
@@ -2489,7 +2492,7 @@
     <value>لا أستطيع إكمال المهمة</value>
   </data>
   <data name="SlackMessageView_Combo3" xml:space="preserve">
-    <value>لقد أكملت مهمة لكنها كانت صعبة</value>
+    <value>لقد أكملت مهمة ولكنها كانت صعبة</value>
   </data>
   <data name="SlackMessageView_Combo4" xml:space="preserve">
     <value>أود أن أفعل...</value>

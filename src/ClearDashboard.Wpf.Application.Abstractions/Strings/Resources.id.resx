@@ -1082,7 +1082,7 @@
     <value>Tambahkan sebagai formulir untuk...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Temukan leksem atau bentuk yang lengkap atau sebagian yang cocok dengan sumbernya</value>
+    <value>Temukan leksem lengkap atau sebagian atau kecocokan bentuk dengan sumbernya</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Tambahkan target sebagai terjemahan untuk ...</value>
@@ -1466,7 +1466,7 @@
     <value>Karena izin proyek Paratext Anda, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Filter berdasarkan Ayat</value>
+    <value>Saring berdasarkan Ayat</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Filter</value>
@@ -1622,7 +1622,7 @@
     <value>Pilih label yang akan dihapus dari grup label</value>
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
-    <value>Catatan: label ini akan muncul di bawah grup label: Tidak Ada</value>
+    <value>Catatan: label ini akan muncul di bawah grup label: Tidak ada</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>Kirim catatan ini ke Paratext?</value>
@@ -1787,13 +1787,16 @@
     <value>Paskan seluruh area konten ke area pandang</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>Paskan semua node ke viewport</value>
+    <value>Pasangkan semua node ke viewport</value>
   </data>
   <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
     <value>Dapatkan Catatan Eksternal Terbaru</value>
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Dapatkan Terbaru dari Paratext</value>
+  </data>
+  <data name="Pds_ImportWordAnlysisMenu" xml:space="preserve">
+    <value>Impor Analisis Kata </value>
   </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
     <value>Tampilkan informasi tentang proyek ini</value>
@@ -2057,7 +2060,7 @@
     <value>Segarkan Daftar Proyek Kolaborasi</value>
   </data>
   <data name="ProjectPicker_SearchRecent" xml:space="preserve">
-    <value>Cari terkini</value>
+    <value>Cari terbaru</value>
   </data>
   <data name="ProjectPicker_StartParatext" xml:space="preserve">
     <value>Klik di sini untuk memulai Paratext</value>

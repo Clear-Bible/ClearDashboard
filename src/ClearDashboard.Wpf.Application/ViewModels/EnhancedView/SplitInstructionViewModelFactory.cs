@@ -49,7 +49,7 @@ public static class SplitInstructionViewModelFactory
             
             var length = last ? surfaceTextLength - splitIndex : splitIndexes[index] - splitIndex;
             tokenText = surfaceText.Substring(splitIndex, length);
-            splitInstructions.Add(new SplitInstructionViewModel {Index = splitIndex, TokenText = tokenText, TrainingText = tokenText, TokenType = DetermineTokenType(index, splitIndex, surfaceTextLength, splitIndexes.Count)}); //, CircumfixGroup = "A"
+            splitInstructions.Add(new SplitInstructionViewModel {Index = splitIndex, TokenText = tokenText, TrainingText = tokenText, TokenType = DetermineTokenType(index, splitIndex, surfaceTextLength, splitIndexes.Last()) }); //, CircumfixGroup = "A"
             index++;
         }
 

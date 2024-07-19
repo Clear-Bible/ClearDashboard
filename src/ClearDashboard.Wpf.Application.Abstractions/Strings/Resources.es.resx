@@ -503,7 +503,7 @@
     <value>Parte fuente</value>
   </data>
   <data name="BulkAlignmentReview_SourceRef" xml:space="preserve">
-    <value>Referencia de fuente</value>
+    <value>Fuente de referencia</value>
   </data>
   <data name="BulkAlignmentReview_Target" xml:space="preserve">
     <value>Objetivo</value>
@@ -1517,7 +1517,7 @@
     <value>Agregar un grupo de etiquetas</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>Ya existe un grupo de etiquetas con nombre</value>
+    <value>Ya existe un grupo de etiquetas con nombre.</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>Inicializar grupo de etiquetas</value>
@@ -1794,6 +1794,9 @@
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Obtenga lo último de Paratext</value>
+  </data>
+  <data name="Pds_ImportWordAnlysisMenu" xml:space="preserve">
+    <value>Importar análisis de palabras </value>
   </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
     <value>Mostrar información sobre este proyecto</value>
@@ -2165,7 +2168,7 @@
     <value>Esdras</value>
   </data>
   <data name="ProperCase_Galatians" xml:space="preserve">
-    <value>gálatas</value>
+    <value>Gálatas</value>
   </data>
   <data name="ProperCase_Genesis" xml:space="preserve">
     <value>Génesis</value>
@@ -2405,7 +2408,7 @@
     <value>Modos de energía</value>
   </data>
   <data name="Settings_PowerModesDescription" xml:space="preserve">
-    <value>Permita que ClearDashboard cambie los modos de energía durante eventos computacionales elevados</value>
+    <value>Permita que ClearDashboard cambie los modos de energía durante eventos computacionales intensos</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
     <value>Reservado</value>

@@ -1319,7 +1319,7 @@
     <value>Versículo</value>
   </data>
   <data name="Marble_Verses" xml:space="preserve">
-    <value>Versículos</value>
+    <value>Versos</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
     <value>Sentido do verso</value>
@@ -1478,7 +1478,7 @@
     <value>Filtrar por status</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>Filtrar por texto</value>
+    <value>Filtrar por Texto</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>Qualquer</value>
@@ -1694,7 +1694,7 @@
     <value>Alinhador de palavras da máquina de trem</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
-    <value>Defina o mapeamento de versículos entre corpora paralelizados</value>
+    <value>Defina o mapeamento de versos entre corpora paralelizados</value>
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Corpus Paratextual</value>
@@ -1736,7 +1736,7 @@
     <value>Auxiliar</value>
   </data>
   <data name="Pds_BackTranslation" xml:space="preserve">
-    <value>Retrotradução</value>
+    <value>Tradução reversa</value>
   </data>
   <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
     <value>Calcular novo modelo de tradução</value>
@@ -1794,6 +1794,9 @@
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Receba as últimas novidades do Paratext</value>
+  </data>
+  <data name="Pds_ImportWordAnlysisMenu" xml:space="preserve">
+    <value>Importar análises de palavras </value>
   </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
     <value>Mostrar informações sobre este projeto</value>

@@ -668,7 +668,7 @@
     <value>Фильтровать поиск по терминам</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>Фильтровать поиск по ключевым словам</value>
+    <value>Фильтрация поиска по ключевым словам</value>
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
     <value>Подстрочный</value>
@@ -1088,7 +1088,7 @@
     <value>Добавить цель в качестве перевода для...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Найдите лексемы, у которых есть один или несколько переводов, соответствующих целевому.</value>
+    <value>Найдите лексемы, у которых есть один или несколько переводов, соответствующих целевому значению.</value>
   </data>
   <data name="LexiconImport_Checked" xml:space="preserve">
     <value>Проверено</value>
@@ -1553,7 +1553,7 @@
     <value>Отметить выбранные записи как открытые</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>Отметить выбранные записи как решенные</value>
+    <value>Отметить выбранные заметки как решенные</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>Созданный</value>
@@ -1794,6 +1794,9 @@
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Получайте последние новости от Paratext</value>
+  </data>
+  <data name="Pds_ImportWordAnlysisMenu" xml:space="preserve">
+    <value>Импортировать анализ слов </value>
   </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
     <value>Показать информацию об этом проекте</value>
@@ -2291,7 +2294,7 @@
     <value>регистр</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Предоставленный ключ неисправен.  При расшифровке некоторые элементы json не удалось найти.</value>
+    <value>Предоставленный ключ неисправен.  При расшифровке не удалось найти некоторые элементы json.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>Содержимое расшифрованного лицензионного ключа не соответствует предоставленной вами информации.</value>
@@ -2594,7 +2597,7 @@
     <value>Обновить и добавить новое</value>
   </data>
   <data name="UseDefaults" xml:space="preserve">
-    <value>Создать, используя значения по умолчанию</value>
+    <value>Создать, используя настройки по умолчанию</value>
   </data>
   <data name="Windows_AlignmentTool" xml:space="preserve">
     <value>Инструмент выравнивания</value>
@@ -2627,7 +2630,7 @@
     <value>Смысл:</value>
   </data>
   <data name="WordMeaningsView_SubDomain" xml:space="preserve">
-    <value>Поддомен:</value>
+    <value>Субдомен:</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Да</value>
