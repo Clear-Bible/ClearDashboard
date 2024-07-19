@@ -1478,7 +1478,7 @@
     <value>በሁኔታ አጣራ</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>በጽሁፍ አጣራ</value>
+    <value>በፅሁፍ አጣራ</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>ማንኛውም</value>
@@ -1673,7 +1673,7 @@
     <value>ኢንተርሊንየር ፍጠር</value>
   </data>
   <data name="ParallelCorpusDialog_JSON_Metadata" xml:space="preserve">
-    <value>JSON ዲበ ውሂብ</value>
+    <value>JSON ሜታዳታ</value>
   </data>
   <data name="ParallelCorpusDialog_ParallelCorpus" xml:space="preserve">
     <value>የ Corpora ጥቅሶችን ትይዩ ያድርጉ</value>
@@ -1794,6 +1794,9 @@
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>ከParatext የቅርብ ጊዜ ያግኙ</value>
+  </data>
+  <data name="Pds_ImportWordAnlysisMenu" xml:space="preserve">
+    <value>የቃል ትንታኔዎችን አስመጣ </value>
   </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
     <value>ስለዚህ ፕሮጀክት መረጃ አሳይ</value>
@@ -2012,7 +2015,7 @@
     <value>እዚህ ብቸኝነት ነው።  እባክዎ አዲስ ፕሮጀክት ይፍጠሩ።</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>ፓራቴክስት አልተጫነም።  እባክህ Paratext ጫን እና የ ClearDashboard መተግበሪያን እንደገና አስጀምር።</value>
+    <value>ፓራቴክስት አልተጫነም።  እባክህ Paratextን ጫን እና የ ClearDashboard መተግበሪያን እንደገና አስጀምር።</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>ፓራቴክስት እየሰራ አይደለም።</value>
@@ -2039,7 +2042,7 @@
     <value>ፕሮጀክት፡- </value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
-    <value>እዚያ ደርሰናል!</value>
+    <value>ልንደርስ ነው!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
     <value>'Dashboard Getting' ቪዲዮዎችን ለማየት እዚህ ጠቅ ያድርጉ</value>
@@ -2357,7 +2360,7 @@
     <value>አሰላለፍ አርትዖትን አንቃ</value>
   </data>
   <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
-    <value>በሙከራ ቡድን ውስጥ የውጭ ፓራቴክስት ማስታወሻዎችን አንቃ</value>
+    <value>በሙከራ ቡድን ውስጥ የውጪ ፓራቴክስት ማስታወሻዎችን አንቃ</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
     <value>የውጭ ፓራቴክስት ማስታወሻዎችን አንቃ</value>
@@ -2435,7 +2438,7 @@
     <value>የተዘረጉ እይታዎችን ከዳሽቦርድ በተለየ ማሳያ ላይ አሳይ</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>ሶስት ወይም ከዚያ በላይ ተቆጣጣሪዎች ላሏቸው ስርዓቶች የተዘረጋውን እይታ በሶስተኛ ማሳያ ላይ አሳይ</value>
+    <value>ሶስት ወይም ከዚያ በላይ ማሳያዎች ላሏቸው ስርዓቶች የተዘረጋውን እይታ በሶስተኛ ማሳያ ላይ አሳይ</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>የጽሑፍ ስብስብ</value>

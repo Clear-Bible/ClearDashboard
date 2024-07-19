@@ -113,7 +113,7 @@
     <value>Phiên bản</value>
   </data>
   <data name="AccountInfo_ClearDashboardUserIdLabel" xml:space="preserve">
-    <value>ClearDashboard UserId:</value>
+    <value>Id người dùng ClearDashboard:</value>
   </data>
   <data name="AccountInfo_ClearDashboardUsernameLabel" xml:space="preserve">
     <value>Tên người dùng ClearDashboard:</value>
@@ -956,7 +956,7 @@
     <value>bổ đề</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
-    <value>Bổ đề/Dạng thức:</value>
+    <value>Bổ đề/Dạng:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
     <value>Bổ đề cho từ vựng mới:</value>
@@ -1106,7 +1106,7 @@
     <value>Ngôn ngữ:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
-    <value>Từ vựng hoặc mẫu phù hợp</value>
+    <value>Lexeme hoặc mẫu phù hợp</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
     <value>Không còn bản ghi nào để nhập.</value>
@@ -1199,7 +1199,7 @@
     <value>Sở thích</value>
   </data>
   <data name="MainView_QuickNew" xml:space="preserve">
-    <value>Nhanh chóng Mới</value>
+    <value>Mới nhanh</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Có sẵn các thay đổi cộng tác</value>
@@ -1595,7 +1595,7 @@
     <value>Đã xem</value>
   </data>
   <data name="Notes_NotesNotSent" xml:space="preserve">
-    <value> các ghi chú đã chọn sẽ không được gửi đến Paratext.</value>
+    <value> các ghi chú đã chọn sẽ không được gửi tới Paratext.</value>
   </data>
   <data name="Notes_NoteStatus_Archived" xml:space="preserve">
     <value>Đã lưu trữ</value>
@@ -1794,6 +1794,9 @@
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Nhận thông tin mới nhất từ ​​Paratext</value>
+  </data>
+  <data name="Pds_ImportWordAnlysisMenu" xml:space="preserve">
+    <value>Nhập phân tích từ </value>
   </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
     <value>Hiển thị thông tin về dự án này</value>
@@ -2435,7 +2438,7 @@
     <value>Hiển thị Chế độ xem mở rộng trên màn hình khác với Trang tổng quan</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>Đối với các hệ thống có ba màn hình trở lên, hãy hiển thị Chế độ xem mở rộng trên màn hình thứ ba</value>
+    <value>Đối với hệ thống có ba màn hình trở lên, hãy hiển thị Chế độ xem mở rộng trên màn hình thứ ba</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>Bộ sưu tập văn bản</value>
@@ -2471,7 +2474,7 @@
     <value>Ghi chú phát hành</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>Hiển thị bản phát hành trước</value>
+    <value>Hiển thị các bản phát hành trước</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
     <value>Cập nhật lên phiên bản mới của ClearDashboard</value>
@@ -2489,7 +2492,7 @@
     <value>Tôi không thể hoàn thành nhiệm vụ</value>
   </data>
   <data name="SlackMessageView_Combo3" xml:space="preserve">
-    <value>Tôi đã hoàn thành một nhiệm vụ nhưng nó rất khó</value>
+    <value>Tôi đã hoàn thành một nhiệm vụ nhưng nó rất khó khăn</value>
   </data>
   <data name="SlackMessageView_Combo4" xml:space="preserve">
     <value>Tôi muốn làm...</value>

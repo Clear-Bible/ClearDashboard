@@ -767,7 +767,7 @@
     <value>Textul țintă:</value>
   </data>
   <data name="FontSettings_TargetFontSize" xml:space="preserve">
-    <value>Dimensiunea țintă a fontului:</value>
+    <value>Dimensiunea vizată a fontului:</value>
   </data>
   <data name="FontSettings_Title" xml:space="preserve">
     <value>Titlu:</value>
@@ -1685,13 +1685,13 @@
     <value>Algoritmul de aliniere a cuvintelor mașinii</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>Tren model simetrizat?</value>
+    <value>Modelul simetric al trenului?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>Tren</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>Aliniere de cuvinte a mașinii de tren</value>
+    <value>Alinierea cuvintelor Train Machine</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Setați maparea versurilor între corpurile paralelizate</value>
@@ -1795,6 +1795,9 @@
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Obțineți cele mai recente de la Paratext</value>
   </data>
+  <data name="Pds_ImportWordAnlysisMenu" xml:space="preserve">
+    <value>Importați analize Word </value>
+  </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
     <value>Afișați informații despre acest proiect</value>
   </data>
@@ -1880,7 +1883,7 @@
     <value>PHP</value>
   </data>
   <data name="Pins_ClearFilter" xml:space="preserve">
-    <value>Ștergeți filtrul</value>
+    <value>Șterge filtrul</value>
   </data>
   <data name="Pins_Code" xml:space="preserve">
     <value>Cod</value>
@@ -1994,7 +1997,7 @@
     <value>Import Server Project</value>
   </data>
   <data name="ProjectPicker_IncludeBiblicalTextsTooltip" xml:space="preserve">
-    <value>Bifați această casetă pentru a include textele biblice greacă și ebraică atunci când vă creați proiectul.</value>
+    <value>Bifați această casetă pentru a include textele biblice grecești și ebraice atunci când vă creați proiectul.</value>
   </data>
   <data name="ProjectPicker_IncludeNtBiblicalTexts" xml:space="preserve">
     <value>Includeți texte biblice grecești din NT?</value>
@@ -2213,7 +2216,7 @@
     <value>Judecătorii</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
-    <value>Lamentații</value>
+    <value>Lamentări</value>
   </data>
   <data name="ProperCase_Leviticus" xml:space="preserve">
     <value>Leviticul</value>
@@ -2306,7 +2309,7 @@
     <value>Vă rugăm să introduceți prenumele</value>
   </data>
   <data name="RegistrationView_LastName" xml:space="preserve">
-    <value>Vă rugăm să introduceți numele dvs. de familie</value>
+    <value>Vă rugăm să introduceți numele de familie</value>
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
     <value>Vă rugăm să introduceți cheia de licență</value>
@@ -2405,7 +2408,7 @@
     <value>Moduri de putere</value>
   </data>
   <data name="Settings_PowerModesDescription" xml:space="preserve">
-    <value>Permiteți ClearDashboard-ului să schimbe modurile de alimentare în timpul evenimentelor de calcul ridicat</value>
+    <value>Permiteți ClearDashboard să schimbe modurile de alimentare în timpul evenimentelor de calcul ridicat</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
     <value>Rezervat</value>

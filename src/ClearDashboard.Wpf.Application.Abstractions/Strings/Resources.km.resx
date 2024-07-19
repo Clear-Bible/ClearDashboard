@@ -665,7 +665,7 @@
     <value>និមិត្តសញ្ញា '{0}' មានការតម្រឹមច្រើនដែលបានកំណត់។ ការចុច '{1}' នឹងលុបការតម្រឹមទាំងអស់។</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>តម្រងស្វែងរកពាក្យ</value>
+    <value>ត្រងពាក្យស្វែងរក</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
     <value>ត្រងពាក្យស្វែងរកតាមលក្ខខណ្ឌសំខាន់ៗ</value>
@@ -686,7 +686,7 @@
     <value>សម្គាល់ការតម្រឹមជា 'ត្រូវការការពិនិត្យឡើងវិញ'</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
-    <value>សម្គាល់ការតម្រឹមជា 'មានសុពលភាព'</value>
+    <value>សម្គាល់ការតម្រឹមជា 'ត្រឹមត្រូវ'</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
     <value>និមិត្តសញ្ញាថ្មី៖ អត្ថបទបណ្តុះបណ្តាល</value>
@@ -695,7 +695,7 @@
     <value>កំណត់ចំណាំ</value>
   </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
-    <value>មិនមានទិន្នន័យខនៅក្នុងជួរខគម្ពីរនេះទេ។</value>
+    <value>មិនមានទិន្នន័យខគម្ពីរនៅក្នុងជួរខគម្ពីរនេះទេ។</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
     <value>យក Corpus ចេញ</value>
@@ -881,7 +881,7 @@
     <value>បន្ថែមដែនន័យធៀបទៅនឹងអត្ថន័យនេះ។</value>
   </data>
   <data name="Lexicon_AddForm" xml:space="preserve">
-    <value>បន្ថែមទម្រង់ lexical ទៅ lexical នេះ។</value>
+    <value>បន្ថែមទម្រង់ lexical ទៅនឹង lexical នេះ។</value>
   </data>
   <data name="Lexicon_AddLexeme" xml:space="preserve">
     <value>បន្ថែម Lexeme</value>
@@ -965,7 +965,7 @@
     <value>លេសេម</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
-    <value>Lexeme សម្រាប់​មាន​រួច​ហើយ​សម្រាប់​លេម៉ា</value>
+    <value>Lexeme សម្រាប់​មាន​រួច​ហើយ​សម្រាប់ lemma</value>
   </data>
   <data name="Lexicon_Lexicon" xml:space="preserve">
     <value>វចនានុក្រម</value>
@@ -983,7 +983,7 @@
     <value>មិនមានទម្រង់ដែលអាចប្រើបានទេ។</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>ដក​ដែន​អត្ថន័យ​នេះ​ចេញ​ពី​អត្ថន័យ​នេះ។</value>
+    <value>ដកដែនសុភាសិតនេះចេញពីអត្ថន័យនេះ។</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
     <value>យកទម្រង់ lexical នេះចេញពី lexical នេះ។</value>
@@ -1517,7 +1517,7 @@
     <value>បន្ថែមក្រុមស្លាក</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>ក្រុមស្លាកមានរួចហើយជាមួយឈ្មោះ</value>
+    <value>ក្រុមស្លាកមានរួចហើយដែលមានឈ្មោះ</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>ចាប់ផ្តើមក្រុមស្លាក</value>
@@ -1553,7 +1553,7 @@
     <value>សម្គាល់ចំណុចដែលបានជ្រើសរើសថាបើក</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>សម្គាល់ jots ដែលបានជ្រើសរើសថាបានដោះស្រាយ</value>
+    <value>សម្គាល់​ចំណុច​ដែល​បាន​ជ្រើសរើស​ថា​បាន​ដោះស្រាយ</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>បានបង្កើត</value>
@@ -1794,6 +1794,9 @@
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>ទទួលបានចុងក្រោយបំផុតពី Paratext</value>
+  </data>
+  <data name="Pds_ImportWordAnlysisMenu" xml:space="preserve">
+    <value>នាំចូលការវិភាគពាក្យ </value>
   </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
     <value>បង្ហាញព័ត៌មានអំពីគម្រោងនេះ។</value>
@@ -2510,7 +2513,7 @@
     <value>ផ្ញើឯកសារ USFM</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
-    <value>សំណូមពរ</value>
+    <value>ការណែនាំ</value>
   </data>
   <data name="SlackMessageView_SuggestionEditor" xml:space="preserve">
     <value>កម្មវិធីនិពន្ធ</value>
@@ -2543,7 +2546,7 @@
     <value>បានធ្វើទ្រង់ទ្រាយ</value>
   </data>
   <data name="TargetContextView_Unformatted" xml:space="preserve">
-    <value>មិនមានទ្រង់ទ្រាយ</value>
+    <value>មិន​មាន​ទ្រង់ទ្រាយ</value>
   </data>
   <data name="TargetContextView_ZoomIn" xml:space="preserve">
     <value>ពង្រីក</value>

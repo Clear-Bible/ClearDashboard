@@ -140,7 +140,7 @@
     <value>副文字電子郵件：</value>
   </data>
   <data name="AccountInfo_ParatextUsernameLabel" xml:space="preserve">
-    <value>副文字使用者名稱：</value>
+    <value>副文本使用者名稱：</value>
   </data>
   <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
     <value>重新啟動應用程式</value>
@@ -434,7 +434,7 @@
     <value>對齊的單字</value>
   </data>
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
-    <value>路線</value>
+    <value>對齊方式</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
     <value>對齊類型： </value>
@@ -656,7 +656,7 @@
     <value>刪除對齊方式</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>刪除「{0}」的對齊方式嗎？</value>
+    <value>刪除「{0}」的對齊嗎？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
     <value>刪除所有對齊方式？</value>
@@ -710,7 +710,7 @@
     <value>將拆分應用於令牌的其他實例</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>選擇拆分令牌的位置：</value>
+    <value>選擇分割令牌的位置：</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>三路分流</value>
@@ -1373,10 +1373,10 @@
     <value>檢查使用者可用性</value>
   </data>
   <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
-    <value>創造協作用戶</value>
+    <value>創建協作用戶</value>
   </data>
   <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
-    <value>創造協作用戶</value>
+    <value>創建協作用戶</value>
   </data>
   <data name="NewCollabUserView_DashboardEmailValidationCode" xml:space="preserve">
     <value>ClearDashboard 電子郵件驗證碼</value>
@@ -1664,7 +1664,7 @@
     <value>舊約</value>
   </data>
   <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
-    <value>建立字對齊</value>
+    <value>建立單字對齊</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
     <value>創建語料庫詩句的平行化</value>
@@ -1703,7 +1703,7 @@
     <value>選擇要訓練的 SMT 演算法</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>新增批次批准查看</value>
+    <value>新增批量批准查看</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>新增到視圖</value>
@@ -1794,6 +1794,9 @@
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>從 Paratext 獲取最新信息</value>
+  </data>
+  <data name="Pds_ImportWordAnlysisMenu" xml:space="preserve">
+    <value>導入詞分析 </value>
   </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
     <value>顯示有​​關該項目的信息</value>
@@ -1958,7 +1961,7 @@
     <value>合作項目</value>
   </data>
   <data name="ProjectPicker_CreateLong" xml:space="preserve">
-    <value>建立您的專案以開始使用。</value>
+    <value>建立您的專案以開始。</value>
   </data>
   <data name="ProjectPicker_CreateNewProject" xml:space="preserve">
     <value>建立一個新項目</value>
