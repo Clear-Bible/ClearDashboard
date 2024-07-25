@@ -47,6 +47,7 @@ using Autofac.Configuration;
 using ClearDashboard.Collaboration.Features;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Localization;
 using Microsoft.Extensions.Configuration;
 using DashboardApplication = System.Windows.Application;
 
@@ -186,7 +187,10 @@ namespace ClearDashboard.Wpf.Application
         protected override void PostInitialize()
         {
             LogDependencyInjectionRegistrations();
+
             SetupLanguage();
+
+            StaticLocalizationService.SetLocalizationService(Container!.Resolve<ILocalizationService>());
 
 #if DEBUG
             if (DependencyInjectionLogging)
@@ -272,6 +276,7 @@ namespace ClearDashboard.Wpf.Application
                     userId = 2;
                     nameSpaceId = 0;
                 }
+
                 return new CollaborationConfiguration()
                 {
                     RemoteUrl = section["RemoteUrl"],
@@ -281,7 +286,8 @@ namespace ClearDashboard.Wpf.Application
                     Group  = section["Group"],
                     RemotePersonalPassword = section["RemotePersonalPassword"], 
                     UserId = userId,
-                    NamespaceId = nameSpaceId
+                    NamespaceId = nameSpaceId,
+                    TokenId = section["TokenId"] is not null ? Convert.ToInt16(section["TokenId"]) : 0
                 };
             });
 
@@ -642,6 +648,8 @@ namespace ClearDashboard.Wpf.Application
         }
 
         #endregion
+
+       
 
     }
 }

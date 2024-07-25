@@ -225,8 +225,9 @@ public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IMode
     public void Add(string key, ModelExtra value) { AddProperty(key, value); }
     public void Add(string key, IEnumerable<string> value) { AddProperty(key, value); }
     public void Add(string key, IDictionary<string, object> value) { AddProperty(key, value); }
+	public void Add(string key, IList<Models.Metadatum> value) { AddProperty(key, value); }
 
-    public bool TryGetPropertyValue(string key, out object? value) => _properties.TryGetValue(key, out value);
+	public bool TryGetPropertyValue(string key, out object? value) => _properties.TryGetValue(key, out value);
     public bool TryGetNullableStringPropertyValue(string key, out string? valueAsString)
     {
         if (TryGetPropertyValue(key, out var value) &&
@@ -289,9 +290,21 @@ public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IMode
     public void ApplyPropertyDifference(PropertyDifference propertyDifference)
     {
         var propertyName = propertyDifference.PropertyName;
-        if (_properties.TryGetValue(propertyName, out var propertyValue))
+
+        if (propertyDifference.PropertyValueDifference.GetType().IsAssignableTo(typeof(ValueDifference)))
         {
-            if (propertyValue is not null && propertyValue.GetType().IsAssignableTo(typeof(ModelRef)))
+            if (!_properties.ContainsKey(propertyName))
+            {
+				throw new InvalidDifferenceStateException($"Attempt in GeneralModel to ApplyPropertyDifferences of a ValueDifference to property name '{propertyName}' but property not found");
+			}
+
+            _properties[propertyName] = ((ValueDifference)propertyDifference.PropertyValueDifference).Value2AsObject;
+            return;
+        }
+
+		if (_properties.TryGetValue(propertyName, out var propertyValue))
+        {
+			if (propertyValue is not null && propertyValue.GetType().IsAssignableTo(typeof(ModelRef)))
             {
                 foreach (var pd in ((IModelDifference)propertyDifference.PropertyValueDifference).PropertyDifferences)
                 {
@@ -315,8 +328,29 @@ public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IMode
                     }
                 }
             }
-            else
+			else if (propertyValue is not null && propertyValue.GetType().IsAssignableTo(typeof(IList<Models.Metadatum>)))
             {
+                if (((IListDifference<Models.Metadatum>)propertyDifference.PropertyValueDifference).HasDifferences)
+                {
+                    var tempList = new List<Models.Metadatum>((IList<Models.Metadatum>)propertyValue);
+
+                    var onlyIn1Keys = ((IListDifference<Models.Metadatum>)propertyDifference.PropertyValueDifference).OnlyIn1.Select(e => e.Key);
+                    tempList.RemoveAll(e => onlyIn1Keys.Contains(e.Key));
+
+                    tempList.AddRange(((IListDifference<Models.Metadatum>)propertyDifference.PropertyValueDifference).OnlyIn2);
+
+                    foreach (var diff in ((IListDifference<Models.Metadatum>)propertyDifference.PropertyValueDifference).ListMemberModelDifferences)
+                    {
+                        var diffKey = (string)diff.Id!;
+						var value2AsString = (string?)diff.PropertyValueDifferences.First().propertyValueDifference.Value2AsObject;
+                        tempList.Where(e => string.Equals(e.Key, diffKey)).ToList().ForEach(e => e.Value = value2AsString);
+                    }
+
+                    _properties[propertyName] = tempList;
+                }
+			}
+			else
+		    {
                 throw new InvalidDifferenceStateException($"Attempt in GeneralModel to ApplyPropertyDifferences to property name '{propertyName}' but value is either null or not of type ModelRef or IEnumerable<KeyValuePair<string, object?>>");
             }
         }

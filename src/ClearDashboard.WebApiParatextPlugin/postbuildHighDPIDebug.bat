@@ -1,4 +1,5 @@
 set ProjectName="ClearDashboardWebApiPlugin"
+set ParatextInstallDir="C:\Program Files\Paratext 9"
 set TargetPath=.\bin\HighDPIDebug\net48
 
 

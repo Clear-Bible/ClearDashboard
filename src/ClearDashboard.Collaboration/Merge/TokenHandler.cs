@@ -55,7 +55,24 @@ public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
 
             });
 
-        mergeContext.MergeBehavior.AddEntityValueResolver(
+		mergeContext.MergeBehavior.AddEntityValueResolver(
+			(typeof(Models.Token), nameof(Models.Token.GrammarId)),
+			entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
+
+				if (modelSnapshot.PropertyValues.TryGetValue(TokenBuilder.GRAMMAR_SHORT_NAME, out var grammarShortName))
+				{
+                    if (string.IsNullOrEmpty((string?)grammarShortName)) return null;
+					var grammarId = await GrammarHandler.GrammarShortNameToId((string)grammarShortName, projectDbContext, logger);
+					return (grammarId != default) ? grammarId : null;
+				}
+				else
+				{
+					throw new PropertyResolutionException($"Token snapshot does not have Grammer ShortName, which is required for Grammar conversion.");
+				}
+
+			});
+
+		mergeContext.MergeBehavior.AddEntityValueResolver(
             (typeof(Models.Token), nameof(Models.Token.Id)),
             entityValueResolver: async (IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger) => {
 
@@ -79,9 +96,13 @@ public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
         mergeContext.MergeBehavior.AddPropertyNameMapping(
             (typeof(Models.Token), TokenBuilder.VERSE_ROW_LOCATION),
             new[] { nameof(Models.Token.VerseRowId) });
-    }
 
-    protected async static Task<Guid> ResolveTokenId(IModelSnapshot<Models.Token> modelSnapshot, DbConnection dbConnection, MergeCache cache, ILogger logger)
+		mergeContext.MergeBehavior.AddPropertyNameMapping(
+			(typeof(Models.Token), TokenBuilder.GRAMMAR_SHORT_NAME),
+			new[] { nameof(Models.Token.GrammarId) });
+	}
+
+	protected async static Task<Guid> ResolveTokenId(IModelSnapshot<Models.Token> modelSnapshot, DbConnection dbConnection, MergeCache cache, ILogger logger)
     {
         if (modelSnapshot.PropertyValues.TryGetValue("Ref", out var refValue) &&
             modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Token.TokenizedCorpusId), out var tokenizedCorpusId) &&

@@ -128,9 +128,9 @@ ab4261bb84031c8d984468f2e9d86df7ffe52809abcdefff / CRSB
 
                 var hebrewTaskName = processRunner.RegisterManuscriptCorpusTask(CorpusType.ManuscriptHebrew);
                 var greekTaskName = processRunner.RegisterManuscriptCorpusTask(CorpusType.ManuscriptGreek);
-                var paratextTaskName = processRunner.RegisterParatextProjectCorpusTask(paratextProject, Tokenizers.LatinWordTokenizer, bookIds);
-                var paratextBtTaskName = processRunner.RegisterParatextProjectCorpusTask(paratextBtProject, Tokenizers.LatinWordTokenizer, bookIds);
-                var paratextLwcTaskName = processRunner.RegisterParatextProjectCorpusTask(paratextLwcProject, Tokenizers.LatinWordTokenizer, bookIds);
+                var paratextTaskName = processRunner.RegisterParatextProjectCorpusTask(paratextProject, Tokenizers.LatinWordTokenizer, bookIds, true);
+                var paratextBtTaskName = processRunner.RegisterParatextProjectCorpusTask(paratextBtProject, Tokenizers.LatinWordTokenizer, bookIds, true);
+                var paratextLwcTaskName = processRunner.RegisterParatextProjectCorpusTask(paratextLwcProject, Tokenizers.LatinWordTokenizer, bookIds, false);
 
                 var taskNameSetParatextLwc = processRunner.RegisterParallelizationTasks(
                     paratextTaskName,

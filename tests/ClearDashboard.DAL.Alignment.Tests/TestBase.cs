@@ -35,7 +35,8 @@ namespace ClearDashboard.DAL.Alignment.Tests
     public abstract class TestBase
     {
         public IMediator Mediator { get; private set; }
-        public ProjectDbContext ProjectDbContext { get; set; }
+		public IUserProvider UserProvider { get; private set; }
+		public ProjectDbContext ProjectDbContext { get; set; }
         protected ITestOutputHelper Output { get; private set; }
         protected IContainer? Container { get; private set; }
         protected string ProjectName { get; set; }
@@ -53,7 +54,8 @@ namespace ClearDashboard.DAL.Alignment.Tests
                 // ReSharper disable once VirtualMemberCallInConstructor
                 Container = SetupDependencyInjection();
                 Mediator = Container!.Resolve<IMediator>();
-                Logger = SetupLogging(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects\\Logs\\ClearDashboardTests.log"));
+				UserProvider = Container!.Resolve<IUserProvider>();
+				Logger = SetupLogging(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects\\Logs\\ClearDashboardTests.log"));
                 (ProjectName, ProjectDbContext) = SetupTests().GetAwaiter().GetResult();
             }
             finally
@@ -98,7 +100,11 @@ namespace ClearDashboard.DAL.Alignment.Tests
                 .As<IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>>>()
                 .Keyed<IRequest<RequestResult<DataAccessLayer.Models.Lexicon_Lexicon>>>("External");
 
-            var container = builder.Build();
+			builder.RegisterType<ParatextPlugin.CQRS.Features.Lexicon.GetWordAnalysesQuery>()
+	            .As<IRequest<RequestResult<IEnumerable<DataAccessLayer.Models.Lexicon_WordAnalysis>>>>()
+	            .Keyed<IRequest<RequestResult<IEnumerable<DataAccessLayer.Models.Lexicon_WordAnalysis>>>>("External");
+
+			var container = builder.Build();
             return container;
         }
 

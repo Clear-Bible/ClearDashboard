@@ -305,6 +305,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        private bool _showExternalNotes = AbstractionsSettingsHelper.GetShowExternalNotes();
+        public bool ShowExternalNotes
+        {
+            get => _showExternalNotes;
+            set
+            {
+                if (_showExternalNotes != value)
+                {
+                    _showExternalNotes = value;
+                    AbstractionsSettingsHelper.SaveShowExternalNotes(value);
+                    NotifyOfPropertyChange(() => ShowExternalNotes);
+
+                    EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage()).GetAwaiter();
+                }
+            }
+        }
+
 
         //private bool _showExternalNotes = AbstractionsSettingsHelper.GetShowExternalNotes();
         //public bool ShowExternalNotes
@@ -379,6 +396,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public async Task RequestClose(object? obj)
         {
             await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.PaneId));
+        }
+
+        //I'm doing a separate method because when I modify the signature of "RequestClose" then
+        //"RequestCloseCommand = new RelayCommandAsync(RequestClose);" complains
+        public async Task RequestClose(object? obj, bool showConfirmation = true) 
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.PaneId, showConfirmation));
         }
         #endregion
 
@@ -932,10 +956,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             // select the attached token
             if (e.SelectedTokens.Count == 0)
             {
-                e.TokenDisplayViewModel.IsTokenSelected = true;
+                if (!e.TokenDisplayViewModel.IsTranslationSelected &&
+                    e.TokenDisplayViewModel.IsTokenSelected != true)
+                {
+                    e.TokenDisplayViewModel.IsTokenSelected = true;
+                }
                 e.SelectedTokens.Add(e.TokenDisplayViewModel);
             }
 
+            SelectionManager.SelectedTokens = e.SelectedTokens;
             // 3
             if (SelectionManager.AnySelectedNotes)
             {
@@ -1025,7 +1054,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             if (SelectionManager.IsDragInProcess)
             {
-                SelectionManager.UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
+                TokenDisplayViewModelCollection selectedTokensAcrossAllVersesCollection = new(); 
+                selectedTokensAcrossAllVersesCollection.AddRangeDistinct(SelectionManager.SelectedTokens);
+                selectedTokensAcrossAllVersesCollection.AddRangeDistinct(e.SelectedTokens);
+                SelectionManager.UpdateSelection(e.TokenDisplay, selectedTokensAcrossAllVersesCollection, e.IsControlPressed);
             }
 
             Message = $"'{e.TokenDisplay.SurfaceText}' token ({e.TokenDisplay.Token.TokenId}) hovered";
@@ -1069,6 +1101,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 var dialogViewModel = LifetimeScope!.Resolve<SplitTokenDialogViewModel>();
                 dialogViewModel.TokenDisplay = args.TokenDisplay;
                 dialogViewModel.TokenFontFamily = item.SourceFontFamily;
+                dialogViewModel.Translation = args.Translation;
+                dialogViewModel.InterlinearDisplay = args.InterlinearDisplay;
+                dialogViewModel.TranslationActionType = args.TranslationActionType;
                 _ = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
             }
             await System.Windows.Application.Current.Dispatcher.InvokeAsync(ShowSplitTokenDialog);
@@ -1097,7 +1132,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 //SelectionManager.UpdateRightClickTranslationSelection(e.TokenDisplay);
                 //NoteControlVisibility = SelectionManager.AnySelectedTokenTranslationNotes ? Visibility.Visible : Visibility.Collapsed;
-
+                
                 SelectionManager.UpdateRightClickSelection(e.TokenDisplay);
             }
         }
@@ -1173,7 +1208,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EventAggregator.PublishOnUIThreadAsync(new FilterPinsMessage(e.TokenDisplayViewModel.SurfaceText));
         }
 
-        public void FilterPinsTarget(object? sender, NoteEventArgs e)
+        public void FilterPinsTranslation(object? sender, NoteEventArgs e)
         {
             EventAggregator.PublishOnUIThreadAsync(new FilterPinsMessage(e.TokenDisplayViewModel.TargetTranslationText));
         }

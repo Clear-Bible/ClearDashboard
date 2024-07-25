@@ -23,13 +23,9 @@ using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using SIL.Scripture;
 using System.Diagnostics.CodeAnalysis;
-using System.Collections.ObjectModel;
-using SIL.Extensions;
-using System.Diagnostics;
 using System.Windows.Media;
-using System.Windows.Threading;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -48,7 +44,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<NoteMouseLeaveMessage>,
         IHandle<TokensJoinedMessage>,
         IHandle<TokenUnjoinedMessage>,
-        IHandle<TokenSplitMessage>
+        IHandle<TokenSplitMessage>, IDisposable
     {
 
         #region Member Variables   
@@ -64,7 +60,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #region Public Properties
 
-        public bool HasExternalNotes => ExternalNotes.Count() > 0 && AbstractionsSettingsHelper.GetShowExternalNotes() && AbstractionsSettingsHelper.GetExternalNotesEnabled();
+        public bool HasExternalNotes => ExternalNotes.Count() > 0 && AbstractionsSettingsHelper.GetShowExternalNotes();
         public TokenizedTextCorpus? SourceCorpus => SourceTokenMap?.Corpus;
         public TokenizedTextCorpus? TargetCorpus => TargetTokenMap?.Corpus;
 
@@ -141,9 +137,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         private bool _multipleExternalNotes = false;
+        private bool disposedValue;
+
         public bool MultipleExternalNotes
         {
-            get => _multipleExternalNotes && AbstractionsSettingsHelper.GetShowExternalNotes() && AbstractionsSettingsHelper.GetExternalNotesEnabled();
+            get => _multipleExternalNotes && AbstractionsSettingsHelper.GetShowExternalNotes();
             set
             {
                 _multipleExternalNotes = value;
@@ -204,6 +202,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
             foreach (var (token, paddingBefore, paddingAfter) in tokenMap.PaddedTokens)
             {
+                // TODO808: Completed - reviewed with Andy
+                // 1. a Composite(parallel) that overlaps with Composite(null) in parallel view will hide Composite(null) (but show its child tokens).
+                //
+                // The GetCompositeToken() call should prioritize Composite(parallel) over Composite(null).  Requires a property on CompositeToken to indicate whether
+                // it is parallel or not.
                 var compositeToken = tokenMap.GetCompositeToken(token);
 
                 var tokenDisplayViewModel = new TokenDisplayViewModel(token)
@@ -218,8 +221,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     IsSource = isSource,
                 };
 
+                if (tokenDisplayViewModel.Translation?.TranslationId != null)
+                {
+                    tokenDisplayViewModel.TranslationNoteIds = await NoteManager.GetNoteIdsAsync(tokenDisplayViewModel.Translation.TranslationId);
+                }
+
                 // check to see if this is the first jot note in a series of notes
-                if (tokenDisplayViewModel.TokenNoteIds.Count > 0)
+                if (tokenDisplayViewModel.TokenNoteIds.Count > 0 || tokenDisplayViewModel.TranslationNoteIds.Count > 0)
                 {
                     foreach (var noteId in tokenDisplayViewModel.TokenNoteIds)
                     {
@@ -229,13 +237,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                             tokenDisplayViewModel.IsFirstJotsNoteToken = true;
                         }
                     }
-                }
 
-                //Debug.WriteLine($"TokenDisplayViewModel: {tokenDisplayViewModel.SurfaceText} {tokenDisplayViewModel.TokenHasNote} {tokenDisplayViewModel.IsFirstJotsNoteToken}");
-
-                if (tokenDisplayViewModel.Translation?.TranslationId != null)
-                {
-                    tokenDisplayViewModel.TranslationNoteIds = await NoteManager.GetNoteIdsAsync(tokenDisplayViewModel.Translation.TranslationId);
+                    foreach (var noteId in tokenDisplayViewModel.TranslationNoteIds)
+                    {
+                        if (!noteGuids.ContainsKey(noteId.Id))
+                        {
+                            noteGuids.Add(noteId.Id, Guid.NewGuid());
+                            tokenDisplayViewModel.IsFirstJotsNoteTranslation = true;
+                        }
+                    }
                 }
 
                 // pad out extra space on the first token for the external notes flag
@@ -476,11 +486,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// Get the <see cref="Translation"/> for a specified token.
         /// </summary>
         /// <remarks>
-        /// This will be null unless called from an <see cref="InterlinearDisplayViewModel"/> containing a valid <see cref="TranslationSet"/>.
+        /// This will be null unless called from an <see cref="InterlinearDisplayViewModel"/> containing a valid <see cref="DAL.Alignment.Translation.TranslationSet"/>.
         /// </remarks>
         /// <param name="token">The <see cref="Token"/> for which to obtain a translation.</param>
         /// <param name="compositeToken">An optional <see cref="CompositeToken"/> that <paramref name="token"/> is a constituent of.</param>
-        /// <returns>A <see cref="Translation"/> for the token if a valid <see cref="TranslationSet"/> is known; null otherwise.</returns>
+        /// <returns>A <see cref="Translation"/> for the token if a valid <see cref="DAL.Alignment.Translation.TranslationSet"/> is known; null otherwise.</returns>
         protected virtual Translation? GetTranslationForToken(Token token, CompositeToken? compositeToken)
         {
             return null;
@@ -563,7 +573,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             foreach (var model in SourceTokenDisplayViewModels)
             {
                 // check to see if this is the first jot note in a series of notes
-                if (model.TokenNoteIds.Count > 0)
+                if (model.TokenNoteIds.Count > 0 || model.TranslationNoteIds.Count > 0)
                 {
                     foreach (var noteId in model.TokenNoteIds)
                     {
@@ -573,6 +583,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                             model.IsFirstJotsNoteToken = true;
                         }
                     }
+
+                    foreach (var noteId in model.TranslationNoteIds)
+                    {
+                        if (!noteGuids.ContainsKey(noteId.Id))
+                        {
+                            noteGuids.Add(noteId.Id, Guid.NewGuid());
+                            model.IsFirstJotsNoteTranslation = true;
+                        }
+                    }
                 }
             }
 
@@ -580,7 +599,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             foreach (var model in TargetTokenDisplayViewModels)
             {
                 // check to see if this is the first jot note in a series of notes
-                if (model.TokenNoteIds.Count > 0)
+                if (model.TokenNoteIds.Count > 0 || model.TranslationNoteIds.Count > 0)
                 {
                     foreach (var noteId in model.TokenNoteIds)
                     {
@@ -588,6 +607,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         {
                             noteGuids.Add(noteId.Id, Guid.NewGuid());
                             model.IsFirstJotsNoteToken = true;
+                        }
+                    }
+
+                    foreach (var noteId in model.TranslationNoteIds)
+                    {
+                        if (!noteGuids.ContainsKey(noteId.Id))
+                        {
+                            noteGuids.Add(noteId.Id, Guid.NewGuid());
+                            model.IsFirstJotsNoteTranslation = true;
                         }
                     }
                 }
@@ -607,10 +635,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 MatchingTokenAction(
                     t => message.Note.Associations.Any(a =>
-                        a.AssociatedEntityId.IdEquals(t.Token.TokenId) ||
-                        a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t =>
+                        a.AssociatedEntityId.IdEquals(t.Token.TokenId)), t =>
                     {
                         t.IsNoteHovered = true;
+                        t.NoteIndicatorBrush = message.NewNote ? Brushes.Orange : Brushes.MediumPurple;
+                    });
+
+                MatchingTokenAction(
+                    t => message.Note.Associations.Any(a =>
+                        a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t =>
+                    {
+                        t.IsTranslationNoteHovered = true;
                         t.NoteIndicatorBrush = message.NewNote ? Brushes.Orange : Brushes.MediumPurple;
                     });
             }
@@ -625,7 +660,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 MatchingTokenAction(
                     t => message.Note.Associations.Any(a =>
                         a.AssociatedEntityId.IdEquals(t.Token.TokenId) ||
-                        a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t => t.IsNoteHovered = false);
+                        a.AssociatedEntityId.IdEquals(t.Translation?.TranslationId)), t =>
+                    {
+                        t.IsNoteHovered = false;
+                        t.IsTranslationNoteHovered = false;
+                    });
 
             }
 
@@ -634,21 +673,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task HandleAsync(TokensJoinedMessage message, CancellationToken cancellationToken)
         {
-            MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = message.CompositeToken);
-            SourceTokenMap?.AddCompositeToken(message.CompositeToken);
-            TargetTokenMap?.AddCompositeToken(message.CompositeToken);
-            await RefreshTranslationsAsync(message.Tokens, message.CompositeToken);
+            if (message.ParallelCorpusId == null || (message.ParallelCorpusId != null && message.ParallelCorpusId == ParallelCorpusId))
+            {
+                MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = message.CompositeToken);
+                SourceTokenMap?.AddCompositeToken(message.CompositeToken);
+                TargetTokenMap?.AddCompositeToken(message.CompositeToken);
+                await RefreshTranslationsAsync(message.Tokens, message.CompositeToken);
+                
+            }
         }        
         
         public async Task HandleAsync(TokenSplitMessage message, CancellationToken cancellationToken)
         {
+           
+            // 3. for token splitting api return value, for corpus view needs to look in the composite dict for a Composite(null),
+            // and if none use the dict of individual non-composite tokens.
+            //
+            // This method is currently replacing the token using the dictionary of composites; it needs to be updated with the above logic.
+
+            // 1. Composite where children are changing
+            // 2. Token where it becomes a composite
             foreach (var kvp in message.SplitCompositeTokensByIncomingTokenId)
             {
                 var compositeToken = kvp.Value.FirstOrDefault();    // For now, the user can only split one token at a time.
-                if (compositeToken != null)
+                var isParallel = compositeToken?.HasMetadatum(MetadatumKeys.IsParallelCompositeToken);
+                if (compositeToken != null && isParallel != null && isParallel.Value && compositeToken.GetMetadatum<bool>(MetadatumKeys.IsParallelCompositeToken))
                 {
                     SourceTokenMap?.ReplaceToken(kvp.Key, compositeToken);
                     TargetTokenMap?.ReplaceToken(kvp.Key, compositeToken);
+                }
+                else if (compositeToken != null)
+                {
+                    // TODO:  If there are child tokens in the parallel view which are part of both parallel
+                    // and non-parallel composites we only want to show the children if the non-parallel composite.
+                    var childTokens  = message.SplitChildTokensByIncomingTokenId[kvp.Key].ToList();
+                  
+                    SourceTokenMap?.RemoveCompositeToken(compositeToken, new TokenCollection(childTokens));
+                    TargetTokenMap?.RemoveCompositeToken(compositeToken, new TokenCollection(childTokens));
                 }
             }
             await BuildTokenDisplayViewModelsAsync();
@@ -694,6 +755,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
 
             public int GetHashCode([DisallowNull] TokenId obj) => obj.BookNumber ^ obj.ChapterNumber ^ obj.VerseNumber;
+        }
+
+        public void Dispose()
+        {
+            EventAggregator.Unsubscribe(this);
         }
     }
 }

@@ -131,7 +131,7 @@
     <value>- ព័ត៌មានលម្អិតគណនីបច្ចុប្បន្ន-</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
-    <value>អសកម្មអាជ្ញាប័ណ្ណបច្ចុប្បន្ន</value>
+    <value>បិទដំណើរការអាជ្ញាប័ណ្ណបច្ចុប្បន្ន</value>
   </data>
   <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
     <value>- គណនីផ្សេងទៀត-</value>
@@ -437,7 +437,7 @@
     <value>តម្រឹម</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>ប្រភេទតម្រឹម៖</value>
+    <value>ប្រភេទតម្រឹម៖ </value>
   </data>
   <data name="BulkAlignmentReview_Approve" xml:space="preserve">
     <value>យល់ព្រម</value>
@@ -566,7 +566,7 @@
     <value>លុបការសហការគម្រោង</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>អ្នកមានអ្នកប្រើប្រាស់ផ្សេងទៀតបានភ្ជាប់ទៅគម្រោងនេះ។ គម្រោងនេះនឹងត្រូវដកចេញសម្រាប់ពួកគេផងដែរ។ តើអ្នកប្រាកដថាចង់លុបគម្រោងនេះទេ?</value>
+    <value>អ្នកមានអ្នកប្រើប្រាស់ផ្សេងទៀតបានភ្ជាប់ទៅគម្រោងនេះ។  គម្រោងនេះនឹងត្រូវដកចេញសម្រាប់ពួកគេផងដែរ។ តើអ្នកប្រាកដថាចង់លុបគម្រោងនេះទេ?</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
     <value>តើអ្នកប្រាកដថាចង់លុបគម្រោងនេះទេ?</value>
@@ -674,7 +674,7 @@
     <value>អន្តរលីនេអ៊ែរ</value>
   </data>
   <data name="EnhancedView_JoinTokens" xml:space="preserve">
-    <value>ចូលរួមថូខឹន</value>
+    <value>ចូលរួម Token</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
     <value>ចូលរួម Token សម្រាប់ភាសា Pair</value>
@@ -686,7 +686,7 @@
     <value>សម្គាល់ការតម្រឹមជា 'ត្រូវការការពិនិត្យឡើងវិញ'</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
-    <value>សម្គាល់ការតម្រឹមជា 'មានសុពលភាព'</value>
+    <value>សម្គាល់ការតម្រឹមជា 'ត្រឹមត្រូវ'</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
     <value>និមិត្តសញ្ញាថ្មី៖ អត្ថបទបណ្តុះបណ្តាល</value>
@@ -695,7 +695,7 @@
     <value>កំណត់ចំណាំ</value>
   </data>
   <data name="EnhancedView_NoVerseData" xml:space="preserve">
-    <value>មិនមានទិន្នន័យខនៅក្នុងជួរខគម្ពីរនេះទេ។</value>
+    <value>មិនមានទិន្នន័យខគម្ពីរនៅក្នុងជួរខគម្ពីរនេះទេ។</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
     <value>យក Corpus ចេញ</value>
@@ -787,6 +787,12 @@
   <data name="GEN" xml:space="preserve">
     <value>GEN</value>
   </data>
+  <data name="GrammarTagList_Description" xml:space="preserve">
+    <value>ការពិពណ៌នា</value>
+  </data>
+  <data name="GrammarTagList_Short" xml:space="preserve">
+    <value>ខ្លី</value>
+  </data>
   <data name="HAB" xml:space="preserve">
     <value>HAB</value>
   </data>
@@ -798,6 +804,18 @@
   </data>
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>ការនាំចូលត្រូវបានលុបចោល</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>ការនាំចូលពេញលេញ</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>កំហុសបានជួបប្រទះ (ពិនិត្យមើលកំណត់ហេតុសម្រាប់ព័ត៌មានលម្អិត)</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>នាំចូលការវិភាគពាក្យ</value>
   </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
@@ -892,8 +910,14 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>ប្រសិនបើធីក វានឹងផ្លាស់ប្តូរការកើតឡើងដែលមិនកំណត់ទាំងអស់នៃពាក្យនេះ។</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>ផ្លាស់ប្តូរការកើតឡើងដែលមិនបានកំណត់ទាំងអស់។</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>ប្រសិនបើធីក វានឹងផ្លាស់ប្តូរការកើតឡើងដែលមិនកំណត់ទាំងអស់នៃពាក្យនេះ។</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
-    <value>ការចុះសម្រុងគ្នា។</value>
+    <value>ភាពស្របគ្នា។</value>
   </data>
   <data name="Lexicon_DeleteLexeme" xml:space="preserve">
     <value>លុបវេយ្យាករណ៍នេះ។</value>
@@ -907,11 +931,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>លុបការបកប្រែនេះ។</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;អត្ថន័យទទេ&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>បញ្ចូលការបកប្រែថ្មីសម្រាប់</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>បញ្ចូលភាពរលោងថ្មី។</value>
+  </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>ទម្រង់៖</value>
+  </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>រលោង</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>បញ្ជីរលោង</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>ភាសា៖</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>លេម៉ា</value>
@@ -926,7 +965,13 @@
     <value>លេសេម</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
-    <value>Lexeme សម្រាប់​មាន​រួច​ហើយ​សម្រាប់​លេម៉ា</value>
+    <value>Lexeme សម្រាប់​មាន​រួច​ហើយ​សម្រាប់ lemma</value>
+  </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>វចនានុក្រម</value>
+  </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>ការប្រកួត</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>អត្ថន័យ៖</value>
@@ -934,14 +979,32 @@
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>រលោងថ្មី។</value>
   </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>មិនមានទម្រង់ដែលអាចប្រើបានទេ។</value>
+  </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>ដក​ដែន​អត្ថន័យ​នេះ​ចេញ​ពី​អត្ថន័យ​នេះ។</value>
+    <value>ដកដែនសុភាសិតនេះចេញពីអត្ថន័យនេះ។</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
     <value>យកទម្រង់ lexical នេះចេញពី lexical នេះ។</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>កំណត់ភាពរលោងសម្រាប់</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>ការបកប្រែ៖</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>ប្រភេទ៖</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>មិនបានកំណត់</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>ភាពរលោងដែលកំណត់ដោយអ្នកប្រើប្រាស់</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>ផ្ទៀងផ្ទាត់</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>និង</value>
@@ -1027,11 +1090,23 @@
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>ស្វែងរក lexemes ដែលមានការបកប្រែមួយ ឬច្រើនដែលត្រូវនឹងគោលដៅ</value>
   </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>បានពិនិត្យ</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>សាកសព៖</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>នាំចូល</value>
+  </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>បានពិនិត្យការនាំចូល</value>
   </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>ភាសា៖</value>
+  </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
-    <value>Leexeme ឬទម្រង់ប្រកួត</value>
+    <value>Leexeme ឬ​ទម្រង់​ប្រកួត</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
     <value>មិនមានកំណត់ត្រាទៀតទេដែលត្រូវនាំចូល។</value>
@@ -1066,6 +1141,9 @@
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>ឈប់ជ្រើសរើសទាំងអស់។</value>
   </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>ពាក្យ៖</value>
+  </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>ឈ្មោះដំបូងគឺចាំបាច់</value>
   </data>
@@ -1073,7 +1151,7 @@
     <value>នាមត្រកូលត្រូវបានទាមទារ</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
-    <value>តម្រូវឱ្យសោអាជ្ញាប័ណ្ណ</value>
+    <value>លេខកូដអាជ្ញាប័ណ្ណត្រូវបានទាមទារ</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
@@ -1142,7 +1220,7 @@
     <value>លក្ខខណ្ឌព្រះគម្ពីរ</value>
   </data>
   <data name="MainView_WindowsCorpusTokens" xml:space="preserve">
-    <value>Corpus Tokens</value>
+    <value>រូបសញ្ញា Corpus</value>
   </data>
   <data name="MainView_WindowsDashboard" xml:space="preserve">
     <value>ផ្ទាំងគ្រប់គ្រង</value>
@@ -1208,10 +1286,10 @@
     <value>រលោង៖</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>ផ្នែកនៃការនិយាយ</value>
+    <value>ផ្នែកនៃការនិយាយ   </value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>លេមម៉ាដែលពាក់ព័ន្ធ</value>
+    <value>លេមម៉ាដែលពាក់ព័ន្ធ   </value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>វិសាលភាព៖</value>
@@ -1232,7 +1310,7 @@
     <value>អារម្មណ៍</value>
   </data>
   <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>កូដខ្លាំង</value>
+    <value>កូដខ្លាំង   </value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>ដែនរង៖</value>
@@ -1373,7 +1451,7 @@
     <value>បន្ថែម Jot</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>បន្ថែម​រឿង​ថ្មី។</value>
+    <value>បន្ថែម​ចំណុច​ថ្មី​មួយ (ប្ដូរ​ចូល​សម្រាប់​បន្ទាត់​ថ្មី)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>រាងកាយ</value>
@@ -1385,7 +1463,7 @@
     <value>លុប​រឿង​នេះ​ឬ?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
-    <value>ដោយសារការអនុញ្ញាតគម្រោង Paratext របស់អ្នក</value>
+    <value>ដោយសារការអនុញ្ញាតគម្រោង Paratext របស់អ្នក </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>ត្រងតាមខ</value>
@@ -1439,7 +1517,7 @@
     <value>បន្ថែមក្រុមស្លាក</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>ក្រុមស្លាកមានរួចហើយជាមួយឈ្មោះ</value>
+    <value>ក្រុមស្លាកមានរួចហើយដែលមានឈ្មោះ</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>ចាប់ផ្តើមក្រុមស្លាក</value>
@@ -1613,7 +1691,7 @@
     <value>រថភ្លើង</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>កម្មវិធីតម្រឹមពាក្យរបស់ម៉ាស៊ីនរថភ្លើង</value>
+    <value>ការតម្រឹមពាក្យរបស់ម៉ាស៊ីនរថភ្លើង</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>កំណត់ Verse Mapping រវាង Parallelized Corpora</value>
@@ -1625,7 +1703,7 @@
     <value>ជ្រើសរើសក្បួនដោះស្រាយ SMT ដើម្បីហ្វឹកហាត់</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>បន្ថែមការយល់ព្រមជាដុំទៅមើល</value>
+    <value>បន្ថែមការយល់ព្រមជាដុំដើម្បីមើល</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>បន្ថែមទៅទិដ្ឋភាព</value>
@@ -1717,6 +1795,9 @@
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>ទទួលបានចុងក្រោយបំផុតពី Paratext</value>
   </data>
+  <data name="Pds_ImportWordAnlysisMenu" xml:space="preserve">
+    <value>នាំចូលការវិភាគពាក្យ </value>
+  </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
     <value>បង្ហាញព័ត៌មានអំពីគម្រោងនេះ។</value>
   </data>
@@ -1733,7 +1814,7 @@
     <value>ចំនួននិមិត្តសញ្ញាផ្សេងគ្នា</value>
   </data>
   <data name="Pds_ProjectDesignSurface" xml:space="preserve">
-    <value>ការរចនាផ្ទៃគម្រោង</value>
+    <value>ផ្ទៃរចនាគម្រោង</value>
   </data>
   <data name="Pds_PropertiesMenu" xml:space="preserve">
     <value>ទ្រព្យសម្បត្តិ</value>
@@ -1769,7 +1850,7 @@
     <value>សិក្សាព្រះគម្ពីរបន្ថែម</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>ចូលទៅកាន់ Paratext ហើយប្តូរគម្រោង។ គម្រោង Paratext បច្ចុប្បន្នបានភ្ជាប់ទៅកម្មវិធីជំនួយ ClearDashboard មិនដូចគ្នាទៅនឹង corpus នៅក្នុងគម្រោង ClearDashboard នេះទេ។</value>
+    <value>ចូលទៅកាន់ Paratext ហើយប្តូរគម្រោង។  គម្រោង Paratext បច្ចុប្បន្នបានភ្ជាប់ទៅកម្មវិធីជំនួយ ClearDashboard គឺមិនដូចគ្នាទៅនឹង corpus នៅក្នុងគម្រោង ClearDashboard នេះទេ។</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>គោលដៅ</value>
@@ -1889,13 +1970,13 @@
     <value>ចាប់ផ្តើមគម្រោងថ្មីរហ័ស</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>បង្កើតគម្រោង៖</value>
+    <value>បង្កើតគម្រោង៖ </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
     <value>បង្កើតគម្រោងរបស់អ្នកដោយប្រើអ្នកជំនួយការគំរូគម្រោង។</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>មូលដ្ឋានទិន្នន័យ៖</value>
+    <value>មូលដ្ឋានទិន្នន័យ៖ </value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
     <value>អ្នកមិនអាចលុបគម្រោងនោះបានទេ កម្មវិធីផ្សេងទៀតនៅតែប្រើវា។</value>
@@ -1931,10 +2012,10 @@
     <value>គ្មានការប្រកួត។</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>វាឯកោនៅទីនេះ។ សូមបង្កើតគម្រោងថ្មីមួយ។</value>
+    <value>វាឯកោនៅទីនេះ។  សូមបង្កើតគម្រោងថ្មីមួយ។</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Paratext មិនត្រូវបានដំឡើងទេ។ សូមដំឡើង Paratext ហើយដំណើរការកម្មវិធី ClearDashboard ឡើងវិញ។</value>
+    <value>Paratext មិនត្រូវបានដំឡើងទេ។  សូមដំឡើង Paratext ហើយដំណើរការកម្មវិធី ClearDashboard ឡើងវិញ។</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>Paratext មិនដំណើរការទេ។</value>
@@ -1958,7 +2039,7 @@
     <value>គម្រោង Paratext</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>គម្រោង៖</value>
+    <value>គម្រោង៖ </value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>យើងជិតដល់ហើយ!</value>
@@ -1985,7 +2066,7 @@
     <value>ចុចទីនេះដើម្បីចាប់ផ្តើម Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>កំណែ៖</value>
+    <value>កំណែ៖ </value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>សូមបញ្ចូលឈ្មោះសម្រាប់គម្រោងរបស់អ្នក។</value>
@@ -1994,7 +2075,7 @@
     <value>បង្កើតគម្រោងថ្មីរបស់អ្នក។</value>
   </data>
   <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>ឈ្មោះគម្រោងដែលបានផ្តល់ឱ្យមានតួអក្សរខុសច្បាប់។ តួអក្សរដែលមានសុពលភាពរួមមាន 'A-Z' (អក្សរតូច និងអក្សរធំ) លេខ '0-9' និងតួអក្សរ '-' និង '_'។</value>
+    <value>ឈ្មោះគម្រោងដែលបានផ្តល់ឱ្យមានតួអក្សរខុសច្បាប់។  តួអក្សរដែលមានសុពលភាពរួមមាន 'A-Z' (អក្សរតូច និងអក្សរធំ) លេខ '0-9' និងតួអក្សរ '-' និង '_'។</value>
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>គម្រោងដែលមានឈ្មោះដូចគ្នាមានរួចហើយ។ សូមជ្រើសរើសឈ្មោះតែមួយគត់។</value>
@@ -2213,7 +2294,7 @@
     <value>ចុះឈ្មោះ</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>កូនសោដែលបានផ្តល់គឺមានបញ្ហា។ នៅពេលឌិគ្រីប ធាតុ json ជាក់លាក់មិនអាចត្រូវបានរកឃើញទេ។</value>
+    <value>កូនសោដែលបានផ្តល់គឺមានបញ្ហា។  នៅពេលឌិគ្រីប ធាតុ json ជាក់លាក់មិនអាចត្រូវបានរកឃើញទេ។</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>ខ្លឹមសារនៃលេខកូដអាជ្ញាប័ណ្ណដែលបានឌិគ្រីបមិនត្រូវគ្នានឹងព័ត៌មានដែលអ្នកបានផ្តល់នោះទេ។</value>
@@ -2222,7 +2303,7 @@
     <value>សោអាជ្ញាប័ណ្ណរបស់អ្នកបាត់ ឬខូច។</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>សូមស្វាគមន៍មកកាន់ ClearDashboard! សូមបញ្ចូលព័ត៌មានចុះឈ្មោះរបស់អ្នក។</value>
+    <value>សូមស្វាគមន៍មកកាន់ ClearDashboard!  សូមបញ្ចូលព័ត៌មានចុះឈ្មោះរបស់អ្នក។</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>សូមបញ្ចូលឈ្មោះរបស់អ្នក។</value>
@@ -2432,7 +2513,7 @@
     <value>ផ្ញើឯកសារ USFM</value>
   </data>
   <data name="SlackMessageView_Suggestion" xml:space="preserve">
-    <value>សំណូមពរ</value>
+    <value>ការណែនាំ</value>
   </data>
   <data name="SlackMessageView_SuggestionEditor" xml:space="preserve">
     <value>កម្មវិធីនិពន្ធ</value>
@@ -2476,8 +2557,29 @@
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
   </data>
-  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+  <data name="TokenDisplay_SetGloss" xml:space="preserve">
     <value>កំណត់ភាពរលោង</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>បន្ថែម Lexeme</value>
+  </data>
+  <data name="TokenSplitting_ClickWhere" xml:space="preserve">
+    <value>ចុចកន្លែងដែលត្រូវបំបែកពាក្យទៅជាសញ្ញាសម្ងាត់</value>
+  </data>
+  <data name="TokenSplitting_Gloss" xml:space="preserve">
+    <value>រលោង</value>
+  </data>
+  <data name="TokenSplitting_Grammar" xml:space="preserve">
+    <value>វេយ្យាករណ៍</value>
+  </data>
+  <data name="TokenSplitting_TrainingText" xml:space="preserve">
+    <value>អត្ថបទបណ្តុះបណ្តាល</value>
+  </data>
+  <data name="TokenSplitting_Type" xml:space="preserve">
+    <value>ប្រភេទ</value>
+  </data>
+  <data name="TokenSplitting_WordGloss" xml:space="preserve">
+    <value>ពាក្យរលោង</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>ធ្វើបច្ចុប្បន្នភាព</value>
@@ -2504,7 +2606,7 @@
     <value>លក្ខខណ្ឌព្រះគម្ពីរ</value>
   </data>
   <data name="Windows_CorpusTokens" xml:space="preserve">
-    <value>Corpus Tokens</value>
+    <value>រូបសញ្ញា Corpus</value>
   </data>
   <data name="Windows_Dashboard" xml:space="preserve">
     <value>ផ្ទាំងគ្រប់គ្រង</value>

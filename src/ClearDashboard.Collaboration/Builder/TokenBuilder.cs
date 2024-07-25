@@ -11,6 +11,7 @@ namespace ClearDashboard.Collaboration.Builder;
 public class TokenBuilder : GeneralModelBuilder<Models.Token>
 {
     public const string VERSE_ROW_LOCATION = "VerseRowLocation";
+    public const string GRAMMAR_SHORT_NAME = "GrammerShortName";
 
     public override string IdentityKey => BuildPropertyRefName();
 
@@ -18,8 +19,9 @@ public class TokenBuilder : GeneralModelBuilder<Models.Token>
         new Dictionary<string, Type>()
         {
             { BuildPropertyRefName(), typeof(string) },
-            { VERSE_ROW_LOCATION, typeof(string) }
-        };
+            { VERSE_ROW_LOCATION, typeof(string) },
+			{ GRAMMAR_SHORT_NAME, typeof(string) }
+		};
 
     public static IEnumerable<(Models.Token Token, int? OriginTokenLocationIndex)> OrganizeTokensByOriginTokenLocation(IEnumerable<Models.Token> tokens, IEnumerable<string>? engineTokenIdAdditions = null)
     {
@@ -90,7 +92,8 @@ public class TokenBuilder : GeneralModelBuilder<Models.Token>
                 return OrganizeTokensByOriginTokenLocation(projectDbContext.Tokens
                     .AsNoTrackingWithIdentityResolution()
                     .Include(e => e.VerseRow)
-                    .Where(e => e.TokenizedCorpusId == tokenizedCorpusId),
+					.Include(e => e.Grammar)
+					.Where(e => e.TokenizedCorpusId == tokenizedCorpusId),
                     engineTokenIdAdditions
                 );
             };
@@ -100,11 +103,12 @@ public class TokenBuilder : GeneralModelBuilder<Models.Token>
         var modelProperties = ExtractUsingModelRefs(
             tokenOriginTokenLocationIndex.Token, 
             builderContext, 
-            new List<string>() { "Id", "VerseRowId" });
+            new List<string>() { nameof(Models.IdentifiableEntity.Id), nameof(Models.TokenComponent.VerseRowId), nameof(Models.TokenComponent.GrammarId) });
 
         modelProperties.Add(VERSE_ROW_LOCATION, (typeof(string), tokenOriginTokenLocationIndex.Token.VerseRow?.BookChapterVerse));
+		modelProperties.Add(GRAMMAR_SHORT_NAME, (typeof(string), tokenOriginTokenLocationIndex.Token.Grammar?.ShortName));
 
-        var refValue = CalculateRef(
+		var refValue = CalculateRef(
             tokenOriginTokenLocationIndex.Token.TokenizedCorpusId,
             tokenOriginTokenLocationIndex.Token.EngineTokenId!,
             tokenOriginTokenLocationIndex.Token.OriginTokenLocation,

@@ -1,14 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
-
     <IsPackable>false</IsPackable>
-
     <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
-
   <ItemGroup>
     <None Remove="MockData\USFM\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\01GEN01.sfm" />
     <None Remove="MockData\USFM\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\19PSA03.sfm" />
@@ -33,7 +29,6 @@
     <None Remove="MockData\VerseText\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\41MAT01.sfm" />
     <None Remove="MockData\VerseText\80bbd0dbab94dbc97d5dc64d8c09fb687e066b26\41MAT.sfm" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Include="MockData\USFM\0851c4dcaee3893d9ccdc7c59de9cdd661a586d6\01GEN01.sfm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -102,12 +97,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.3" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
     <PackageReference Include="xunit" Version="2.5.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.0">
@@ -118,13 +110,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\src\ClearDashboard.ParatextPlugin.CQRS\ClearDashboard.ParatextPlugin.CQRS.csproj" />
     <ProjectReference Include="..\..\src\ClearDashboard.WebApiParatextPlugin\ClearDashboard.WebApiParatextPlugin.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <None Update="MockData\VerseText\2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f\01GEN01.sfm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -157,5 +149,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
 </Project>

@@ -305,7 +305,7 @@
     <value>समूह; क्षेत्र</value>
   </data>
   <data name="BiblicalTermsDomains_HonorRespectStatus" xml:space="preserve">
-    <value>आदर, आदर, रुतबा</value>
+    <value>आदर, सम्मान, रुतबा</value>
   </data>
   <data name="BiblicalTermsDomains_Locale" xml:space="preserve">
     <value>स्थान</value>
@@ -338,7 +338,7 @@
     <value>लोग; अधिकार</value>
   </data>
   <data name="BiblicalTermsDomains_PeopleHonorRespectStatus" xml:space="preserve">
-    <value>लोग; आदर, आदर, रुतबा</value>
+    <value>लोग; आदर, सम्मान, रुतबा</value>
   </data>
   <data name="BiblicalTermsDomains_Person" xml:space="preserve">
     <value>व्यक्ति</value>
@@ -437,7 +437,7 @@
     <value>संरेखण</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>संरेखण प्रकार:</value>
+    <value>संरेखण प्रकार: </value>
   </data>
   <data name="BulkAlignmentReview_Approve" xml:space="preserve">
     <value>मंज़ूरी देना</value>
@@ -566,7 +566,7 @@
     <value>प्रोजेक्ट सहयोग हटाएँ</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>आपके पास इस प्रोजेक्ट से अन्य उपयोगकर्ता जुड़े हुए हैं। उनके लिए भी ये प्रोजेक्ट निकाला जाएगा. क्या आप वाकई इस प्रोजेक्ट को हटाना चाहते हैं?</value>
+    <value>आपके पास इस प्रोजेक्ट से अन्य उपयोगकर्ता जुड़े हुए हैं।  उनके लिए भी ये प्रोजेक्ट निकाला जाएगा. क्या आप वाकई इस प्रोजेक्ट को हटाना चाहते हैं?</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
     <value>क्या आप वाकई इस प्रोजेक्ट को हटाना चाहते हैं?</value>
@@ -787,6 +787,12 @@
   <data name="GEN" xml:space="preserve">
     <value>GEN</value>
   </data>
+  <data name="GrammarTagList_Description" xml:space="preserve">
+    <value>विवरण</value>
+  </data>
+  <data name="GrammarTagList_Short" xml:space="preserve">
+    <value>छोटा</value>
+  </data>
   <data name="HAB" xml:space="preserve">
     <value>HAB</value>
   </data>
@@ -798,6 +804,18 @@
   </data>
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>आयात रद्द किया गया</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>आयात पूर्ण</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>त्रुटि आई (विवरण के लिए लॉग जांचें)</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>शब्द विश्लेषण आयात करें</value>
   </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
@@ -892,6 +910,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>यदि जाँच की जाए, तो यह इस शब्द की सभी अनिर्धारित घटनाओं को बदल देगा</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>सभी अनसेट घटनाओं को बदलें</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>यदि जाँच की जाए, तो यह इस शब्द की सभी अनिर्धारित घटनाओं को बदल देगा</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>क़बूल</value>
   </data>
@@ -907,11 +931,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>यह अनुवाद हटाएँ</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;खाली अर्थ&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>के लिए एक नया अनुवाद दर्ज करें</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>एक नई चमक दर्ज करें</value>
+  </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>प्रपत्र:</value>
+  </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>ग्लोस</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>चमकदार सूची</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>भाषा:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>लेम्मा</value>
@@ -928,11 +967,20 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>लेम्मा के लिए एक शब्द पहले से ही मौजूद है</value>
   </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>शब्दकोश</value>
+  </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>माचिस</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>अर्थ:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>नई चमक</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>कोई फॉर्म उपलब्ध नहीं है</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>इस अर्थ डोमेन को इस अर्थ से हटा दें</value>
@@ -941,7 +989,22 @@
     <value>इस लेम्मा से इस शाब्दिक रूप को हटा दें</value>
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
-    <value>के लिए ग्लॉस सेट करें</value>
+    <value>के लिए एक चमक सेट करें</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>अनुवाद:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>प्रकार:</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>अनसेट</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>उपयोगकर्ता परिभाषित चमक</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>सत्यापित</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>और</value>
@@ -1025,10 +1088,22 @@
     <value>लक्ष्य को अनुवाद के रूप में जोड़ें...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>ऐसे शब्द ढूंढें जिनका एक या अधिक अनुवाद लक्ष्य से मेल खाता हो</value>
+    <value>ऐसे शब्द खोजें जिनका एक या अधिक अनुवाद लक्ष्य से मेल खाता हो</value>
+  </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>चेक किए गए</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>कॉर्पस:</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>आयात</value>
   </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>आयात की जाँच की गई</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>भाषा:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>लेक्समी या फॉर्म मैच</value>
@@ -1065,6 +1140,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>सभी को अचयनित करें</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>शब्द:</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>पहला नाम आवश्यक है</value>
@@ -1208,10 +1286,10 @@
     <value>चमक:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>शब्दभेद</value>
+    <value>शब्दभेद   </value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>संबंधित लेम्मास</value>
+    <value>संबंधित लेम्मास   </value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>दायरा:</value>
@@ -1223,7 +1301,7 @@
     <value>इंग्लिश ग्लॉस द्वारा खोजें</value>
   </data>
   <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>हिब्रू/ग्रीक द्वारा खोजें</value>
+    <value>हिब्रू/ग्रीक के आधार पर खोजें</value>
   </data>
   <data name="Marble_Sense" xml:space="preserve">
     <value>समझ</value>
@@ -1232,7 +1310,7 @@
     <value>होश</value>
   </data>
   <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>सशक्त कोड</value>
+    <value>सशक्त कोड   </value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>उप डोमेन:</value>
@@ -1373,19 +1451,19 @@
     <value>जोत जोड़ें</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>एक नया जोट जोड़ें</value>
+    <value>एक नया जोट जोड़ें (नई लाइन के लिए शिफ्ट-एंटर)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>शरीर</value>
   </data>
   <data name="Notes_Delete" xml:space="preserve">
-    <value>जोट हटाएं</value>
+    <value>जोत हटाएं</value>
   </data>
   <data name="Notes_DeleteConfirmation" xml:space="preserve">
     <value>यह जोत हटाएं?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
-    <value>आपके पैराटेक्स्ट प्रोजेक्ट अनुमतियों के कारण,</value>
+    <value>आपके पैराटेक्स्ट प्रोजेक्ट अनुमतियों के कारण, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>श्लोक द्वारा फ़िल्टर करें</value>
@@ -1400,7 +1478,7 @@
     <value>स्थिति के अनुसार फ़िल्टर करें</value>
   </data>
   <data name="Notes_FilterNoteText" xml:space="preserve">
-    <value>पाठ के अनुसार फ़िल्टर करें</value>
+    <value>पाठ द्वारा फ़िल्टर करें</value>
   </data>
   <data name="Notes_FilterStatus_Any" xml:space="preserve">
     <value>कोई</value>
@@ -1607,7 +1685,7 @@
     <value>मशीन वर्ड संरेखण एल्गोरिदम</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>ट्रेन सममिति मॉडल?</value>
+    <value>ट्रेन सममितिकृत मॉडल?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>रेलगाड़ी</value>
@@ -1717,6 +1795,9 @@
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>पैराटेक्स्ट से नवीनतम जानकारी प्राप्त करें</value>
   </data>
+  <data name="Pds_ImportWordAnlysisMenu" xml:space="preserve">
+    <value>शब्द विश्लेषण आयात करें </value>
+  </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
     <value>इस परियोजना के बारे में जानकारी दिखाएं</value>
   </data>
@@ -1769,7 +1850,7 @@
     <value>अध्ययन बाइबिल परिवर्धन</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>पैराटेक्स्ट पर जाएँ और प्रोजेक्ट स्विच करें। वर्तमान में क्लियरडैशबोर्ड प्लगइन से जुड़ा पैराटेक्स्ट प्रोजेक्ट इस क्लियरडैशबोर्ड प्रोजेक्ट के कॉर्पस के समान नहीं है।</value>
+    <value>पैराटेक्स्ट पर जाएँ और प्रोजेक्ट स्विच करें।  वर्तमान में क्लियरडैशबोर्ड प्लगइन से जुड़ा पैराटेक्स्ट प्रोजेक्ट इस क्लियरडैशबोर्ड प्रोजेक्ट के कॉर्पस के समान नहीं है।</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>लक्ष्य</value>
@@ -1889,13 +1970,13 @@
     <value>त्वरित प्रारंभ नया प्रोजेक्ट</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>प्रोजेक्ट बनाएं:</value>
+    <value>प्रोजेक्ट बनाएं: </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
     <value>प्रोजेक्ट टेम्पलेट विज़ार्ड का उपयोग करके अपना प्रोजेक्ट बनाएं।</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>डेटाबेस:</value>
+    <value>डेटाबेस: </value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
     <value>आप उस प्रोजेक्ट को हटा नहीं सकते, कोई अन्य एप्लिकेशन अभी भी उसका उपयोग कर रहा है।</value>
@@ -1931,10 +2012,10 @@
     <value>कोई मेल नहीं।</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>यहां अकेलापन है। कृपया एक नया प्रोजेक्ट बनाएं.</value>
+    <value>यहां अकेलापन है।  कृपया एक नया प्रोजेक्ट बनाएं.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>पैराटेक्स्ट स्थापित नहीं है. कृपया पैराटेक्स्ट इंस्टॉल करें और क्लियरडैशबोर्ड एप्लिकेशन को दोबारा चलाएं।</value>
+    <value>पैराटेक्स्ट स्थापित नहीं है.  कृपया पैराटेक्स्ट इंस्टॉल करें और क्लियरडैशबोर्ड एप्लिकेशन को दोबारा चलाएं।</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>पैराटेक्स्ट नहीं चल रहा है</value>
@@ -1958,13 +2039,13 @@
     <value>पैराटेक्स्ट प्रोजेक्ट</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>परियोजना:</value>
+    <value>परियोजना: </value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>हम बस पहुँच गए!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
-    <value>'डैशबोर्ड प्रारंभ करना' वीडियो देखने के लिए यहां क्लिक करें</value>
+    <value>'डैशबोर्ड गेटिंग स्टार्टेड' वीडियो देखने के लिए यहां क्लिक करें</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderOverview" xml:space="preserve">
     <value>आपके द्वारा नीचे दिए गए 'बनाएं' बटन पर क्लिक करने के बाद, हम आपके प्रोजेक्ट को टोकनाइज़, संरेखित और तैयार करेंगे। संसाधित होते ही सभी चरण यहां दिखाई देंगे. जब आप प्रतीक्षा कर रहे हों तो बेझिझक नीचे दिए गए लिंक पर क्लिक करें और ClearDashboard का उपयोग शुरू करने के लिए कुछ उपयोगी वीडियो देखें!</value>
@@ -1985,7 +2066,7 @@
     <value>पैराटेक्स्ट शुरू करने के लिए यहां क्लिक करें</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>संस्करण:</value>
+    <value>संस्करण: </value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>कृपया अपने प्रोजेक्ट के लिए एक नाम दर्ज करें</value>
@@ -1994,7 +2075,7 @@
     <value>अपना नया प्रोजेक्ट बनाएं</value>
   </data>
   <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>दिए गए प्रोजेक्ट नाम में अवैध अक्षर हैं। मान्य वर्णों में 'A-Z' (लोअरकेस और अपरकेस), संख्याएँ '0-9' और वर्ण '-' और '_' शामिल हैं।</value>
+    <value>दिए गए प्रोजेक्ट नाम में अवैध अक्षर हैं।  मान्य वर्णों में 'A-Z' (लोअरकेस और अपरकेस), संख्याएँ '0-9' और वर्ण '-' और '_' शामिल हैं।</value>
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>इसी नाम से एक प्रोजेक्ट पहले से मौजूद है. कृपया एक अद्वितीय नाम चुनें.</value>
@@ -2213,7 +2294,7 @@
     <value>पंजीकरण करवाना</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>प्रदान की गई कुंजी दोषपूर्ण है. डिक्रिप्ट होने पर, कुछ json तत्व नहीं मिल सके।</value>
+    <value>प्रदान की गई कुंजी दोषपूर्ण है.  डिक्रिप्ट होने पर, कुछ json तत्व नहीं मिल सके।</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>डिक्रिप्टेड लाइसेंस कुंजी की सामग्री आपके द्वारा प्रदान की गई जानकारी से मेल नहीं खाती है।</value>
@@ -2222,7 +2303,7 @@
     <value>आपकी लाइसेंस कुंजी या तो गुम है या टूटी हुई है।</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>क्लियरडैशबोर्ड में आपका स्वागत है! कृपया अपनी पंजीकरण जानकारी दर्ज करें.</value>
+    <value>क्लियरडैशबोर्ड में आपका स्वागत है!  कृपया अपनी पंजीकरण जानकारी दर्ज करें.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>कृपया अपना पहला नाम दें</value>
@@ -2476,8 +2557,29 @@
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
   </data>
-  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+  <data name="TokenDisplay_SetGloss" xml:space="preserve">
     <value>चमक सेट करें</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>लेक्समे जोड़ें</value>
+  </data>
+  <data name="TokenSplitting_ClickWhere" xml:space="preserve">
+    <value>शब्द को टोकन में विभाजित करने के लिए कहां क्लिक करें</value>
+  </data>
+  <data name="TokenSplitting_Gloss" xml:space="preserve">
+    <value>ग्लोस</value>
+  </data>
+  <data name="TokenSplitting_Grammar" xml:space="preserve">
+    <value>व्याकरण</value>
+  </data>
+  <data name="TokenSplitting_TrainingText" xml:space="preserve">
+    <value>प्रशिक्षण पाठ</value>
+  </data>
+  <data name="TokenSplitting_Type" xml:space="preserve">
+    <value>प्रकार</value>
+  </data>
+  <data name="TokenSplitting_WordGloss" xml:space="preserve">
+    <value>शब्द चमक</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>अद्यतन</value>

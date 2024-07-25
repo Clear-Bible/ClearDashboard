@@ -681,19 +681,20 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                 {
                     Group = SelectedGroup.Name,
                     RemoteEmail = EmailBox,
-                    RemotePersonalAccessToken = accessToken,
+                    RemotePersonalAccessToken = accessToken.Token,
                     RemotePersonalPassword = password,
                     RemoteUrl = "",
                     RemoteUserName = user.UserName,
                     UserId = user.Id,
                     NamespaceId = user.NamespaceId,
+                    TokenId = accessToken.Id
                 };
 
                 _collaborationConfiguration = CollaborationConfig;
 
                 user.Password = password;
 
-                var results = await _mySqlHttpClientServices.CreateNewCollabUser(user, accessToken);
+                var results = await _mySqlHttpClientServices.CreateNewCollabUser(user, accessToken.Token);
 
                 if (results)
                 {
@@ -832,6 +833,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                         RemotePersonalPassword = Encryption.Decrypt(gitLabUser.RemotePersonalPassword),
                         Group = gitLabUser.GroupName,
                         NamespaceId = gitLabUser.NamespaceId,
+                        TokenId = gitLabUser.TokenId
                     };
 
                     FetchedGitLabLicense = LicenseManager.EncryptCollabJsonToString(user);
@@ -856,6 +858,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                         RemotePersonalPassword = Encryption.Decrypt(gitLabUser.RemotePersonalPassword),
                         Group = gitLabUser.GroupName,
                         NamespaceId = gitLabUser.NamespaceId,
+                        TokenId = gitLabUser.TokenId
                     };
 
                     FetchedGitLabLicense = LicenseManager.EncryptCollabJsonToString(user);
@@ -925,7 +928,8 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                                           $"Organization: {CollabUser.Group}\n" +
                                           $"RemotePersonalAccessToken: {CollabUser.RemotePersonalAccessToken}\n" +
                                           $"RemotePersonalPassword: {CollabUser.RemotePersonalPassword}\n" +
-                                          $"NamespaceId: {CollabUser.NamespaceId}");
+                                          $"NamespaceId: {CollabUser.NamespaceId}\n" +
+                                          $"TokenId: {CollabUser.TokenId}");
                         break;
                     case "CopyFetchedEmail":
                         Clipboard.SetText(FetchedEmailBox);

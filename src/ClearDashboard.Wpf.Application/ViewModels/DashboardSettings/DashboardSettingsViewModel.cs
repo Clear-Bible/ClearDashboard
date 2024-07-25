@@ -105,16 +105,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
         }
 
-        private bool _isExternalNotesEnabled = false;
-        public bool IsExternalNotesEnabled
-        {
-            get => _isExternalNotesEnabled;
-            set
-            {
-                _isExternalNotesEnabled = value;
-                NotifyOfPropertyChange(() => IsExternalNotesEnabled);
-            }
-        }
 
 
         private bool _isAlignmentEditingEnabled;
@@ -350,22 +340,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         }
 
 
-        private bool _showExternalNotes = AbstractionsSettingsHelper.GetShowExternalNotes();
-        public bool ShowExternalNotes
-        {
-            get => _showExternalNotes;
-            set
-            {
-                if (_showExternalNotes != value)
-                {
-                    _showExternalNotes = value;
-                    AbstractionsSettingsHelper.SaveShowExternalNotes(value);
-                    NotifyOfPropertyChange(() => ShowExternalNotes);
+        //private bool _showExternalNotes = AbstractionsSettingsHelper.GetShowExternalNotes();
+        //public bool ShowExternalNotes
+        //{
+        //    get => _showExternalNotes;
+        //    set
+        //    {
+        //        if (_showExternalNotes != value)
+        //        {
+        //            _showExternalNotes = value;
+        //            AbstractionsSettingsHelper.SaveShowExternalNotes(value);
+        //            NotifyOfPropertyChange(() => ShowExternalNotes);
 
-                    EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage()).GetAwaiter();
-                }
-            }
-        }
+        //            EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage()).GetAwaiter();
+        //        }
+        //    }
+        //}
 
         private bool _isProjectLoaded;
         public bool IsProjectLoaded
@@ -463,7 +453,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
             IsTokenSplittingEnabled = Settings.Default.IsTokenSplittingEnabled;
             IsLexiconImportEnabled = AbstractionsSettingsHelper.GetEnabledLexiconImport();
-            IsExternalNotesEnabled = AbstractionsSettingsHelper.GetExternalNotesEnabled();
 
             IsProjectLoaded = ProjectManager.HasCurrentProject;
 
@@ -542,7 +531,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
                 Email = _collaborationConfig.RemoteEmail!,
                 Password = _collaborationConfig.RemotePersonalPassword!,
                 Organization = _collaborationConfig.Group!,
-                NamespaceId = _collaborationConfig.NamespaceId
+                NamespaceId = _collaborationConfig.NamespaceId,
+                TokenId = _collaborationConfig.TokenId
             };
 #pragma warning restore CA1416
 
@@ -664,14 +654,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             await _eventAggregator.PublishOnUIThreadAsync(new RedrawCorpusNodeMenus());
         }
 
-        public async void EnableExternalNotes(bool value)
-        {
-            AbstractionsSettingsHelper.SaveExternalNotesEnabled(IsExternalNotesEnabled);
-            await _eventAggregator.PublishOnUIThreadAsync(new RefreshVerse());
-            await _eventAggregator.PublishOnUIThreadAsync(new RedrawCorpusNodeMenus());
-        }
-
-
         // ReSharper disable once UnusedParameter.Global
         public async void VerseByVerseTextCollectionsEnabledCheckBox(bool value)
         {
@@ -759,6 +741,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
                     RemoteUserName = user.RemoteUserName,
                     UserId = user.UserId,
                     NamespaceId = user.NamespaceId,
+                    TokenId = user.TokenId
                 };
 
                 _collaborationManager.SaveCollaborationLicense(CollaborationConfig);

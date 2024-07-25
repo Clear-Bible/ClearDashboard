@@ -129,6 +129,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         /// </summary>
         public static readonly DependencyProperty CurrentLexemeProperty = DependencyProperty.Register(nameof(CurrentLexeme), typeof(LexemeViewModel), typeof(LexemeEditor));
 
+        public static readonly DependencyProperty IsReadOnlyProperty = DependencyProperty.Register(nameof(IsReadOnly), typeof(bool), typeof(LexemeEditor));
+
         /// <summary>
         /// Identifies the Lexemes dependency property.
         /// </summary>
@@ -162,7 +164,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         /// Identifies the LemmaMargin dependency property.
         /// </summary>
         public static readonly DependencyProperty LemmaMarginProperty = DependencyProperty.Register(nameof(LemmaMargin), typeof(Thickness), typeof(LexemeEditor),
-            new PropertyMetadata(new Thickness(3, 0, 3, 0)));
+            new PropertyMetadata(new Thickness(4, 0, 3, 0)));
 
         /// <summary>
         /// Identifies the LemmaPadding dependency property.
@@ -370,7 +372,19 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         public Visibility AddLexemeVisibility => Lexemes != null && Lexemes.Any() ? Visibility.Collapsed : Visibility.Visible;
         public Visibility LexemeControlsVisibility => Lexemes != null && Lexemes.Any() ? Visibility.Visible : Visibility.Collapsed;
 
-        public Visibility LemmaTextBlockVisibility => IsEditing ? Visibility.Hidden : Visibility.Visible;
+        public Visibility LemmaTextBlockVisibility
+        {
+            get => _lemmaTextBlockVisibility;
+            set
+            {
+                //if (value == _lemmaTextBlockVisibility) return;
+                _lemmaTextBlockVisibility = value;
+                OnPropertyChanged();
+            }
+        }
+        // NB:  was the following...
+        //return IsEditing ? Visibility.Hidden : Visibility.Visible;
+
         public Visibility LemmaTextBoxVisibility => IsEditing ? Visibility.Visible : Visibility.Hidden;
 
         #endregion
@@ -771,6 +785,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             set => SetValue(CurrentLexemeProperty, value);
         }
 
+        public bool IsReadOnly
+        {
+            get => (bool)GetValue(IsReadOnlyProperty);
+            set => SetValue(IsReadOnlyProperty, value);
+        }
+
         /// <summary>
         /// Gets or sets the lexeme collection associated with the editor.
         /// </summary>
@@ -974,6 +994,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         }
 
         private Visibility _newLexemeErrorVisibility = Visibility.Hidden;
+        private Visibility _lemmaTextBlockVisibility = Visibility.Hidden;
+
         /// <summary>
         /// Gets or sets the visibility of the new lexeme validation message.
         /// </summary>
@@ -1288,5 +1310,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
             EventAggregator?.SubscribeOnUIThread(this);
         }
+
+       
     }
 }

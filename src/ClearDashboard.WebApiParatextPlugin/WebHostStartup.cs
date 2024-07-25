@@ -144,7 +144,14 @@ namespace ClearDashboard.WebApiParatextPlugin
                     Path.GetDirectoryName(Application.ExecutablePath) /* paratextAppPath */
                 ));
 
-            services.AddControllersAsServices(typeof(WebHostStartup).Assembly.GetExportedTypes()
+			services.AddTransient<IWordAnalysesObtainable>(x =>
+				new Features.Lexicon.WordAnalysesFromXmlFiles(
+					x.GetRequiredService<ILogger<WordAnalysesFromXmlFiles>>(),
+					getParatextProjectMetadata,
+					Path.GetDirectoryName(Application.ExecutablePath) /* paratextAppPath */
+				));
+
+			services.AddControllersAsServices(typeof(WebHostStartup).Assembly.GetExportedTypes()
                 .Where(t => !t.IsAbstract && !t.IsGenericTypeDefinition)
                 .Where(t => typeof(IHttpController).IsAssignableFrom(t)
                             || t.Name.EndsWith("Controller", StringComparison.OrdinalIgnoreCase)));

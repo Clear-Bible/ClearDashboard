@@ -33,7 +33,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
         public List<Models.User> Users { get; private set; } = new();
         public List<Models.Lexicon_Lexeme> LexiconLexemes { get; private set; } = new();
         public List<Models.Lexicon_SemanticDomain> LexiconSemanticDomains { get; private set; } = new();
-        public List<Models.Corpus> Corpora { get; private set; } = new();
+		public List<Models.Grammar> Grammar { get; private set; } = new();
+		public List<Models.Corpus> Corpora { get; private set; } = new();
         public List<Models.TokenizedCorpus> TokenizedCorpora { get; private set; } = new();
         public List<Models.ParallelCorpus> ParallelCorpora { get; private set; } = new();
         public List<Models.TokenComposite> TokenComposites { get; private set; } = new();
@@ -66,7 +67,11 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             Users.Add(new Models.User() { Id = testUserId1, FirstName = "tester", LastName = "one"});
             Users.Add(new Models.User() { Id = testUserId2, FirstName = "tester", LastName = "two"});
 
-            var testCorpus1 = BuildTestCorpus(Guid.NewGuid(), "test corpus 1", "language one", Models.CorpusType.Standard, testUserId1);
+            Grammar.Add(new Models.Grammar() { Id = Guid.NewGuid(), ShortName = "Grammar1", Description = "Grammar1", Category = "CoolGrammars" });
+			Grammar.Add(new Models.Grammar() { Id = Guid.NewGuid(), ShortName = "Grammar2", Description = "Grammar2", Category = "CoolGrammars" });
+			Grammar.Add(new Models.Grammar() { Id = Guid.NewGuid(), ShortName = "Grammar3", Description = "Grammar3", Category = "NerdGrammars" });
+
+			var testCorpus1 = BuildTestCorpus(Guid.NewGuid(), "test corpus 1", "language one", Models.CorpusType.Standard, testUserId1);
             Corpora.Clear();
             Corpora.Add(testCorpus1);
 
@@ -101,7 +106,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
 
             var projectSnapshot = new ProjectSnapshot(ProjectBuilder.BuildModelSnapshot(testProject));
             projectSnapshot.AddGeneralModelList(ToUserBuilder(Users).BuildModelSnapshots(builderContext));
-            projectSnapshot.AddGeneralModelList(ToCorpusBuilder(Corpora).BuildModelSnapshots(builderContext));
+			projectSnapshot.AddGeneralModelList(ToGrammarBuilder(Grammar).BuildModelSnapshots(builderContext));
+			projectSnapshot.AddGeneralModelList(ToCorpusBuilder(Corpora).BuildModelSnapshots(builderContext));
             projectSnapshot.AddGeneralModelList(ToTokenizedCorpusBuilder(TokenizedCorpora, TokenComposites, Tokens).BuildModelSnapshots(builderContext));
             projectSnapshot.AddGeneralModelList(ToParallelCorpusBuilder(ParallelCorpora, TokenComposites).BuildModelSnapshots(builderContext));
             projectSnapshot.AddGeneralModelList(ToAlignmentSetBuilder(AlignmentSets, Alignments).BuildModelSnapshots(builderContext));
@@ -689,7 +695,12 @@ namespace ClearDashboard.DAL.Alignment.Tests.Collaboration
             return new SemanticDomainBuilder { GetSemanticDomains = (projectDbContext) => semanticDomains };
         }
 
-        public static CorpusBuilder ToCorpusBuilder(IEnumerable<Models.Corpus> corpora)
+		public static GrammarBuilder ToGrammarBuilder(IEnumerable<Models.Grammar> grammar)
+		{
+			return new GrammarBuilder { GetGrammar = (projectDbContext) => grammar };
+		}
+
+		public static CorpusBuilder ToCorpusBuilder(IEnumerable<Models.Corpus> corpora)
         {
             return new CorpusBuilder { GetCorpora = (projectDbContext) => corpora };
         }

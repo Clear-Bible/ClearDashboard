@@ -1042,8 +1042,24 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                         });
                     }
 
+					// do not allow MACULA or Resource types to have word analyses
+					if ((corpusNodeViewModel.CorpusType == CorpusType.Standard || corpusNodeViewModel.CorpusType == CorpusType.BackTranslation)
+						/* && Settings.Default.IsWordAnalysesImportEnabled */)
+					{
+						corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
+						{
+							// Show the Lexicon Dialog
+							Header = LocalizationService.Get("Pds_ImportWordAnalysesMenu"),
+							Id = DesignSurfaceMenuIds.ImportWordAnalyses,
+							ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
+							IconKind = PackIconPicolIconsKind.Upload.ToString(),
+							CorpusNodeViewModel = corpusNodeViewModel,
+							Tokenizer = tokenizer.ToString(),
+						});
+					}
 
-                    foreach (var menuBuilder in menuBuilders)
+
+					foreach (var menuBuilder in menuBuilders)
                     {
                         menuBuilder.CreateOnlyForNonResouceCorpusNodeChildMenu(corpusNodeMenuViewModel, tokenizedCorpus);
                     }

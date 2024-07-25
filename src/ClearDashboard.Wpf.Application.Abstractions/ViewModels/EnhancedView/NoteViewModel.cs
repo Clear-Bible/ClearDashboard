@@ -92,47 +92,64 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
 
-        public string AssociationVerse
+        public string ShortAssociationVerse
         {
             get
             {
-                string verses = String.Empty;
-                foreach (var association in Associations)
-                {
-                    try
-                    {
-                        var verseId = string.Empty;
-                        if (association.AssociatedEntityId is TranslationId translationId)
-                        {
-                            verseId = translationId.SourceTokenId.ToString().Substring(0, 9);
-                        }
-                        else
-                        {
-                            verseId = association.AssociatedEntityId.ToString().Substring(0, 9);
-                        }
-
-                        if (verseId.Length > 0)
-                        {
-                            verses += DAL.ViewModels.BookChapterVerseViewModel.GetVerseStrShortFromBBBCCCVVV(verseId) + ", ";
-                        }
-                    }
-                    catch (Exception)
-                    {
-                    }
-                    
-                }
-
-                if (verses.Length > 2)
-                {
-                    verses = verses.Substring(0, verses.Length - 2);
-                }
-
-                return verses;
+                return GetAssociationVerses(true);
             }
         }
 
+        public string LongAssociationVerse
+        {
+            get
+            {
+                return GetAssociationVerses(false);
+            }
+        }
 
-        
+        public string GetAssociationVerses(bool isShort)
+        {
+            string verses = String.Empty;
+            foreach (var association in Associations.DistinctBy(a => $"{a.Book+a.Chapter+a.Verse}"))
+            {
+                try
+                {
+                    var verseId = string.Empty;
+                    if (association.AssociatedEntityId is TranslationId translationId)
+                    {
+                        verseId = translationId.SourceTokenId.ToString().Substring(0, 9);
+                    }
+                    else
+                    {
+                        verseId = association.AssociatedEntityId.ToString().Substring(0, 9);
+                    }
+
+                    if (verseId.Length > 0)
+                    {
+                        if (isShort)
+                        {
+                            verses += DAL.ViewModels.BookChapterVerseViewModel.GetVerseStrShortFromBBBCCCVVV(verseId) + ", ";
+                        }
+                        else
+                        {
+                            verses += DAL.ViewModels.BookChapterVerseViewModel.GetVerseStrLongFromBBBCCCVVV(verseId) + ", ";
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            if (verses.Length > 2)
+            {
+                verses = verses.Substring(0, verses.Length - 2);
+            }
+
+            return verses;
+        }
+
 
         public bool HasReplies =>  Replies.Count > 0;
 
@@ -238,6 +255,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// Gets the display name of the user that last modified the note.
         /// </summary>
         public string ModifiedBy => (Entity.NoteId != null && Entity.NoteId.UserId != null ? Entity.NoteId.UserId.DisplayName : string.Empty) ?? string.Empty;
+
+        public string UserName => ModifiedBy;
 
         /// <summary>
         /// Gets whether this note is eligible to be sent to Paratext.

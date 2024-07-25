@@ -453,7 +453,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await RebuildMainMenu(cancellationToken);
             await ActivateDockedWindowViewModels(cancellationToken);
             await LoadAvalonDockLayout();
-            await LoadEnhancedViewTabs(cancellationToken);
+            await LoadEnhancedViewTabs(cancellationToken, true);
         }
 
 
@@ -707,7 +707,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 
 
-        private async Task LoadEnhancedViewTabs(CancellationToken cancellationToken)
+        private async Task LoadEnhancedViewTabs(CancellationToken cancellationToken, bool skipFirstTab = false, bool onlyLoadFirstTab = false)
         {
             _ = Task.Run((Func<Task>)(async () =>
             {
@@ -717,6 +717,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 if (enhancedViews == null)
                 {
                     return;
+                } 
+                else if (enhancedViews.Count > 0 && skipFirstTab)
+                {
+                    enhancedViews.RemoveAt(0);
+                }
+                else if (enhancedViews.Count > 1 && onlyLoadFirstTab)
+                {
+                    enhancedViews.RemoveRange(1, enhancedViews.Count - 1);
                 }
 
                 await Execute.OnUIThreadAsync(async () =>
@@ -772,12 +780,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 foreach (var enhancedViewLayout in enhancedViewLayouts)
                 {
                     EnhancedViewModel enhancedViewModel = null;
-                    if (index == 0)
-                    {
-                        ++index;
-                        enhancedViewModel = (EnhancedViewModel)Items.FirstOrDefault(vm => vm is EnhancedViewModel);
-                    }
-
+                    
                     var isNewEnhancedView = enhancedViewModel is null;
                     if (isNewEnhancedView)
                     {
@@ -795,21 +798,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         AddNewEnhancedViewTab(enhancedViewLayoutDocument);
                         await enhancedViewModel.Initialize(enhancedViewLayout, null, cancellationToken);
                     }
-                    else
-                    {
-                        await enhancedViewModel.Initialize(enhancedViewLayout, null, cancellationToken);
-                        // first one - reset the title from the default
-                        enhancedViewModel.DisplayName = enhancedViewLayout.Title;
-                        //if (enhancedViewLayout.ParatextSync)
-                        //{
-                        //    // paratext sync is enabled so use whatever the current verse in paratext is
-                        //    enhancedViewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
-                        //}
-                    }
 
                     await Task.Delay(100, cancellationToken);
                 }
-
             }
             catch (Exception ex)
             {
@@ -851,9 +842,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         private async Task ActivateDockedWindowViewModels(CancellationToken cancellationToken)
         {
             Items.Clear();
-
+            
             // documents
-            await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
+            await LoadEnhancedViewTabs(cancellationToken, onlyLoadFirstTab: true);
             // tools
             await ActivateItemAsync<BiblicalTermsViewModel>(cancellationToken);
 
@@ -2364,6 +2355,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public async Task HandleAsync(CloseDockingPane message, CancellationToken cancellationToken)
         {
             var windowGuid = message.Guid;
+            var showConfirmation = message.showConfirmation;
 
             var dockableWindows = _dockingManager.Layout.Descendents()
                 .OfType<LayoutDocument>().ToArray();
@@ -2387,9 +2379,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                             confirmationViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.CloseEnhancedViewConfirmation;
 
-                            var result = await WindowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null, 
-                                SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
+                            bool result = true;
 
+                            if (showConfirmation)
+                            {
+                                result = await WindowManager!.ShowDialogAsync(confirmationViewPopupViewModel, null,
+                                    SimpleMessagePopupViewModel.CreateDialogSettings(confirmationViewPopupViewModel.Title));
+                            }
+                            
                             if (result == true)
                             {
                                 pane.Close();

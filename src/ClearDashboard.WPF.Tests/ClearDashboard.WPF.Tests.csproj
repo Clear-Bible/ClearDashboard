@@ -5,13 +5,13 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <Platforms>AnyCPU</Platforms>
-    <FileVersion>1.4.0.15</FileVersion>
-    <Version>1.4.0.15</Version>
-    <AssemblyVersion>1.4.0.15</AssemblyVersion>
+    <FileVersion>1.5.0.0</FileVersion>
+    <Version>1.5.0.0</Version>
+    <AssemblyVersion>1.5.0.0</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
-    <PackageReference Include="Serilog" Version="3.0.1" />
+    <PackageReference Include="Serilog" Version="3.1.1" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="7.0.0" />
     <PackageReference Include="xunit" Version="2.5.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.0">
@@ -29,5 +29,10 @@
     <ProjectReference Include="..\..\..\ClearEngineMachine\machine\src\SIL.Machine.Translation.Thot\SIL.Machine.Translation.Thot.csproj" />
     <ProjectReference Include="..\..\..\ClearEngineMachine\machine\src\SIL.Machine\SIL.Machine.csproj" />
     <ProjectReference Include="..\ClearDashboard.Wpf.Application\ClearDashboard.Wpf.Application.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Data\GrammarTypes.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

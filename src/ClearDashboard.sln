@@ -22,6 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		Build-Dashboard-Module-Project-Template.md = Build-Dashboard-Module-Project-Template.md
 		..\Caliburn-Micro-Cheat-Sheet.md = ..\Caliburn-Micro-Cheat-Sheet.md
 		..\CQRS-Cheat-Sheet.md = ..\CQRS-Cheat-Sheet.md
+		DotNet-Framework-Upgrade.md = DotNet-Framework-Upgrade.md
 		Generate Sematic Domain Lookup Sqlite.md = Generate Sematic Domain Lookup Sqlite.md
 		..\Localization-How-To.md = ..\Localization-How-To.md
 		Migration-How-To.md = Migration-How-To.md
@@ -165,6 +166,13 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearBible.Macula.PropertiesSources", "..\..\ClearEngineMachine\ClearEngine\src\ClearBible.Macula.PropertiesSources\ClearBible.Macula.PropertiesSources.csproj", "{FA6E2C8F-C2CC-4C33-9AA7-1CE7D88F0398}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearBible.MaculaPropertiesSources.ETL", "..\..\ClearEngineMachine\ClearEngine\src\ClearBible.MaculaPropertiesSources.ETL\ClearBible.MaculaPropertiesSources.ETL.csproj", "{73AA37ED-24A3-4AB3-80A6-4BCF09D5FADB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{C04A676C-4AFC-4A03-961C-089CBA169193}"
+	ProjectSection(SolutionItems) = preProject
+		ReadMe.md = ReadMe.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Wpf.ViewModels", "ClearDashboard.DAL.WpfViewModels\ClearDashboard.DAL.Wpf.ViewModels.csproj", "{82738C78-80F0-450E-BB03-F106BF7C4861}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1230,6 +1238,26 @@ Global
 		{73AA37ED-24A3-4AB3-80A6-4BCF09D5FADB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{73AA37ED-24A3-4AB3-80A6-4BCF09D5FADB}.Release|x64.ActiveCfg = Release|Any CPU
 		{73AA37ED-24A3-4AB3-80A6-4BCF09D5FADB}.Release|x64.Build.0 = Release|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Collab_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Collab_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Collab_Debug|x64.ActiveCfg = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Collab_Debug|x64.Build.0 = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Collab_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Collab_Release|Any CPU.Build.0 = Release|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Collab_Release|x64.ActiveCfg = Release|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Collab_Release|x64.Build.0 = Release|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Debug|x64.Build.0 = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.HighDPIDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.HighDPIDebug|Any CPU.Build.0 = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.HighDPIDebug|x64.ActiveCfg = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.HighDPIDebug|x64.Build.0 = Debug|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Release|x64.ActiveCfg = Release|Any CPU
+		{82738C78-80F0-450E-BB03-F106BF7C4861}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1295,6 +1323,8 @@ Global
 		{B73F4D90-ECA4-4A45-902D-4F91C5C1030C} = {72B67B6E-D1EA-4F06-B0A3-59803ED7D2D7}
 		{FA6E2C8F-C2CC-4C33-9AA7-1CE7D88F0398} = {72B67B6E-D1EA-4F06-B0A3-59803ED7D2D7}
 		{73AA37ED-24A3-4AB3-80A6-4BCF09D5FADB} = {72B67B6E-D1EA-4F06-B0A3-59803ED7D2D7}
+		{C04A676C-4AFC-4A03-961C-089CBA169193} = {AA93D4BA-F38C-4446-BF88-90BDE0DC5F0B}
+		{82738C78-80F0-450E-BB03-F106BF7C4861} = {AB666381-AB6E-46E9-8CAB-DC08A7C93AA1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BFF05FFA-E592-49AC-8796-A4E60A3D729F}

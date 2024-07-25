@@ -167,7 +167,7 @@
     <value>USFM በመፈተሽ ላይ</value>
   </data>
   <data name="AddParatextCorpusDialog_CopyToClipboard" xml:space="preserve">
-    <value>የ USFM ስህተቶችን ወደ ቅንጥብ ሰሌዳ ይቅዱ</value>
+    <value>የUSFM ስህተቶችን ወደ ቅንጥብ ሰሌዳ ይቅዱ</value>
   </data>
   <data name="AddParatextCorpusDialog_ErrorCount" xml:space="preserve">
     <value>የስህተት ብዛት፡-</value>
@@ -230,7 +230,7 @@
     <value>OFFSET</value>
   </data>
   <data name="Bcv_PreviousBook" xml:space="preserve">
-    <value>ያለፈው መጽሐፍ</value>
+    <value>ቀዳሚ መጽሐፍ</value>
   </data>
   <data name="Bcv_PreviousChapter" xml:space="preserve">
     <value>ያለፈው ምዕራፍ</value>
@@ -437,7 +437,7 @@
     <value>አሰላለፍ</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>የአሰላለፍ አይነት፡</value>
+    <value>የአሰላለፍ አይነት፡ </value>
   </data>
   <data name="BulkAlignmentReview_Approve" xml:space="preserve">
     <value>አጽድቅ</value>
@@ -566,7 +566,7 @@
     <value>የፕሮጀክት ትብብርን ሰርዝ</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>ከዚህ ፕሮጀክት ጋር የተገናኙ ሌሎች ተጠቃሚዎች አሉዎት። ይህ ፕሮጀክት ለእነሱም ይወገዳል. እርግጠኛ ነዎት ይህን ፕሮጀክት መሰረዝ ይፈልጋሉ?</value>
+    <value>ከዚህ ፕሮጀክት ጋር የተገናኙ ሌሎች ተጠቃሚዎች አሉዎት።  ይህ ፕሮጀክት ለእነሱም ይወገዳል. እርግጠኛ ነዎት ይህን ፕሮጀክት መሰረዝ ይፈልጋሉ?</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
     <value>እርግጠኛ ነዎት ይህን ፕሮጀክት መሰረዝ ይፈልጋሉ?</value>
@@ -740,10 +740,10 @@
     <value>EZR</value>
   </data>
   <data name="FontSettings_FontSize" xml:space="preserve">
-    <value>የፊደል መጠን፡-</value>
+    <value>የፊደል መጠን፡</value>
   </data>
   <data name="FontSettings_Height" xml:space="preserve">
-    <value>ቁመት፡</value>
+    <value>ቁመት፡-</value>
   </data>
   <data name="FontSettings_Horizontal" xml:space="preserve">
     <value>አግድም ክፍተት፡</value>
@@ -787,6 +787,12 @@
   <data name="GEN" xml:space="preserve">
     <value>GEN</value>
   </data>
+  <data name="GrammarTagList_Description" xml:space="preserve">
+    <value>መግለጫ</value>
+  </data>
+  <data name="GrammarTagList_Short" xml:space="preserve">
+    <value>አጭር</value>
+  </data>
   <data name="HAB" xml:space="preserve">
     <value>HAB</value>
   </data>
@@ -798,6 +804,18 @@
   </data>
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>ማስመጣት ተሰርዟል።</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>ማስመጣት ተጠናቋል</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>ስህተት አጋጥሞታል (ለዝርዝሮቹ ምዝግብ ማስታወሻን ይመልከቱ)</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>የቃል ትንታኔዎችን አስመጣ</value>
   </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
@@ -815,7 +833,7 @@
     <value>JHN</value>
   </data>
   <data name="JiraResultsView_Password" xml:space="preserve">
-    <value>የይለፍ ቃል:</value>
+    <value>የይለፍ ቃል፥</value>
   </data>
   <data name="JiraResultsView_URL" xml:space="preserve">
     <value>URL፡</value>
@@ -892,6 +910,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>ምልክት ካደረጉ፣ ይህ ሁሉንም የዚህ ቃል ያልተዘጋጁ ክስተቶችን ይለውጣል</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>ሁሉንም ያልተዘጋጁ ክስተቶች ይቀይሩ</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>ምልክት ካደረጉ፣ ይህ ሁሉንም የዚህ ቃል ያልተዘጋጁ ክስተቶችን ይለውጣል</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>ኮንኮርዳንስ</value>
   </data>
@@ -907,11 +931,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>ይህን ትርጉም ሰርዝ</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;ባዶ ትርጉም&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>ለ አዲስ ትርጉም ያስገቡ</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>አዲስ አንጸባራቂ አስገባ</value>
+  </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>ቅጾች፡</value>
+  </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>አንጸባራቂ</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>አንጸባራቂ ዝርዝር</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>ቋንቋ፡</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>ለማ</value>
@@ -923,16 +962,25 @@
     <value>ለማ ለአዲስ ሌክስሜ፡-</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
-    <value>ሌክሰሜ</value>
+    <value>ሌክስሜ</value>
   </data>
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>ለለማ አስቀድሞ ሌክስሜ አለ።</value>
+  </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>መዝገበ ቃላት</value>
+  </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>ግጥሚያዎች</value>
   </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>ትርጉሞች፡-</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>አዲስ አንጸባራቂ</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>ምንም ቅጾች አይገኙም።</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>ይህን የትርጓሜ ጎራ ከዚህ ትርጉም አስወግድ</value>
@@ -942,6 +990,21 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>አንጸባራቂ አዘጋጅ ለ</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>ትርጉሞች፡-</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>ዓይነት፡</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>አልተዋቀረም።</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>በተጠቃሚ የተገለጸ አንጸባራቂ</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>የተረጋገጠ</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>እና</value>
@@ -977,13 +1040,13 @@
     <value>ሙሉ በሙሉ ተዛማጅ</value>
   </data>
   <data name="LexiconEdit_Lexeme" xml:space="preserve">
-    <value>ሌክሰሜ</value>
+    <value>ሌክስሜ</value>
   </data>
   <data name="LexiconEdit_LoadingData" xml:space="preserve">
     <value>ውሂብ በመጫን ላይ...</value>
   </data>
   <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
-    <value>ውሂብ በመጫን ላይ ሳለ ያልተጠበቀ ስህተት ተከስቷል። {0}</value>
+    <value>ውሂብ በመጫን ላይ ሳለ ያልተጠበቀ ስህተት ተፈጥሯል። {0}</value>
   </data>
   <data name="LexiconEdit_Matching" xml:space="preserve">
     <value>ማዛመድ</value>
@@ -1027,8 +1090,20 @@
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>ከዒላማው ጋር የሚዛመድ አንድ ወይም ከዚያ በላይ ትርጉም ያላቸውን መዝገበ ቃላት ያግኙ</value>
   </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>ተረጋግጧል</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>ኮርፐስ፡</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>አስመጣ</value>
+  </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>ማስመጣት ተረጋግጧል</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>ቋንቋ፡</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexeme ወይም ቅጽ ግጥሚያዎች</value>
@@ -1065,6 +1140,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>ሁሉንም አይምረጡ</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>ቃል፡-</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>የመጀመሪያ ስም ያስፈልጋል</value>
@@ -1205,13 +1283,13 @@
     <value>አጠቃላይ መረጃ</value>
   </data>
   <data name="Marble_Glosses" xml:space="preserve">
-    <value>አንጸባራቂዎች፡</value>
+    <value>አንጸባራቂዎች</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>የንግግር ክፍሎች</value>
+    <value>የንግግር ክፍሎች   </value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>ተዛማጅ Lemmas</value>
+    <value>ተዛማጅ Lemmas   </value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>ወሰን፡</value>
@@ -1232,7 +1310,7 @@
     <value>ስሜት</value>
   </data>
   <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>ጠንካራ ኮዶች</value>
+    <value>ጠንካራ ኮዶች   </value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>ንዑስ ጎራዎች፡</value>
@@ -1328,7 +1406,7 @@
     <value>አዲስ የትብብር ተጠቃሚ</value>
   </data>
   <data name="NewCollabUserView_Password" xml:space="preserve">
-    <value>የይለፍ ቃል:</value>
+    <value>የይለፍ ቃል፥</value>
   </data>
   <data name="NewCollabUserView_SavedToRemoteServer" xml:space="preserve">
     <value>ወደ የርቀት አገልጋይ ተቀምጧል</value>
@@ -1373,7 +1451,7 @@
     <value>Jot ጨምር</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>አዲስ ጆት ጨምር</value>
+    <value>አዲስ ጆት አክል (ለአዲስ መስመር ፈረቃ አስገባ)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>አካል</value>
@@ -1385,7 +1463,7 @@
     <value>ይህ ጽሁፍ ይሰረዝ?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
-    <value>በእርስዎ Paratext ፕሮጀክት ፈቃዶች ምክንያት፣</value>
+    <value>በእርስዎ Paratext ፕሮጀክት ፈቃዶች ምክንያት፣ </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>በቁጥር አጣራ</value>
@@ -1406,7 +1484,7 @@
     <value>ማንኛውም</value>
   </data>
   <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>ተፈቷል።</value>
+    <value>ተፈትቷል</value>
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>ክፈት</value>
@@ -1493,7 +1571,7 @@
     <value>ክፈት</value>
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>ተፈቷል።</value>
+    <value>ተፈትቷል</value>
   </data>
   <data name="Notes_Note_Verse" xml:space="preserve">
     <value>ቁጥር</value>
@@ -1550,7 +1628,7 @@
     <value>እነዚህ ጆቶች ወደ Paratext ይላኩ?</value>
   </data>
   <data name="Notes_SendToParatext" xml:space="preserve">
-    <value>ጆቶችን ወደ ፓራቴክስት ላክ</value>
+    <value>ጆቶችን ወደ Paratext ይላኩ።</value>
   </data>
   <data name="Notes_TakeAction" xml:space="preserve">
     <value />
@@ -1717,6 +1795,9 @@
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>ከParatext የቅርብ ጊዜ ያግኙ</value>
   </data>
+  <data name="Pds_ImportWordAnlysisMenu" xml:space="preserve">
+    <value>የቃል ትንታኔዎችን አስመጣ </value>
+  </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
     <value>ስለዚህ ፕሮጀክት መረጃ አሳይ</value>
   </data>
@@ -1769,7 +1850,7 @@
     <value>StudyBible ተጨማሪዎች</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>ወደ Paratext ይሂዱ እና ፕሮጀክቶችን ይቀይሩ። በአሁኑ ጊዜ ከ ClearDashboard ፕለጊን ጋር የተገናኘው የፓራቴክስት ፕሮጀክት በዚህ ClearDashboard ፕሮጀክት ውስጥ ካለው ኮርፐስ ጋር አንድ አይነት አይደለም።</value>
+    <value>ወደ Paratext ይሂዱ እና ፕሮጀክቶችን ይቀይሩ።  በአሁኑ ጊዜ ከ ClearDashboard ፕለጊን ጋር የተገናኘው የፓራቴክስት ፕሮጀክት በዚህ ClearDashboard ፕሮጀክት ውስጥ ካለው ኮርፐስ ጋር አንድ አይነት አይደለም።</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>ዒላማ</value>
@@ -1820,7 +1901,7 @@
     <value>ቋንቋ</value>
   </data>
   <data name="Pins_Lexeme" xml:space="preserve">
-    <value>ሌክሰሜ</value>
+    <value>ሌክስሜ</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
     <value>Lexeme አይነት</value>
@@ -1889,13 +1970,13 @@
     <value>ፈጣን ጅምር አዲስ ፕሮጀክት</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>ፕሮጀክት ፍጠር፡</value>
+    <value>ፕሮጀክት ፍጠር፡ </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
     <value>የፕሮጀክት አብነት አዋቂን በመጠቀም ፕሮጀክትዎን ይፍጠሩ።</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>የውሂብ ጎታ፡</value>
+    <value>የውሂብ ጎታ፡ </value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
     <value>ያንን ፕሮጀክት መሰረዝ አይችሉም፣ ሌላ መተግበሪያ አሁንም እየተጠቀመበት ነው።</value>
@@ -1931,10 +2012,10 @@
     <value>ምንም ግጥሚያዎች የሉም።</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>እዚህ ብቸኝነት ነው። እባክዎ አዲስ ፕሮጀክት ይፍጠሩ።</value>
+    <value>እዚህ ብቸኝነት ነው።  እባክዎ አዲስ ፕሮጀክት ይፍጠሩ።</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>ፓራቴክስት አልተጫነም። እባክህ Paratextን ጫን እና የ ClearDashboard መተግበሪያን እንደገና አስጀምር።</value>
+    <value>ፓራቴክስት አልተጫነም።  እባክህ Paratextን ጫን እና የ ClearDashboard መተግበሪያን እንደገና አስጀምር።</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>ፓራቴክስት እየሰራ አይደለም።</value>
@@ -1958,7 +2039,7 @@
     <value>Paratext ፕሮጀክት</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>ፕሮጀክት፡-</value>
+    <value>ፕሮጀክት፡- </value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>ልንደርስ ነው!</value>
@@ -1985,7 +2066,7 @@
     <value>Paratext ለመጀመር እዚህ ጠቅ ያድርጉ</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>ስሪት፡</value>
+    <value>ስሪት፡ </value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>እባክዎ ለፕሮጀክትዎ ስም ያስገቡ</value>
@@ -1994,7 +2075,7 @@
     <value>አዲሱን ፕሮጀክትዎን ይፍጠሩ</value>
   </data>
   <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>የተሰጠው የፕሮጀክት ስም ሕገወጥ ቁምፊዎችን ይዟል። ልክ የሆኑ ቁምፊዎች 'A-Z' (ትንሽ እና አቢይ ሆሄያት)፣ ቁጥሮች '0-9' እና '-' እና '_' ቁምፊዎችን ያካትታሉ።</value>
+    <value>የተሰጠው የፕሮጀክት ስም ሕገወጥ ቁምፊዎችን ይዟል።  ልክ የሆኑ ቁምፊዎች 'A-Z' (ትንሽ እና አቢይ ሆሄያት)፣ ቁጥሮች '0-9' እና '-' እና '_' ቁምፊዎችን ያካትታሉ።</value>
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>ተመሳሳይ ስም ያለው ፕሮጀክት አስቀድሞ አለ። እባክዎ ልዩ ስም ይምረጡ።</value>
@@ -2213,7 +2294,7 @@
     <value>ይመዝገቡ</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>የቀረበው ቁልፍ የተሳሳተ ነው። ዲክሪፕት ሲደረግ የተወሰኑ የ json አባሎች ሊገኙ አልቻሉም።</value>
+    <value>የቀረበው ቁልፍ የተሳሳተ ነው።  ዲክሪፕት ሲደረግ የተወሰኑ የ json አባሎች ሊገኙ አልቻሉም።</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>ዲክሪፕት የተደረገው የፍቃድ ቁልፉ ይዘት እርስዎ ካቀረቡት መረጃ ጋር አይዛመድም።</value>
@@ -2222,13 +2303,13 @@
     <value>የፍቃድ ቁልፍዎ ጠፍቷል ወይም ተሰበረ።</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>ወደ ClearDashboard እንኳን በደህና መጡ! እባክዎ የመመዝገቢያ መረጃዎን ያስገቡ።</value>
+    <value>ወደ ClearDashboard እንኳን በደህና መጡ!  እባክዎ የመመዝገቢያ መረጃዎን ያስገቡ።</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>እባክህ የመጀመሪያ ስምህን አስገባ</value>
   </data>
   <data name="RegistrationView_LastName" xml:space="preserve">
-    <value>እባክህ የመጨረሻ ስምህን አስገባ</value>
+    <value>እባክህ የአያት ስምህን አስገባ</value>
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
     <value>እባክዎ የፍቃድ ቁልፍዎን ያስገቡ</value>
@@ -2357,7 +2438,7 @@
     <value>የተዘረጉ እይታዎችን ከዳሽቦርድ በተለየ ማሳያ ላይ አሳይ</value>
   </data>
   <data name="Settings_ShowMirrorViewOnThirdMonitor" xml:space="preserve">
-    <value>ሶስት ወይም ከዚያ በላይ ተቆጣጣሪዎች ላሏቸው ስርዓቶች የተዘረጋውን እይታ በሶስተኛ ማሳያ ላይ አሳይ</value>
+    <value>ሶስት ወይም ከዚያ በላይ ማሳያዎች ላሏቸው ስርዓቶች የተዘረጋውን እይታ በሶስተኛ ማሳያ ላይ አሳይ</value>
   </data>
   <data name="Settings_TextCollections" xml:space="preserve">
     <value>የጽሑፍ ስብስብ</value>
@@ -2381,13 +2462,13 @@
     <value>በመጫን ላይ...</value>
   </data>
   <data name="ShellView_NoBackGroundTasks" xml:space="preserve">
-    <value>ምንም የበስተጀርባ ተግባራት አይሰሩም።</value>
+    <value>ምንም የበስተጀርባ ስራዎች አይሰሩም።</value>
   </data>
   <data name="ShellView_PowerModeEnabled" xml:space="preserve">
     <value>የኃይል ሁነታ ነቅቷል።</value>
   </data>
   <data name="ShellView_ShowBackgroundTasksTooltip" xml:space="preserve">
-    <value>የበስተጀርባ ተግባሮችን አሳይ</value>
+    <value>የበስተጀርባ ተግባራትን አሳይ</value>
   </data>
   <data name="ShellView_ShowNotes" xml:space="preserve">
     <value>የመልቀቂያ ማስታወሻዎች</value>
@@ -2462,7 +2543,7 @@
     <value>ሁኔታ</value>
   </data>
   <data name="TargetContextView_Formatted" xml:space="preserve">
-    <value>የተቀረፀው</value>
+    <value>የተቀረጸ</value>
   </data>
   <data name="TargetContextView_Unformatted" xml:space="preserve">
     <value>ቅርጸት ያልተሰራ</value>
@@ -2476,8 +2557,29 @@
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
   </data>
-  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+  <data name="TokenDisplay_SetGloss" xml:space="preserve">
     <value>Gloss አዘጋጅ</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>Lexeme ያክሉ</value>
+  </data>
+  <data name="TokenSplitting_ClickWhere" xml:space="preserve">
+    <value>ቃሉን ወደ ቶከኖች ለመከፋፈል የት ላይ ጠቅ ያድርጉ</value>
+  </data>
+  <data name="TokenSplitting_Gloss" xml:space="preserve">
+    <value>አንጸባራቂ</value>
+  </data>
+  <data name="TokenSplitting_Grammar" xml:space="preserve">
+    <value>ሰዋሰው</value>
+  </data>
+  <data name="TokenSplitting_TrainingText" xml:space="preserve">
+    <value>የሥልጠና ጽሑፍ</value>
+  </data>
+  <data name="TokenSplitting_Type" xml:space="preserve">
+    <value>ዓይነት</value>
+  </data>
+  <data name="TokenSplitting_WordGloss" xml:space="preserve">
+    <value>የቃል አንጸባራቂ</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>አዘምን</value>

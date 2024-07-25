@@ -267,93 +267,37 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
 
         DataUtil.AddWhereClauseParameterValues(command, resolvedWhereClause);
 
-        await ApplyPropertyModelDifferencesToCommand(command, modelDifference, modelSnapshot);
-        await ApplyPropertyValueDifferencesToCommand(command, modelDifference, modelSnapshot);
+        await ApplyPropertyDifferencesToCommand(command, modelDifference, modelSnapshot);
 
-        return command;
+		return command;
     }
 
-    private async Task ApplyPropertyValueDifferencesToCommand(DbCommand command, IModelDifference modelDifference, IModelSnapshot modelSnapshot)
+    private async Task ApplyPropertyDifferencesToCommand(DbCommand command, IModelDifference modelDifference, IModelSnapshot modelSnapshot)
     {
-        var entityType = modelSnapshot.EntityType;
-        var entityPropertyValuesSet = new List<string>();
+		var entityType = modelSnapshot.EntityType;
+		var entityPropertyValuesSet = new List<string>();
 
-        // Each property difference here refers to a simple value difference.
-        foreach (var (propertyName, propertyValueDifference) in modelDifference.PropertyValueDifferences)
+		// Each property difference here refers to difference within a more complex
+		// property (e.g. NoteModelRef.ModelRef), which has to have converter(s) in
+		// order to apply to simple database column(s).
+		foreach (var propertyDifference in modelDifference.PropertyDifferences)
         {
-            // Grab the propertyName + 'value2' from the value difference
-            // and run it through any (optional) converter(s), and assign
-            // to DbCommand
-            var propertyValue = propertyValueDifference.Value2AsObject;
+			// First apply the property difference to modelSnapshot:
+			modelSnapshot.ApplyPropertyDifference(propertyDifference);
 
-            IEnumerable<string>? entityPropertyValues = null;
-            if (!_propertyNameMap.TryGetValue((entityType, propertyName), out entityPropertyValues))
-            {
-                entityPropertyValues = new List<string>() { propertyName };
-            }
+		    if (!_propertyNameMap.TryGetValue((entityType, propertyDifference.PropertyName), out IEnumerable<string>? entityPropertyValues))
+		    {
+			    entityPropertyValues = new List<string>() { propertyDifference.PropertyName };
+		    }
 
-            entityPropertyValues = entityPropertyValues
-                .Where(e => !string.IsNullOrEmpty(e))
-                .Where(e => !entityPropertyValuesSet.Contains(e))
-                .ToList();
-            if (!entityPropertyValues.Any())
-            {
-                continue;
-            }
-
-            foreach (var ep in entityPropertyValues)
-            {
-                if (_entityValueResolvers.TryGetValue((entityType, ep), out var resolver))
-                {
-                    propertyValue = await RunEntityValueResolverAsync(modelSnapshot, ep, resolver);
-                    command.Parameters[$"@{ep}"].Value = propertyValue ?? DBNull.Value;
-
-                    entityPropertyValuesSet.Add(ep);
-                    continue;
-                }
-                else
-                {
-                    propertyValue = propertyValue.ToDatabaseCommandParameterValue(_dateTimeOffsetToBinary);
-                    command.Parameters[$"@{ep}"].Value = propertyValue;
-
-                    entityPropertyValuesSet.Add(ep);
-                }
-            }
-        }
-    }
-
-    private async Task ApplyPropertyModelDifferencesToCommand(DbCommand command, IModelDifference modelDifference, IModelSnapshot modelSnapshot)
-    {
-        var entityType = modelSnapshot.EntityType;
-        var entityPropertyValuesSet = new List<string>();
-
-        // Each property difference here refers to difference within a more complex
-        // property (e.g. NoteModelRef.ModelRef), which has to have converter(s) in
-        // order to apply to simple database column(s).
-        foreach (var propertyModelDifference in modelDifference.PropertyDifferences
-            .Where(d => d.PropertyValueDifference.GetType().IsAssignableTo(typeof(IModelDifference))))
-        {
-            var modelValueDifference = (IModelDifference)propertyModelDifference.PropertyValueDifference;
-
-            // First apply the property difference to modelSnapshot (this
-            // may have to traverse down a hierarachy), and then run the
-            // converter(s) to get the DbCommand database value(s):
-            modelSnapshot.ApplyPropertyDifference(propertyModelDifference);
-
-            IEnumerable<string>? entityPropertyValues = null;
-            if (!_propertyNameMap.TryGetValue((entityType, propertyModelDifference.PropertyName), out entityPropertyValues))
-            {
-                entityPropertyValues = new List<string>() { propertyModelDifference.PropertyName };
-            }
-
-            entityPropertyValues = entityPropertyValues
-                .Where(e => !string.IsNullOrEmpty(e))
-                .Where(e => !entityPropertyValuesSet.Contains(e))
-                .ToList();
-            if (!entityPropertyValues.Any())
-            {
-                continue;
-            }
+		    entityPropertyValues = entityPropertyValues
+			    .Where(e => !string.IsNullOrEmpty(e))
+			    .Where(e => !entityPropertyValuesSet.Contains(e))
+			    .ToList();
+		    if (!entityPropertyValues.Any())
+		    {
+			    return;
+		    }
 
             foreach (var ep in entityPropertyValues)
             {
@@ -364,23 +308,44 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
 
                     entityPropertyValuesSet.Add(ep);
                 }
-                else if (modelValueDifference.ModelType.IsAssignableTo(typeof(IDictionary<string, object>)))
+                else
                 {
-                    command.Parameters[$"@{ep}"].Value = modelSnapshot.PropertyValues[propertyModelDifference.PropertyName]
-                        .ToDatabaseCommandParameterValue(_dateTimeOffsetToBinary);
+                    if (propertyDifference.PropertyValueDifference.GetType().IsAssignableTo(typeof(IModelDifference)))
+                    {
+                        var modelValueDifference = (IModelDifference)propertyDifference.PropertyValueDifference;
+
+                        if (!modelValueDifference.ModelType.IsAssignableTo(typeof(IDictionary<string, object>)) &&
+                            !modelValueDifference.ModelType.IsAssignableTo(typeof(IList<Models.Metadatum>)))
+                        {
+                            throw new PropertyResolutionException($"{nameof(ApplyPropertyDifferencesToCommand)}  found mapped property '{propertyDifference.PropertyName}' ModelDifference for entity type '{entityType}' property '{ep}', but model type {modelValueDifference.ModelType.FullName} is not supported");
+                        }
+                    }
+                    else if (propertyDifference.PropertyValueDifference.GetType().IsAssignableTo(typeof(IListDifference)))
+                    {
+						var listValueDifference = (IListDifference)propertyDifference.PropertyValueDifference;
+
+                        if (!listValueDifference.GetType().IsGenericType)
+                        {
+                            throw new InvalidModelStateException($"{nameof(ApplyPropertyDifferencesToCommand)} encountered non-generic ListDifference type: {listValueDifference.GetType().FullName}");
+                        }
+
+                        var listGenericArgument = listValueDifference.GetType().GetGenericArguments()[0];
+                        if (!listGenericArgument.IsAssignableTo(typeof(Models.Metadatum)))
+						{
+							throw new PropertyResolutionException($"{nameof(ApplyPropertyDifferencesToCommand)}  found mapped property '{propertyDifference.PropertyName}' ListDifference for entity type '{entityType}' property '{ep}', but list type {listGenericArgument.FullName} is not supported");
+						}
+					}
+
+					var propertyValue = modelSnapshot.PropertyValues[propertyDifference.PropertyName];
+                    command.Parameters[$"@{ep}"].Value = propertyValue.ToDatabaseCommandParameterValue(_dateTimeOffsetToBinary);
 
                     entityPropertyValuesSet.Add(ep);
                 }
-                else
-                {
-                    throw new PropertyResolutionException($"Found mapped property '{propertyModelDifference.PropertyName}' ModelDifference for entity type '{entityType}' property '{ep}', but no resolver configured");
-                }
             }
-        }
+		}
+	}
 
-    }
-
-    protected DbCommand CreateModelSnapshotDeleteCommand(DbConnection connection, Type entityType, Dictionary<string, object?> resolvedWhereClause)
+	protected DbCommand CreateModelSnapshotDeleteCommand(DbConnection connection, Type entityType, Dictionary<string, object?> resolvedWhereClause)
     {
         var command = connection.CreateCommand();
 
@@ -496,8 +461,16 @@ public static class DbCommandExtensions
                 }
             }
         }
+        else if (property.PropertyType.IsAssignableTo(typeof(IList<Models.Metadatum>)))
+        {
+			var columnAttribute = (ColumnAttribute?)property.GetCustomAttribute(typeof(ColumnAttribute), true);
+			if (nullabilityInfo.WriteState is not NullabilityState.Nullable)
+			{
+				return JsonSerializer.Serialize(new List<Models.Metadatum>());
+			}
+		}
 
-        if (nullabilityInfo.WriteState is not NullabilityState.Nullable)
+		if (nullabilityInfo.WriteState is not NullabilityState.Nullable)
         {
             if (property.PropertyType.IsValueType)
             {
@@ -526,8 +499,12 @@ public static class DbCommandExtensions
         {
             value = JsonSerializer.Serialize((IDictionary<string, object>)value);
         }
+		else if (value is IList<Models.Metadatum>)
+		{
+			value = JsonSerializer.Serialize((IList<Models.Metadatum>)value);
+		}
 
-        return value != null ? value : DBNull.Value;
+		return value != null ? value : DBNull.Value;
     }
 
     internal static Type ToDomainEntityIdType(this string domainEntityTypeName)

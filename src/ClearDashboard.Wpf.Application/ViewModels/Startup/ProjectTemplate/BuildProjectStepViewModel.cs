@@ -500,7 +500,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             _processRunner.StartRegistration();
 
             var paratextTaskName = _processRunner.RegisterParatextProjectCorpusTask(
-                ParentViewModel!.SelectedParatextProject!, Tokenizers.LatinWordTokenizer, ParentViewModel!.SelectedBookIds!);
+                ParentViewModel!.SelectedParatextProject!, Tokenizers.LatinWordTokenizer, ParentViewModel!.SelectedBookIds!, ParentViewModel!.ImportWordAnalysesParatextProject);
 
             if (ParentViewModel!.IncludeOtBiblicalTexts)
             {
@@ -536,7 +536,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             {
                 var paratextBtTaskName = _processRunner.RegisterParatextProjectCorpusTask(
                     ParentViewModel!.SelectedParatextBtProject, Tokenizers.LatinWordTokenizer,
-                    ParentViewModel!.SelectedBookIds!);
+                    ParentViewModel!.SelectedBookIds!,
+					ParentViewModel!.ImportWordAnalysesParatextBtProject);
 
                 _ = _processRunner.RegisterParallelizationTasks(
                     paratextTaskName,
@@ -549,7 +550,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup.ProjectTemplate
             {
                 var paratextLwcTaskName = _processRunner.RegisterParatextProjectCorpusTask(
                     ParentViewModel!.SelectedParatextLwcProject, Tokenizers.LatinWordTokenizer,
-                    ParentViewModel!.SelectedBookIds!);
+                    ParentViewModel!.SelectedBookIds!,
+					ParentViewModel!.ImportWordAnalysesParatextLwcProject);
 
                 _ = _processRunner.RegisterParallelizationTasks(
                     paratextTaskName,

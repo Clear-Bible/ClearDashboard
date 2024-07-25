@@ -29,6 +29,7 @@ using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Popups;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
@@ -54,6 +55,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using static ClearBible.Engine.Persistence.FileGetBookIds;
 using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
@@ -2026,8 +2028,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.ShowLexiconDialog:
                     await ShowLexiconDialog(corpusNodeViewModel.CorpusId);
                     break;
-            }
-        }
+				case DesignSurfaceViewModel.DesignSurfaceMenuIds.ImportWordAnalyses:
+					await ShowImportWordAnalysesDialogAsync(corpusNodeViewModel.ParatextProjectId, cancellationToken);
+					break;
+			}
+		}
 
         private async Task ShowLexiconDialog(Guid corpusId)
         {
@@ -2066,8 +2071,57 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
+		private async Task ShowImportWordAnalysesDialogAsync(string externalParatextProjectId, CancellationToken cancellationToken)
+		{
+			var localizedString = _localizationService!.Get("ImportWordAnalyses_Title");
 
-        public void ShowCorpusProperties(CorpusNodeViewModel corpus)
+			dynamic settings = new ExpandoObject();
+			settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+			settings.ResizeMode = ResizeMode.NoResize;
+			settings.Title = $"{localizedString}";
+
+			// Keep the window on top
+			//settings.Topmost = true;
+			settings.Owner = System.Windows.Application.Current.MainWindow;
+
+			var viewModel = LifetimeScope!.Resolve<ImportWordAnalysesDialogViewModel>();
+			if (viewModel != null)
+			{
+				try
+				{
+					var node = DesignSurfaceViewModel!.CorpusNodes
+						.Single(cn => cn.ParatextProjectId == externalParatextProjectId);
+
+                    // TODO:  this assumes a one-to-one relationship between Corpus and TokenizedCorpus.
+                    // If this ever changes, this would need to be changed!
+					var tokenizedTextCorpusId = (await TokenizedTextCorpus.GetAllTokenizedCorpusIdsAsync(
+							LifetimeScope!,
+							new CorpusId(node.CorpusId),
+                            cancellationToken)).FirstOrDefault();
+
+					if (tokenizedTextCorpusId is null)
+					{
+						throw new ArgumentException($"No TokenizedTextCorpusId found for corpus '{node.CorpusId}'");
+					}
+
+					viewModel.TokenizedTextCorpusId = tokenizedTextCorpusId;
+
+					IWindowManager manager = new WindowManager();
+					var result = await manager.ShowDialogAsync(viewModel, null, settings);
+					if (result == true)
+					{
+						await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage());
+					}
+				}
+				finally
+				{
+					await viewModel.DeactivateAsync(false);
+				}
+
+			}
+		}
+
+		public void ShowCorpusProperties(CorpusNodeViewModel corpus)
         {
             SelectedDesignSurfaceComponent = corpus;
         }

@@ -22,6 +22,7 @@ using SIL.Scripture;
 using ClearDashboard.DAL.Alignment.Features.Lexicon;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using Org.BouncyCastle.Utilities.Encoders;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -32,15 +33,91 @@ public class CreateLexiconCommandHandlerTests : TestBase
     }
 
     [Fact]
-    [Trait("Category", "Handlers")]
-    public async Task Lexicon_ExternalSave()
+    [Trait("Category", "WordAnalyses")]
+    public async Task WordAnalyses_ExternalGet()
     {
         try
         {
-            var lemma1 = "Lemma_1";
-            var lemma2 = "Lemma_2";
-            var lemma3 = "Lemma_3";
-            var lemma1Form1 = lemma1 + "_form1";
+			var externalLexiconCommand = new GetExternalLexiconQuery(null /* currently loaded project */);
+			var externalLexiconResult = await Mediator.Send(externalLexiconCommand);
+			await externalLexiconResult.Data!.SaveAsync(Mediator!);
+
+			var internalLexiconCommand = new GetInternalLexiconQuery();
+			var internalLexiconResult = await Mediator.Send(internalLexiconCommand);
+			var internalLexemesByTypeLemma = internalLexiconResult.Data!.Lexemes
+                .GroupBy(e => (e.Type?.ToLower(), e.Lemma?.ToLower()))
+                .ToDictionary(
+                    g => g.Key, 
+                    g => g.Select(e => e).First());
+
+			var externalWordAnalysesCommand = new GetExternalWordAnalysesQuery(null /* currently loaded project */);
+            var externalWordAnalysesResult = await Mediator.Send(externalWordAnalysesCommand);
+            var wordsToImport = externalWordAnalysesResult.Data!.ToList();
+
+            var wordsToImportLexemeCount = wordsToImport.SelectMany(e => e.Lexemes).Count();
+            Output.WriteLine("");
+            Output.WriteLine($"Lexemes in wordsToImport: {wordsToImportLexemeCount}");
+
+			foreach (var w in wordsToImport)
+			{
+                for (int i = 0; i < w.Lexemes.Count; i++)
+                {
+                    var lex = w.Lexemes[i];
+                    if (internalLexemesByTypeLemma.TryGetValue((lex.Type?.ToLower(), lex.Lemma?.ToLower()), out var replacementLexeme))
+                    {
+                        w.Lexemes[i] = replacementLexeme;
+                    }
+                }
+			}
+
+			var lexemesInWordsToImport = wordsToImport
+				.SelectMany(e => e.Lexemes)
+				.GroupBy(e => e.LexemeId.Id)
+				.SelectMany(g => g.Select(l => l))
+				.ToList();
+			Output.WriteLine($"WordAnalyses lexemes to import: {lexemesInWordsToImport.Where(e => !e.IsInDatabase).Count()}");
+			Output.WriteLine($"WordAnalyses lexemes already imported: {lexemesInWordsToImport.Where(e => e.IsInDatabase).Count()}");
+
+            Output.WriteLine("");
+            var ct = 0;
+            foreach (var wordSample in wordsToImport.Where(e => e.Lexemes.Any(l => l.IsInDatabase)))
+            {
+				Output.WriteLine($"Word:  {wordSample.Word}");
+				foreach (var lex in wordSample.Lexemes)
+				{
+					Output.WriteLine($"\tLexeme:  {lex.Type}:{lex.Lemma} [{lex.Language}] is in database: {lex.IsInDatabase}");
+				}
+
+				if (ct++ > 5) break;
+			}
+
+			ct = 0;
+			foreach (var wordSample in wordsToImport.Where(e => e.Lexemes.Any(l => !l.IsInDatabase)))
+			{
+				Output.WriteLine($"Word:  {wordSample.Word}");
+				foreach (var lex in wordSample.Lexemes)
+				{
+					Output.WriteLine($"\tLexeme:  {lex.Type}:{lex.Lemma} [{lex.Language}] is in database: {lex.IsInDatabase}");
+				}
+				
+                if (ct++ > 5) break;
+			}
+		}
+		catch (Exception ex)
+		{
+			Output.WriteLine($"\tException:  {ex.Message}");
+		}
+	}
+	[Fact]
+	[Trait("Category", "Handlers")]
+	public async Task Lexicon_ExternalSave()
+	{
+		try
+		{
+			var lemma1 = "Lemma_1";
+			var lemma2 = "Lemma_2";
+			var lemma3 = "Lemma_3";
+			var lemma1Form1 = lemma1 + "_form1";
             var lemma1Form2 = lemma1 + "_form2";
             var lemma1Meaning1 = lemma1 + "_meaning1";
             var lemma1Meaning2 = lemma1 + "_meaning2";

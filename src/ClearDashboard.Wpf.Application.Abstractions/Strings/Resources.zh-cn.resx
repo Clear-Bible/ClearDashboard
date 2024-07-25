@@ -434,10 +434,10 @@
     <value>对齐的单词</value>
   </data>
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
-    <value>路线</value>
+    <value>对齐方式</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>对齐类型：</value>
+    <value>对齐类型： </value>
   </data>
   <data name="BulkAlignmentReview_Approve" xml:space="preserve">
     <value>批准</value>
@@ -566,7 +566,7 @@
     <value>删除项目协作</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>您有其他用户连接到该项目。该项目也将为他们删除。确定要删除该项目吗？</value>
+    <value>您有其他用户连接到该项目。  该项目也将为他们删除。确定要删除该项目吗？</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
     <value>您确定要删除该项目吗？</value>
@@ -656,7 +656,7 @@
     <value>删除对齐方式</value>
   </data>
   <data name="EnhancedView_DeleteAlignmentTemplate" xml:space="preserve">
-    <value>删除“{0}”的对齐方式吗？</value>
+    <value>删除“{0}”的对齐吗？</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignments" xml:space="preserve">
     <value>删除所有对齐方式？</value>
@@ -787,6 +787,12 @@
   <data name="GEN" xml:space="preserve">
     <value>GEN</value>
   </data>
+  <data name="GrammarTagList_Description" xml:space="preserve">
+    <value>描述</value>
+  </data>
+  <data name="GrammarTagList_Short" xml:space="preserve">
+    <value>短的</value>
+  </data>
   <data name="HAB" xml:space="preserve">
     <value>HAB</value>
   </data>
@@ -798,6 +804,18 @@
   </data>
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>进口已取消</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>导入完成</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>遇到错误（查看日志了解详细信息）</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>导入词分析</value>
   </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
@@ -892,6 +910,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>如果选中，这将更改该单词的所有未设置的出现</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>更改所有未设置的事件</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>如果选中，这将更改该单词的所有未设置的出现</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>索引</value>
   </data>
@@ -907,11 +931,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>删除此翻译</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;空意义&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>输入新翻译</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>输入新的光泽</value>
+  </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>形式：</value>
+  </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>光泽度</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>光泽表</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>语言：</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>引理</value>
@@ -928,11 +967,20 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>引理已经存在词位</value>
   </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>词典</value>
+  </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>火柴</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>含义：</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>新光泽</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>没有可用的表格</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>从这个含义中删除这个语义域</value>
@@ -942,6 +990,21 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>设置光泽度</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>翻译：</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>类型：</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>取消设置</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>用户定义的光泽度</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>已验证</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>和</value>
@@ -1027,8 +1090,20 @@
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>查找具有与目标匹配的一个或多个翻译的词素</value>
   </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>已检查</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>语料库：</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>进口</value>
+  </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>导入检查</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>语言：</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>词位或形式匹配</value>
@@ -1065,6 +1140,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>全部取消选择</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>单词：</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>名字为必填项</value>
@@ -1208,10 +1286,10 @@
     <value>光泽：</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>词类</value>
+    <value>词类   </value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>相关引理</value>
+    <value>相关引理   </value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>范围：</value>
@@ -1232,7 +1310,7 @@
     <value>感官</value>
   </data>
   <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>强代码</value>
+    <value>强代码   </value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>子域：</value>
@@ -1373,7 +1451,7 @@
     <value>添加笔迹</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>添加新笔迹</value>
+    <value>添加新的记号（Shift-Enter 换行）</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>身体</value>
@@ -1385,7 +1463,7 @@
     <value>删除这个笔记吗？</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
-    <value>由于您的 Paratext 项目权限，</value>
+    <value>由于您的 Paratext 项目权限， </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>按诗句过滤</value>
@@ -1586,7 +1664,7 @@
     <value>旧约</value>
   </data>
   <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
-    <value>创建字对齐</value>
+    <value>创建单词对齐</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
     <value>创建语料库诗句的并行化</value>
@@ -1717,8 +1795,11 @@
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>从 Paratext 获取最新信息</value>
   </data>
+  <data name="Pds_ImportWordAnlysisMenu" xml:space="preserve">
+    <value>导入词分析 </value>
+  </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
-    <value>显示有关此项目的信息</value>
+    <value>显示有关该项目的信息</value>
   </data>
   <data name="Pds_ManuscriptGreek" xml:space="preserve">
     <value>希腊语 (NT) MACULA</value>
@@ -1769,7 +1850,7 @@
     <value>研究圣经增补</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>转到 Paratext 并切换项目。当前连接到 ClearDashboard 插件的 Paratext 项目与此 ClearDashboard 项目中的语料库不同。</value>
+    <value>转到 Paratext 并切换项目。  当前连接到 ClearDashboard 插件的 Paratext 项目与此 ClearDashboard 项目中的语料库不同。</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>目标</value>
@@ -1889,13 +1970,13 @@
     <value>快速启动新项目</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>创建项目：</value>
+    <value>创建项目： </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
     <value>使用项目模板向导创建项目。</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>数据库：</value>
+    <value>数据库： </value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
     <value>您无法删除该项目，另一个应用程序仍在使用它。</value>
@@ -1931,10 +2012,10 @@
     <value>无匹配。</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>这里很孤独。请创建一个新项目。</value>
+    <value>这里很孤独。  请创建一个新项目。</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>未安装 Paratext。请安装 Paratext 并重新运行 ClearDashboard 应用程序。</value>
+    <value>未安装 Paratext。  请安装 Paratext 并重新运行 ClearDashboard 应用程序。</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>副文本未运行</value>
@@ -1958,7 +2039,7 @@
     <value>副文本项目</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>项目：</value>
+    <value>项目： </value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>我们快到了！</value>
@@ -1985,7 +2066,7 @@
     <value>单击此处启动 Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>版本：</value>
+    <value>版本： </value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>请输入您的项目名称</value>
@@ -1994,7 +2075,7 @@
     <value>创建您的新项目</value>
   </data>
   <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>给定的项目名称包含非法字符。有效字符包括“A-Z”（小写和大写）、数字“0-9”以及字符“-”和“_”。</value>
+    <value>给定的项目名称包含非法字符。  有效字符包括“A-Z”（小写和大写）、数字“0-9”以及字符“-”和“_”。</value>
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>已存在同名项目。请选择一个独特的名称。</value>
@@ -2213,7 +2294,7 @@
     <value>登记</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>提供的密钥有故障。解密时，无法找到某些 json 元素。</value>
+    <value>提供的密钥有故障。  解密时，无法找到某些 json 元素。</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>解密的许可证密钥的内容与您提供的信息不匹配。</value>
@@ -2222,7 +2303,7 @@
     <value>您的许可证密钥丢失或损坏。</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>欢迎来到 ClearDashboard！请输入您的注册信息。</value>
+    <value>欢迎来到 ClearDashboard！  请输入您的注册信息。</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>请输入您的名字</value>
@@ -2476,8 +2557,29 @@
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
   </data>
-  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+  <data name="TokenDisplay_SetGloss" xml:space="preserve">
     <value>设置光泽度</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>添加词目</value>
+  </data>
+  <data name="TokenSplitting_ClickWhere" xml:space="preserve">
+    <value>单击将单词拆分为标记的位置</value>
+  </data>
+  <data name="TokenSplitting_Gloss" xml:space="preserve">
+    <value>光泽度</value>
+  </data>
+  <data name="TokenSplitting_Grammar" xml:space="preserve">
+    <value>语法</value>
+  </data>
+  <data name="TokenSplitting_TrainingText" xml:space="preserve">
+    <value>培训文本</value>
+  </data>
+  <data name="TokenSplitting_Type" xml:space="preserve">
+    <value>类型</value>
+  </data>
+  <data name="TokenSplitting_WordGloss" xml:space="preserve">
+    <value>字光泽</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>更新</value>

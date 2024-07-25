@@ -269,8 +269,13 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
                 .ToArray();
 
             var tokensForComposite1 = verseRows[0].Tokens.Take(4).Select(tc => ModelHelper.BuildToken(tc)).ToList();
-            var composite1 = new CompositeToken(tokensForComposite1);
-            composite1.TokenId.Id = Guid.NewGuid();
+            var composite1 = new CompositeToken(tokensForComposite1)
+            {
+                TokenId =
+                {
+                    Id = Guid.NewGuid()
+                }
+            };
 
             // First this should succeed since its the first one:
             await TokenizedTextCorpus.PutCompositeToken(Mediator!, composite1, null);
@@ -286,8 +291,13 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             Assert.Empty(composite1.Tokens.Select(t => t.TokenId.Id).Except(tokenComposite1.Tokens.Select(tc => tc.Id)));
 
             var tokensForComposite2 = verseRows[0].Tokens.Skip(1).Take(4).Select(tc => ModelHelper.BuildToken(tc)).ToList();
-            var composite2 = new CompositeToken(tokensForComposite2);
-            composite2.TokenId.Id = Guid.NewGuid();
+            var composite2 = new CompositeToken(tokensForComposite2)
+            {
+                TokenId =
+                {
+                    Id = Guid.NewGuid()
+                }
+            };
 
             // Should fail since its a new composite Id and some of the same tokens in composite1:
             await Assert.ThrowsAsync<MediatorErrorEngineException>(() => TokenizedTextCorpus.PutCompositeToken(Mediator!, composite2, null));
@@ -296,8 +306,13 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             // (same compositeId as in composite1)
             var tokensForComposite3 = verseRows[0].Tokens.Skip(2).Take(3).Select(tc => ModelHelper.BuildToken(tc)).ToList();
             var otherTokensForComposite3 = verseRows[1].Tokens.Take(2).Select(tc => ModelHelper.BuildToken(tc)).ToList();
-            var composite3 = new CompositeToken(tokensForComposite3, otherTokensForComposite3);
-            composite3.TokenId.Id = composite1.TokenId.Id;
+            var composite3 = new CompositeToken(tokensForComposite3, otherTokensForComposite3)
+            {
+                TokenId =
+                {
+                    Id = composite1.TokenId.Id
+                }
+            };
 
             await TokenizedTextCorpus.PutCompositeToken(Mediator!, composite3, null);
 
@@ -314,8 +329,13 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             var tokensForComposite4 = verseRows[0].Tokens.Skip(2).Take(3).Select(tc => ModelHelper.BuildToken(tc)).ToList();
             var otherTokensForComposite4 = verseRows[1].Tokens.Take(2).Select(tc => ModelHelper.BuildToken(tc)).ToList();
             otherTokensForComposite4.AddRange(verseRowsOther[0].Tokens.Take(2).Select(tc => ModelHelper.BuildToken(tc)).ToList());
-            var composite4 = new CompositeToken(tokensForComposite4, otherTokensForComposite4);
-            composite4.TokenId.Id = composite1.TokenId.Id;
+            var composite4 = new CompositeToken(tokensForComposite4, otherTokensForComposite4)
+            {
+                TokenId =
+                {
+                    Id = composite1.TokenId.Id
+                }
+            };
 
             await Assert.ThrowsAsync<MediatorErrorEngineException>(() => TokenizedTextCorpus.PutCompositeToken(Mediator!, composite4, null));
 

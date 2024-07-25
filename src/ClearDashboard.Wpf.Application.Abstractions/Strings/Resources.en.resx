@@ -787,6 +787,12 @@
   <data name="GEN" xml:space="preserve">
     <value>GEN</value>
   </data>
+  <data name="GrammarTagList_Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="GrammarTagList_Short" xml:space="preserve">
+    <value>Short</value>
+  </data>
   <data name="HAB" xml:space="preserve">
     <value>HAB</value>
   </data>
@@ -798,6 +804,18 @@
   </data>
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>Import Cancelled</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>Import Complete</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>Error Encountered (check log for details)</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>Import Word Analyses</value>
   </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
@@ -892,6 +910,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>If checked, this will change all unset occurrences of this word</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>Change all unset occurrences</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>If checked, this will change all unset occurrences of this word</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Concordance</value>
   </data>
@@ -907,11 +931,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Delete this translation</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;empty meaning&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Enter a new translation for</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Enter a new gloss</value>
+  </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>Forms:</value>
+  </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>Gloss</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>Gloss List</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>language:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lemma</value>
@@ -928,11 +967,20 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>A lexeme for already exists for lemma</value>
   </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>Lexicon</value>
+  </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>Matches</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Meanings:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>New Gloss</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>No forms available</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Remove this semantic domain from this meaning</value>
@@ -942,6 +990,21 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Set a gloss for</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>Translations:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>type:</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>Unset</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>User Defined Gloss</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>Verified</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>And</value>
@@ -1027,8 +1090,20 @@
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Find lexemes that have one or more translation that matches target</value>
   </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>Checked</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>Corpus:</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Import Checked</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>Language:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Lexeme or form matches</value>
@@ -1065,6 +1140,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>Unselect All</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>Word:</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>First Name is required</value>
@@ -1373,7 +1451,7 @@
     <value>Add Jot</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Add a new jot </value>
+    <value>Add a new jot (shift-enter for new line)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Body</value>
@@ -1716,6 +1794,9 @@
   </data>
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Get Latest from Paratext</value>
+  </data>
+  <data name="Pds_ImportWordAnlysisMenu" xml:space="preserve">
+    <value>Import Word Analyses </value>
   </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
     <value>Show information about this project</value>
@@ -2476,8 +2557,29 @@
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
   </data>
-  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+  <data name="TokenDisplay_SetGloss" xml:space="preserve">
     <value>Set Gloss</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>Add Lexeme</value>
+  </data>
+  <data name="TokenSplitting_ClickWhere" xml:space="preserve">
+    <value>Click where to split the word into tokens</value>
+  </data>
+  <data name="TokenSplitting_Gloss" xml:space="preserve">
+    <value>Gloss</value>
+  </data>
+  <data name="TokenSplitting_Grammar" xml:space="preserve">
+    <value>Grammar</value>
+  </data>
+  <data name="TokenSplitting_TrainingText" xml:space="preserve">
+    <value>Training Text</value>
+  </data>
+  <data name="TokenSplitting_Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="TokenSplitting_WordGloss" xml:space="preserve">
+    <value>Word Gloss</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Update</value>

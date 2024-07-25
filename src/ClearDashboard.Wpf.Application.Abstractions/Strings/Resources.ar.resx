@@ -437,7 +437,7 @@
     <value>التحالفات</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>نوع المحاذاة:</value>
+    <value>نوع المحاذاة: </value>
   </data>
   <data name="BulkAlignmentReview_Approve" xml:space="preserve">
     <value>يعتمد</value>
@@ -566,7 +566,7 @@
     <value>حذف التعاون في المشروع</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>لديك مستخدمين آخرين متصلين بهذا المشروع. ستتم إزالة هذا المشروع لهم أيضًا. هل أنت متأكد أنك تريد حذف هذا المشروع؟</value>
+    <value>لديك مستخدمين آخرين متصلين بهذا المشروع.  ستتم إزالة هذا المشروع لهم أيضًا. هل أنت متأكد أنك تريد حذف هذا المشروع؟</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
     <value>هل أنت متأكد أنك تريد حذف هذا المشروع؟</value>
@@ -787,6 +787,12 @@
   <data name="GEN" xml:space="preserve">
     <value>GEN</value>
   </data>
+  <data name="GrammarTagList_Description" xml:space="preserve">
+    <value>وصف</value>
+  </data>
+  <data name="GrammarTagList_Short" xml:space="preserve">
+    <value>قصير</value>
+  </data>
   <data name="HAB" xml:space="preserve">
     <value>HAB</value>
   </data>
@@ -798,6 +804,18 @@
   </data>
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>تم إلغاء الاستيراد</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>اكتمل الاستيراد</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>حدث خطأ (راجع السجل للحصول على التفاصيل)</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>استيراد تحليلات الكلمات</value>
   </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
@@ -892,11 +910,17 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>إذا تم تحديده، فسيؤدي ذلك إلى تغيير جميع التكرارات غير المحددة لهذه الكلمة</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>تغيير كافة التكرارات غير المحددة</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>إذا تم تحديده، فسيؤدي ذلك إلى تغيير جميع التكرارات غير المحددة لهذه الكلمة</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>فهرس أبجدي</value>
   </data>
   <data name="Lexicon_DeleteLexeme" xml:space="preserve">
-    <value>احذف هذا المعجم</value>
+    <value>احذف هذا المفردات</value>
   </data>
   <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
     <value>حذف هذا المعجم؟</value>
@@ -907,11 +931,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>احذف هذه الترجمة</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;المعنى الفارغ&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>أدخل ترجمة جديدة ل</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>أدخل لمعان جديد</value>
+  </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>نماذج:</value>
+  </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>لمعان</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>قائمة اللمعان</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>لغة:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>ليما</value>
@@ -928,11 +967,20 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>معجم لـ موجود بالفعل لـ lemma</value>
   </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>معجم</value>
+  </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>اعواد الكبريت</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>المعاني:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>لمعان جديد</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>لا توجد نماذج متاحة</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>أزل هذا المجال الدلالي من هذا المعنى</value>
@@ -942,6 +990,21 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>تعيين لمعان ل</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>الترجمات:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>يكتب:</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>غير محدد</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>لمعان محدد من قبل المستخدم</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>تم التحقق</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>و</value>
@@ -1027,8 +1090,20 @@
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>ابحث عن المعاجم التي تحتوي على ترجمة واحدة أو أكثر تطابق الهدف</value>
   </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>التحقق</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>جسم:</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>يستورد</value>
+  </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>تم فحص الاستيراد</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>لغة:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>المفردات أو تطابقات النموذج</value>
@@ -1065,6 +1140,9 @@
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
     <value>إلغاء تحديد الكل</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>كلمة:</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>الإسم الأول مطلوب</value>
@@ -1208,10 +1286,10 @@
     <value>اللمعان:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>أجزاء من الكلام</value>
+    <value>أجزاء من الكلام   </value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>ليماس ذات صلة</value>
+    <value>ليماس ذات صلة   </value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>نِطَاق:</value>
@@ -1232,7 +1310,7 @@
     <value>حواس</value>
   </data>
   <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>رموز قوية</value>
+    <value>رموز قوية   </value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>المجالات الفرعية:</value>
@@ -1253,7 +1331,7 @@
     <value>MAT</value>
   </data>
   <data name="MergeDialog_CreatingDatabase" xml:space="preserve">
-    <value>جارٍ إنشاء قاعدة البيانات...</value>
+    <value>جارٍ إنشاء قاعدة بيانات...</value>
   </data>
   <data name="MergeDialog_MergeCompleteReloadingInterface" xml:space="preserve">
     <value>اكتمل الدمج...جاري إعادة تحميل الواجهة</value>
@@ -1373,7 +1451,7 @@
     <value>أضف جوت</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>أضف نقطة جديدة</value>
+    <value>إضافة نقطة جديدة (shift-enter للسطر الجديد)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>جسم</value>
@@ -1385,7 +1463,7 @@
     <value>هل تريد حذف هذه النقطة؟</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
-    <value>بسبب أذونات مشروع Paratext الخاص بك،</value>
+    <value>بسبب أذونات مشروع Paratext الخاص بك، </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>تصفية حسب الآية</value>
@@ -1717,6 +1795,9 @@
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>احصل على الأحدث من Paratext</value>
   </data>
+  <data name="Pds_ImportWordAnlysisMenu" xml:space="preserve">
+    <value>استيراد تحليلات الكلمات </value>
+  </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
     <value>عرض معلومات حول هذا المشروع</value>
   </data>
@@ -1745,7 +1826,7 @@
     <value>الموارد</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
-    <value>قم بتوسيع المحتوى إلى 100%</value>
+    <value>قم بتوسيع المحتوى إلى 100٪</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
     <value>إضافة نص إلى نافذة جديدة</value>
@@ -1769,7 +1850,7 @@
     <value>إضافات StudyBible</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>انتقل إلى Paratext وقم بتبديل المشاريع. إن مشروع Paratext المتصل حاليًا بالمكون الإضافي ClearDashboard ليس هو نفس المجموعة الموجودة في مشروع ClearDashboard هذا.</value>
+    <value>انتقل إلى Paratext وقم بتبديل المشاريع.  إن مشروع Paratext المتصل حاليًا بالمكون الإضافي ClearDashboard ليس هو نفس المجموعة الموجودة في مشروع ClearDashboard هذا.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>هدف</value>
@@ -1889,13 +1970,13 @@
     <value>بداية سريعة لمشروع جديد</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>إنشاء مشروع:</value>
+    <value>إنشاء مشروع: </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
     <value>أنشئ مشروعك باستخدام معالج قالب المشروع.</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>قاعدة البيانات:</value>
+    <value>قاعدة البيانات: </value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
     <value>لا يمكنك حذف هذا المشروع، فلا يزال هناك تطبيق آخر يستخدمه.</value>
@@ -1931,10 +2012,10 @@
     <value>لا توجد مباريات.</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>إنه وحيد هنا. الرجاء إنشاء مشروع جديد.</value>
+    <value>إنه وحيد هنا.  الرجاء إنشاء مشروع جديد.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>لم يتم تثبيت Paratext. الرجاء تثبيت Paratext وإعادة تشغيل تطبيق ClearDashboard.</value>
+    <value>لم يتم تثبيت Paratext.  الرجاء تثبيت Paratext وإعادة تشغيل تطبيق ClearDashboard.</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>Paratext لا يعمل</value>
@@ -1958,7 +2039,7 @@
     <value>مشروع Paratext</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>مشروع:</value>
+    <value>مشروع: </value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>نحن على وشك الوصول!</value>
@@ -1985,7 +2066,7 @@
     <value>انقر هنا لبدء Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>إصدار:</value>
+    <value>إصدار: </value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>الرجاء إدخال اسم لمشروعك</value>
@@ -1994,7 +2075,7 @@
     <value>أنشئ مشروعك الجديد</value>
   </data>
   <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>يحتوي اسم المشروع المحدد على أحرف غير قانونية. تتضمن الأحرف الصالحة "A-Z" (أحرف صغيرة وكبيرة)، والأرقام "0-9" والأحرف "-" و"_".</value>
+    <value>يحتوي اسم المشروع المحدد على أحرف غير قانونية.  تتضمن الأحرف الصالحة "A-Z" (أحرف صغيرة وكبيرة)، والأرقام "0-9" والأحرف "-" و"_".</value>
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>يوجد بالفعل مشروع يحمل نفس الاسم. الرجاء اختيار اسم فريد.</value>
@@ -2105,7 +2186,7 @@
     <value>هوشع</value>
   </data>
   <data name="ProperCase_Isaiah" xml:space="preserve">
-    <value>إشعياء</value>
+    <value>أشعياء</value>
   </data>
   <data name="ProperCase_James" xml:space="preserve">
     <value>جوامع</value>
@@ -2213,7 +2294,7 @@
     <value>يسجل</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>المفتاح المقدم معيب. عند فك التشفير، لا يمكن العثور على عناصر json معينة.</value>
+    <value>المفتاح المقدم معيب.  عند فك التشفير، لا يمكن العثور على عناصر json معينة.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>لا تتطابق محتويات مفتاح الترخيص الذي تم فك تشفيره مع المعلومات التي قدمتها.</value>
@@ -2222,7 +2303,7 @@
     <value>مفتاح الترخيص الخاص بك إما مفقود أو مكسور.</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>مرحبًا بك في ClearDashboard! الرجاء إدخال معلومات التسجيل الخاصة بك.</value>
+    <value>مرحبًا بك في ClearDashboard!  الرجاء إدخال معلومات التسجيل الخاصة بك.</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>يرجى ادخال الاسم الاول</value>
@@ -2476,8 +2557,29 @@
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
   </data>
-  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+  <data name="TokenDisplay_SetGloss" xml:space="preserve">
     <value>ضبط اللمعان</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>إضافة مفردات</value>
+  </data>
+  <data name="TokenSplitting_ClickWhere" xml:space="preserve">
+    <value>انقر فوق المكان الذي تريد تقسيم الكلمة فيه إلى رموز مميزة</value>
+  </data>
+  <data name="TokenSplitting_Gloss" xml:space="preserve">
+    <value>لمعان</value>
+  </data>
+  <data name="TokenSplitting_Grammar" xml:space="preserve">
+    <value>قواعد</value>
+  </data>
+  <data name="TokenSplitting_TrainingText" xml:space="preserve">
+    <value>نص التدريب</value>
+  </data>
+  <data name="TokenSplitting_Type" xml:space="preserve">
+    <value>يكتب</value>
+  </data>
+  <data name="TokenSplitting_WordGloss" xml:space="preserve">
+    <value>لمعان الكلمات</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>تحديث</value>

@@ -63,6 +63,7 @@
                     <userControls:VerseDisplay
                         x:Name="VerseDisplay"
                         Title=""
+                        GlossSet="OnGlossSet"
                         HorizontalAlignment="Stretch"
                         HorizontalSpacing="{Binding DataContext.SourceHorizontalValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
                         IsEnabled="True"
@@ -81,9 +82,10 @@
                         TranslationDoubleClicked="TranslationDoubleClicked"
                         TranslationFontFamily="{Binding ElementName=InnerListView, Path=DataContext.TranslationFontFamily}"
                         TranslationFontSize="{Binding DataContext.TranslationsFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
-                        TranslationSet="TranslationSet"
+                        TranslationSet="OnTranslationSet"
                         TranslationVerticalSpacing="{Binding DataContext.SourceVerticalValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
                         Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
+                        <!--TranslationSet="TranslationSet" -->
                         <b:Interaction.Triggers>
                             <b:EventTrigger EventName="TokenCreateAlignment">
                                 <b:CallMethodAction MethodName="TokenCreateAlignment" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
@@ -133,8 +135,8 @@
                             <b:EventTrigger EventName="FilterPins">
                                 <b:CallMethodAction MethodName="FilterPins" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
                             </b:EventTrigger>
-                            <b:EventTrigger EventName="FilterPinsTarget">
-                                <b:CallMethodAction MethodName="FilterPinsTarget" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                            <b:EventTrigger EventName="FilterPinsTranslation">
+                                <b:CallMethodAction MethodName="FilterPinsTranslation" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
                             </b:EventTrigger>
                             <b:EventTrigger EventName="FilterPinsByBiblicalTerms">
                                 <b:CallMethodAction MethodName="FilterPinsByBiblicalTerms" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
