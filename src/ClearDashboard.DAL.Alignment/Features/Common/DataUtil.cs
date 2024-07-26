@@ -5,62 +5,105 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Text;
+using ClearDashboard.DataAccessLayer.Data;
 using Models = ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Data.Extensions;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClearDashboard.DAL.Alignment.Features.Common
 {
     public static class DataUtil
     {
-        public const string NOT_NULL = "{NOT_NULL}";
-        public static void ApplyColumnsToInsertCommand(DbCommand command, Type type, string[] columns)
+        public static async Task<T> BulkWriteToDatabaseTransactional<S,T>(
+            ProjectDbContext projectDbContext, 
+            Func<DbConnection, IModel, CancellationToken, Task<S>> bulkWriteFunc,
+            Func<ProjectDbContext, S, Task<T>> postCommitReturnValueGenerator,
+            CancellationToken cancellationToken)
         {
-            command.CommandText =
-            $@"
-                INSERT INTO {type.Name} ({string.Join(", ", columns)})
-                VALUES ({string.Join(", ", columns.Select(c => "@" + c.ToDbCommandParameterName()))})
-            ";
+            //var connectionWasOpen = ProjectDbContext.Database.GetDbConnection().State == ConnectionState.Open; 
+            //if (!connectionWasOpen)
+            //{
+            var metadataModel = projectDbContext.Model;
+            await projectDbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+            //}
 
-            AddWhereClauseParameters(command, columns, Array.Empty<(string, int)>());
+            try
+            {
+                // Generally follows https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/bulk-insert
+                // mostly using database connection-level functions, commands, paramters etc.
+                using var connection = projectDbContext.Database.GetDbConnection();
+                using var transaction = await connection.BeginTransactionAsync(cancellationToken);
+
+                S bulkWriteOutput = await bulkWriteFunc(connection, metadataModel, cancellationToken);
+
+                await transaction.CommitAsync(cancellationToken);
+
+                return await postCommitReturnValueGenerator(projectDbContext, bulkWriteOutput);
+            }
+            finally
+            {
+                //if (!connectionWasOpen)
+                //{
+                await projectDbContext.Database.CloseConnectionAsync().ConfigureAwait(false);
+                //}
+            }
         }
 
-        public static void ApplyColumnsToUpdateCommand(DbCommand command, Type type, string[] columns, (string name, WhereEquality whereEquality)[] whereColumns, (string name, int count)[] whereInColumns)
+        public const string NOT_NULL = "{NOT_NULL}";
+        public static void ApplyColumnsToInsertCommand(DbCommand command, IEntityType entityType, IProperty[] columns)
         {
-            var whereStrings = BuildWhereStrings(whereColumns, whereInColumns);
+            var tableName = entityType.ToTableName();
+        
+            command.CommandText =
+            $@"
+                INSERT INTO {tableName} ({string.Join(", ", columns.Select(c => c.GetColumnName()))})
+                VALUES ({string.Join(", ", columns.Select(c => command.ToParameterName(c.Name)))})
+            ";
+
+            AddWhereClauseParameters(command, columns, Array.Empty<(IProperty, int)>());
+        }
+
+        public static void ApplyColumnsToUpdateCommand(DbCommand command, IEntityType entityType, IProperty[] columns, (IProperty PropertyInfo, WhereEquality whereEquality)[] whereColumns, (IProperty PropertyInfo, int Count)[] whereInColumns)
+        {
+            var tableName = entityType.ToTableName();
+            var whereStrings = BuildWhereStrings(command, whereColumns, whereInColumns);
 
             if (!whereStrings.Any())
             {
-                throw new Exception($"No where clause column names provided to Update '{type.ShortDisplayName()}' query");
+                throw new Exception($"No where clause column names provided to Update '{tableName}' query");
             }
 
             command.CommandText =
             $@"
-                UPDATE {type.Name}
-                SET {string.Join(", ", columns.Select(c => c + " = @" + c.ToDbCommandParameterName()))}
+                UPDATE {tableName}
+                SET {string.Join(", ", columns.Select(c => c.GetColumnName() + " = " + command.ToParameterName(c.Name)))}
                 WHERE {string.Join(" AND ", whereStrings)}
             ";
 
             AddWhereClauseParameters(
                 command, 
-                columns.Union(whereColumns.Select(e => e.name)).ToArray(), 
+                columns.Union(whereColumns.Select(e => e.PropertyInfo)).ToArray(), 
                 whereInColumns);
         }
 
-        public static void ApplyColumnsToDeleteCommand(DbCommand command, Type type, (string name, WhereEquality whereEquality)[] whereColumns, (string name, int count)[] whereInColumns)
+        public static void ApplyColumnsToDeleteCommand(DbCommand command, IEntityType entityType, (IProperty PropertyInfo, WhereEquality WhereEquality)[] whereColumns, (IProperty PropertyInfo, int Count)[] whereInColumns)
         {
-            var whereStrings = BuildWhereStrings(whereColumns, whereInColumns);
+            var tableName = entityType.ToTableName();
+            var whereStrings = BuildWhereStrings(command, whereColumns, whereInColumns);
 
             if (!whereStrings.Any())
             {
-                throw new Exception($"No where clause column names provided to Delete '{type.ShortDisplayName()}' query");
+                throw new Exception($"No where clause column names provided to Delete '{tableName}' query");
             }
 
             command.CommandText =
                 $@"
-                DELETE FROM {type.Name}
+                DELETE FROM {tableName}
                 WHERE {string.Join(" AND ", whereStrings)}
             ";
 
-            AddWhereClauseParameters(command, whereColumns.Select(e => e.name).ToArray(), whereInColumns);
+            AddWhereClauseParameters(command, whereColumns.Select(e => e.PropertyInfo).ToArray(), whereInColumns);
         }
 
         public enum WhereEquality
@@ -70,134 +113,131 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             IsNot
         }
 
-        public static string BuildSelectCommandText(Type type, string[] selectColumns, (string name, WhereEquality whereEquality)[] whereColumns, (string name, int count)[] whereInColumns, (Type JoinType, string JoinColumn, string FromColumn)[] joins, bool notIndexed)
+        public static string BuildSelectCommandText(DbCommand command, IEntityType entityType, string[] selectColumns, (IProperty PropertyInfo, WhereEquality WhereEquality)[] whereColumns, (IProperty PropertyInfo, int Count)[] whereInColumns, (Type JoinType, string JoinColumn, string FromColumn)[] joins, bool notIndexed)
         {
-            var whereStrings = BuildWhereStrings(whereColumns, whereInColumns);
+            var tableName = entityType.ToTableName();
+            var whereStrings = BuildWhereStrings(command, whereColumns, whereInColumns);
 
             var notIndexedString = notIndexed ? " NOT INDEXED " : string.Empty;
 
             var joinStringBuilder = new StringBuilder();
             foreach (var join in joins)
             {
-                joinStringBuilder.AppendLine($"JOIN {join.JoinType.Name} ON {join.JoinType.Name}.{join.JoinColumn} = {type.Name}.{join.FromColumn}");
+                joinStringBuilder.AppendLine($"JOIN {join.JoinType.Name} ON {join.JoinType.Name}.{join.JoinColumn} = {tableName}.{join.FromColumn}");
             }
 
             return
             $@"
                 SELECT {string.Join(", ", selectColumns)}
-                FROM {type.Name} {notIndexedString}
+                FROM {tableName} {notIndexedString}
                 {joinStringBuilder}
                 WHERE {string.Join(" AND ", whereStrings)}
             ";
         }
 
-        public static (string name, WhereEquality whereEquality)[] ExtractWhereColumns(Dictionary<string, object?> whereClause)
+        public static (IProperty PropertyInfo, WhereEquality WhereEquality)[] ExtractWhereColumns(IEnumerable<(IProperty PropertyInfo, object? ColumnValue)> whereClause)
         {
             return whereClause
                 .Where(e => 
-                    e.Value == null || 
-                    e.Value!.GetType() == typeof(string) || 
-                    e.Value!.GetType().GetInterface(nameof(System.Collections.IEnumerable)) == null)
+                    e.ColumnValue == null || 
+                    e.ColumnValue!.GetType() == typeof(string) || 
+                    e.ColumnValue!.GetType().GetInterface(nameof(System.Collections.IEnumerable)) == null)
                 .Select(e =>
                 {
-                    if (e.Value == null)
-                        return (e.Key, WhereEquality.Is);
-                    else if ((e.Value as string) == NOT_NULL)
-                        return (e.Key, WhereEquality.IsNot);
-                    return (e.Key, WhereEquality.Equals);
+                    if (e.ColumnValue == null)
+                        return (e.PropertyInfo, WhereEquality.Is);
+                    else if ((e.ColumnValue as string) == NOT_NULL)
+                        return (e.PropertyInfo, WhereEquality.IsNot);
+                    return (e.PropertyInfo, WhereEquality.Equals);
                 })
                 .ToArray();
         }
 
-        public static (string name, int count)[] ExtractWhereInColumns(Dictionary<string, object?> whereClause)
+        public static (IProperty PropertyInfo, int Count)[] ExtractWhereInColumns(IEnumerable<(IProperty PropertyInfo, object? ColumnValue)> whereClause)
         {
             return whereClause
-                .Where(e => e.Value != null)
-                .Where(e => e.Value!.GetType() != typeof(string))
-                .Where(e => e.Value!.GetType().GetInterface(nameof(System.Collections.IEnumerable)) != null)
-                .Select(e => (name: e.Key, count: (e.Value as IEnumerable)!.Cast<object>().Count()))
+                .Where(e => e.ColumnValue != null)
+                .Where(e => e.ColumnValue!.GetType() != typeof(string))
+                .Where(e => e.ColumnValue!.GetType().GetInterface(nameof(System.Collections.IEnumerable)) != null)
+                .Select(e => (e.PropertyInfo, count: (e.ColumnValue as IEnumerable)!.Cast<object>().Count()))
                 .ToArray();
         }
 
-        public static IEnumerable<string> BuildWhereStrings((string name, WhereEquality whereEquality)[] whereColumns, (string name, int count)[] whereInColumns)
+        public static IEnumerable<string> BuildWhereStrings(DbCommand command, (IProperty PropertyInfo, WhereEquality WhereEquality)[] whereColumns, (IProperty PropertyInfo, int Count)[] whereInColumns)
         {
             var whereStrings = new List<string>();
 
-            var whereEquals = whereColumns.Where(e => e.whereEquality == WhereEquality.Equals);
-            var whereIs = whereColumns.Where(e => e.whereEquality == WhereEquality.Is);
-            var whereIsNot = whereColumns.Where(e => e.whereEquality == WhereEquality.IsNot);
+            var whereEquals = whereColumns.Where(e => e.WhereEquality == WhereEquality.Equals);
+            var whereIs = whereColumns.Where(e => e.WhereEquality == WhereEquality.Is);
+            var whereIsNot = whereColumns.Where(e => e.WhereEquality == WhereEquality.IsNot);
 
             if (whereEquals.Any())
             {
                 // E.g.:  " AND TokenizedCorpusId = @TokenizedCorpusId"
-                whereStrings.Add($"{string.Join(" AND ", whereEquals.Select(c => c.name + " = @" + c.name.ToDbCommandParameterName()))}");
+                whereStrings.Add($"{string.Join(" AND ", whereEquals.Select(c => c.PropertyInfo.GetColumnName() + " = " + command.ToParameterName(c.PropertyInfo.Name)))}");
             }
             if (whereIs.Any())
             {
                 // E.g.:  " AND Deleted IS @Deleted"
-                whereStrings.Add($"{string.Join(" AND ", whereIs.Select(c => c.name + " IS @" + c.name.ToDbCommandParameterName()))}");
+                whereStrings.Add($"{string.Join(" AND ", whereIs.Select(c => c.PropertyInfo.GetColumnName() + " IS " + command.ToParameterName(c.PropertyInfo.Name)))}");
             }
             if (whereIsNot.Any())
             {
                 // E.g.:  " AND Deleted IS @Deleted"
-                whereStrings.Add($"{string.Join(" AND ", whereIsNot.Select(c => c.name + " IS NOT @" + c.name.ToDbCommandParameterName()))}");
+                whereStrings.Add($"{string.Join(" AND ", whereIsNot.Select(c => c.PropertyInfo.GetColumnName() + " IS NOT " + command.ToParameterName(c.PropertyInfo.Name)))}");
             }
-            if (whereInColumns.Any())
+            if (whereInColumns.Length != 0)
             {
                 // E.g.:  " AND EngineTokenId IN (@EngineTokenId0, @EngineTokenId1)"
                 whereStrings.Add(string.Join(" AND ", whereInColumns
-                    .Select(column => column.name + " IN (" + BuildWhereInParameterString(column.name, column.count) + ")")));
+                    .Select(column => column.PropertyInfo.GetColumnName() + " IN (" + BuildWhereInParameterString(command, column.PropertyInfo.Name, column.Count) + ")")));
             }
 
             return whereStrings;
         }
 
-        public static string BuildWhereInParameterString(string columnName, int count)
+        public static string BuildWhereInParameterString(DbCommand command, string columnName, int count)
         {
-            return string.Join(", ", Enumerable.Range(0, count).Select(e => $"@{columnName.ToDbCommandParameterName()}{e}"));
+            return string.Join(", ", Enumerable.Range(0, count).Select(e => command.ToParameterName(columnName, count)));
         }
 
-        public static void AddWhereClauseParameters(DbCommand command, string[] whereColumnNames, (string name, int count)[] whereInColumns)
+        public static void AddWhereClauseParameters(DbCommand command, IProperty[] whereColumns, (IProperty Property, int Count)[] whereInColumns)
         {
-            foreach (var columnName in whereColumnNames)
+            foreach (var property in whereColumns)
             {
-                var parameter = command.CreateParameter();
-                parameter.ParameterName = $"@{columnName.ToDbCommandParameterName()}";
-                command.Parameters.Add(parameter);
+                command.CreateAddParameter(property);
             }
 
-            foreach (var (columnName, columnCount) in whereInColumns)
+            foreach (var (property, columnCount) in whereInColumns)
             {
                 foreach (var nameIndex in Enumerable.Range(0, columnCount))
                 {
-                    var parameter = command.CreateParameter();
-                    parameter.ParameterName = $"@{columnName.ToDbCommandParameterName()}{nameIndex}";
-                    command.Parameters.Add(parameter);
+                    command.CreateAddParameter(property, nameIndex);
                 }
             }
         }
 
-        public static void AddWhereClauseParameterValues(DbCommand command, Dictionary<string, object?> whereClause)
+        public static void AddWhereClauseParameterValues(DbCommand command, IEnumerable<(IProperty PropertyInfo, object? ParameterValue)> whereClause)
         {
-            foreach (var kvp in whereClause)
+            foreach (var item in whereClause)
             {
-                if (kvp.Value is not null && 
-                    kvp.Value!.GetType() != typeof(string) && 
-                    kvp.Value!.GetType().GetInterface(nameof(System.Collections.IEnumerable)) != null)
+                if (item.ParameterValue is not null && 
+                    item.ParameterValue!.GetType() != typeof(string) && 
+                    item.ParameterValue!.GetType().GetInterface(nameof(System.Collections.IEnumerable)) != null)
                 {
-                    var valueEnumerable = (kvp.Value as IEnumerable)!.Cast<object>();
+                    var valueEnumerable = (item.ParameterValue as IEnumerable)!.Cast<object>();
                     foreach (var column in valueEnumerable.Select((value, nameIndex) => new { value, nameIndex }))
                     {
-                        command.Parameters[$"@{kvp.Key.ToDbCommandParameterName()}{column.nameIndex}"].Value = column.value;
+                        command.Parameters[command.ToParameterName(item.PropertyInfo.Name, column.nameIndex)].Value = column.value;
                     }
                 }
-                else if (kvp.Value is null || (kvp.Value as string) == NOT_NULL)
+                else if (item.ParameterValue is null || (item.ParameterValue as string) == NOT_NULL)
                 {
-                    command.Parameters[$"@{kvp.Key.ToDbCommandParameterName()}"].Value = DBNull.Value;
+                    command.Parameters[command.ToParameterName(item.PropertyInfo.Name)].Value = DBNull.Value;
                 }
                 else
                 {
-                    command.Parameters[$"@{kvp.Key.ToDbCommandParameterName()}"].Value = kvp.Value;
+                    command.Parameters[command.ToParameterName(item.PropertyInfo.Name)].Value = item.ParameterValue;
                 }
             }
         }
@@ -230,7 +270,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             return results;
         }
 
-        public static async Task<IEnumerable<Dictionary<string, object?>>> SelectEntityValuesAsync(DbConnection? connection, Type tableType, IEnumerable<string> selectColumns, Dictionary<string, object?> whereClause, IEnumerable<(Type JoinType, string JoinColumn, string FromColumn)> joins, bool useNotIndexedInFromClause, CancellationToken cancellationToken)
+        public static async Task<IEnumerable<Dictionary<string, object?>>> SelectEntityValuesAsync(DbConnection? connection, IEntityType entityType, IEnumerable<string> selectColumns, IEnumerable<(IProperty PropertyInfo, object? ParameterValue)> whereClause, IEnumerable<(Type JoinType, string JoinColumn, string FromColumn)> joins, bool useNotIndexedInFromClause, CancellationToken cancellationToken)
         {
             if (connection is null) throw new Exception($"Database connnection is null - MergeStartAsync must be called prior to calling this method");
 
@@ -241,14 +281,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 
             command.CommandType = CommandType.Text;
             command.CommandText = BuildSelectCommandText(
-                tableType,
+                command,
+                entityType,
                 selectColumns.ToArray(),
                 whereColumns,
                 whereInColumns,
                 joins.ToArray(),
                 useNotIndexedInFromClause);
 
-            AddWhereClauseParameters(command, whereColumns.Select(e => e.name).ToArray(), whereInColumns);
+            AddWhereClauseParameters(command, whereColumns.Select(e => e.PropertyInfo).ToArray(), whereInColumns);
 
             try
             {
@@ -256,7 +297,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             }
             catch (Exception ex)
             {
-                throw new Exception($"Preparing command to get data from table type '{tableType}' failed with the following error: {ex.Message}", ex);
+                throw new Exception($"Preparing command to select data for entity type '{entityType.DisplayName()}' failed with the following error: {ex.Message}", ex);
             }
 
             AddWhereClauseParameterValues(command, whereClause);
@@ -267,29 +308,30 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             return results;
         }
 
-        public static async Task DeleteIdentifiableEntityAsync(DbConnection dbConnection, Type tableType, IEnumerable<Guid> ids, CancellationToken cancellationToken)
+        public static async Task DeleteIdentifiableEntityAsync(DbConnection dbConnection, IEntityType entityType, IEnumerable<Guid> ids, CancellationToken cancellationToken)
         {
-            if (!tableType.IsAssignableTo(typeof(Models.IdentifiableEntity)))
+            if (!entityType.ClrType.IsAssignableTo(typeof(Models.IdentifiableEntity)))
             {
-                throw new Exception($"Table/entity type '{tableType.Name}' is not assignable to '{nameof(Models.IdentifiableEntity)}'");
+                throw new Exception($"Table/entity type '{entityType.DisplayName()}' is not assignable to '{nameof(Models.IdentifiableEntity)}'");
             }
 
             if (!ids.Any())
             {
-                throw new Exception($"Call to delete from table/entity type '{tableType.Name}' contains no ids");
+                throw new Exception($"Call to delete from table/entity type '{entityType.DisplayName()}' contains no ids");
             }
 
-            var whereClause = new Dictionary<string, object?>() {
-                { nameof(Models.IdentifiableEntity.Id), ids } 
+            var idPropertyInfo = entityType.ToProperty(nameof(Models.IdentifiableEntity.Id));
+            var whereClause = new List<(IProperty, object?)>() {
+                { (idPropertyInfo, ids) } 
             };
 
             await using var command = dbConnection.CreateCommand();
 
             ApplyColumnsToDeleteCommand(
                 command, 
-                tableType, 
-                Array.Empty<(string, WhereEquality)>(), 
-                new (string name, int count)[] { (whereClause.Keys.First(), ids.Count()) });
+                entityType, 
+                Array.Empty<(IProperty, WhereEquality)>(), 
+                new (IProperty PropertyInfo, int Count)[] { (idPropertyInfo, ids.Count()) });
 
             try
             {
@@ -297,7 +339,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             }
             catch (Exception ex)
             {
-                throw new Exception($"Preparing command to get data from table type '{tableType}' failed with the following error: {ex.Message}", ex);
+                throw new Exception($"Preparing command to delete data for entity type '{entityType.DisplayName()}' failed with the following error: {ex.Message}", ex);
             }
 
             AddWhereClauseParameterValues(command, whereClause);
@@ -305,18 +347,22 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public static DbCommand CreateSoftDeleteByIdUpdateCommand(DbConnection connection, Type type)
+        public static DbCommand CreateSoftDeleteByIdUpdateCommand(DbConnection connection, IEntityType entityType)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { nameof(Models.Alignment.Deleted) };
-            var whereColumns = new (string, WhereEquality)[] { (nameof(Models.IdentifiableEntity.Id), WhereEquality.Equals) };
+
+            var deletedPropertyInfo = entityType.ToProperty(nameof(Models.Alignment.Deleted));
+            var idPropertyInfo = entityType.ToProperty(nameof(Models.IdentifiableEntity.Id));
+
+            var columns = new IProperty[] { deletedPropertyInfo };
+            var whereColumns = new (IProperty, WhereEquality)[] { (idPropertyInfo, WhereEquality.Equals) };
 
             DataUtil.ApplyColumnsToUpdateCommand(
                 command, 
-                type, 
+                entityType, 
                 columns, 
                 whereColumns,
-                Array.Empty<(string, int)>());
+                Array.Empty<(IProperty, int)>());
 
             command.Prepare();
 
@@ -327,8 +373,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
         {
             var converter = new DateTimeOffsetToBinaryConverter();
 
-            command.Parameters[$"@{nameof(Models.Alignment.Deleted)}"].Value = converter.ConvertToProvider(deleted);
-            command.Parameters[$"@{nameof(Models.IdentifiableEntity.Id)}"].Value = id;
+            command.Parameters[command.ToParameterName(nameof(Models.Alignment.Deleted))].Value = converter.ConvertToProvider(deleted);
+            command.Parameters[command.ToParameterName(nameof(Models.IdentifiableEntity.Id))].Value = id;
 
             _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }

@@ -1,7 +1,5 @@
-﻿using ClearBible.Engine.Corpora;
-using ClearDashboard.DAL.Alignment.Features.Common;
+﻿using ClearDashboard.DAL.Alignment.Features.Common;
 using ClearDashboard.DAL.Alignment.Features.Events;
-using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
@@ -9,18 +7,10 @@ using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using SIL.Machine.Translation;
-using System.Data.Common;
-using System.Threading.Tasks;
-using SIL.Linq;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
-using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
-using SIL.Machine.SequenceAlignment;
-using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
-using SIL.Machine.FiniteState;
 
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
@@ -62,6 +52,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 await AlignmentUtil.DeleteMachineAlignmentsByAlignmentSetIdAsync(
                     request.AlignmentSetToRedo.Id,
                     connection,
+                    ProjectDbContext.Model,
                     cancellationToken);
 
                 var redoneAlignmentsModel = redoneAlignments
@@ -74,7 +65,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         AlignmentOriginatedFrom = Models.AlignmentOriginatedFrom.FromAlignmentModel
                     }).ToList();
 
-                await using var redoneAlignmentsInsertCommand = AlignmentUtil.CreateAlignmentInsertCommand(connection);
+                await using var redoneAlignmentsInsertCommand = AlignmentUtil.CreateAlignmentInsertCommand(connection, ProjectDbContext.Model);
                 await AlignmentUtil.InsertAlignmentsAsync(
                     redoneAlignmentsModel,
                     request.AlignmentSetToRedo.Id,

@@ -4,7 +4,9 @@ using ClearDashboard.Collaboration.Exceptions;
 using ClearDashboard.Collaboration.Model;
 using ClearDashboard.DAL.Alignment.Features.Common;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
 using System.Data;
@@ -151,21 +153,24 @@ DELETE FROM TokenComponent WHERE Id IN
 
         await _mergeContext.MergeBehavior.RunDbConnectionQueryAsync(
             $"Find token ids, token composite ids from token locations",
-            async (DbConnection dbConnection, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
+            async (DbConnection dbConnection, IModel metadataModel, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
             {
                 await using var command = dbConnection.CreateCommand();
                 command.CommandType = CommandType.Text;
 
-                var whereClause = new Dictionary<string, object?>
-                {
-                    { nameof(Models.TokenComposite.ParallelCorpusId), parallelCorpusId },
-                    { nameof(Models.TokenComposite.Deleted), null },
-                    { nameof(Models.Token.TokenizedCorpusId), tokenizedCorpusId },
-                    { nameof(Models.Token.EngineTokenId), tokenLocations },
-                    { TokenHandler.DISCRIMINATOR_COLUMN_NAME, TokenHandler.DISCRIMINATOR_COLUMN_VALUE }
+                var entityType = metadataModel.ToEntityType(typeof(Models.TokenComposite));
+
+				var whereClause = new List<(IProperty PropertyInfo, object? ParameterValue)>
+				{
+                    { (entityType.ToProperty(nameof(Models.TokenComposite.ParallelCorpusId)), parallelCorpusId) },
+                    { (entityType.ToProperty(nameof(Models.TokenComposite.Deleted)), null) },
+                    { (entityType.ToProperty(nameof(Models.TokenComposite.TokenizedCorpusId)), tokenizedCorpusId) },
+                    { (entityType.ToProperty(nameof(Models.TokenComposite.EngineTokenId)), tokenLocations) },
+                    { (entityType.ToProperty(TokenHandler.DISCRIMINATOR_COLUMN_NAME), TokenHandler.DISCRIMINATOR_COLUMN_VALUE) }
                 };
 
                 var whereEngineTokenIds = DataUtil.BuildWhereInParameterString(
+                    command,
                     nameof(Models.Token.EngineTokenId),
                     tokenLocations.Count());
 
@@ -203,13 +208,13 @@ DELETE FROM TokenComponent WHERE Id IN
 
                 DataUtil.AddWhereClauseParameters(
                     command,
-                    new string[] {
-                        nameof(Models.TokenComposite.ParallelCorpusId),
-                        nameof(Models.TokenComposite.Deleted),
-                        nameof(Models.Token.TokenizedCorpusId),
-                        TokenHandler.DISCRIMINATOR_COLUMN_NAME
+                    new IProperty[] {
+						entityType.ToProperty(nameof(Models.TokenComposite.ParallelCorpusId)),
+						entityType.ToProperty(nameof(Models.TokenComposite.Deleted)),
+						entityType.ToProperty(nameof(Models.TokenComposite.TokenizedCorpusId)),
+						entityType.ToProperty(TokenHandler.DISCRIMINATOR_COLUMN_NAME)
                     },
-                    new (string name, int count)[] { (nameof(Models.Token.EngineTokenId), tokenLocations.Count()) });
+                    new (IProperty propertyInfo, int count)[] { (entityType.ToProperty(nameof(Models.TokenComposite.EngineTokenId)), tokenLocations.Count()) });
 
                 command.Prepare();
 
@@ -268,9 +273,9 @@ DELETE FROM TokenComponent WHERE Id IN
         {
             await _mergeContext.MergeBehavior.RunDbConnectionQueryAsync(
                 $"Delete any existing composites that reference TokenLocations",
-                async (DbConnection dbConnection, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
+                async (DbConnection dbConnection, IModel metadataModel, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
                 {
-                    await DeleteComposites(dbConnection, existingTokenCompositeIds, cancellationToken);
+                    await DeleteComposites(dbConnection, metadataModel, existingTokenCompositeIds, cancellationToken);
                 },
                 cancellationToken
             );
@@ -354,7 +359,7 @@ DELETE FROM TokenComponent WHERE Id IN
 
         await _mergeContext.MergeBehavior.RunDbConnectionQueryAsync(
             $"Applying TokenComposite 'TokenLocations' property ListMembershipDifference (OnlyIn1: {string.Join(", ", tokenLocationsOnlyIn1)}, OnlyIn2: {string.Join(", ", tokenLocationsOnlyIn2)})",
-            async (DbConnection dbConnection, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
+            async (DbConnection dbConnection, IModel metadataModel, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
             {
                 var tcaIdsToRemove = new List<Guid>();
                 var tcIdsToRemove = new List<Guid>();
@@ -378,13 +383,14 @@ DELETE FROM TokenComponent WHERE Id IN
                     }
                 }
 
+                var entityType = metadataModel.ToEntityType(typeof(Models.TokenCompositeTokenAssociation));
                 foreach (var tcaId in tcaIdsToRemove)
                 {
-                    await DataUtil.DeleteIdentifiableEntityAsync(dbConnection, typeof(Models.TokenCompositeTokenAssociation), new Guid[] { tcaId }, cancellationToken);
+                    await DataUtil.DeleteIdentifiableEntityAsync(dbConnection, entityType, new Guid[] { tcaId }, cancellationToken);
                 }
                 foreach (var tcId in tcIdsToRemove)
                 {
-                    await DataUtil.DeleteIdentifiableEntityAsync(dbConnection, typeof(Models.TokenCompositeTokenAssociation), new Guid[] { tcId }, cancellationToken);
+                    await DataUtil.DeleteIdentifiableEntityAsync(dbConnection, entityType, new Guid[] { tcId }, cancellationToken);
                 }
 
                 if (tcaIdsToAdd.Any())

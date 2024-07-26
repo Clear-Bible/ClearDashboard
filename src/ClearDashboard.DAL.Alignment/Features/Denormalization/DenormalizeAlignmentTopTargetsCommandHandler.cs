@@ -3,6 +3,7 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Data.Extensions;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ using ClearDashboard.DataAccessLayer.Threading;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Translation;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ClearDashboard.DAL.Alignment.Features.Denormalization
 {
@@ -367,7 +369,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
                         cancellationToken);
                 }
 
-                using var insertCommand = CreateAlignmentTopTargetTrainingTextInsertCommand(connection);
+                using var insertCommand = CreateAlignmentTopTargetTrainingTextInsertCommand(connection, ProjectDbContext.Model);
 
                 var completed = 0;
                 foreach (var a in sourceTokenIdToTopTargetTrainingTexts)
@@ -414,12 +416,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
             }
         }
 
-        private static DbCommand CreateAlignmentTopTargetTrainingTextInsertCommand(DbConnection connection)
+        private static DbCommand CreateAlignmentTopTargetTrainingTextInsertCommand(DbConnection connection, IModel metadataModel)
         {
             var command = connection.CreateCommand();
             var columns = new string[] { "Id", "AlignmentSetId", "SourceTokenComponentId", "SourceTrainingText", "TopTargetTrainingText" };
 
-            ApplyColumnsToCommand(command, typeof(Models.AlignmentTopTargetTrainingText), columns);
+            ApplyColumnsToCommand(command, metadataModel.ToEntityType(typeof(Models.AlignmentTopTargetTrainingText)), columns);
 
             return command;
         }
@@ -439,11 +441,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
             return id;
         }
 
-        private static void ApplyColumnsToCommand(DbCommand command, Type type, string[] columns)
+        private static void ApplyColumnsToCommand(DbCommand command, IEntityType entityType, string[] columns)
         {
+            var tableName = entityType.ToTableName();
+
             command.CommandText =
             $@"
-                INSERT INTO {type.Name} ({string.Join(", ", columns)})
+                INSERT INTO {tableName} ({string.Join(", ", columns)})
                 VALUES ({string.Join(", ", columns.Select(c => "@" + c))})
             ";
 

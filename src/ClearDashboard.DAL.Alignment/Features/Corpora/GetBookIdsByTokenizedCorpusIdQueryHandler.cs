@@ -79,7 +79,8 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
             bookAbbreviations.Add(bookAbbreviation);
         }
 
-        ScrVers versification = new ScrVers((ScrVersType)tokenizedCorpus.ScrVersType);
+        ScrVersType type = (ScrVersType)tokenizedCorpus.ScrVersType;
+        ScrVers versification = new (type.ToString());
         if (!string.IsNullOrEmpty(tokenizedCorpus.CustomVersData))
         {
             using (var reader = new StringReader(tokenizedCorpus.CustomVersData))

@@ -9,7 +9,9 @@ using ClearDashboard.Collaboration.Exceptions;
 using ClearDashboard.Collaboration.Model;
 using ClearDashboard.DAL.Alignment.Features.Common;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Data.Extensions;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
@@ -18,7 +20,7 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 namespace ClearDashboard.Collaboration.Merge;
 
 public delegate Task ProjectDbContextMergeQueryAsync(ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken = default);
-public delegate Task DbConnectionMergeQueryAsync(DbConnection dbConnnection, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken = default);
+public delegate Task DbConnectionMergeQueryAsync(DbConnection dbConnnection, IModel metadataModel, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken = default);
 public delegate Task<object?> EntityValueResolverAsync(IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, DbConnection dbConnection, MergeCache cache, ILogger logger);
 
 public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
@@ -92,24 +94,22 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
 
     public abstract Task<object?> RunEntityValueResolverAsync(IModelSnapshot modelSnapshot, string propertyName, EntityValueResolverAsync entityValueResolver);
 
-    protected DbCommand CreateModelSnapshotInsertCommandNoParameters(DbConnection connection, IModelSnapshot modelSnapshot)
+    protected DbCommand CreateModelSnapshotInsertCommandNoParameters(DbConnection connection, IModel metadataModel, IModelSnapshot modelSnapshot)
     {
-        var entityProperties = modelSnapshot.EntityType.GetMappedPrimitiveProperties().ToDictionary(p => p.Name, p => p);
+        var entityType = metadataModel.ToEntityType(modelSnapshot.EntityType);
+		var entityProperties = modelSnapshot.EntityType.GetMappedPrimitiveProperties().ToDictionary(p => p.Name, p => p);
 
         var columns = entityProperties.Values
-            .Select(p => p.Name)
+            .Select(p => entityType.ToProperty(p.Name))
             .ToList();
-
-        var tableType = modelSnapshot.EntityType;
 
         if (_discriminatorMappings.TryGetValue(modelSnapshot.EntityType, out var mapping))
         {
-            tableType = mapping.TableEntityType;
-            columns.Add(mapping.DiscriminatorColumnName);
+            columns.Add(entityType.ToProperty(mapping.DiscriminatorColumnName));
         }
 
         var command = connection.CreateCommand();
-        DataUtil.ApplyColumnsToInsertCommand(command, tableType, columns.ToArray());
+        DataUtil.ApplyColumnsToInsertCommand(command, entityType, columns.ToArray());
         command.Prepare();
 
         foreach (DbParameter p in command.Parameters)
@@ -227,15 +227,15 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
         return resolvedValues;
     }
 
-    protected async Task<DbCommand> CreateModelSnapshotUpdateCommand(DbConnection connection, IModelDifference modelDifference, IModelSnapshot modelSnapshot, Dictionary<string, object?> resolvedWhereClause)
+    protected async Task<DbCommand> CreateModelSnapshotUpdateCommand(DbConnection connection, IModel metadataModel, IModelDifference modelDifference, IModelSnapshot modelSnapshot, Dictionary<string, object?> resolvedWhereClause)
     {
-        var entityType = modelSnapshot.EntityType;
+		var entityType = metadataModel.ToEntityType(modelSnapshot.EntityType);
 
-        // Note that if there are any matching _propertyValueConverter mappings,
-        // we output the mapped "EntityPropertyName" into columns:
-        var columns = modelDifference.PropertyDifferences
+		// Note that if there are any matching _propertyValueConverter mappings,
+		// we output the mapped "EntityPropertyName" into columns:
+		var columns = modelDifference.PropertyDifferences
             .SelectMany(pd =>
-                _propertyNameMap.TryGetValue((entityType, pd.PropertyName), out var entityPropertyNames)
+                _propertyNameMap.TryGetValue((modelSnapshot.EntityType, pd.PropertyName), out var entityPropertyNames)
                     ? entityPropertyNames
                     : new[] { pd.PropertyName }
                 )
@@ -244,17 +244,20 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
 
         var command = connection.CreateCommand();
 
-        var tableType = entityType;
-        if (_discriminatorMappings.TryGetValue(entityType, out var mapping))
+        if (_discriminatorMappings.TryGetValue(modelSnapshot.EntityType, out var mapping))
         {
-            tableType = mapping.TableEntityType;
             resolvedWhereClause[mapping.DiscriminatorColumnName] = mapping.DiscriminatorColumnValue;
         }
 
-        var whereColumns = DataUtil.ExtractWhereColumns(resolvedWhereClause);
-        var whereInColumns = DataUtil.ExtractWhereInColumns(resolvedWhereClause);
+        var propertyColumns = columns.Select(e => entityType.ToProperty(e)).ToArray();
+		var propertyWhereClause = resolvedWhereClause
+	        .Select(e => (entityType.ToProperty(e.Key), e.Value))
+	        .ToList();
 
-        DataUtil.ApplyColumnsToUpdateCommand(command, tableType, columns, whereColumns, whereInColumns);
+		var whereColumns = DataUtil.ExtractWhereColumns(propertyWhereClause);
+        var whereInColumns = DataUtil.ExtractWhereInColumns(propertyWhereClause);
+
+        DataUtil.ApplyColumnsToUpdateCommand(command, entityType, propertyColumns, whereColumns, whereInColumns);
 
         try
         {
@@ -265,7 +268,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
             throw new PropertyResolutionException($"Entity type '{entityType}' had following error when trying to prepare DbCommand: {ex.Message}");
         }
 
-        DataUtil.AddWhereClauseParameterValues(command, resolvedWhereClause);
+        DataUtil.AddWhereClauseParameterValues(command, propertyWhereClause);
 
         await ApplyPropertyDifferencesToCommand(command, modelDifference, modelSnapshot);
 
@@ -345,21 +348,24 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
 		}
 	}
 
-	protected DbCommand CreateModelSnapshotDeleteCommand(DbConnection connection, Type entityType, Dictionary<string, object?> resolvedWhereClause)
+	protected DbCommand CreateModelSnapshotDeleteCommand(DbConnection connection, IModel metadataModel, Type entityType, Dictionary<string, object?> resolvedWhereClause)
     {
         var command = connection.CreateCommand();
+        var iEntityType = metadataModel.ToEntityType(entityType);
 
-        var tableType = entityType;
         if (_discriminatorMappings.TryGetValue(entityType, out var mapping))
         {
-            tableType = mapping.TableEntityType;
             resolvedWhereClause[mapping.DiscriminatorColumnName] = mapping.DiscriminatorColumnValue;
         }
 
-        var whereColumns = DataUtil.ExtractWhereColumns(resolvedWhereClause);
-        var whereInColumns = DataUtil.ExtractWhereInColumns(resolvedWhereClause);
+        var whereClause = resolvedWhereClause
+            .Select(e => (iEntityType.ToProperty(e.Key), e.Value))
+            .ToList();
 
-        DataUtil.ApplyColumnsToDeleteCommand(command, tableType, whereColumns, whereInColumns);
+        var whereColumns = DataUtil.ExtractWhereColumns(whereClause);
+        var whereInColumns = DataUtil.ExtractWhereInColumns(whereClause);
+
+        DataUtil.ApplyColumnsToDeleteCommand(command, iEntityType, whereColumns, whereInColumns);
 
         try
         {
@@ -370,7 +376,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
             throw new PropertyResolutionException($"Entity type '{entityType}' had following error when trying to prepare DbCommand: {ex.Message}");
         }
 
-        DataUtil.AddWhereClauseParameterValues(command, resolvedWhereClause);
+        DataUtil.AddWhereClauseParameterValues(command, whereClause);
 
         return command;
     }

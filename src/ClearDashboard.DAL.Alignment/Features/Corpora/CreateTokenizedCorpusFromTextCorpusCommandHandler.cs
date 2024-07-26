@@ -24,13 +24,16 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         TokenizedTextCorpus>
     {
         private readonly IComponentContext _context;
+        private readonly ITokenizedCorpusDataCreator _tokenizedCorpusDataCreator;
 
         public CreateTokenizedCorpusFromTextCorpusCommandHandler(IComponentContext context,
             ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider,
-            ILogger<CreateTokenizedCorpusFromTextCorpusCommandHandler> logger)
+            ILogger<CreateTokenizedCorpusFromTextCorpusCommandHandler> logger,
+            ITokenizedCorpusDataCreator tokenizedCorpusDataCreator)
             : base(projectNameDbContextFactory, projectProvider, logger)
         {
 			_context = context;
+            _tokenizedCorpusDataCreator = tokenizedCorpusDataCreator;
         }
 
         protected override async Task<RequestResult<TokenizedTextCorpus>> SaveDataAsync(
@@ -72,6 +75,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var tokenizedCorpus = new Models.TokenizedCorpus
             {
                 Corpus = corpus,
+                CorpusId = corpus.Id,
                 DisplayName = request.DisplayName,
                 TokenizationFunction = request.TokenizationFunction
             };
@@ -79,6 +83,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             if (TokenizedTextCorpus.FixedTokenizedCorpusIdsByCorpusType.TryGetValue(corpus.CorpusType, out Guid tokenizedCorpusId))
             {
                 tokenizedCorpus.Id = tokenizedCorpusId;
+            }
+            else
+            {
+                tokenizedCorpus.Id = Guid.NewGuid();
             }
 
             tokenizedCorpus.LastTokenized = tokenizedCorpus.Created;
@@ -97,85 +105,38 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 tokenizedCorpus.ScrVersType = (int)request.Versification.Type;
             }
 
-            var (tokenizedTextCorpus, tokenCount) = await CreateTokenizedTextCorpus(
-                tokenizedCorpus,
-                request.CorpusId,
-                request.TextCorpus,
-                request.Versification,
-                cancellationToken);
-
+            var tokenizedTextCorpus = await DataUtil.BulkWriteToDatabaseTransactional<(int, int), TokenizedTextCorpus>(
+                ProjectDbContext,
+                async (connection, metadataModel, cancellationToken) => await _tokenizedCorpusDataCreator.BulkWriteTokenizedCorpusToDatabaseAsync(
+                    connection, 
+                    metadataModel, 
+                    tokenizedCorpus, 
+                    request.TextCorpus, 
+                    cancellationToken),
+                async (projectDbContext, bulkWriteCounts) => {
 #if DEBUG
-            proc.Refresh();
-            Logger.LogInformation($"Private memory usage (AFTER BULK INSERT): {proc.PrivateMemorySize64}");
+                    proc.Refresh();
+                    Logger.LogInformation($"Private memory usage (AFTER BULK INSERT): {proc.PrivateMemorySize64}");
 
-            sw.Stop();
-            Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end) [token count: {tokenCount}]");
+                    Logger.LogInformation($"Elapsed={sw.Elapsed} - tokenized corpus verse rows {bulkWriteCounts.Item1} and tokens inserted: {bulkWriteCounts.Item2}]");
 #endif
+                    var tokenizedCorpusDb = ModelHelper.AddIdIncludesTokenizedCorpaQuery(ProjectDbContext!)
+                        .First(tc => tc.Id == tokenizedCorpus.Id);
+
+                    var tokenizedTextCorpus = new TokenizedTextCorpus(
+                        ModelHelper.BuildTokenizedTextCorpusId(tokenizedCorpusDb),
+                        _context,
+                        request.TextCorpus.Texts.Select(t => t.Id).ToList(),
+                        request.Versification,
+                        false,
+                        false);
+
+                    return await Task.FromResult(tokenizedTextCorpus);
+                },
+                cancellationToken
+            );
+
             return new RequestResult<TokenizedTextCorpus>(tokenizedTextCorpus);
-        }
-
-        private async Task<(TokenizedTextCorpus, int)> CreateTokenizedTextCorpus(Models.TokenizedCorpus tokenizedCorpus, CorpusId corpusId, ITextCorpus textCorpus, ScrVers versification, CancellationToken cancellationToken)
-        {
-            var bookIds = textCorpus.Texts.Select(t => t.Id).ToList();
-            var tokenCount = 0;
-
-            //var connectionWasOpen = ProjectDbContext.Database.GetDbConnection().State == ConnectionState.Open; 
-            //if (!connectionWasOpen)
-            //{
-            await ProjectDbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
-            //}
-
-            try
-            {
-                // Generally follows https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/bulk-insert
-                // mostly using database connection-level functions, commands, paramters etc.
-                using var connection = ProjectDbContext.Database.GetDbConnection();
-                using var transaction = await connection.BeginTransactionAsync(cancellationToken);
-
-                using var tokenizedCorpusInsertCommand = TokenizedCorpusDataBuilder.CreateTokenizedCorpusInsertCommand(connection);
-                using var verseRowInsertCommand = TokenizedCorpusDataBuilder.CreateVerseRowInsertCommand(connection);
-                using var tokenComponentInsertCommand = TokenizedCorpusDataBuilder.CreateTokenComponentInsertCommand(connection);
-                using var tokenCompositeTokenAssociationInsertCommand = TokenizedCorpusDataBuilder.CreateTokenCompositeTokenAssociationInsertCommand(connection);
-
-                await TokenizedCorpusDataBuilder.InsertTokenizedCorpusAsync(tokenizedCorpus, tokenizedCorpusInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
-                var tokenizedCorpusId = (Guid)tokenizedCorpusInsertCommand.Parameters["@Id"].Value!;
-
-                foreach (var bookId in bookIds)
-                {
-                    var tokensTextRows = TokenizedCorpusDataBuilder.ExtractValidateBook(textCorpus, bookId, corpusId.Name);
-                    var (verseRows, btTokenCount) = TokenizedCorpusDataBuilder.BuildVerseRowModel(tokensTextRows, tokenizedCorpusId);
-
-                    foreach (var verseRow in verseRows)
-                    {
-                        cancellationToken.ThrowIfCancellationRequested();
-
-                        await TokenizedCorpusDataBuilder.InsertVerseRowAsync(verseRow, verseRowInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
-                        await TokenizedCorpusDataBuilder.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, cancellationToken);
-                    }
-                }
-
-                await transaction.CommitAsync(cancellationToken);
-
-                var tokenizedCorpusDb = ModelHelper.AddIdIncludesTokenizedCorpaQuery(ProjectDbContext!)
-                    .First(tc => tc.Id == tokenizedCorpusId);
-                var tokenizedTextCorpus = new TokenizedTextCorpus(
-                    ModelHelper.BuildTokenizedTextCorpusId(tokenizedCorpusDb),
-                    _context,
-                    bookIds,
-                    versification,
-                    false,
-                    false);
-
-//               var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedTextCorpusId(tokenizedCorpusId));
-                return (tokenizedTextCorpus, tokenCount);
-            }
-            finally
-            {
-                //if (!connectionWasOpen)
-                //{
-                await ProjectDbContext.Database.CloseConnectionAsync().ConfigureAwait(false);
-                //}
-            }
         }
     }
 }

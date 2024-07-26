@@ -5,7 +5,9 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
+using System.Xml.Serialization;
 // ReSharper disable InconsistentNaming
 
 namespace ClearDashboard.DataAccessLayer.Data
@@ -27,8 +29,6 @@ namespace ClearDashboard.DataAccessLayer.Data
             UserProvider = userProvider;
             DatabaseName = databaseName;
             OptionsBuilder = optionsBuilder;
-
-
         }
         internal ProjectDbContext(string databaseName, DbContextOptionsBuilder<ProjectDbContext> optionsBuilder)
             : base(optionsBuilder.Options)
@@ -36,8 +36,11 @@ namespace ClearDashboard.DataAccessLayer.Data
             // This constructor is only for initial migration / design time usage
             DatabaseName = databaseName;
             OptionsBuilder = optionsBuilder;
+        }
+        protected ProjectDbContext(DbContextOptions options)
+            : base(options)
+        {
 
-        
         }
 
         public virtual DbSet<Adornment> Adornments => Set<Adornment>();
@@ -95,6 +98,8 @@ namespace ClearDashboard.DataAccessLayer.Data
         {
             try
             {
+                var whichOne = this.GetType().Name;
+
                 // Ensure that the database is created.  Note that if we want to be able to apply migrations later,
                 // we want to call Database.Migrate(), not Database.EnsureCreated().
                 // https://stackoverflow.com/questions/38238043/how-and-where-to-call-database-ensurecreated-and-database-migrate
@@ -104,9 +109,12 @@ namespace ClearDashboard.DataAccessLayer.Data
                 //await Database.GetPendingMigrationsAsync();
                 if ((await Database.GetPendingMigrationsAsync()).Any())
                 {
-                    // Should convert languageNames to languageTags in database,
-                    // if it hasn't been done already:
-                    await Migrations.languagenames.MigrateData(this, _logger, CancellationToken.None);
+                    if (whichOne != nameof(NpgsqlProjectDbContext))
+                    {
+                        // Should convert languageNames to languageTags in database,
+                        // if it hasn't been done already:
+                        await Migrations.languagenames.MigrateData(this, _logger, CancellationToken.None);
+                    }
 
                     _logger?.LogInformation("Migration required, migrating...");
                     await Database.MigrateAsync();
@@ -165,7 +173,7 @@ namespace ClearDashboard.DataAccessLayer.Data
             base.OnModelCreating(modelBuilder);
 
             // We want our table names to be singular
-            modelBuilder.RemovePluralizingTableNameConvention();
+            modelBuilder.RemovePluralizingTableNameConvention(this);
 
             modelBuilder.Entity<Alignment>()
                 .HasOne(e => e.SourceTokenComponent)
@@ -287,8 +295,9 @@ namespace ClearDashboard.DataAccessLayer.Data
             // set when an entity is added to the database.
             modelBuilder.AddUserIdValueGenerator();
 
-            modelBuilder.Entity<Token>().ToTable("TokenComponent");
-            modelBuilder.Entity<TokenComposite>().ToTable("TokenComponent");
+            var tokenComponentTableName = modelBuilder.Model.FindEntityType(typeof(TokenComponent)).GetTableName();
+            modelBuilder.Entity<Token>().ToTable(tokenComponentTableName);
+            modelBuilder.Entity<TokenComposite>().ToTable(tokenComponentTableName);
             //modelBuilder.Entity<TokenComposite>().Navigation(e => e.Tokens).AutoInclude();
 
             modelBuilder
@@ -336,8 +345,14 @@ namespace ClearDashboard.DataAccessLayer.Data
             //    .HasIndex(e => new { e.BookNumber, e.ChapterNumber, e.VerseNumber });
 
 //            modelBuilder.Entity<Translation>().Navigation(e => e.SourceTokenComponent).AutoInclude();
-            modelBuilder.Entity<TranslationModelEntry>().HasIndex(e => new { e.TranslationSetId, e.SourceText }).IsUnique();
-            modelBuilder.Entity<TranslationModelTargetTextScore>().HasIndex(e => new { e.TranslationModelEntryId, e.Text}).IsUnique();
+            modelBuilder.Entity<TranslationModelEntry>()
+                .HasIndex(e => new { e.TranslationSetId, e.SourceText })
+                .IsUnique()
+                .HasDatabaseName("IX_Trans_Model_Entry_Trans_Set_Id_Source_Text");
+            modelBuilder.Entity<TranslationModelTargetTextScore>()
+                .HasIndex(e => new { e.TranslationModelEntryId, e.Text})
+                .IsUnique()
+                .HasDatabaseName("IX_Trans_Model_Score_Entry_Id_Text");
 
             modelBuilder.Entity<Label>()
                 .HasIndex(e => e.Text)
@@ -365,10 +380,16 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<Verse>().HasIndex(e => e.BBBCCCVVV);
 
             modelBuilder.Entity<AlignmentTopTargetTrainingText>()
-                .HasIndex(e => new { e.AlignmentSetId, e.SourceTokenComponentId });
+                .HasIndex(e => new { e.AlignmentSetId, e.SourceTokenComponentId })
+                .HasDatabaseName("IX_Align_Top_Training_Align_Set_Id_Source_Token_Id");
 
             modelBuilder.Entity<AlignmentTopTargetTrainingText>()
-                .HasIndex(e => new { e.AlignmentSetId, e.SourceTrainingText });
+                .HasIndex(e => e.SourceTokenComponentId)
+                .HasDatabaseName("IX_Align_Top_Training_Source_Token_Id");
+
+            modelBuilder.Entity<AlignmentTopTargetTrainingText>()
+                .HasIndex(e => new { e.AlignmentSetId, e.SourceTrainingText })
+                .HasDatabaseName("IX_Align_Top_Training_Align_Set_Id_Source_Training");
 
             // =============
             // LEXICON:

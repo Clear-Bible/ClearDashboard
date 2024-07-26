@@ -13,6 +13,8 @@ using System.Text;
 using System.Threading.Tasks;
 using static ClearDashboard.DAL.Alignment.Features.Common.DataUtil;
 using ClearBible.Engine.Corpora;
+using Microsoft.EntityFrameworkCore.Metadata;
+using ClearDashboard.DataAccessLayer.Data.Extensions;
 
 namespace ClearDashboard.DAL.Alignment.Features.Common;
 
@@ -83,22 +85,22 @@ public class SplitTokenDbCommands : IDisposable
 		Connection = connection;
 		Transaction = transaction;
 
-		_tokenComponentInsertCommand = TokenizedCorpusDataBuilder.CreateTokenComponentInsertCommand(connection);
-		_tokenComponentDeleteCommand = TokenizedCorpusDataBuilder.CreateTokenComponentDeleteCommand(connection);
-		_tokenComponentUpdateSurfaceTrainingEngineTokenIdCommand = TokenizedCorpusDataBuilder.CreateTokenComponentUpdateSurfaceTrainingEngineTokenIdCommand(connection);
-		_tokenCompositeTokenAssociationInsertCommand = TokenizedCorpusDataBuilder.CreateTokenCompositeTokenAssociationInsertCommand(connection);
-		_tokenComponentSoftDeleteCommand = TokenizedCorpusDataBuilder.CreateSoftDeleteMetadataUpdateByIdCommand(connection);
-		_tokenComponentUpdateTypeCommand = TokenizedCorpusDataBuilder.CreateTokenComponentTypeUpdateCommand(connection);
-		_tokenSubwordRenumberCommand = TokenizedCorpusDataBuilder.CreateTokenSubwordRenumberCommand(connection);
-		_noteAssociationInsertCommand = CreateNoteAssociationInsertCommand(connection);
-		_noteAssociationDomainEntityIdSetCommand = CreateNoteAssociationDomainEntityIdSetCommand(connection);
-		_alignmentSourceIdSetCommand = AlignmentUtil.CreateAlignmentSourceOrTargetIdSetCommand(connection, true);
-		_alignmentTargetIdSetCommand = AlignmentUtil.CreateAlignmentSourceOrTargetIdSetCommand(connection, false);
-		_translationSourceIdSetCommand = AlignmentUtil.CreateTranslationSourceIdSetCommand(connection);
-		_tvaTokenComponentIdSetCommand = AlignmentUtil.CreateTVATokenComponentIdSetCommand(connection);
-		_alignmentInsertCommand = AlignmentUtil.CreateAlignmentInsertCommand(connection);
-		_translationInsertCommand = AlignmentUtil.CreateTranslationInsertCommand(connection);
-		_tvaInsertCommand = AlignmentUtil.CreateTokenVerseAssociationInsertCommand(connection);
+		_tokenComponentInsertCommand = TokenizedCorpusDataBuilder.CreateTokenComponentInsertCommand(connection, ProjectDbContext.Model);
+		_tokenComponentDeleteCommand = TokenizedCorpusDataBuilder.CreateTokenComponentDeleteCommand(connection, ProjectDbContext.Model);
+		_tokenComponentUpdateSurfaceTrainingEngineTokenIdCommand = TokenizedCorpusDataBuilder.CreateTokenComponentUpdateSurfaceTrainingEngineTokenIdCommand(connection, ProjectDbContext.Model);
+		_tokenCompositeTokenAssociationInsertCommand = TokenizedCorpusDataBuilder.CreateTokenCompositeTokenAssociationInsertCommand(connection, ProjectDbContext.Model);
+		_tokenComponentSoftDeleteCommand = TokenizedCorpusDataBuilder.CreateSoftDeleteMetadataUpdateByIdCommand(connection, ProjectDbContext.Model);
+		_tokenComponentUpdateTypeCommand = TokenizedCorpusDataBuilder.CreateTokenComponentTypeUpdateCommand(connection, ProjectDbContext.Model);
+		_tokenSubwordRenumberCommand = TokenizedCorpusDataBuilder.CreateTokenSubwordRenumberCommand(connection, ProjectDbContext.Model);
+		_noteAssociationInsertCommand = CreateNoteAssociationInsertCommand(connection, ProjectDbContext.Model);
+		_noteAssociationDomainEntityIdSetCommand = CreateNoteAssociationDomainEntityIdSetCommand(connection, ProjectDbContext.Model);
+		_alignmentSourceIdSetCommand = AlignmentUtil.CreateAlignmentSourceOrTargetIdSetCommand(connection, true, ProjectDbContext.Model);
+		_alignmentTargetIdSetCommand = AlignmentUtil.CreateAlignmentSourceOrTargetIdSetCommand(connection, false, ProjectDbContext.Model);
+		_translationSourceIdSetCommand = AlignmentUtil.CreateTranslationSourceIdSetCommand(connection, ProjectDbContext.Model);
+		_tvaTokenComponentIdSetCommand = AlignmentUtil.CreateTVATokenComponentIdSetCommand(connection, ProjectDbContext.Model);
+		_alignmentInsertCommand = AlignmentUtil.CreateAlignmentInsertCommand(connection, ProjectDbContext.Model);
+		_translationInsertCommand = AlignmentUtil.CreateTranslationInsertCommand(connection, ProjectDbContext.Model);
+		_tvaInsertCommand = AlignmentUtil.CreateTokenVerseAssociationInsertCommand(connection, ProjectDbContext.Model);
 	}
 
 	public bool HasAlignmentSetChangesToDenormalize()
@@ -203,7 +205,7 @@ public class SplitTokenDbCommands : IDisposable
 		{
 			await DataUtil.DeleteIdentifiableEntityAsync(
 				Connection,
-				typeof(Models.TokenCompositeTokenAssociation),
+				ProjectDbContext.Model.ToEntityType(typeof(Models.TokenCompositeTokenAssociation)),
 				_tokenCompositeTokenAssociationsToRemove.Select(e => e.Id).ToArray(),
 				cancellationToken);
 		}
@@ -291,7 +293,7 @@ public class SplitTokenDbCommands : IDisposable
 		if (HasAlignmentSetChangesToDenormalize())
 		{
 			Logger.LogInformation($"{nameof(SplitTokenDbCommands)} - inserting alignment denormalization tasks");
-			using (var denormalizationTaskInsertCommand = AlignmentUtil.CreateAlignmentDenormalizationTaskInsertCommand(Connection))
+			using (var denormalizationTaskInsertCommand = AlignmentUtil.CreateAlignmentDenormalizationTaskInsertCommand(Connection, ProjectDbContext.Model))
 			{
 				foreach (var kvp in _sourceTrainingTextsByAlignmentSetId)
 				{
@@ -502,12 +504,19 @@ public class SplitTokenDbCommands : IDisposable
 		}
 	}
 
-	private static DbCommand CreateNoteAssociationInsertCommand(DbConnection connection)
+	private static DbCommand CreateNoteAssociationInsertCommand(DbConnection connection, IModel metadataModel)
 	{
 		var command = connection.CreateCommand();
-		var columns = new string[] { "Id", "NoteId", "DomainEntityIdGuid", "DomainEntityIdName" };
+		var entityType = metadataModel.ToEntityType(typeof(Models.NoteDomainEntityAssociation));
+		var insertProperties = entityType.ToProperties(new List<string>
+			{
+				nameof(Models.NoteDomainEntityAssociation.Id),
+				nameof(Models.NoteDomainEntityAssociation.NoteId),
+				nameof(Models.NoteDomainEntityAssociation.DomainEntityIdGuid),
+				nameof(Models.NoteDomainEntityAssociation.DomainEntityIdName)
+			}).ToArray();
 
-		DataUtil.ApplyColumnsToInsertCommand(command, typeof(Models.NoteDomainEntityAssociation), columns);
+		DataUtil.ApplyColumnsToInsertCommand(command, entityType, insertProperties);
 
 		command.Prepare();
 
@@ -523,18 +532,26 @@ public class SplitTokenDbCommands : IDisposable
 		_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 	}
 
-	private static DbCommand CreateNoteAssociationDomainEntityIdSetCommand(DbConnection connection)
+	private static DbCommand CreateNoteAssociationDomainEntityIdSetCommand(DbConnection connection, IModel metadataModel)
 	{
 		var command = connection.CreateCommand();
-		var columns = new string[] { nameof(Models.NoteDomainEntityAssociation.DomainEntityIdGuid) };
-		var whereColumns = new (string, WhereEquality)[] { (nameof(Models.IdentifiableEntity.Id), WhereEquality.Equals) };
+		var entityType = metadataModel.ToEntityType(typeof(Models.NoteDomainEntityAssociation));
+
+		var columns = entityType.ToProperties(new List<string>
+			{
+				nameof(Models.NoteDomainEntityAssociation.DomainEntityIdGuid)
+			}).ToArray();
+
+		var whereColumns = new (IProperty, DataUtil.WhereEquality)[] {
+				(entityType.ToProperty(nameof(Models.IdentifiableEntity.Id)), DataUtil.WhereEquality.Equals)
+			};
 
 		DataUtil.ApplyColumnsToUpdateCommand(
 			command,
-			typeof(Models.NoteDomainEntityAssociation),
+			entityType,
 			columns,
 			whereColumns,
-			Array.Empty<(string, int)>());
+			Array.Empty<(IProperty, int)>());
 
 		command.Prepare();
 

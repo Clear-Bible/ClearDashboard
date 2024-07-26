@@ -460,7 +460,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests
                 await ProjectDbContext.SaveChangesAsync();
 
                 // Add a token having Metadata using DbCommand (i.e. Bulk Insert):
-				using (var cmd = TokenizedCorpusDataBuilder.CreateTokenComponentInsertCommand(ProjectDbContext.Database.GetDbConnection()))
+				using (var cmd = TokenizedCorpusDataBuilder.CreateTokenComponentInsertCommand(ProjectDbContext.Database.GetDbConnection(), ProjectDbContext.Model))
 				{
                     testToken.Id = Guid.NewGuid();
                     testToken.Metadata.Add(new DataAccessLayer.Models.Metadatum { Key = "key3", Value = "value3" });

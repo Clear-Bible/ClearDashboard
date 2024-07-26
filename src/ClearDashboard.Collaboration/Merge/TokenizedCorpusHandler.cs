@@ -18,6 +18,7 @@ using ClearDashboard.Collaboration.Factory;
 using SIL.Machine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Collaboration.Builder;
+using ClearDashboard.DAL.Interfaces;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -313,11 +314,16 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
 
                 progress.Report(new ProgressStatus(0, $"Inserting VerseRow tokens for tokenized corpus '{tokenizedCorpusName}' '{tokenizedCorpusId}'"));
 
-                var tokenInsertCount = 0;
+				(Guid VerseRowId, Guid UserId) GetVerseRowIdFunc((string BookChapterVerse, Guid TokenizedCorpusId) verseRowContext)
+				{
+					return (Guid.NewGuid(), projectDbContext.UserProvider.CurrentUser!.Id);
+				}
+
+				var tokenInsertCount = 0;
                 var connection = projectDbContext.Database.GetDbConnection();
 
-                using var tokenComponentInsertCommand = TokenizedCorpusDataBuilder.CreateTokenComponentInsertCommand(connection);
-                using var tokenCompositeTokenAssociationInsertCommand = TokenizedCorpusDataBuilder.CreateTokenCompositeTokenAssociationInsertCommand(connection);
+                using var tokenComponentInsertCommand = TokenizedCorpusDataBuilder.CreateTokenComponentInsertCommand(connection, projectDbContext.Model);
+                using var tokenCompositeTokenAssociationInsertCommand = TokenizedCorpusDataBuilder.CreateTokenCompositeTokenAssociationInsertCommand(connection, projectDbContext.Model);
 
                 foreach (var bookId in bookIds)
                 {
@@ -329,7 +335,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
                     // This method currently doesn't have any way to use the real
                     // VerseRowIds when building VerseRows.  So we correct each
                     // token's VerseRowId before doing its insert
-                    var (verseRows, btTokenCount) = TokenizedCorpusDataBuilder.BuildVerseRowModel(tokensTextRows, tokenizedCorpusId);
+                    var (verseRows, btTokenCount) = TokenizedCorpusDataBuilder.BuildVerseRowModel(tokensTextRows, tokenizedCorpusId, GetVerseRowIdFunc);
 
                     foreach (var verseRow in verseRows)
                     {
@@ -443,7 +449,12 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
 
                 progress.Report(new ProgressStatus(0, $"Inserting VerseRows and tokens for manuscript tokenized corpus '{tokenizedCorpusName}' '{tokenizedCorpusId}'"));
 
-                var tokenInsertCount = 0;
+				(Guid VerseRowId, Guid UserId) GetVerseRowIdFunc((string BookChapterVerse, Guid TokenizedCorpusId) verseRowContext)
+				{
+					return (Guid.NewGuid(), projectDbContext.UserProvider.CurrentUser!.Id);
+				}
+
+				var tokenInsertCount = 0;
                 var connection = projectDbContext.Database.GetDbConnection();
 
                 var corpusType = projectDbContext.TokenizedCorpora.Include(e => e.Corpus)
@@ -459,9 +470,9 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
 
                 var textCorpus = GetMaculaCorpus(corpusType); 
 
-                using var verseRowInsertCommand = TokenizedCorpusDataBuilder.CreateVerseRowInsertCommand(connection);
-                using var tokenComponentInsertCommand = TokenizedCorpusDataBuilder.CreateTokenComponentInsertCommand(connection);
-                using var tokenCompositeTokenAssociationInsertCommand = TokenizedCorpusDataBuilder.CreateTokenCompositeTokenAssociationInsertCommand(connection);
+                using var verseRowInsertCommand = TokenizedCorpusDataBuilder.CreateVerseRowInsertCommand(connection, projectDbContext.Model);
+                using var tokenComponentInsertCommand = TokenizedCorpusDataBuilder.CreateTokenComponentInsertCommand(connection, projectDbContext.Model);
+                using var tokenCompositeTokenAssociationInsertCommand = TokenizedCorpusDataBuilder.CreateTokenCompositeTokenAssociationInsertCommand(connection, projectDbContext.Model);
 
                 var bookIds = textCorpus.Texts.Select(t => t.Id).ToList();
 
@@ -475,7 +486,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler<IModelSnapshot<Models.
                     // This method currently doesn't have any way to use the real
                     // VerseRowIds when building VerseRows.  So we correct each
                     // token's VerseRowId before doing its insert
-                    var (verseRows, btTokenCount) = TokenizedCorpusDataBuilder.BuildVerseRowModel(tokensTextRows, tokenizedCorpusId);
+                    var (verseRows, btTokenCount) = TokenizedCorpusDataBuilder.BuildVerseRowModel(tokensTextRows, tokenizedCorpusId, GetVerseRowIdFunc);
 
                     foreach (var verseRow in verseRows)
                     {

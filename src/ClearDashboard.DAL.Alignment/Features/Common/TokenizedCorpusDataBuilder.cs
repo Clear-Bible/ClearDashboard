@@ -1,13 +1,16 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DataAccessLayer.Data.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SIL.Machine.Corpora;
 using SIL.Scripture;
+using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Text.Json;
-using static ClearBible.Engine.Persistence.FileGetBookIds;
 using static ClearDashboard.DAL.Alignment.Features.Common.DataUtil;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
@@ -55,24 +58,57 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 
             return tokensTextRows;
         }
-        public static (IEnumerable<Models.VerseRow>, int) BuildVerseRowModel(IEnumerable<TokensTextRow> tokensTextRows, Guid tokenizedCorpusId)
+
+        public static IDictionary<string, IEnumerable<Models.VerseRow>> BuildCorpusVerseRowModels(
+            ITextCorpus textCorpus, 
+            Guid tokenizedCorpusId, 
+            Func<(string BookChapterVerse, Guid TokenizedCorpusId), (Guid verseRowId, Guid userId)> verseRowIdProvider, 
+            string displayName,
+            IEnumerable<string>? bookIds = null)
+        {
+            var verseRowsByBook = new Dictionary<string, IEnumerable<Models.VerseRow>>();
+
+            bookIds ??= textCorpus.Texts.Select(t => t.Id).ToList();
+            foreach (var bookId in bookIds)
+            {
+                var tokensTextRows = ExtractValidateBook(
+                    textCorpus,
+                    bookId,
+                    displayName);
+
+                // This method currently doesn't have any way to use the real
+                // VerseRowIds when building VerseRows.  So we correct each
+                // token's VerseRowId before doing its insert
+                var (verseRows, btTokenCount) = BuildVerseRowModel(tokensTextRows, tokenizedCorpusId, verseRowIdProvider);
+                verseRowsByBook.Add(bookId, verseRows);
+            }
+
+            return verseRowsByBook;
+        }
+
+        public static (IEnumerable<Models.VerseRow>, int) BuildVerseRowModel(
+            IEnumerable<TokensTextRow> tokensTextRows, 
+            Guid tokenizedCorpusId,
+            Func<(string BookChapterVerse, Guid TokenizedCorpusId), (Guid verseRowId, Guid userId)> verseRowIdProvider)
         {
             var tokenCount = 0;
             var verseRows = tokensTextRows
                 .Where(ttr => ttr.IsEmpty == false)
                 .Select(ttr =>
                 {
-                    var verseRowId = Guid.NewGuid(); //TEMP
                     var (b, c, v) = (
                         ((VerseRef)ttr.Ref).BookNum,
                         ((VerseRef)ttr.Ref).ChapterNum,
                         ((VerseRef)ttr.Ref).VerseNum);
+                    var bookChapterVerse = $"{b:000}{c:000}{v:000}";
+                    var (verseRowId, userId) = verseRowIdProvider((bookChapterVerse, tokenizedCorpusId));
 
                     return new Models.VerseRow
                     {
                         Id = verseRowId,
+                        UserId = userId,
                         TokenizedCorpusId = tokenizedCorpusId,
-                        BookChapterVerse = $"{b:000}{c:000}{v:000}",
+                        BookChapterVerse = bookChapterVerse,
                         OriginalText = ttr.OriginalText,
                         IsSentenceStart = ttr.IsSentenceStart,
                         IsInRange = ttr.IsInRange,
@@ -97,7 +133,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
                                             .Select(childToken =>
                                             {
                                                 tokenCount++;
-                                                var modelToken =  new Models.Token
+												var modelToken = new Models.Token
                                                 {
                                                     Id = childToken.TokenId.Id,
                                                     VerseRowId = verseRowId,
@@ -113,19 +149,19 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
                                                     ExtendedProperties = childToken.ExtendedProperties
                                                 };
 
-                                                if (childToken.HasMetadatum(Models.MetadatumKeys.ModelTokenMetadata))
-                                                {
-                                                    modelToken.Metadata = childToken.GetMetadatum<List<Models.Metadatum>>(Models.MetadatumKeys.ModelTokenMetadata).ToList();
-                                                }
+												if (childToken.HasMetadatum(Models.MetadatumKeys.ModelTokenMetadata))
+												{
+													modelToken.Metadata = childToken.GetMetadatum<List<Models.Metadatum>>(Models.MetadatumKeys.ModelTokenMetadata).ToList();
+												}
 
-                                                return modelToken;
-                                            }).ToList()
+												return modelToken;
+											}).ToList()
                                     };
                                 }
                                 else
                                 {
                                     tokenCount++;
-                                    var modelToken  = new Models.Token
+									var modelToken = new Models.Token
                                     {
                                         Id = token.TokenId.Id,
                                         VerseRowId = verseRowId,
@@ -141,94 +177,162 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
                                         ExtendedProperties = token.ExtendedProperties
                                     } as Models.TokenComponent;
 
-                                    if (token.HasMetadatum(Models.MetadatumKeys.ModelTokenMetadata))
-                                    {
-                                        modelToken.Metadata = token.GetMetadatum<List<Models.Metadatum>>(Models.MetadatumKeys.ModelTokenMetadata).ToList();
-                                    }
+									if (token.HasMetadatum(Models.MetadatumKeys.ModelTokenMetadata))
+									{
+										modelToken.Metadata = token.GetMetadatum<List<Models.Metadatum>>(Models.MetadatumKeys.ModelTokenMetadata).ToList();
+									}
 
-                                    return modelToken;
-                                }
+									return modelToken;
+								}
                             })
                         .ToList()
                     };
-                });
+                })
+                .ToList();
 
             return (verseRows, tokenCount);
         }
-        public static DbCommand CreateVerseRowUpdateCommand(DbConnection connection)
+        public static DbCommand CreateVerseRowUpdateCommand(DbConnection connection, IModel metadataModel)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { "OriginalText", "IsSentenceStart", "IsInRange", "IsRangeStart", "IsEmpty", "Modified" };
-            var whereColumns = new (string, DataUtil.WhereEquality)[] { ("Id", DataUtil.WhereEquality.Equals) };
 
-            DataUtil.ApplyColumnsToUpdateCommand(command, typeof(Models.VerseRow), columns, whereColumns, Array.Empty<(string, int)>());
+            var entityType = metadataModel.ToEntityType(typeof(Models.VerseRow));
+
+            var columns = entityType.ToProperties(new List<string>
+            {
+                nameof(Models.VerseRow.OriginalText), 
+                nameof(Models.VerseRow.IsSentenceStart), 
+                nameof(Models.VerseRow.IsInRange), 
+                nameof(Models.VerseRow.IsRangeStart), 
+                nameof(Models.VerseRow.IsEmpty), 
+                nameof(Models.VerseRow.Modified)
+            }).ToArray();
+
+            var whereColumns = new (IProperty, DataUtil.WhereEquality)[] { 
+                (entityType.ToProperty(nameof(Models.IdentifiableEntity.Id)), DataUtil.WhereEquality.Equals) 
+            };
+
+            DataUtil.ApplyColumnsToUpdateCommand(
+                command, 
+                entityType, 
+                columns, 
+                whereColumns, 
+                Array.Empty<(IProperty, int)>()
+            );
 
             command.Prepare();
 
             return command;
         }
 
-        public static async Task UpdateVerseRowAsync(Models.VerseRow verseRow, DbCommand verseRowCmd, CancellationToken cancellationToken)
+        public static async Task UpdateVerseRowAsync(Models.VerseRow verseRow, DbCommand command, CancellationToken cancellationToken)
         {
-            verseRowCmd.Parameters["@Id"].Value = verseRow.Id;
-            verseRowCmd.Parameters["@OriginalText"].Value = verseRow.OriginalText != null ? verseRow.OriginalText : DBNull.Value;
-            verseRowCmd.Parameters["@IsSentenceStart"].Value = verseRow.IsSentenceStart;
-            verseRowCmd.Parameters["@IsInRange"].Value = verseRow.IsInRange;
-            verseRowCmd.Parameters["@IsRangeStart"].Value = verseRow.IsRangeStart;
-            verseRowCmd.Parameters["@IsEmpty"].Value = verseRow.IsEmpty;
-            verseRowCmd.Parameters["@Modified"].Value = verseRow.Modified;
+            void setCommandProperty(string propertyName, object? value) => 
+                command.Parameters[command.ToParameterName(propertyName)].Value = value;
 
-            _ = await verseRowCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+            setCommandProperty(nameof(Models.VerseRow.Id), verseRow.Id);
+            setCommandProperty(nameof(Models.VerseRow.OriginalText), verseRow.OriginalText != null ? verseRow.OriginalText : DBNull.Value);
+            setCommandProperty(nameof(Models.VerseRow.IsSentenceStart), verseRow.IsSentenceStart);
+            setCommandProperty(nameof(Models.VerseRow.IsInRange), verseRow.IsInRange);
+            setCommandProperty(nameof(Models.VerseRow.IsRangeStart), verseRow.IsRangeStart);
+            setCommandProperty(nameof(Models.VerseRow.IsEmpty), verseRow.IsEmpty);
+            setCommandProperty(nameof(Models.VerseRow.Modified), verseRow.Modified);
+
+            _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public static DbCommand CreateVerseRowInsertCommand(DbConnection connection)
+        public static DbCommand CreateVerseRowInsertCommand(DbConnection connection, IModel metadataModel)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "BookChapterVerse", "OriginalText", "TokenizedCorpusId", "IsSentenceStart", "IsInRange", "IsRangeStart", "IsEmpty", "UserId", "Created" };
+            var entityType = metadataModel.ToEntityType(typeof(Models.VerseRow));
+            var insertProperties = entityType.ToProperties(new List<string>
+            {
+                nameof(Models.VerseRow.Id), 
+                nameof(Models.VerseRow.BookChapterVerse), 
+                nameof(Models.VerseRow.OriginalText), 
+                nameof(Models.VerseRow.TokenizedCorpusId), 
+                nameof(Models.VerseRow.IsSentenceStart), 
+                nameof(Models.VerseRow.IsInRange), 
+                nameof(Models.VerseRow.IsRangeStart), 
+                nameof(Models.VerseRow.IsEmpty), 
+                nameof(Models.VerseRow.UserId), 
+                nameof(Models.VerseRow.Created)
+            }).ToArray();
 
-            DataUtil.ApplyColumnsToInsertCommand(command, typeof(Models.VerseRow), columns);
+            DataUtil.ApplyColumnsToInsertCommand(command, entityType, insertProperties);
 
             command.Prepare();
 
             return command;
         }
 
-        public static async Task InsertVerseRowAsync(Models.VerseRow verseRow, DbCommand verseRowCmd, IUserProvider userProvider, CancellationToken cancellationToken)
+        public static async Task InsertVerseRowAsync(Models.VerseRow verseRow, DbCommand command, IUserProvider userProvider, CancellationToken cancellationToken)
         {
             var converter = new DateTimeOffsetToBinaryConverter();
 
-            verseRowCmd.Parameters["@Id"].Value = verseRow.Id;
-            verseRowCmd.Parameters["@BookChapterVerse"].Value = verseRow.BookChapterVerse;
-            verseRowCmd.Parameters["@OriginalText"].Value = verseRow.OriginalText != null ? verseRow.OriginalText : DBNull.Value;
-            verseRowCmd.Parameters["@IsSentenceStart"].Value = verseRow.IsSentenceStart;
-            verseRowCmd.Parameters["@IsInRange"].Value = verseRow.IsInRange;
-            verseRowCmd.Parameters["@IsRangeStart"].Value = verseRow.IsRangeStart;
-            verseRowCmd.Parameters["@IsEmpty"].Value = verseRow.IsEmpty;
-            verseRowCmd.Parameters["@TokenizedCorpusId"].Value = verseRow.TokenizedCorpusId;
-            verseRowCmd.Parameters["@UserId"].Value = Guid.Empty != verseRow.UserId ? verseRow.UserId : userProvider!.CurrentUser!.Id;
-            verseRowCmd.Parameters["@Created"].Value = converter.ConvertToProvider(verseRow.Created);
+            object? dt(DateTimeOffset d) => converter.ConvertToProvider(d);
+            void setCommandProperty(string propertyName, object? value) => 
+                command.Parameters[command.ToParameterName(propertyName)].Value = value;
 
-            _ = await verseRowCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+            setCommandProperty(nameof(Models.VerseRow.Id), verseRow.Id);
+            setCommandProperty(nameof(Models.VerseRow.BookChapterVerse), verseRow.BookChapterVerse);
+            setCommandProperty(nameof(Models.VerseRow.OriginalText), verseRow.OriginalText != null ? verseRow.OriginalText : DBNull.Value);
+            setCommandProperty(nameof(Models.VerseRow.IsSentenceStart), verseRow.IsSentenceStart);
+            setCommandProperty(nameof(Models.VerseRow.IsInRange), verseRow.IsInRange);
+            setCommandProperty(nameof(Models.VerseRow.IsRangeStart), verseRow.IsRangeStart);
+            setCommandProperty(nameof(Models.VerseRow.IsEmpty), verseRow.IsEmpty);
+            setCommandProperty(nameof(Models.VerseRow.TokenizedCorpusId), verseRow.TokenizedCorpusId);
+            setCommandProperty(nameof(Models.VerseRow.UserId), Guid.Empty != verseRow.UserId ? verseRow.UserId : userProvider!.CurrentUser!.Id);
+            setCommandProperty(nameof(Models.VerseRow.Created), dt(verseRow.Created));
+
+            _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public static DbCommand CreateTokenComponentInsertCommand(DbConnection connection)
+        public static DbCommand CreateTokenComponentInsertCommand(DbConnection connection, IModel metadataModel)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "EngineTokenId", "TrainingText", "VerseRowId", "TokenizedCorpusId", "ParallelCorpusId", "Discriminator", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "ExtendedProperties", "Type", "Metadata", "GrammarId", "CircumfixGroup" };
+            var entityType = metadataModel.ToEntityType(typeof(Models.Token));
+            var insertProperties = entityType.ToProperties(new List<string>
+            {
+                nameof(Models.Token.Id), 
+                nameof(Models.Token.EngineTokenId), 
+                nameof(Models.Token.TrainingText), 
+                nameof(Models.Token.VerseRowId), 
+                nameof(Models.Token.TokenizedCorpusId),
+				nameof(Models.TokenComposite.ParallelCorpusId),
+				nameof(Models.Token.BookNumber), 
+                nameof(Models.Token.ChapterNumber),  
+                nameof(Models.Token.VerseNumber), 
+                nameof(Models.Token.WordNumber), 
+                nameof(Models.Token.SubwordNumber), 
+                nameof(Models.Token.SurfaceText), 
+                nameof(Models.Token.ExtendedProperties),
+				nameof(Models.Token.Type),
+				nameof(Models.Token.Metadata),
+				nameof(Models.Token.GrammarId),
+				nameof(Models.Token.CircumfixGroup),
+				DbCommandExtensions.DISCRIMINATOR_COLUMN_NAME
+            }).ToArray();
 
-            DataUtil.ApplyColumnsToInsertCommand(command, typeof(Models.TokenComponent), columns);
+            DataUtil.ApplyColumnsToInsertCommand(command, entityType, insertProperties);
 
             command.Prepare();
 
             return command;
         }
 
-        public static DbCommand CreateTokenCompositeTokenAssociationInsertCommand(DbConnection connection)
+        public static DbCommand CreateTokenCompositeTokenAssociationInsertCommand(DbConnection connection, IModel metadataModel)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "TokenId", "TokenCompositeId" };
+            var entityType = metadataModel.ToEntityType(typeof(Models.TokenCompositeTokenAssociation));
+            var insertProperties = entityType.ToProperties(new List<string>
+            {
+                nameof(Models.TokenCompositeTokenAssociation.Id),
+                nameof(Models.TokenCompositeTokenAssociation.TokenId), 
+                nameof(Models.TokenCompositeTokenAssociation.TokenCompositeId)
+            }).ToArray();
 
-            DataUtil.ApplyColumnsToInsertCommand(command, typeof(Models.TokenCompositeTokenAssociation), columns);
+            DataUtil.ApplyColumnsToInsertCommand(command, entityType, insertProperties);
 
             command.Prepare();
 
@@ -260,69 +364,93 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 
             }
         }
-        public static async Task InsertTokenAsync(Models.Token token, Guid? tokenCompositeId, DbCommand componentCmd, CancellationToken cancellationToken)
+        public static async Task InsertTokenAsync(Models.Token token, Guid? tokenCompositeId, DbCommand command, CancellationToken cancellationToken)
         {
-            componentCmd.Parameters["@Id"].Value = token.Id;
-            componentCmd.Parameters["@EngineTokenId"].Value = token.EngineTokenId;
-            componentCmd.Parameters["@TrainingText"].Value = token.TrainingText;
-            componentCmd.Parameters["@VerseRowId"].Value = token.VerseRowId;
-            componentCmd.Parameters["@TokenizedCorpusId"].Value = token.TokenizedCorpusId;
-			componentCmd.Parameters["@ParallelCorpusId"].Value = DBNull.Value;
-			componentCmd.Parameters["@Discriminator"].Value = token.GetType().Name;
-            componentCmd.Parameters["@BookNumber"].Value = token.BookNumber;
-            componentCmd.Parameters["@ChapterNumber"].Value = token.ChapterNumber;
-            componentCmd.Parameters["@VerseNumber"].Value = token.VerseNumber;
-            componentCmd.Parameters["@WordNumber"].Value = token.WordNumber;
-            componentCmd.Parameters["@SubwordNumber"].Value = token.SubwordNumber;
-            componentCmd.Parameters["@SurfaceText"].Value = token.SurfaceText;
-            componentCmd.Parameters["@ExtendedProperties"].Value = token.ExtendedProperties != null ? token.ExtendedProperties : DBNull.Value;
-			componentCmd.Parameters["@Type"].Value = token.Type != null ? token.Type : DBNull.Value;
-			componentCmd.Parameters["@Metadata"].Value = JsonSerializer.Serialize(token.Metadata);
-            componentCmd.Parameters["@GrammarId"].Value = token.GrammarId != null ? token.GrammarId : DBNull.Value;
-            componentCmd.Parameters["@CircumfixGroup"].Value = token.CircumfixGroup != null ? token.CircumfixGroup : DBNull.Value;
+            void setCommandProperty(string propertyName, object? value) => 
+                command.Parameters[command.ToParameterName(propertyName)].Value = value;
 
-            _ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+            setCommandProperty(nameof(Models.Token.Id), token.Id);
+            setCommandProperty(nameof(Models.Token.EngineTokenId), token.EngineTokenId);
+            setCommandProperty(nameof(Models.Token.TrainingText), token.TrainingText);
+            setCommandProperty(nameof(Models.Token.VerseRowId), token.VerseRowId);
+            setCommandProperty(nameof(Models.Token.TokenizedCorpusId), token.TokenizedCorpusId);
+			setCommandProperty(nameof(Models.TokenComposite.ParallelCorpusId), DBNull.Value);
+			setCommandProperty(DbCommandExtensions.DISCRIMINATOR_COLUMN_NAME, token.GetType().Name);
+            setCommandProperty(nameof(Models.Token.BookNumber), token.BookNumber);
+            setCommandProperty(nameof(Models.Token.ChapterNumber), token.ChapterNumber);
+            setCommandProperty(nameof(Models.Token.VerseNumber), token.VerseNumber);
+            setCommandProperty(nameof(Models.Token.WordNumber), token.WordNumber);
+            setCommandProperty(nameof(Models.Token.SubwordNumber), token.SubwordNumber);
+            setCommandProperty(nameof(Models.Token.SurfaceText), token.SurfaceText);
+			setCommandProperty(nameof(Models.Token.ExtendedProperties), token.ExtendedProperties != null ? token.ExtendedProperties : DBNull.Value);
+			setCommandProperty(nameof(Models.Token.Type), token.Type != null ? token.Type : DBNull.Value);
+			setCommandProperty(nameof(Models.Token.Metadata), JsonSerializer.Serialize(token.Metadata));
+			setCommandProperty(nameof(Models.Token.GrammarId), token.GrammarId != null ? token.GrammarId : DBNull.Value);
+			setCommandProperty(nameof(Models.Token.CircumfixGroup), token.CircumfixGroup != null ? token.CircumfixGroup : DBNull.Value);
+
+			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
-        public static async Task InsertTokenCompositeAsync(Models.TokenComposite tokenComposite, DbCommand componentCmd, CancellationToken cancellationToken)
+        public static async Task InsertTokenCompositeAsync(Models.TokenComposite tokenComposite, DbCommand command, CancellationToken cancellationToken)
         {
-            componentCmd.Parameters["@Id"].Value = tokenComposite.Id;
-            componentCmd.Parameters["@EngineTokenId"].Value = tokenComposite.EngineTokenId;
-            componentCmd.Parameters["@TrainingText"].Value = tokenComposite.TrainingText;
-            componentCmd.Parameters["@VerseRowId"].Value = tokenComposite.VerseRowId;
-            componentCmd.Parameters["@ExtendedProperties"].Value = tokenComposite.ExtendedProperties != null ? tokenComposite.ExtendedProperties : DBNull.Value;
-            componentCmd.Parameters["@TokenizedCorpusId"].Value = tokenComposite.TokenizedCorpusId;
-			componentCmd.Parameters["@ParallelCorpusId"].Value = tokenComposite.ParallelCorpusId != null ? tokenComposite.ParallelCorpusId : DBNull.Value;
-			componentCmd.Parameters["@Discriminator"].Value = tokenComposite.GetType().Name;
-            componentCmd.Parameters["@BookNumber"].Value = DBNull.Value;
-            componentCmd.Parameters["@ChapterNumber"].Value = DBNull.Value;
-            componentCmd.Parameters["@VerseNumber"].Value = DBNull.Value;
-            componentCmd.Parameters["@WordNumber"].Value = DBNull.Value;
-            componentCmd.Parameters["@SubwordNumber"].Value = DBNull.Value;
-            componentCmd.Parameters["@SurfaceText"].Value = tokenComposite.SurfaceText;
-			componentCmd.Parameters["@Type"].Value = tokenComposite.Type != null ? tokenComposite.Type : DBNull.Value;
-			componentCmd.Parameters["@Metadata"].Value = JsonSerializer.Serialize(tokenComposite.Metadata);
-            componentCmd.Parameters["@GrammarId"].Value = tokenComposite.GrammarId != null ? tokenComposite.GrammarId : DBNull.Value;
-            componentCmd.Parameters["@CircumfixGroup"].Value = tokenComposite.CircumfixGroup != null ? tokenComposite.CircumfixGroup : DBNull.Value;
-            _ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+            void setCommandProperty(string propertyName, object? value) => 
+                command.Parameters[command.ToParameterName(propertyName)].Value = value;
+
+            setCommandProperty(nameof(Models.TokenComposite.Id), tokenComposite.Id);
+            setCommandProperty(nameof(Models.TokenComposite.EngineTokenId), tokenComposite.EngineTokenId);
+            setCommandProperty(nameof(Models.TokenComposite.TrainingText), tokenComposite.TrainingText);
+            setCommandProperty(nameof(Models.TokenComposite.VerseRowId), tokenComposite.VerseRowId);
+            setCommandProperty(nameof(Models.TokenComposite.ExtendedProperties), tokenComposite.ExtendedProperties != null ? tokenComposite.ExtendedProperties : DBNull.Value);
+            setCommandProperty(nameof(Models.TokenComposite.TokenizedCorpusId), tokenComposite.TokenizedCorpusId);
+			setCommandProperty(nameof(Models.TokenComposite.ParallelCorpusId), tokenComposite.ParallelCorpusId != null ? tokenComposite.ParallelCorpusId : DBNull.Value);
+			setCommandProperty(DbCommandExtensions.DISCRIMINATOR_COLUMN_NAME, tokenComposite.GetType().Name);
+            setCommandProperty(nameof(Models.Token.BookNumber), DBNull.Value);
+            setCommandProperty(nameof(Models.Token.ChapterNumber), DBNull.Value);
+            setCommandProperty(nameof(Models.Token.VerseNumber), DBNull.Value);
+            setCommandProperty(nameof(Models.Token.WordNumber), DBNull.Value);
+            setCommandProperty(nameof(Models.Token.SubwordNumber), DBNull.Value);
+			setCommandProperty(nameof(Models.TokenComposite.SurfaceText), tokenComposite.SurfaceText);
+			setCommandProperty(nameof(Models.TokenComposite.Type), tokenComposite.Type != null ? tokenComposite.Type : DBNull.Value);
+			setCommandProperty(nameof(Models.TokenComposite.Metadata), JsonSerializer.Serialize(tokenComposite.Metadata));
+			setCommandProperty(nameof(Models.TokenComposite.GrammarId), tokenComposite.GrammarId != null ? tokenComposite.GrammarId : DBNull.Value);
+			setCommandProperty(nameof(Models.TokenComposite.CircumfixGroup), tokenComposite.CircumfixGroup != null ? tokenComposite.CircumfixGroup : DBNull.Value);
+
+			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
-        public static async Task<Guid> InsertTokenCompositeTokenAssociationAsync(Guid tokenId, Guid tokenCompositeId, DbCommand assocCmd, CancellationToken cancellationToken)
+        public static async Task<Guid> InsertTokenCompositeTokenAssociationAsync(Guid tokenId, Guid tokenCompositeId, DbCommand command, CancellationToken cancellationToken)
         {
+            void setCommandProperty(string propertyName, object? value) => 
+                command.Parameters[command.ToParameterName(propertyName)].Value = value;
+
             var id = Guid.NewGuid();
 
-            assocCmd.Parameters["@Id"].Value = id;
-            assocCmd.Parameters["@TokenId"].Value = tokenId;
-            assocCmd.Parameters["@TokenCompositeId"].Value = tokenCompositeId;
-            _ = await assocCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+            setCommandProperty(nameof(Models.TokenCompositeTokenAssociation.Id), id);
+            setCommandProperty(nameof(Models.TokenCompositeTokenAssociation.TokenId), tokenId);
+            setCommandProperty(nameof(Models.TokenCompositeTokenAssociation.TokenCompositeId), tokenCompositeId);
+
+            _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 
             return id;
         }
 
-        public static DbCommand CreateTokenizedCorpusInsertCommand(DbConnection connection)
+        public static DbCommand CreateTokenizedCorpusInsertCommand(DbConnection connection, IModel metadataModel)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "CorpusId", "DisplayName", "TokenizationFunction", "ScrVersType", "CustomVersData", "Metadata", "UserId", "Created", "LastTokenized" };
+            var entityType = metadataModel.ToEntityType(typeof(Models.TokenizedCorpus));
+            var insertProperties = entityType.ToProperties(new List<string>
+            {
+                nameof(Models.TokenizedCorpus.Id), 
+                nameof(Models.TokenizedCorpus.CorpusId), 
+                nameof(Models.TokenizedCorpus.DisplayName), 
+                nameof(Models.TokenizedCorpus.TokenizationFunction), 
+                nameof(Models.TokenizedCorpus.ScrVersType), 
+                nameof(Models.TokenizedCorpus.CustomVersData), 
+                nameof(Models.TokenizedCorpus.Metadata), 
+                nameof(Models.TokenizedCorpus.UserId), 
+                nameof(Models.TokenizedCorpus.Created), 
+                nameof(Models.TokenizedCorpus.LastTokenized), 
+            }).ToArray();
 
-            DataUtil.ApplyColumnsToInsertCommand(command, typeof(Models.TokenizedCorpus), columns);
+            DataUtil.ApplyColumnsToInsertCommand(command, entityType, insertProperties);
 
             command.Prepare();
 
@@ -333,53 +461,46 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
         {
             var converter = new DateTimeOffsetToBinaryConverter();
 
-            command.Parameters["@Id"].Value = Guid.Empty != tokenizedCorpus.Id ? tokenizedCorpus.Id : Guid.NewGuid();
-            command.Parameters["@CorpusId"].Value = tokenizedCorpus.Corpus?.Id ?? tokenizedCorpus.CorpusId;
-            command.Parameters["@DisplayName"].Value = tokenizedCorpus.DisplayName;
-            command.Parameters["@TokenizationFunction"].Value = tokenizedCorpus.TokenizationFunction;
-            command.Parameters["@ScrVersType"].Value = tokenizedCorpus.ScrVersType;
-            command.Parameters["@CustomVersData"].Value = tokenizedCorpus.CustomVersData != null ? tokenizedCorpus.CustomVersData : DBNull.Value;
-            command.Parameters["@Metadata"].Value = JsonSerializer.Serialize(tokenizedCorpus.Metadata);
-            command.Parameters["@UserId"].Value = Guid.Empty != tokenizedCorpus.UserId ? tokenizedCorpus.UserId : userProvider!.CurrentUser!.Id;
-            command.Parameters["@Created"].Value = converter.ConvertToProvider(tokenizedCorpus.Created);
-            command.Parameters["@LastTokenized"].Value = converter.ConvertToProvider(tokenizedCorpus.LastTokenized);
+            object? dt(DateTimeOffset? d) => converter.ConvertToProvider(d);
+            void setCommandProperty(string propertyName, object? value) => 
+                command.Parameters[command.ToParameterName(propertyName)].Value = value;
+
+            setCommandProperty(nameof(Models.TokenizedCorpus.Id), Guid.Empty != tokenizedCorpus.Id ? tokenizedCorpus.Id : Guid.NewGuid());
+            setCommandProperty(nameof(Models.TokenizedCorpus.CorpusId), tokenizedCorpus.Corpus?.Id ?? tokenizedCorpus.CorpusId);
+            setCommandProperty(nameof(Models.TokenizedCorpus.DisplayName), tokenizedCorpus.DisplayName);
+            setCommandProperty(nameof(Models.TokenizedCorpus.TokenizationFunction), tokenizedCorpus.TokenizationFunction);
+            setCommandProperty(nameof(Models.TokenizedCorpus.ScrVersType), tokenizedCorpus.ScrVersType);
+            setCommandProperty(nameof(Models.TokenizedCorpus.CustomVersData), tokenizedCorpus.CustomVersData != null ? tokenizedCorpus.CustomVersData : DBNull.Value);
+            setCommandProperty(nameof(Models.TokenizedCorpus.Metadata), JsonSerializer.Serialize(tokenizedCorpus.Metadata));
+            setCommandProperty(nameof(Models.TokenizedCorpus.UserId), Guid.Empty != tokenizedCorpus.UserId ? tokenizedCorpus.UserId : userProvider!.CurrentUser!.Id);
+            setCommandProperty(nameof(Models.TokenizedCorpus.Created), converter.ConvertToProvider(tokenizedCorpus.Created));
+            setCommandProperty(nameof(Models.TokenizedCorpus.LastTokenized), dt(tokenizedCorpus.LastTokenized));
 
             _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public static DbCommand CreateTokenCompositeIdUpdateCommand(DbConnection connection)
-        {
-            var command = connection.CreateCommand();
-            var columns = new string[] { "TokenCompositeId" };
-            var whereColumns = new (string, DataUtil.WhereEquality)[] { ("Id", DataUtil.WhereEquality.Equals) };
-
-            DataUtil.ApplyColumnsToUpdateCommand(command, typeof(Models.TokenComponent), columns, whereColumns, Array.Empty<(string, int)>());
-
-            command.Prepare();
-
-            return command;
-        }
-
-        public static async Task SetTokenCompositeIdAsync(Guid? tokenCompositeId, Guid tokenComponentId, DbCommand command, CancellationToken cancellationToken)
-        {
-            command.Parameters["@TokenCompositeId"].Value = (tokenCompositeId is null) ? DBNull.Value : tokenCompositeId;
-            command.Parameters["@Id"].Value = tokenComponentId;
-
-            _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
-        }
-
-		public static DbCommand CreateTokenComponentUpdateSurfaceTrainingEngineTokenIdCommand(DbConnection connection)
+		public static DbCommand CreateTokenComponentUpdateSurfaceTrainingEngineTokenIdCommand(DbConnection connection, IModel metadataModel)
 		{
 			var command = connection.CreateCommand();
-			var columns = new string[] { nameof(Models.TokenComponent.SurfaceText), nameof(Models.TokenComponent.TrainingText), nameof(Models.TokenComponent.EngineTokenId) };
-			var whereColumns = new (string, WhereEquality)[] { (nameof(Models.IdentifiableEntity.Id), WhereEquality.Equals) };
+			var entityType = metadataModel.ToEntityType(typeof(Models.TokenComponent));
+
+			var columns = entityType.ToProperties(new List<string>
+			{
+				nameof(Models.TokenComponent.SurfaceText),
+				nameof(Models.TokenComponent.TrainingText),
+				nameof(Models.TokenComponent.EngineTokenId)
+			}).ToArray();
+
+			var whereColumns = new (IProperty, DataUtil.WhereEquality)[] {
+				(entityType.ToProperty(nameof(Models.IdentifiableEntity.Id)), DataUtil.WhereEquality.Equals)
+			};
 
 			DataUtil.ApplyColumnsToUpdateCommand(
 				command,
-				typeof(Models.TokenComponent),
+				entityType,
 				columns,
 				whereColumns,
-				Array.Empty<(string, int)>());
+				Array.Empty<(IProperty, int)>());
 
 			command.Prepare();
 
@@ -404,18 +525,27 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 			await SoftDeleteMetadataUpdateByIdAsync((DateTimeOffset)tokenComponent.Deleted, tokenComponent.Metadata, tokenComponent.Id, command, cancellationToken);
 		}
 
-		public static DbCommand CreateSoftDeleteMetadataUpdateByIdCommand(DbConnection connection)
+		public static DbCommand CreateSoftDeleteMetadataUpdateByIdCommand(DbConnection connection, IModel metadataModel)
 		{
 			var command = connection.CreateCommand();
-			var columns = new string[] { nameof(Models.TokenComponent.Deleted), nameof(Models.TokenComponent.Metadata) };
-			var whereColumns = new (string, WhereEquality)[] { (nameof(Models.IdentifiableEntity.Id), WhereEquality.Equals) };
+			var entityType = metadataModel.ToEntityType(typeof(Models.TokenComponent));
+
+			var columns = entityType.ToProperties(new List<string>
+			{
+				nameof(Models.TokenComponent.Deleted),
+				nameof(Models.TokenComponent.Metadata)
+			}).ToArray();
+
+			var whereColumns = new (IProperty, DataUtil.WhereEquality)[] {
+				(entityType.ToProperty(nameof(Models.IdentifiableEntity.Id)), DataUtil.WhereEquality.Equals)
+			};
 
 			DataUtil.ApplyColumnsToUpdateCommand(
 				command,
-				typeof(Models.TokenComponent),
+				entityType,
 				columns,
 				whereColumns,
-				Array.Empty<(string, int)>());
+				Array.Empty<(IProperty, int)>());
 
 			command.Prepare();
 
@@ -433,18 +563,26 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 		}
 
-		public static DbCommand CreateTokenComponentTypeUpdateCommand(DbConnection connection)
+		public static DbCommand CreateTokenComponentTypeUpdateCommand(DbConnection connection, IModel metadataModel)
 		{
 			var command = connection.CreateCommand();
-			var columns = new string[] { nameof(Models.TokenComponent.Type) };
-			var whereColumns = new (string, WhereEquality)[] { (nameof(Models.IdentifiableEntity.Id), WhereEquality.Equals) };
+			var entityType = metadataModel.ToEntityType(typeof(Models.TokenComponent));
+
+			var columns = entityType.ToProperties(new List<string>
+			{
+				nameof(Models.TokenComponent.Type)
+			}).ToArray();
+
+			var whereColumns = new (IProperty, DataUtil.WhereEquality)[] {
+				(entityType.ToProperty(nameof(Models.IdentifiableEntity.Id)), DataUtil.WhereEquality.Equals)
+			};
 
 			DataUtil.ApplyColumnsToUpdateCommand(
 				command,
-				typeof(Models.TokenComponent),
+				entityType,
 				columns,
 				whereColumns,
-				Array.Empty<(string, int)>());
+				Array.Empty<(IProperty, int)>());
 
 			command.Prepare();
 
@@ -458,18 +596,28 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 		}
 
-		public static DbCommand CreateTokenSubwordRenumberCommand(DbConnection connection)
+		public static DbCommand CreateTokenSubwordRenumberCommand(DbConnection connection, IModel metadataModel)
 		{
 			var command = connection.CreateCommand();
-			var columns = new string[] { nameof(Models.Token.OriginTokenLocation), nameof(Models.Token.SubwordNumber), nameof(Models.Token.EngineTokenId) };
-			var whereColumns = new (string, WhereEquality)[] { (nameof(Models.IdentifiableEntity.Id), WhereEquality.Equals) };
+			var entityType = metadataModel.ToEntityType(typeof(Models.TokenComponent));
+
+			var columns = entityType.ToProperties(new List<string>
+			{
+				nameof(Models.Token.OriginTokenLocation),
+				nameof(Models.Token.SubwordNumber), 
+                nameof(Models.Token.EngineTokenId)
+			}).ToArray();
+
+			var whereColumns = new (IProperty, DataUtil.WhereEquality)[] {
+				(entityType.ToProperty(nameof(Models.IdentifiableEntity.Id)), DataUtil.WhereEquality.Equals)
+			};
 
 			DataUtil.ApplyColumnsToUpdateCommand(
 				command,
-				typeof(Models.TokenComponent),
+				entityType,
 				columns,
 				whereColumns,
-				Array.Empty<(string, int)>());
+				Array.Empty<(IProperty, int)>());
 
 			command.Prepare();
 
@@ -486,16 +634,20 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 		}
 
-		public static DbCommand CreateTokenComponentDeleteCommand(DbConnection connection)
+		public static DbCommand CreateTokenComponentDeleteCommand(DbConnection connection, IModel metadataModel)
 		{
 			var command = connection.CreateCommand();
-			var whereColumns = new (string, WhereEquality)[] { (nameof(Models.IdentifiableEntity.Id), WhereEquality.Equals) };
+			var entityType = metadataModel.ToEntityType(typeof(Models.TokenComponent));
+
+			var whereColumns = new (IProperty, DataUtil.WhereEquality)[] {
+				(entityType.ToProperty(nameof(Models.IdentifiableEntity.Id)), DataUtil.WhereEquality.Equals)
+			};
 
 			DataUtil.ApplyColumnsToDeleteCommand(
 				command,
-				typeof(Models.TokenComponent),
+				entityType,
 				whereColumns,
-				Array.Empty<(string, int)>());
+				Array.Empty<(IProperty, int)>());
 
 			command.Prepare();
 

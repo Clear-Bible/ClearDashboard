@@ -1,5 +1,4 @@
 ﻿using ClearBible.Engine.Corpora;
-using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.CQRS;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -7,11 +6,12 @@ using Microsoft.Extensions.Logging;
 using SIL.Machine.Translation;
 using System.Data.Common;
 using System.Text.Json;
-using ClearDashboard.DAL.Alignment.Features.Translation;
-using static ClearDashboard.DAL.Alignment.Features.Corpora.UpdateOrAddVersesInTokenizedCorpusCommandHandler;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models;
 using SIL.Machine.SequenceAlignment;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore;
+using ClearDashboard.DataAccessLayer.Data.Extensions;
 using static ClearDashboard.DAL.Alignment.Features.Common.DataUtil;
 using ClearDashboard.DAL.Interfaces;
 
@@ -19,37 +19,53 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 {
     public static class AlignmentUtil
     {
-        static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+        static readonly SemaphoreSlim semaphoreSlim = new(1, 1);
 
-        public static DbCommand CreateAlignmentSetInsertCommand(DbConnection connection)
+        public static DbCommand CreateAlignmentSetInsertCommand(DbConnection connection, IModel metadataModel)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "ParallelCorpusId", "DisplayName", "SmtModel", "IsSyntaxTreeAlignerRefined", "IsSymmetrized", "Metadata", "UserId", "Created" };
+            var entityType = metadataModel.ToEntityType(typeof(Models.AlignmentSet));
+            var insertProperties = entityType.ToProperties(new List<string>
+            {
+                nameof(Models.AlignmentSet.Id), 
+                nameof(Models.AlignmentSet.ParallelCorpusId), 
+                nameof(Models.AlignmentSet.DisplayName), 
+                nameof(Models.AlignmentSet.SmtModel), 
+                nameof(Models.AlignmentSet.IsSyntaxTreeAlignerRefined), 
+                nameof(Models.AlignmentSet.IsSymmetrized), 
+                nameof(Models.AlignmentSet.Metadata), 
+                nameof(Models.AlignmentSet.UserId), 
+                nameof(Models.AlignmentSet.Created) 
+            }).ToArray();
 
-            ApplyColumnsToCommand(command, typeof(Models.AlignmentSet), columns);
+            ApplyColumnsToInsertCommand(command, entityType, insertProperties);
 
             command.Prepare();
 
             return command;
         }
 
-        public static async Task<Guid> PrepareInsertAlignmentSetAsync(Models.AlignmentSet alignmentSet, DbCommand alignmentSetCommand, Guid currentUserId, CancellationToken cancellationToken)
+        public static async Task<Guid> PrepareInsertAlignmentSetAsync(Models.AlignmentSet alignmentSet, DbCommand command, Guid currentUserId, CancellationToken cancellationToken)
         {
             var converter = new DateTimeOffsetToBinaryConverter();
 
+            object? dt(DateTimeOffset d) => converter.ConvertToProvider(d);
+            void setCommandProperty(string propertyName, object? value) => 
+                command.Parameters[command.ToParameterName(propertyName)].Value = value;
+
             var alignmentSetId = (Guid.Empty != alignmentSet.Id) ? alignmentSet.Id : Guid.NewGuid();
 
-            alignmentSetCommand.Parameters["@Id"].Value = alignmentSetId;
-            alignmentSetCommand.Parameters["@ParallelCorpusId"].Value = alignmentSet.ParallelCorpusId;
-            alignmentSetCommand.Parameters["@DisplayName"].Value = alignmentSet.DisplayName;
-            alignmentSetCommand.Parameters["@SmtModel"].Value = alignmentSet.SmtModel;
-            alignmentSetCommand.Parameters["@IsSyntaxTreeAlignerRefined"].Value = alignmentSet.IsSyntaxTreeAlignerRefined;
-            alignmentSetCommand.Parameters["@IsSymmetrized"].Value = alignmentSet.IsSymmetrized;
-            alignmentSetCommand.Parameters["@Metadata"].Value = JsonSerializer.Serialize(alignmentSet.Metadata);
-            alignmentSetCommand.Parameters["@UserId"].Value = Guid.Empty != alignmentSet.UserId ? alignmentSet.UserId : currentUserId;
-            alignmentSetCommand.Parameters["@Created"].Value = converter.ConvertToProvider(alignmentSet.Created);
+            setCommandProperty(nameof(Models.AlignmentSet.Id), alignmentSetId);
+            setCommandProperty(nameof(Models.AlignmentSet.ParallelCorpusId), alignmentSet.ParallelCorpusId);
+            setCommandProperty(nameof(Models.AlignmentSet.DisplayName), alignmentSet.DisplayName);
+            setCommandProperty(nameof(Models.AlignmentSet.SmtModel), alignmentSet.SmtModel);
+            setCommandProperty(nameof(Models.AlignmentSet.IsSyntaxTreeAlignerRefined), alignmentSet.IsSyntaxTreeAlignerRefined);
+            setCommandProperty(nameof(Models.AlignmentSet.IsSymmetrized), alignmentSet.IsSymmetrized);
+            setCommandProperty(nameof(Models.AlignmentSet.Metadata), JsonSerializer.Serialize(alignmentSet.Metadata));
+            setCommandProperty(nameof(Models.AlignmentSet.UserId), Guid.Empty != alignmentSet.UserId ? alignmentSet.UserId : currentUserId);
+            setCommandProperty(nameof(Models.AlignmentSet.Created), dt(alignmentSet.Created));
 
-            _ = await alignmentSetCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+            _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 
             return alignmentSetId;
         }
@@ -64,40 +80,69 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             }
         }
 
-        public static DbCommand CreateAlignmentInsertCommand(DbConnection connection)
+        public static DbCommand CreateAlignmentInsertCommand(DbConnection connection, IModel metadataModel)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "SourceTokenComponentId", "TargetTokenComponentId", "AlignmentVerification", "AlignmentOriginatedFrom", "Score", "AlignmentSetId", "UserId", "Created" };
+            var entityType = metadataModel.ToEntityType(typeof(Models.Alignment));
+            var insertProperties = entityType.ToProperties(new List<string>
+            {
+                nameof(Models.Alignment.Id), 
+                nameof(Models.Alignment.SourceTokenComponentId), 
+                nameof(Models.Alignment.TargetTokenComponentId), 
+                nameof(Models.Alignment.AlignmentVerification), 
+                nameof(Models.Alignment.AlignmentOriginatedFrom), 
+                nameof(Models.Alignment.Score), 
+                nameof(Models.Alignment.AlignmentSetId), 
+                nameof(Models.Alignment.UserId), 
+                nameof(Models.Alignment.Created) 
+            }).ToArray();
 
-            ApplyColumnsToCommand(command, typeof(Models.Alignment), columns);
+            ApplyColumnsToInsertCommand(command, entityType, insertProperties);
 
             command.Prepare();
 
             return command;
         }
 
-        public static async Task InsertAlignmentAsync(Models.Alignment alignment, Guid alignmentSetId, DbCommand alignmentCommand, Guid currentUserId, CancellationToken cancellationToken)
-        {
-            var converter = new DateTimeOffsetToBinaryConverter();
+		public static async Task InsertAlignmentAsync(Models.Alignment alignment, Guid alignmentSetId, DbCommand command, Guid currentUserId, CancellationToken cancellationToken)
+		{
+			var converter = new DateTimeOffsetToBinaryConverter();
 
-            alignmentCommand.Parameters["@Id"].Value = (Guid.Empty != alignment.Id) ? alignment.Id : Guid.NewGuid();
-            alignmentCommand.Parameters["@SourceTokenComponentId"].Value = alignment.SourceTokenComponentId;
-            alignmentCommand.Parameters["@TargetTokenComponentId"].Value = alignment.TargetTokenComponentId;
-            alignmentCommand.Parameters["@AlignmentVerification"].Value = alignment.AlignmentVerification;
-            alignmentCommand.Parameters["@AlignmentOriginatedFrom"].Value = alignment.AlignmentOriginatedFrom;
-            alignmentCommand.Parameters["@Score"].Value = alignment.Score;
-            alignmentCommand.Parameters["@AlignmentSetId"].Value = alignmentSetId;
-            alignmentCommand.Parameters["@UserId"].Value = Guid.Empty != alignment.UserId ? alignment.UserId : currentUserId;
-            alignmentCommand.Parameters["@Created"].Value = converter.ConvertToProvider(alignment.Created);
-            _ = await alignmentCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
-        }
+			object? dt(DateTimeOffset d) => converter.ConvertToProvider(d);
+			void setCommandProperty(string propertyName, object? value) =>
+				command.Parameters[command.ToParameterName(propertyName)].Value = value;
 
-		public static DbCommand CreateTranslationInsertCommand(DbConnection connection)
+			setCommandProperty(nameof(Models.Alignment.Id), (Guid.Empty != alignment.Id) ? alignment.Id : Guid.NewGuid());
+			setCommandProperty(nameof(Models.Alignment.SourceTokenComponentId), alignment.SourceTokenComponentId);
+			setCommandProperty(nameof(Models.Alignment.TargetTokenComponentId), alignment.TargetTokenComponentId);
+			setCommandProperty(nameof(Models.Alignment.AlignmentVerification), (int)alignment.AlignmentVerification);
+			setCommandProperty(nameof(Models.Alignment.AlignmentOriginatedFrom), (int)alignment.AlignmentOriginatedFrom);
+			setCommandProperty(nameof(Models.Alignment.Score), alignment.Score);
+			setCommandProperty(nameof(Models.Alignment.AlignmentSetId), alignmentSetId);
+			setCommandProperty(nameof(Models.Alignment.UserId), Guid.Empty != alignment.UserId ? alignment.UserId : currentUserId);
+			setCommandProperty(nameof(Models.Alignment.Created), dt(alignment.Created));
+
+			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+		}
+
+		public static DbCommand CreateTranslationInsertCommand(DbConnection connection, IModel metadataModel)
 		{
 			var command = connection.CreateCommand();
-			var columns = new string[] { "Id", "SourceTokenComponentId", "TargetText", "TranslationState", "TranslationSetId", "LexiconTranslationId", "UserId", "Created" };
+			var entityType = metadataModel.ToEntityType(typeof(Models.Translation));
 
-			ApplyColumnsToCommand(command, typeof(Models.Translation), columns);
+			var insertProperties = entityType.ToProperties(new List<string>
+			{
+				nameof(Models.Translation.Id),
+				nameof(Models.Translation.SourceTokenComponentId),
+				nameof(Models.Translation.TargetText),
+				nameof(Models.Translation.TranslationState),
+				nameof(Models.Translation.TranslationSetId),
+				nameof(Models.Translation.LexiconTranslationId),
+				nameof(Models.Translation.UserId),
+				nameof(Models.Translation.Created)
+			}).ToArray();
+
+			ApplyColumnsToInsertCommand(command, entityType, insertProperties);
 
 			command.Prepare();
 
@@ -119,12 +164,22 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 			_ = await translationCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 		}
 
-		public static DbCommand CreateTokenVerseAssociationInsertCommand(DbConnection connection)
+		public static DbCommand CreateTokenVerseAssociationInsertCommand(DbConnection connection, IModel metadataModel)
 		{
 			var command = connection.CreateCommand();
-			var columns = new string[] { "Id", "TokenComponentId", "VerseId", "Position", "UserId", "Created" };
+			var entityType = metadataModel.ToEntityType(typeof(Models.TokenVerseAssociation));
 
-			ApplyColumnsToCommand(command, typeof(Models.TokenVerseAssociation), columns);
+			var insertProperties = entityType.ToProperties(new List<string>
+			{
+				nameof(Models.TokenVerseAssociation.Id),
+				nameof(Models.TokenVerseAssociation.TokenComponentId),
+				nameof(Models.TokenVerseAssociation.VerseId),
+				nameof(Models.TokenVerseAssociation.Position),
+				nameof(Models.TokenVerseAssociation.UserId),
+				nameof(Models.TokenVerseAssociation.Created)
+			}).ToArray();
+
+			ApplyColumnsToInsertCommand(command, entityType, insertProperties);
 
 			command.Prepare();
 
@@ -144,61 +199,60 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 			_ = await tvaCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 		}
 
-		private static void ApplyColumnsToCommand(DbCommand command, Type type, string[] columns)
+        private static void ApplyColumnsToInsertCommand(DbCommand command, IEntityType entityType, IProperty[] columns)
         {
+            var tableName = entityType.ToTableName();
+
             command.CommandText =
             $@"
-                INSERT INTO {type.Name} ({string.Join(", ", columns)})
-                VALUES ({string.Join(", ", columns.Select(c => "@" + c))})
+                INSERT INTO {tableName} ({string.Join(", ", columns.Select(c => c.GetColumnName()))})
+                VALUES ({string.Join(", ", columns.Select(c => command.ToParameterName(c.Name)))})
             ";
 
             foreach (var column in columns)
             {
-                var parameter = command.CreateParameter();
-                parameter.ParameterName = $"@{column}";
-                command.Parameters.Add(parameter);
+                command.CreateAddParameter(column);
             }
         }
 
-        public static DbCommand CreateDeleteMachineAlignmentsByAlignmentSetIdCommand(DbConnection connection)
-        {
-            var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "ParallelCorpusId", "DisplayName", "SmtModel", "IsSyntaxTreeAlignerRefined", "IsSymmetrized", "Metadata", "UserId", "Created" };
-
-            ApplyColumnsToCommand(command, typeof(Models.AlignmentSet), columns);
-
-            command.Prepare();
-
-            return command;
-        }
-
-        public static async Task DeleteMachineAlignmentsByAlignmentSetIdAsync(Guid alignmentSetId, DbConnection connection, CancellationToken cancellationToken)//IEnumerable<Guid> alignmentTopTargetTrainingTextGuidsToDelete,
+        public static async Task DeleteMachineAlignmentsByAlignmentSetIdAsync(Guid alignmentSetId, DbConnection connection, IModel metadataModel, CancellationToken cancellationToken)//IEnumerable<Guid> alignmentTopTargetTrainingTextGuidsToDelete,
         {   
+            var entityType = metadataModel.ToEntityType(typeof(Models.Alignment));
+            var originatedFromColumn = entityType.ToProperty(nameof(Models.Alignment.AlignmentOriginatedFrom));
+            var alignmentSetIdColumn = entityType.ToProperty(nameof(Models.Alignment.AlignmentSetId));
+                
             await using var command = connection.CreateCommand();
             command.CommandText = $@"
-                DELETE FROM Alignment
-                WHERE AlignmentOriginatedFrom = '0' AND AlignmentSetId = '{alignmentSetId.ToString().ToUpper()}'    
+                DELETE FROM {entityType.ToTableName()}
+                WHERE 
+                    {originatedFromColumn} = '0' AND 
+                    {alignmentSetIdColumn}  = '{alignmentSetId.ToString().ToUpper()}'    
             ";
 
             _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 
-		public static DbCommand CreateAlignmentSourceOrTargetIdSetCommand(DbConnection connection, bool isSource)
+		public static DbCommand CreateAlignmentSourceOrTargetIdSetCommand(DbConnection connection, bool isSource, IModel metadataModel)
 		{
-			var columnName = isSource
-				? nameof(DataAccessLayer.Models.Alignment.SourceTokenComponentId)
-				: nameof(DataAccessLayer.Models.Alignment.TargetTokenComponentId);
-
 			var command = connection.CreateCommand();
-			var columns = new string[] { columnName };
-			var whereColumns = new (string, WhereEquality)[] { (nameof(IdentifiableEntity.Id), WhereEquality.Equals) };
+			var entityType = metadataModel.ToEntityType(typeof(Models.Alignment));
+
+			var columnName = isSource
+		        ? nameof(DataAccessLayer.Models.Alignment.SourceTokenComponentId)
+		        : nameof(DataAccessLayer.Models.Alignment.TargetTokenComponentId);
+
+			var tokenComponentIdPropertyInfo = entityType.ToProperty(columnName);
+			var idPropertyInfo = entityType.ToProperty(nameof(Models.IdentifiableEntity.Id));
+
+			var columns = new IProperty[] { tokenComponentIdPropertyInfo };
+			var whereColumns = new (IProperty, WhereEquality)[] { (idPropertyInfo, WhereEquality.Equals) };
 
 			DataUtil.ApplyColumnsToUpdateCommand(
 				command,
-				typeof(DataAccessLayer.Models.Alignment),
+				entityType,
 				columns,
 				whereColumns,
-				Array.Empty<(string, int)>());
+				Array.Empty<(IProperty, int)>());
 
 			command.Prepare();
 
@@ -221,18 +275,23 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 		}
 
-		public static DbCommand CreateTranslationSourceIdSetCommand(DbConnection connection)
+		public static DbCommand CreateTranslationSourceIdSetCommand(DbConnection connection, IModel metadataModel)
 		{
 			var command = connection.CreateCommand();
-			var columns = new string[] { nameof(DataAccessLayer.Models.Translation.SourceTokenComponentId) };
-			var whereColumns = new (string, WhereEquality)[] { (nameof(IdentifiableEntity.Id), WhereEquality.Equals) };
+			var entityType = metadataModel.ToEntityType(typeof(Models.Translation));
+
+			var sourceTokenComponentIdPropertyInfo = entityType.ToProperty(nameof(Models.Translation.SourceTokenComponentId));
+			var idPropertyInfo = entityType.ToProperty(nameof(Models.IdentifiableEntity.Id));
+
+			var columns = new IProperty[] { sourceTokenComponentIdPropertyInfo };
+			var whereColumns = new (IProperty, WhereEquality)[] { (idPropertyInfo, WhereEquality.Equals) };
 
 			DataUtil.ApplyColumnsToUpdateCommand(
 				command,
-				typeof(DataAccessLayer.Models.Translation),
+				entityType,
 				columns,
 				whereColumns,
-				Array.Empty<(string, int)>());
+				Array.Empty<(IProperty, int)>());
 
 			command.Prepare();
 
@@ -247,18 +306,23 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 		}
 
-		public static DbCommand CreateTVATokenComponentIdSetCommand(DbConnection connection)
+		public static DbCommand CreateTVATokenComponentIdSetCommand(DbConnection connection, IModel metadataModel)
 		{
 			var command = connection.CreateCommand();
-			var columns = new string[] { nameof(DataAccessLayer.Models.TokenVerseAssociation.TokenComponentId) };
-			var whereColumns = new (string, WhereEquality)[] { (nameof(IdentifiableEntity.Id), WhereEquality.Equals) };
+			var entityType = metadataModel.ToEntityType(typeof(Models.TokenVerseAssociation));
+
+			var tokenComponentIdPropertyInfo = entityType.ToProperty(nameof(Models.TokenVerseAssociation.TokenComponentId));
+			var idPropertyInfo = entityType.ToProperty(nameof(Models.IdentifiableEntity.Id));
+
+			var columns = new IProperty[] { tokenComponentIdPropertyInfo };
+			var whereColumns = new (IProperty, WhereEquality)[] { (idPropertyInfo, WhereEquality.Equals) };
 
 			DataUtil.ApplyColumnsToUpdateCommand(
 				command,
-				typeof(DataAccessLayer.Models.TokenVerseAssociation),
+				entityType,
 				columns,
 				whereColumns,
-				Array.Empty<(string, int)>());
+				Array.Empty<(IProperty, int)>());
 
 			command.Prepare();
 
@@ -273,12 +337,18 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 		}
 
-		public static DbCommand CreateAlignmentDenormalizationTaskInsertCommand(DbConnection connection)
+		public static DbCommand CreateAlignmentDenormalizationTaskInsertCommand(DbConnection connection, IModel metadataModel)
 		{
 			var command = connection.CreateCommand();
-			var columns = new string[] { "Id", "AlignmentSetId", "SourceText" };
+			var entityType = metadataModel.ToEntityType(typeof(Models.AlignmentSetDenormalizationTask));
+			var insertProperties = entityType.ToProperties(new List<string>
+			{
+				nameof(Models.AlignmentSetDenormalizationTask.Id),
+				nameof(Models.AlignmentSetDenormalizationTask.AlignmentSetId),
+				nameof(Models.AlignmentSetDenormalizationTask.SourceText)
+			}).ToArray();
 
-			DataUtil.ApplyColumnsToInsertCommand(command, typeof(Models.AlignmentSetDenormalizationTask), columns);
+			DataUtil.ApplyColumnsToInsertCommand(command, entityType, insertProperties);
 
 			command.Prepare();
 
@@ -287,7 +357,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 
 		public static async Task<Guid> InsertAlignmentDenormalizationTaskAsync(Models.AlignmentSetDenormalizationTask denormalizationTask, DbCommand command, CancellationToken cancellationToken)
 		{
-            var id = Guid.NewGuid();
+			var id = Guid.NewGuid();
 
 			command.Parameters["@Id"].Value = id;
 			command.Parameters["@AlignmentSetId"].Value = denormalizationTask.AlignmentSetId;
@@ -295,7 +365,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 
 			_ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 
-            return id;
+			return id;
 		}
 
 		//Same as ProjectTemplateProcessRunner, how do we do background tasks?

@@ -156,8 +156,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 using var connection = ProjectDbContext.Database.GetDbConnection();
                 using var transaction = await ProjectDbContext.Database.GetDbConnection().BeginTransactionAsync(cancellationToken);
 
-                using var alignmentSetInsertCommand = AlignmentUtil.CreateAlignmentSetInsertCommand(connection);
-                using var alignmentInsertCommand = AlignmentUtil.CreateAlignmentInsertCommand(connection);
+                using var alignmentSetInsertCommand = AlignmentUtil.CreateAlignmentSetInsertCommand(connection, ProjectDbContext.Model);
+                using var alignmentInsertCommand = AlignmentUtil.CreateAlignmentInsertCommand(connection, ProjectDbContext.Model);
 
                 await AlignmentUtil.PrepareInsertAlignmentSetAsync(
                     alignmentSet,

@@ -11,6 +11,8 @@ using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
+using Microsoft.EntityFrameworkCore.Metadata;
+using ClearDashboard.DataAccessLayer.Data.Extensions;
 
 namespace ClearDashboard.Collaboration.Merge
 {
@@ -23,7 +25,7 @@ namespace ClearDashboard.Collaboration.Merge
         {
         }
 
-        protected async Task DeleteComposites(DbConnection dbConnection, IEnumerable<Guid> tokenCompositeIds, CancellationToken cancellationToken)
+        protected async Task DeleteComposites(DbConnection dbConnection, IModel metadataModel, IEnumerable<Guid> tokenCompositeIds, CancellationToken cancellationToken)
         {
             if (!tokenCompositeIds.Any())
             {
@@ -32,7 +34,7 @@ namespace ClearDashboard.Collaboration.Merge
 
             await DataUtil.DeleteIdentifiableEntityAsync(
                 dbConnection,
-                TokenCompositeHandler.TABLE_ENTITY_TYPE,
+                metadataModel.ToEntityType(TokenCompositeHandler.TABLE_ENTITY_TYPE),
                 tokenCompositeIds,
                 cancellationToken);
         }

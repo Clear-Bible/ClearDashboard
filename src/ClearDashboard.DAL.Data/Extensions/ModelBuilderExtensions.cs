@@ -23,7 +23,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Extensions
                         .Property(userIdProperty.Name)
                         .HasValueGenerator<UserIdValueGenerator>();
                 }
-
             }
         }
 
@@ -56,11 +55,14 @@ namespace ClearDashboard.DataAccessLayer.Data.Extensions
         /// <summary>
         /// Remove pluralizing table name convention to create table name in singular form.
         /// </summary>       
-        public static void RemovePluralizingTableNameConvention(this ModelBuilder modelBuilder)
+        public static void RemovePluralizingTableNameConvention(this ModelBuilder modelBuilder, DbContext dbContext)
         {
-            foreach (IMutableEntityType entityType in modelBuilder.Model.GetEntityTypes())
+            if (dbContext is not NpgsqlProjectDbContext)
             {
-                entityType.SetTableName(entityType.DisplayName());
+                foreach (IMutableEntityType entityType in modelBuilder.Model.GetEntityTypes())
+                {
+                    entityType.SetTableName(entityType.DisplayName());
+                }
             }
         }
 

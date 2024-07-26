@@ -9,6 +9,7 @@ using ClearDashboard.Collaboration.Model;
 using ClearDashboard.DAL.Alignment.Features.Common;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Data.Extensions;
 using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -81,7 +82,7 @@ public class MergeBehaviorApply : MergeBehaviorBase
         if (_connection is null) throw new Exception($"Database connnection is null - MergeStartAsync must be called prior to calling this method");
 
         var resolvedWhereClause = await ResolveWhereClauseAsync(where, itemToDelete);
-        await using var command = CreateModelSnapshotDeleteCommand(_connection, itemToDelete.EntityType, resolvedWhereClause);
+        await using var command = CreateModelSnapshotDeleteCommand(_connection, _projectDbContext.Model, itemToDelete.EntityType, resolvedWhereClause);
 
         _logger.LogDebug($"Executing delete query for model type '{itemToDelete.EntityType.ShortDisplayName()}' having parameter values:");
         foreach (DbParameter p in command.Parameters)
@@ -100,8 +101,10 @@ public class MergeBehaviorApply : MergeBehaviorBase
     {
         if (_connection is null) throw new Exception($"Database connnection is null - MergeStartAsync must be called prior to calling this method");
 
+        var entityType = _projectDbContext.Model.ToEntityType(itemToModify.EntityType);
+
         var resolvedWhereClause = await ResolveWhereClauseAsync(where, itemToModify);
-        using var command = await CreateModelSnapshotUpdateCommand(_connection, modelDifference, itemToModify, resolvedWhereClause);
+        using var command = await CreateModelSnapshotUpdateCommand(_connection, _projectDbContext.Model, modelDifference, itemToModify, resolvedWhereClause);
 
         _logger.LogDebug($"Running update command for model type: '{itemToModify.EntityType.ShortDisplayName()}' having parameter values:");
         foreach (DbParameter p in command.Parameters)
@@ -128,7 +131,7 @@ public class MergeBehaviorApply : MergeBehaviorBase
 
         _logger.LogDebug($"Creating insert command for model type {itemToCreate.EntityType.ShortDisplayName()}");
 
-        var command = CreateModelSnapshotInsertCommandNoParameters(_connection, itemToCreate);
+        var command = CreateModelSnapshotInsertCommandNoParameters(_connection, _projectDbContext.Model, itemToCreate);
         _insertCommandsByType.Add(itemToCreate.EntityType, command);
     }
 
@@ -179,7 +182,7 @@ public class MergeBehaviorApply : MergeBehaviorBase
         }
 
         _logger.LogDebug($"Running handler '{GetType().Name}' specific query:  '{description}'");
-        await query.Invoke(_connection, MergeCache, _logger, Progress, cancellationToken);
+        await query.Invoke(_connection, _projectDbContext.Model, MergeCache, _logger, Progress, cancellationToken);
     }
 
     public override async Task<object?> RunEntityValueResolverAsync(IModelSnapshot modelSnapshot, string propertyName, EntityValueResolverAsync propertyValueConverter)

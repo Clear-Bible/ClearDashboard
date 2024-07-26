@@ -15,6 +15,8 @@ using System.Data.Entity.Core.Objects;
 using ClearDashboard.DataAccessLayer.Data.Migrations;
 using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using Microsoft.EntityFrameworkCore.Metadata;
+using ClearDashboard.DataAccessLayer.Data.Extensions;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -81,7 +83,7 @@ public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
                     throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.Token>");
                 }
 
-                var tokenId = await ResolveTokenId((IModelSnapshot<Models.Token>)modelSnapshot, dbConnection, cache, logger);
+                var tokenId = await ResolveTokenId((IModelSnapshot<Models.Token>)modelSnapshot, dbConnection, projectDbContext.Model, cache, logger);
                 return (tokenId != default) ? tokenId : null;
             });
 
@@ -102,7 +104,7 @@ public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
 			new[] { nameof(Models.Token.GrammarId) });
 	}
 
-	protected async static Task<Guid> ResolveTokenId(IModelSnapshot<Models.Token> modelSnapshot, DbConnection dbConnection, MergeCache cache, ILogger logger)
+	protected async static Task<Guid> ResolveTokenId(IModelSnapshot<Models.Token> modelSnapshot, DbConnection dbConnection, IModel metadataModel, MergeCache cache, ILogger logger)
     {
         if (modelSnapshot.PropertyValues.TryGetValue("Ref", out var refValue) &&
             modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Token.TokenizedCorpusId), out var tokenizedCorpusId) &&
@@ -120,17 +122,19 @@ public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
 
             Guid tokenId;
             var deleted = (hasDeleted && tokenDeleted is not null) ? DataUtil.NOT_NULL : null;
+            var entityType = metadataModel.ToEntityType(TABLE_ENTITY_TYPE);
+
             if (originTokenLocation is not null)
             {
                 var tokenResult = (await DataUtil.SelectEntityValuesAsync(
                     dbConnection,
-                    TABLE_ENTITY_TYPE,
+					entityType,
                     new List<string> { nameof(Models.Token.Id), nameof(Models.Token.EngineTokenId) },
-                    whereClause: new Dictionary<string, object?> {
-                        { nameof(Models.Token.OriginTokenLocation), (string)originTokenLocation },
-                        { nameof(Models.Token.TokenizedCorpusId), tokenizedCorpusId },
-                        { nameof(Models.Token.Deleted), deleted },
-                        { DISCRIMINATOR_COLUMN_NAME, DISCRIMINATOR_COLUMN_VALUE }
+                    whereClause: new List<(IProperty PropertyInfo, object? ParameterValue)> {
+                        { (entityType.ToProperty(nameof(Models.Token.OriginTokenLocation)), (string)originTokenLocation) },
+                        { (entityType.ToProperty(nameof(Models.Token.TokenizedCorpusId)), tokenizedCorpusId) },
+                        { (entityType.ToProperty(nameof(Models.Token.Deleted)), deleted) },
+                        { (entityType.ToProperty(DISCRIMINATOR_COLUMN_NAME), DISCRIMINATOR_COLUMN_VALUE) }
                     },
                     Enumerable.Empty<(Type, string, string)>(),
                     true,
@@ -158,13 +162,13 @@ public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
             {
                 var tokenResult = (await DataUtil.SelectEntityValuesAsync(
                     dbConnection,
-                    TABLE_ENTITY_TYPE,
+					entityType,
                     new List<string> { nameof(Models.Token.Id), nameof(Models.Token.EngineTokenId) },
-                    new Dictionary<string, object?> {
-                        { nameof(Models.Token.EngineTokenId), (string)engineTokenId! },
-                        { nameof(Models.Token.TokenizedCorpusId), tokenizedCorpusId },
-                        { nameof(Models.Token.Deleted), deleted },
-                        { DISCRIMINATOR_COLUMN_NAME, DISCRIMINATOR_COLUMN_VALUE }
+                    new List<(IProperty PropertyInfo, object? ParameterValue)> {
+                        { (entityType.ToProperty(nameof(Models.Token.EngineTokenId)), (string)engineTokenId!) },
+                        { (entityType.ToProperty(nameof(Models.Token.TokenizedCorpusId)), tokenizedCorpusId) },
+                        { (entityType.ToProperty(nameof(Models.Token.Deleted)), deleted) },
+                        { (entityType.ToProperty(DISCRIMINATOR_COLUMN_NAME), DISCRIMINATOR_COLUMN_VALUE) }
                     },
                     Enumerable.Empty<(Type, string, string)>(),
                     true,
@@ -206,14 +210,14 @@ public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
 
         await _mergeContext.MergeBehavior.RunDbConnectionQueryAsync(
             $"Resolve token id",
-            async (DbConnection dbConnection, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
+            async (DbConnection dbConnection, IModel metadataModel, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
             {
-                tokenId = await ResolveTokenId(itemToDelete, dbConnection, cache, logger);
+                tokenId = await ResolveTokenId(itemToDelete, dbConnection, metadataModel, cache, logger);
                 if (tokenId == default)
                     return;
 
-                var tokenCompositeIds = await FindTokenCompositeIds(dbConnection, new Guid[] { tokenId }, cancellationToken);
-                await DeleteComposites(dbConnection, tokenCompositeIds, cancellationToken);
+                var tokenCompositeIds = await FindTokenCompositeIds(dbConnection, metadataModel, new Guid[] { tokenId }, cancellationToken);
+                await DeleteComposites(dbConnection, metadataModel, tokenCompositeIds, cancellationToken);
 
                 deletedTokenCompositeIds.AddRange(tokenCompositeIds);
             },
@@ -341,23 +345,23 @@ public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
             {
                 await _mergeContext.MergeBehavior.RunDbConnectionQueryAsync(
                     $"Find all database composite ids related to incoming token snapshots",
-                    async (DbConnection dbConnection, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
+                    async (DbConnection dbConnection, IModel metadataModel, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) =>
                     {
                         var tokenIds = new List<Guid>();
                         foreach (var tokenSnapshot in otlSetCurrentDatabase
                             .Select(e => e.Snapshot))
                         {
-                            var tokenId = await ResolveTokenId(tokenSnapshot, dbConnection, cache, logger);
+                            var tokenId = await ResolveTokenId(tokenSnapshot, dbConnection, metadataModel, cache, logger);
                             if (tokenId != default)
                             {
                                 tokenIds.Add(tokenId);
                             }
                         }
 
-                        var tokenCompositeIds = await FindTokenCompositeIds(dbConnection, tokenIds, cancellationToken);
+                        var tokenCompositeIds = await FindTokenCompositeIds(dbConnection, metadataModel, tokenIds, cancellationToken);
                         if (tokenCompositeIds.Any())
                         {
-                            await DeleteComposites(dbConnection, tokenCompositeIds, cancellationToken);
+                            await DeleteComposites(dbConnection, metadataModel, tokenCompositeIds, cancellationToken);
                             deletedTokenCompositeIds.AddRange(tokenCompositeIds);
                         }
                     },
@@ -368,17 +372,18 @@ public class TokenHandler : TokenComponentHandler<IModelSnapshot<Models.Token>>
         await DetachTokenComponents(Enumerable.Empty<Guid>(), deletedTokenCompositeIds, cancellationToken);
     }
 
-    private static async Task<IEnumerable<Guid>> FindTokenCompositeIds(DbConnection dbConnection, IEnumerable<Guid> tokenIds, CancellationToken cancellationToken)
+    private static async Task<IEnumerable<Guid>> FindTokenCompositeIds(DbConnection dbConnection, IModel metadataModel, IEnumerable<Guid> tokenIds, CancellationToken cancellationToken)
     {
-        return (await DataUtil.SelectEntityValuesAsync(
+        var entityType = metadataModel.ToEntityType(typeof(Models.TokenCompositeTokenAssociation));
+		return (await DataUtil.SelectEntityValuesAsync(
             dbConnection,
-            typeof(Models.TokenCompositeTokenAssociation),
+            entityType,
             new List<string> { 
                 nameof(Models.TokenCompositeTokenAssociation.TokenCompositeId)
             },
-            new Dictionary<string, object?> {
-                { nameof(Models.TokenCompositeTokenAssociation.TokenId), tokenIds },
-                { nameof(Models.TokenCompositeTokenAssociation.Deleted), null }
+            new List<(IProperty PropertyInfo, object? ParameterValue)> {
+                { (entityType.ToProperty(nameof(Models.TokenCompositeTokenAssociation.TokenId)), tokenIds) },
+                { (entityType.ToProperty(nameof(Models.TokenCompositeTokenAssociation.Deleted)), null) }
             },
             Enumerable.Empty<(Type, string, string)>(),
             true,

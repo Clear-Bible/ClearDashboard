@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using ClearDashboard.DataAccessLayer.Data;
 using SIL.Machine.Utils;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ClearDashboard.Collaboration.Merge;
 

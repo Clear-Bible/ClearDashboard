@@ -3,8 +3,10 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Data.Extensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 using System.Data.Common;
@@ -63,8 +65,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             Logger.LogInformation($"Private memory usage (BEFORE BULK INSERT): {proc.PrivateMemorySize64}");
 #endif
 
+            var metadataModel = ProjectDbContext.Model;
             await ProjectDbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
-
             try
             {
                 var translationSet = new Models.TranslationSet
@@ -96,9 +98,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 using var connection = ProjectDbContext.Database.GetDbConnection();
                 using var transaction = await ProjectDbContext.Database.GetDbConnection().BeginTransactionAsync(cancellationToken);
 
-                using var translationSetInsertCommand = CreateTranslationSetInsertCommand(connection);
-                using var translationModelEntryInsertCommand = CreateTranslationModelEntryInsertCommand(connection);
-                using var translationModelTargetTextScoreInsertCommand = CreateTranslationModelTargetTextScoreInsertCommand(connection);
+                using var translationSetInsertCommand = CreateTranslationSetInsertCommand(connection, metadataModel);
+                using var translationModelEntryInsertCommand = CreateTranslationModelEntryInsertCommand(connection, metadataModel);
+                using var translationModelTargetTextScoreInsertCommand = CreateTranslationModelTargetTextScoreInsertCommand(connection, metadataModel);
 
                 var translationSetId = await InsertTranslationSetAsync(
                     translationSet,
@@ -148,12 +150,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
         }
 
-        private static DbCommand CreateTranslationSetInsertCommand(DbConnection connection)
+        private static DbCommand CreateTranslationSetInsertCommand(DbConnection connection, IModel metadataModel)
         {
             var command = connection.CreateCommand();
             var columns = new string[] { "Id", "ParallelCorpusId", "AlignmentSetId", /*"DerivedFrom", "EngineWordAlignmentId", */ "DisplayName", /*"SmtModel",*/ "Metadata", "UserId", "Created" };
 
-            ApplyColumnsToCommand(command, typeof(Models.TranslationSet), columns);
+            ApplyColumnsToCommand(command, metadataModel.ToEntityType(typeof(Models.TranslationSet)), columns);
 
             command.Prepare();
 
@@ -182,12 +184,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             return translationSetId;
         }
 
-        private static DbCommand CreateTranslationModelEntryInsertCommand(DbConnection connection)
+        private static DbCommand CreateTranslationModelEntryInsertCommand(DbConnection connection, IModel metadataModel)
         {
             var command = connection.CreateCommand();
             var columns = new string[] { "Id", "TranslationSetId", "SourceText" };
 
-            ApplyColumnsToCommand(command, typeof(Models.TranslationModelEntry), columns);
+            ApplyColumnsToCommand(command, metadataModel.ToEntityType(typeof(Models.TranslationModelEntry)), columns);
 
             command.Prepare();
 
@@ -209,12 +211,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
         }
 
-        private static DbCommand CreateTranslationModelTargetTextScoreInsertCommand(DbConnection connection)
+        private static DbCommand CreateTranslationModelTargetTextScoreInsertCommand(DbConnection connection, IModel metadataModel)
         {
             var command = connection.CreateCommand();
             var columns = new string[] { "Id", "TranslationModelEntryId", "Text", "Score" };
 
-            ApplyColumnsToCommand(command, typeof(Models.TranslationModelTargetTextScore), columns);
+            ApplyColumnsToCommand(command, metadataModel.ToEntityType(typeof(Models.TranslationModelTargetTextScore)), columns);
 
             command.Prepare();
 
@@ -232,11 +234,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             _ = await translationModelTargetTextScoreCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        private static void ApplyColumnsToCommand(DbCommand command, Type type, string[] columns)
+        private static void ApplyColumnsToCommand(DbCommand command, IEntityType entityType, string[] columns)
         {
+            var tableName = entityType.ToTableName();
+
             command.CommandText =
             $@"
-                INSERT INTO {type.Name} ({string.Join(", ", columns)})
+                INSERT INTO {tableName} ({string.Join(", ", columns)})
                 VALUES ({string.Join(", ", columns.Select(c => "@" + c))})
             ";
 

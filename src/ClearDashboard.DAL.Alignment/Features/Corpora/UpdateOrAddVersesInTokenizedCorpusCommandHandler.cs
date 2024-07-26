@@ -1,10 +1,10 @@
 ﻿using ClearDashboard.DAL.Alignment.Features.Common;
 using ClearDashboard.DAL.Alignment.Features.Events;
-using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Data.Extensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -22,14 +22,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         IEnumerable<string>>
     {
         private readonly IMediator _mediator;
+        private readonly ITokenizedCorpusDataCreator _tokenizedCorpusDataCreator;
 
         public UpdateOrAddVersesInTokenizedCorpusCommandHandler(
             IMediator mediator, 
             ProjectDbContextFactory? projectNameDbContextFactory, 
             IProjectProvider projectProvider, 
-            ILogger<UpdateOrAddVersesInTokenizedCorpusCommandHandler> logger) : base(projectNameDbContextFactory,projectProvider,  logger)
+            ILogger<UpdateOrAddVersesInTokenizedCorpusCommandHandler> logger,
+            ITokenizedCorpusDataCreator tokenizedCorpusDataCreator) : base(projectNameDbContextFactory,projectProvider,  logger)
         {
             _mediator = mediator;
+            _tokenizedCorpusDataCreator = tokenizedCorpusDataCreator;
         }
 
         protected override async Task<RequestResult<IEnumerable<string>>> SaveDataAsync(UpdateOrAddVersesInTokenizedCorpusCommand request, CancellationToken cancellationToken)
@@ -44,6 +47,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             var alignmentsRemoving = new List<Models.Alignment>();
 
+            (Guid VerseRowId, Guid UserId) GetVerseRowIdFunc((string BookChapterVerse, Guid TokenizedCorpusId) verseRowContext)
+            {
+                return (Guid.NewGuid(), ProjectDbContext.UserProvider!.CurrentUser!.Id);
+            }
+
+            var metadataModel = ProjectDbContext.Model;
             await ProjectDbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
             try
             {
@@ -52,26 +61,33 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 using var connection = ProjectDbContext.Database.GetDbConnection();
                 using var transaction = await connection.BeginTransactionAsync(cancellationToken);
 
-                using var verseRowInsertCommand = TokenizedCorpusDataBuilder.CreateVerseRowInsertCommand(connection);
-                using var tokenComponentInsertCommand = TokenizedCorpusDataBuilder.CreateTokenComponentInsertCommand(connection);
-                using var tokenCompositeTokenAssociationInsertCommand = TokenizedCorpusDataBuilder.CreateTokenCompositeTokenAssociationInsertCommand(connection);
-
                 if (bookIdsToInsert.Any())
                 {
-                    foreach (var bookId in bookIdsToInsert)
-                    {
-                        var tokensTextRows = TokenizedCorpusDataBuilder.ExtractValidateBook(request.TextCorpus, bookId, corpusId.Name);
-                        var (verseRows, btTokenCount) = TokenizedCorpusDataBuilder.BuildVerseRowModel(tokensTextRows, tokenizedCorpusGuid);
+                    var verseRowsByBook = TokenizedCorpusDataBuilder.BuildCorpusVerseRowModels(
+                        request.TextCorpus, 
+                        tokenizedCorpusGuid, 
+                        GetVerseRowIdFunc, 
+                        corpusId.Name ?? string.Empty,
+                        bookIdsToInsert);
 
-                        foreach (var verseRow in verseRows)
-                        {
-                            cancellationToken.ThrowIfCancellationRequested();
+                    await _tokenizedCorpusDataCreator.BulkWriteVerseRowsToDatabaseAsync(
+                        connection, 
+                        ProjectDbContext.Model, 
+                        verseRowsByBook, 
+                        cancellationToken);
 
-                            await TokenizedCorpusDataBuilder.InsertVerseRowAsync(verseRow, verseRowInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
-                            await TokenizedCorpusDataBuilder.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, cancellationToken);
-                        }
-                    }
+                    var tokenInsertCount = await _tokenizedCorpusDataCreator.BulkWriteTokensToDatabaseAsync(
+                        connection, 
+                        ProjectDbContext.Model,
+                        request.TextCorpus,
+                        verseRowsByBook,
+                        corpusId.Name ?? string.Empty,
+                        cancellationToken);
                 }
+
+                using var verseRowInsertCommand = TokenizedCorpusDataBuilder.CreateVerseRowInsertCommand(connection, metadataModel);
+                using var tokenComponentInsertCommand = TokenizedCorpusDataBuilder.CreateTokenComponentInsertCommand(connection, metadataModel);
+                using var tokenCompositeTokenAssociationInsertCommand = TokenizedCorpusDataBuilder.CreateTokenCompositeTokenAssociationInsertCommand(connection, metadataModel);
 
                 if (bookIdsToUpdate.Any())
                 {
@@ -84,12 +100,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                     var currentDateTime = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
 
-                    using var tokenSD = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.TokenComponent));
-                    using var taSD    = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.TokenCompositeTokenAssociation));
-                    using var transSD = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.Translation));
-                    using var alignSD = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.Alignment));
-                    using var tvaSD   = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.TokenVerseAssociation));
-                    using var verseRowUpdate = TokenizedCorpusDataBuilder.CreateVerseRowUpdateCommand(connection);
+                    using var tokenSD = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, metadataModel.ToEntityType(typeof(Models.TokenComponent)));
+                    using var taSD    = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, metadataModel.ToEntityType(typeof(Models.TokenCompositeTokenAssociation)));
+                    using var transSD = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, metadataModel.ToEntityType(typeof(Models.Translation)));
+                    using var alignSD = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, metadataModel.ToEntityType(typeof(Models.Alignment)));
+                    using var tvaSD   = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, metadataModel.ToEntityType(typeof(Models.TokenVerseAssociation)));
+                    using var verseRowUpdate = TokenizedCorpusDataBuilder.CreateVerseRowUpdateCommand(connection, metadataModel);
 
                     async Task del(Guid id, DbCommand cmd) => await DataUtil.SoftDeleteByIdAsync(currentDateTime, id, cmd, cancellationToken);
 
@@ -98,7 +114,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         var bookNumberAsPaddedString = $"{ModelHelper.GetBookNumberForSILAbbreviation(bookId):000}";
 
                         var tokensTextRows = TokenizedCorpusDataBuilder.ExtractValidateBook(request.TextCorpus, bookId, corpusId.Name);
-                        var (verseRows, btTokenCount) = TokenizedCorpusDataBuilder.BuildVerseRowModel(tokensTextRows, tokenizedCorpusGuid);
+                        var (verseRows, btTokenCount) = TokenizedCorpusDataBuilder.BuildVerseRowModel(tokensTextRows, tokenizedCorpusGuid, GetVerseRowIdFunc);
 
                         var bookVerseRowsDb = ProjectDbContext.VerseRows
                             .Where(vr => vr.TokenizedCorpusId == tokenizedCorpusGuid)
