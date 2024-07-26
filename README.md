@@ -3,7 +3,9 @@ The ClearDashboard Project
 
 > ### "And this gospel of the kingdom will be proclaimed throughout the whole world as a testimony to all nations, and then the end will come." Matthew 24:14 (ESV)
 
+## PLEASE READ
 
+THe state of the project as of 7/31204 is captured in the [![1.5 release board](https://github.com/orgs/Clear-Bible/projects/11/views/16)] (https://github.com/orgs/Clear-Bible/projects/11/views/16)
 
 [![.NET Core Desktop](https://github.com/Clear-Bible/ClearDashboard/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/Clear-Bible/ClearDashboard/actions/workflows/dotnet-desktop.yml)
 [![Language](https://img.shields.io/badge/Language-C%23-blue.svg?style=flat-square)](https://docs.microsoft.com/en-us/dotnet/csharp/)
