@@ -1,4 +1,6 @@
-﻿HOW TO MAKE A RELEASE INSTALLER
+﻿TEST MERGE
+
+HOW TO MAKE A RELEASE INSTALLER
 
 NOTES: The command line version of the installer for some reason does not copy over certain runtime files
 into the proper directory.  These missing files have been stashed into the \installer\Runtimes\ directory
