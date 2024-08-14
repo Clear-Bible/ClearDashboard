@@ -53,6 +53,7 @@ MANUAL VERSION
 
 
 19. Upload the installer to google drive
-20. Upload the installer to CLEAR_External_Releases/Files
-21. Update pico-composer/content/index.md to point to the new installer in CLEAR_External_Releases/Files
+20. Upload the installer to CLEAR_External_Releases/Latest
+21. (NO LONGER NECESSARY) Update pico-composer/content/index.md to point to the new installer in CLEAR_External_Releases/Files
 22. Create the Version Notes json file.  Call it ClearDashboard.json and place it in CLEAR_External_Releases/VersionHistory
+23. Use Putty to access server to update it (Instructions in Google Drive)
