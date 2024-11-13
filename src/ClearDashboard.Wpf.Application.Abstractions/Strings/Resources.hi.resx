@@ -266,7 +266,7 @@
     <value>*</value>
   </data>
   <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
-    <value>जानवरों</value>
+    <value>जानवर</value>
   </data>
   <data name="BiblicalTermsDomains_Area" xml:space="preserve">
     <value>क्षेत्र</value>
@@ -353,7 +353,7 @@
     <value>बलिदान और प्रसाद</value>
   </data>
   <data name="BiblicalTermsDomains_Settlement" xml:space="preserve">
-    <value>समझौता</value>
+    <value>बस्ती</value>
   </data>
   <data name="BiblicalTermsDomains_SignsAndWonders" xml:space="preserve">
     <value>संकेत और चमत्कार</value>
@@ -860,7 +860,7 @@
     <value>LAM</value>
   </data>
   <data name="Landing_NewProject" xml:space="preserve">
-    <value>नया काम</value>
+    <value>नया प्रोजेक्ट</value>
   </data>
   <data name="Landing_Project" xml:space="preserve">
     <value>परियोजना</value>
@@ -869,7 +869,7 @@
     <value>परियोजनाओं</value>
   </data>
   <data name="Landing_Settings" xml:space="preserve">
-    <value>समायोजन</value>
+    <value>सेटिंग्स</value>
   </data>
   <data name="Language [UID_Key]" xml:space="preserve">
     <value>Hindi [hi]</value>
@@ -923,7 +923,7 @@
     <value>इस शब्दकोष को हटा दें</value>
   </data>
   <data name="Lexicon_DeleteLexemePrompt" xml:space="preserve">
-    <value>क्या यह लेक्सेम हटा दिया गया है?</value>
+    <value>इस लेक्सेम को हटाएं?</value>
   </data>
   <data name="Lexicon_DeleteMeaning" xml:space="preserve">
     <value>इस अर्थ को हटा दें</value>
@@ -1010,7 +1010,7 @@
     <value>और</value>
   </data>
   <data name="LexiconEdit_ApplyFilter" xml:space="preserve">
-    <value>फिल्टर लागू करें</value>
+    <value>फ़िल्टर लागू करें</value>
   </data>
   <data name="LexiconEdit_Cancel" xml:space="preserve">
     <value>रद्द करना</value>
@@ -1028,7 +1028,7 @@
     <value>हो गया</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
-    <value>सब ढूँढ़ो</value>
+    <value>सभी खोजें</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>फार्म</value>
@@ -1144,6 +1144,9 @@
   <data name="LexiconImport_Word" xml:space="preserve">
     <value>शब्द:</value>
   </data>
+  <data name="LicenseValidator_EmailMissing" xml:space="preserve">
+    <value>ईमेल की जरूरत है</value>
+  </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>पहला नाम आवश्यक है</value>
   </data>
@@ -1152,6 +1155,12 @@
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>लाइसेंस कुंजी आवश्यक है</value>
+  </data>
+  <data name="LicenseValidator_OrganizationMissing" xml:space="preserve">
+    <value>संगठन की आवश्यकता है</value>
+  </data>
+  <data name="LicenseValidator_ParatextUserNameMissing" xml:space="preserve">
+    <value>पैराटेक्स्ट उपयोक्तानाम आवश्यक है</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
@@ -1196,7 +1205,7 @@
     <value>मानक लेआउट</value>
   </data>
   <data name="MainView_ProgramPreferences" xml:space="preserve">
-    <value>पसंद</value>
+    <value>प्राथमिकताएँ</value>
   </data>
   <data name="MainView_QuickNew" xml:space="preserve">
     <value>त्वरित नया</value>
@@ -1205,7 +1214,7 @@
     <value>सहयोग परिवर्तन उपलब्ध हैं</value>
   </data>
   <data name="MainView_Settings" xml:space="preserve">
-    <value>समायोजन</value>
+    <value>सेटिंग्स</value>
   </data>
   <data name="MainView_ShowLog" xml:space="preserve">
     <value>प्रवेश देखें</value>
@@ -1301,7 +1310,7 @@
     <value>इंग्लिश ग्लॉस द्वारा खोजें</value>
   </data>
   <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>हिब्रू/ग्रीक के आधार पर खोजें</value>
+    <value>हिब्रू/ग्रीक द्वारा खोजें</value>
   </data>
   <data name="Marble_Sense" xml:space="preserve">
     <value>समझ</value>
@@ -1466,7 +1475,7 @@
     <value>आपके पैराटेक्स्ट प्रोजेक्ट अनुमतियों के कारण, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>श्लोक द्वारा फ़िल्टर करें</value>
+    <value>छंद द्वारा फ़िल्टर करें</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>फिल्टर</value>
@@ -1661,7 +1670,7 @@
     <value>ठीक है</value>
   </data>
   <data name="OldTestament" xml:space="preserve">
-    <value>पुराना वसीयतनामा</value>
+    <value>पुराना नियम</value>
   </data>
   <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
     <value>शब्द संरेखण बनाएँ</value>
@@ -1835,7 +1844,7 @@
     <value>स्रोत</value>
   </data>
   <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>स्रोत भाषा</value>
+    <value>स्रोतभाषा</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
     <value>मानक</value>
@@ -1883,7 +1892,7 @@
     <value>PHP</value>
   </data>
   <data name="Pins_ClearFilter" xml:space="preserve">
-    <value>स्पष्ट निस्यंदक</value>
+    <value>फ़िल्टर साफ़ करें</value>
   </data>
   <data name="Pins_Code" xml:space="preserve">
     <value>कोड</value>
@@ -2012,7 +2021,7 @@
     <value>कोई मेल नहीं।</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>यहां अकेलापन है।  कृपया एक नया प्रोजेक्ट बनाएं.</value>
+    <value>यहाँ अकेलापन है.  कृपया एक नया प्रोजेक्ट बनाएं.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
     <value>पैराटेक्स्ट स्थापित नहीं है.  कृपया पैराटेक्स्ट इंस्टॉल करें और क्लियरडैशबोर्ड एप्लिकेशन को दोबारा चलाएं।</value>
@@ -2042,7 +2051,7 @@
     <value>परियोजना: </value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
-    <value>हम बस पहुँच गए!</value>
+    <value>हम लगभग वहाँ पहुँच चुके हैं!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
     <value>'डैशबोर्ड गेटिंग स्टार्टेड' वीडियो देखने के लिए यहां क्लिक करें</value>
@@ -2159,7 +2168,7 @@
     <value>एस्थर</value>
   </data>
   <data name="ProperCase_Exodus" xml:space="preserve">
-    <value>एक्सोदेस</value>
+    <value>पलायन</value>
   </data>
   <data name="ProperCase_Ezekiel" xml:space="preserve">
     <value>ईजेकील</value>
@@ -2213,7 +2222,7 @@
     <value>जूदास</value>
   </data>
   <data name="ProperCase_Judges" xml:space="preserve">
-    <value>न्यायाधीशों</value>
+    <value>न्यायाधीश</value>
   </data>
   <data name="ProperCase_Lamentations" xml:space="preserve">
     <value>विलाप</value>
@@ -2305,6 +2314,9 @@
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
     <value>क्लियरडैशबोर्ड में आपका स्वागत है!  कृपया अपनी पंजीकरण जानकारी दर्ज करें.</value>
   </data>
+  <data name="RegistrationView_Email" xml:space="preserve">
+    <value>कृपया अपना ईमेल दर्ज करें</value>
+  </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>कृपया अपना पहला नाम दें</value>
   </data>
@@ -2314,8 +2326,14 @@
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
     <value>कृपया अपना लाइसेंस कुंजी दर्ज करें</value>
   </data>
+  <data name="RegistrationView_Organization" xml:space="preserve">
+    <value>कृपया अपना संगठन दर्ज करें</value>
+  </data>
+  <data name="RegistrationView_ParatextUserName" xml:space="preserve">
+    <value>कृपया अपना पैराटेक्स्ट उपयोक्तानाम दर्ज करें</value>
+  </data>
   <data name="ReleaseNotes_KnownIssues" xml:space="preserve">
-    <value>ज्ञात पहलु</value>
+    <value>ज्ञात मुद्दे</value>
   </data>
   <data name="REV" xml:space="preserve">
     <value>REV</value>
@@ -2504,7 +2522,7 @@
     <value>कोई इंटरनेट नहीं</value>
   </data>
   <data name="SlackMessageView_ResetForm" xml:space="preserve">
-    <value>प्रपत्र को रीसेट करें</value>
+    <value>फॉर्म रीसेट करें</value>
   </data>
   <data name="SlackMessageView_Send" xml:space="preserve">
     <value>भेजना</value>
@@ -2525,7 +2543,7 @@
     <value>पूर्व दर्शन</value>
   </data>
   <data name="SlackMessageView_SuggestionSeverity" xml:space="preserve">
-    <value>तीव्रता:</value>
+    <value>गंभीरता:</value>
   </data>
   <data name="SlackMessageView_SuggestionTitle" xml:space="preserve">
     <value>शीर्षक:</value>

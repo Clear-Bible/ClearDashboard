@@ -131,7 +131,7 @@
     <value>- ព័ត៌មានលម្អិតគណនីបច្ចុប្បន្ន-</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
-    <value>បិទដំណើរការអាជ្ញាប័ណ្ណបច្ចុប្បន្ន</value>
+    <value>អសកម្មអាជ្ញាប័ណ្ណបច្ចុប្បន្ន</value>
   </data>
   <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
     <value>- គណនីផ្សេងទៀត-</value>
@@ -182,7 +182,7 @@
     <value>រក្សាទុកកំហុស USFM ដើម្បីដាក់ឯកសារ</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
-    <value>ជ្រើសរើស​ទាំងអស់</value>
+    <value>ជ្រើសរើសទាំងអស់។</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectBooks" xml:space="preserve">
     <value>ជ្រើសរើសសៀវភៅដែលត្រូវដំណើរការ</value>
@@ -311,7 +311,7 @@
     <value>មូលដ្ឋាន</value>
   </data>
   <data name="BiblicalTermsDomains_MammalsDomesticAnimals" xml:space="preserve">
-    <value>ថនិកសត្វ; សត្វ​ក្នុង​ស្រុក</value>
+    <value>ថនិកសត្វ; សត្វក្នុងស្រុក</value>
   </data>
   <data name="BiblicalTermsDomains_MammalsWildAnimals" xml:space="preserve">
     <value>ថនិកសត្វ; សត្វព្រៃ</value>
@@ -533,7 +533,7 @@
     <value>រួមបញ្ចូលនៅក្នុងការបង្វិលបង្ហាញនាឡិកា</value>
   </data>
   <data name="ClockUserControl_LocalTime" xml:space="preserve">
-    <value>ម៉ោង​ក្នុងស្រុក</value>
+    <value>ម៉ោងក្នុងស្រុក</value>
   </data>
   <data name="ClockUserControl_Name" xml:space="preserve">
     <value>ដាក់ឈ្មោះធាតុ</value>
@@ -596,10 +596,10 @@
     <value>បានបង្កើត</value>
   </data>
   <data name="CreatedBy" xml:space="preserve">
-    <value>បង្កើត​ឡើង​ដោយ</value>
+    <value>បង្កើតដោយ</value>
   </data>
   <data name="Current" xml:space="preserve">
-    <value>នា​ពេល​បច្ចុប្បន្ន</value>
+    <value>បច្ចុប្បន្ន</value>
   </data>
   <data name="DAN" xml:space="preserve">
     <value>DAN</value>
@@ -662,10 +662,10 @@
     <value>លុបការតម្រឹមទាំងអស់?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>និមិត្តសញ្ញា '{0}' មានការតម្រឹមច្រើនដែលបានកំណត់។ ការចុច '{1}' នឹងលុបការតម្រឹមទាំងអស់។</value>
+    <value>សញ្ញាសម្ងាត់ '{0}' មានការតម្រឹមច្រើនដែលបានកំណត់។ ការចុច '{1}' នឹងលុបការតម្រឹមទាំងអស់។</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>ត្រងពាក្យស្វែងរក</value>
+    <value>តម្រងស្វែងរកពាក្យ</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
     <value>ត្រងពាក្យស្វែងរកតាមលក្ខខណ្ឌសំខាន់ៗ</value>
@@ -674,7 +674,7 @@
     <value>អន្តរលីនេអ៊ែរ</value>
   </data>
   <data name="EnhancedView_JoinTokens" xml:space="preserve">
-    <value>ចូលរួម Token</value>
+    <value>ចូលរួមថូខឹន</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
     <value>ចូលរួម Token សម្រាប់ភាសា Pair</value>
@@ -686,7 +686,7 @@
     <value>សម្គាល់ការតម្រឹមជា 'ត្រូវការការពិនិត្យឡើងវិញ'</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
-    <value>សម្គាល់ការតម្រឹមជា 'ត្រឹមត្រូវ'</value>
+    <value>សម្គាល់ការតម្រឹមជា 'មានសុពលភាព'</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
     <value>និមិត្តសញ្ញាថ្មី៖ អត្ថបទបណ្តុះបណ្តាល</value>
@@ -740,7 +740,7 @@
     <value>EZR</value>
   </data>
   <data name="FontSettings_FontSize" xml:space="preserve">
-    <value>ទំហំ​អក្សរ:</value>
+    <value>ទំហំពុម្ពអក្សរ៖</value>
   </data>
   <data name="FontSettings_Height" xml:space="preserve">
     <value>កម្ពស់៖</value>
@@ -839,7 +839,7 @@
     <value>URL៖</value>
   </data>
   <data name="JiraResultsView_Username" xml:space="preserve">
-    <value>ឈ្មោះ​អ្នកប្រើប្រាស់:</value>
+    <value>ឈ្មោះអ្នកប្រើប្រាស់៖</value>
   </data>
   <data name="JOB" xml:space="preserve">
     <value>JOB</value>
@@ -860,7 +860,7 @@
     <value>LAM</value>
   </data>
   <data name="Landing_NewProject" xml:space="preserve">
-    <value>គម្រោង​ថ្មី</value>
+    <value>គម្រោងថ្មី។</value>
   </data>
   <data name="Landing_Project" xml:space="preserve">
     <value>គម្រោង</value>
@@ -881,7 +881,7 @@
     <value>បន្ថែមដែនន័យធៀបទៅនឹងអត្ថន័យនេះ។</value>
   </data>
   <data name="Lexicon_AddForm" xml:space="preserve">
-    <value>បន្ថែមទម្រង់ lexical ទៅនឹង lexical នេះ។</value>
+    <value>បន្ថែមទម្រង់ lexical ទៅ lexical នេះ។</value>
   </data>
   <data name="Lexicon_AddLexeme" xml:space="preserve">
     <value>បន្ថែម Lexeme</value>
@@ -917,7 +917,7 @@
     <value>ប្រសិនបើធីក វានឹងផ្លាស់ប្តូរការកើតឡើងដែលមិនកំណត់ទាំងអស់នៃពាក្យនេះ។</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
-    <value>ភាពស្របគ្នា។</value>
+    <value>ការចុះសម្រុងគ្នា។</value>
   </data>
   <data name="Lexicon_DeleteLexeme" xml:space="preserve">
     <value>លុបវេយ្យាករណ៍នេះ។</value>
@@ -1115,7 +1115,7 @@
     <value>សូមជ្រើសរើសសាកសព។</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
-    <value>ជ្រើសរើស​ទាំងអស់</value>
+    <value>ជ្រើសរើសទាំងអស់។</value>
   </data>
   <data name="LexiconImport_SourceLanguage" xml:space="preserve">
     <value>ភាសាប្រភព</value>
@@ -1144,6 +1144,9 @@
   <data name="LexiconImport_Word" xml:space="preserve">
     <value>ពាក្យ៖</value>
   </data>
+  <data name="LicenseValidator_EmailMissing" xml:space="preserve">
+    <value>អ៊ីមែលត្រូវបានទាមទារ</value>
+  </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>ឈ្មោះដំបូងគឺចាំបាច់</value>
   </data>
@@ -1153,6 +1156,12 @@
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>លេខកូដអាជ្ញាប័ណ្ណត្រូវបានទាមទារ</value>
   </data>
+  <data name="LicenseValidator_OrganizationMissing" xml:space="preserve">
+    <value>អង្គការត្រូវបានទាមទារ</value>
+  </data>
+  <data name="LicenseValidator_ParatextUserNameMissing" xml:space="preserve">
+    <value>ឈ្មោះអ្នកប្រើ Paratext ត្រូវបានទាមទារ</value>
+  </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
   </data>
@@ -1160,7 +1169,7 @@
     <value>អំពី</value>
   </data>
   <data name="MainView_AccountInfo" xml:space="preserve">
-    <value>ព​ត៌​មាន​គណនី</value>
+    <value>ព័ត៌មានគណនី</value>
   </data>
   <data name="MainView_File" xml:space="preserve">
     <value>ឯកសារ</value>
@@ -1280,7 +1289,7 @@
     <value>ក្រាហ្វប្រេកង់</value>
   </data>
   <data name="Marble_GeneralInformation" xml:space="preserve">
-    <value>ព័ត៌មាន​ទូទៅ</value>
+    <value>ព័ត៌មានទូទៅ</value>
   </data>
   <data name="Marble_Glosses" xml:space="preserve">
     <value>រលោង៖</value>
@@ -1385,7 +1394,7 @@
     <value>អ៊ីមែល៖</value>
   </data>
   <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
-    <value>អាស័យ​ដ្ឋាន​អ៊ី​ម៉េ​ល</value>
+    <value>អាសយដ្ឋានអ៊ីមែល</value>
   </data>
   <data name="NewCollabUserView_EmailValidationCode" xml:space="preserve">
     <value>លេខកូដផ្ទៀងផ្ទាត់តាមអ៊ីមែល៖</value>
@@ -1418,7 +1427,7 @@
     <value>អ្នកប្រើប្រាស់មាននៅលើម៉ាស៊ីនមេរួចហើយ</value>
   </data>
   <data name="NewCollabUserView_Username" xml:space="preserve">
-    <value>ឈ្មោះ​អ្នកប្រើប្រាស់:</value>
+    <value>ឈ្មោះអ្នកប្រើប្រាស់៖</value>
   </data>
   <data name="NewCollabUserView_UserOnSystem" xml:space="preserve">
     <value>អ្នកប្រើប្រាស់មាននៅលើប្រព័ន្ធហើយ!</value>
@@ -1451,7 +1460,7 @@
     <value>បន្ថែម Jot</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>បន្ថែម​ចំណុច​ថ្មី​មួយ (ប្ដូរ​ចូល​សម្រាប់​បន្ទាត់​ថ្មី)</value>
+    <value>បន្ថែម jot ថ្មី (shift-enter for new line)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>រាងកាយ</value>
@@ -1553,7 +1562,7 @@
     <value>សម្គាល់ចំណុចដែលបានជ្រើសរើសថាបើក</value>
   </data>
   <data name="Notes_MarkResolved" xml:space="preserve">
-    <value>សម្គាល់​ចំណុច​ដែល​បាន​ជ្រើសរើស​ថា​បាន​ដោះស្រាយ</value>
+    <value>សម្គាល់ jots ដែលបានជ្រើសរើសថាបានដោះស្រាយ</value>
   </data>
   <data name="Notes_Note_Created" xml:space="preserve">
     <value>បានបង្កើត</value>
@@ -1613,7 +1622,7 @@
     <value>ផ្នែក</value>
   </data>
   <data name="Notes_PleaseAddJot" xml:space="preserve">
-    <value>សូម​បន្ថែម​ការ​សរសេរ​ដោយ​ប្រើ​ប្រអប់​ខាងក្រោម។</value>
+    <value>សូម​បន្ថែម​ពាក្យ​ចចាមអារ៉ាម​ដោយ​ប្រើ​ប្រអប់​ខាងក្រោម។</value>
   </data>
   <data name="Notes_ResolveConfirmation" xml:space="preserve">
     <value>សម្គាល់ចំណុចទាំងនេះថាត្រូវបានដោះស្រាយ?</value>
@@ -1691,7 +1700,7 @@
     <value>រថភ្លើង</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>ការតម្រឹមពាក្យរបស់ម៉ាស៊ីនរថភ្លើង</value>
+    <value>កម្មវិធីតម្រឹមពាក្យរបស់ម៉ាស៊ីនរថភ្លើង</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>កំណត់ Verse Mapping រវាង Parallelized Corpora</value>
@@ -1814,7 +1823,7 @@
     <value>ចំនួននិមិត្តសញ្ញាផ្សេងគ្នា</value>
   </data>
   <data name="Pds_ProjectDesignSurface" xml:space="preserve">
-    <value>ផ្ទៃរចនាគម្រោង</value>
+    <value>ការរចនាផ្ទៃគម្រោង</value>
   </data>
   <data name="Pds_PropertiesMenu" xml:space="preserve">
     <value>ទ្រព្យសម្បត្តិ</value>
@@ -2285,7 +2294,7 @@
     <value>PSA</value>
   </data>
   <data name="Refresh" xml:space="preserve">
-    <value>ធ្វើ​ឱ្យ​ស្រស់</value>
+    <value>ធ្វើឱ្យស្រស់</value>
   </data>
   <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
     <value>បិទកម្មវិធី</value>
@@ -2294,7 +2303,7 @@
     <value>ចុះឈ្មោះ</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>កូនសោដែលបានផ្តល់គឺមានបញ្ហា។  នៅពេលឌិគ្រីប ធាតុ json ជាក់លាក់មិនអាចត្រូវបានរកឃើញទេ។</value>
+    <value>គន្លឹះ​ដែល​បាន​ផ្ដល់​គឺ​មាន​បញ្ហា។  នៅពេលឌិគ្រីប ធាតុ json ជាក់លាក់មិនអាចត្រូវបានរកឃើញទេ។</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>ខ្លឹមសារនៃលេខកូដអាជ្ញាប័ណ្ណដែលបានឌិគ្រីបមិនត្រូវគ្នានឹងព័ត៌មានដែលអ្នកបានផ្តល់នោះទេ។</value>
@@ -2305,6 +2314,9 @@
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
     <value>សូមស្វាគមន៍មកកាន់ ClearDashboard!  សូមបញ្ចូលព័ត៌មានចុះឈ្មោះរបស់អ្នក។</value>
   </data>
+  <data name="RegistrationView_Email" xml:space="preserve">
+    <value>សូមបញ្ចូលអ៊ីមែលរបស់អ្នក។</value>
+  </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>សូមបញ្ចូលឈ្មោះរបស់អ្នក។</value>
   </data>
@@ -2314,8 +2326,14 @@
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
     <value>សូមបញ្ចូលលេខកូដអាជ្ញាប័ណ្ណរបស់អ្នក។</value>
   </data>
+  <data name="RegistrationView_Organization" xml:space="preserve">
+    <value>សូមបញ្ចូលស្ថាប័នរបស់អ្នក។</value>
+  </data>
+  <data name="RegistrationView_ParatextUserName" xml:space="preserve">
+    <value>សូមបញ្ចូលឈ្មោះអ្នកប្រើប្រាស់ Paratext របស់អ្នក។</value>
+  </data>
   <data name="ReleaseNotes_KnownIssues" xml:space="preserve">
-    <value>បញ្ហា​ដែល​បាន​ដឹង</value>
+    <value>បញ្ហាដែលគេស្គាល់</value>
   </data>
   <data name="REV" xml:space="preserve">
     <value>REV</value>
@@ -2348,7 +2366,7 @@
     <value>អ៊ីមែល</value>
   </data>
   <data name="Settings_EmailAddress" xml:space="preserve">
-    <value>អាស័យ​ដ្ឋាន​អ៊ី​ម៉េ​ល</value>
+    <value>អាសយដ្ឋានអ៊ីមែល</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
     <value>កំហុសក្នុងការផ្ញើអ៊ីមែល</value>
@@ -2381,7 +2399,7 @@
     <value>ទូទៅ</value>
   </data>
   <data name="Settings_GeneralSettings" xml:space="preserve">
-    <value>ការកំណត់​ទូទៅ</value>
+    <value>ការកំណត់ទូទៅ</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>ក្រុម</value>
@@ -2447,7 +2465,7 @@
     <value>អ្នកប្រើប្រាស់មាននៅលើម៉ាស៊ីនមេរួចហើយ</value>
   </data>
   <data name="Settings_UserName" xml:space="preserve">
-    <value>ឈ្មោះ​អ្នកប្រើប្រាស់</value>
+    <value>ឈ្មោះអ្នកប្រើប្រាស់</value>
   </data>
   <data name="Settings_ValidateEmailCode" xml:space="preserve">
     <value>ធ្វើឱ្យមានសុពលភាពលេខកូដអ៊ីមែល</value>
@@ -2480,10 +2498,10 @@
     <value>ធ្វើបច្ចុប្បន្នភាពទៅកំណែថ្មីនៃ ClearDashboard</value>
   </data>
   <data name="ShellView_User" xml:space="preserve">
-    <value>អ្នក​ប្រើ</value>
+    <value>អ្នកប្រើប្រាស់</value>
   </data>
   <data name="SlackMessageView_BugReport" xml:space="preserve">
-    <value>របាយការណ៍​កំហុស</value>
+    <value>របាយការណ៍កំហុស</value>
   </data>
   <data name="SlackMessageView_Combo1" xml:space="preserve">
     <value>ខ្ញុំបានបាត់បង់ទិន្នន័យនៅក្នុងគម្រោងមួយ។</value>
@@ -2585,7 +2603,7 @@
     <value>ធ្វើបច្ចុប្បន្នភាព</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Add" xml:space="preserve">
-    <value>បន្ថែម​ថ្មី</value>
+    <value>បន្ថែមថ្មី។</value>
   </data>
   <data name="UpdateParatextCorpusDialog_SelectBooks" xml:space="preserve">
     <value>ធ្វើបច្ចុប្បន្នភាព និងបន្ថែមសៀវភៅថ្មីៗ</value>

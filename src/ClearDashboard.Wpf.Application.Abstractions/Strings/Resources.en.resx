@@ -1144,6 +1144,9 @@
   <data name="LexiconImport_Word" xml:space="preserve">
     <value>Word:</value>
   </data>
+  <data name="LicenseValidator_EmailMissing" xml:space="preserve">
+    <value>Email is required</value>
+  </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>First Name is required</value>
   </data>
@@ -1152,6 +1155,12 @@
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>License Key is required</value>
+  </data>
+  <data name="LicenseValidator_OrganizationMissing" xml:space="preserve">
+    <value>Organization is required</value>
+  </data>
+  <data name="LicenseValidator_ParatextUserNameMissing" xml:space="preserve">
+    <value>Paratext username is required</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
@@ -2305,6 +2314,9 @@
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
     <value>Welcome to ClearDashboard!  Please enter your registration information.</value>
   </data>
+  <data name="RegistrationView_Email" xml:space="preserve">
+    <value>Please enter your email</value>
+  </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Please enter your first name</value>
   </data>
@@ -2313,6 +2325,12 @@
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
     <value>Please enter your license key</value>
+  </data>
+  <data name="RegistrationView_Organization" xml:space="preserve">
+    <value>Please enter your organization</value>
+  </data>
+  <data name="RegistrationView_ParatextUserName" xml:space="preserve">
+    <value>Please enter your Paratext username</value>
   </data>
   <data name="ReleaseNotes_KnownIssues" xml:space="preserve">
     <value>Known Issues</value>

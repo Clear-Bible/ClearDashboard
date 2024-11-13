@@ -110,7 +110,7 @@
     <value>3JN</value>
   </data>
   <data name="AboutView_Version" xml:space="preserve">
-    <value>Versi: kapan</value>
+    <value>Versi</value>
   </data>
   <data name="AccountInfo_ClearDashboardUserIdLabel" xml:space="preserve">
     <value>HapusId Pengguna Dasbor:</value>
@@ -221,7 +221,7 @@
     <value>Buku Berikutnya</value>
   </data>
   <data name="Bcv_NextChapter" xml:space="preserve">
-    <value>Bab selanjutnya</value>
+    <value>Bab Berikutnya</value>
   </data>
   <data name="Bcv_NextVerse" xml:space="preserve">
     <value>Ayat Berikutnya</value>
@@ -281,10 +281,10 @@
     <value>konstruksi; kegiatan keagamaan</value>
   </data>
   <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>konstruksi; Peternakan</value>
+    <value>konstruksi; peternakan</value>
   </data>
   <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
-    <value>wadah; Peternakan</value>
+    <value>wadah; peternakan</value>
   </data>
   <data name="BiblicalTermsDomains_CraftsCloth" xml:space="preserve">
     <value>kerajinan tangan; kain</value>
@@ -311,13 +311,13 @@
     <value>lokal</value>
   </data>
   <data name="BiblicalTermsDomains_MammalsDomesticAnimals" xml:space="preserve">
-    <value>mamalia; binatang lokal</value>
+    <value>mamalia; hewan peliharaan</value>
   </data>
   <data name="BiblicalTermsDomains_MammalsWildAnimals" xml:space="preserve">
-    <value>mamalia; Hewan liar</value>
+    <value>mamalia; binatang liar</value>
   </data>
   <data name="BiblicalTermsDomains_Monument" xml:space="preserve">
-    <value>Monumen</value>
+    <value>monumen</value>
   </data>
   <data name="BiblicalTermsDomains_MoralsAndEthics" xml:space="preserve">
     <value>moral dan etika</value>
@@ -533,7 +533,7 @@
     <value>Sertakan dalam rotasi tampilan jam</value>
   </data>
   <data name="ClockUserControl_LocalTime" xml:space="preserve">
-    <value>Waktu lokal</value>
+    <value>Waktu setempat</value>
   </data>
   <data name="ClockUserControl_Name" xml:space="preserve">
     <value>Beri nama barangnya</value>
@@ -578,7 +578,7 @@
     <value>Anggota Proyek</value>
   </data>
   <data name="CollabProjectManagementView_ProjectOwner" xml:space="preserve">
-    <value>Pemilik proyek</value>
+    <value>Pemilik Proyek</value>
   </data>
   <data name="CollabProjectManagementView_Projects" xml:space="preserve">
     <value>Proyek</value>
@@ -596,7 +596,7 @@
     <value>Dibuat</value>
   </data>
   <data name="CreatedBy" xml:space="preserve">
-    <value>Dibuat oleh</value>
+    <value>Dibuat Oleh</value>
   </data>
   <data name="Current" xml:space="preserve">
     <value>Saat ini</value>
@@ -620,7 +620,7 @@
     <value>DEU</value>
   </data>
   <data name="DisplayName" xml:space="preserve">
-    <value>Nama tampilan</value>
+    <value>Nama Tampilan</value>
   </data>
   <data name="Done" xml:space="preserve">
     <value>Selesai</value>
@@ -860,7 +860,7 @@
     <value>LAM</value>
   </data>
   <data name="Landing_NewProject" xml:space="preserve">
-    <value>Proyek baru</value>
+    <value>Proyek Baru</value>
   </data>
   <data name="Landing_Project" xml:space="preserve">
     <value>Proyek</value>
@@ -1004,7 +1004,7 @@
     <value>Gloss Buatan Pengguna</value>
   </data>
   <data name="Lexicon_Verified" xml:space="preserve">
-    <value>Diverifikasi</value>
+    <value>Terverifikasi</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Dan</value>
@@ -1028,7 +1028,7 @@
     <value>Selesai</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
-    <value>Temukan semua</value>
+    <value>Temukan Semua</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>Formulir</value>
@@ -1061,10 +1061,10 @@
     <value>Sebagian</value>
   </data>
   <data name="LexiconEdit_SaveChanges" xml:space="preserve">
-    <value>Simpan perubahan</value>
+    <value>Simpan Perubahan</value>
   </data>
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
-    <value>Bahasa sumber</value>
+    <value>Bahasa Sumber</value>
   </data>
   <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
     <value>Bahasa Sasaran</value>
@@ -1118,7 +1118,7 @@
     <value>Pilih Semua</value>
   </data>
   <data name="LexiconImport_SourceLanguage" xml:space="preserve">
-    <value>Bahasa sumber</value>
+    <value>Bahasa Sumber</value>
   </data>
   <data name="LexiconImport_SourceType" xml:space="preserve">
     <value>Jenis</value>
@@ -1144,6 +1144,9 @@
   <data name="LexiconImport_Word" xml:space="preserve">
     <value>Kata:</value>
   </data>
+  <data name="LicenseValidator_EmailMissing" xml:space="preserve">
+    <value>Email diperlukan</value>
+  </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>Nama Depan wajib diisi</value>
   </data>
@@ -1152,6 +1155,12 @@
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>Kunci Lisensi diperlukan</value>
+  </data>
+  <data name="LicenseValidator_OrganizationMissing" xml:space="preserve">
+    <value>Organisasi diperlukan</value>
+  </data>
+  <data name="LicenseValidator_ParatextUserNameMissing" xml:space="preserve">
+    <value>Nama pengguna paratext diperlukan</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
@@ -1232,7 +1241,7 @@
     <value>MARMER</value>
   </data>
   <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
-    <value>Pemandangan baru</value>
+    <value>Tampilan Baru</value>
   </data>
   <data name="MainView_WindowsNotes" xml:space="preserve">
     <value>catatan</value>
@@ -1286,7 +1295,7 @@
     <value>Gloss:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Bagian dari pidato   </value>
+    <value>Bagian dari Pidato   </value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
     <value>Lemma Terkait   </value>
@@ -1382,10 +1391,10 @@
     <value>Kode Validasi Email ClearDashboard</value>
   </data>
   <data name="NewCollabUserView_Email" xml:space="preserve">
-    <value>Surel:</value>
+    <value>E-mail:</value>
   </data>
   <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
-    <value>Alamat email</value>
+    <value>Alamat Surel</value>
   </data>
   <data name="NewCollabUserView_EmailValidationCode" xml:space="preserve">
     <value>Kode Verifikasi Email:</value>
@@ -1400,7 +1409,7 @@
     <value>Kelompok:</value>
   </data>
   <data name="NewCollabUserView_LastName" xml:space="preserve">
-    <value>Nama keluarga</value>
+    <value>Nama Belakang</value>
   </data>
   <data name="NewCollabUserView_NewCollabUser" xml:space="preserve">
     <value>Pengguna Kolaborasi Baru</value>
@@ -1559,7 +1568,7 @@
     <value>Dibuat</value>
   </data>
   <data name="Notes_Note_Modified" xml:space="preserve">
-    <value>Diubah</value>
+    <value>Dimodifikasi</value>
   </data>
   <data name="Notes_Note_ModifiedBy" xml:space="preserve">
     <value>Pengarang</value>
@@ -1622,7 +1631,7 @@
     <value>Pilih label yang akan dihapus dari grup label</value>
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
-    <value>Catatan: label ini akan muncul di bawah grup label: Tidak ada</value>
+    <value>Catatan: label ini akan muncul di bawah grup label: Tidak Ada</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>Kirim catatan ini ke Paratext?</value>
@@ -1835,7 +1844,7 @@
     <value>Sumber</value>
   </data>
   <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>Bahasa sumber</value>
+    <value>Bahasa Sumber</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
     <value>Standar</value>
@@ -1889,7 +1898,7 @@
     <value>Kode</value>
   </data>
   <data name="Pins_Filter" xml:space="preserve">
-    <value>Saring:</value>
+    <value>Menyaring:</value>
   </data>
   <data name="Pins_Forms" xml:space="preserve">
     <value>Formulir</value>
@@ -1991,7 +2000,7 @@
     <value>Jika dicentang, Anda akan dapat memilih buku mana yang akan diproses.</value>
   </data>
   <data name="ProjectPicker_GetStarted" xml:space="preserve">
-    <value>Memulai</value>
+    <value>Mulailah</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>Impor Proyek Server</value>
@@ -2009,10 +2018,10 @@
     <value>Kelola Proyek Kolaborasi</value>
   </data>
   <data name="ProjectPicker_NoMatches" xml:space="preserve">
-    <value>Tidak ada yang cocok.</value>
+    <value>Tidak ada kecocokan.</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>Sepi disini.  Silakan buat proyek baru.</value>
+    <value>Di sini sepi.  Silakan buat proyek baru.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
     <value>Paratext tidak diinstal.  Silakan install Paratext dan jalankan kembali aplikasi ClearDashboard.</value>
@@ -2066,7 +2075,7 @@
     <value>Klik di sini untuk memulai Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Versi: kapan: </value>
+    <value>Versi: </value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>Silakan masukkan nama untuk proyek Anda</value>
@@ -2135,7 +2144,7 @@
     <value>3 Yohanes</value>
   </data>
   <data name="ProperCase_Acts" xml:space="preserve">
-    <value>Tindakan</value>
+    <value>Kisah Para Rasul</value>
   </data>
   <data name="ProperCase_Amos" xml:space="preserve">
     <value>Amos</value>
@@ -2255,7 +2264,7 @@
     <value>Filipi</value>
   </data>
   <data name="ProperCase_Proverbs" xml:space="preserve">
-    <value>Peribahasa</value>
+    <value>Amsal</value>
   </data>
   <data name="ProperCase_Psalms" xml:space="preserve">
     <value>Mazmur</value>
@@ -2305,6 +2314,9 @@
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
     <value>Selamat datang di ClearDashboard!  Silakan masukkan informasi pendaftaran Anda.</value>
   </data>
+  <data name="RegistrationView_Email" xml:space="preserve">
+    <value>Silakan masukkan email Anda</value>
+  </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Silakan masukkan nama depan Anda</value>
   </data>
@@ -2314,8 +2326,14 @@
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
     <value>Silakan masukkan kunci lisensi Anda</value>
   </data>
+  <data name="RegistrationView_Organization" xml:space="preserve">
+    <value>Silakan masukkan organisasi Anda</value>
+  </data>
+  <data name="RegistrationView_ParatextUserName" xml:space="preserve">
+    <value>Silakan masukkan nama pengguna Paratext Anda</value>
+  </data>
   <data name="ReleaseNotes_KnownIssues" xml:space="preserve">
-    <value>Masalah Dikenal</value>
+    <value>Masalah yang Diketahui</value>
   </data>
   <data name="REV" xml:space="preserve">
     <value>REV</value>
@@ -2345,10 +2363,10 @@
     <value>Kode Validasi Email ClearDashboard</value>
   </data>
   <data name="Settings_Email" xml:space="preserve">
-    <value>Surel</value>
+    <value>E-mail</value>
   </data>
   <data name="Settings_EmailAddress" xml:space="preserve">
-    <value>Alamat email</value>
+    <value>Alamat Surel</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
     <value>Kesalahan Pengiriman Email</value>
@@ -2495,13 +2513,13 @@
     <value>Saya menyelesaikan tugas tetapi itu sulit</value>
   </data>
   <data name="SlackMessageView_Combo4" xml:space="preserve">
-    <value>Saya akan melakukan...</value>
+    <value>Saya ingin melakukan...</value>
   </data>
   <data name="SlackMessageView_Message" xml:space="preserve">
     <value>Pesan:</value>
   </data>
   <data name="SlackMessageView_NoInternet" xml:space="preserve">
-    <value>Tidak ada internet</value>
+    <value>Tidak ada Internet</value>
   </data>
   <data name="SlackMessageView_ResetForm" xml:space="preserve">
     <value>Atur Ulang Formulir</value>
@@ -2585,7 +2603,7 @@
     <value>Memperbarui</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Add" xml:space="preserve">
-    <value>Tambah baru</value>
+    <value>Tambahkan Baru</value>
   </data>
   <data name="UpdateParatextCorpusDialog_SelectBooks" xml:space="preserve">
     <value>Perbarui dan Tambahkan Buku Baru</value>
