@@ -143,7 +143,7 @@
     <value>Nombre de usuario de Paratexto:</value>
   </data>
   <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
-    <value>Reiniciar aplicación</value>
+    <value>Reiniciar la aplicación</value>
   </data>
   <data name="AccountInfo_SelectAccountLabel" xml:space="preserve">
     <value>Seleccione una cuenta para cambiar a:</value>
@@ -197,7 +197,7 @@
     <value>Seleccione Proyecto Paratexto</value>
   </data>
   <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
-    <value>Deselecciona todo</value>
+    <value>Deseleccionar todo</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>Todo</value>
@@ -233,7 +233,7 @@
     <value>Libro anterior</value>
   </data>
   <data name="Bcv_PreviousChapter" xml:space="preserve">
-    <value>Capítulo previo</value>
+    <value>Capítulo anterior</value>
   </data>
   <data name="Bcv_PreviousVerse" xml:space="preserve">
     <value>Verso anterior</value>
@@ -242,7 +242,7 @@
     <value>SINCRONIZACIÓN</value>
   </data>
   <data name="Bcv_Verse" xml:space="preserve">
-    <value>VERSO</value>
+    <value>VERSÍCULO</value>
   </data>
   <data name="BiblicalTermsBcv_All" xml:space="preserve">
     <value>Todo</value>
@@ -254,7 +254,7 @@
     <value>Capítulo</value>
   </data>
   <data name="BiblicalTermsBcv_Verse" xml:space="preserve">
-    <value>Verso</value>
+    <value>Versículo</value>
   </data>
   <data name="BiblicalTermsDomains_Affection" xml:space="preserve">
     <value>afecto</value>
@@ -281,10 +281,10 @@
     <value>construcción; actividades religiosas</value>
   </data>
   <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
-    <value>construcciones; la cría de animales</value>
+    <value>construcciones; ganadería</value>
   </data>
   <data name="BiblicalTermsDomains_ContainersAnimalHusbandry" xml:space="preserve">
-    <value>contenedores; la cría de animales</value>
+    <value>contenedores; ganadería</value>
   </data>
   <data name="BiblicalTermsDomains_CraftsCloth" xml:space="preserve">
     <value>artesanía; paño</value>
@@ -317,7 +317,7 @@
     <value>mamíferos; animales salvajes</value>
   </data>
   <data name="BiblicalTermsDomains_Monument" xml:space="preserve">
-    <value>Monumento</value>
+    <value>monumento</value>
   </data>
   <data name="BiblicalTermsDomains_MoralsAndEthics" xml:space="preserve">
     <value>moral y ética</value>
@@ -437,7 +437,7 @@
     <value>Alineaciones</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>Tipo de alineación:</value>
+    <value>Tipo de alineación: </value>
   </data>
   <data name="BulkAlignmentReview_Approve" xml:space="preserve">
     <value>Aprobar</value>
@@ -545,7 +545,7 @@
     <value>nuevo individuo</value>
   </data>
   <data name="ClockUserControl_Select" xml:space="preserve">
-    <value>Selecciona la zona horaria</value>
+    <value>Seleccionar zona horaria</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Cerca</value>
@@ -566,7 +566,7 @@
     <value>Eliminar colaboración en proyectos</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>Tienes otros usuarios conectados a este proyecto. Este proyecto también se eliminará para ellos. ¿Estás seguro de que deseas eliminar este proyecto?</value>
+    <value>Tienes otros usuarios conectados a este proyecto.  Este proyecto también se eliminará para ellos. ¿Estás seguro de que deseas eliminar este proyecto?</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
     <value>¿Estás seguro de que deseas eliminar este proyecto?</value>
@@ -758,7 +758,7 @@
     <value>Mostrar notas externas</value>
   </data>
   <data name="FontSettings_Source" xml:space="preserve">
-    <value>Texto de origen:</value>
+    <value>Texto fuente:</value>
   </data>
   <data name="FontSettings_SourceFontSize" xml:space="preserve">
     <value>Tamaño de fuente fuente:</value>
@@ -787,6 +787,12 @@
   <data name="GEN" xml:space="preserve">
     <value>GEN</value>
   </data>
+  <data name="GrammarTagList_Description" xml:space="preserve">
+    <value>Descripción</value>
+  </data>
+  <data name="GrammarTagList_Short" xml:space="preserve">
+    <value>Corto</value>
+  </data>
   <data name="HAB" xml:space="preserve">
     <value>HAB</value>
   </data>
@@ -798,6 +804,18 @@
   </data>
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>Importación cancelada</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>Importación completa</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>Error encontrado (consulte el registro para obtener más detalles)</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>Importar análisis de palabras</value>
   </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
@@ -892,6 +910,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>Si está marcado, esto cambiará todas las apariciones no configuradas de esta palabra.</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>Cambiar todas las ocurrencias no configuradas</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>Si está marcado, esto cambiará todas las apariciones no configuradas de esta palabra.</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>Concordancia</value>
   </data>
@@ -907,11 +931,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Eliminar esta traducción</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;significado vacío&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>Introduzca una nueva traducción para</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>Introduzca un nuevo brillo</value>
+  </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>Formas:</value>
+  </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>Brillo</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>Lista de brillo</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>idioma:</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>Lema</value>
@@ -928,11 +967,20 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>Ya existe un lexema para el lema.</value>
   </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>Léxico</value>
+  </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>Partidos</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>Significados:</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>Nuevo brillo</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>No hay formularios disponibles</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>Eliminar este dominio semántico de este significado.</value>
@@ -942,6 +990,21 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>Establecer un brillo para</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>Traducciones:</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>tipo:</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>Desarmado</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>Brillo definido por el usuario</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>Verificado</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>Y</value>
@@ -965,7 +1028,7 @@
     <value>Hecho</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
-    <value>Encuentra todos</value>
+    <value>Buscar todo</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
     <value>Formularios</value>
@@ -1001,7 +1064,7 @@
     <value>Guardar cambios</value>
   </data>
   <data name="LexiconEdit_SourceLanguage" xml:space="preserve">
-    <value>Lenguaje fuente</value>
+    <value>Idioma de origen</value>
   </data>
   <data name="LexiconEdit_TargetLanguage" xml:space="preserve">
     <value>Lengua de llegada</value>
@@ -1027,8 +1090,20 @@
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>Encuentre lexemas que tengan una o más traducciones que coincidan con el objetivo</value>
   </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>Comprobado</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>Cuerpo:</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>Importar</value>
+  </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>Importación marcada</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>Idioma:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>Coincidencias de lexema o forma</value>
@@ -1043,7 +1118,7 @@
     <value>Seleccionar todo</value>
   </data>
   <data name="LexiconImport_SourceLanguage" xml:space="preserve">
-    <value>Lenguaje fuente</value>
+    <value>Idioma de origen</value>
   </data>
   <data name="LexiconImport_SourceType" xml:space="preserve">
     <value>Tipo</value>
@@ -1064,16 +1139,28 @@
     <value>Coincidencias de traducción</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
-    <value>Deselecciona todo</value>
+    <value>Deseleccionar todo</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>Palabra:</value>
+  </data>
+  <data name="LicenseValidator_EmailMissing" xml:space="preserve">
+    <value>Se requiere correo electrónico</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
-    <value>Se requiere el primer nombre</value>
+    <value>El nombre es obligatorio</value>
   </data>
   <data name="LicenseValidator_LastMissing" xml:space="preserve">
     <value>El apellido es obligatorio</value>
   </data>
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>Se requiere clave de licencia</value>
+  </data>
+  <data name="LicenseValidator_OrganizationMissing" xml:space="preserve">
+    <value>Se requiere organización</value>
+  </data>
+  <data name="LicenseValidator_ParatextUserNameMissing" xml:space="preserve">
+    <value>Se requiere nombre de usuario de Paratext</value>
   </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
@@ -1208,10 +1295,10 @@
     <value>Glosas:</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>Partes de la oración</value>
+    <value>Partes de la oración   </value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>Lemas relacionados</value>
+    <value>Lemas relacionados   </value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>Alcance:</value>
@@ -1229,16 +1316,16 @@
     <value>Sentido</value>
   </data>
   <data name="Marble_Senses" xml:space="preserve">
-    <value>Sentidos</value>
+    <value>Sentido</value>
   </data>
   <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>Códigos fuertes</value>
+    <value>Códigos fuertes   </value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>Subdominios:</value>
   </data>
   <data name="Marble_Verse" xml:space="preserve">
-    <value>Verso</value>
+    <value>Versículo</value>
   </data>
   <data name="Marble_Verses" xml:space="preserve">
     <value>Versos</value>
@@ -1373,7 +1460,7 @@
     <value>Añadir jota</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>Agregar una nueva jota</value>
+    <value>Agregue una nueva jota (mayúsculas-ingresar para una nueva línea)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>Cuerpo</value>
@@ -1385,7 +1472,7 @@
     <value>¿Eliminar esta jota?</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
-    <value>Debido a los permisos de su proyecto Paratext,</value>
+    <value>Debido a los permisos de su proyecto Paratext, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>Filtrar por Verso</value>
@@ -1496,7 +1583,7 @@
     <value>Resuelto</value>
   </data>
   <data name="Notes_Note_Verse" xml:space="preserve">
-    <value>Verso</value>
+    <value>Versículo</value>
   </data>
   <data name="Notes_NoteAssociationDescriptions" xml:space="preserve">
     <value>Asociaciones</value>
@@ -1583,7 +1670,7 @@
     <value>De acuerdo</value>
   </data>
   <data name="OldTestament" xml:space="preserve">
-    <value>Viejo Testamento</value>
+    <value>Antiguo Testamento</value>
   </data>
   <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
     <value>Crear alineación de palabras</value>
@@ -1658,7 +1745,7 @@
     <value>Auxiliar</value>
   </data>
   <data name="Pds_BackTranslation" xml:space="preserve">
-    <value>Traducción inversa</value>
+    <value>AtrásTraducción</value>
   </data>
   <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
     <value>Calcular nuevo modelo de traducción</value>
@@ -1717,6 +1804,9 @@
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>Obtenga lo último de Paratext</value>
   </data>
+  <data name="Pds_ImportWordAnlysisMenu" xml:space="preserve">
+    <value>Importar análisis de palabras </value>
+  </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
     <value>Mostrar información sobre este proyecto</value>
   </data>
@@ -1754,7 +1844,7 @@
     <value>Fuente</value>
   </data>
   <data name="Pds_SourceLanguage" xml:space="preserve">
-    <value>Lenguaje fuente</value>
+    <value>Idioma de origen</value>
   </data>
   <data name="Pds_Standard" xml:space="preserve">
     <value>Estándar</value>
@@ -1769,7 +1859,7 @@
     <value>EstudioBibliaAdiciones</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Vaya a Paratext y cambie de proyecto. El proyecto Paratext actualmente conectado al complemento ClearDashboard no es el mismo que el corpus de este proyecto ClearDashboard.</value>
+    <value>Vaya a Paratext y cambie de proyecto.  El proyecto Paratext actualmente conectado al complemento ClearDashboard no es el mismo que el corpus de este proyecto ClearDashboard.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Objetivo</value>
@@ -1802,7 +1892,7 @@
     <value>PHP</value>
   </data>
   <data name="Pins_ClearFilter" xml:space="preserve">
-    <value>Filtro claro</value>
+    <value>Borrar filtro</value>
   </data>
   <data name="Pins_Code" xml:space="preserve">
     <value>Código</value>
@@ -1889,13 +1979,13 @@
     <value>Inicio rápido Nuevo proyecto</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>Crear proyecto:</value>
+    <value>Crear proyecto: </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
     <value>Cree su proyecto utilizando el asistente de plantilla de proyecto.</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>Base de datos:</value>
+    <value>Base de datos: </value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
     <value>No puedes eliminar ese proyecto, otra aplicación todavía lo está usando.</value>
@@ -1910,7 +2000,7 @@
     <value>Si está marcado, podrá seleccionar qué libros procesar.</value>
   </data>
   <data name="ProjectPicker_GetStarted" xml:space="preserve">
-    <value>Empezar</value>
+    <value>empezar</value>
   </data>
   <data name="ProjectPicker_ImportServerProject" xml:space="preserve">
     <value>Importar proyecto de servidor</value>
@@ -1928,19 +2018,19 @@
     <value>Gestionar proyectos de colaboración</value>
   </data>
   <data name="ProjectPicker_NoMatches" xml:space="preserve">
-    <value>No hay coincidencias.</value>
+    <value>Sin coincidencias.</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>Es un lugar solitario aquí. Por favor crea un nuevo proyecto.</value>
+    <value>Es un lugar solitario aquí.  Por favor crea un nuevo proyecto.</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>Paratext no está instalado. Instale Paratext y vuelva a ejecutar la aplicación ClearDashboard.</value>
+    <value>Paratext no está instalado.  Instale Paratext y vuelva a ejecutar la aplicación ClearDashboard.</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>El paratexto no se está ejecutando</value>
   </data>
   <data name="ProjectPicker_OpenRecent" xml:space="preserve">
-    <value>Recientemente abierto</value>
+    <value>Abierto reciente</value>
   </data>
   <data name="ProjectPicker_Paratext" xml:space="preserve">
     <value>Paratexto</value>
@@ -1958,10 +2048,10 @@
     <value>Proyecto Paratexto</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>Proyecto:</value>
+    <value>Proyecto: </value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
-    <value>¡Casi estámos allí!</value>
+    <value>¡Ya casi llegamos!</value>
   </data>
   <data name="ProjectPicker_ProjectBuilderHelpfulVideos" xml:space="preserve">
     <value>Haga clic aquí para ver los vídeos de introducción al panel de control.</value>
@@ -1985,7 +2075,7 @@
     <value>Haga clic aquí para iniciar Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>Versión:</value>
+    <value>Versión: </value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>Por favor ingresa un nombre para tu proyecto</value>
@@ -1994,7 +2084,7 @@
     <value>Crea tu nuevo proyecto</value>
   </data>
   <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>El nombre del proyecto dado contiene caracteres ilegales. Los caracteres válidos incluyen 'A-Z' (minúsculas y mayúsculas), números '0-9' y los caracteres '-' y '_'.</value>
+    <value>El nombre del proyecto dado contiene caracteres ilegales.  Los caracteres válidos incluyen 'A-Z' (minúsculas y mayúsculas), números '0-9' y los caracteres '-' y '_'.</value>
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>Ya existe un proyecto con el mismo nombre. Elija un nombre único.</value>
@@ -2189,7 +2279,7 @@
     <value>Piedad</value>
   </data>
   <data name="ProperCase_Song of Songs" xml:space="preserve">
-    <value>Canción de canciones</value>
+    <value>Cantar de los cantares</value>
   </data>
   <data name="ProperCase_Titus" xml:space="preserve">
     <value>Tito</value>
@@ -2204,16 +2294,16 @@
     <value>PSA</value>
   </data>
   <data name="Refresh" xml:space="preserve">
-    <value>Actualizar</value>
+    <value>Refrescar</value>
   </data>
   <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
-    <value>Cierra la aplicación</value>
+    <value>Cerrar aplicación</value>
   </data>
   <data name="RegistrationDialogView_Register" xml:space="preserve">
     <value>Registro</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>La llave proporcionada está defectuosa. Cuando se descifró, no se pudieron encontrar ciertos elementos json.</value>
+    <value>La llave proporcionada está defectuosa.  Cuando se descifró, no se pudieron encontrar ciertos elementos json.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>El contenido de la clave de licencia descifrada no coincide con la información que proporcionó.</value>
@@ -2222,16 +2312,25 @@
     <value>Su clave de licencia falta o está rota.</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>¡Bienvenido a ClearDashboard! Por favor ingrese su información de registro.</value>
+    <value>¡Bienvenido a ClearDashboard!  Por favor ingrese su información de registro.</value>
+  </data>
+  <data name="RegistrationView_Email" xml:space="preserve">
+    <value>Por favor ingrese su correo electrónico</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
-    <value>Por favor, introduzca su nombre de pila</value>
+    <value>Por favor ingresa tu nombre</value>
   </data>
   <data name="RegistrationView_LastName" xml:space="preserve">
-    <value>Por favor ingrese su apellido</value>
+    <value>Por favor ingresa tu apellido</value>
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>Por favor, introduzca su clave de licencia</value>
+    <value>Por favor ingrese su clave de licencia</value>
+  </data>
+  <data name="RegistrationView_Organization" xml:space="preserve">
+    <value>Por favor ingrese su organización</value>
+  </data>
+  <data name="RegistrationView_ParatextUserName" xml:space="preserve">
+    <value>Por favor ingrese su nombre de usuario de Paratext</value>
   </data>
   <data name="ReleaseNotes_KnownIssues" xml:space="preserve">
     <value>Problemas conocidos</value>
@@ -2300,7 +2399,7 @@
     <value>General</value>
   </data>
   <data name="Settings_GeneralSettings" xml:space="preserve">
-    <value>Configuración general</value>
+    <value>Configuraciones generales</value>
   </data>
   <data name="Settings_Group" xml:space="preserve">
     <value>Grupo</value>
@@ -2345,7 +2444,7 @@
     <value>Guardar usuario de GitLab en el servidor</value>
   </data>
   <data name="Settings_SaveSettings" xml:space="preserve">
-    <value>Guardar ajustes</value>
+    <value>Guardar configuración</value>
   </data>
   <data name="Settings_SendValidationEmail" xml:space="preserve">
     <value>Enviar correo electrónico de validación</value>
@@ -2390,7 +2489,7 @@
     <value>Mostrar tareas en segundo plano</value>
   </data>
   <data name="ShellView_ShowNotes" xml:space="preserve">
-    <value>Notas de lanzamiento</value>
+    <value>Notas de la versión</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
     <value>Mostrar prelanzamientos</value>
@@ -2420,7 +2519,7 @@
     <value>Mensaje:</value>
   </data>
   <data name="SlackMessageView_NoInternet" xml:space="preserve">
-    <value>Sin internet</value>
+    <value>sin internet</value>
   </data>
   <data name="SlackMessageView_ResetForm" xml:space="preserve">
     <value>Restablecer formulario</value>
@@ -2468,16 +2567,37 @@
     <value>Sin formato</value>
   </data>
   <data name="TargetContextView_ZoomIn" xml:space="preserve">
-    <value>Acercarse</value>
+    <value>Dar un golpe de zoom</value>
   </data>
   <data name="TargetContextView_ZoomOut" xml:space="preserve">
-    <value>Disminuir el zoom</value>
+    <value>Alejar</value>
   </data>
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
   </data>
-  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+  <data name="TokenDisplay_SetGloss" xml:space="preserve">
     <value>Establecer brillo</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>Agregar lexema</value>
+  </data>
+  <data name="TokenSplitting_ClickWhere" xml:space="preserve">
+    <value>Haga clic donde dividir la palabra en tokens</value>
+  </data>
+  <data name="TokenSplitting_Gloss" xml:space="preserve">
+    <value>Brillo</value>
+  </data>
+  <data name="TokenSplitting_Grammar" xml:space="preserve">
+    <value>Gramática</value>
+  </data>
+  <data name="TokenSplitting_TrainingText" xml:space="preserve">
+    <value>Texto de entrenamiento</value>
+  </data>
+  <data name="TokenSplitting_Type" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="TokenSplitting_WordGloss" xml:space="preserve">
+    <value>Brillo de palabras</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Actualizar</value>

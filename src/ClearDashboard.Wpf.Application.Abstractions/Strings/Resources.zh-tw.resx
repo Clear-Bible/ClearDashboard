@@ -140,7 +140,7 @@
     <value>副文字電子郵件：</value>
   </data>
   <data name="AccountInfo_ParatextUsernameLabel" xml:space="preserve">
-    <value>副文本使用者名稱：</value>
+    <value>副文字使用者名稱：</value>
   </data>
   <data name="AccountInfo_RestartApplicationButton" xml:space="preserve">
     <value>重新啟動應用程式</value>
@@ -182,7 +182,7 @@
     <value>將 USFM 錯誤儲存到文件</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
-    <value>全選</value>
+    <value>選擇全部</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectBooks" xml:space="preserve">
     <value>選擇要處理的書籍</value>
@@ -197,7 +197,7 @@
     <value>選擇副文本項目</value>
   </data>
   <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
-    <value>全部取消選擇</value>
+    <value>取消全選</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>全部</value>
@@ -215,7 +215,7 @@
     <value>書</value>
   </data>
   <data name="Bcv_Chapter" xml:space="preserve">
-    <value>章節</value>
+    <value>章</value>
   </data>
   <data name="Bcv_NextBook" xml:space="preserve">
     <value>下一本書</value>
@@ -251,7 +251,7 @@
     <value>書</value>
   </data>
   <data name="BiblicalTermsBcv_Chapter" xml:space="preserve">
-    <value>章節</value>
+    <value>章</value>
   </data>
   <data name="BiblicalTermsBcv_Verse" xml:space="preserve">
     <value>詩</value>
@@ -434,10 +434,10 @@
     <value>對齊的單字</value>
   </data>
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
-    <value>路線</value>
+    <value>對齊方式</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
-    <value>對齊類型：</value>
+    <value>對齊類型： </value>
   </data>
   <data name="BulkAlignmentReview_Approve" xml:space="preserve">
     <value>核准</value>
@@ -566,7 +566,7 @@
     <value>刪除專案協作</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmExtended" xml:space="preserve">
-    <value>您有其他用戶連接到該項目。該項目也將為他們刪除。確定要刪除該項目嗎？</value>
+    <value>您有其他用戶連接到該項目。  該項目也將為他們刪除。確定要刪除該項目嗎？</value>
   </data>
   <data name="CollabProjectManagementView_DeleteConfirmSimple" xml:space="preserve">
     <value>您確定要刪除該項目嗎？</value>
@@ -578,7 +578,7 @@
     <value>專案成員</value>
   </data>
   <data name="CollabProjectManagementView_ProjectOwner" xml:space="preserve">
-    <value>專案擁有者</value>
+    <value>專案業主</value>
   </data>
   <data name="CollabProjectManagementView_Projects" xml:space="preserve">
     <value>專案</value>
@@ -596,7 +596,7 @@
     <value>已創建</value>
   </data>
   <data name="CreatedBy" xml:space="preserve">
-    <value>由...製作</value>
+    <value>創建者</value>
   </data>
   <data name="Current" xml:space="preserve">
     <value>目前的</value>
@@ -787,6 +787,12 @@
   <data name="GEN" xml:space="preserve">
     <value>GEN</value>
   </data>
+  <data name="GrammarTagList_Description" xml:space="preserve">
+    <value>描述</value>
+  </data>
+  <data name="GrammarTagList_Short" xml:space="preserve">
+    <value>短的</value>
+  </data>
   <data name="HAB" xml:space="preserve">
     <value>HAB</value>
   </data>
@@ -798,6 +804,18 @@
   </data>
   <data name="HOS" xml:space="preserve">
     <value>HOS</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportCancelled" xml:space="preserve">
+    <value>進口已取消</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportComplete" xml:space="preserve">
+    <value>導入完成</value>
+  </data>
+  <data name="ImportWordAnalyses_ImportErrored" xml:space="preserve">
+    <value>遇到錯誤（查看日誌以了解詳細資訊）</value>
+  </data>
+  <data name="ImportWordAnalyses_Title" xml:space="preserve">
+    <value>導入詞分析</value>
   </data>
   <data name="ISA" xml:space="preserve">
     <value>ISA</value>
@@ -892,6 +910,12 @@
   <data name="Lexicon_ChangeAllTooltip" xml:space="preserve">
     <value>如果選中，這將更改該單字的所有未設定的出現</value>
   </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrences" xml:space="preserve">
+    <value>更改所有未設定的事件</value>
+  </data>
+  <data name="Lexicon_ChangeAllUnsetOccurrencesToolTip" xml:space="preserve">
+    <value>如果選中，這將更改該單字的所有未設定的出現</value>
+  </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
     <value>索引</value>
   </data>
@@ -907,11 +931,26 @@
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>刪除此翻譯</value>
   </data>
+  <data name="Lexicon_Empty_Translation" xml:space="preserve">
+    <value>&lt;空意義&gt;</value>
+  </data>
   <data name="Lexicon_EnterNewMeaningTranslation" xml:space="preserve">
     <value>輸入新翻譯</value>
   </data>
   <data name="Lexicon_EnterNewTranslation" xml:space="preserve">
     <value>輸入新的光澤</value>
+  </data>
+  <data name="Lexicon_Forms" xml:space="preserve">
+    <value>表格：</value>
+  </data>
+  <data name="Lexicon_Gloss" xml:space="preserve">
+    <value>光澤度</value>
+  </data>
+  <data name="Lexicon_GlossList" xml:space="preserve">
+    <value>光澤表</value>
+  </data>
+  <data name="Lexicon_Language" xml:space="preserve">
+    <value>語言：</value>
   </data>
   <data name="Lexicon_Lemma" xml:space="preserve">
     <value>引理</value>
@@ -928,11 +967,20 @@
   <data name="Lexicon_LexemeExists" xml:space="preserve">
     <value>引理已經存在詞位</value>
   </data>
+  <data name="Lexicon_Lexicon" xml:space="preserve">
+    <value>字典</value>
+  </data>
+  <data name="Lexicon_Matches" xml:space="preserve">
+    <value>火柴</value>
+  </data>
   <data name="Lexicon_Meanings" xml:space="preserve">
     <value>意義：</value>
   </data>
   <data name="Lexicon_NewTranslation" xml:space="preserve">
     <value>新光澤</value>
+  </data>
+  <data name="Lexicon_No_Forms" xml:space="preserve">
+    <value>沒有可用的表格</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
     <value>從這個意義中刪除這個語意域</value>
@@ -942,6 +990,21 @@
   </data>
   <data name="Lexicon_SetTranslation" xml:space="preserve">
     <value>設定光澤度</value>
+  </data>
+  <data name="Lexicon_Translations" xml:space="preserve">
+    <value>翻譯：</value>
+  </data>
+  <data name="Lexicon_Type" xml:space="preserve">
+    <value>類型：</value>
+  </data>
+  <data name="Lexicon_Unset" xml:space="preserve">
+    <value>取消設定</value>
+  </data>
+  <data name="Lexicon_User_Defined_Gloss" xml:space="preserve">
+    <value>使用者定義的光澤度</value>
+  </data>
+  <data name="Lexicon_Verified" xml:space="preserve">
+    <value>已驗證</value>
   </data>
   <data name="LexiconEdit_And" xml:space="preserve">
     <value>和</value>
@@ -965,10 +1028,10 @@
     <value>完畢</value>
   </data>
   <data name="LexiconEdit_FindAll" xml:space="preserve">
-    <value>找到所有</value>
+    <value>找全部</value>
   </data>
   <data name="LexiconEdit_Forms" xml:space="preserve">
-    <value>形式</value>
+    <value>表格</value>
   </data>
   <data name="LexiconEdit_Fully" xml:space="preserve">
     <value>完全</value>
@@ -980,7 +1043,7 @@
     <value>詞法</value>
   </data>
   <data name="LexiconEdit_LoadingData" xml:space="preserve">
-    <value>載入資料中...</value>
+    <value>正在載入資料...</value>
   </data>
   <data name="LexiconEdit_LoadingData_ErrorTemplate" xml:space="preserve">
     <value>載入資料時發生意外錯誤。 {0}</value>
@@ -1027,8 +1090,20 @@
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
     <value>尋找具有與目標相符的一個或多個翻譯的詞素</value>
   </data>
+  <data name="LexiconImport_Checked" xml:space="preserve">
+    <value>已檢查</value>
+  </data>
+  <data name="LexiconImport_Corpus" xml:space="preserve">
+    <value>語料庫：</value>
+  </data>
+  <data name="LexiconImport_Import" xml:space="preserve">
+    <value>進口</value>
+  </data>
   <data name="LexiconImport_ImportChecked" xml:space="preserve">
     <value>導入檢查</value>
+  </data>
+  <data name="LexiconImport_Language" xml:space="preserve">
+    <value>語言：</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
     <value>詞位或形式匹配</value>
@@ -1040,7 +1115,7 @@
     <value>請選擇一個語料庫。</value>
   </data>
   <data name="LexiconImport_SelectAll" xml:space="preserve">
-    <value>全選</value>
+    <value>選擇全部</value>
   </data>
   <data name="LexiconImport_SourceLanguage" xml:space="preserve">
     <value>原始語言</value>
@@ -1064,7 +1139,13 @@
     <value>翻譯匹配</value>
   </data>
   <data name="LexiconImport_UnselectAll" xml:space="preserve">
-    <value>全部取消選擇</value>
+    <value>取消全選</value>
+  </data>
+  <data name="LexiconImport_Word" xml:space="preserve">
+    <value>單字：</value>
+  </data>
+  <data name="LicenseValidator_EmailMissing" xml:space="preserve">
+    <value>電子郵件為必填項</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>名字為必填項</value>
@@ -1075,6 +1156,12 @@
   <data name="LicenseValidator_LicenseMissing" xml:space="preserve">
     <value>需要許可證密鑰</value>
   </data>
+  <data name="LicenseValidator_OrganizationMissing" xml:space="preserve">
+    <value>需要組織</value>
+  </data>
+  <data name="LicenseValidator_ParatextUserNameMissing" xml:space="preserve">
+    <value>需要 Paratext 用戶名</value>
+  </data>
   <data name="LUK" xml:space="preserve">
     <value>LUK</value>
   </data>
@@ -1082,7 +1169,7 @@
     <value>關於</value>
   </data>
   <data name="MainView_AccountInfo" xml:space="preserve">
-    <value>帳戶資訊</value>
+    <value>帳號資訊</value>
   </data>
   <data name="MainView_File" xml:space="preserve">
     <value>文件</value>
@@ -1118,7 +1205,7 @@
     <value>標準佈局</value>
   </data>
   <data name="MainView_ProgramPreferences" xml:space="preserve">
-    <value>優先</value>
+    <value>偏好設定</value>
   </data>
   <data name="MainView_QuickNew" xml:space="preserve">
     <value>快速上新</value>
@@ -1178,7 +1265,7 @@
     <value>書</value>
   </data>
   <data name="Marble_Chapter" xml:space="preserve">
-    <value>章節</value>
+    <value>章</value>
   </data>
   <data name="Marble_Definition" xml:space="preserve">
     <value>定義</value>
@@ -1208,10 +1295,10 @@
     <value>光澤：</value>
   </data>
   <data name="Marble_PartsOfSpeech" xml:space="preserve">
-    <value>詞類</value>
+    <value>詞類   </value>
   </data>
   <data name="Marble_RelatedLemmas" xml:space="preserve">
-    <value>相關引理</value>
+    <value>相關引理   </value>
   </data>
   <data name="Marble_Scope" xml:space="preserve">
     <value>範圍：</value>
@@ -1232,7 +1319,7 @@
     <value>感官</value>
   </data>
   <data name="Marble_StrongCodes" xml:space="preserve">
-    <value>強程式碼</value>
+    <value>強程式碼   </value>
   </data>
   <data name="Marble_SubDomains" xml:space="preserve">
     <value>子域：</value>
@@ -1295,10 +1382,10 @@
     <value>檢查使用者可用性</value>
   </data>
   <data name="NewCollabUserView_CreateACollabUser" xml:space="preserve">
-    <value>創建協作用戶</value>
+    <value>創造協作用戶</value>
   </data>
   <data name="NewCollabUserView_CreateCollabUser" xml:space="preserve">
-    <value>創建協作用戶</value>
+    <value>創造協作用戶</value>
   </data>
   <data name="NewCollabUserView_DashboardEmailValidationCode" xml:space="preserve">
     <value>ClearDashboard 電子郵件驗證碼</value>
@@ -1307,7 +1394,7 @@
     <value>電子郵件：</value>
   </data>
   <data name="NewCollabUserView_EmailAddress" xml:space="preserve">
-    <value>電子郵件地址</value>
+    <value>電子郵件</value>
   </data>
   <data name="NewCollabUserView_EmailValidationCode" xml:space="preserve">
     <value>信箱驗證碼：</value>
@@ -1349,7 +1436,7 @@
     <value>驗證電子郵件程式碼</value>
   </data>
   <data name="NewProject_ProjectExistsTemplate" xml:space="preserve">
-    <value>名為「{0}」的項目已存在。請選擇一個獨特的名稱。”</value>
+    <value>名為「{0}」的項目已存在。請選擇一個獨特的名稱。</value>
   </data>
   <data name="NewProjectDialog_Title" xml:space="preserve">
     <value>建立新項目</value>
@@ -1373,7 +1460,7 @@
     <value>新增筆跡</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>新增筆跡</value>
+    <value>新增新的記號（Shift-Enter 換行）</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>身體</value>
@@ -1385,7 +1472,7 @@
     <value>刪除這個筆記嗎？</value>
   </data>
   <data name="Notes_DueToPermissions" xml:space="preserve">
-    <value>由於您的 Paratext 專案權限，</value>
+    <value>由於您的 Paratext 專案權限， </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
     <value>按詩句過濾</value>
@@ -1406,7 +1493,7 @@
     <value>任何</value>
   </data>
   <data name="Notes_FilterStatus_Closed" xml:space="preserve">
-    <value>解決</value>
+    <value>已解決</value>
   </data>
   <data name="Notes_FilterStatus_Open" xml:space="preserve">
     <value>打開</value>
@@ -1427,7 +1514,7 @@
     <value>是否要刪除標籤：</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>您想取消關聯標籤嗎：</value>
+    <value>您要取消關聯標籤嗎：</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>來自標籤組：</value>
@@ -1493,7 +1580,7 @@
     <value>打開</value>
   </data>
   <data name="Notes_Note_NoteStatus_Resolved" xml:space="preserve">
-    <value>解決</value>
+    <value>已解決</value>
   </data>
   <data name="Notes_Note_Verse" xml:space="preserve">
     <value>詩</value>
@@ -1643,7 +1730,7 @@
     <value>建立新的語料庫標記化</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>新增的行間</value>
+    <value>新增新的行間</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>新增文字到視圖</value>
@@ -1688,7 +1775,7 @@
     <value>刪除行間</value>
   </data>
   <data name="Pds_DeletingCorpusNode" xml:space="preserve">
-    <value>您確定要刪除該語料嗎？與該語料庫相關的所有註釋、對齊和行間都將被刪除且無法復原。</value>
+    <value>您確定要刪除該語料嗎？與該語料庫相關的所有註釋、對齊方式和行間文字都將被刪除且無法恢復。</value>
   </data>
   <data name="Pds_Dictionary" xml:space="preserve">
     <value>字典</value>
@@ -1717,8 +1804,11 @@
   <data name="Pds_GetLatestFromParatext" xml:space="preserve">
     <value>從 Paratext 獲取最新信息</value>
   </data>
+  <data name="Pds_ImportWordAnlysisMenu" xml:space="preserve">
+    <value>導入詞分析 </value>
+  </data>
   <data name="Pds_InfoToolTip" xml:space="preserve">
-    <value>顯示有​​關此項目的信息</value>
+    <value>顯示有​​關該項目的信息</value>
   </data>
   <data name="Pds_ManuscriptGreek" xml:space="preserve">
     <value>希臘語 (NT) MACULA</value>
@@ -1769,7 +1859,7 @@
     <value>研讀聖經增補</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>轉到 Paratext 並切換項目。目前連接到 ClearDashboard 外掛程式的 Paratext 專案與此 ClearDashboard 專案中的語料庫不同。</value>
+    <value>轉到 Paratext 並切換項目。  目前連接到 ClearDashboard 外掛程式的 Paratext 專案與此 ClearDashboard 專案中的語料庫不同。</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>目標</value>
@@ -1811,7 +1901,7 @@
     <value>篩選：</value>
   </data>
   <data name="Pins_Forms" xml:space="preserve">
-    <value>形式</value>
+    <value>表格</value>
   </data>
   <data name="Pins_Gloss" xml:space="preserve">
     <value>光澤度</value>
@@ -1844,10 +1934,10 @@
     <value>短語</value>
   </data>
   <data name="Pins_Prefix" xml:space="preserve">
-    <value>字首</value>
+    <value>前綴</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>顯示反向翻譯</value>
+    <value>顯示返回翻譯</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>幹</value>
@@ -1874,7 +1964,7 @@
     <value>Paratext Beta 未運行</value>
   </data>
   <data name="ProjectPicker_Cancelling" xml:space="preserve">
-    <value>取消...</value>
+    <value>正在取消...</value>
   </data>
   <data name="ProjectPicker_CollabProjects" xml:space="preserve">
     <value>合作項目</value>
@@ -1889,13 +1979,13 @@
     <value>快速啟動新項目</value>
   </data>
   <data name="ProjectPicker_CreateProject" xml:space="preserve">
-    <value>建立專案：</value>
+    <value>建立專案： </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
     <value>使用專案範本精靈建立專案。</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
-    <value>資料庫:</value>
+    <value>資料庫: </value>
   </data>
   <data name="ProjectPicker_DeleteError" xml:space="preserve">
     <value>您無法刪除該項目，另一個應用程式仍在使用它。</value>
@@ -1928,13 +2018,13 @@
     <value>管理協作項目</value>
   </data>
   <data name="ProjectPicker_NoMatches" xml:space="preserve">
-    <value>無匹配。</value>
+    <value>沒有匹配項。</value>
   </data>
   <data name="ProjectPicker_NoProject" xml:space="preserve">
-    <value>這裡很孤獨。請建立一個新專案。</value>
+    <value>這裡很孤獨。  請建立一個新專案。</value>
   </data>
   <data name="ProjectPicker_NotInstalled" xml:space="preserve">
-    <value>未安裝 Paratext。請安裝 Paratext 並重新運行 ClearDashboard 應用程式。</value>
+    <value>未安裝 Paratext。  請安裝 Paratext 並重新運行 ClearDashboard 應用程式。</value>
   </data>
   <data name="ProjectPicker_NotRunning" xml:space="preserve">
     <value>副文本未運行</value>
@@ -1958,7 +2048,7 @@
     <value>副文本項目</value>
   </data>
   <data name="ProjectPicker_Project" xml:space="preserve">
-    <value>專案:</value>
+    <value>專案: </value>
   </data>
   <data name="ProjectPicker_ProjectBuilderAlmostThere" xml:space="preserve">
     <value>我們快到了！</value>
@@ -1985,7 +2075,7 @@
     <value>按一下此處啟動 Paratext</value>
   </data>
   <data name="ProjectPicker_Version" xml:space="preserve">
-    <value>版本：</value>
+    <value>版本： </value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
     <value>請輸入您的項目名稱</value>
@@ -1994,7 +2084,7 @@
     <value>建立您的新項目</value>
   </data>
   <data name="ProjectValidator_IllegalCharacters" xml:space="preserve">
-    <value>給定的項目名稱包含非法字元。有效字元包括“A-Z”（小寫和大寫）、數字“0-9”以及字元“-”和“_”。</value>
+    <value>給定的項目名稱包含非法字元。  有效字元包括“A-Z”（小寫和大寫）、數字“0-9”以及字元“-”和“_”。</value>
   </data>
   <data name="ProjectValidator_SameName" xml:space="preserve">
     <value>已存在同名項目。請選擇一個獨特的名稱。</value>
@@ -2213,7 +2303,7 @@
     <value>登記</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>提供的密鑰故障。解密時，無法找到某些 json 元素。</value>
+    <value>提供的密鑰故障。  解密時，無法找到某些 json 元素。</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>解密的許可證金鑰的內容與您提供的資訊不符。</value>
@@ -2222,7 +2312,10 @@
     <value>您的許可證密鑰遺失或損壞。</value>
   </data>
   <data name="RegistrationDialogViewModel_Welcome" xml:space="preserve">
-    <value>歡迎來到 ClearDashboard！請輸入您的註冊資訊。</value>
+    <value>歡迎來到 ClearDashboard！  請輸入您的註冊資訊。</value>
+  </data>
+  <data name="RegistrationView_Email" xml:space="preserve">
+    <value>請輸入您的電子郵件</value>
   </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>請輸入您的名字</value>
@@ -2233,8 +2326,14 @@
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
     <value>請輸入您的許可證密鑰</value>
   </data>
+  <data name="RegistrationView_Organization" xml:space="preserve">
+    <value>請輸入您的組織</value>
+  </data>
+  <data name="RegistrationView_ParatextUserName" xml:space="preserve">
+    <value>請輸入您的 Paratext 使用者名稱</value>
+  </data>
   <data name="ReleaseNotes_KnownIssues" xml:space="preserve">
-    <value>已知的問題</value>
+    <value>已知問題</value>
   </data>
   <data name="REV" xml:space="preserve">
     <value>REV</value>
@@ -2267,7 +2366,7 @@
     <value>電子郵件</value>
   </data>
   <data name="Settings_EmailAddress" xml:space="preserve">
-    <value>電子郵件地址</value>
+    <value>電子郵件</value>
   </data>
   <data name="Settings_EmailSendingError" xml:space="preserve">
     <value>電子郵件發送錯誤</value>
@@ -2414,7 +2513,7 @@
     <value>我完成了一項任務，但很困難</value>
   </data>
   <data name="SlackMessageView_Combo4" xml:space="preserve">
-    <value>我想要做...</value>
+    <value>我想做...</value>
   </data>
   <data name="SlackMessageView_Message" xml:space="preserve">
     <value>訊息:</value>
@@ -2476,14 +2575,35 @@
   <data name="TIT" xml:space="preserve">
     <value>TIT</value>
   </data>
-  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+  <data name="TokenDisplay_SetGloss" xml:space="preserve">
     <value>設定光澤度</value>
+  </data>
+  <data name="TokenDisplay_SetTranslation" xml:space="preserve">
+    <value>新增詞目</value>
+  </data>
+  <data name="TokenSplitting_ClickWhere" xml:space="preserve">
+    <value>點擊將單字拆分為標記的位置</value>
+  </data>
+  <data name="TokenSplitting_Gloss" xml:space="preserve">
+    <value>光澤度</value>
+  </data>
+  <data name="TokenSplitting_Grammar" xml:space="preserve">
+    <value>文法</value>
+  </data>
+  <data name="TokenSplitting_TrainingText" xml:space="preserve">
+    <value>培訓文本</value>
+  </data>
+  <data name="TokenSplitting_Type" xml:space="preserve">
+    <value>類型</value>
+  </data>
+  <data name="TokenSplitting_WordGloss" xml:space="preserve">
+    <value>文字光澤</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>更新</value>
   </data>
   <data name="UpdateParatextCorpusDialog_Add" xml:space="preserve">
-    <value>添新</value>
+    <value>新增內容</value>
   </data>
   <data name="UpdateParatextCorpusDialog_SelectBooks" xml:space="preserve">
     <value>更新和新增新書</value>

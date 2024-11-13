@@ -14,12 +14,14 @@ using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -28,6 +30,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private readonly DashboardProjectManager _dashboardProjectManager;
         private readonly ILocalizationService _localizationService;
         private readonly CollaborationManager _collaborationManager;
+        private readonly GitLabHttpClientServices _gitLabServices;
+        private readonly GitLabHttpClientServices _gitLabHttpClientServices;
 
         #region Member Variables
         private RegistrationDialogViewModel _parent;
@@ -51,6 +55,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 LicenseUser.LicenseKey = value;
                 ValidationResult = Validate();
                 NotifyOfPropertyChange(nameof(LicenseUser));
+
+            }
+        }
+
+        private string _email;
+        public string Email
+        {
+            get { return _email; }
+            set
+            {
+                Set(ref _email, value);
+                LicenseUser.Email = value;
+                ValidationResult = Validate();
+                NotifyOfPropertyChange(nameof(Email));
+
+            }
+        }
+
+        private string _paratextUserName;
+        public string ParatextUserName
+        {
+            get { return _email; }
+            set
+            {
+                Set(ref _paratextUserName, value);
+                LicenseUser.ParatextUserName = value;
+                ValidationResult = Validate();
+                NotifyOfPropertyChange(nameof(ParatextUserName));
 
             }
         }
@@ -88,7 +120,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             set => Set(ref _matchType, value);
         }
 
-        
+        private List<GitLabGroup> _groups;
+        public List<GitLabGroup> Groups
+        {
+            get => _groups;
+            set
+            {
+                _groups = value;
+                NotifyOfPropertyChange(() => Groups);
+            }
+        }
+
+        private GitLabGroup _selectedGroup;
+        public GitLabGroup SelectedGroup
+        {
+            get => _selectedGroup;
+            set
+            {
+                _selectedGroup = value;
+                NotifyOfPropertyChange(() => SelectedGroup);
+
+                //ValidateCreateButton();
+            }
+        }
+
         #endregion
 
         #region Constructor
@@ -100,6 +155,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             ILifetimeScope? lifetimeScope,
             IValidator<DashboardUser> licenseValidator,
             ILocalizationService localizationService,
+            GitLabHttpClientServices gitLabHttpClientServices,
             CollaborationManager collaborationManager)
         : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, licenseValidator)
         {
@@ -107,6 +163,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             _localizationService = localizationService;
             LicenseUser = new DashboardUser();
             _collaborationManager = collaborationManager;
+            _gitLabHttpClientServices = gitLabHttpClientServices;
+        }
+
+        protected override async void OnViewReady(object view)
+        {
+            //FetchByIdInput = Visibility.Collapsed;
+            try
+            {
+                Groups = await _gitLabHttpClientServices.GetAllGroups();
+            }
+            catch
+            {
+                // ignored
+            }
+
+            //var dashboardUsersList = await _mySqlHttpClientServices.GetAllDashboardUsers();
+            //DashboardUsers = dashboardUsersList.OrderBy(s => s.LastName).ThenBy(s => s.FirstName).ToList();
+
+            //var gitUsers = await _gitLabServices.GetAllUsers();
+            //GitLabUsers = gitUsers.OrderBy(s => s.UserName).ToList();
+
+            //await RefreshProjectUserConnectionGrid();
+
+            base.OnViewReady(view);
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -288,7 +368,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         }
         #endregion  Methods
 
-
+        public void GroupSelected()
+        {
+            // for caliburn
+        }
 
     }
 
