@@ -5,24 +5,22 @@ using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
+using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
-using LicenseGenerator = GenerateLicenseKeyForDashboard.ViewModels;
+using LicenseGenerator = GenerateLicenseKeyForDashboard.ViewModels.LicenseGenerator;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -33,6 +31,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private readonly CollaborationManager _collaborationManager;
         private readonly GitLabHttpClientServices _gitLabServices;
         private readonly GitLabHttpClientServices _gitLabHttpClientServices;
+        private readonly CollaborationServerHttpClientServices _mySqlHttpClientServices;
 
         #region Member Variables
         private RegistrationDialogViewModel _parent;
@@ -166,8 +165,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             _collaborationManager = collaborationManager;
             _gitLabHttpClientServices = gitLabHttpClientServices;
 
-            //var licenseGenerator = new GenerateLicenseKeyForDashboard.ViewModels.ShellViewModel();
-            //var stop = true;
+            _mySqlHttpClientServices = ServiceCollectionHttpExtensions.GetSqlHttpClientServices();
         }
 
         protected override async void OnViewReady(object view)
@@ -227,8 +225,119 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             System.Windows.Application.Current.Shutdown();
         }
 
+        public async Task<string> GenerateLicense(
+            string email, 
+            CollaborationServerHttpClientServices mySqlHttpClientServices, 
+            string firstName, 
+            string lastName, 
+            bool isInternalChecked,
+            int licenseVersion)
+        {
+            string gitLabConfig = string.Empty;
+
+            string combinedCreateLicense = null;
+
+            //GeneratedLicenseBoxText = string.Empty;
+            //GenerateLicenseMessage = string.Empty;
+            //GeneratedGitLabLicense = string.Empty;
+
+            var emailAlreadyExists = await LicenseGenerator.CheckForPreExistingDashboardEmail(email, mySqlHttpClientServices);
+
+            if (emailAlreadyExists)
+            {
+                //GenerateLicenseMessage = "Dashboard Email already exists on system!";
+                //GenerateLicenseMessageBrush = Brushes.Red;
+            }
+            else
+            {
+                var gitlabUsersExists = await LicenseGenerator.CheckForPreExistingGitlabEmail(email, _gitLabServices, firstName, lastName);
+
+                if (gitlabUsersExists)
+                {
+                    //GenerateLicenseMessage = "Gitlab users already exists on system!";
+                    //GenerateLicenseMessageBrush = Brushes.Red;
+                }
+                else
+                {
+                    // create GitLab User First to get it's GitLab Id
+                    var gitLabUser = await LicenseGenerator.CreateGitLabUser(_gitLabServices, firstName, lastName, email, SelectedGroup);
+
+                    if (gitLabUser.Id == 0)
+                    {
+                        //GenerateLicenseMessage = "Error Creating user on Server";
+                        //GenerateLicenseMessageBrush = Brushes.Red;
+
+                        //CollaborationConfig = new();
+                    }
+                    else
+                    {
+                        var accessToken = await _gitLabServices.GeneratePersonalAccessToken(gitLabUser);
+
+                        CollaborationConfiguration CollaborationConfig = new CollaborationConfiguration
+                        {
+                            Group = SelectedGroup.Name,
+                            RemoteEmail = email,
+                            RemotePersonalAccessToken = accessToken.Token,
+                            RemotePersonalPassword = gitLabUser.Password,
+                            RemoteUrl = "",
+                            RemoteUserName = gitLabUser.UserName,
+                            UserId = gitLabUser.Id,
+                            NamespaceId = gitLabUser.NamespaceId,
+                            TokenId = accessToken.Id
+                        };
+
+                        //_collaborationConfiguration = CollaborationConfig;
+
+                        gitLabUser.Password = gitLabUser.Password;
+
+                        var results = await mySqlHttpClientServices.CreateNewCollabUser(gitLabUser, accessToken.Token);
+
+                        if (results)
+                        {
+                            //GeneratedGitLabLicense = LicenseManager.EncryptCollabJsonToString(CollaborationConfig);
+                            gitLabConfig = LicenseManager.EncryptCollabJsonToString(CollaborationConfig);
+                        }
+
+                    }
+
+                    // create Dashboard User
+                    var licenseKey = await LicenseGenerator.GenerateDashboardLicense(
+                        firstName,
+                        lastName,
+                        Guid.NewGuid(),
+                        email,
+                        gitLabUser.Id,
+                        isInternalChecked,
+                        licenseVersion,
+                        ParatextUserName,
+                        SelectedGroup,
+                        mySqlHttpClientServices);
+
+                    //GeneratedLicenseBoxText = licenseKey;
+
+                    //GenerateLicenseMessage = "Saved to remote server";
+                    //GenerateLicenseMessageBrush = Brushes.Green;
+
+                    combinedCreateLicense = LicenseGenerator.CombineLicenses(licenseKey, gitLabConfig);
+
+                }
+            }
+            return combinedCreateLicense;
+        }
+
         public async void Register()
         {
+            var combinedLicense  = await GenerateLicense(
+                Email,
+                _mySqlHttpClientServices,
+                FirstName,
+                LastName,
+                false,
+                2
+                );
+
+            LicenseKey = combinedLicense;
+
             try
             {
                 if (File.Exists(LicenseManager.LicenseFilePath))
