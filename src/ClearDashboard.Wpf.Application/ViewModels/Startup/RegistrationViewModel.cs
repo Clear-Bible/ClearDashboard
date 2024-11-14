@@ -53,7 +53,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 Set(ref _licenseKey, value);
                 LicenseUser.LicenseKey = value;
-                ValidationResult = Validate();
+                //ValidationResult = Validate();
                 NotifyOfPropertyChange(nameof(LicenseUser));
 
             }
@@ -76,7 +76,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private string _paratextUserName;
         public string ParatextUserName
         {
-            get { return _email; }
+            get { return _paratextUserName; }
             set
             {
                 Set(ref _paratextUserName, value);
@@ -138,6 +138,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             set
             {
                 _selectedGroup = value;
+                LicenseUser.Organization = value.Name;
+                ValidationResult = Validate();
                 NotifyOfPropertyChange(() => SelectedGroup);
 
                 //ValidateCreateButton();
@@ -166,6 +168,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             _gitLabHttpClientServices = gitLabHttpClientServices;
 
             _mySqlHttpClientServices = ServiceCollectionHttpExtensions.GetSqlHttpClientServices();
+            _gitLabServices = ServiceCollectionHttpExtensions.GetGitLabHttpClientServices();
         }
 
         protected override async void OnViewReady(object view)
@@ -236,16 +239,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             string gitLabConfig = string.Empty;
 
             string combinedCreateLicense = null;
-
-            //GeneratedLicenseBoxText = string.Empty;
-            //GenerateLicenseMessage = string.Empty;
-            //GeneratedGitLabLicense = string.Empty;
-
+            
             var emailAlreadyExists = await LicenseGenerator.CheckForPreExistingDashboardEmail(email, mySqlHttpClientServices);
 
             if (emailAlreadyExists)
             {
-                //GenerateLicenseMessage = "Dashboard Email already exists on system!";
+                MatchType = "Email already exists on system!";
                 //GenerateLicenseMessageBrush = Brushes.Red;
             }
             else
@@ -254,7 +253,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                 if (gitlabUsersExists)
                 {
-                    //GenerateLicenseMessage = "Gitlab users already exists on system!";
+                    MatchType = "Collab user already exists on system!";
                     //GenerateLicenseMessageBrush = Brushes.Red;
                 }
                 else
@@ -264,7 +263,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                     if (gitLabUser.Id == 0)
                     {
-                        //GenerateLicenseMessage = "Error Creating user on Server";
+                        MatchType = "Error while creating collab account";
                         //GenerateLicenseMessageBrush = Brushes.Red;
 
                         //CollaborationConfig = new();
@@ -315,7 +314,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                     //GeneratedLicenseBoxText = licenseKey;
 
-                    //GenerateLicenseMessage = "Saved to remote server";
+                    MatchType = "Success!";
                     //GenerateLicenseMessageBrush = Brushes.Green;
 
                     combinedCreateLicense = LicenseGenerator.CombineLicenses(licenseKey, gitLabConfig);
@@ -335,6 +334,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 false,
                 2
                 );
+
+            if (combinedLicense == null)
+            {
+                return;
+            }
 
             LicenseKey = combinedLicense;
 
