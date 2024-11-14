@@ -216,7 +216,7 @@
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
-                        Path="ParatextUsername"
+                        Path="ParatextUserName"
                         UpdateSourceTrigger="PropertyChanged"
                         ValidatesOnDataErrors="True" />
                 </TextBox.Text>
@@ -274,7 +274,7 @@
                 HorizontalAlignment="left"
                 VerticalAlignment="Bottom"
                 Click="SendLicenseEmailButton_OnClick"
-                Content="Ask Clear for a license"
+                Content="Not working?  Ask Biblica for a license."
                 Style="{StaticResource TransparentStyle}"
                 Visibility="Visible" />
         </StackPanel>

@@ -22,6 +22,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
+using LicenseGenerator = GenerateLicenseKeyForDashboard.ViewModels;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -164,6 +165,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             LicenseUser = new DashboardUser();
             _collaborationManager = collaborationManager;
             _gitLabHttpClientServices = gitLabHttpClientServices;
+
+            //var licenseGenerator = new GenerateLicenseKeyForDashboard.ViewModels.ShellViewModel();
+            //var stop = true;
         }
 
         protected override async void OnViewReady(object view)
