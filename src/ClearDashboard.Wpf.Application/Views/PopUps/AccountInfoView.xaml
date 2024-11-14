@@ -112,9 +112,9 @@
 
                 <ListBox
                     Height="185"
-                    ScrollViewer.CanContentScroll="False"
                     IsEnabled="{Binding IsEnabled}"
                     ItemsSource="{Binding UserAndPathList}"
+                    ScrollViewer.CanContentScroll="False"
                     SelectedItem="{Binding SelectedUserAndPath}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>

@@ -490,10 +490,9 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
         {
 
             var _collaborationManager =
+                _mySqlHttpClientServices = ServiceCollectionHttpExtensions.GetSqlHttpClientServices();
 
-            _mySqlHttpClientServices = ServiceCollectionExtensions.GetSqlHttpClientServices();
-
-            _gitLabServices = ServiceCollectionExtensions.GetGitLabHttpClientServices();
+            _gitLabServices = ServiceCollectionHttpExtensions.GetGitLabHttpClientServices();
 
 
             //get the assembly version

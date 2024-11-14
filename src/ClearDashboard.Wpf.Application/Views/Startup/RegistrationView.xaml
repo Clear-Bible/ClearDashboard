@@ -107,6 +107,21 @@
                         </StackPanel>
                     </DataTemplate>
                 </controls:AutoCompleteComboBox.ItemTemplate>
+                <Validation.ErrorTemplate>
+                    <ControlTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <AdornedElementPlaceholder />
+                            <TextBlock
+                                MaxWidth="350"
+                                Margin="0"
+                                HorizontalAlignment="Left"
+                                FontSize="16"
+                                Foreground="{DynamicResource ErrorHueBrush}"
+                                Text="{Binding [0].ErrorContent}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </ControlTemplate>
+                </Validation.ErrorTemplate>
             </controls:AutoCompleteComboBox>
 
             <TextBox
@@ -293,6 +308,7 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             Content="{helpers:Localization RegistrationDialogView_Register}"
+            IsEnabled="{Binding CanRegister}"
             Style="{StaticResource TransparentStyle}" />
 
 
