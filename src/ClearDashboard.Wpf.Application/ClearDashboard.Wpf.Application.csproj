@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
@@ -161,6 +161,7 @@
     <PackageReference Include="System.Management" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\tools\GenerateLicenseKeyForDashboard\GenerateLicenseKeyForDashboard.csproj" />
     <ProjectReference Include="..\ClearDashboard.Collaboration\ClearDashboard.Collaboration.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.WpfViewModels\ClearDashboard.DAL.Wpf.ViewModels.csproj" />

@@ -532,42 +532,16 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
         public async void GenerateLicense_OnClick()
         {
-            GeneratedLicenseBoxText = string.Empty;
-            GenerateLicenseMessage = string.Empty;
-            GeneratedGitLabLicense = string.Empty;
-
-            var emailAlreadyExists = await CheckForPreExistingDashboardEmail(EmailBox);
-
-            if (emailAlreadyExists)
-            {
-                GenerateLicenseMessage = "Dashboard Email already exists on system!";
-                GenerateLicenseMessageBrush = Brushes.Red;
-            }
-            else
-            {
-                var gitlabUsersExists = await CheckForPreExistingGitlabEmail(EmailBox);
-
-                if (gitlabUsersExists)
-                {
-                    GenerateLicenseMessage = "Gitlab users already exists on system!";
-                    GenerateLicenseMessageBrush = Brushes.Red;
-                }
-                else
-                {
-                    // create GitLab User First to get it's GitLab Id
-                    var gitLabUserId = await CreateGitLabUser();
-
-                    // create Dashboard User
-                    var licenseKey = await GenerateDashboardLicense(FirstNameBox, LastNameBox, Guid.NewGuid(), EmailBox, gitLabUserId);
-                    GeneratedLicenseBoxText = licenseKey;
-
-                    GenerateLicenseMessage = "Saved to remote server";
-                    GenerateLicenseMessageBrush = Brushes.Green;
-
-                    CombinedCreateLicense = CombineLicenses(GeneratedLicenseBoxText, GeneratedGitLabLicense);
-                }
-
-            }
+            LicenseGenerator.GenerateLicense(
+                EmailBox, 
+                _mySqlHttpClientServices, 
+                _gitLabServices, 
+                FirstNameBox, 
+                LastNameBox, 
+                SelectedGroup, 
+                IsInternalChecked, 
+                _licenseVersion, 
+                ParatextUserName);
         }
 
         public void GroupSelected()
@@ -654,116 +628,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
 
 
         }
-
-
-        /// <summary>
-        /// Creates the User on the GitLab Server
-        /// </summary>
-        public async Task<int> CreateGitLabUser()
-        {
-            var password = GenerateRandomPassword.RandomPassword(16);
-
-            GitLabUser user = await _gitLabServices.CreateNewUser(FirstNameBox, LastNameBox, GetUserName(), password,
-                EmailBox, SelectedGroup.Name);
-
-            if (user.Id == 0)
-            {
-                GenerateLicenseMessage = "Error Creating user on Server";
-                GenerateLicenseMessageBrush = Brushes.Red;
-
-                CollaborationConfig = new();
-            }
-            else
-            {
-                var accessToken = await _gitLabServices.GeneratePersonalAccessToken(user);
-
-                CollaborationConfig = new CollaborationConfiguration
-                {
-                    Group = SelectedGroup.Name,
-                    RemoteEmail = EmailBox,
-                    RemotePersonalAccessToken = accessToken.Token,
-                    RemotePersonalPassword = password,
-                    RemoteUrl = "",
-                    RemoteUserName = user.UserName,
-                    UserId = user.Id,
-                    NamespaceId = user.NamespaceId,
-                    TokenId = accessToken.Id
-                };
-
-                _collaborationConfiguration = CollaborationConfig;
-
-                user.Password = password;
-
-                var results = await _mySqlHttpClientServices.CreateNewCollabUser(user, accessToken.Token);
-
-                if (results)
-                {
-                    GeneratedGitLabLicense = LicenseManager.EncryptCollabJsonToString(CollaborationConfig);
-                }
-
-            }
-
-            return user.Id;
-        }
-
-        private async Task<bool> CheckForPreExistingDashboardEmail(string email)
-        {
-            var results = await _mySqlHttpClientServices.GetAllDashboardUsers();
-
-            var dashboardUser = results.FirstOrDefault(du => du.Email == email);
-
-            if (dashboardUser is null)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-
-        private async Task<bool> CheckForPreExistingGitlabEmail(string email)
-        {
-            return await _gitLabServices.CheckForExistingUser(GetUserName(), EmailBox);
-        }
-
-
-        private async Task<string> GenerateDashboardLicense(string firstName, string lastName, Guid id, string email,
-            int gitLabUserId)
-        {
-            var licenseUser = new User
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                Id = id,
-                IsInternal = IsInternalChecked,
-                LicenseVersion = _licenseVersion,
-            };
-
-            var encryptedLicense = LicenseManager.EncryptToString(licenseUser);
-
-            var dashboardUser = new DashboardUser
-            {
-                GitLabUserId = gitLabUserId,
-                Email = email,
-                ParatextUserName = ParatextUserName,
-                FirstName = firstName,
-                LastName = lastName,
-                Id = id,
-                LicenseVersion = _licenseVersion,
-                LicenseKey = encryptedLicense,
-                IsInternal = IsInternalChecked,
-                Organization = SelectedGroup.Name,
-            };
-
-            var results = await _mySqlHttpClientServices.CreateNewDashboardUser(dashboardUser);
-
-            if (!results)
-            {
-                encryptedLicense = "User failed to be added to the remote server";
-            }
-
-            return encryptedLicense;
-        }
+        
 
         public void DecryptLicense_OnClick()
         {
@@ -868,12 +733,7 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
             FetchedEmailBox = dashboardUser.Email ?? string.Empty;
             FetchedLicenseBox = dashboardUser.LicenseKey ?? string.Empty;
 
-            CombinedLicense = CombineLicenses(FetchedLicenseBox, FetchedGitLabLicense);
-        }
-
-        private string CombineLicenses(string dashboardLicense, string collabLicense)
-        {
-            return $"{dashboardLicense}^{collabLicense}";
+            CombinedLicense = LicenseGenerator.CombineLicenses(FetchedLicenseBox, FetchedGitLabLicense);
         }
 
         public async void DeleteLicenseById_OnClick()
@@ -1012,5 +872,210 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
         #endregion // Methods
 
 
+    }
+
+    public static class LicenseGenerator {
+        public static async void GenerateLicense(
+            string emailBox, 
+            CollaborationServerHttpClientServices mySqlHttpClientServices, 
+            GitLabHttpClientServices gitLabServices, 
+            string firstNameBox, 
+            string lastNameBox,
+            GitLabGroup selectedGroup,
+            bool isInternalChecked,
+            int licenseVersion,
+            string paratextUserName
+        )
+        {
+            var generatedLicenseBoxText = string.Empty;
+            var generateLicenseMessage = string.Empty;
+            var generatedGitLabLicense = string.Empty;
+            Brush generateLicenseMessageBrush;
+
+            var emailAlreadyExists = await CheckForPreExistingDashboardEmail(emailBox, mySqlHttpClientServices);
+
+            if (emailAlreadyExists)
+            {
+                generateLicenseMessage = "Dashboard Email already exists on system!";
+                generateLicenseMessageBrush = Brushes.Red;
+            }
+            else
+            {
+                var gitlabUsersExists = await CheckForPreExistingGitlabEmail(emailBox, gitLabServices, firstNameBox, lastNameBox);
+
+                if (gitlabUsersExists)
+                {
+                    generateLicenseMessage = "Gitlab users already exists on system!";
+                    generateLicenseMessageBrush = Brushes.Red;
+                }
+                else
+                {
+                    // create GitLab User First to get it's GitLab Id
+                    var gitLabUserId = await CreateGitLabUser(gitLabServices, firstNameBox, lastNameBox, emailBox, selectedGroup, mySqlHttpClientServices);
+
+                    // create Dashboard User
+                    var licenseKey = await GenerateDashboardLicense(
+                        firstNameBox, 
+                        lastNameBox, 
+                        Guid.NewGuid(), 
+                        emailBox, 
+                        gitLabUserId,
+                        isInternalChecked,
+                        licenseVersion,
+                        paratextUserName, 
+                        selectedGroup,
+                        mySqlHttpClientServices);
+                    
+                    ;
+                        
+                    generatedLicenseBoxText = licenseKey;
+
+                    generateLicenseMessage = "Saved to remote server";
+                    generateLicenseMessageBrush = Brushes.Green;
+
+                    var CombinedCreateLicense = CombineLicenses(generatedLicenseBoxText, generatedGitLabLicense);
+                }
+
+            }
+        }
+
+        private static async Task<bool> CheckForPreExistingDashboardEmail(string email, CollaborationServerHttpClientServices mySqlHttpClientServices)
+        {
+            var results = await mySqlHttpClientServices.GetAllDashboardUsers();
+
+            var dashboardUser = results.FirstOrDefault(du => du.Email == email);
+
+            if (dashboardUser is null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private static async Task<bool> CheckForPreExistingGitlabEmail(string email, GitLabHttpClientServices gitLabServices, string firstNameBox, string lastNameBox)
+        {
+            return await gitLabServices.CheckForExistingUser(GetUserName(firstNameBox, lastNameBox), email);
+        }
+
+        private static string GetUserName(string firstNameBox, string lastNameBox)
+        {
+            return (Regex.Replace(firstNameBox, @"\s|\p{P}|[']", "") + "." +
+                    Regex.Replace(lastNameBox, @"\s|\p{P}|[']", "")).ToLower();
+        }
+
+        /// <summary>
+        /// Creates the User on the GitLab Server
+        /// </summary>
+        public static async Task<int> CreateGitLabUser(
+            GitLabHttpClientServices gitLabServices, 
+            string firstNameBox, 
+            string lastNameBox, 
+            string emailBox,
+            GitLabGroup selectedGroup,
+            CollaborationServerHttpClientServices mySqlHttpClientServices
+            )
+        {
+            var password = GenerateRandomPassword.RandomPassword(16);
+
+            GitLabUser user = await gitLabServices.CreateNewUser(
+                firstNameBox, 
+                lastNameBox, 
+                GetUserName( firstNameBox,  lastNameBox), 
+                password,
+                emailBox,
+                selectedGroup.Name);
+
+            if (user.Id == 0)
+            {
+                var generateLicenseMessage = "Error Creating user on Server";
+                var generateLicenseMessageBrush = Brushes.Red;
+
+                CollaborationConfiguration CollaborationConfig = new ();
+            }
+            else
+            {
+                var accessToken = await gitLabServices.GeneratePersonalAccessToken(user);
+
+                CollaborationConfiguration CollaborationConfig = new CollaborationConfiguration
+                {
+                    Group = selectedGroup.Name,
+                    RemoteEmail = emailBox,
+                    RemotePersonalAccessToken = accessToken.Token,
+                    RemotePersonalPassword = password,
+                    RemoteUrl = "",
+                    RemoteUserName = user.UserName,
+                    UserId = user.Id,
+                    NamespaceId = user.NamespaceId,
+                    TokenId = accessToken.Id
+                };
+
+                //_collaborationConfiguration = CollaborationConfig;
+
+                user.Password = password;
+
+                var results = await mySqlHttpClientServices.CreateNewCollabUser(user, accessToken.Token);
+
+                if (results)
+                {
+                    var generatedGitLabLicense = LicenseManager.EncryptCollabJsonToString(CollaborationConfig);
+                }
+
+            }
+
+            return user.Id;
+        }
+
+        private static async Task<string> GenerateDashboardLicense(
+            string firstName, 
+            string lastName, 
+            Guid id, 
+            string email,
+            int gitLabUserId, 
+            bool isInternalChecked, 
+            int licenseVersion, 
+            string paratextUserName, 
+            GitLabGroup selectedGroup, 
+            CollaborationServerHttpClientServices mySqlHttpClientServices)
+        {
+            var licenseUser = new User
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                Id = id,
+                IsInternal = isInternalChecked,
+                LicenseVersion = licenseVersion,
+            };
+
+            var encryptedLicense = LicenseManager.EncryptToString(licenseUser);
+
+            var dashboardUser = new DashboardUser
+            {
+                GitLabUserId = gitLabUserId,
+                Email = email,
+                ParatextUserName = paratextUserName,
+                FirstName = firstName,
+                LastName = lastName,
+                Id = id,
+                LicenseVersion = licenseVersion,
+                LicenseKey = encryptedLicense,
+                IsInternal = isInternalChecked,
+                Organization = selectedGroup.Name,
+            };
+
+            var results = await mySqlHttpClientServices.CreateNewDashboardUser(dashboardUser);
+
+            if (!results)
+            {
+                encryptedLicense = "User failed to be added to the remote server";
+            }
+
+            return encryptedLicense;
+        }
+
+        public static string CombineLicenses(string dashboardLicense, string collabLicense)
+        {
+            return $"{dashboardLicense}^{collabLicense}";
+        }
     }
 }
