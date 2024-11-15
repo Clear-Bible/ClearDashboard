@@ -995,6 +995,8 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                 emailBox,
                 selectedGroup.Name);
 
+            user.Password = password;
+
             return user;
         }
 
