@@ -91,13 +91,13 @@ jobs:
         #working-directory: C:/ClearDashboard.git
         uses: Nuget/setup-nuget@v1.0.5
 
+      - name: Print current directory
+        run: pwd
+
       - name: Configure ClearBible GitHub NuGet package source
         working-directory: $PWD
         run: dotnet nuget add source --username ${{secrets.GH_PACKAGES_USER}} --password ${{ secrets.GH_PACKAGES_PAT }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/clear-bible/index.json"
         #run: dotnet nuget add source --username USERNAME --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name ClearBible "https://nuget.pkg.github.com/OWNER/index.json"
-
-      - name: Print current directory
-        run: pwd
 
       - name: Configure Caliburn.Micro NuGet package source
         working-directory: C:/ClearDashboard.git
