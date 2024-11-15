@@ -139,7 +139,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             set
             {
                 _selectedGroup = value;
-                LicenseUser.Organization = value.Name;
+                if (value is GitLabGroup)
+                    LicenseUser.Organization = value.Name;
+                else
+                    LicenseUser.Organization = null;
                 ValidationResult = Validate();
                 NotifyOfPropertyChange(() => SelectedGroup);
 
