@@ -253,7 +253,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                 if (gitlabUsersExists)
                 {
-                    MatchType = "Collab user already exists on system!";
+                    MatchType = $"{LicenseGenerator.GetUserName(FirstName, LastName)} already exists on system!";
                     //GenerateLicenseMessageBrush = Brushes.Red;
                 }
                 else
