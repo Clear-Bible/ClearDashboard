@@ -311,6 +311,20 @@
             IsEnabled="{Binding CanRegister}"
             Style="{StaticResource TransparentStyle}" />
 
+        <ProgressBar
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Width="76"
+            Height="75"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            IsIndeterminate="True"
+            Style="{StaticResource ClearDashboardCircularProgressBar}"
+            Visibility="{Binding ProgressBarVisibility}"
+            Value="0" />
+
 
     </Grid>
 </UserControl>

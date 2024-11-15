@@ -146,6 +146,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
+        private bool _progressBarVisibility;
+        public bool ProgressBarVisibility
+        {
+            get => _progressBarVisibility;
+            set
+            {
+                _progressBarVisibility = value;
+                NotifyOfPropertyChange(() => ProgressBarVisibility);
+            }
+        }
+        
         #endregion
 
         #region Constructor
@@ -236,6 +247,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             bool isInternalChecked,
             int licenseVersion)
         {
+            CanRegister = false;
+            ProgressBarVisibility = true;
+
+
             string gitLabConfig = string.Empty;
 
             string combinedCreateLicense = null;
@@ -321,6 +336,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                 }
             }
+            ProgressBarVisibility = false;
+            CanRegister = true;
+
             return combinedCreateLicense;
         }
 
