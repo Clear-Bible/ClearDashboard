@@ -20,6 +20,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using LicenseGenerator = GenerateLicenseKeyForDashboard.ViewModels.LicenseGenerator;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
@@ -146,8 +147,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private bool _progressBarVisibility;
-        public bool ProgressBarVisibility
+        private Visibility _progressBarVisibility;
+        public Visibility ProgressBarVisibility
         {
             get => _progressBarVisibility;
             set
@@ -180,6 +181,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             _mySqlHttpClientServices = ServiceCollectionHttpExtensions.GetSqlHttpClientServices();
             _gitLabServices = ServiceCollectionHttpExtensions.GetGitLabHttpClientServices();
+            ProgressBarVisibility = Visibility.Collapsed;
         }
 
         protected override async void OnViewReady(object view)
@@ -247,10 +249,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             bool isInternalChecked,
             int licenseVersion)
         {
-            CanRegister = false;
-            ProgressBarVisibility = true;
-
-
+            
             string gitLabConfig = string.Empty;
 
             string combinedCreateLicense = null;
@@ -336,14 +335,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                 }
             }
-            ProgressBarVisibility = false;
-            CanRegister = true;
-
+            
             return combinedCreateLicense;
         }
 
         public async void Register()
         {
+            CanRegister = false;
+            ProgressBarVisibility = Visibility.Visible;
+            
             var combinedLicense  = await GenerateLicense(
                 Email,
                 _mySqlHttpClientServices,
@@ -495,6 +495,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 Logger.LogError("LicenseUserMatchType switch statement failed: "+ex);
             }
             Logger.LogInformation("MatchType is: "+MatchType);
+
+            ProgressBarVisibility = Visibility.Collapsed;
+            CanRegister = true;
         }
 
         public async void ShowAccountInfoWindow()
