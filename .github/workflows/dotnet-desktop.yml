@@ -41,135 +41,132 @@ name: .NET Core Desktop
 on:
   push:
     branches:
-      - 'main'
-      - 'DEV'
+      - "main"
+      - "DEV"
   pull_request:
     branches:
-      - 'main'
-      - 'DEV'
+      - "main"
+      - "DEV"
 
 jobs:
-
   build:
-
     strategy:
       matrix:
         configuration: [Debug] #, Release]
 
-    runs-on: windows-latest  # For a list of available runner types, refer to
-                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+    runs-on:
+      windows-latest # For a list of available runner types, refer to
+      # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     env:
       Solution_Name: ClearDashboard
       Solution_Path: src\ClearDashboard.sln
       Test_Project_Path: src\ClearDashboard.Tests\ClearDashboard.Tests.csproj
       Wpf_Project_Path: src\ClearDashboard.WPF\ClearDashboard.WPF.csproj
-      Wap_Project_Directory: ClearDashboard.WPF.Package    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
-      Wap_Project_Path: ClearDashboard.App.Package\ClearDashboard.Package.wapproj                   # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
+      Wap_Project_Directory: ClearDashboard.WPF.Package # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
+      Wap_Project_Path: ClearDashboard.App.Package\ClearDashboard.Package.wapproj # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
 
     steps:
-    #- name: Always Fail # For testing the CI notifier.
-    #  uses: cutenode/action-always-fail@v1.0.1
-    
-    - run: Get-PSDrive
-  
-    - name: Checkout
-      env: 
-        GIT_CLONE_PROTECTION_ACTIVE: false
-      run: |
-        mkdir C:/ClearDashboard.git
-        git clone https://${{secrets.GH_PACKAGES_USER}}:${{ secrets.GH_PACKAGES_PAT}}@github.com/Clear-Bible/ClearDashboard.git C:/ClearDashboard.git --depth 1
+      #- name: Always Fail # For testing the CI notifier.
+      #  uses: cutenode/action-always-fail@v1.0.1
 
-    - name: Install .NET Core
-      #working-directory: C:/ClearDashboard.git
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 8.0.x
+      - run: Get-PSDrive
 
-    - name: Setup MSBuild.exe
-      #working-directory: C:/ClearDashboard.git
-      uses: microsoft/setup-msbuild@v1.1
-      
-    - name: Setup NuGet
-      #working-directory: C:/ClearDashboard.git
-      uses: Nuget/setup-nuget@v1.0.5
-      
-    - name: Configure ClearBible GitHub NuGet package source
-      working-directory: C:/ClearDashboard.git
-      run:  dotnet nuget add source --username ${{secrets.GH_PACKAGES_USER}} --password ${{ secrets.GH_PACKAGES_PAT }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/clear-bible/index.json"
-      #run: dotnet nuget add source --username USERNAME --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name ClearBible "https://nuget.pkg.github.com/OWNER/index.json"   
-      
-    - name: Configure Caliburn.Micro NuGet package source
-      working-directory: C:/ClearDashboard.git
-      run: dotnet nuget add source --name myget-caliburn-micro "https://www.myget.org/F/caliburn-micro-builds/api/v3/index.json"
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          lfs: true
 
-    - name: Restore NuGet packages
-      working-directory: C:/ClearDashboard.git
-      run: nuget restore $env:Solution_Path
-      
-    # Restore the application to populate the obj folder with RuntimeIdentifiers
-    #- name: Restore the application
+      - name: Install .NET Core
+        #working-directory: C:/ClearDashboard.git
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Setup MSBuild.exe
+        #working-directory: C:/ClearDashboard.git
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Setup NuGet
+        #working-directory: C:/ClearDashboard.git
+        uses: Nuget/setup-nuget@v1.0.5
+
+      - name: Configure ClearBible GitHub NuGet package source
+        #working-directory: C:/ClearDashboard.git
+        run: dotnet nuget add source --username ${{secrets.GH_PACKAGES_USER}} --password ${{ secrets.GH_PACKAGES_PAT }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/clear-bible/index.json"
+        #run: dotnet nuget add source --username USERNAME --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name ClearBible "https://nuget.pkg.github.com/OWNER/index.json"
+
+      - name: Configure Caliburn.Micro NuGet package source
+        #working-directory: C:/ClearDashboard.git
+        run: dotnet nuget add source --name myget-caliburn-micro "https://www.myget.org/F/caliburn-micro-builds/api/v3/index.json"
+
+      - name: Restore NuGet packages
+        #working-directory: C:/ClearDashboard.git
+        run: nuget restore $env:Solution_Path
+
+      # Restore the application to populate the obj folder with RuntimeIdentifiers
+      #- name: Restore the application
       #run: msbuild $env:Solution_Path /t:Restore /p:Configuration=$env:Configuration
-    #  run: dotnet restore $env:Solution_Path /p:Configuration=$env:Configuration
-    #  env:
-    #    Configuration: ${{ matrix.configuration }}
+      #  run: dotnet restore $env:Solution_Path /p:Configuration=$env:Configuration
+      #  env:
+      #    Configuration: ${{ matrix.configuration }}
 
-    - name: Build
-      working-directory: C:/ClearDashboard.git
-      run: dotnet build $env:Solution_Path --no-restore
+      - name: Build
+        #working-directory: C:/ClearDashboard.git
+        run: dotnet build $env:Solution_Path --no-restore
 
-    - name: Execute unit tests
-      working-directory: C:/ClearDashboard.git
-      run: dotnet test $env:Test_Project_Path --no-build --verbosity normal
+      - name: Execute unit tests
+        #working-directory: C:/ClearDashboard.git
+        run: dotnet test $env:Test_Project_Path --no-build --verbosity normal
 
-    # Decode the base 64 encoded pfx and save the Signing_Certificate
-#    - name: Decode the pfx
-#      run: |
-#        $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.Base64_Encoded_Pfx }}")
-#        $certificatePath = Join-Path -Path $env:Wap_Project_Directory -ChildPath GitHubActionsWorkflow.pfx
-#        [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
+      # Decode the base 64 encoded pfx and save the Signing_Certificate
+      #    - name: Decode the pfx
+      #      run: |
+      #        $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.Base64_Encoded_Pfx }}")
+      #        $certificatePath = Join-Path -Path $env:Wap_Project_Directory -ChildPath GitHubActionsWorkflow.pfx
+      #        [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
 
-    # Need to create the WAP file in the project before this will work.
-    # Create the app package by building and packaging the Windows Application Packaging project
-#    - name: Create the app package
-#      run: msbuild $env:Wap_Project_Path /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle # /p:PackageCertificateKeyFile=GitHubActionsWorkflow.pfx /p:PackageCertificatePassword=${{ secrets.Pfx_Key }}
-#      env:
-#        Appx_Bundle: Always
-#        Appx_Bundle_Platforms: x86|x64
-#        Appx_Package_Build_Mode: StoreUpload
-#        Configuration: ${{ matrix.configuration }}
+      # Need to create the WAP file in the project before this will work.
+      # Create the app package by building and packaging the Windows Application Packaging project
+      #    - name: Create the app package
+      #      run: msbuild $env:Wap_Project_Path /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle # /p:PackageCertificateKeyFile=GitHubActionsWorkflow.pfx /p:PackageCertificatePassword=${{ secrets.Pfx_Key }}
+      #      env:
+      #        Appx_Bundle: Always
+      #        Appx_Bundle_Platforms: x86|x64
+      #        Appx_Package_Build_Mode: StoreUpload
+      #        Configuration: ${{ matrix.configuration }}
 
-    # Remove the pfx
-#    - name: Remove the pfx
-#      run: Remove-Item -path $env:Wap_Project_Directory\$env:Signing_Certificate
+      # Remove the pfx
+      #    - name: Remove the pfx
+      #      run: Remove-Item -path $env:Wap_Project_Directory\$env:Signing_Certificate
 
-    # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
-    - name: Upload build artifacts
-      #working-directory: C:/ClearDashboard.git
-      uses: actions/upload-artifact@v2
-      with:
-        name: MSIX Package
-        path: ${{ env.Wap_Project_Directory }}\AppPackages
+      # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
+      - name: Upload build artifacts
+        #working-directory: C:/ClearDashboard.git
+        uses: actions/upload-artifact@v3
+        with:
+          name: MSIX Package
+          path: ${{ env.Wap_Project_Directory }}\AppPackages
 
-# Report results
-    - name: Post success to a Slack channel
-      #working-directory: C:/ClearDashboard.git
-      id: slack-success
-      uses: slackapi/slack-github-action@v1.18.0
-      if: "contains(job.status, 'success')"
-      with:
-        channel-id: 'C05S5RG6EFL'
-        slack-message: ":grin: GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-      env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-    
-    - name: Post fail to a Slack channel
-      #working-directory: C:/ClearDashboard.git
-      id: slack-fail
-      uses: slackapi/slack-github-action@v1.18.0
-      if: "!contains(job.status, 'success')"
-      with:
-        channel-id: 'C05S5RG6EFL'
-        slack-message: ":poop: GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-      env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      # Report results
+      - name: Post success to a Slack channel
+        #working-directory: C:/ClearDashboard.git
+        id: slack-success
+        uses: slackapi/slack-github-action@v1.18.0
+        if: "contains(job.status, 'success')"
+        with:
+          channel-id: "C05S5RG6EFL"
+          slack-message: ":grin: GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      - name: Post fail to a Slack channel
+        #working-directory: C:/ClearDashboard.git
+        id: slack-fail
+        uses: slackapi/slack-github-action@v1.18.0
+        if: "!contains(job.status, 'success')"
+        with:
+          channel-id: "C05S5RG6EFL"
+          slack-message: ":poop: GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
