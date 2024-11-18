@@ -5,21 +5,23 @@ using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.LicenseGenerator;
+using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Models.HttpClientFactory;
 using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Dynamic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using LicenseGenerator = GenerateLicenseKeyForDashboard.ViewModels.LicenseGenerator;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -28,6 +30,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private readonly DashboardProjectManager _dashboardProjectManager;
         private readonly ILocalizationService _localizationService;
         private readonly CollaborationManager _collaborationManager;
+        private readonly GitLabHttpClientServices _gitLabServices;
+        private readonly GitLabHttpClientServices _gitLabHttpClientServices;
+        private readonly CollaborationServerHttpClientServices _mySqlHttpClientServices;
 
         #region Member Variables
         private RegistrationDialogViewModel _parent;
@@ -49,8 +54,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 Set(ref _licenseKey, value);
                 LicenseUser.LicenseKey = value;
-                ValidationResult = Validate();
                 NotifyOfPropertyChange(nameof(LicenseUser));
+
+            }
+        }
+
+        private string _email;
+        public string Email
+        {
+            get { return _email; }
+            set
+            {
+                Set(ref _email, value);
+                LicenseUser.Email = value;
+                ValidationResult = Validate();
+                NotifyOfPropertyChange(nameof(Email));
+
+            }
+        }
+
+        private string _paratextUserName;
+        public string ParatextUserName
+        {
+            get { return _paratextUserName; }
+            set
+            {
+                Set(ref _paratextUserName, value);
+                LicenseUser.ParatextUserName = value;
+                ValidationResult = Validate();
+                NotifyOfPropertyChange(nameof(ParatextUserName));
 
             }
         }
@@ -88,6 +120,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             set => Set(ref _matchType, value);
         }
 
+        private List<GitLabGroup> _groups;
+        public List<GitLabGroup> Groups
+        {
+            get => _groups;
+            set
+            {
+                _groups = value;
+                NotifyOfPropertyChange(() => Groups);
+            }
+        }
+
+        private GitLabGroup _selectedGroup;
+        public GitLabGroup SelectedGroup
+        {
+            get => _selectedGroup;
+            set
+            {
+                _selectedGroup = value;
+                if (value is GitLabGroup)
+                    LicenseUser.Organization = value.Name;
+                else
+                    LicenseUser.Organization = null;
+                ValidationResult = Validate();
+                NotifyOfPropertyChange(() => SelectedGroup);
+            }
+        }
+
+        private Visibility _progressBarVisibility;
+        public Visibility ProgressBarVisibility
+        {
+            get => _progressBarVisibility;
+            set
+            {
+                _progressBarVisibility = value;
+                NotifyOfPropertyChange(() => ProgressBarVisibility);
+            }
+        }
         
         #endregion
 
@@ -100,6 +169,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             ILifetimeScope? lifetimeScope,
             IValidator<DashboardUser> licenseValidator,
             ILocalizationService localizationService,
+            GitLabHttpClientServices gitLabHttpClientServices,
             CollaborationManager collaborationManager)
         : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, licenseValidator)
         {
@@ -107,6 +177,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             _localizationService = localizationService;
             LicenseUser = new DashboardUser();
             _collaborationManager = collaborationManager;
+            _gitLabHttpClientServices = gitLabHttpClientServices;
+
+            _mySqlHttpClientServices = ServiceCollectionHttpExtensions.GetSqlHttpClientServices();
+            _gitLabServices = ServiceCollectionHttpExtensions.GetGitLabHttpClientServices();
+            ProgressBarVisibility = Visibility.Collapsed;
+        }
+
+        protected override async void OnViewReady(object view)
+        {
+            try
+            {
+                Groups = await _gitLabHttpClientServices.GetAllGroups();
+            }
+            catch
+            {
+                // ignored
+            }
+
+            base.OnViewReady(view);
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -143,8 +232,132 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             System.Windows.Application.Current.Shutdown();
         }
 
+        public async Task<string> GenerateLicense(
+            string email, 
+            CollaborationServerHttpClientServices mySqlHttpClientServices, 
+            string firstName, 
+            string lastName, 
+            bool isInternalChecked,
+            int licenseVersion)
+        {
+            
+            string gitLabConfig = string.Empty;
+
+            string combinedCreateLicense = null;
+            
+            var emailAlreadyExists = await LicenseGenerator.CheckForPreExistingDashboardEmail(email, mySqlHttpClientServices);
+
+            if (emailAlreadyExists)
+            {
+                MatchType = _localizationService.Get("Registration_EmailExists");
+            }
+            else
+            {
+                var gitlabUsersExists = await LicenseGenerator.CheckForPreExistingGitlabEmail(email, _gitLabServices, firstName, lastName);
+
+                if (gitlabUsersExists)
+                {
+                    MatchType = $"{FirstName} {LastName} {_localizationService.Get("Registration_NameExists")}";
+                }
+                else
+                {
+                    // create GitLab User First to get it's GitLab Id
+                    var gitLabUser = await LicenseGenerator.CreateGitLabUser(_gitLabServices, firstName, lastName, email, SelectedGroup);
+
+                    if (gitLabUser.Id == 0)
+                    {
+                        MatchType = _localizationService.Get("Registration_CollabError");
+                    }
+                    else
+                    {
+                        var accessToken = await _gitLabServices.GeneratePersonalAccessToken(gitLabUser);
+
+                        CollaborationConfiguration CollaborationConfig = new CollaborationConfiguration
+                        {
+                            Group = SelectedGroup.Name,
+                            RemoteEmail = email,
+                            RemotePersonalAccessToken = accessToken.Token,
+                            RemotePersonalPassword = gitLabUser.Password,
+                            RemoteUrl = "",
+                            RemoteUserName = gitLabUser.UserName,
+                            UserId = gitLabUser.Id,
+                            NamespaceId = gitLabUser.NamespaceId,
+                            TokenId = accessToken.Id
+                        };
+
+                        gitLabUser.Password = gitLabUser.Password;
+
+                        var results = await mySqlHttpClientServices.CreateNewCollabUser(gitLabUser, accessToken.Token);
+
+                        if (results)
+                        {
+                            gitLabConfig = LicenseManager.EncryptCollabJsonToString(CollaborationConfig);
+                        }
+
+                    }
+
+                    // create Dashboard User
+                    var licenseKey = await LicenseGenerator.GenerateDashboardLicense(
+                        firstName,
+                        lastName,
+                        Guid.NewGuid(),
+                        email,
+                        gitLabUser.Id,
+                        isInternalChecked,
+                        licenseVersion,
+                        ParatextUserName,
+                        SelectedGroup,
+                        mySqlHttpClientServices);
+
+                    MatchType = _localizationService.Get("Registration_Success");
+
+                    combinedCreateLicense = LicenseGenerator.CombineLicenses(licenseKey, gitLabConfig);
+
+                }
+            }
+            
+            return combinedCreateLicense;
+        }
+
         public async void Register()
         {
+            CanRegister = false;
+            ProgressBarVisibility = Visibility.Visible;
+
+            var combinedLicense = string.Empty;
+
+            if (LicenseKey == string.Empty || LicenseKey == null)
+            {
+                combinedLicense = await GenerateLicense(
+                    Email,
+                    _mySqlHttpClientServices,
+                    FirstName,
+                    LastName,
+                    false,
+                    2
+                );
+
+            }
+            else
+            {
+                combinedLicense = LicenseKey;
+            }
+
+            await EvaluateLicense(combinedLicense);
+
+            ProgressBarVisibility = Visibility.Collapsed;
+            CanRegister = true;
+        }
+        
+        private async Task<bool> EvaluateLicense(string combinedLicense)
+        {
+            if (combinedLicense == null)
+            {
+                return true;
+            }
+
+            LicenseKey = combinedLicense;
+
             try
             {
                 if (File.Exists(LicenseManager.LicenseFilePath))
@@ -154,7 +367,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
             catch (Exception ex)
             {
-                Logger.LogError("Deleting the LicenseFilePath failed: "+ex);
+                Logger.LogError("Deleting the LicenseFilePath failed: " + ex);
             }
 
             //parsing LicenseKey
@@ -165,14 +378,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             string decryptedLicenseKey = string.Empty;
             try
             {
-                Logger.LogInformation("LicenseKey is: "+encryptedLicense);
+                Logger.LogInformation("LicenseKey is: " + encryptedLicense);
                 decryptedLicenseKey = LicenseManager.DecryptLicenseFromString(encryptedLicense);
             }
             catch (Exception ex)
             {
-                Logger.LogError("DecryptLicenseFromString failed: "+ex);
+                Logger.LogError("DecryptLicenseFromString failed: " + ex);
             }
-            Logger.LogInformation("decryptedLicenseKey is: "+decryptedLicenseKey);
+
+            Logger.LogInformation("decryptedLicenseKey is: " + decryptedLicenseKey);
 
             User decryptedLicenseUser = new User();
             try
@@ -181,9 +395,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
             catch (Exception ex)
             {
-                Logger.LogError("DecryptJsonToUser failed: "+ex);
+                Logger.LogError("DecryptJsonToUser failed: " + ex);
             }
-            Logger.LogInformation("decryptedLicenseUser is: "+decryptedLicenseUser);
+
+            Logger.LogInformation("decryptedLicenseUser is: " + decryptedLicenseUser);
 
             try
             {
@@ -191,16 +406,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 {
                     Logger.LogError("decryptedLicenseUser.Id is equal to Guid.Empty");
                     throw new Exception("License has empty guid.");
-                    
                 }
             }
             catch (Exception ex)
             {
-                Logger.LogError("Evaluating decryptedLicenseUser.Id failed: "+ex);
+                Logger.LogError("Evaluating decryptedLicenseUser.Id failed: " + ex);
             }
 
-            Logger.LogInformation("FirstName is: "+FirstName);
-            Logger.LogInformation("LastName is: "+LastName);
+            Logger.LogInformation("FirstName is: " + FirstName);
+            Logger.LogInformation("LastName is: " + LastName);
             User givenLicenseUser = new User();
             try
             {
@@ -210,13 +424,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     LastName = LastName //_registrationViewModel.LastName;
                 };
                 ////givenLicenseUser.LicenseKey = _registrationViewModel.LicenseKey; <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
-
             }
             catch (Exception ex)
             {
-                Logger.LogError("givenLicenseUser failed to set: "+ex);
+                Logger.LogError("givenLicenseUser failed to set: " + ex);
             }
-            Logger.LogInformation("givenLicenseUser is: "+givenLicenseUser);
+
+            Logger.LogInformation("givenLicenseUser is: " + givenLicenseUser);
 
             LicenseUserMatchType match = LicenseUserMatchType.Error;
             try
@@ -225,9 +439,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
             catch (Exception ex)
             {
-                Logger.LogError("CompareGivenUserAndDecryptedUser failed: "+ex);
+                Logger.LogError("CompareGivenUserAndDecryptedUser failed: " + ex);
             }
-            Logger.LogInformation("match is: "+match);
+
+            Logger.LogInformation("match is: " + match);
 
             try
             {
@@ -238,6 +453,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         {
                             Directory.CreateDirectory(LicenseManager.LicenseFolderPath);
                         }
+
                         File.WriteAllText(LicenseManager.LicenseFilePath, encryptedLicense);
 
                         if (licenseArray.Length > 1)
@@ -257,29 +473,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                         break;
                     case LicenseUserMatchType.BothNameMismatch:
-                        MatchType = "The license key does not match either name provided.";
+                        MatchType = _localizationService.Get("Registration_NoNameMatch");
                         break;
                     case LicenseUserMatchType.FirstNameMismatch:
-                        MatchType = "Your first name does not match the license key.";
+                        MatchType = _localizationService.Get("Registration_FirstNameNoMatch");
                         break;
                     case LicenseUserMatchType.LastNameMismatch:
-                        MatchType = "Your last name does not match the license key.";
+                        MatchType = _localizationService.Get("Registration_LastNameNoMatch");
                         break;
                     case LicenseUserMatchType.Error:
-                        MatchType = "There is an unknown issue with your license key.";
+                        MatchType = _localizationService.Get("Registration_UnknownIssue");
                         break;
                     default:
-                        MatchType = "License key comparison is null.";
+                        MatchType = _localizationService.Get("Registration_LicenseNull");
                         break;
                 }
-
-                
             }
             catch (Exception ex)
             {
-                Logger.LogError("LicenseUserMatchType switch statement failed: "+ex);
+                Logger.LogError("LicenseUserMatchType switch statement failed: " + ex);
             }
-            Logger.LogInformation("MatchType is: "+MatchType);
+
+            Logger.LogInformation("MatchType is: " + MatchType);
+            return false;
         }
 
         public async void ShowAccountInfoWindow()
@@ -288,7 +504,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         }
         #endregion  Methods
 
-
+        public void GroupSelected()
+        {
+            // for caliburn
+        }
 
     }
 

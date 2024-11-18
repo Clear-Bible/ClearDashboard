@@ -7,9 +7,9 @@
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>Assets\ClearDashboard_Icon.ico</ApplicationIcon>
     <Copyright>Clear Bible, 2023</Copyright>
-    <AssemblyVersion>1.4.4.4</AssemblyVersion>
-    <FileVersion>1.4.4.4</FileVersion>
-    <Version>1.4.4.4</Version>
+    <AssemblyVersion>1.4.4.5</AssemblyVersion>
+    <FileVersion>1.4.4.5</FileVersion>
+    <Version>1.4.4.5</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <UserSecretsId>b02febcf-d7fc-48e1-abb1-f03647ca553c</UserSecretsId>
     <Configurations>Debug;Release;Collab_Release;Collab_Debug;HighDPIDebug</Configurations>
@@ -161,6 +161,7 @@
     <PackageReference Include="WpfKeyboard.Resources" Version="1.0.5" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\tools\GenerateLicenseKeyForDashboard\GenerateLicenseKeyForDashboard.csproj" />
     <ProjectReference Include="..\ClearDashboard.Collaboration\ClearDashboard.Collaboration.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.WpfViewModels\ClearDashboard.DAL.Wpf.ViewModels.csproj" />

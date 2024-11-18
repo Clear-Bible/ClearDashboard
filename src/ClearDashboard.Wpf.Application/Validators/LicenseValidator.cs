@@ -45,9 +45,15 @@ namespace ClearDashboard.Wpf.Application.Validators
             RuleFor(x => x.LastName)
                 .NotEmpty()
                 .WithMessage(_localizationService.Get("LicenseValidator_LastMissing"));
-            RuleFor(x => x.LicenseKey)
+            RuleFor(x => x.Organization)
                 .NotEmpty()
-                .WithMessage(_localizationService.Get("LicenseValidator_LicenseMissing"));
+                .WithMessage(_localizationService.Get("LicenseValidator_OrganizationMissing"));
+            RuleFor(x => x.Email)
+                .NotEmpty()
+                .WithMessage(_localizationService.Get("LicenseValidator_EmailMissing"));
+            RuleFor(x => x.ParatextUserName)
+                .NotEmpty()
+                .WithMessage(_localizationService.Get("LicenseValidator_ParatextUserNameMissing"));
         }
 
     }

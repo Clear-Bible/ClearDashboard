@@ -4,9 +4,9 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
-    <FileVersion>1.4.4.4</FileVersion>
-    <Version>1.4.4.4</Version>
-    <AssemblyVersion>1.4.4.4</AssemblyVersion>
+    <FileVersion>1.4.4.5</FileVersion>
+    <Version>1.4.4.5</Version>
+    <AssemblyVersion>1.4.4.5</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />

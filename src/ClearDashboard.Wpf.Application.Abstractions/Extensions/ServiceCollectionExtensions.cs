@@ -15,7 +15,7 @@ using System.Net.Http;
 namespace ClearDashboard.Wpf.Application.Extensions
 {
 
-    public static class ServiceCollectionExtensions
+    public static class ServiceCollectionHttpExtensions
     {
         public static void AddClearDashboardDataAccessLayer(this IServiceCollection serviceCollection)
         {
