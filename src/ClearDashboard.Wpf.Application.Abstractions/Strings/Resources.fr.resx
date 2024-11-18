@@ -452,7 +452,7 @@
     <value>Éditeur d'alignement en masse</value>
   </data>
   <data name="BulkAlignmentReview_BulkAlignmentReview" xml:space="preserve">
-    <value>Examen de l'alignement en masse</value>
+    <value>Examen de l'alignement en bloc</value>
   </data>
   <data name="BulkAlignmentReview_Count" xml:space="preserve">
     <value>Compter</value>
@@ -1334,7 +1334,7 @@
     <value>Sens du verset</value>
   </data>
   <data name="Marble_VerseTotal" xml:space="preserve">
-    <value>Verset total</value>
+    <value>Verset Total</value>
   </data>
   <data name="MAT" xml:space="preserve">
     <value>MAT</value>
@@ -1688,10 +1688,10 @@
     <value>Paralléliser les versets de corpus</value>
   </data>
   <data name="ParallelCorpusDialog_SmtAlgorithm" xml:space="preserve">
-    <value>Algorithme d’alignement des mots machine</value>
+    <value>Algorithme d’alignement de mots machine</value>
   </data>
   <data name="ParallelCorpusDialog_SmtModel" xml:space="preserve">
-    <value>Algorithme d’alignement des mots machine</value>
+    <value>Algorithme d’alignement de mots machine</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
     <value>Former un modèle symétrique ?</value>
@@ -2296,6 +2296,33 @@
   <data name="Refresh" xml:space="preserve">
     <value>Rafraîchir</value>
   </data>
+  <data name="Registration_CollabError" xml:space="preserve">
+    <value>Erreur lors de la création du compte de collaboration</value>
+  </data>
+  <data name="Registration_EmailExists" xml:space="preserve">
+    <value>L'e-mail existe déjà sur le système !</value>
+  </data>
+  <data name="Registration_FirstNameNoMatch" xml:space="preserve">
+    <value>Votre prénom ne correspond pas à la clé de licence.</value>
+  </data>
+  <data name="Registration_LastNameNoMatch" xml:space="preserve">
+    <value>Votre nom de famille ne correspond pas à la clé de licence.</value>
+  </data>
+  <data name="Registration_LicenseNull" xml:space="preserve">
+    <value>La comparaison des clés de licence est nulle.</value>
+  </data>
+  <data name="Registration_NameExists" xml:space="preserve">
+    <value>existe déjà sur le système !</value>
+  </data>
+  <data name="Registration_NoNameMatch" xml:space="preserve">
+    <value>La clé de licence ne correspond à aucun des noms fournis.</value>
+  </data>
+  <data name="Registration_Success" xml:space="preserve">
+    <value>Succès!</value>
+  </data>
+  <data name="Registration_UnknownIssue" xml:space="preserve">
+    <value>Il y a un problème inconnu avec votre clé de licence.</value>
+  </data>
   <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
     <value>Fermer l'application</value>
   </data>
@@ -2317,6 +2344,9 @@
   <data name="RegistrationView_Email" xml:space="preserve">
     <value>Veuillez entrer votre email</value>
   </data>
+  <data name="RegistrationView_EmailMessage" xml:space="preserve">
+    <value>Si vous souhaitez une licence mais que vous ne parvenez pas à en créer une en utilisant l'écran précédent, envoyez-nous un e-mail à Dashboard@biblica.com avec votre prénom, votre nom et votre organisation.</value>
+  </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Veuillez entrer votre prénom</value>
   </data>
@@ -2324,7 +2354,7 @@
     <value>Veuillez entrer votre nom de famille</value>
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>Veuillez entrer votre clé de licence</value>
+    <value>Veuillez entrer votre clé de licence (facultatif)</value>
   </data>
   <data name="RegistrationView_Organization" xml:space="preserve">
     <value>Veuillez entrer votre organisation</value>
@@ -2492,7 +2522,7 @@
     <value>Notes de version</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>Afficher les pré-versions</value>
+    <value>Afficher les préversions</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
     <value>Mise à jour vers la nouvelle version de ClearDashboard</value>

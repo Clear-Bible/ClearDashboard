@@ -434,7 +434,7 @@
     <value>對齊的單字</value>
   </data>
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
-    <value>對齊方式</value>
+    <value>路線</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
     <value>對齊類型： </value>
@@ -710,7 +710,7 @@
     <value>將拆分應用於令牌的其他實例</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>選擇分割令牌的位置：</value>
+    <value>選擇拆分令牌的位置：</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>三路分流</value>
@@ -1439,7 +1439,7 @@
     <value>名為「{0}」的項目已存在。請選擇一個獨特的名稱。</value>
   </data>
   <data name="NewProjectDialog_Title" xml:space="preserve">
-    <value>建立新項目</value>
+    <value>建立新專案</value>
   </data>
   <data name="NewProjectDialogView_EnterName" xml:space="preserve">
     <value>請輸入您的項目的名稱。</value>
@@ -1514,7 +1514,7 @@
     <value>是否要刪除標籤：</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>您要取消關聯標籤嗎：</value>
+    <value>您想取消關聯標籤嗎：</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>來自標籤組：</value>
@@ -1673,7 +1673,7 @@
     <value>舊約</value>
   </data>
   <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
-    <value>建立字對齊</value>
+    <value>建立單字對齊方式</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
     <value>創建語料庫詩句的平行化</value>
@@ -1712,7 +1712,7 @@
     <value>選擇要訓練的 SMT 演算法</value>
   </data>
   <data name="Pds_AddBulkAlignmentApprovalToEnhancedViewMenu" xml:space="preserve">
-    <value>新增批次批准查看</value>
+    <value>新增批量批准查看</value>
   </data>
   <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
     <value>新增到視圖</value>
@@ -1730,7 +1730,7 @@
     <value>建立新的語料庫標記化</value>
   </data>
   <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
-    <value>新增新的行間</value>
+    <value>新增的行間</value>
   </data>
   <data name="Pds_AddToEnhancedViewMenu" xml:space="preserve">
     <value>新增文字到視圖</value>
@@ -1937,7 +1937,7 @@
     <value>前綴</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>顯示返回翻譯</value>
+    <value>顯示反向翻譯</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>幹</value>
@@ -2296,6 +2296,33 @@
   <data name="Refresh" xml:space="preserve">
     <value>重新整理</value>
   </data>
+  <data name="Registration_CollabError" xml:space="preserve">
+    <value>建立協作帳戶時發生錯誤</value>
+  </data>
+  <data name="Registration_EmailExists" xml:space="preserve">
+    <value>系統中已存在電子郵件！</value>
+  </data>
+  <data name="Registration_FirstNameNoMatch" xml:space="preserve">
+    <value>您的名字與許可證密鑰不符。</value>
+  </data>
+  <data name="Registration_LastNameNoMatch" xml:space="preserve">
+    <value>您的姓氏與許可證密鑰不符。</value>
+  </data>
+  <data name="Registration_LicenseNull" xml:space="preserve">
+    <value>許可證密鑰比較為空。</value>
+  </data>
+  <data name="Registration_NameExists" xml:space="preserve">
+    <value>系統上已經存在！</value>
+  </data>
+  <data name="Registration_NoNameMatch" xml:space="preserve">
+    <value>許可證密鑰與提供的任一名稱都不符。</value>
+  </data>
+  <data name="Registration_Success" xml:space="preserve">
+    <value>成功！</value>
+  </data>
+  <data name="Registration_UnknownIssue" xml:space="preserve">
+    <value>您的許可證密鑰有未知問題。</value>
+  </data>
   <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
     <value>關閉申請</value>
   </data>
@@ -2317,6 +2344,9 @@
   <data name="RegistrationView_Email" xml:space="preserve">
     <value>請輸入您的電子郵件</value>
   </data>
+  <data name="RegistrationView_EmailMessage" xml:space="preserve">
+    <value>如果您想要許可證，但無法使用上一畫面製作許可證，請發送電子郵件至dashboard@biblica.com，並註明您的名字、姓氏和組織。</value>
+  </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>請輸入您的名字</value>
   </data>
@@ -2324,7 +2354,7 @@
     <value>請輸入您的姓氏</value>
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>請輸入您的許可證密鑰</value>
+    <value>請輸入您的許可證密鑰（可選）</value>
   </data>
   <data name="RegistrationView_Organization" xml:space="preserve">
     <value>請輸入您的組織</value>

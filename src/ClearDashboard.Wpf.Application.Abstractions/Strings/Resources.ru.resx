@@ -635,7 +635,7 @@
     <value>Добавить выравнивание?</value>
   </data>
   <data name="EnhancedView_AddAlignmentTemplate" xml:space="preserve">
-    <value>Выровнять '{0}' по '{1}'?</value>
+    <value>Выровнять "{0}" по "{1}"?</value>
   </data>
   <data name="EnhancedView_Alignment" xml:space="preserve">
     <value>Выравнивание</value>
@@ -668,7 +668,7 @@
     <value>Фильтровать поиск по терминам</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
-    <value>Фильтровать поиск по ключевым словам</value>
+    <value>Фильтрация поиска по ключевым словам</value>
   </data>
   <data name="EnhancedView_Interlinear" xml:space="preserve">
     <value>Подстрочный</value>
@@ -1088,7 +1088,7 @@
     <value>Добавить цель в качестве перевода для...</value>
   </data>
   <data name="LexiconImport_AddTargetButtonTooltip" xml:space="preserve">
-    <value>Найдите лексемы, у которых есть один или несколько переводов, соответствующих целевому значению.</value>
+    <value>Найдите лексемы, у которых есть один или несколько переводов, соответствующих целевому.</value>
   </data>
   <data name="LexiconImport_Checked" xml:space="preserve">
     <value>Проверено</value>
@@ -1475,7 +1475,7 @@
     <value>В соответствии с вашими разрешениями на проект Paratext, </value>
   </data>
   <data name="Notes_FilterAssociationsDescriptionText" xml:space="preserve">
-    <value>Фильтровать по стиху</value>
+    <value>Фильтровать по стихам</value>
   </data>
   <data name="Notes_FilterExpander" xml:space="preserve">
     <value>Фильтры</value>
@@ -1508,7 +1508,7 @@
     <value>Вы хотите создать ярлык:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
-    <value>и свяжите его с группой меток:</value>
+    <value>и свяжем его с группой меток:</value>
   </data>
   <data name="Notes_LabelDeleteConfirm" xml:space="preserve">
     <value>Вы хотите удалить ярлык:</value>
@@ -1859,7 +1859,7 @@
     <value>ИсследованиеБиблияДополнения</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Перейдите в Паратекст и переключите проекты.  Проект Paratext, подключенный в настоящее время к плагину ClearDashboard, не совпадает с корпусом в этом проекте ClearDashboard.</value>
+    <value>Перейдите в Паратекст и переключите проекты.  Проект Paratext, в настоящее время подключенный к плагину ClearDashboard, не совпадает с корпусом в этом проекте ClearDashboard.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Цель</value>
@@ -1925,7 +1925,7 @@
     <value>Примечания</value>
   </data>
   <data name="Pins_Occurences" xml:space="preserve">
-    <value>Случаи</value>
+    <value>События</value>
   </data>
   <data name="Pins_Origin" xml:space="preserve">
     <value>Источник</value>
@@ -2296,6 +2296,33 @@
   <data name="Refresh" xml:space="preserve">
     <value>Обновить</value>
   </data>
+  <data name="Registration_CollabError" xml:space="preserve">
+    <value>Ошибка при создании учетной записи для совместной работы.</value>
+  </data>
+  <data name="Registration_EmailExists" xml:space="preserve">
+    <value>Электронная почта уже существует в системе!</value>
+  </data>
+  <data name="Registration_FirstNameNoMatch" xml:space="preserve">
+    <value>Ваше имя не соответствует лицензионному ключу.</value>
+  </data>
+  <data name="Registration_LastNameNoMatch" xml:space="preserve">
+    <value>Ваша фамилия не соответствует лицензионному ключу.</value>
+  </data>
+  <data name="Registration_LicenseNull" xml:space="preserve">
+    <value>Сравнение лицензионных ключей не имеет значения.</value>
+  </data>
+  <data name="Registration_NameExists" xml:space="preserve">
+    <value>уже существует в системе!</value>
+  </data>
+  <data name="Registration_NoNameMatch" xml:space="preserve">
+    <value>Лицензионный ключ не соответствует ни одному из указанных имен.</value>
+  </data>
+  <data name="Registration_Success" xml:space="preserve">
+    <value>Успех!</value>
+  </data>
+  <data name="Registration_UnknownIssue" xml:space="preserve">
+    <value>Возникла неизвестная проблема с вашим лицензионным ключом.</value>
+  </data>
   <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
     <value>Закрыть приложение</value>
   </data>
@@ -2303,7 +2330,7 @@
     <value>Зарегистрироваться</value>
   </data>
   <data name="RegistrationDialogViewModel_FaultyKey" xml:space="preserve">
-    <value>Предоставленный ключ неисправен.  При расшифровке некоторые элементы json не удалось найти.</value>
+    <value>Предоставленный ключ неисправен.  При расшифровке не удалось найти некоторые элементы json.</value>
   </data>
   <data name="RegistrationDialogViewModel_MismatchCatch" xml:space="preserve">
     <value>Содержимое расшифрованного лицензионного ключа не соответствует предоставленной вами информации.</value>
@@ -2317,6 +2344,9 @@
   <data name="RegistrationView_Email" xml:space="preserve">
     <value>Пожалуйста, введите свой адрес электронной почты</value>
   </data>
+  <data name="RegistrationView_EmailMessage" xml:space="preserve">
+    <value>Если вам нужна лицензия, но вы не можете ее получить, используя предыдущий экран, напишите нам по адресу Dashboard@biblica.com, указав свое имя, фамилию и организацию.</value>
+  </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Пожалуйста, введите свое имя</value>
   </data>
@@ -2324,7 +2354,7 @@
     <value>Пожалуйста, введите вашу фамилию</value>
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>Пожалуйста, введите ваш лицензионный ключ</value>
+    <value>Пожалуйста, введите лицензионный ключ (необязательно)</value>
   </data>
   <data name="RegistrationView_Organization" xml:space="preserve">
     <value>Пожалуйста, введите вашу организацию</value>
@@ -2615,7 +2645,7 @@
     <value>Обновить и добавить новое</value>
   </data>
   <data name="UseDefaults" xml:space="preserve">
-    <value>Создать, используя настройки по умолчанию</value>
+    <value>Создать, используя значения по умолчанию</value>
   </data>
   <data name="Windows_AlignmentTool" xml:space="preserve">
     <value>Инструмент выравнивания</value>

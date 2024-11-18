@@ -194,7 +194,7 @@
     <value>Wählen Sie USFM-Bücher zum Senden aus</value>
   </data>
   <data name="AddParatextCorpusDialog_Title" xml:space="preserve">
-    <value>Wählen Sie Paratext-Projekt aus</value>
+    <value>Wählen Sie Paratextprojekt aus</value>
   </data>
   <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
     <value>Alle abwählen</value>
@@ -677,7 +677,7 @@
     <value>Treten Sie Token bei</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
-    <value>Join-Tokens für Sprachpaar</value>
+    <value>Join-Token für Sprachpaar</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsInvalid" xml:space="preserve">
     <value>Ausrichtung als „Ungültig“ markieren</value>
@@ -1106,7 +1106,7 @@
     <value>Sprache:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
-    <value>Lexem- oder Formularübereinstimmungen</value>
+    <value>Lexem- oder Formübereinstimmungen</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
     <value>Es sind keine weiteren Datensätze zum Importieren vorhanden.</value>
@@ -1271,7 +1271,7 @@
     <value>Definition</value>
   </data>
   <data name="Marble_DefinitionLong" xml:space="preserve">
-    <value>Definition Lang:</value>
+    <value>Definition lang:</value>
   </data>
   <data name="Marble_DefinitionShort" xml:space="preserve">
     <value>Definition kurz:</value>
@@ -1859,7 +1859,7 @@
     <value>StudyBibleAdditions</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>Gehen Sie zu Paratext und wechseln Sie die Projekte.  Das Paratext-Projekt, das derzeit mit dem ClearDashboard-Plugin verbunden ist, ist nicht dasselbe wie das Korpus in diesem ClearDashboard-Projekt.</value>
+    <value>Gehen Sie zu Paratext und wechseln Sie die Projekte.  Das derzeit mit dem ClearDashboard-Plugin verbundene Paratext-Projekt ist nicht dasselbe wie das Korpus in diesem ClearDashboard-Projekt.</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>Ziel</value>
@@ -2296,6 +2296,33 @@
   <data name="Refresh" xml:space="preserve">
     <value>Aktualisieren</value>
   </data>
+  <data name="Registration_CollabError" xml:space="preserve">
+    <value>Fehler beim Erstellen des Collab-Kontos</value>
+  </data>
+  <data name="Registration_EmailExists" xml:space="preserve">
+    <value>E-Mail ist bereits im System vorhanden!</value>
+  </data>
+  <data name="Registration_FirstNameNoMatch" xml:space="preserve">
+    <value>Ihr Vorname stimmt nicht mit dem Lizenzschlüssel überein.</value>
+  </data>
+  <data name="Registration_LastNameNoMatch" xml:space="preserve">
+    <value>Ihr Nachname stimmt nicht mit dem Lizenzschlüssel überein.</value>
+  </data>
+  <data name="Registration_LicenseNull" xml:space="preserve">
+    <value>Der Lizenzschlüsselvergleich ist null.</value>
+  </data>
+  <data name="Registration_NameExists" xml:space="preserve">
+    <value>existiert bereits auf dem System!</value>
+  </data>
+  <data name="Registration_NoNameMatch" xml:space="preserve">
+    <value>Der Lizenzschlüssel stimmt mit keinem der angegebenen Namen überein.</value>
+  </data>
+  <data name="Registration_Success" xml:space="preserve">
+    <value>Erfolg!</value>
+  </data>
+  <data name="Registration_UnknownIssue" xml:space="preserve">
+    <value>Es liegt ein unbekanntes Problem mit Ihrem Lizenzschlüssel vor.</value>
+  </data>
   <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
     <value>Anwendung schließen</value>
   </data>
@@ -2317,6 +2344,9 @@
   <data name="RegistrationView_Email" xml:space="preserve">
     <value>Bitte geben Sie Ihre E-Mail-Adresse ein</value>
   </data>
+  <data name="RegistrationView_EmailMessage" xml:space="preserve">
+    <value>Wenn Sie eine Lizenz wünschen, aber über den vorherigen Bildschirm keine erstellen können, senden Sie uns eine E-Mail an Dashboard@biblica.com mit Ihrem Vor- und Nachnamen und Ihrer Organisation.</value>
+  </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Bitte geben Sie Ihren Vornamen ein</value>
   </data>
@@ -2324,7 +2354,7 @@
     <value>Bitte geben Sie Ihren Nachnamen ein</value>
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>Bitte geben Sie Ihren Lizenzschlüssel ein</value>
+    <value>Bitte geben Sie Ihren Lizenzschlüssel ein (optional)</value>
   </data>
   <data name="RegistrationView_Organization" xml:space="preserve">
     <value>Bitte geben Sie Ihre Organisation ein</value>
@@ -2426,7 +2456,7 @@
     <value>Leistungsmodi</value>
   </data>
   <data name="Settings_PowerModesDescription" xml:space="preserve">
-    <value>Erlauben Sie ClearDashboard, den Energiemodus bei Ereignissen mit hoher Rechenleistung zu ändern</value>
+    <value>Erlauben Sie ClearDashboard, den Energiemodus bei Ereignissen mit hohem Rechenaufwand zu ändern</value>
   </data>
   <data name="Settings_Reserved" xml:space="preserve">
     <value>Reserviert</value>

@@ -249,7 +249,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             if (emailAlreadyExists)
             {
-                MatchType = "Email already exists on system!";
+                MatchType = _localizationService.Get("Registration_EmailExists");
             }
             else
             {
@@ -257,7 +257,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                 if (gitlabUsersExists)
                 {
-                    MatchType = $"{LicenseGenerator.GetUserName(FirstName, LastName)} already exists on system!";
+                    MatchType = $"{FirstName} {LastName} {_localizationService.Get("Registration_NameExists")}";
                 }
                 else
                 {
@@ -266,7 +266,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                     if (gitLabUser.Id == 0)
                     {
-                        MatchType = "Error while creating collab account";
+                        MatchType = _localizationService.Get("Registration_CollabError");
                     }
                     else
                     {
@@ -309,7 +309,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         SelectedGroup,
                         mySqlHttpClientServices);
 
-                    MatchType = "Success!";
+                    MatchType = _localizationService.Get("Registration_Success");
 
                     combinedCreateLicense = LicenseGenerator.CombineLicenses(licenseKey, gitLabConfig);
 
@@ -323,19 +323,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             CanRegister = false;
             ProgressBarVisibility = Visibility.Visible;
-            
-            var combinedLicense  = await GenerateLicense(
-                Email,
-                _mySqlHttpClientServices,
-                FirstName,
-                LastName,
-                false,
-                2
+
+            var combinedLicense = string.Empty;
+
+            if (LicenseKey == string.Empty || LicenseKey == null)
+            {
+                combinedLicense = await GenerateLicense(
+                    Email,
+                    _mySqlHttpClientServices,
+                    FirstName,
+                    LastName,
+                    false,
+                    2
                 );
 
+            }
+            else
+            {
+                combinedLicense = LicenseKey;
+            }
+
+            await EvaluateLicense(combinedLicense);
+
+            ProgressBarVisibility = Visibility.Collapsed;
+            CanRegister = true;
+        }
+        
+        private async Task<bool> EvaluateLicense(string combinedLicense)
+        {
             if (combinedLicense == null)
             {
-                return;
+                return true;
             }
 
             LicenseKey = combinedLicense;
@@ -349,7 +367,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
             catch (Exception ex)
             {
-                Logger.LogError("Deleting the LicenseFilePath failed: "+ex);
+                Logger.LogError("Deleting the LicenseFilePath failed: " + ex);
             }
 
             //parsing LicenseKey
@@ -360,14 +378,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             string decryptedLicenseKey = string.Empty;
             try
             {
-                Logger.LogInformation("LicenseKey is: "+encryptedLicense);
+                Logger.LogInformation("LicenseKey is: " + encryptedLicense);
                 decryptedLicenseKey = LicenseManager.DecryptLicenseFromString(encryptedLicense);
             }
             catch (Exception ex)
             {
-                Logger.LogError("DecryptLicenseFromString failed: "+ex);
+                Logger.LogError("DecryptLicenseFromString failed: " + ex);
             }
-            Logger.LogInformation("decryptedLicenseKey is: "+decryptedLicenseKey);
+
+            Logger.LogInformation("decryptedLicenseKey is: " + decryptedLicenseKey);
 
             User decryptedLicenseUser = new User();
             try
@@ -376,9 +395,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
             catch (Exception ex)
             {
-                Logger.LogError("DecryptJsonToUser failed: "+ex);
+                Logger.LogError("DecryptJsonToUser failed: " + ex);
             }
-            Logger.LogInformation("decryptedLicenseUser is: "+decryptedLicenseUser);
+
+            Logger.LogInformation("decryptedLicenseUser is: " + decryptedLicenseUser);
 
             try
             {
@@ -386,16 +406,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 {
                     Logger.LogError("decryptedLicenseUser.Id is equal to Guid.Empty");
                     throw new Exception("License has empty guid.");
-                    
                 }
             }
             catch (Exception ex)
             {
-                Logger.LogError("Evaluating decryptedLicenseUser.Id failed: "+ex);
+                Logger.LogError("Evaluating decryptedLicenseUser.Id failed: " + ex);
             }
 
-            Logger.LogInformation("FirstName is: "+FirstName);
-            Logger.LogInformation("LastName is: "+LastName);
+            Logger.LogInformation("FirstName is: " + FirstName);
+            Logger.LogInformation("LastName is: " + LastName);
             User givenLicenseUser = new User();
             try
             {
@@ -405,13 +424,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     LastName = LastName //_registrationViewModel.LastName;
                 };
                 ////givenLicenseUser.LicenseKey = _registrationViewModel.LicenseKey; <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
-
             }
             catch (Exception ex)
             {
-                Logger.LogError("givenLicenseUser failed to set: "+ex);
+                Logger.LogError("givenLicenseUser failed to set: " + ex);
             }
-            Logger.LogInformation("givenLicenseUser is: "+givenLicenseUser);
+
+            Logger.LogInformation("givenLicenseUser is: " + givenLicenseUser);
 
             LicenseUserMatchType match = LicenseUserMatchType.Error;
             try
@@ -420,9 +439,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
             catch (Exception ex)
             {
-                Logger.LogError("CompareGivenUserAndDecryptedUser failed: "+ex);
+                Logger.LogError("CompareGivenUserAndDecryptedUser failed: " + ex);
             }
-            Logger.LogInformation("match is: "+match);
+
+            Logger.LogInformation("match is: " + match);
 
             try
             {
@@ -433,6 +453,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         {
                             Directory.CreateDirectory(LicenseManager.LicenseFolderPath);
                         }
+
                         File.WriteAllText(LicenseManager.LicenseFilePath, encryptedLicense);
 
                         if (licenseArray.Length > 1)
@@ -452,32 +473,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                         break;
                     case LicenseUserMatchType.BothNameMismatch:
-                        MatchType = "The license key does not match either name provided.";
+                        MatchType = _localizationService.Get("Registration_NoNameMatch");
                         break;
                     case LicenseUserMatchType.FirstNameMismatch:
-                        MatchType = "Your first name does not match the license key.";
+                        MatchType = _localizationService.Get("Registration_FirstNameNoMatch");
                         break;
                     case LicenseUserMatchType.LastNameMismatch:
-                        MatchType = "Your last name does not match the license key.";
+                        MatchType = _localizationService.Get("Registration_LastNameNoMatch");
                         break;
                     case LicenseUserMatchType.Error:
-                        MatchType = "There is an unknown issue with your license key.";
+                        MatchType = _localizationService.Get("Registration_UnknownIssue");
                         break;
                     default:
-                        MatchType = "License key comparison is null.";
+                        MatchType = _localizationService.Get("Registration_LicenseNull");
                         break;
                 }
-
-                
             }
             catch (Exception ex)
             {
-                Logger.LogError("LicenseUserMatchType switch statement failed: "+ex);
+                Logger.LogError("LicenseUserMatchType switch statement failed: " + ex);
             }
-            Logger.LogInformation("MatchType is: "+MatchType);
 
-            ProgressBarVisibility = Visibility.Collapsed;
-            CanRegister = true;
+            Logger.LogInformation("MatchType is: " + MatchType);
+            return false;
         }
 
         public async void ShowAccountInfoWindow()

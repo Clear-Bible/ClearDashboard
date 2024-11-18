@@ -134,7 +134,7 @@
     <value>停用当前许可证</value>
   </data>
   <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
-    <value>-其他账户-</value>
+    <value>-其他帐户-</value>
   </data>
   <data name="AccountInfo_ParatextEmailLabel" xml:space="preserve">
     <value>副文本电子邮件：</value>
@@ -434,7 +434,7 @@
     <value>对齐的单词</value>
   </data>
   <data name="BulkAlignmentReview_Alignments" xml:space="preserve">
-    <value>对齐方式</value>
+    <value>路线</value>
   </data>
   <data name="BulkAlignmentReview_AlignmentType" xml:space="preserve">
     <value>对齐类型： </value>
@@ -710,7 +710,7 @@
     <value>将拆分应用于令牌的其他实例</value>
   </data>
   <data name="EnhancedView_SplitTokenLocation" xml:space="preserve">
-    <value>选择分割令牌的位置：</value>
+    <value>选择拆分令牌的位置：</value>
   </data>
   <data name="EnhancedView_SplitTokenThreeWay" xml:space="preserve">
     <value>三路分流</value>
@@ -1514,7 +1514,7 @@
     <value>是否要删除标签：</value>
   </data>
   <data name="Notes_LabelDisassociateConfirm" xml:space="preserve">
-    <value>您要取消关联标签吗：</value>
+    <value>您想取消关联标签吗：</value>
   </data>
   <data name="Notes_LabelFromLabelGroup" xml:space="preserve">
     <value>来自标签组：</value>
@@ -1673,7 +1673,7 @@
     <value>旧约</value>
   </data>
   <data name="ParallelCorpusDialog_AddAlignmentSet" xml:space="preserve">
-    <value>创建字对齐</value>
+    <value>创建单词对齐方式</value>
   </data>
   <data name="ParallelCorpusDialog_AddParallelRelationship" xml:space="preserve">
     <value>创建语料库诗句的并行化</value>
@@ -1937,7 +1937,7 @@
     <value>前缀</value>
   </data>
   <data name="Pins_ShowBackTranslation" xml:space="preserve">
-    <value>显示返回翻译</value>
+    <value>显示反向翻译</value>
   </data>
   <data name="Pins_Stem" xml:space="preserve">
     <value>干</value>
@@ -2296,6 +2296,33 @@
   <data name="Refresh" xml:space="preserve">
     <value>刷新</value>
   </data>
+  <data name="Registration_CollabError" xml:space="preserve">
+    <value>创建协作帐户时出错</value>
+  </data>
+  <data name="Registration_EmailExists" xml:space="preserve">
+    <value>系统中已存在电子邮件！</value>
+  </data>
+  <data name="Registration_FirstNameNoMatch" xml:space="preserve">
+    <value>您的名字与许可证密钥不匹配。</value>
+  </data>
+  <data name="Registration_LastNameNoMatch" xml:space="preserve">
+    <value>您的姓氏与许可证密钥不匹配。</value>
+  </data>
+  <data name="Registration_LicenseNull" xml:space="preserve">
+    <value>许可证密钥比较为空。</value>
+  </data>
+  <data name="Registration_NameExists" xml:space="preserve">
+    <value>系统上已经存在！</value>
+  </data>
+  <data name="Registration_NoNameMatch" xml:space="preserve">
+    <value>许可证密钥与提供的任一名称都不匹配。</value>
+  </data>
+  <data name="Registration_Success" xml:space="preserve">
+    <value>成功！</value>
+  </data>
+  <data name="Registration_UnknownIssue" xml:space="preserve">
+    <value>您的许可证密钥存在未知问题。</value>
+  </data>
   <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
     <value>关闭申请</value>
   </data>
@@ -2317,6 +2344,9 @@
   <data name="RegistrationView_Email" xml:space="preserve">
     <value>请输入您的电子邮件</value>
   </data>
+  <data name="RegistrationView_EmailMessage" xml:space="preserve">
+    <value>如果您想要许可证，但无法使用上一屏幕制作许可证，请发送电子邮件至dashboard@biblica.com，并注明您的名字、姓氏和组织。</value>
+  </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>请输入您的名字</value>
   </data>
@@ -2324,7 +2354,7 @@
     <value>请输入您的姓氏</value>
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>请输入您的许可证密钥</value>
+    <value>请输入您的许可证密钥（可选）</value>
   </data>
   <data name="RegistrationView_Organization" xml:space="preserve">
     <value>请输入您的组织</value>

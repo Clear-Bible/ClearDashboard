@@ -131,7 +131,7 @@
     <value>- ព័ត៌មានលម្អិតគណនីបច្ចុប្បន្ន-</value>
   </data>
   <data name="AccountInfo_DeactivateButton" xml:space="preserve">
-    <value>អសកម្មអាជ្ញាប័ណ្ណបច្ចុប្បន្ន</value>
+    <value>បិទដំណើរការអាជ្ញាប័ណ្ណបច្ចុប្បន្ន</value>
   </data>
   <data name="AccountInfo_OtherAccountsLabel" xml:space="preserve">
     <value>- គណនីផ្សេងទៀត-</value>
@@ -662,10 +662,10 @@
     <value>លុបការតម្រឹមទាំងអស់?</value>
   </data>
   <data name="EnhancedView_DeleteAllAlignmentsTemplate" xml:space="preserve">
-    <value>សញ្ញាសម្ងាត់ '{0}' មានការតម្រឹមច្រើនដែលបានកំណត់។ ការចុច '{1}' នឹងលុបការតម្រឹមទាំងអស់។</value>
+    <value>និមិត្តសញ្ញា '{0}' មានការតម្រឹមច្រើនដែលបានកំណត់។ ការចុច '{1}' នឹងលុបការតម្រឹមទាំងអស់។</value>
   </data>
   <data name="EnhancedView_FilterPins" xml:space="preserve">
-    <value>តម្រងស្វែងរកពាក្យ</value>
+    <value>ត្រងពាក្យស្វែងរក</value>
   </data>
   <data name="EnhancedView_FilterPinsByKeyTerms" xml:space="preserve">
     <value>ត្រងពាក្យស្វែងរកតាមលក្ខខណ្ឌសំខាន់ៗ</value>
@@ -674,7 +674,7 @@
     <value>អន្តរលីនេអ៊ែរ</value>
   </data>
   <data name="EnhancedView_JoinTokens" xml:space="preserve">
-    <value>ចូលរួមថូខឹន</value>
+    <value>ចូលរួម Token</value>
   </data>
   <data name="EnhancedView_JoinTokensForLanguagePair" xml:space="preserve">
     <value>ចូលរួម Token សម្រាប់ភាសា Pair</value>
@@ -686,7 +686,7 @@
     <value>សម្គាល់ការតម្រឹមជា 'ត្រូវការការពិនិត្យឡើងវិញ'</value>
   </data>
   <data name="EnhancedView_MarkAlignmentAsValid" xml:space="preserve">
-    <value>សម្គាល់ការតម្រឹមជា 'មានសុពលភាព'</value>
+    <value>សម្គាល់ការតម្រឹមជា 'ត្រឹមត្រូវ'</value>
   </data>
   <data name="EnhancedView_NewToken" xml:space="preserve">
     <value>និមិត្តសញ្ញាថ្មី៖ អត្ថបទបណ្តុះបណ្តាល</value>
@@ -917,7 +917,7 @@
     <value>ប្រសិនបើធីក វានឹងផ្លាស់ប្តូរការកើតឡើងដែលមិនកំណត់ទាំងអស់នៃពាក្យនេះ។</value>
   </data>
   <data name="Lexicon_Concordance" xml:space="preserve">
-    <value>ការចុះសម្រុងគ្នា។</value>
+    <value>ភាពស្របគ្នា។</value>
   </data>
   <data name="Lexicon_DeleteLexeme" xml:space="preserve">
     <value>លុបវេយ្យាករណ៍នេះ។</value>
@@ -983,7 +983,7 @@
     <value>មិនមានទម្រង់ដែលអាចប្រើបានទេ។</value>
   </data>
   <data name="Lexicon_RemoveDomain" xml:space="preserve">
-    <value>ដកដែនសុភាសិតនេះចេញពីអត្ថន័យនេះ។</value>
+    <value>ដក​ដែន​អត្ថន័យ​នេះ​ចេញ​ពី​អត្ថន័យ​នេះ។</value>
   </data>
   <data name="Lexicon_RemoveForm" xml:space="preserve">
     <value>យកទម្រង់ lexical នេះចេញពី lexical នេះ។</value>
@@ -1106,7 +1106,7 @@
     <value>ភាសា៖</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
-    <value>Leexeme ឬ​ទម្រង់​ប្រកួត</value>
+    <value>Leexeme ឬទម្រង់ប្រកួត</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
     <value>មិនមានកំណត់ត្រាទៀតទេដែលត្រូវនាំចូល។</value>
@@ -1145,7 +1145,7 @@
     <value>ពាក្យ៖</value>
   </data>
   <data name="LicenseValidator_EmailMissing" xml:space="preserve">
-    <value>អ៊ីមែលត្រូវបានទាមទារ</value>
+    <value>អ៊ីមែលគឺចាំបាច់</value>
   </data>
   <data name="LicenseValidator_FirstMissing" xml:space="preserve">
     <value>ឈ្មោះដំបូងគឺចាំបាច់</value>
@@ -1460,7 +1460,7 @@
     <value>បន្ថែម Jot</value>
   </data>
   <data name="Notes_AddNewNote" xml:space="preserve">
-    <value>បន្ថែម jot ថ្មី (shift-enter for new line)</value>
+    <value>បន្ថែម​ចំណុច​ថ្មី​មួយ (ប្ដូរ​ចូល​សម្រាប់​បន្ទាត់​ថ្មី)</value>
   </data>
   <data name="Notes_Body" xml:space="preserve">
     <value>រាងកាយ</value>
@@ -1526,7 +1526,7 @@
     <value>បន្ថែមក្រុមស្លាក</value>
   </data>
   <data name="Notes_LabelGroupExists" xml:space="preserve">
-    <value>ក្រុមស្លាកមានរួចហើយដែលមានឈ្មោះ</value>
+    <value>ក្រុមស្លាកមានរួចហើយជាមួយឈ្មោះ</value>
   </data>
   <data name="Notes_LabelGroupInitialize" xml:space="preserve">
     <value>ចាប់ផ្តើមក្រុមស្លាក</value>
@@ -1700,7 +1700,7 @@
     <value>រថភ្លើង</value>
   </data>
   <data name="ParallelCorpusDialog_TrainSmtModel" xml:space="preserve">
-    <value>កម្មវិធីតម្រឹមពាក្យរបស់ម៉ាស៊ីនរថភ្លើង</value>
+    <value>ការតម្រឹមពាក្យរបស់ម៉ាស៊ីនរថភ្លើង</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>កំណត់ Verse Mapping រវាង Parallelized Corpora</value>
@@ -2296,6 +2296,33 @@
   <data name="Refresh" xml:space="preserve">
     <value>ធ្វើឱ្យស្រស់</value>
   </data>
+  <data name="Registration_CollabError" xml:space="preserve">
+    <value>មាន​បញ្ហា​ពេល​បង្កើត​គណនី​សហការ</value>
+  </data>
+  <data name="Registration_EmailExists" xml:space="preserve">
+    <value>អ៊ីមែលមានរួចហើយនៅលើប្រព័ន្ធ!</value>
+  </data>
+  <data name="Registration_FirstNameNoMatch" xml:space="preserve">
+    <value>ឈ្មោះរបស់អ្នកមិនត្រូវគ្នានឹងលេខកូដអាជ្ញាប័ណ្ណទេ។</value>
+  </data>
+  <data name="Registration_LastNameNoMatch" xml:space="preserve">
+    <value>នាមត្រកូលរបស់អ្នកមិនត្រូវគ្នានឹងលេខកូដអាជ្ញាប័ណ្ណទេ។</value>
+  </data>
+  <data name="Registration_LicenseNull" xml:space="preserve">
+    <value>ការ​ប្រៀបធៀប​លេខ​កូដ​អាជ្ញាប័ណ្ណ​គឺ​ទទេ។</value>
+  </data>
+  <data name="Registration_NameExists" xml:space="preserve">
+    <value>មាននៅលើប្រព័ន្ធរួចហើយ!</value>
+  </data>
+  <data name="Registration_NoNameMatch" xml:space="preserve">
+    <value>លេខ​កូដ​អាជ្ញាប័ណ្ណ​មិន​ត្រូវ​គ្នា​នឹង​ឈ្មោះ​ដែល​បាន​ផ្តល់​ឱ្យ​ទេ។</value>
+  </data>
+  <data name="Registration_Success" xml:space="preserve">
+    <value>ជោគជ័យ!</value>
+  </data>
+  <data name="Registration_UnknownIssue" xml:space="preserve">
+    <value>មានបញ្ហាដែលមិនស្គាល់ជាមួយលេខកូដអាជ្ញាប័ណ្ណរបស់អ្នក។</value>
+  </data>
   <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
     <value>បិទកម្មវិធី</value>
   </data>
@@ -2317,6 +2344,9 @@
   <data name="RegistrationView_Email" xml:space="preserve">
     <value>សូមបញ្ចូលអ៊ីមែលរបស់អ្នក។</value>
   </data>
+  <data name="RegistrationView_EmailMessage" xml:space="preserve">
+    <value>ប្រសិនបើអ្នកចង់បានអាជ្ញាប័ណ្ណ ប៉ុន្តែមិនអាចបង្កើតមួយដោយប្រើអេក្រង់មុនបានទេ សូមផ្ញើអ៊ីមែលមកយើងតាមរយៈ dashboard@biblica.com ជាមួយនឹងឈ្មោះ នាមត្រកូល និងស្ថាប័នរបស់អ្នក។</value>
+  </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>សូមបញ្ចូលឈ្មោះរបស់អ្នក។</value>
   </data>
@@ -2324,7 +2354,7 @@
     <value>សូមបញ្ចូលនាមត្រកូលរបស់អ្នក។</value>
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>សូមបញ្ចូលលេខកូដអាជ្ញាប័ណ្ណរបស់អ្នក។</value>
+    <value>សូមបញ្ចូលលេខកូដអាជ្ញាប័ណ្ណរបស់អ្នក (ជាជម្រើស)</value>
   </data>
   <data name="RegistrationView_Organization" xml:space="preserve">
     <value>សូមបញ្ចូលស្ថាប័នរបស់អ្នក។</value>
@@ -2564,7 +2594,7 @@
     <value>បានធ្វើទ្រង់ទ្រាយ</value>
   </data>
   <data name="TargetContextView_Unformatted" xml:space="preserve">
-    <value>មិន​មាន​ទ្រង់ទ្រាយ</value>
+    <value>មិនមានទ្រង់ទ្រាយ</value>
   </data>
   <data name="TargetContextView_ZoomIn" xml:space="preserve">
     <value>ពង្រីក</value>

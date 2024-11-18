@@ -1082,7 +1082,7 @@
     <value>Tambahkan sebagai formulir untuk...</value>
   </data>
   <data name="LexiconImport_AddFormButtonTooltip" xml:space="preserve">
-    <value>Temukan leksem lengkap atau sebagian atau kecocokan bentuk dengan sumbernya</value>
+    <value>Temukan leksem atau bentuk yang lengkap atau sebagian yang cocok dengan sumbernya</value>
   </data>
   <data name="LexiconImport_AddTargetButtonText" xml:space="preserve">
     <value>Tambahkan target sebagai terjemahan untuk ...</value>
@@ -1358,7 +1358,7 @@
     <value>MIC</value>
   </data>
   <data name="Migrate_Header" xml:space="preserve">
-    <value>Reset pemetaan ayat ke versi default</value>
+    <value>Reset pemetaan ayat ke versifikasi default</value>
   </data>
   <data name="MRK" xml:space="preserve">
     <value>MRK</value>
@@ -1631,7 +1631,7 @@
     <value>Pilih label yang akan dihapus dari grup label</value>
   </data>
   <data name="Notes_SelectLabelsToDeleteFromLabelGroupSecondaryMessage" xml:space="preserve">
-    <value>Catatan: label ini akan muncul di bawah grup label: Tidak Ada</value>
+    <value>Catatan: label ini akan muncul di bawah grup label: Tidak ada</value>
   </data>
   <data name="Notes_SendConfirmation" xml:space="preserve">
     <value>Kirim catatan ini ke Paratext?</value>
@@ -1796,7 +1796,7 @@
     <value>Paskan seluruh area konten ke area pandang</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>Pasangkan semua node ke viewport</value>
+    <value>Paskan semua node ke viewport</value>
   </data>
   <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
     <value>Dapatkan Catatan Eksternal Terbaru</value>
@@ -1829,7 +1829,7 @@
     <value>Properti</value>
   </data>
   <data name="Pds_ResetVerseVersification" xml:space="preserve">
-    <value>Reset pemetaan ayat ke versi default</value>
+    <value>Reset pemetaan ayat ke versifikasi default</value>
   </data>
   <data name="Pds_Resource" xml:space="preserve">
     <value>Sumber</value>
@@ -2296,6 +2296,33 @@
   <data name="Refresh" xml:space="preserve">
     <value>Menyegarkan</value>
   </data>
+  <data name="Registration_CollabError" xml:space="preserve">
+    <value>Terjadi kesalahan saat membuat akun kolaborasi</value>
+  </data>
+  <data name="Registration_EmailExists" xml:space="preserve">
+    <value>Email sudah ada di sistem!</value>
+  </data>
+  <data name="Registration_FirstNameNoMatch" xml:space="preserve">
+    <value>Nama depan Anda tidak cocok dengan kunci lisensi.</value>
+  </data>
+  <data name="Registration_LastNameNoMatch" xml:space="preserve">
+    <value>Nama belakang Anda tidak cocok dengan kunci lisensi.</value>
+  </data>
+  <data name="Registration_LicenseNull" xml:space="preserve">
+    <value>Perbandingan kunci lisensi adalah nol.</value>
+  </data>
+  <data name="Registration_NameExists" xml:space="preserve">
+    <value>sudah ada di sistem!</value>
+  </data>
+  <data name="Registration_NoNameMatch" xml:space="preserve">
+    <value>Kunci lisensi tidak cocok dengan nama mana pun yang diberikan.</value>
+  </data>
+  <data name="Registration_Success" xml:space="preserve">
+    <value>Kesuksesan!</value>
+  </data>
+  <data name="Registration_UnknownIssue" xml:space="preserve">
+    <value>Ada masalah yang tidak diketahui dengan kunci lisensi Anda.</value>
+  </data>
   <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
     <value>Tutup Aplikasi</value>
   </data>
@@ -2317,6 +2344,9 @@
   <data name="RegistrationView_Email" xml:space="preserve">
     <value>Silakan masukkan email Anda</value>
   </data>
+  <data name="RegistrationView_EmailMessage" xml:space="preserve">
+    <value>Jika Anda menginginkan lisensi tetapi tidak dapat membuatnya menggunakan layar sebelumnya, kirimkan email kepada kami di dashboard@biblica.com dengan mencantumkan nama depan, nama belakang, dan organisasi Anda.</value>
+  </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Silakan masukkan nama depan Anda</value>
   </data>
@@ -2324,7 +2354,7 @@
     <value>Silakan masukkan nama belakang Anda</value>
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>Silakan masukkan kunci lisensi Anda</value>
+    <value>Silakan masukkan kunci lisensi Anda (opsional)</value>
   </data>
   <data name="RegistrationView_Organization" xml:space="preserve">
     <value>Silakan masukkan organisasi Anda</value>
@@ -2471,7 +2501,7 @@
     <value>Validasi Kode Email</value>
   </data>
   <data name="Settings_VerseByVerseTextCollectionsEnabled" xml:space="preserve">
-    <value>Aktifkan tampilan Kumpulan Teks ayat demi ayat</value>
+    <value>Aktifkan tampilan Koleksi Teks ayat demi ayat</value>
   </data>
   <data name="ShellView_CancelTaskTooltip" xml:space="preserve">
     <value>Batalkan Tugas</value>

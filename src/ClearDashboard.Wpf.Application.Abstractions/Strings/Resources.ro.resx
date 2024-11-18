@@ -353,7 +353,7 @@
     <value>jertfe și ofrande</value>
   </data>
   <data name="BiblicalTermsDomains_Settlement" xml:space="preserve">
-    <value>aşezare</value>
+    <value>decontare</value>
   </data>
   <data name="BiblicalTermsDomains_SignsAndWonders" xml:space="preserve">
     <value>semne și minuni</value>
@@ -767,7 +767,7 @@
     <value>Textul țintă:</value>
   </data>
   <data name="FontSettings_TargetFontSize" xml:space="preserve">
-    <value>Dimensiunea vizată a fontului:</value>
+    <value>Dimensiunea țintă a fontului:</value>
   </data>
   <data name="FontSettings_Title" xml:space="preserve">
     <value>Titlu:</value>
@@ -926,7 +926,7 @@
     <value>Ștergeți acest lexem?</value>
   </data>
   <data name="Lexicon_DeleteMeaning" xml:space="preserve">
-    <value>Ștergeți acest sens</value>
+    <value>Șterge acest sens</value>
   </data>
   <data name="Lexicon_DeleteTranslation" xml:space="preserve">
     <value>Ștergeți această traducere</value>
@@ -2078,7 +2078,7 @@
     <value>Versiune: </value>
   </data>
   <data name="ProjectSetup_Hint" xml:space="preserve">
-    <value>Introduceți un nume pentru proiectul dvs</value>
+    <value>Vă rugăm să introduceți un nume pentru proiectul dvs</value>
   </data>
   <data name="ProjectSetup_Title" xml:space="preserve">
     <value>Creați-vă noul proiect</value>
@@ -2296,6 +2296,33 @@
   <data name="Refresh" xml:space="preserve">
     <value>Reîmprospăta</value>
   </data>
+  <data name="Registration_CollabError" xml:space="preserve">
+    <value>Eroare la crearea contului de colaborare</value>
+  </data>
+  <data name="Registration_EmailExists" xml:space="preserve">
+    <value>E-mailul există deja pe sistem!</value>
+  </data>
+  <data name="Registration_FirstNameNoMatch" xml:space="preserve">
+    <value>Prenumele dumneavoastră nu se potrivește cu cheia de licență.</value>
+  </data>
+  <data name="Registration_LastNameNoMatch" xml:space="preserve">
+    <value>Numele dvs. de familie nu se potrivește cu cheia de licență.</value>
+  </data>
+  <data name="Registration_LicenseNull" xml:space="preserve">
+    <value>Comparația cheii de licență este nulă.</value>
+  </data>
+  <data name="Registration_NameExists" xml:space="preserve">
+    <value>există deja pe sistem!</value>
+  </data>
+  <data name="Registration_NoNameMatch" xml:space="preserve">
+    <value>Cheia de licență nu corespunde niciunui nume furnizat.</value>
+  </data>
+  <data name="Registration_Success" xml:space="preserve">
+    <value>Succes!</value>
+  </data>
+  <data name="Registration_UnknownIssue" xml:space="preserve">
+    <value>Există o problemă necunoscută cu cheia de licență.</value>
+  </data>
   <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
     <value>Închideți aplicația</value>
   </data>
@@ -2317,6 +2344,9 @@
   <data name="RegistrationView_Email" xml:space="preserve">
     <value>Vă rugăm să introduceți adresa dvs. de e-mail</value>
   </data>
+  <data name="RegistrationView_EmailMessage" xml:space="preserve">
+    <value>Dacă doriți o licență, dar nu puteți face una folosind ecranul anterior, trimiteți-ne un e-mail la dashboard@biblica.com cu numele, prenumele și organizația.</value>
+  </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Vă rugăm să introduceți prenumele dvs</value>
   </data>
@@ -2324,7 +2354,7 @@
     <value>Vă rugăm să introduceți numele dvs. de familie</value>
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>Vă rugăm să introduceți cheia de licență</value>
+    <value>Vă rugăm să introduceți cheia de licență (opțional)</value>
   </data>
   <data name="RegistrationView_Organization" xml:space="preserve">
     <value>Vă rugăm să introduceți organizația dvs</value>

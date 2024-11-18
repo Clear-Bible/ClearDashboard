@@ -698,7 +698,7 @@
     <value>इस पद्य श्रेणी में कोई पद्य डेटा नहीं है।</value>
   </data>
   <data name="EnhancedView_RemoveCorpus" xml:space="preserve">
-    <value>कॉर्पस हटाएँ</value>
+    <value>कॉर्पस हटाएं</value>
   </data>
   <data name="EnhancedView_ShowControls" xml:space="preserve">
     <value>दृश्य नियंत्रण दिखाएँ</value>
@@ -1286,7 +1286,7 @@
     <value>डोमेन</value>
   </data>
   <data name="Marble_FrequencyGraph" xml:space="preserve">
-    <value>आवृत्ति ग्राफ</value>
+    <value>आवृत्ति ग्राफ़</value>
   </data>
   <data name="Marble_GeneralInformation" xml:space="preserve">
     <value>सामान्य जानकारी</value>
@@ -1310,7 +1310,7 @@
     <value>इंग्लिश ग्लॉस द्वारा खोजें</value>
   </data>
   <data name="Marble_SearchHebrew" xml:space="preserve">
-    <value>हिब्रू/ग्रीक द्वारा खोजें</value>
+    <value>हिब्रू/ग्रीक के आधार पर खोजें</value>
   </data>
   <data name="Marble_Sense" xml:space="preserve">
     <value>समझ</value>
@@ -1694,7 +1694,7 @@
     <value>मशीन वर्ड संरेखण एल्गोरिदम</value>
   </data>
   <data name="ParallelCorpusDialog_Symmetrize" xml:space="preserve">
-    <value>ट्रेन सममितिकृत मॉडल?</value>
+    <value>ट्रेन सममिति मॉडल?</value>
   </data>
   <data name="ParallelCorpusDialog_Train" xml:space="preserve">
     <value>रेलगाड़ी</value>
@@ -1859,7 +1859,7 @@
     <value>अध्ययन बाइबिल परिवर्धन</value>
   </data>
   <data name="Pds_SwitchParatextProject" xml:space="preserve">
-    <value>पैराटेक्स्ट पर जाएँ और प्रोजेक्ट स्विच करें।  वर्तमान में क्लियरडैशबोर्ड प्लगइन से जुड़ा पैराटेक्स्ट प्रोजेक्ट इस क्लियरडैशबोर्ड प्रोजेक्ट के कॉर्पस के समान नहीं है।</value>
+    <value>पैराटेक्स्ट पर जाएं और प्रोजेक्ट स्विच करें।  वर्तमान में क्लियरडैशबोर्ड प्लगइन से जुड़ा पैराटेक्स्ट प्रोजेक्ट इस क्लियरडैशबोर्ड प्रोजेक्ट के कॉर्पस के समान नहीं है।</value>
   </data>
   <data name="Pds_Target" xml:space="preserve">
     <value>लक्ष्य</value>
@@ -2296,6 +2296,33 @@
   <data name="Refresh" xml:space="preserve">
     <value>ताज़ा करना</value>
   </data>
+  <data name="Registration_CollabError" xml:space="preserve">
+    <value>कोलाब खाता बनाते समय त्रुटि</value>
+  </data>
+  <data name="Registration_EmailExists" xml:space="preserve">
+    <value>ईमेल सिस्टम पर पहले से मौजूद है!</value>
+  </data>
+  <data name="Registration_FirstNameNoMatch" xml:space="preserve">
+    <value>आपका पहला नाम लाइसेंस कुंजी से मेल नहीं खाता.</value>
+  </data>
+  <data name="Registration_LastNameNoMatch" xml:space="preserve">
+    <value>आपका अंतिम नाम लाइसेंस कुंजी से मेल नहीं खाता.</value>
+  </data>
+  <data name="Registration_LicenseNull" xml:space="preserve">
+    <value>लाइसेंस कुंजी तुलना शून्य है.</value>
+  </data>
+  <data name="Registration_NameExists" xml:space="preserve">
+    <value>सिस्टम पर पहले से मौजूद है!</value>
+  </data>
+  <data name="Registration_NoNameMatch" xml:space="preserve">
+    <value>लाइसेंस कुंजी दिए गए किसी भी नाम से मेल नहीं खाती।</value>
+  </data>
+  <data name="Registration_Success" xml:space="preserve">
+    <value>सफलता!</value>
+  </data>
+  <data name="Registration_UnknownIssue" xml:space="preserve">
+    <value>आपकी लाइसेंस कुंजी के साथ कोई अज्ञात समस्या है.</value>
+  </data>
   <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
     <value>एप्लिकेशन बंद करो</value>
   </data>
@@ -2317,6 +2344,9 @@
   <data name="RegistrationView_Email" xml:space="preserve">
     <value>कृपया अपना ईमेल दर्ज करें</value>
   </data>
+  <data name="RegistrationView_EmailMessage" xml:space="preserve">
+    <value>यदि आप लाइसेंस चाहते हैं लेकिन पिछली स्क्रीन का उपयोग करके लाइसेंस नहीं बना सकते हैं, तो हमें अपने पहले नाम, उपनाम और संगठन के साथ डैशबोर्ड@biblica.com पर ईमेल करें।</value>
+  </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>कृपया अपना पहला नाम दें</value>
   </data>
@@ -2324,7 +2354,7 @@
     <value>कृपया अपना अंतिम नाम दर्ज करें</value>
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>कृपया अपना लाइसेंस कुंजी दर्ज करें</value>
+    <value>कृपया अपनी लाइसेंस कुंजी दर्ज करें (वैकल्पिक)</value>
   </data>
   <data name="RegistrationView_Organization" xml:space="preserve">
     <value>कृपया अपना संगठन दर्ज करें</value>

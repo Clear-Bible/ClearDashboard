@@ -878,7 +878,7 @@
     <value>LEV</value>
   </data>
   <data name="Lexicon_AddDomain" xml:space="preserve">
-    <value>Añade un dominio semántico a este significado.</value>
+    <value>Agregue un dominio semántico a este significado.</value>
   </data>
   <data name="Lexicon_AddForm" xml:space="preserve">
     <value>Añade una forma léxica a este lema.</value>
@@ -2296,6 +2296,33 @@
   <data name="Refresh" xml:space="preserve">
     <value>Refrescar</value>
   </data>
+  <data name="Registration_CollabError" xml:space="preserve">
+    <value>Error al crear una cuenta de colaboración</value>
+  </data>
+  <data name="Registration_EmailExists" xml:space="preserve">
+    <value>¡El correo electrónico ya existe en el sistema!</value>
+  </data>
+  <data name="Registration_FirstNameNoMatch" xml:space="preserve">
+    <value>Su nombre no coincide con la clave de licencia.</value>
+  </data>
+  <data name="Registration_LastNameNoMatch" xml:space="preserve">
+    <value>Su apellido no coincide con la clave de licencia.</value>
+  </data>
+  <data name="Registration_LicenseNull" xml:space="preserve">
+    <value>La comparación de claves de licencia es nula.</value>
+  </data>
+  <data name="Registration_NameExists" xml:space="preserve">
+    <value>¡Ya existe en el sistema!</value>
+  </data>
+  <data name="Registration_NoNameMatch" xml:space="preserve">
+    <value>La clave de licencia no coincide con ninguno de los nombres proporcionados.</value>
+  </data>
+  <data name="Registration_Success" xml:space="preserve">
+    <value>¡Éxito!</value>
+  </data>
+  <data name="Registration_UnknownIssue" xml:space="preserve">
+    <value>Hay un problema desconocido con su clave de licencia.</value>
+  </data>
   <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
     <value>Cerrar aplicación</value>
   </data>
@@ -2317,6 +2344,9 @@
   <data name="RegistrationView_Email" xml:space="preserve">
     <value>Por favor ingrese su correo electrónico</value>
   </data>
+  <data name="RegistrationView_EmailMessage" xml:space="preserve">
+    <value>Si desea obtener una licencia pero no puede crearla usando la pantalla anterior, envíenos un correo electrónico a Dashboard@biblica.com con su nombre, apellido y organización.</value>
+  </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Por favor ingresa tu nombre</value>
   </data>
@@ -2324,7 +2354,7 @@
     <value>Por favor ingresa tu apellido</value>
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>Por favor ingrese su clave de licencia</value>
+    <value>Por favor ingrese su clave de licencia (opcional)</value>
   </data>
   <data name="RegistrationView_Organization" xml:space="preserve">
     <value>Por favor ingrese su organización</value>

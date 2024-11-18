@@ -956,7 +956,7 @@
     <value>bổ đề</value>
   </data>
   <data name="Lexicon_LemmaForms" xml:space="preserve">
-    <value>Bổ đề/Dạng:</value>
+    <value>Bổ đề/Dạng thức:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
     <value>Bổ đề cho từ vựng mới:</value>
@@ -1106,7 +1106,7 @@
     <value>Ngôn ngữ:</value>
   </data>
   <data name="LexiconImport_LexemeOrFormMatches" xml:space="preserve">
-    <value>Từ vựng hoặc mẫu phù hợp</value>
+    <value>Lexeme hoặc mẫu phù hợp</value>
   </data>
   <data name="LexiconImport_NoMoreRecordsToImport" xml:space="preserve">
     <value>Không còn bản ghi nào để nhập.</value>
@@ -1208,7 +1208,7 @@
     <value>Tùy chọn</value>
   </data>
   <data name="MainView_QuickNew" xml:space="preserve">
-    <value>Mới nhanh</value>
+    <value>Nhanh chóng Mới</value>
   </data>
   <data name="MainView_RemoteUpdateAvailable" xml:space="preserve">
     <value>Có sẵn các thay đổi cộng tác</value>
@@ -1850,7 +1850,7 @@
     <value>Tiêu chuẩn</value>
   </data>
   <data name="Pds_StartParatextFirst" xml:space="preserve">
-    <value>Bắt đầu đoạn văn bản đầu tiên</value>
+    <value>Bắt đầu đoạn văn đầu tiên</value>
   </data>
   <data name="Pds_StudyBible" xml:space="preserve">
     <value>Nghiên CứuKinh Thánh</value>
@@ -1868,7 +1868,7 @@
     <value>Chuyển ngữHướng dẫn sử dụng</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
-    <value>Chuyển ngữVới Bộ mã hóa</value>
+    <value>Chuyển ngữVới bộ mã hóa</value>
   </data>
   <data name="Pds_Unknown" xml:space="preserve">
     <value>Không xác định</value>
@@ -2296,6 +2296,33 @@
   <data name="Refresh" xml:space="preserve">
     <value>Làm cho khỏe lại</value>
   </data>
+  <data name="Registration_CollabError" xml:space="preserve">
+    <value>Lỗi khi tạo tài khoản cộng tác</value>
+  </data>
+  <data name="Registration_EmailExists" xml:space="preserve">
+    <value>Email đã tồn tại trên hệ thống!</value>
+  </data>
+  <data name="Registration_FirstNameNoMatch" xml:space="preserve">
+    <value>Tên của bạn không khớp với mã cấp phép.</value>
+  </data>
+  <data name="Registration_LastNameNoMatch" xml:space="preserve">
+    <value>Họ của bạn không khớp với mã cấp phép.</value>
+  </data>
+  <data name="Registration_LicenseNull" xml:space="preserve">
+    <value>So sánh khóa cấp phép là null.</value>
+  </data>
+  <data name="Registration_NameExists" xml:space="preserve">
+    <value>đã tồn tại trên hệ thống!</value>
+  </data>
+  <data name="Registration_NoNameMatch" xml:space="preserve">
+    <value>Khóa cấp phép không khớp với tên được cung cấp.</value>
+  </data>
+  <data name="Registration_Success" xml:space="preserve">
+    <value>Thành công!</value>
+  </data>
+  <data name="Registration_UnknownIssue" xml:space="preserve">
+    <value>Có một vấn đề không xác định với mã cấp phép của bạn.</value>
+  </data>
   <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
     <value>Đóng ứng dụng</value>
   </data>
@@ -2317,6 +2344,9 @@
   <data name="RegistrationView_Email" xml:space="preserve">
     <value>Vui lòng nhập email của bạn</value>
   </data>
+  <data name="RegistrationView_EmailMessage" xml:space="preserve">
+    <value>Nếu bạn muốn có giấy phép nhưng không thể tạo giấy phép bằng màn hình trước, hãy gửi email cho chúng tôi theo địa chỉ Dashboard@biblica.com kèm theo tên, họ và tổ chức của bạn.</value>
+  </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Vui lòng nhập tên của bạn</value>
   </data>
@@ -2324,7 +2354,7 @@
     <value>Vui lòng nhập họ của bạn</value>
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>Vui lòng nhập mã cấp phép của bạn</value>
+    <value>Vui lòng nhập mã cấp phép của bạn (tùy chọn)</value>
   </data>
   <data name="RegistrationView_Organization" xml:space="preserve">
     <value>Vui lòng nhập tổ chức của bạn</value>
@@ -2492,7 +2522,7 @@
     <value>Ghi chú phát hành</value>
   </data>
   <data name="ShellView_ShowPreReleases" xml:space="preserve">
-    <value>Hiển thị các bản phát hành trước</value>
+    <value>Hiển thị bản phát hành trước</value>
   </data>
   <data name="ShellView_UpdateFound" xml:space="preserve">
     <value>Cập nhật lên phiên bản mới của ClearDashboard</value>

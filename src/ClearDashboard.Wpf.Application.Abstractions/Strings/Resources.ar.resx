@@ -959,7 +959,7 @@
     <value>ليما / النماذج:</value>
   </data>
   <data name="Lexicon_LemmaForNewLexeme" xml:space="preserve">
-    <value>Lemma للمفردات الجديدة:</value>
+    <value>Lemma للمعجم الجديد:</value>
   </data>
   <data name="Lexicon_Lexeme" xml:space="preserve">
     <value>المعجم</value>
@@ -1505,7 +1505,7 @@
     <value>أضف تصنيفًا</value>
   </data>
   <data name="Notes_LabelAddConfirm" xml:space="preserve">
-    <value>هل تريد إنشاء تسمية:</value>
+    <value>هل تريد إنشاء التسمية:</value>
   </data>
   <data name="Notes_LabelAssociateConfirm" xml:space="preserve">
     <value>وربطها بمجموعة التصنيفات:</value>
@@ -1796,7 +1796,7 @@
     <value>احتواء منطقة المحتوى بالكامل في إطار العرض</value>
   </data>
   <data name="Pds_FitNodesToViewport" xml:space="preserve">
-    <value>تناسب كافة العقد إلى إطار العرض</value>
+    <value>احتواء جميع العقد في إطار العرض</value>
   </data>
   <data name="Pds_GetLatestExternalNotes" xml:space="preserve">
     <value>احصل على أحدث الملاحظات الخارجية</value>
@@ -1835,7 +1835,7 @@
     <value>الموارد</value>
   </data>
   <data name="Pds_ScaleToOneHundered" xml:space="preserve">
-    <value>قم بتوسيع المحتوى إلى 100%</value>
+    <value>قم بتوسيع المحتوى إلى 100٪</value>
   </data>
   <data name="Pds_ShowVersesMenu" xml:space="preserve">
     <value>إضافة نص إلى نافذة جديدة</value>
@@ -1913,7 +1913,7 @@
     <value>المعجم</value>
   </data>
   <data name="Pins_LexemeType" xml:space="preserve">
-    <value>نوع المعجم</value>
+    <value>نوع المفردات</value>
   </data>
   <data name="Pins_LoadReferences" xml:space="preserve">
     <value>تحميل المراجع</value>
@@ -1982,7 +1982,7 @@
     <value>إنشاء مشروع: </value>
   </data>
   <data name="ProjectPicker_CreateWithProjectTemplate" xml:space="preserve">
-    <value>أنشئ مشروعك باستخدام معالج قالب المشروع.</value>
+    <value>قم بإنشاء مشروعك باستخدام معالج قالب المشروع.</value>
   </data>
   <data name="ProjectPicker_Database" xml:space="preserve">
     <value>قاعدة البيانات: </value>
@@ -2195,7 +2195,7 @@
     <value>هوشع</value>
   </data>
   <data name="ProperCase_Isaiah" xml:space="preserve">
-    <value>إشعياء</value>
+    <value>أشعياء</value>
   </data>
   <data name="ProperCase_James" xml:space="preserve">
     <value>جيمس</value>
@@ -2296,6 +2296,33 @@
   <data name="Refresh" xml:space="preserve">
     <value>ينعش</value>
   </data>
+  <data name="Registration_CollabError" xml:space="preserve">
+    <value>حدث خطأ أثناء إنشاء حساب التعاون</value>
+  </data>
+  <data name="Registration_EmailExists" xml:space="preserve">
+    <value>البريد الإلكتروني موجود بالفعل على النظام!</value>
+  </data>
+  <data name="Registration_FirstNameNoMatch" xml:space="preserve">
+    <value>اسمك الأول لا يتطابق مع مفتاح الترخيص.</value>
+  </data>
+  <data name="Registration_LastNameNoMatch" xml:space="preserve">
+    <value>اسمك الأخير لا يتطابق مع مفتاح الترخيص.</value>
+  </data>
+  <data name="Registration_LicenseNull" xml:space="preserve">
+    <value>مقارنة مفتاح الترخيص فارغة.</value>
+  </data>
+  <data name="Registration_NameExists" xml:space="preserve">
+    <value>موجود بالفعل على النظام!</value>
+  </data>
+  <data name="Registration_NoNameMatch" xml:space="preserve">
+    <value>مفتاح الترخيص لا يتطابق مع أي من الاسمين المقدمين.</value>
+  </data>
+  <data name="Registration_Success" xml:space="preserve">
+    <value>نجاح!</value>
+  </data>
+  <data name="Registration_UnknownIssue" xml:space="preserve">
+    <value>توجد مشكلة غير معروفة في مفتاح الترخيص الخاص بك.</value>
+  </data>
   <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
     <value>إغلاق التطبيق</value>
   </data>
@@ -2317,6 +2344,9 @@
   <data name="RegistrationView_Email" xml:space="preserve">
     <value>الرجاء إدخال البريد الإلكتروني الخاص بك</value>
   </data>
+  <data name="RegistrationView_EmailMessage" xml:space="preserve">
+    <value>إذا كنت ترغب في الحصول على ترخيص ولكن لا يمكنك إنشاء ترخيص باستخدام الشاشة السابقة، راسلنا عبر البريد الإلكتروني على Dashboard@biblica.com مع اسمك الأول واسم العائلة والمؤسسة.</value>
+  </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>الرجاء إدخال اسمك الأول</value>
   </data>
@@ -2324,7 +2354,7 @@
     <value>الرجاء إدخال اسمك الأخير</value>
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>الرجاء إدخال مفتاح الترخيص الخاص بك</value>
+    <value>الرجاء إدخال مفتاح الترخيص الخاص بك (اختياري)</value>
   </data>
   <data name="RegistrationView_Organization" xml:space="preserve">
     <value>الرجاء إدخال مؤسستك</value>
@@ -2378,7 +2408,7 @@
     <value>تمكين تحرير المحاذاة</value>
   </data>
   <data name="Settings_EnableEnhancedNotes" xml:space="preserve">
-    <value>تمكين ملاحظات Paratext الخارجية في المجموعة التجريبية</value>
+    <value>تمكين الملاحظات Paratext الخارجية في المجموعة التجريبية</value>
   </data>
   <data name="Settings_EnableExternalNotes" xml:space="preserve">
     <value>تمكين ملاحظات Paratext الخارجية</value>

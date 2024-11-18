@@ -254,13 +254,50 @@
 
         </StackPanel>
 
+        <TextBox
+            x:Name="LicenseKey"
+            Grid.Row="2"
+            Grid.RowSpan="2"
+            Grid.Column="1"
+            Margin="20,227,10,0"
+            materialDesign:HintAssist.FloatingScale="0.50"
+            materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
+            materialDesign:HintAssist.Hint="{helpers:Localization RegistrationView_LicenseKey}"
+            materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+            MaxLines="4"
+            Style="{DynamicResource RegistrationTextBox}"
+            TextWrapping="Wrap">
+            <TextBox.Text>
+                <Binding
+                    Mode="TwoWay"
+                    Path="LicenseKey"
+                    UpdateSourceTrigger="PropertyChanged"
+                    ValidatesOnDataErrors="True" />
+            </TextBox.Text>
+            <Validation.ErrorTemplate>
+                <ControlTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <AdornedElementPlaceholder />
+                        <TextBlock
+                            MaxWidth="350"
+                            Margin="0"
+                            HorizontalAlignment="Left"
+                            FontSize="16"
+                            Foreground="{DynamicResource ErrorHueBrush}"
+                            Text="{Binding [0].ErrorContent}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </ControlTemplate>
+            </Validation.ErrorTemplate>
+        </TextBox>
+
         <TextBlock
             x:Name="MatchType"
             Grid.Row="3"
             Grid.ColumnSpan="2"
             Width="500"
             MaxWidth="350"
-            Margin="20,10"
+            Margin="20,10,20,100"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
             materialDesign:HintAssist.FloatingScale="0.50"

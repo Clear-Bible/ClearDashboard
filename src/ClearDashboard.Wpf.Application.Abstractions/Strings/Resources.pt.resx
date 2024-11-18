@@ -1328,7 +1328,7 @@
     <value>Verso</value>
   </data>
   <data name="Marble_Verses" xml:space="preserve">
-    <value>Versículos</value>
+    <value>Versos</value>
   </data>
   <data name="Marble_VerseSense" xml:space="preserve">
     <value>Sentido do verso</value>
@@ -1703,7 +1703,7 @@
     <value>Alinhador de palavras da máquina de trem</value>
   </data>
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
-    <value>Defina o mapeamento de versos entre corpora paralelizados</value>
+    <value>Defina o mapeamento de versículos entre corpora paralelizados</value>
   </data>
   <data name="ParatextCorpusDialog_ParatextCorpus" xml:space="preserve">
     <value>Corpus Paratextual</value>
@@ -2296,6 +2296,33 @@
   <data name="Refresh" xml:space="preserve">
     <value>Atualizar</value>
   </data>
+  <data name="Registration_CollabError" xml:space="preserve">
+    <value>Erro ao criar conta de colaboração</value>
+  </data>
+  <data name="Registration_EmailExists" xml:space="preserve">
+    <value>O e-mail já existe no sistema!</value>
+  </data>
+  <data name="Registration_FirstNameNoMatch" xml:space="preserve">
+    <value>Seu primeiro nome não corresponde à chave de licença.</value>
+  </data>
+  <data name="Registration_LastNameNoMatch" xml:space="preserve">
+    <value>Seu sobrenome não corresponde à chave de licença.</value>
+  </data>
+  <data name="Registration_LicenseNull" xml:space="preserve">
+    <value>A comparação da chave de licença é nula.</value>
+  </data>
+  <data name="Registration_NameExists" xml:space="preserve">
+    <value>já existe no sistema!</value>
+  </data>
+  <data name="Registration_NoNameMatch" xml:space="preserve">
+    <value>A chave de licença não corresponde a nenhum dos nomes fornecidos.</value>
+  </data>
+  <data name="Registration_Success" xml:space="preserve">
+    <value>Sucesso!</value>
+  </data>
+  <data name="Registration_UnknownIssue" xml:space="preserve">
+    <value>Há um problema desconhecido com sua chave de licença.</value>
+  </data>
   <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
     <value>Fechar aplicativo</value>
   </data>
@@ -2317,6 +2344,9 @@
   <data name="RegistrationView_Email" xml:space="preserve">
     <value>Por favor insira seu e-mail</value>
   </data>
+  <data name="RegistrationView_EmailMessage" xml:space="preserve">
+    <value>Se você deseja uma licença, mas não consegue criar uma usando a tela anterior, envie-nos um e-mail para dashboard@biblica.com com seu nome, sobrenome e organização.</value>
+  </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Por favor insira seu primeiro nome</value>
   </data>
@@ -2324,7 +2354,7 @@
     <value>Por favor insira seu sobrenome</value>
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>Por favor insira sua chave de licença</value>
+    <value>Por favor insira sua chave de licença (opcional)</value>
   </data>
   <data name="RegistrationView_Organization" xml:space="preserve">
     <value>Por favor insira sua organização</value>

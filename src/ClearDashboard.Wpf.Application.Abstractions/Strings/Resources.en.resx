@@ -2296,6 +2296,33 @@
   <data name="Refresh" xml:space="preserve">
     <value>Refresh</value>
   </data>
+  <data name="Registration_CollabError" xml:space="preserve">
+    <value>Error while creating collab account</value>
+  </data>
+  <data name="Registration_EmailExists" xml:space="preserve">
+    <value>Email already exists on system!</value>
+  </data>
+  <data name="Registration_FirstNameNoMatch" xml:space="preserve">
+    <value>Your first name does not match the license key.</value>
+  </data>
+  <data name="Registration_LastNameNoMatch" xml:space="preserve">
+    <value>Your last name does not match the license key.</value>
+  </data>
+  <data name="Registration_LicenseNull" xml:space="preserve">
+    <value>License key comparison is null.</value>
+  </data>
+  <data name="Registration_NameExists" xml:space="preserve">
+    <value>already exists on system!</value>
+  </data>
+  <data name="Registration_NoNameMatch" xml:space="preserve">
+    <value>The license key does not match either name provided.</value>
+  </data>
+  <data name="Registration_Success" xml:space="preserve">
+    <value>Success!</value>
+  </data>
+  <data name="Registration_UnknownIssue" xml:space="preserve">
+    <value>There is an unknown issue with your license key.</value>
+  </data>
   <data name="RegistrationDialogView_CloseApplication" xml:space="preserve">
     <value>Close Application</value>
   </data>
@@ -2317,6 +2344,9 @@
   <data name="RegistrationView_Email" xml:space="preserve">
     <value>Please enter your email</value>
   </data>
+  <data name="RegistrationView_EmailMessage" xml:space="preserve">
+    <value>If you'd like a license but can't make one using the previous screen, email us at dashboard@biblica.com with your first name, last name, and organization.</value>
+  </data>
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Please enter your first name</value>
   </data>
@@ -2324,7 +2354,7 @@
     <value>Please enter your last name</value>
   </data>
   <data name="RegistrationView_LicenseKey" xml:space="preserve">
-    <value>Please enter your license key</value>
+    <value>Please enter your license key (optional)</value>
   </data>
   <data name="RegistrationView_Organization" xml:space="preserve">
     <value>Please enter your organization</value>
