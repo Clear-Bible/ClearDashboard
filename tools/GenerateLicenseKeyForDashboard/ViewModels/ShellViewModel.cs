@@ -580,8 +580,6 @@ namespace GenerateLicenseKeyForDashboard.ViewModels
                             TokenId = accessToken.Id
                         };
 
-                        //_collaborationConfiguration = CollaborationConfig;
-
                         gitLabUser.Password = gitLabUser.Password;
 
                         var results = await _mySqlHttpClientServices.CreateNewCollabUser(gitLabUser, accessToken.Token);

@@ -54,7 +54,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 Set(ref _licenseKey, value);
                 LicenseUser.LicenseKey = value;
-                //ValidationResult = Validate();
                 NotifyOfPropertyChange(nameof(LicenseUser));
 
             }
@@ -145,8 +144,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     LicenseUser.Organization = null;
                 ValidationResult = Validate();
                 NotifyOfPropertyChange(() => SelectedGroup);
-
-                //ValidateCreateButton();
             }
         }
 
@@ -189,7 +186,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         protected override async void OnViewReady(object view)
         {
-            //FetchByIdInput = Visibility.Collapsed;
             try
             {
                 Groups = await _gitLabHttpClientServices.GetAllGroups();
@@ -198,14 +194,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 // ignored
             }
-
-            //var dashboardUsersList = await _mySqlHttpClientServices.GetAllDashboardUsers();
-            //DashboardUsers = dashboardUsersList.OrderBy(s => s.LastName).ThenBy(s => s.FirstName).ToList();
-
-            //var gitUsers = await _gitLabServices.GetAllUsers();
-            //GitLabUsers = gitUsers.OrderBy(s => s.UserName).ToList();
-
-            //await RefreshProjectUserConnectionGrid();
 
             base.OnViewReady(view);
         }
@@ -262,7 +250,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             if (emailAlreadyExists)
             {
                 MatchType = "Email already exists on system!";
-                //GenerateLicenseMessageBrush = Brushes.Red;
             }
             else
             {
@@ -271,7 +258,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 if (gitlabUsersExists)
                 {
                     MatchType = $"{LicenseGenerator.GetUserName(FirstName, LastName)} already exists on system!";
-                    //GenerateLicenseMessageBrush = Brushes.Red;
                 }
                 else
                 {
@@ -281,9 +267,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     if (gitLabUser.Id == 0)
                     {
                         MatchType = "Error while creating collab account";
-                        //GenerateLicenseMessageBrush = Brushes.Red;
-
-                        //CollaborationConfig = new();
                     }
                     else
                     {
@@ -302,15 +285,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                             TokenId = accessToken.Id
                         };
 
-                        //_collaborationConfiguration = CollaborationConfig;
-
                         gitLabUser.Password = gitLabUser.Password;
 
                         var results = await mySqlHttpClientServices.CreateNewCollabUser(gitLabUser, accessToken.Token);
 
                         if (results)
                         {
-                            //GeneratedGitLabLicense = LicenseManager.EncryptCollabJsonToString(CollaborationConfig);
                             gitLabConfig = LicenseManager.EncryptCollabJsonToString(CollaborationConfig);
                         }
 
@@ -329,10 +309,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         SelectedGroup,
                         mySqlHttpClientServices);
 
-                    //GeneratedLicenseBoxText = licenseKey;
-
                     MatchType = "Success!";
-                    //GenerateLicenseMessageBrush = Brushes.Green;
 
                     combinedCreateLicense = LicenseGenerator.CombineLicenses(licenseKey, gitLabConfig);
 
